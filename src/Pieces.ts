@@ -56,7 +56,7 @@ export class Piece {
 
   // Example method
   introduce(): string {
-    return `Hi, I am ${this.name}`
+    return `${this.name}: ${this.description}`
   }
 }
 
@@ -200,22 +200,75 @@ export class Mine extends Piece {
   //check for pieces on top, damage them
 }
 
-//	U+1F422 turtle
+export class Spider extends Piece {
+  //U+1F577 U+FE0F spider trail is trap
+  constructor(headPosition: Coordinate){
+     super("Spider", "A piece with that freezes pieces in its trail", "U+FE0F", 6, 3, 1, 3, 0, headPosition, [headPosition])
+  }
 
-//	U+1F997 hopper
-
-//U+1F577 U+FE0F spider trail is trap
+  //check for pieces in path, set their moves to 0
+}
 
 //	U+1F9A0 microbe
+export class Germ extends Piece {
+  constructor(headPosition: Coordinate){
+     super("Germ", "A piece that infects other pieces, draining their max size", "U+1F9A0", 1, 4, 1, 0, 0, headPosition, [headPosition])
+  }
+
+  //infect a piece, drain it's max size every turn
+}
 
 //	U+1F5DC U+FE0F vice hold others in place
+export class Vice extends Piece {
+  constructor(headPosition: Coordinate){
+     super("Vice", "A piece that can reduce other pieces moves to 0", "U+1F9A0", 1, 2, 1, 0, 1, headPosition, [headPosition])
+  }
 
-//	U+1F9FD sponge
-
-//	U+1F9F2 magnet
-
+  //set another piece's moves to 0 when in range
+}
 
 //	U+1F441 U+FE0F U+200D U+1F5E8 U+FE0F eye
+export class Watchman extends Piece {
+  constructor(headPosition: Coordinate){
+     super("Watchman", "A piece that spots other pieces, reducing their defence", "U+1F441", 2, 2, 3, 0, 0, headPosition, [headPosition])
+  }
+
+  //spot, reduce a pieces defence by 1 if not already spotted
+}
+
+//	U+1F9F2 magnet
+export class Magnet extends Piece {
+  constructor(headPosition: Coordinate){
+     super("Magnet", "A piece that moves other pieces", "U+1F9F2", 2, 2, 3, 0, 0, headPosition, [headPosition])
+  }
+
+  // pull pieces toward it
+}
+
+//	U+1F422 turtle
+export class Turtle extends Piece {
+  constructor(headPosition: Coordinate){
+     super("Turtle", "A slow piece with high defence", "U+1F422", 1, 1, 1, 3, 4, headPosition, [headPosition])
+  }
+  // slow, high defence, snap low range atk
+}
+
+//	U+1F997 hopper
+export class Hopper extends Piece {
+  constructor(headPosition: Coordinate){
+     super("Hopper", "A piece that can jump over pieces next to it", "U+1F997", 1, 3, 1, 2, 2, headPosition, [headPosition])
+  }
+  //jump over other pieces next to it
+}
+
+//	U+1F9FD sponge
+export class Sponge extends Piece {
+  constructor(headPosition: Coordinate){
+     super("Sponge", "A piece that can jump over pieces next to it", "U+1F9FD", 4, 0, 1, 0, 0, headPosition, [headPosition])
+  }
+  //choose a stat to absorb from a nearby piece
+}
 
 //name desc || maxsize moves range atk def
+
 //all +1 variants get +1 added to non 0 number stats

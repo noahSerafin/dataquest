@@ -6,6 +6,11 @@ const size = ref(9);
 const width = ref(9);
 const height = ref(9);
 
+const dropper = ref(null);
+const setDropper = (newDropper) => {
+  dropper.value = newDropper
+}
+
 const isDragging = ref(false)
 const dragMode = ref<"activate" | "deactivate" | null>(null)
 
@@ -66,19 +71,9 @@ const updateSize = () => {
   fillGrid(); // create a blank board
 }
 
-// Toggle tile state
-/*const toggleTile = (x: number, y: number) => {
-  const key = `${x},${y}`
-  if (activeTiles.value.has(key)) {
-    activeTiles.value.delete(key)
-  } else {
-    activeTiles.value.add(key)
-  }
-  
-  // Check if a tile is active
-  const isActive = (x: number, y: number) => activeTiles.value.has(`${x},${y}`)
-  }*/
-
+const emit = defineEmits<{
+  (e: "export-level", tiles: Coordinate[]): void
+}>()
 // export active tiles to clipboard
 const exportTiles = async () => {
   const coords: Coordinate[] = Array.from(activeTiles.value).map(key => {
@@ -86,8 +81,9 @@ const exportTiles = async () => {
     return { x, y }
   })
   const json = JSON.stringify(coords, null, 2);
-  await navigator.clipboard.writeText(json);
-  alert("Copied " + coords.length + " tiles to clipboard.");
+ // await navigator.clipboard.writeText(json);
+  //alert("Copied " + coords.length + " tiles to clipboard.");
+  emit("export-level", coords) // send data to App.vue
 }
 
 
@@ -156,7 +152,12 @@ const boardHeight = computed(() => tileSize.value * height.value)
     </template>
 
   </div>
-  <!-- Export button -->
+  <!-- Place Pieces -->
+   <div class="droppers">
+     <button @click="setDropper('Lance')">U+1F3A0</button>
+     <button @click="setDropper(null)">X</button>
+    </div>
+     <!-- Export button -->
     <button @click="exportTiles" class="export-btn">Export Tiles</button>
   </div>
 </template>
@@ -176,10 +177,9 @@ const boardHeight = computed(() => tileSize.value * height.value)
   border: 3px solid white;
   display: grid;
   margin: auto; /* center horizontally */
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%); /* center vertically too */
+  position: relative;
+  top: 0;
+  left: 0;
 }
 .tile{
   background-color: gainsboro;
@@ -190,5 +190,13 @@ const boardHeight = computed(() => tileSize.value * height.value)
 }
 .tile-empty{
   background-color: #202020;
+}
+.droppers{
+  position: absolute;
+  right: 2%;
+  top: 10%;
+  button{
+    display: block;
+  }
 }
 </style>

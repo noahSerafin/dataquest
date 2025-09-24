@@ -36,6 +36,7 @@ export class Piece {
     tiles: [headPosition] // default to head
   }
 
+//name desc unicode || maxsize moves range atk def
   getStats(): string {
     return `${this.name} | Size: ${this.maxSize}, Moves: ${this.moves}, Range: ${this.range}, Attack: ${this.attack}, Defence: ${this.defence}`
   }
@@ -63,7 +64,8 @@ export class Piece {
 //name desc unicode || maxsize moves range atk def
 export class Sword extends Piece {
   constructor(headPosition: Coordinate){
-    super("Sword", "A basic attack piece", "U+1F5E1 U+FE0F", 3, 2, 1, 2, 0, headPosition, [headPosition])
+    super("Sword", "A basic attack piece", "U+1F5E1", 3, 2, 1, 2, 0, headPosition, [headPosition])
+    //name desc utf || maxsize moves range atk def
   }
 
   // Sword-specific ability example
@@ -73,10 +75,28 @@ export class Sword extends Piece {
   }
 }
 
-//name desc || maxsize moves range atk def
+export class Sword2 extends Piece {
+  constructor(headPosition: Coordinate){
+    super("Sword2", "A basic attack piece", "U+FE0F", 3, 2, 1, 2, 0, headPosition, [headPosition])
+  }
+
+  // Sword-specific ability example
+  charge(target: Piece): void {
+    console.log(`${this.name} charges at ${target.name}!`)
+    target.tiles.forEach(tile => console.log(`Hits tile at (${tile.x}, ${tile.y})`))
+  }
+}
+
+
 export class Shield extends Piece {
   constructor(headPosition: Coordinate){
-     super("Shield", "A basic defence piece", "U+1F6E1 U+FE0F", 3, 2, 0, 0, 1, headPosition, [headPosition])
+     super("Shield", "A basic defence piece", "U+1F6E1", 3, 2, 0, 0, 1, headPosition, [headPosition])
+  }
+}
+
+export class Shield2 extends Piece {
+  constructor(headPosition: Coordinate){
+     super("Shield2", "A basic defence piece", "U+FE0F", 3, 2, 0, 0, 1, headPosition, [headPosition])
   }
 }
 
@@ -134,11 +154,15 @@ export class Mole extends Piece {
 
 export class Lance extends Piece {
   constructor(headPosition: Coordinate){
-     super("Lance", "A piece with a strong attack in straight lines", "	U+1F3A0", 3, 3, 3, 2, 0, headPosition, [headPosition])//horse carousel atm //cane: "U+1F9AF"
+    super("Lance", "A piece with a strong attack in straight lines", "	U+1F3A0", 3, 3, 3, 2, 0, headPosition, [headPosition])//horse carousel atm //cane: "U+1F9AF"
+    //name desc unicode || maxsize moves range atk def
   }
 
-  //canmoveNormally bool???
-  //charge: stright lines only + move
+  // Lance-specific ability example
+  charge(target: Piece): void {
+    console.log(`${this.name} charges at ${target.name}!`)
+    target.tiles.forEach(tile => console.log(`Hits tile at (${tile.x}, ${tile.y})`))
+  }
 }
 
 export class Trojan extends Piece {

@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount } from "vue"
 import type { Coordinate } from "../types"
+//import Piece from "./Piece.vue"
+//import type { Piece } from "../Pieces"
 
 
 interface Props{
   tiles : Coordinate[]
+  //pieces: Piece[]
 }
 const props = defineProps<Props>()
 
@@ -46,12 +49,12 @@ const tileSet = computed(() => new Set(props.tiles.map(t => `${t.x},${t.y}`)))
 <template>
   <div
     v-if="cols > 0 && rows > 0"
-    class="grid"
+    class="grid board"
     :style="{
       width: boardWidth + 'px',
       height: boardHeight + 'px',
       gridTemplateColumns: `repeat(${cols}, 1fr)`,
-      gridTemplateRows: `repeat(${rows}, 1fr)`
+      gridTemplateRows: `repeat(${rows}, 1fr)`,
     }"
   >
     <template v-for="row in rows" :key="row">
@@ -63,16 +66,17 @@ const tileSet = computed(() => new Set(props.tiles.map(t => `${t.x},${t.y}`)))
       </template>
     </template>
   </div>
+  <!-- Render pieces -->
+  <Piece v-for="p in pieces" :key="p.name" :piece="p" :tileSize="tileSize" />
 </template>
 
 <style scoped>
 .grid {
   display: grid;
   margin: auto; /* center horizontally */
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%); /* center vertically too */
+  position: relative;
+  top: 0;
+  left: 0;
 }
 .tile{
   background-color: gainsboro;

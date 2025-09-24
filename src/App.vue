@@ -6,23 +6,37 @@ import type { Coordinate } from "./types";
 import { level1 } from './levels';
 
 const level = ref(level1);
+const displayEditor = ref(true);
 
-const occupiedTiles: Coordinate[] = [
-  { x: 1, y: 0 },
-  { x: 2, y: 2 },
-  { x: 0, y: 3 }
-]
-//<Board :tiles="occupiedTiles"/>
+  const swapDisplay = () => {
+    displayEditor.value = !displayEditor.value;
+  }
+
+  // When editor exports a new level
+  const handleExport = (tiles: Coordinate[]) => {
+    level.value = tiles; // update the Board's tiles
+    displayEditor.value = false; // swap to board view
+  };
 </script>
 
 <template>
-  <!--
-    <Board :tiles="level" />
-    -->
-  <Leveleditor />
+  <button @mousedown="swapDisplay()">
+    {{ displayEditor ? "Show Board" : "Show Editor" }}
+  </button>
+  <Board v-if="!displayEditor" :tiles="level" />
+  <Leveleditor v-else @export-level="handleExport"/>
 </template>
 
 <style scoped>
+button{
+  position: absolute;
+  top: 8%;
+  left: 2%;
+  background-color: transparent;
+  color: white;
+  border: 1px solid white;
+  padding: 2px 4px;
+}
 .logo {
   height: 6em;
   padding: 1.5em;

@@ -2,13 +2,53 @@
 import { ref, computed, onMounted, onBeforeUnmount, watch, reactive } from "vue";
 import type { Coordinate } from "../types";
 
-const size = ref(5);
-const width = ref(5);
-const height = ref(5);
+const size = ref(9);
+const width = ref(9);
+const height = ref(9);
+
+const isDragging = ref(false)
+const dragMode = ref<"activate" | "deactivate" | null>(null)
+
+const key = (x: number, y: number) => `${x},${y}`
+const isActive = (x: number, y: number) => activeTiles.value.has(key(x, y))
+
+// Apply toggle based on mode
+function applyDrag(x: number, y: number) {
+  const k = key(x, y)
+  if (dragMode.value === "activate") activeTiles.value.add(k)
+  else if (dragMode.value === "deactivate") activeTiles.value.delete(k)
+}
+
+// Handle mouse down
+function handleMouseDown(x: number, y: number) {
+  isDragging.value = true
+  dragMode.value = isActive(x, y) ? "deactivate" : "activate"
+  applyDrag(x, y)
+}
+
+// Handle mouse enter while dragging
+function handleMouseEnter(x: number, y: number) {
+  if (!isDragging.value) return
+  applyDrag(x, y)
+}
+
+// Stop drag on mouseup anywhere
+function handleMouseUp() {
+  isDragging.value = false
+  dragMode.value = null
+}
+
+onMounted(() => {
+  window.addEventListener("mouseup", handleMouseUp)
+})
+onBeforeUnmount(() => {
+  window.removeEventListener("mouseup", handleMouseUp)
+})
 
 // Track clicked tiles
 const activeTiles = ref<Set<string>>(new Set());
 //reactive(new Set<string>());
+
 const fillGrid = () => {
   activeTiles.value.clear()
   for (let y = 0; y < height.value; y++) {
@@ -27,17 +67,17 @@ const updateSize = () => {
 }
 
 // Toggle tile state
-const toggleTile = (x: number, y: number) => {
+/*const toggleTile = (x: number, y: number) => {
   const key = `${x},${y}`
   if (activeTiles.value.has(key)) {
     activeTiles.value.delete(key)
   } else {
     activeTiles.value.add(key)
   }
-}
-
-// Check if a tile is active
-const isActive = (x: number, y: number) => activeTiles.value.has(`${x},${y}`)
+  
+  // Check if a tile is active
+  const isActive = (x: number, y: number) => activeTiles.value.has(`${x},${y}`)
+  }*/
 
 // export active tiles to clipboard
 const exportTiles = async () => {
@@ -109,7 +149,8 @@ const boardHeight = computed(() => tileSize.value * height.value)
         <template v-for="c in width" :key="`${c-1}-${r-1}`">
           <div
             :class="isActive(c-1, r-1) ? 'tile' : 'tile-empty'"
-            @click="toggleTile(c-1, r-1)"
+            @mousedown.prevent="handleMouseDown(c-1, r-1)"
+            @mouseenter="handleMouseEnter(c-1, r-1)"
           />
       </template>
     </template>

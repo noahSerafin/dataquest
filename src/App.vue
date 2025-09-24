@@ -17,9 +17,9 @@ const occupiedTiles: Coordinate[] = [
 
 <template>
   <!--
-    <Leveleditor />
-  -->
-  <Board :tiles="level" />
+    <Board :tiles="level" />
+    -->
+  <Leveleditor />
 </template>
 
 <style scoped>

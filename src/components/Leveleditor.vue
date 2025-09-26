@@ -1,13 +1,20 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount, watch, reactive } from "vue";
 import type { Coordinate } from "../types";
+//import PieceView from "./Piece.vue";
+import type { Piece } from "../Pieces";
+import {Sword, Sword2, Shield, Shield2, Sling, Bow, Treb, Gate, Stonewall, Firewall, Trench, Lance, Mole, Trojan, Cannon, Tank, Bomb, Dataworm, Copycat, Trap, Mine, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge } from "../Pieces";
+
+//const pieceClasses: Array<typeof Piece>
+const pieceClasses = [Sword, Sword2, Shield, Shield2, Sling, Bow, Treb, Gate, Stonewall, Firewall, Trench, Lance, Mole, Trojan, Cannon, Tank, Bomb, Dataworm, Copycat, Trap, Mine, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge];
+console.log(pieceClasses[0].unicode);
 
 const size = ref(9);
 const width = ref(9);
 const height = ref(9);
 
-const dropper = ref(null);
-const setDropper = (newDropper) => {
+const dropper = ref('');
+const setDropper = (newDropper: string) => {
   dropper.value = newDropper
 }
 
@@ -26,9 +33,20 @@ function applyDrag(x: number, y: number) {
 
 // Handle mouse down
 function handleMouseDown(x: number, y: number) {
-  isDragging.value = true
-  dragMode.value = isActive(x, y) ? "deactivate" : "activate"
-  applyDrag(x, y)
+  if (dropper.value === "") {
+    isDragging.value = true
+    dragMode.value = isActive(x, y) ? "deactivate" : "activate"
+    applyDrag(x, y)
+  } else {
+     // piece placement mode
+    /*
+     const Piece = pieces[dropper.value as keyof typeof pieces]
+    if (Piece) {
+      const newPiece = new Piece({ x, y })
+      pieces.value.push(newPiece)
+    }
+    */
+  }
 }
 
 // Handle mouse enter while dragging
@@ -154,8 +172,19 @@ const boardHeight = computed(() => tileSize.value * height.value)
   </div>
   <!-- Place Pieces -->
    <div class="droppers">
-     <button @click="setDropper('Lance')">U+1F3A0</button>
-     <button @click="setDropper(null)">X</button>
+      <template>
+        <div class="piece-selector">
+          <button
+            v-for="p in pieceClasses"
+            :key="p.name"
+            class="piece-button"
+            @click="setDropper(p.unicode)"
+          >
+            {{ p.unicode }}
+          </button>
+        </div>
+      </template>
+     <button @click="setDropper('')">X</button>
     </div>
      <!-- Export button -->
     <button @click="exportTiles" class="export-btn">Export Tiles</button>

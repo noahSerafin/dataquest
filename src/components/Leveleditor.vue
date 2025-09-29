@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount, watch, reactive } from "vue";
 import type { Coordinate } from "../types";
-//import PieceView from "./Piece.vue";
+import PieceView from "./PieceView.vue";
 import type { Piece } from "../Pieces";
-import {Sword, Sword2, Shield, Shield2, Sling, Bow, Treb, Gate, Stonewall, Firewall, Trench, Lance, Mole, Trojan, Cannon, Tank, Bomb, Dataworm, Copycat, Trap, Mine, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge } from "../Pieces";
+import {Sword, Sword2, Shield, Aegis, Sling, Bow, Treb, Gate, Stonewall, Firewall, Trench, Lance, Mole, Trojan, Cannon, Tank, Bomb, Dataworm, Copycat, Trap, Mine, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge } from "../Pieces";
 
 //const pieceClasses: Array<typeof Piece>
-const pieceClasses = [Sword, Sword2, Shield, Shield2, Sling, Bow, Treb, Gate, Stonewall, Firewall, Trench, Lance, Mole, Trojan, Cannon, Tank, Bomb, Dataworm, Copycat, Trap, Mine, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge];
+const pieceClasses = [Sword, Sword2, Shield, Aegis, Sling, Bow, Treb, Gate, Stonewall, Firewall, Trench, Lance, Mole, Trojan, Cannon, Tank, Bomb, Dataworm, Copycat, Trap, Mine, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge];
 console.log(pieceClasses[0].unicode);
 
 const size = ref(9);

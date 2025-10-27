@@ -52,7 +52,7 @@ export class Whetstone extends Item {
 export class Plating extends Item {
     static name: "Plating";
     static description: "increases a pieces defence by 1";
-    static unicode: "";
+    static unicode: "U+26E8";
     constructor(){
         super(Plating.name, Plating.description, Plating.unicode, 3)
         //name desc utf || maxsize moves range atk def
@@ -63,7 +63,7 @@ export class Plating extends Item {
 export class Blueberry extends Item {
     static name: "Blueberry";
     static description: "increases a pieces max size by 1";
-    static unicode: "";
+    static unicode: "U+1FAD0";
     constructor(){
         super(Plating.name, Plating.description, Plating.unicode, 3)
         //name desc utf || maxsize moves range atk def
@@ -74,9 +74,9 @@ export class Blueberry extends Item {
 export class Scope extends Item {
     static name: "Scope";
     static description: "increases a pieces range by 1";
-    static unicode: "";
+    static unicode: "U+1F52D";
     constructor(){
-        super(Lightning.name, Lightning.description, Lightning.unicode, 3)
+        super(Scope.name, Scope.description, Scope.unicode, 3)
         //name desc utf || maxsize moves range atk def
     }
     //increases a pieces moves by 1
@@ -85,7 +85,7 @@ export class Scope extends Item {
 export class Lightning extends Item {
     static name: "Lightning";
     static description: "increases a pieces moves by 1";
-    static unicode: "";
+    static unicode: "U+26A1";
     constructor(){
         super(Lightning.name, Lightning.description, Lightning.unicode, 3)
         //name desc utf || maxsize moves range atk def
@@ -96,7 +96,7 @@ export class Lightning extends Item {
 export class Blessing extends Item {
     static name: "Blessing";
     static description: "increases all a programs stats by 1";
-    static unicode: "";
+    static unicode: "U+1F389";
     constructor(){
         super(Blessing.name, Blessing.description, Blessing.unicode, 9)
         //name desc utf || maxsize moves range atk def

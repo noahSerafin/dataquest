@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount } from "vue"
 import type { Coordinate } from "../types"
+import PieceView from "./PieceView.vue";
 //import Piece from "./Piece.vue"
 //import type { Piece } from "../Pieces"
 
@@ -47,6 +48,7 @@ const tileSet = computed(() => new Set(props.tiles.map(t => `${t.x},${t.y}`)))
 
 
 <template>
+  <div class="grid-container">
   <div
     v-if="cols > 0 && rows > 0"
     class="grid board"
@@ -62,15 +64,27 @@ const tileSet = computed(() => new Set(props.tiles.map(t => `${t.x},${t.y}`)))
         <div
           class="border border-black"
           :class="tileSet.has(`${col-1},${row-1}`) ? 'tile' : 'tile-empty'"
+          :id="col-1+', '+(row-1)"
         />
       </template>
     </template>
   </div>
   <!-- Render pieces -->
-  <Piece v-for="p in pieces" :key="p.name" :piece="p" :tileSize="tileSize" />
+   <PieceView
+   name="Shield"
+   team="player"
+   :tileSize=tileSize
+   :headPosition="{x: 0, y: 0}"
+   :pieceTiles="[{x:0, y:0}, {x:0, y:1}, {x:1, y:1}]"
+   :mapTiles = props.tiles
+   />
+   </div>
 </template>
 
 <style scoped>
+.grid-container{
+  position: relative;
+}
 .grid {
   display: grid;
   margin: auto; /* center horizontally */

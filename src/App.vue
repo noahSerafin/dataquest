@@ -30,7 +30,7 @@ const displayEditor = ref(true);
 <style scoped>
 button{
   position: absolute;
-  top: 8%;
+  top: 2%;
   left: 2%;
   background-color: transparent;
   color: white;

@@ -1,14 +1,28 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount, watch, reactive } from "vue";
 import type { Coordinate } from "../types";
+//import PieceView from "./PieceView.vue";
+//import type { Piece } from "../Pieces";
+import {Allpieces} from "../Pieces";
+
+//const pieceClasses: Array<typeof Piece>
+const pieceClasses = [...Allpieces];//switch to object for fast lookup when there are "dozens" of pieces
 
 const size = ref(9);
 const width = ref(9);
 const height = ref(9);
 
-const dropper = ref(null);
-const setDropper = (newDropper) => {
-  dropper.value = newDropper
+const dropper = ref('');
+const placingEnemies = ref(true);
+//also need a way of adding extra tiles to an already placed piece
+const newPlacement = ref(true);
+
+const setDropper = (newDropper: string) => {
+  if(newDropper == dropper.value){
+    //switch that dropper button from player to enemy
+  }
+  dropper.value = newDropper // + player or enemy
+  console.log(dropper.value)
 }
 
 const isDragging = ref(false)
@@ -26,9 +40,20 @@ function applyDrag(x: number, y: number) {
 
 // Handle mouse down
 function handleMouseDown(x: number, y: number) {
-  isDragging.value = true
-  dragMode.value = isActive(x, y) ? "deactivate" : "activate"
-  applyDrag(x, y)
+  if (dropper.value === "") {
+    isDragging.value = true
+    dragMode.value = isActive(x, y) ? "deactivate" : "activate"
+    applyDrag(x, y)
+  } else {
+     // piece placement mode
+    /*
+     const Piece = pieces[dropper.value as keyof typeof pieces]
+    if (Piece) {
+      const newPiece = new Piece({ x, y })
+      pieces.value.push(newPiece)
+    }
+    */
+  }
 }
 
 // Handle mouse enter while dragging
@@ -81,8 +106,8 @@ const exportTiles = async () => {
     return { x, y }
   })
   const json = JSON.stringify(coords, null, 2);
- // await navigator.clipboard.writeText(json);
-  //alert("Copied " + coords.length + " tiles to clipboard.");
+  await navigator.clipboard.writeText(json);
+  alert("Copied " + coords.length + " tiles to clipboard.");
   emit("export-level", coords) // send data to App.vue
 }
 
@@ -132,30 +157,45 @@ const boardHeight = computed(() => tileSize.value * height.value)
         <input type="range" min="5" max="48" v-model.number="height" @input="fillGrid"/>
       </label>
   </div>
-  <div
-    class="grid"
-    :style="{
-      width: boardWidth + 'px',
-      height: boardHeight + 'px',
-      gridTemplateColumns: `repeat(${width}, 1fr)`,
-      gridTemplateRows: `repeat(${height}, 1fr)`
-    }"
-  >
-    <template v-for="r in height" :key="r">
-        <template v-for="c in width" :key="`${c-1}-${r-1}`">
-          <div
-            :class="isActive(c-1, r-1) ? 'tile' : 'tile-empty'"
-            @mousedown.prevent="handleMouseDown(c-1, r-1)"
-            @mouseenter="handleMouseEnter(c-1, r-1)"
-          />
-      </template>
-    </template>
-
-  </div>
   <!-- Place Pieces -->
    <div class="droppers">
-     <button @click="setDropper('Lance')">U+1F3A0</button>
-     <button @click="setDropper(null)">X</button>
+     <div class="piece-selector">
+          <button @click="setDropper('')">X</button>
+          <button @click="setDropper('Player_Spawn')">{{ String.fromCodePoint(parseInt("U+2BD0".replace('U+', ''), 16)) }}</button>
+          <button @click="setDropper('Enemy_Spawn')">{{ String.fromCodePoint(parseInt("U+2B1A".replace('U+', ''), 16)) }}</button>
+          <button @click="setDropper('Extender')">{{ String.fromCodePoint(parseInt("U+25FC".replace('U+', ''), 16)) }}</button>
+          <button
+            v-for="p in pieceClasses"
+            :key="p.name"
+            class="piece-button for-player"
+            :id="p.name+'-dropper-btn'"
+            @click="setDropper(p.name)"
+          >
+            {{ String.fromCodePoint(parseInt(p.unicode.replace('U+', ''), 16)) }} {{ p.name }}
+          </button>
+        </div>
+    </div>
+    <div class="grid-container">
+      <div
+        class="grid"
+        :style="{
+          width: boardWidth + 'px',
+          height: boardHeight + 'px',
+          gridTemplateColumns: `repeat(${width}, 1fr)`,
+          gridTemplateRows: `repeat(${height}, 1fr)`
+        }"
+      >
+        <template v-for="r in height" :key="r">
+            <template v-for="c in width" :key="`${c-1}-${r-1}`">
+              <div
+                :class="isActive(c-1, r-1) ? 'tile' : 'tile-empty'"
+                @mousedown.prevent="handleMouseDown(c-1, r-1)"
+                @mouseenter="handleMouseEnter(c-1, r-1)"
+              />
+          </template>
+        </template>
+
+      </div>
     </div>
      <!-- Export button -->
     <button @click="exportTiles" class="export-btn">Export Tiles</button>
@@ -172,6 +212,9 @@ const boardHeight = computed(() => tileSize.value * height.value)
 .export-btn{
   position: absolute;
   bottom: 5vh;
+}
+.grid-container{
+  position: relative;
 }
 .grid {
   border: 3px solid white;
@@ -193,8 +236,10 @@ const boardHeight = computed(() => tileSize.value * height.value)
 }
 .droppers{
   position: absolute;
-  right: 2%;
+  left: 2%;
   top: 10%;
+  overflow-y: scroll;
+  height: 80%;
   button{
     display: block;
   }

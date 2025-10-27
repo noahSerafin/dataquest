@@ -1,0 +1,160 @@
+<script setup lang="ts">
+import { ref, computed, onMounted } from "vue";
+import type { Coordinate } from "../types";
+import { Piece, Allpieces } from "../Pieces";
+import PieceController from "./PieceController.vue";
+
+//construction-------------
+
+const lookupPiece = (pieceName: string) => {
+  return Allpieces.find(pieceClass => pieceClass.name === pieceName)
+}
+
+// Props
+const props = defineProps<{
+  name: string
+  team: string
+  tileSize: number
+  headPosition: Coordinate
+  pieceTiles: Coordinate[]
+  mapTiles: Coordinate[]
+}>();
+
+//local state
+const piece = ref<InstanceType<typeof Piece> | null>(null);
+const showController = ref(false);
+
+// On mount, create the piece instance
+onMounted(() => {
+  const PieceClass = lookupPiece(props.name)
+  if (!PieceClass) {
+    console.error(`No piece found with name: ${props.name}`)
+    return
+  }
+  piece.value = new PieceClass(
+    props.headPosition
+  )
+})
+
+// --- reactive properties derived from the piece instance ---
+// Computed values
+const pieceId = computed(() =>
+  piece.value ? `${piece.value.name}-${crypto.randomUUID()}` : 'uninitialized-piece'
+)
+
+// Derived values
+const unicodeSymbol = computed(() =>
+  piece.value
+    ? String.fromCodePoint(parseInt(piece.value.unicode.replace('U+', ''), 16))
+    : ''
+)
+
+// All non-head tiles
+const bodyTiles = computed(() =>
+  props.pieceTiles.filter(
+    (p) => p.x !== props.headPosition.x || p.y !== props.headPosition.y
+  )
+)
+
+const getDirectionClass = (tile: Coordinate, index: number) => {
+  if (index === 0) return '' // skip connector from head
+  const prev = index === 0 ? props.headPosition : props.pieceTiles[index - 1]
+
+  const dx = tile.x - prev.x
+  const dy = tile.y - prev.y
+
+  if (dx === 1) return 'from-left'
+  if (dx === -1) return 'from-right'
+  if (dy === 1) return 'from-top'
+  if (dy === -1) return 'from-bottom'
+  return ''
+}
+
+const pieceStyle = computed(() => {
+  if (!piece.value) return {}
+  return {
+    left: (piece.value.headPosition.x * props.tileSize)+6 + 'px',
+    top: (piece.value.headPosition.y * props.tileSize)+6 + 'px',
+    position: 'absolute',
+    width: props.tileSize-16 + 'px',
+    height: props.tileSize-16 + 'px',
+    fontSize: props.tileSize * 0.8 + 'px',
+    lineHeight: props.tileSize -24 + 'px',
+    backgroundColor: piece.value.color,
+    '--piece-color': piece.value.color,
+  }
+})
+
+const getTileStyle = (tile: Coordinate) => ({
+  left: tile.x * props.tileSize+6 + "px",
+  top: tile.y * props.tileSize+6 + "px",
+})
+
+//controller------------
+
+</script>
+
+<template>
+  <div
+    class="board-piece"
+    :class="'team-'+team"
+    :id="pieceId"
+    :style="pieceStyle"
+    @click="showController = !showController"
+  >
+    {{ unicodeSymbol }}
+  </div>
+  <div
+    v-for="(tile, index) in bodyTiles"
+    :key="index"
+    class="piece-tile"
+    :class="getDirectionClass(tile, index+1)"
+    :style="{
+      ...pieceStyle,
+      ...getTileStyle(tile),
+    }"
+  />
+  <PieceController
+    v-if="showController"
+    :piece="piece"
+    @move="console.log('Move', $event)"
+    @attack="console.log('Attack', $event)"
+    @special="console.log('Special', $event)"
+  />
+</template>
+
+<style scoped>
+.board-piece, .piece-tile{
+  text-align: center;
+  transition: all 0.2s ease;
+  border: outset;
+}
+.board-piece:hover{
+  cursor: pointer;
+}
+.piece-tile::before {
+  content: '';
+  position: absolute;
+  width: 25%;
+  height: 25%;
+  background-color: var(--piece-color);
+}
+
+/* directional placement */
+.piece-tile.from-left::before {
+  left: -12.5%;
+  top: 37.5%;
+}
+.piece-tile.from-right::before {
+  right: -12.5%;
+  top: 37.5%;
+}
+.piece-tile.from-top::before {
+  top: -12.5%;
+  left: 37.5%;
+}
+.piece-tile.from-bottom::before {
+  bottom: -12.5%;
+  left: 37.5%;
+}
+</style>

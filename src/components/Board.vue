@@ -44,6 +44,51 @@ const boardHeight = computed(() => tileSize.value * rows.value)
 
 // Make a Set for fast lookup
 const tileSet = computed(() => new Set(props.tiles.map(t => `${t.x},${t.y}`)))
+
+//pieceMap to track occupied spaces
+const activePieces = ref<InstanceType<typeof Piece>[]>([]);
+
+// Fast lookup: "x,y" → piece reference
+const pieceMap = computed(() => {
+  const map = new Map<string, InstanceType<typeof Piece>>()
+  activePieces.value.forEach(piece => {
+    piece.tiles.forEach(tile => {
+      map.set(`${tile.x},${tile.y}`, piece)
+    })
+  })
+  return map
+});
+
+const isOccupied = (x: number, y: number) => pieceMap.value.has(`${x},${y}`);
+
+const getAvailableMoves = (piece: InstanceType<typeof Piece>) => {
+  const results: Coordinate[] = []
+  const { x, y } = piece.headPosition
+
+  for (let i = 1; i <= piece.moves; i++) {
+    // check up
+    if (!pieceMap.value.has(`${x},${y - i}`)) results.push({ x, y: y - i })
+    else break
+  }
+  for (let i = 1; i <= piece.moves; i++) {
+    // check down
+    if (!pieceMap.value.has(`${x},${y + i}`)) results.push({ x, y: y + i })
+    else break
+  }
+  for (let i = 1; i <= piece.moves; i++) {
+    // check left
+    if (!pieceMap.value.has(`${x - i},${y}`)) results.push({ x: x - i, y })
+    else break
+  }
+  for (let i = 1; i <= piece.moves; i++) {
+    // check right
+    if (!pieceMap.value.has(`${x + i},${y}`)) results.push({ x: x + i, y })
+    else break
+  }
+
+  return results
+}
+
 </script>
 
 

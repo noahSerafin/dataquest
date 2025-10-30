@@ -20,6 +20,13 @@ const props = defineProps<{
   mapTiles: Coordinate[]
 }>();
 
+//emits
+const emit = defineEmits<{
+  (e: 'highlightMoves', piece: Piece): void
+  (e: 'attack', piece: Piece): void
+  (e: 'special', piece: Piece): void
+}>()
+
 //local state
 const piece = ref<InstanceType<typeof Piece> | null>(null);
 const showController = ref(false);
@@ -91,6 +98,19 @@ const getTileStyle = (tile: Coordinate) => ({
 })
 
 //controller------------
+const onHighlightMoves = (piece: Piece) => {
+  emit('highlightMoves', piece) // 🔁 forward up to Board.vue
+
+}
+const handlePieceMoveClick = () => {
+  if (piece.value) {
+    emit('highlightMoves', piece.value)
+  }
+}
+
+const onAttack = (piece) => {
+  emit('attack', piece)
+}
 
 </script>
 
@@ -103,6 +123,14 @@ const getTileStyle = (tile: Coordinate) => ({
     @click="showController = !showController"
   >
     {{ unicodeSymbol }}
+    <button
+      v-if="showController"
+      class="move-btn"
+      @click.stop="handlePieceMoveClick"
+      title="Move this piece"
+    >
+      M
+    </button>
   </div>
   <div
     v-for="(tile, index) in bodyTiles"
@@ -117,8 +145,8 @@ const getTileStyle = (tile: Coordinate) => ({
   <PieceController
     v-if="showController"
     :piece="piece"
-    @move="console.log('Move', $event)"
-    @attack="console.log('Attack', $event)"
+    @highlightMoves="onHighlightMoves"
+    @attack="onAttack"
     @special="console.log('Special', $event)"
   />
 </template>
@@ -156,5 +184,23 @@ const getTileStyle = (tile: Coordinate) => ({
 .piece-tile.from-bottom::before {
   bottom: -12.5%;
   left: 37.5%;
+}
+.move-btn {
+  position: absolute;
+  bottom: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+  border: none;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.4);
+  color: white;
+  cursor: pointer;
+  z-index: 5;
+  transition: background 0.2s;
+}
+.move-btn:hover {
+  background: rgba(0, 0, 0, 0.7);
 }
 </style>

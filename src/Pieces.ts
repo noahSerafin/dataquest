@@ -16,6 +16,7 @@ export abstract class Piece {
   defence: number
   headPosition: Coordinate
   tiles: Coordinate[] // an array of (x, y) positions
+  movesRemaining: number
 
   constructor(
     name: string, 
@@ -41,6 +42,7 @@ export abstract class Piece {
     this.color = color
     this.headPosition = headPosition
     this.tiles = [headPosition] // default to head
+    this.movesRemaining = moves // default to full moves at start of turn
   }
 
 //name desc unicode || maxsize moves range atk def
@@ -53,7 +55,17 @@ export abstract class Piece {
     this.tiles.push({ x, y })
   }
 
-  highlightMove(){
+  resetMoves() {
+    this.movesRemaining = this.moves
+  }
+
+  useMove() {
+    if (this.movesRemaining > 0) {
+      this.movesRemaining--
+    }
+  }
+
+  highlightMove(){//handled in Board.vue
     this.moves
     //this.headPosition
   }
@@ -65,6 +77,7 @@ export abstract class Piece {
     if (this.tiles.length > this.maxSize) {
       this.tiles.shift() // removes first element
     }
+    this.useMove();
   }
 
   takeDamage(damage: number){

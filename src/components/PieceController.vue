@@ -4,7 +4,7 @@ import type { Coordinate } from "../types"
 import type { Piece } from "../Pieces"
 
 defineProps<{ piece: InstanceType<typeof Piece> | null }>()
-defineEmits(['move', 'attack', 'special'])
+defineEmits(['highlightMove', 'attack', 'special'])
 
 /*
  <button
@@ -37,7 +37,7 @@ defineEmits(['move', 'attack', 'special'])
       </div>
 
       <div class="actions">
-        <button @click="$emit('move', piece)">Move</button>
+        <button @click="$emit('highlightMove', piece)">Move</button>
         <button @click="$emit('attack', piece)">Attack</button>
        
       </div>

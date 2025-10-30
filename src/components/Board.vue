@@ -2,13 +2,11 @@
 import { ref, computed, onMounted, onBeforeUnmount } from "vue"
 import type { Coordinate } from "../types"
 import PieceView from "./PieceView.vue";
-//import Piece from "./Piece.vue"
-//import type { Piece } from "../Pieces"
-
+import type { Piece } from "../Pieces"
 
 interface Props{
   tiles : Coordinate[]
-  //pieces: Piece[]
+  pieces: Piece[]
 }
 const props = defineProps<Props>()
 
@@ -43,6 +41,7 @@ const boardWidth = computed(() => tileSize.value * cols.value)
 const boardHeight = computed(() => tileSize.value * rows.value)
 
 // Make a Set for fast lookup
+//will need to be ref if you have a bitman
 const tileSet = computed(() => new Set(props.tiles.map(t => `${t.x},${t.y}`)))
 
 //pieceMap to track occupied spaces
@@ -56,37 +55,38 @@ const pieceMap = computed(() => {
       map.set(`${tile.x},${tile.y}`, piece)
     })
   })
+  console.log('piecemap:', map)
   return map
 });
 
 const isOccupied = (x: number, y: number) => pieceMap.value.has(`${x},${y}`);
 
-const getAvailableMoves = (piece: InstanceType<typeof Piece>) => {
-  const results: Coordinate[] = []
+//change to one move at a time
+function getAvailableMoves(
+  piece: Piece,
+  tileSet: Set<string>, // the valid board tiles like "x,y"
+  pieceMap: Map<string, Piece> // all occupied tiles by other pieces
+): Coordinate[] {
+  if (piece.movesRemaining <= 0) return [] // no moves left
+
   const { x, y } = piece.headPosition
+  const potentialMoves: Coordinate[] = [
+    { x: x + 1, y },
+    { x: x - 1, y },
+    { x: x, y: y + 1 },
+    { x: x, y: y - 1 }
+  ]
 
-  for (let i = 1; i <= piece.moves; i++) {
-    // check up
-    if (!pieceMap.value.has(`${x},${y - i}`)) results.push({ x, y: y - i })
-    else break
-  }
-  for (let i = 1; i <= piece.moves; i++) {
-    // check down
-    if (!pieceMap.value.has(`${x},${y + i}`)) results.push({ x, y: y + i })
-    else break
-  }
-  for (let i = 1; i <= piece.moves; i++) {
-    // check left
-    if (!pieceMap.value.has(`${x - i},${y}`)) results.push({ x: x - i, y })
-    else break
-  }
-  for (let i = 1; i <= piece.moves; i++) {
-    // check right
-    if (!pieceMap.value.has(`${x + i},${y}`)) results.push({ x: x + i, y })
-    else break
-  }
+  return potentialMoves.filter(pos => {
+    const key = `${pos.x},${pos.y}`
+    return tileSet.has(key) && !pieceMap.has(key)
+  })
+}
 
-  return results
+const moveHighlights = ref<Coordinate[]>([])
+
+const highlightMoves = (piece: InstanceType<typeof Piece>) => {
+  moveHighlights.value = getAvailableMoves(piece, tileSet.value, pieceMap.value);
 }
 
 </script>
@@ -94,35 +94,48 @@ const getAvailableMoves = (piece: InstanceType<typeof Piece>) => {
 
 <template>
   <div class="grid-container">
-  <div
-    v-if="cols > 0 && rows > 0"
-    class="grid board"
-    :style="{
-      width: boardWidth + 'px',
-      height: boardHeight + 'px',
-      gridTemplateColumns: `repeat(${cols}, 1fr)`,
-      gridTemplateRows: `repeat(${rows}, 1fr)`,
-    }"
-  >
-    <template v-for="row in rows" :key="row">
-      <template v-for="col in cols" :key="`${col},${row}`">
-        <div
-          class="border border-black"
-          :class="tileSet.has(`${col-1},${row-1}`) ? 'tile' : 'tile-empty'"
-          :id="col-1+', '+(row-1)"
-        />
+    <div
+      v-if="cols > 0 && rows > 0"
+      class="grid board"
+      :style="{
+        width: boardWidth + 'px',
+        height: boardHeight + 'px',
+        gridTemplateColumns: `repeat(${cols}, 1fr)`,
+        gridTemplateRows: `repeat(${rows}, 1fr)`,
+      }"
+    >
+      <template v-for="row in rows" :key="row">
+        <template v-for="col in cols" :key="`${col},${row}`">
+          <div
+            class="border border-black"
+            :class="tileSet.has(`${col-1},${row-1}`) ? 'tile' : 'tile-empty'"
+            :id="col-1+', '+(row-1)"
+          />
+        </template>
       </template>
-    </template>
-  </div>
-  <!-- Render pieces -->
-   <PieceView
-   name="Shield"
-   team="player"
-   :tileSize=tileSize
-   :headPosition="{x: 0, y: 0}"
-   :pieceTiles="[{x:0, y:0}, {x:0, y:1}, {x:1, y:1}]"
-   :mapTiles = props.tiles
-   />
+    </div>
+    <!-- Render pieces -->
+    <PieceView
+    name="Shield"
+    team="player"
+    :tileSize=tileSize
+    :headPosition="{x: 0, y: 0}"
+    :pieceTiles="[{x:0, y:0}, {x:0, y:1}, {x:1, y:1}]"
+    :mapTiles = props.tiles
+    @highlightMoves="highlightMoves"
+    />
+    <!-- Highlights -->
+    <div
+      v-for="(tile, index) in moveHighlights"
+      :key="index"
+      class="highlight-tile"
+      :style="{
+        left: tile.x * tileSize + 'px',
+        top: tile.y * tileSize + 'px',
+        width: tileSize + 'px',
+        height: tileSize + 'px',
+      }"
+    />
    </div>
 </template>
 
@@ -145,5 +158,11 @@ const getAvailableMoves = (piece: InstanceType<typeof Piece>) => {
 }
 .tile-empty{
   background-color: black;
+}
+.highlight-tile {
+  position: absolute;
+  background-color: rgba(0, 200, 255, 0.3);
+  border: 1px solid rgba(0, 200, 255, 0.5);
+  pointer-events: none;
 }
 </style>

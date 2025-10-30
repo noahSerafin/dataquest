@@ -1,0 +1,37 @@
+EDITOR
+export tiles done
+
+dropper drops pieces (or their name + unicode)
+export pieces
+
+
+
+BOARD
+import tiles done
+import pieces into piecemap
+render pieces form piecemap
+
+move
+test highlights
+
+moving piece should update board
+
+
+
+PIECES
+move should add to size up to max size
+
+atk function
+
+special functions
+
+
+
+SHOP
+
+
+
+APP 
+game logic
+swao between board and shop
+increment difficulty

@@ -2,7 +2,7 @@
 import { ref, computed, onMounted, onBeforeUnmount, watch, reactive } from "vue";
 import type { Coordinate } from "../types";
 //import PieceView from "./PieceView.vue";
-//import type { Piece } from "../Pieces";
+import type { Piece } from "../Pieces";
 import {Allpieces} from "../Pieces";
 
 //const pieceClasses: Array<typeof Piece>
@@ -12,14 +12,27 @@ const size = ref(9);
 const width = ref(9);
 const height = ref(9);
 
-const dropper = ref('');
-const placingEnemies = ref(true);
-//also need a way of adding extra tiles to an already placed piece
-const newPlacement = ref(true);
 
-const setDropper = (newDropper: string) => {
-  if(newDropper == dropper.value){
+type DropperMode = 'tile' | 'piece' | 'extend';
+
+interface DropperState {
+  mode: DropperMode
+  tileType?: string           // used when mode === 'tile'
+  pieceName?: string          // used when mode === 'piece' or 'extend'
+  team?: 'player' | 'enemy'   // used when placing pieces
+  extending?: boolean         // convenience flag for UI
+  pieceToExtend?: string      // pieceId (uuid or similar)
+};
+
+const dropper = ref<DropperState>({
+  mode: 'tile',
+  tileType: '',
+});
+
+const setDropper = (newDropper: DropperState) => {
+  if(newDropper.pieceName == dropper.value.pieceName){
     //switch that dropper button from player to enemy
+    newDropper.team = dropper.value.team == 'player' ? 'enemy' : 'player';
   }
   dropper.value = newDropper // + player or enemy
   console.log(dropper.value)
@@ -38,21 +51,44 @@ function applyDrag(x: number, y: number) {
   else if (dragMode.value === "deactivate") activeTiles.value.delete(k)
 }
 
+const piecesToExport = ref<InstanceType<typeof Piece>[]>([]);
+
+function placePiece(coord: Coordinate) {
+  const pieceClass = Allpieces.find(p => p.name === dropper.value.pieceName)
+  if (!pieceClass) return
+
+  const newPiece = new pieceClass(coord)
+  newPiece.team = dropper.value.team ?? 'enemy'
+
+  piecesToExport.value.push(newPiece)
+}
+
+function extendPiece(pieceID: string, coord: Coordinate) {
+  const pieceToExtend = piecesToExport.value.find(p => p.id === pieceID)
+  if (!pieceToExtend) return
+
+  pieceToExtend.addTile(coord.x, coord.y); //not a . value, its a function
+}
+
 // Handle mouse down
 function handleMouseDown(x: number, y: number) {
-  if (dropper.value === "") {
+  if (dropper.value.mode === "tile") {
+    //todo: check coord isn't occupied before removing a tile
     isDragging.value = true
     dragMode.value = isActive(x, y) ? "deactivate" : "activate"
     applyDrag(x, y)
-  } else {
-     // piece placement mode
-    /*
+  } else if (dropper.value.mode == 'extend' && dropper.value.pieceToExtend){
+    extendPiece(dropper.value.pieceToExtend, {x, y});  
+  } else if (dropper.value.mode == 'piece'){
+    placePiece({x, y});
+      // piece placement mode
+     /*
      const Piece = pieces[dropper.value as keyof typeof pieces]
-    if (Piece) {
-      const newPiece = new Piece({ x, y })
-      pieces.value.push(newPiece)
-    }
-    */
+      if (Piece) {
+        const newPiece = new Piece({ x, y })
+        pieces.value.push(newPiece)
+      }
+      */
   }
 }
 
@@ -160,16 +196,24 @@ const boardHeight = computed(() => tileSize.value * height.value)
   <!-- Place Pieces -->
    <div class="droppers">
      <div class="piece-selector">
-          <button @click="setDropper('')">X</button>
-          <button @click="setDropper('Player_Spawn')">{{ String.fromCodePoint(parseInt("U+2BD0".replace('U+', ''), 16)) }}</button>
-          <button @click="setDropper('Enemy_Spawn')">{{ String.fromCodePoint(parseInt("U+2B1A".replace('U+', ''), 16)) }}</button>
-          <button @click="setDropper('Extender')">{{ String.fromCodePoint(parseInt("U+25FC".replace('U+', ''), 16)) }}</button>
+      <!-- todo set new buttons to dropperState equivalents
+       mode: DropperMode
+      tileType?: string           // used when mode === 'tile'
+      pieceName?: string          // used when mode === 'piece' or 'extend'
+      team?: 'player' | 'enemy'   // used when placing pieces
+      extending?: boolean         // convenience flag for UI
+      pieceToExtend?: string 
+      -->
+          <button @click="setDropper('', null)">X</button>
+          <button @click="setDropper('Player_Spawn', "U+2BD0")">{{ String.fromCodePoint(parseInt("U+2BD0".replace('U+', ''), 16)) }}</button>
+          <button @click="setDropper('Enemy_Spawn', "U+2B1A")">{{ String.fromCodePoint(parseInt("U+2B1A".replace('U+', ''), 16)) }}</button>
+          <button @click="setDropper('Extender', "U+2B1A")">{{ String.fromCodePoint(parseInt("U+25FC".replace('U+', ''), 16)) }}</button>
           <button
             v-for="p in pieceClasses"
             :key="p.name"
             class="piece-button for-player"
             :id="p.name+'-dropper-btn'"
-            @click="setDropper(p.name)"
+            @click="setDropper(p.name, p.unicode)"
           >
             {{ String.fromCodePoint(parseInt(p.unicode.replace('U+', ''), 16)) }} {{ p.name }}
           </button>

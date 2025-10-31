@@ -14,10 +14,10 @@ const lookupPiece = (pieceName: string) => {
 const props = defineProps<{
   name: string
   team: string
-  tileSize: number
+  tileSize: number//provided by board.vue
   headPosition: Coordinate
   pieceTiles: Coordinate[]
-  mapTiles: Coordinate[]
+  mapTiles: Coordinate[]//provided by board.vue
 }>();
 
 //emits
@@ -45,9 +45,6 @@ onMounted(() => {
 
 // --- reactive properties derived from the piece instance ---
 // Computed values
-const pieceId = computed(() =>
-  piece.value ? `${piece.value.name}-${crypto.randomUUID()}` : 'uninitialized-piece'
-)
 
 // Derived values
 const unicodeSymbol = computed(() =>
@@ -118,7 +115,8 @@ const onAttack = (piece) => {
   <div
     class="board-piece"
     :class="'team-'+team"
-    :id="pieceId"
+    :name="piece?.name"
+    :id="piece?.id"
     :style="pieceStyle"
     @click="showController = !showController"
   >

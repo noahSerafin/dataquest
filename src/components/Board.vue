@@ -115,15 +115,32 @@ const highlightMoves = (piece: InstanceType<typeof Piece>) => {
       </template>
     </div>
     <!-- Render pieces -->
-    <PieceView
-    name="Shield"
-    team="player"
-    :tileSize=tileSize
-    :headPosition="{x: 0, y: 0}"
-    :pieceTiles="[{x:0, y:0}, {x:0, y:1}, {x:1, y:1}]"
-    :mapTiles = props.tiles
-    @highlightMoves="highlightMoves"
-    />
+    <div
+      v-for="piece in activePieces"
+      class="piece-layer"
+      :key="piece.id"
+    >
+      <PieceView :name="piece.name"
+      :team="piece.team"
+      :tileSize=tileSize
+      :headPosition="{x: 0, y: 0}"
+      :pieceTiles="[{x:0, y:0}, {x:0, y:1}, {x:1, y:1}]"
+      :mapTiles = props.tiles
+      @highlightMoves="highlightMoves"
+      />
+    </div>
+      <!--
+        <PieceView
+        name="Shield"
+        team="player"
+        :tileSize=tileSize
+        :headPosition="{x: 0, y: 0}"
+        :pieceTiles="[{x:0, y:0}, {x:0, y:1}, {x:1, y:1}]"
+        :mapTiles = props.tiles
+        @highlightMoves="highlightMoves"
+        />
+        -->
+
     <!-- Highlights -->
     <div
       v-for="(tile, index) in moveHighlights"

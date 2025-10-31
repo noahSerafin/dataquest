@@ -23,7 +23,7 @@ const displayEditor = ref(true);
   <button @mousedown="swapDisplay()">
     {{ displayEditor ? "Show Board" : "Show Editor" }}
   </button>
-  <Board v-if="!displayEditor" :tiles="level" />
+  <Board v-if="!displayEditor" :tiles="level.map" :pieces=level.pieces/> <!-- todo: set up  levels with array of pieces and tiles (map)-->
   <Leveleditor v-else @export-level="handleExport"/>
 </template>
 

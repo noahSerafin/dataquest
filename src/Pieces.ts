@@ -1,6 +1,7 @@
 import type { Coordinate } from "./types"
 
 export abstract class Piece {
+  id: string
   static name : string
   static description : string
   static unicode : string
@@ -17,6 +18,7 @@ export abstract class Piece {
   headPosition: Coordinate
   tiles: Coordinate[] // an array of (x, y) positions
   movesRemaining: number
+  team: string
 
   constructor(
     name: string, 
@@ -31,6 +33,7 @@ export abstract class Piece {
     headPosition: Coordinate, 
     tiles: Coordinate[]
   ) {
+    this.id = crypto.randomUUID()
     this.name = name
     this.description = description
     this.unicode = unicode
@@ -43,6 +46,7 @@ export abstract class Piece {
     this.headPosition = headPosition
     this.tiles = [headPosition] // default to head
     this.movesRemaining = moves // default to full moves at start of turn
+    this.team = 'player'
   }
 
 //name desc unicode || maxsize moves range atk def

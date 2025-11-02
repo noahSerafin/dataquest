@@ -2,7 +2,9 @@
 import { ref, computed, onMounted, onBeforeUnmount } from "vue"
 import type { Coordinate } from "../types"
 import PieceView from "./PieceView.vue";
+import PieceController from "./PieceController.vue";
 import type { Piece } from "../Pieces"
+import { Allpieces } from "../Pieces"
 
 interface Props{
   tiles : Coordinate[]
@@ -27,8 +29,8 @@ const updateSize = () => {
   vw.value = window.innerWidth * 0.7
   vh.value = window.innerHeight * 0.7
 }
-onMounted(() => window.addEventListener("resize", updateSize))
-onBeforeUnmount(() => window.removeEventListener("resize", updateSize))
+onMounted(() => window.addEventListener("resize", updateSize));
+onBeforeUnmount(() => window.removeEventListener("resize", updateSize));
 
 // Compute tile size
 const tileSize = computed(() => {
@@ -47,6 +49,17 @@ const tileSet = computed(() => new Set(props.tiles.map(t => `${t.x},${t.y}`)))
 //pieceMap to track occupied spaces
 const activePieces = ref<InstanceType<typeof Piece>[]>([]);
 
+function rehydratePieces(rawPieces: any[]): InstanceType<typeof Piece>[] {
+  return rawPieces.map(p => {
+    const PieceClass = Allpieces.find(cls => cls.name === p.name)
+    return PieceClass ? Object.assign(new PieceClass(p.headPosition), p) : p
+  })
+}
+
+onMounted(() => {
+  activePieces.value = rehydratePieces(props.pieces);
+})
+
 // Fast lookup: "x,y" → piece reference
 const pieceMap = computed(() => {
   const map = new Map<string, InstanceType<typeof Piece>>()
@@ -60,6 +73,12 @@ const pieceMap = computed(() => {
 });
 
 const isOccupied = (x: number, y: number) => pieceMap.value.has(`${x},${y}`);
+
+const selectedPiece = ref<Piece | null>(null)
+
+function handlePieceSelect(piece: Piece) {
+  selectedPiece.value = piece
+}
 
 //change to one move at a time
 function getAvailableMoves(
@@ -123,24 +142,12 @@ const highlightMoves = (piece: InstanceType<typeof Piece>) => {
       <PieceView :name="piece.name"
       :team="piece.team"
       :tileSize=tileSize
-      :headPosition="{x: 0, y: 0}"
-      :pieceTiles="[{x:0, y:0}, {x:0, y:1}, {x:1, y:1}]"
+      :headPosition="piece.headPosition"
+      :pieceTiles="piece.tiles"
       :mapTiles = props.tiles
       @highlightMoves="highlightMoves"
       />
     </div>
-      <!--
-        <PieceView
-        name="Shield"
-        team="player"
-        :tileSize=tileSize
-        :headPosition="{x: 0, y: 0}"
-        :pieceTiles="[{x:0, y:0}, {x:0, y:1}, {x:1, y:1}]"
-        :mapTiles = props.tiles
-        @highlightMoves="highlightMoves"
-        />
-        -->
-
     <!-- Highlights -->
     <div
       v-for="(tile, index) in moveHighlights"
@@ -153,7 +160,17 @@ const highlightMoves = (piece: InstanceType<typeof Piece>) => {
         height: tileSize + 'px',
       }"
     />
-   </div>
+    <!--&& selectedPiece.team === 'player'"-->
+    <PieceController
+      v-if="selectedPiece"
+      :piece="selectedPiece"
+      @highlightMoves="highlightMoves"
+      />
+      <!--
+        @attack="onAttack"
+        @special="console.log('Special', $event)"
+      -->
+    </div>
 </template>
 
 <style scoped>

@@ -20,16 +20,27 @@ const props = defineProps<{
   mapTiles: Coordinate[]//provided by board.vue
 }>();
 
-//emits
-const emit = defineEmits<{
-  (e: 'highlightMoves', piece: Piece): void
-  (e: 'attack', piece: Piece): void
-  (e: 'special', piece: Piece): void
-}>()
 
 //local state
 const piece = ref<InstanceType<typeof Piece> | null>(null);
-const showController = ref(false);
+const showController = ref(false);//todo change to selected piece
+
+//emits
+const emit = defineEmits<{ select:[piece:Piece] }>()
+/*
+const emit = defineEmits<{
+  (e: 'select', piece: Piece): void
+}>()
+  (e: 'highlightMoves', piece: Piece): void
+  (e: 'attack', piece: Piece): void
+  (e: 'special', piece: Piece): void
+const emit = defineEmits<{ 
+  select:[piece:Piece],
+}>()
+highlightMoves: [piece: Piece],
+attack: [piece: Piece],
+special: [piece: Piece]
+*/
 
 // On mount, create the piece instance
 onMounted(() => {
@@ -94,19 +105,19 @@ const getTileStyle = (tile: Coordinate) => ({
   top: tile.y * props.tileSize+6 + "px",
 })
 
-//controller------------
-const onHighlightMoves = (piece: Piece) => {
-  emit('highlightMoves', piece) // 🔁 forward up to Board.vue
-
+function handleSelect() {
+  if (piece.value) emit('select', piece.value)
 }
+
+//controller------------
 const handlePieceMoveClick = () => {
   if (piece.value) {
-    emit('highlightMoves', piece.value)
+   // emit('highlightMoves', piece.value)
   }
 }
 
-const onAttack = (piece) => {
-  emit('attack', piece)
+const onAttack = (piece : Piece) => {
+ // emit('attack', piece)
 }
 
 </script>
@@ -118,7 +129,7 @@ const onAttack = (piece) => {
     :name="piece?.name"
     :id="piece?.id"
     :style="pieceStyle"
-    @click="showController = !showController"
+    @click="handleSelect"
   >
     {{ unicodeSymbol }}
     <button
@@ -139,13 +150,6 @@ const onAttack = (piece) => {
       ...pieceStyle,
       ...getTileStyle(tile),
     }"
-  />
-  <PieceController
-    v-if="showController"
-    :piece="piece"
-    @highlightMoves="onHighlightMoves"
-    @attack="onAttack"
-    @special="console.log('Special', $event)"
   />
 </template>
 

@@ -13,8 +13,9 @@ const displayEditor = ref(true);
   }
 
   // When editor exports a new level
-  const handleExport = (tiles: Coordinate[]) => {
-    level.value = tiles; // update the Board's tiles
+  const handleExport = (levelData: any) => {
+    level.value.map = levelData.map;
+    level.value.pieces = levelData.pieces;
     displayEditor.value = false; // swap to board view
   };
 </script>
@@ -23,7 +24,7 @@ const displayEditor = ref(true);
   <button @mousedown="swapDisplay()">
     {{ displayEditor ? "Show Board" : "Show Editor" }}
   </button>
-  <Board v-if="!displayEditor" :tiles="level.map" :pieces=level.pieces/> <!-- todo: set up  levels with array of pieces and tiles (map)-->
+  <Board v-if="!displayEditor" :tiles="level.map" :pieces="level.pieces"/> <!-- todo: set up  levels with array of pieces and tiles (map)-->
   <Leveleditor v-else @export-level="handleExport"/>
 </template>
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount, watch, reactive } from "vue";
 import type { Coordinate } from "../types";
-//import PieceView from "./PieceView.vue";
+import PieceView from "./PieceView.vue";
 import type { Piece } from "../Pieces";
 import {Allpieces} from "../Pieces";
 
@@ -14,10 +14,10 @@ const height = ref(9);
 
 
 type DropperMode = 'tile' | 'piece' | 'extend';
+//const editingPieceID: ref('');
 
 interface DropperState {
   mode: DropperMode
-  tileType?: string           // used when mode === 'tile'
   pieceName?: string          // used when mode === 'piece' or 'extend'
   team?: 'player' | 'enemy'   // used when placing pieces
   extending?: boolean         // convenience flag for UI
@@ -26,16 +26,19 @@ interface DropperState {
 
 const dropper = ref<DropperState>({
   mode: 'tile',
-  tileType: '',
+  pieceName: '',
+  team: 'enemy',
+  extending: false,
+  pieceToExtend: ''
 });
 
 const setDropper = (newDropper: DropperState) => {
+  dropper.value = newDropper // + player or enemy
   if(newDropper.pieceName == dropper.value.pieceName){
     //switch that dropper button from player to enemy
     newDropper.team = dropper.value.team == 'player' ? 'enemy' : 'player';
   }
-  dropper.value = newDropper // + player or enemy
-  console.log(dropper.value)
+  console.log('new dropper: ' , dropper.value, dropper.value.pieceToExtend);
 }
 
 const isDragging = ref(false)
@@ -74,6 +77,7 @@ function extendPiece(pieceID: string, coord: Coordinate) {
 function handleMouseDown(x: number, y: number) {
   if (dropper.value.mode === "tile") {
     //todo: check coord isn't occupied before removing a tile
+    //if coord is occupied remove piece??
     isDragging.value = true
     dragMode.value = isActive(x, y) ? "deactivate" : "activate"
     applyDrag(x, y)
@@ -81,14 +85,6 @@ function handleMouseDown(x: number, y: number) {
     extendPiece(dropper.value.pieceToExtend, {x, y});  
   } else if (dropper.value.mode == 'piece'){
     placePiece({x, y});
-      // piece placement mode
-     /*
-     const Piece = pieces[dropper.value as keyof typeof pieces]
-      if (Piece) {
-        const newPiece = new Piece({ x, y })
-        pieces.value.push(newPiece)
-      }
-      */
   }
 }
 
@@ -113,6 +109,13 @@ onBeforeUnmount(() => {
 
 // Track clicked tiles
 const activeTiles = ref<Set<string>>(new Set());
+
+const tileMap = computed<Coordinate[]>(() =>
+  Array.from(activeTiles.value).map(tileStr => {
+    const [x, y] = tileStr.split(',').map(Number)
+    return { x, y }
+  })
+)
 //reactive(new Set<string>());
 
 const fillGrid = () => {
@@ -135,16 +138,40 @@ const updateSize = () => {
 const emit = defineEmits<{
   (e: "export-level", tiles: Coordinate[]): void
 }>()
-// export active tiles to clipboard
-const exportTiles = async () => {
+
+// export active tiles and pieces to clipboard
+const exportLevel = async () => {
+
   const coords: Coordinate[] = Array.from(activeTiles.value).map(key => {
     const [x, y] = key.split(",").map(Number)
     return { x, y }
   })
-  const json = JSON.stringify(coords, null, 2);
-  await navigator.clipboard.writeText(json);
-  alert("Copied " + coords.length + " tiles to clipboard.");
-  emit("export-level", coords) // send data to App.vue
+ 
+  // Step 2: Extract the relevant data from each piece
+  const exportedPieces = piecesToExport.value.map(p => ({
+    id: p.id,
+    name: p.name,
+    team: p.team,
+    headPosition: p.headPosition,
+    tiles: p.tiles,
+    color: p.color,
+    moves: p.moves,
+    range: p.range,
+  }))
+
+  // Step 3: Build the final level object
+  const exportingLevel = {
+    map: coords,
+    pieces: exportedPieces,
+  }
+
+  // Step 4: Copy JSON to clipboard
+  const json = JSON.stringify(exportingLevel, null, 2)
+  await navigator.clipboard.writeText(json)
+  alert('Copied level to clipboard.')
+
+  // Step 5: Emit for higher-level handling if needed
+  emit('export-level', exportingLevel);
 }
 
 
@@ -196,25 +223,23 @@ const boardHeight = computed(() => tileSize.value * height.value)
   <!-- Place Pieces -->
    <div class="droppers">
      <div class="piece-selector">
-      <!-- todo set new buttons to dropperState equivalents
+      <!-- todo set new buttons, check dropperState is changing
        mode: DropperMode
-      tileType?: string           // used when mode === 'tile'
       pieceName?: string          // used when mode === 'piece' or 'extend'
       team?: 'player' | 'enemy'   // used when placing pieces
       extending?: boolean         // convenience flag for UI
       pieceToExtend?: string 
       -->
-          <button @click="setDropper('', null)">X</button>
-          <button @click="setDropper('Player_Spawn', "U+2BD0")">{{ String.fromCodePoint(parseInt("U+2BD0".replace('U+', ''), 16)) }}</button>
-          <button @click="setDropper('Enemy_Spawn', "U+2B1A")">{{ String.fromCodePoint(parseInt("U+2B1A".replace('U+', ''), 16)) }}</button>
-          <button @click="setDropper('Extender', "U+2B1A")">{{ String.fromCodePoint(parseInt("U+25FC".replace('U+', ''), 16)) }}</button>
+          <button @click="setDropper({mode: 'tile'})">X</button>
+          <button @click="setDropper({mode: 'piece', pieceName: 'Spawn', team: 'player'})">{{ String.fromCodePoint(parseInt("U+2BD0".replace('U+', ''), 16)) }}</button>
+          <button @click="setDropper({mode: 'piece', pieceName: 'Spawn', team: 'enemy'})">{{ String.fromCodePoint(parseInt("U+2B1A".replace('U+', ''), 16)) }}</button>
+          <button @click="setDropper({mode: 'extend'})">{{ String.fromCodePoint(parseInt("U+25FC".replace('U+', ''), 16)) }}</button>
           <button
             v-for="p in pieceClasses"
             :key="p.name"
             class="piece-button for-player"
             :id="p.name+'-dropper-btn'"
-            @click="setDropper(p.name, p.unicode)"
-          >
+            @click="setDropper({mode: 'piece', pieceName: p.name, })"          >
             {{ String.fromCodePoint(parseInt(p.unicode.replace('U+', ''), 16)) }} {{ p.name }}
           </button>
         </div>
@@ -240,9 +265,21 @@ const boardHeight = computed(() => tileSize.value * height.value)
         </template>
 
       </div>
+      <div
+        v-for="piece in piecesToExport"
+        class="piece-layer"
+        :key="piece.id"
+      >
+        <PieceView :name="piece.name"
+        :team="piece.team"
+        :tileSize=tileSize
+        :headPosition="piece.headPosition"
+        :pieceTiles="piece.tiles"
+        :mapTiles="tileMap"/>
+      </div>
     </div>
      <!-- Export button -->
-    <button @click="exportTiles" class="export-btn">Export Tiles</button>
+    <button @click="exportLevel" class="export-btn">Export Tiles</button>
   </div>
 </template>
 

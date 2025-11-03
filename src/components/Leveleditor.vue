@@ -60,7 +60,8 @@ function placePiece(coord: Coordinate) {
   const pieceClass = Allpieces.find(p => p.name === dropper.value.pieceName)
   if (!pieceClass) return
 
-  const newPiece = new pieceClass(coord)
+  const newPiece = new pieceClass(coord);
+  console.log('team: ', dropper.value.team)
   newPiece.team = dropper.value.team ?? 'enemy'
 
   piecesToExport.value.push(newPiece)
@@ -70,7 +71,7 @@ function extendPiece(pieceID: string, coord: Coordinate) {
   const pieceToExtend = piecesToExport.value.find(p => p.id === pieceID)
   if (!pieceToExtend) return
 
-  pieceToExtend.addTile(coord.x, coord.y); //not a . value, its a function
+  pieceToExtend.addTile(coord.x, coord.y); //todo not a . value, its a function
 }
 
 // Handle mouse down
@@ -270,12 +271,11 @@ const boardHeight = computed(() => tileSize.value * height.value)
         class="piece-layer"
         :key="piece.id"
       >
-        <PieceView :name="piece.name"
-        :team="piece.team"
-        :tileSize=tileSize
-        :headPosition="piece.headPosition"
-        :pieceTiles="piece.tiles"
-        :mapTiles="tileMap"/>
+        <PieceView
+          :piece="piece"
+          :tileSize="tileSize"
+          :mapTiles="tileMap"
+        />
       </div>
     </div>
      <!-- Export button -->

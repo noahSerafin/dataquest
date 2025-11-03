@@ -6,97 +6,69 @@ import PieceController from "./PieceController.vue";
 
 //construction-------------
 
-const lookupPiece = (pieceName: string) => {
-  return Allpieces.find(pieceClass => pieceClass.name === pieceName)
-}
-
 // Props
 const props = defineProps<{
-  name: string
-  team: string
+  piece: InstanceType<typeof Piece>
+  //name: string
+  //team: string
+  //headPosition: Coordinate
+  //pieceTiles: Coordinate[]
   tileSize: number//provided by board.vue
-  headPosition: Coordinate
-  pieceTiles: Coordinate[]
   mapTiles: Coordinate[]//provided by board.vue
 }>();
 
 
 //local state
-const piece = ref<InstanceType<typeof Piece> | null>(null);
 const showController = ref(false);//todo change to selected piece
 
 //emits
-const emit = defineEmits<{ select:[piece:Piece] }>()
-/*
-const emit = defineEmits<{
-  (e: 'select', piece: Piece): void
-}>()
-  (e: 'highlightMoves', piece: Piece): void
-  (e: 'attack', piece: Piece): void
-  (e: 'special', piece: Piece): void
 const emit = defineEmits<{ 
   select:[piece:Piece],
 }>()
-highlightMoves: [piece: Piece],
-attack: [piece: Piece],
-special: [piece: Piece]
-*/
 
-// On mount, create the piece instance
-onMounted(() => {
-  const PieceClass = lookupPiece(props.name)
-  if (!PieceClass) {
-    console.error(`No piece found with name: ${props.name}`)
-    return
-  }
-  piece.value = new PieceClass(
-    props.headPosition
-  )
-})
-
-// --- reactive properties derived from the piece instance ---
-// Computed values
-
-// Derived values
+//computed
 const unicodeSymbol = computed(() =>
-  piece.value
-    ? String.fromCodePoint(parseInt(piece.value.unicode.replace('U+', ''), 16))
+  props.piece
+    ? String.fromCodePoint(parseInt(props.piece.unicode.replace('U+', ''), 16))
     : ''
 )
 
+// --- reactive properties derived from the piece instance ---
+
 // All non-head tiles
 const bodyTiles = computed(() =>
-  props.pieceTiles.filter(
-    (p) => p.x !== props.headPosition.x || p.y !== props.headPosition.y
+  props.piece.tiles.filter(
+    (p) => p.x !== props.piece.headPosition.x || p.y !== props.piece.headPosition.y
   )
 )
 
 const getDirectionClass = (tile: Coordinate, index: number) => {
-  if (index === 0) return '' // skip connector from head
-  const prev = index === 0 ? props.headPosition : props.pieceTiles[index - 1]
+  const prev = props.piece.tiles[index - 1]
+  if (!prev) return ''
 
-  const dx = tile.x - prev.x
-  const dy = tile.y - prev.y
+  const dx = prev.x - tile.x
+  const dy = prev.y - tile.y
 
-  if (dx === 1) return 'from-left'
-  if (dx === -1) return 'from-right'
-  if (dy === 1) return 'from-top'
-  if (dy === -1) return 'from-bottom'
+  if (dx === 1) return 'from-right'
+  if (dx === -1) return 'from-left'
+  if (dy === 1) return 'from-bottom'
+  if (dy === -1) return 'from-top'
+
   return ''
 }
 
 const pieceStyle = computed(() => {
-  if (!piece.value) return {}
+  if (!props.piece) return {}
   return {
-    left: (piece.value.headPosition.x * props.tileSize)+6 + 'px',
-    top: (piece.value.headPosition.y * props.tileSize)+6 + 'px',
+    left: (props.piece.headPosition.x * props.tileSize)+6 + 'px',
+    top: (props.piece.headPosition.y * props.tileSize)+6 + 'px',
     position: 'absolute',
     width: props.tileSize-16 + 'px',
     height: props.tileSize-16 + 'px',
     fontSize: props.tileSize * 0.8 + 'px',
     lineHeight: props.tileSize -24 + 'px',
-    backgroundColor: piece.value.color,
-    '--piece-color': piece.value.color,
+    backgroundColor: props.piece.color,
+    '--piece-color': props.piece.color,
   }
 })
 
@@ -106,13 +78,14 @@ const getTileStyle = (tile: Coordinate) => ({
 })
 
 function handleSelect() {
-  if (piece.value) emit('select', piece.value)
+  showController.value = !showController.value;
+  if (props.piece) emit('select', props.piece)
 }
 
 //controller------------
 const handlePieceMoveClick = () => {
-  if (piece.value) {
-   // emit('highlightMoves', piece.value)
+  if (props.piece) {
+   // emit('highlightMoves', props.piece)
   }
 }
 
@@ -125,7 +98,7 @@ const onAttack = (piece : Piece) => {
 <template>
   <div
     class="board-piece"
-    :class="'team-'+team"
+    :class="'team-'+props.piece.team"
     :name="piece?.name"
     :id="piece?.id"
     :style="pieceStyle"

@@ -4,7 +4,7 @@ import type { Coordinate } from "../types"
 import type { Piece } from "../Pieces"
 
 defineProps<{ piece: InstanceType<typeof Piece> | null }>()
-defineEmits(['highlightMove', 'attack', 'special'])
+defineEmits(['highlightMoves', 'attack', 'special'])
 
 /*
  <button
@@ -31,13 +31,14 @@ defineEmits(['highlightMove', 'attack', 'special'])
       <div class="stats">
         <p>Max Size: {{ piece.maxSize }}</p>
         <p>Moves: {{ piece.moves }}</p>
+        <p>Moves left: {{ piece.movesRemaining }}</p>
         <p>Range: {{ piece.range }}</p>
         <p>Attack: {{ piece.attack }}</p>
         <p>Defence: {{ piece.defence }}</p>
       </div>
 
       <div class="actions">
-        <button @click="$emit('highlightMove', piece)">Move</button>
+        <button @click="$emit('highlightMoves', piece)">Move</button>
         <button @click="$emit('attack', piece)">Attack</button>
        
       </div>

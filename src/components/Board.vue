@@ -108,6 +108,22 @@ const highlightMoves = (piece: InstanceType<typeof Piece>) => {
   moveHighlights.value = getAvailableMoves(piece, tileSet.value, pieceMap.value);
 }
 
+const clearHighlights = () => {
+  moveHighlights.value = [];
+}
+
+const movePiece = (coord : Coordinate) => {//todo moves piece, but does not add more tiles visually
+  if(selectedPiece.value){
+    selectedPiece.value?.moveTo(coord);
+    if(selectedPiece.value.movesRemaining > 0){
+      highlightMoves(selectedPiece.value);
+    }else {
+      clearHighlights();
+    }
+    console.log('tiles: ', selectedPiece.value.tiles);
+  }
+}
+
 </script>
 
 
@@ -139,20 +155,20 @@ const highlightMoves = (piece: InstanceType<typeof Piece>) => {
       class="piece-layer"
       :key="piece.id"
     >
-      <PieceView :name="piece.name"
-      :team="piece.team"
+      <PieceView :piece="piece"
       :tileSize=tileSize
-      :headPosition="piece.headPosition"
-      :pieceTiles="piece.tiles"
       :mapTiles = props.tiles
-      @highlightMoves="highlightMoves"
+      @select="handlePieceSelect"
       />
     </div>
-    <!-- Highlights -->
+    <!-- 
+      @highlightMoves="highlightMoves"
+    Highlights -->
     <div
       v-for="(tile, index) in moveHighlights"
       :key="index"
       class="highlight-tile"
+      v-on:click="movePiece(tile)"
       :style="{
         left: tile.x * tileSize + 'px',
         top: tile.y * tileSize + 'px',
@@ -197,6 +213,6 @@ const highlightMoves = (piece: InstanceType<typeof Piece>) => {
   position: absolute;
   background-color: rgba(0, 200, 255, 0.3);
   border: 1px solid rgba(0, 200, 255, 0.5);
-  pointer-events: none;
+  cursor: pointer;
 }
 </style>

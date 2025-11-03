@@ -76,10 +76,10 @@ export abstract class Piece {
 
   moveTo(newPosition: Coordinate): void {
     this.headPosition = newPosition
-    this.tiles.push(newPosition)
+    this.tiles.unshift(newPosition)
     // If exceeding maxSize, remove the oldest tile
     if (this.tiles.length > this.maxSize) {
-      this.tiles.shift() // removes first element
+      this.tiles.pop() // removes first element
     }
     this.useMove();
   }

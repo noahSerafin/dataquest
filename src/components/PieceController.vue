@@ -3,8 +3,11 @@ import { ref, computed, onMounted } from "vue"
 import type { Coordinate } from "../types"
 import type { Piece } from "../Pieces"
 
-defineProps<{ piece: InstanceType<typeof Piece> | null }>()
-defineEmits(['highlightMoves', 'attack', 'special'])
+defineProps<{ 
+  piece: InstanceType<typeof Piece> | null 
+  mode: 'inventory' | 'action'
+}>()
+defineEmits(['highlightMoves', 'attack', 'special', 'place', 'sell'])//TODO place goes in board/player //sell goes in player
 
 /*
  <button
@@ -38,9 +41,15 @@ defineEmits(['highlightMoves', 'attack', 'special'])
       </div>
 
       <div class="actions">
-        <button @click="$emit('highlightMoves', piece)">Move</button>
-        <button @click="$emit('attack', piece)">Attack</button>
-       
+        <template v-if="mode === 'inventory'">
+          <button @click="$emit('place', piece)">Place</button>
+          <button @click="$emit('sell', piece)">Sell</button>
+        </template>
+        <template v-else-if="mode === 'action'">
+          <button @click="$emit('highlightMoves', piece)">Move</button>
+          <button @click="$emit('attack', piece)">Attack</button>
+          <button @click="$emit('special', piece)">Special</button>
+        </template>
       </div>
     </div>
   </transition>

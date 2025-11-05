@@ -11,6 +11,7 @@
 //Miner collect money each round
 //PICK, U+26CF
 
+//BUBBLES, U+1FAE7 increase interest
 
 // CRYSTAL BALL, U+1F52E //see next level/shop in advance
 
@@ -28,6 +29,10 @@
 //clippy - provides hints
 //PAPERCLIP, U+1F4CE
 
+//FISHING POLE AND FISH, U+1F3A3
+
+//8ball  BILLIARDS, U+1F3B1
+
 //LEFT-POINTING MAGNIFYING GLASS, U+1F50D
 // //reveal secrets
 
@@ -41,7 +46,9 @@
 //SATELLITE, U+1F6F0 //orbital laser
 
 //copier - copy a program
-//EMPTY NOTE PAD, U+1F5C7
+//EMPTY NOTE PAD, U+1F5C7 increase memory
+
+// LOCK, U+1F512
 
 //hex SOFTWARE-FUNCTION SYMBOL, U+2394
 
@@ -58,6 +65,11 @@
 //space invaders ALIEN MONSTER, U+1F47E
 //MONEY-MOUTH FACE, U+1F911
 
+//CANDLE, U+1F56F
+ // ELECTRIC TORCH, U+1F526
+
+// /MIRROR, U+1FA9E
+
 //HELICOPTER, U+1F681
 
 //SEWING NEEDLE, U+1FAA1
@@ -65,6 +77,8 @@
 // BRAIN, U+1F9E0
 // ANATOMICAL HEART, U+1FAC0
 //LUNGS, U+1FAC1
+
+// ICE CUBE, U+1F9CA
 
 
 //BLACK CHESS KNIGHT, U+265E

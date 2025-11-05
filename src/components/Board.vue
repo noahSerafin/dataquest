@@ -180,6 +180,7 @@ const movePiece = (coord : Coordinate) => {//todo moves piece, but does not add 
     <PieceController
       v-if="selectedPiece"
       :piece="selectedPiece"
+      mode="action"
       @highlightMoves="highlightMoves"
       />
       <!--

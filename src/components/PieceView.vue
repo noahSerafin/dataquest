@@ -1,20 +1,15 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
 import type { Coordinate } from "../types";
-import { Piece, Allpieces } from "../Pieces";
-import PieceController from "./PieceController.vue";
+import { Piece } from "../Pieces";
 
 //construction-------------
 
 // Props
 const props = defineProps<{
   piece: InstanceType<typeof Piece>
-  //name: string
-  //team: string
-  //headPosition: Coordinate
-  //pieceTiles: Coordinate[]
   tileSize: number//provided by board.vue
-  mapTiles: Coordinate[]//provided by board.vue
+  mapTiles?: Coordinate[] // optional when in inventory
 }>();
 
 
@@ -36,10 +31,18 @@ const unicodeSymbol = computed(() =>
 // --- reactive properties derived from the piece instance ---
 
 // All non-head tiles
-const bodyTiles = computed(() =>
-  props.piece.tiles.filter(
-    (p) => p.x !== props.piece.headPosition.x || p.y !== props.piece.headPosition.y
-  )
+//TODO handle a situation where bodyTiles is empty
+const bodyTiles = computed(() => 
+  {
+    if (!props.piece?.tiles?.length || !props.piece?.headPosition || props.piece.tiles[0] == undefined) {
+      return []
+    } else {
+      console.log('tiles: ', props.piece.tiles)
+      return props.piece.tiles.filter(
+        (p) => p.x !== props.piece.headPosition.x || p.y !== props.piece.headPosition.y
+      )
+    }
+  }
 )
 
 const getDirectionClass = (tile: Coordinate, index: number) => {

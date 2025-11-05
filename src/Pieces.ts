@@ -30,8 +30,8 @@ export abstract class Piece {
     attack: number, 
     defence: number, 
     color: string,
-    headPosition: Coordinate, 
-    tiles: Coordinate[]
+    headPosition: Coordinate | null = null, 
+    tiles: Coordinate[] = []
   ) {
     this.id = crypto.randomUUID()
     this.name = name
@@ -43,8 +43,8 @@ export abstract class Piece {
     this.attack = attack
     this.defence = defence
     this.color = color
-    this.headPosition = headPosition
-    this.tiles = [headPosition] // default to head
+    this.headPosition = headPosition ?? { x: -1, y: -1 };
+    this.tiles = tiles.length ? tiles : headPosition ? [headPosition] : []; //default to head
     this.movesRemaining = moves // default to full moves at start of turn
     this.team = 'player'
   }
@@ -56,7 +56,7 @@ export abstract class Piece {
 
   // Example method: add a new tile position
   addTile(x: number, y: number): void {
-    this.tiles.push({ x, y })
+    this.tiles.unshift({ x, y })
   }
 
   resetMoves() {
@@ -98,7 +98,7 @@ export abstract class Piece {
 }
 
 //name desc unicode || maxsize moves range atk def
-class Sword extends Piece {
+export class Sword extends Piece {
   static name = "Sword";
   static description = "A basic attack piece";
   static unicode = "U+1F5E1";
@@ -132,7 +132,7 @@ class Sword2 extends Piece {
 }
 
 
-class Shield extends Piece {
+export class Shield extends Piece {
   static name = "Shield";
   static description = "A basic defensive piece";
   static unicode = "U+1F6E1";
@@ -456,11 +456,18 @@ class Sponge extends Piece {
 
 export const Allpieces = [Sword, Sword2, Shield, Aegis, Sling, Bow, SAM, Gate, Stonewall, Firewall, Trench, Lance, Mole, Trojan, Cannon, Tank, Bomb, Dataworm, Copycat, Trap, Mine, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge ];
 
+// HOCHO, U+1F52A kitchen knife 
+
+//puffer fish - return damage after being attacked?
+// BLOWFISH, U+1F421
+
+
 //snowball moving increases max size,// and movement speed?
 
 //SUPERVILLAIN, U+1F9B9
 //generate money on a piece's destruction
 
+//ELEPHANT, U+1F418
 
 //STOPWATCH, U+23F1 rewind an emenies move
 

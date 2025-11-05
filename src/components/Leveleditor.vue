@@ -33,8 +33,14 @@ const dropper = ref<DropperState>({
 });
 
 const setDropper = (newDropper: DropperState) => {
-  dropper.value = newDropper // + player or enemy
-  if(newDropper.pieceName == dropper.value.pieceName){
+  if(newDropper.mode === 'extend'){
+    dropper.value.mode === newDropper.mode;
+  } else if(newDropper.pieceName === 'spawn') {
+    dropper.value = newDropper // + player or enemy, todo design a spawner item that works for both
+  } else if(newDropper.mode === 'piece'){
+    dropper.value = newDropper//preventing player/enemy switch atm??
+  }
+  if(newDropper.pieceName == dropper.value.pieceName){//todo make this switch actually work
     //switch that dropper button from player to enemy
     newDropper.team = dropper.value.team == 'player' ? 'enemy' : 'player';
   }
@@ -64,6 +70,7 @@ function placePiece(coord: Coordinate) {
   console.log('team: ', dropper.value.team)
   newPiece.team = dropper.value.team ?? 'enemy'
 
+  dropper.value.pieceToExtend = newPiece.id;
   piecesToExport.value.push(newPiece)
 }
 
@@ -232,8 +239,7 @@ const boardHeight = computed(() => tileSize.value * height.value)
       pieceToExtend?: string 
       -->
           <button @click="setDropper({mode: 'tile'})">X</button>
-          <button @click="setDropper({mode: 'piece', pieceName: 'Spawn', team: 'player'})">{{ String.fromCodePoint(parseInt("U+2BD0".replace('U+', ''), 16)) }}</button>
-          <button @click="setDropper({mode: 'piece', pieceName: 'Spawn', team: 'enemy'})">{{ String.fromCodePoint(parseInt("U+2B1A".replace('U+', ''), 16)) }}</button>
+          <button @click="setDropper({mode: 'piece', pieceName: 'Spawn'})">{{ String.fromCodePoint(parseInt("U+2BD0".replace('U+', ''), 16)) }}</button>
           <button @click="setDropper({mode: 'extend'})">{{ String.fromCodePoint(parseInt("U+25FC".replace('U+', ''), 16)) }}</button>
           <button
             v-for="p in pieceClasses"

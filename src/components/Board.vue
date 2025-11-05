@@ -4,13 +4,16 @@ import type { Coordinate } from "../types"
 import PieceView from "./PieceView.vue";
 import PieceController from "./PieceController.vue";
 import type { Piece } from "../Pieces"
-import { Allpieces } from "../Pieces"
 
 interface Props{
-  tiles : Coordinate[]
+  tiles : Coordinate[]//Set<string>
   pieces: Piece[]
 }
 const props = defineProps<Props>()
+
+// Make a Set for fast lookup
+//will need to be ref if you have a bitman
+const tileSet = computed(() => new Set(props.tiles.map(t => `${t.x},${t.y}`)))
 
 // Get cols/rows from tiles
 const cols = computed(() =>
@@ -42,28 +45,12 @@ const tileSize = computed(() => {
 const boardWidth = computed(() => tileSize.value * cols.value)
 const boardHeight = computed(() => tileSize.value * rows.value)
 
-// Make a Set for fast lookup
-//will need to be ref if you have a bitman
-const tileSet = computed(() => new Set(props.tiles.map(t => `${t.x},${t.y}`)))
 
-//pieceMap to track occupied spaces
-const activePieces = ref<InstanceType<typeof Piece>[]>([]);
-
-function rehydratePieces(rawPieces: any[]): InstanceType<typeof Piece>[] {
-  return rawPieces.map(p => {
-    const PieceClass = Allpieces.find(cls => cls.name === p.name)
-    return PieceClass ? Object.assign(new PieceClass(p.headPosition), p) : p
-  })
-}
-
-onMounted(() => {
-  activePieces.value = rehydratePieces(props.pieces);
-})
 
 // Fast lookup: "x,y" → piece reference
 const pieceMap = computed(() => {
   const map = new Map<string, InstanceType<typeof Piece>>()
-  activePieces.value.forEach(piece => {
+  props.pieces.forEach(piece => {
     piece.tiles.forEach(tile => {
       map.set(`${tile.x},${tile.y}`, piece)
     })
@@ -151,7 +138,7 @@ const movePiece = (coord : Coordinate) => {//todo moves piece, but does not add 
     </div>
     <!-- Render pieces -->
     <div
-      v-for="piece in activePieces"
+      v-for="piece in pieces"
       class="piece-layer"
       :key="piece.id"
     >

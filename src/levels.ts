@@ -1,6 +1,6 @@
 export const level1 = {
 pieces : [],
-map : [  
+tiles : [  
   {
     "x": 0,
     "y": 0,

@@ -31,11 +31,14 @@ import type { Coordinate } from "../types";
     );
 
     const handlePlace = (coord : Coordinate) => {
-
+        //send id to app fo rehydration?
+        //send instance to board and use moveTo?
+        //leave a shallow copy here, or not? (could return all pieces from board later?)
     }
 
     const handleSell = () => {
-
+        //do in player class
+        //pieces/items need a sell value, tie it to rarity?
     }
     //progams can be placed on board, greying them out in inventory, use a similar popup to pieceController but with place/sell buttons
     //items can be used on programs, confirmation window to execute their function

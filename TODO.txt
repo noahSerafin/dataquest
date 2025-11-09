@@ -49,6 +49,30 @@ grey out from inventory until round end - retain ID for stats? return will have 
 sell
 rarity = value ?+=no. of upgrades used on a piece?
 
+AI
+pathfinding
+isPlayerInRange
+
+while movesRemaining:
+if maxSize && playerInRange {
+    pieces should try to use special move if possible
+    if(atk > player's def){
+        attack
+    } else if movesRemaining{
+        find another piece, repeat
+    }
+} (if not max size and can move){
+    move toward nearest player 
+    every move:
+    if(isPlayerInRange){
+        pieces should try to use special move if possible
+    } else if(atk > player's def){
+        attack
+    } else {
+        find another piece, repeat
+    }
+}
+
 
 ITEMS
 

@@ -32,7 +32,7 @@
   ));
 
   const level = ref(level1);
-  const displayEditor = ref(true);
+  const displayEditor = ref(false);
 
   const swapDisplay = () => {
     displayEditor.value = !displayEditor.value;//add map later, make shop an overlay?

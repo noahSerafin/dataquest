@@ -10,6 +10,7 @@ const props = defineProps<{
   piece: InstanceType<typeof Piece>
   tileSize: number//provided by board.vue
   mapTiles?: Coordinate[] // optional when in inventory
+  cssclass: string
 }>();
 
 
@@ -62,17 +63,23 @@ const getDirectionClass = (tile: Coordinate, index: number) => {
 
 const pieceStyle = computed(() => {
   if (!props.piece) return {}
-  return {
+  let styles = {
     left: (props.piece.headPosition.x * props.tileSize)+6 + 'px',
     top: (props.piece.headPosition.y * props.tileSize)+6 + 'px',
     position: 'absolute',
     width: props.tileSize-16 + 'px',
     height: props.tileSize-16 + 'px',
-    fontSize: props.tileSize * 0.8 + 'px',
+    fontSize: props.tileSize * 0.6 + 'px',
     lineHeight: props.tileSize -24 + 'px',
     backgroundColor: props.piece.color,
     '--piece-color': props.piece.color,
   }
+  if (props.cssclass === 'inventory'){
+    styles.left = 'unset'
+    styles.top = 'unset'
+    styles.position =  'relative';
+  }
+  return styles;
 })
 
 const getTileStyle = (tile: Coordinate) => ({
@@ -100,8 +107,7 @@ const onAttack = (piece : Piece) => {
 
 <template>
   <div
-    class="board-piece"
-    :class="'team-'+props.piece.team"
+  :class="`piece ${props.cssclass}-piece team-${props.piece.team}`"
     :name="piece?.name"
     :id="piece?.id"
     :style="pieceStyle"
@@ -130,12 +136,15 @@ const onAttack = (piece : Piece) => {
 </template>
 
 <style scoped>
-.board-piece, .piece-tile{
+.piece, .board-piece, .piece-tile{
   text-align: center;
   transition: all 0.2s ease;
   border: outset;
 }
-.board-piece:hover{
+.team-enemy{
+  border: outset red;
+}
+.piece:hover{
   cursor: pointer;
 }
 .piece-tile::before {

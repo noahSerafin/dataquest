@@ -3,10 +3,13 @@ import { ref, computed, onMounted, onBeforeUnmount, watch, reactive } from "vue"
 import type { Coordinate } from "../types";
 import PieceView from "./PieceView.vue";
 import type { Piece } from "../Pieces";
+import { Spawn } from '../Pieces';
 import {Allpieces} from "../Pieces";
 
 //const pieceClasses: Array<typeof Piece>
-const pieceClasses = [...Allpieces];//switch to object for fast lookup when there are "dozens" of pieces
+//switch to object for fast lookup when there are "dozens" of pieces
+const pieceClasses = [...Allpieces];
+pieceClasses.unshift(Spawn);
 
 const size = ref(9);
 const width = ref(9);
@@ -33,18 +36,54 @@ const dropper = ref<DropperState>({
 });
 
 const setDropper = (newDropper: DropperState) => {
-  if(newDropper.mode === 'extend'){
-    dropper.value.mode === newDropper.mode;
-  } else if(newDropper.pieceName === 'spawn') {
-    dropper.value = newDropper // + player or enemy, todo design a spawner item that works for both
-  } else if(newDropper.mode === 'piece'){
-    dropper.value = newDropper//preventing player/enemy switch atm??
+ const current = dropper.value;
+
+  // 1. If selecting same piece again → toggle team
+  if (
+    current.mode === 'piece' &&
+    newDropper.mode === 'piece' &&
+    current.pieceName === newDropper.pieceName
+  ) {
+    dropper.value = {
+      ...current,
+      team: current.team === 'player' ? 'enemy' : 'player'
+    };
+    return;
   }
-  if(newDropper.pieceName == dropper.value.pieceName){//todo make this switch actually work
-    //switch that dropper button from player to enemy
-    newDropper.team = dropper.value.team == 'player' ? 'enemy' : 'player';
+
+  // 2. If switching to extend mode → keep existing team & pieceName
+  if (newDropper.mode === 'extend') {//TODO finish extend function
+    dropper.value = {
+      ...current,
+      mode: 'extend',
+      pieceToExtend: newDropper.pieceToExtend
+    };
+    return;
   }
-  console.log('new dropper: ' , dropper.value, dropper.value.pieceToExtend);
+
+  // 3. If switching to tile mode → reset piece fields
+  if (newDropper.mode === 'tile') {
+    dropper.value = {
+      mode: 'tile',
+      pieceName: '',
+      team: 'enemy',
+      extending: false,
+      pieceToExtend: ''
+    };
+    return;
+  }
+
+  // 4. Normal switching into piece mode
+  if (newDropper.mode === 'piece') {
+    dropper.value = {
+      mode: 'piece',
+      pieceName: newDropper.pieceName,
+      team: current.team, // keep last used team for player friendliness
+      extending: false,
+      pieceToExtend: ''
+    };
+    return;
+  }
 }
 
 const isDragging = ref(false)
@@ -63,7 +102,7 @@ function applyDrag(x: number, y: number) {
 const piecesToExport = ref<InstanceType<typeof Piece>[]>([]);
 
 function placePiece(coord: Coordinate) {
-  const pieceClass = Allpieces.find(p => p.name === dropper.value.pieceName)
+  const pieceClass = pieceClasses.find(p => p.name === dropper.value.pieceName)
   if (!pieceClass) return
 
   const newPiece = new pieceClass(coord);
@@ -83,6 +122,7 @@ function extendPiece(pieceID: string, coord: Coordinate) {
 
 // Handle mouse down
 function handleMouseDown(x: number, y: number) {
+  console.log('dropper mode: ', dropper.value.mode);
   if (dropper.value.mode === "tile") {
     //todo: check coord isn't occupied before removing a tile
     //if coord is occupied remove piece??
@@ -143,9 +183,14 @@ const updateSize = () => {
   fillGrid(); // create a blank board
 }
 
+type LevelData = {
+  tiles: Coordinate[];
+  pieces: any[];
+};
+
 const emit = defineEmits<{
-  (e: "export-level", tiles: Coordinate[]): void
-}>()
+  (e: 'export-level', payload: LevelData): void;
+}>();
 
 // export active tiles and pieces to clipboard
 const exportLevel = async () => {
@@ -169,7 +214,7 @@ const exportLevel = async () => {
 
   // Step 3: Build the final level object
   const exportingLevel = {
-    map: coords,
+    tiles: coords,
     pieces: exportedPieces,
   }
 
@@ -227,6 +272,9 @@ const boardHeight = computed(() => tileSize.value * height.value)
         Height: {{ height }}
         <input type="range" min="5" max="48" v-model.number="height" @input="fillGrid"/>
       </label>
+      <label>
+        team: {{ dropper.team }}
+      </label>
   </div>
   <!-- Place Pieces -->
    <div class="droppers">
@@ -239,8 +287,7 @@ const boardHeight = computed(() => tileSize.value * height.value)
       pieceToExtend?: string 
       -->
           <button @click="setDropper({mode: 'tile'})">X</button>
-          <button @click="setDropper({mode: 'piece', pieceName: 'Spawn'})">{{ String.fromCodePoint(parseInt("U+2BD0".replace('U+', ''), 16)) }}</button>
-          <button @click="setDropper({mode: 'extend'})">{{ String.fromCodePoint(parseInt("U+25FC".replace('U+', ''), 16)) }}</button>
+          <button @click="setDropper({mode: 'extend'})">{{ String.fromCodePoint(parseInt("U+25FC".replace('U+', ''), 16)) }}extend</button>
           <button
             v-for="p in pieceClasses"
             :key="p.name"
@@ -278,6 +325,7 @@ const boardHeight = computed(() => tileSize.value * height.value)
         :key="piece.id"
       >
         <PieceView
+          cssclass="board"
           :piece="piece"
           :tileSize="tileSize"
           :mapTiles="tileMap"

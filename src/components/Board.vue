@@ -3,11 +3,12 @@ import { ref, computed, onMounted, onBeforeUnmount } from "vue"
 import type { Coordinate } from "../types"
 import PieceView from "./PieceView.vue";
 import PieceController from "./PieceController.vue";
-import type { Piece } from "../Pieces"
+import { Piece } from "../Pieces"
 
 interface Props{
   tiles : Coordinate[]//Set<string>
   pieces: Piece[]
+  highlights: Coordinate[]
 }
 const props = defineProps<Props>()
 
@@ -62,7 +63,6 @@ const pieceMap = computed(() => {
 const isOccupied = (x: number, y: number) => pieceMap.value.has(`${x},${y}`);
 
 const selectedPiece = ref<Piece | null>(null)
-
 function handlePieceSelect(piece: Piece) {
   selectedPiece.value = piece
 }
@@ -89,7 +89,13 @@ function getAvailableMoves(
   })
 }
 
+//cleanup
 const moveHighlights = ref<Coordinate[]>([])
+const placeHighlights = ref<Coordinate[]>([])
+
+onMounted(() => {
+  placeHighlights.value = props.highlights
+})
 
 const highlightMoves = (piece: InstanceType<typeof Piece>) => {
   moveHighlights.value = getAvailableMoves(piece, tileSet.value, pieceMap.value);
@@ -145,6 +151,7 @@ const movePiece = (coord : Coordinate) => {//todo moves piece, but does not add 
       <PieceView :piece="piece"
       :tileSize=tileSize
       :mapTiles = props.tiles
+      cssclass = "board"
       @select="handlePieceSelect"
       />
     </div>
@@ -156,6 +163,18 @@ const movePiece = (coord : Coordinate) => {//todo moves piece, but does not add 
       :key="index"
       class="highlight-tile"
       v-on:click="movePiece(tile)"
+      :style="{
+        left: tile.x * tileSize + 'px',
+        top: tile.y * tileSize + 'px',
+        width: tileSize + 'px',
+        height: tileSize + 'px',
+      }"
+    />
+    <div
+      v-for="(tile, index) in placeHighlights"
+      :key="index"
+      class="highlight-tile yellow"
+      v-on:click=""
       :style="{
         left: tile.x * tileSize + 'px',
         top: tile.y * tileSize + 'px',
@@ -202,5 +221,8 @@ const movePiece = (coord : Coordinate) => {//todo moves piece, but does not add 
   background-color: rgba(0, 200, 255, 0.3);
   border: 1px solid rgba(0, 200, 255, 0.5);
   cursor: pointer;
+}
+.yellow{
+  background-color: rgba(255, 251, 0, 0.432);
 }
 </style>

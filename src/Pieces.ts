@@ -18,7 +18,7 @@ export abstract class Piece {
   headPosition: Coordinate
   tiles: Coordinate[] // an array of (x, y) positions
   movesRemaining: number
-  team: string
+  team: string //'player' or 'enemy'
 
   constructor(
     name: string, 
@@ -31,7 +31,8 @@ export abstract class Piece {
     defence: number, 
     color: string,
     headPosition: Coordinate | null = null, 
-    tiles: Coordinate[] = []
+    tiles: Coordinate[] = [],
+    team: string
   ) {
     this.id = crypto.randomUUID()
     this.name = name
@@ -46,7 +47,7 @@ export abstract class Piece {
     this.headPosition = headPosition ?? { x: -1, y: -1 };
     this.tiles = tiles.length ? tiles : headPosition ? [headPosition] : []; //default to head
     this.movesRemaining = moves // default to full moves at start of turn
-    this.team = 'player'
+    this.team = team
   }
 
 //name desc unicode || maxsize moves range atk def
@@ -97,6 +98,17 @@ export abstract class Piece {
   }
 }
 
+
+export class Spawn extends Piece {
+  static name = "Spawn";
+  static description = "A load point for programs";
+  static unicode = "U+2BD0";
+  static color = "#242424ff";
+  constructor(headPosition: Coordinate) {
+    super(Spawn.name, Spawn.description, Spawn.unicode, 1, 0, 0, 0, 0, Spawn.color, headPosition, [headPosition]);
+  }
+}
+
 //name desc unicode || maxsize moves range atk def
 export class Sword extends Piece {
   static name = "Sword";
@@ -130,7 +142,6 @@ class Sword2 extends Piece {
     target.tiles.forEach(tile => console.log(`Hits tile at (${tile.x}, ${tile.y})`))
   }
 }
-
 
 export class Shield extends Piece {
   static name = "Shield";

@@ -21,7 +21,7 @@ defineEmits(['highlightMoves', 'attack', 'special', 'place', 'sell'])//TODO plac
 
 <template>
   <transition name="fade">
-    <div v-if="piece" class="piece-controller">
+    <div v-if="piece" class="piece-controller" :class="mode+'-controller'">
       <div class="header">
         <span class="symbol">
           {{ String.fromCodePoint(parseInt(piece.unicode.replace('U+', ''), 16)) }}
@@ -32,6 +32,7 @@ defineEmits(['highlightMoves', 'attack', 'special', 'place', 'sell'])//TODO plac
       <p class="desc">{{ piece.description }}</p>
 
       <div class="stats">
+        <p>Size: {{ piece.tiles.length }}</p>
         <p>Max Size: {{ piece.maxSize }}</p>
         <p>Moves: {{ piece.moves }}</p>
         <p>Moves left: {{ piece.movesRemaining }}</p>
@@ -70,6 +71,10 @@ defineEmits(['highlightMoves', 'attack', 'special', 'place', 'sell'])//TODO plac
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+.inventory-controller{
+ left: unset;
+ right: 1rem;
 }
 
 .header {

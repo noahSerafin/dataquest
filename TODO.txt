@@ -1,37 +1,68 @@
 EDITOR
-export tiles done
+export tiles - done
 
-dropper drops pieces (or their name + unicode)
-export pieces
+dropper drops pieces (or their name + unicode) - done
+export pieces - done
 
-
+set up spawner pieces
 
 BOARD
-import tiles done
-import pieces into piecemap
-render pieces form piecemap
+import tiles - done
+import pieces into piecemap - done
+render pieces from piecemap - done
 
-move
-test highlights
-
-moving piece should update board
-
+allow placing on spawners and nex to owned tiles
 
 
 PIECES
-move should add to size up to max size
+
+implement rarity/value
+
+move
+test highlights - done
+
+moving piece should update board - done
+
+move should add to size up to max size - done
+
 
 atk function
 
+
 special functions
 
+ADMIN PIECES
 
+make class
+
+work out how abilities will effect every piece
+
+
+PLAYER
+placement 
+allow placing on spawners 
+and nex to owned tiles
+grey out from inventory until round end
+
+sell
+rarity = value ?+=no. of upgrades used on a piece?
+
+
+ITEMS
+
+implement item functions
 
 SHOP
+rarity
+2 piece/item slots
+piece packs/item packs
+reroll button
+
+vouchers?
 
 
 
 APP 
 game logic
-swao between board and shop
+swap between shop -> map -> board
 increment difficulty

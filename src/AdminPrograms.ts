@@ -20,11 +20,32 @@
 //Onion extra life
 //U+1F9C5
 
+//OS-vouchers???
+// PENGUIN, U+1F427
+//+1 to all player stats - memory admin interest
+
+//WINDOW, U+1FA9F
+//+1 admin -1 memory
+
+// GREEN APPLE, U+1F34F
+//+1 memory -1 interest
+
+// SCALES, U+2696 --- CLASSICAL BUILDING, U+1F3DB --- CROSSED SWORDS, U+2694
+//temple - +1 admin +1 memory -1 interest
+//---------
+
+//EUROPEAN CASTLE, U+1F3F0
+
+//JAPANESE CASTLE, U+1F3EF
+
 //MECHANICAL ARM, U+1F9BE
 //buff - atk +1 on all pieces
 
 //CONVENIENCE STORE, U+1F3EA
 //open the shop during levels
+
+//DEPARTMENT STORE, U+1F3EC
+//free rerolls
 
 //clippy - provides hints
 //PAPERCLIP, U+1F4CE

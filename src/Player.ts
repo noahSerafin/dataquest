@@ -5,6 +5,7 @@ import { Item } from "./Items";
 export class Player {
     money: number
     memory: number
+    adminSlots: number
     // /InstanceType typeof 
     items: Item[]
     programs: Piece[]
@@ -12,11 +13,13 @@ export class Player {
     constructor(
         money = 5,
         memory = 3,
+        adminSlots = 4,
         items: Item[] = [],
         programs: Piece[] = []
     ) {
         this.money = money;
         this.memory = memory;
+        this.adminSlots = adminSlots;
         this.items = items;
         this.programs = programs;
     }

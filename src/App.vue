@@ -53,7 +53,7 @@
   const playerSpawns = ref<Coordinate[]>([]);
   const pieceToPlace = ref<PieceBlueprint | null>(null);
   const isPlacing = ref(false);
-  const newPlacementHighlights = computed<Coordinate[]>(() => {
+  const newPlacementHighlights = computed<Coordinate[]>(() => {//board should only show these if isPlacing
     const highlights: Coordinate[] = [];
 
     activePieces.value.forEach(piece => {

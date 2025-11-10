@@ -1,4 +1,4 @@
-import type { Coordinate } from "./types";
+import type { Coordinate, PieceBlueprint } from "./types";
 import { Piece, type Allpieces } from "./Pieces";
 import { Item } from "./Items";
 
@@ -8,14 +8,14 @@ export class Player {
     adminSlots: number
     // /InstanceType typeof 
     items: Item[]
-    programs: Piece[]
+    programs: PieceBlueprint[]
     //admins: Admin[]
     constructor(
         money = 5,
         memory = 3,
         adminSlots = 4,
         items: Item[] = [],
-        programs: Piece[] = []
+        programs: PieceBlueprint[] = []
     ) {
         this.money = money;
         this.memory = memory;
@@ -45,7 +45,7 @@ export class Player {
   }
 
   /** Add a program/piece if there's enough memory */
-  addProgram(program: Piece): boolean {
+  addProgram(program: PieceBlueprint): boolean {
     if (this.hasMemorySpace) {
       this.programs.push(program);
       return true;
@@ -60,7 +60,7 @@ export class Player {
   }
 
   /** Remove a program by reference */
-  removeProgram(program: Piece): void {
+  removeProgram(program: PieceBlueprint): void {
     this.programs = this.programs.filter(p => p !== program);
   }
 

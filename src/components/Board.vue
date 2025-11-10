@@ -8,9 +8,20 @@ import { Piece } from "../Pieces"
 interface Props{
   tiles : Coordinate[]//Set<string>
   pieces: Piece[]
-  highlights: Coordinate[]
+  placementHighlights: Coordinate[]
+  placementMode: boolean
 }
 const props = defineProps<Props>()
+console.log('in board: ', props.placementHighlights.length);
+
+const emit = defineEmits<{
+  (e: 'place-on-board', coord: Coordinate): void
+}>()
+function handlePlaceClick(tile: Coordinate) {
+  if (!props.placementMode) return
+  if (!props.placementHighlights.some(h => h.x === tile.x && h.y === tile.y)) return
+  emit('place-on-board', tile)
+}
 
 // Make a Set for fast lookup
 //will need to be ref if you have a bitman
@@ -93,10 +104,6 @@ function getAvailableMoves(
 const moveHighlights = ref<Coordinate[]>([])
 const placeHighlights = ref<Coordinate[]>([])
 
-onMounted(() => {
-  placeHighlights.value = props.highlights
-})
-
 const highlightMoves = (piece: InstanceType<typeof Piece>) => {
   moveHighlights.value = getAvailableMoves(piece, tileSet.value, pieceMap.value);
 }
@@ -171,10 +178,10 @@ const movePiece = (coord : Coordinate) => {//todo moves piece, but does not add 
       }"
     />
     <div
-      v-for="(tile, index) in placeHighlights"
+      v-for="(tile, index) in props.placementHighlights"
       :key="index"
       class="highlight-tile yellow"
-      v-on:click=""
+      v-on:click="handlePlaceClick(tile)"
       :style="{
         left: tile.x * tileSize + 'px',
         top: tile.y * tileSize + 'px',
@@ -222,7 +229,11 @@ const movePiece = (coord : Coordinate) => {//todo moves piece, but does not add 
   border: 1px solid rgba(0, 200, 255, 0.5);
   cursor: pointer;
 }
+.piece-layer.piece{
+  z-index: 2;
+}
 .yellow{
   background-color: rgba(255, 251, 0, 0.432);
+  z-index: 1;
 }
 </style>

@@ -38,7 +38,7 @@ const bodyTiles = computed(() =>
     if (!props.piece?.tiles?.length || !props.piece?.headPosition || props.piece.tiles[0] == undefined) {
       return []
     } else {
-      console.log('tiles: ', props.piece.tiles)
+      //console.log('tiles: ', props.piece.tiles)
       return props.piece.tiles.filter(
         (p) => p.x !== props.piece.headPosition.x || p.y !== props.piece.headPosition.y
       )
@@ -73,6 +73,7 @@ const pieceStyle = computed(() => {
     lineHeight: props.tileSize -24 + 'px',
     backgroundColor: props.piece.color,
     '--piece-color': props.piece.color,
+    'z-index': 2
   }
   if (props.cssclass === 'inventory'){
     styles.left = 'unset'
@@ -174,6 +175,7 @@ const onAttack = (piece : Piece) => {
 }
 .move-btn {
   position: absolute;
+  z-index: 2;
   bottom: 2px;
   left: 2px;
   width: 18px;

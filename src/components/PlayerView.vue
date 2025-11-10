@@ -1,24 +1,24 @@
 <script setup lang="ts">
     import { computed, ref } from "vue";
     import type { Player } from "../Player";
-    import { Piece } from "../Pieces";
+    import type { Coordinate, PieceBlueprint } from "../types";
     import { Item } from "../Items";
-    import PieceView from "./PieceView.vue";
     import PieceController from "./PieceController.vue";
+import BlueprintView from "./BlueprintView.vue";
 
     const props = defineProps<{
         player: Player,
+        //activePieces: InstanceType<typeof Piece>[]
     }>();
-
-    const selectedPiece = ref<Piece | null>(null)
-
+    
     const emit = defineEmits<{//move to controller???
-        (e: 'highlightPlacements', program: Piece): void;
-        (e: 'place-program', program: Piece): void;
+        (e: 'highlightPlacements', blueprint: PieceBlueprint): void;
         (e: 'use-item', item: Item): void;
     }>();
 
-    function openInventoryController(piece: Piece) {///TODO SORT OUT IMPORTS
+    const selectedPiece = ref<PieceBlueprint | null>(null)
+    
+    function openInventoryController(piece: PieceBlueprint) {///TODO SORT OUT IMPORTS
         selectedPiece.value = piece;
     }
 
@@ -29,7 +29,12 @@
     const memoryUsage = computed(() => 
         `${props.player.usedMemory}/${props.player.memory}`
     );
-    const highlightPlacements = (coord : Coordinate) => {}
+
+    function handlePlace(piece: PieceBlueprint) {
+        emit('highlightPlacements', piece)
+        selectedPiece.value = null
+    }
+
     const handleSell = () => {
         //do in player class
         //pieces/items need a sell value, tie it to rarity?
@@ -62,12 +67,13 @@
         <h3 class="font-semibold">Programs</h3>
         <div v-if="props.player.programs.length === 0">No programs</div>
         <ul class="inventory-relative">
-            <PieceView
-            v-for="piece in player.programs"
-            :key="piece.id"
-            :piece="piece"
+            <BlueprintView
+            v-for="pieceBlueprint in player.programs"
+            :key="pieceBlueprint.id"
+            :blueprint="pieceBlueprint"
             :tileSize="60"
             cssclass="inventory"
+            :class="'placed-'+pieceBlueprint.isPlaced"
             @select="openInventoryController"
             />
         </ul>
@@ -88,7 +94,7 @@
         v-if="selectedPiece"
         :piece="selectedPiece"
         mode="inventory"
-        @place="highlightPlacements"
+        @highlightPlacements="handlePlace(selectedPiece)"
         @sell="handleSell"
         />
     </div>

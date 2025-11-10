@@ -1,13 +1,19 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue"
-import type { Coordinate } from "../types"
-import type { Piece } from "../Pieces"
+import type { Coordinate, PieceBlueprint } from "../types"
+import { Piece } from "../Pieces"
 
 defineProps<{ 
-  piece: InstanceType<typeof Piece> | null 
+  piece: InstanceType<typeof Piece> | PieceBlueprint
   mode: 'inventory' | 'action'
 }>()
-defineEmits(['highlightMoves', 'attack', 'special', 'place', 'sell'])//TODO place goes in board/player //sell goes in player
+
+// Type guard: true if this is a real in-game instance
+function isInstance(p: any): p is InstanceType<typeof Piece> {
+  return p instanceof Piece
+}
+
+defineEmits(['highlightMoves', 'attack', 'special', 'highlightPlacements', 'sell'])//TODO place goes in board/player //sell goes in player
 
 /*
  <button
@@ -32,10 +38,10 @@ defineEmits(['highlightMoves', 'attack', 'special', 'place', 'sell'])//TODO plac
       <p class="desc">{{ piece.description }}</p>
 
       <div class="stats">
-        <p>Size: {{ piece.tiles.length }}</p>
+        <p v-if="isInstance(piece)">Size: {{ piece.tiles.length }}</p>
         <p>Max Size: {{ piece.maxSize }}</p>
         <p>Moves: {{ piece.moves }}</p>
-        <p>Moves left: {{ piece.movesRemaining }}</p>
+        <p v-if="isInstance(piece)">Moves left: {{ piece.movesRemaining }}</p>
         <p>Range: {{ piece.range }}</p>
         <p>Attack: {{ piece.attack }}</p>
         <p>Defence: {{ piece.defence }}</p>
@@ -43,10 +49,10 @@ defineEmits(['highlightMoves', 'attack', 'special', 'place', 'sell'])//TODO plac
 
       <div class="actions">
         <template v-if="mode === 'inventory'">
-          <button @click="$emit('place', piece)">Place</button>
+          <button @click="$emit('highlightPlacements', piece)">Place</button>
           <button @click="$emit('sell', piece)">Sell</button>
         </template>
-        <template v-else-if="mode === 'action'">
+        <template v-else-if="isInstance(piece) && piece.team == 'player'">
           <button @click="$emit('highlightMoves', piece)">Move</button>
           <button @click="$emit('attack', piece)">Attack</button>
           <button @click="$emit('special', piece)">Special</button>

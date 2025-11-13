@@ -1,55 +1,62 @@
+priority - serach numbers descending
+
 EDITOR
-export tiles - done
+-export tiles - done
 
-dropper drops pieces (or their name + unicode) - done
-export pieces - done
+-dropper drops pieces (or their name + unicode) - done
+-export pieces - done
 
-set up spawner pieces
+-set up spawner pieces - done
+
+add extender function to dropper, using previous piece 1
+
+clicking on an already dropped piece changes the pieceToExtend 2
+
 
 BOARD
-import tiles - done
-import pieces into piecemap - done
-render pieces from piecemap - done
+-import tiles - done
+-import pieces into piecemap - done
+-render pieces from piecemap - done
 
-allow placing on spawners and nex to owned tiles
+-allow placing on spawners, then next to owned tiles - done
 
 
 PIECES
 
-implement rarity/value
+implement rarity/value 3
 
 move
-test highlights - done
+-test highlights - done
 
-moving piece should update board - done
+-moving piece should update board - done
 
-move should add to size up to max size - done
+-move should add to size up to max size - done
 
 
-atk function
+atk function 2
 
 
 special functions
 
-ADMIN PIECES
+ADMIN PIECES 5
 
-make class
+make class 
 
-work out how abilities will effect every piece
+work out how abilities will effect every piece 4
 
 
 PLAYER
-placement 
-allow placing on spawners 
-and next to owned tiles
-placing on a spawner should remove the highlight for that spwaner
+-placement 
+-allow placing on spawners - done
+-and next to owned tiles - done
+-placing on a spawner should remove the highlight for that spwaner - done
 
-grey out from inventory until round end - retain ID for stats? return will have to reset tiles to []
+grey out from inventory until round end - retain ID for stats? return will have to reset tiles to [] - done with blueprints
 
 sell
-rarity = value ?+=no. of upgrades used on a piece?
+rarity = value ?+=no. of upgrades used on a piece? 3
 
-AI
+AI 2/3
 pathfinding
 isPlayerInRange
 
@@ -74,11 +81,11 @@ if maxSize && playerInRange {
 }
 
 
-ITEMS
+ITEMS 4
 
 implement item functions
 
-SHOP
+SHOP 3
 rarity
 2 piece/item slots
 piece packs/item packs
@@ -86,6 +93,16 @@ reroll button
 
 vouchers?
 
+
+MAP 5
+
+loads from levels.ts
+isometric view?
+branching paths
+see two maps ahead?
+hover/click to show map preview of tiles + spawns in popout
+increments difficutly, multiple levels files?
+boss levels
 
 
 APP 

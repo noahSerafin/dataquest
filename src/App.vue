@@ -35,8 +35,6 @@
     displayEditor.value = !displayEditor.value;//add map later, make shop an overlay?
   }
 
-  // Player's build blueprint pieces (never mutated by game actions)
-  const inventoryPieces = ref<PieceBlueprint[]>([])
   //pieceMap to track occupied spaces
   const activePieces = ref<InstanceType<typeof Piece>[]>([]);
   
@@ -45,17 +43,18 @@
     5,  // memory limit
     3, //admin slots
     [], // no items yet
-    [testSword]//, testShield] // starting programs
+    [testSword]//, testShield] // starting pieces
   ));
 
   const level = ref(level1);
   const displayEditor = ref(false);
 
-  const playerSpawns = ref<Coordinate[]>([]);
   const pieceToPlace = ref<PieceBlueprint | null>(null);
   const isPlacing = ref(false);
-  const newPlacementHighlights = computed<Coordinate[]>(() => {//board should only show these if isPlacing
+  const playerSpawns = ref<Coordinate[]>([]);
+  const newPlacementHighlights = () => {//board should only show these if isPlacing
     const highlights: Coordinate[] = [];
+    const tileSet = new Set(level.value.tiles.map(t => `${t.x},${t.y}`));
 
     activePieces.value.forEach(piece => {
       if (piece.team === 'player') {
@@ -69,6 +68,8 @@
           ];
 
           neighbors.forEach(n => {
+            // Skip tiles not on the board
+            if (!tileSet.has(`${n.x},${n.y}`)) return;
             // Skip if tile is already occupied
             const isOccupied = activePieces.value.some(p =>
               p.tiles.some(t => t.x === n.x && t.y === n.y)
@@ -79,14 +80,12 @@
         });
       }
     });
-
     // Optional: remove duplicates
     const uniqueHighlights = Array.from(
       new Map(highlights.map(h => [`${h.x},${h.y}`, h])).values()
     );
-
     return uniqueHighlights;
-  });
+  };
 
   function processSpawnPoints(pieces: Piece[]) {
     const processed: Piece[] = [];
@@ -164,8 +163,9 @@
     bp.isPlaced = true
 
     // Reset placement state
-    pieceToPlace.value = null
-    isPlacing.value = false
+    pieceToPlace.value = null;
+    isPlacing.value = false;
+    playerSpawns.value = newPlacementHighlights();
   }
 
   function handleSell(piece: Piece) {

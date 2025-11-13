@@ -178,7 +178,7 @@ const movePiece = (coord : Coordinate) => {//todo moves piece, but does not add 
       }"
     />
     <div
-      v-for="(tile, index) in props.placementHighlights"
+      v-if="props.placementMode" v-for="(tile, index) in props.placementHighlights"
       :key="index"
       class="highlight-tile yellow"
       v-on:click="handlePlaceClick(tile)"

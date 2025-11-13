@@ -12,8 +12,9 @@
 
   //import { Map } from "./components/Map.vue";
 
-  //testing fields
-  import { Sword, Shield } from "./Pieces"; // adjust import path
+  //testing fields 
+  import BlueprintView from "./components/BlueprintView.vue";
+
   // Instantiate real piece objects
   
   const testSword = {
@@ -99,7 +100,7 @@
         // Enemy spawn → replace with random enemy piece
         if (piece.team === 'enemy') {
           const EnemyClass = Allpieces[Math.floor(Math.random() * Allpieces.length)];//base this off rarity/difficulty later
-          const enemyInstance = new EnemyClass(piece.headPosition);
+          const enemyInstance = new EnemyClass(piece.headPosition, 'enemy');
           enemyInstance.team = 'enemy'
           processed.push(enemyInstance);
           continue;
@@ -132,7 +133,7 @@
     pieceClasses.unshift(Spawn);
     return rawPieces.map(p => {
       const PieceClass = pieceClasses.find(cls => cls.name === p.name)
-      return PieceClass ? Object.assign(new PieceClass(p.headPosition), p) : p
+      return PieceClass ? Object.assign(new PieceClass(p.headPosition, p.team), p) : p
     })
   }
 
@@ -155,8 +156,7 @@
     const PieceClass = Allpieces.find(p => p.name === bp.name)
     if (!PieceClass) return
 
-    const instance = new PieceClass(coord)   // now real placement!
-    instance.team = 'player'
+    const instance = new PieceClass(coord, 'player', bp.id);   // now real placement!
 
     activePieces.value.push(instance)
 
@@ -195,7 +195,14 @@
   <button class="swap-display" @mousedown="swapDisplay()">
     {{ displayEditor ? "Show Board" : "Show Editor" }}
   </button>
-  <div v-if="isPlacing">placing {{ pieceToPlace?.name }}</div>
+  <div v-if="isPlacing && pieceToPlace"
+    class="info">
+    <p>Placing:</p>
+    <BlueprintView :blueprint="pieceToPlace"
+    :tileSize="60"
+    :cssclass="'placing'"
+    />
+  </div>
   <PlayerView v-if="!displayEditor" :player="player" @highlightPlacements="highlightPlacements"/>
   <Board v-if="!displayEditor" :tiles="level.tiles" :pieces="activePieces" :placementHighlights="playerSpawns" :placementMode="isPlacing" @place-on-board="placePieceOnBoardAt"/>
   <Leveleditor v-else @export-level="handleExport"/>
@@ -203,6 +210,12 @@
 </template>
 
 <style scoped>
+.info{
+  position: relative;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+}
 button{
   position: absolute;
   background-color: transparent;

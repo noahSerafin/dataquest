@@ -1,4 +1,4 @@
-export const level1 = {
+export const castled = {
   "tiles": [
     {
       "x": 0,
@@ -103,7 +103,7 @@ export const level1 = {
   ],
   "pieces": [
     {
-      "id": "86f1462c-79a8-450e-bd95-df45485974a5",
+      "id": "0f1ec80e-3f52-442d-9d71-ada1bc7be01d",
       "name": "Spawn",
       "team": "enemy",
       "headPosition": {
@@ -121,7 +121,37 @@ export const level1 = {
       "range": 0
     },
     {
-      "id": "498ac3d3-522b-48e1-81a6-cd6fde08e2cb",
+      "id": "951924df-3527-4452-a5ba-1e7744fe92b4",
+      "name": "Stonewall",
+      "team": "enemy",
+      "headPosition": {
+        "x": 0,
+        "y": 1
+      },
+      "tiles": [
+         {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": 2,
+          "y": 1
+        },
+        {
+          "x": 3,
+          "y": 1
+        }
+      ],
+      "color": "#ffa700",
+      "moves": 2,
+      "range": 0
+    },
+    {
+      "id": "5535f576-2398-4607-87d8-028dffe65208",
       "name": "Spawn",
       "team": "player",
       "headPosition": {
@@ -136,78 +166,6 @@ export const level1 = {
       ],
       "color": "#242424ff",
       "moves": 0,
-      "range": 0
-    },
-    {
-      "id": "d4313128-6b59-444b-b213-1db706293baf",
-      "name": "Sword",
-      "team": "player",
-      "headPosition": {
-        "x": 1,
-        "y": 4
-      },
-      "tiles": [
-        {
-          "x": 1,
-          "y": 4
-        }
-      ],
-      "color": "#dddcd7",
-      "moves": 2,
-      "range": 1
-    },
-    {
-      "id": "d7efe620-120a-4447-b716-69c932e5f31b",
-      "name": "Stonewall",
-      "team": "enemy",
-      "headPosition": {
-        "x": 0,
-        "y": 1
-      },
-      "tiles": [
-        {
-          "x": 0,
-          "y": 1
-        }
-      ],
-      "color": "#ffa700",
-      "moves": 2,
-      "range": 0
-    },
-    {
-      "id": "5e01f130-ef48-4e60-b989-756e4dd633fa",
-      "name": "Stonewall",
-      "team": "enemy",
-      "headPosition": {
-        "x": 1,
-        "y": 1
-      },
-      "tiles": [
-        {
-          "x": 1,
-          "y": 1
-        }
-      ],
-      "color": "#ffa700",
-      "moves": 2,
-      "range": 0
-    },
-    {
-      "id": "5d823d6a-c469-4366-9931-0d82673a064b",
-      "name": "Stonewall",
-      "team": "enemy",
-      "headPosition": {
-        "x": 2,
-        "y": 1
-      },
-      "tiles": [
-        {
-          "x": 2,
-          "y": 1
-        }
-      ],
-      "color": "#ffa700",
-      "moves": 2,
       "range": 0
     }
   ]

@@ -58,7 +58,7 @@ export abstract class Piece {
 
   // Example method: add a new tile position
   addTile(x: number, y: number): void {
-    this.tiles.unshift({ x, y })
+    this.tiles.push({ x, y })
   }
 
   resetMoves() {
@@ -76,7 +76,8 @@ export abstract class Piece {
     //this.headPosition
   }
 
-  moveTo(newPosition: Coordinate, team: string, id?: string): void {
+  moveTo(newPosition: Coordinate): void {
+    console.log('attempting move')
     this.headPosition = newPosition
     this.tiles.unshift(newPosition)
     // If exceeding maxSize, remove the oldest tile

@@ -2,7 +2,7 @@
   import { ref, onMounted, computed} from "vue";
   import Board from './components/Board.vue';
   import Leveleditor from './components/Leveleditor.vue';
-  import { level1 } from './levels';
+  import { castled } from './levels';
   import { Player } from "./Player";
   import PlayerView from "./components/PlayerView.vue";
   import type { Piece } from "./Pieces"
@@ -45,12 +45,13 @@
     [], // no items yet
     [testSword]//, testShield] // starting pieces
   ));
-
-  const level = ref(level1);
+  const level = ref(castled);
   const displayEditor = ref(false);
+  const isPlacing = ref(false);
+  const hasFinishedTurn = ref(false);
+  const isFirstTurn = ref(true);
 
   const pieceToPlace = ref<PieceBlueprint | null>(null);
-  const isPlacing = ref(false);
   const playerSpawns = ref<Coordinate[]>([]);
   const newPlacementHighlights = () => {//board should only show these if isPlacing
     const highlights: Coordinate[] = [];
@@ -135,7 +136,6 @@
       return PieceClass ? Object.assign(new PieceClass(p.headPosition, p.team), p) : p
     })
   }
-
   
   onMounted(() => {
     const initPieces = rehydratePieces(level.value.pieces);
@@ -145,6 +145,9 @@
   function highlightPlacements(pieceBlueprint: PieceBlueprint) {
     pieceToPlace.value = pieceBlueprint;
     isPlacing.value = true;
+    if(isFirstTurn){
+      isFirstTurn.value = false;
+    }
   }
 
   function placePieceOnBoardAt(coord: Coordinate) {
@@ -164,8 +167,8 @@
 
     // Reset placement state
     pieceToPlace.value = null;
-    isPlacing.value = false;
     playerSpawns.value = newPlacementHighlights();
+    isPlacing.value = false;
   }
 
   function handleSell(piece: Piece) {
@@ -204,7 +207,7 @@
     />
   </div>
   <PlayerView v-if="!displayEditor" :player="player" @highlightPlacements="highlightPlacements"/>
-  <Board v-if="!displayEditor" :tiles="level.tiles" :pieces="activePieces" :placementHighlights="playerSpawns" :placementMode="isPlacing" @place-on-board="placePieceOnBoardAt"/>
+  <Board v-if="!displayEditor" :tiles="level.tiles" :pieces="activePieces" :placementHighlights="playerSpawns" :isFirstTurn="isFirstTurn" :placementMode="isPlacing" @place-on-board="placePieceOnBoardAt"/>
   <Leveleditor v-else @export-level="handleExport"/>
   <button v-if="!displayEditor" class="end-turn" v-on:click="endTurn()">End Turn</button>
 </template>

@@ -46,6 +46,10 @@ const bodyTiles = computed(() =>
   }
 )
 
+if(props.piece.name == 'Stonewall' || props.piece.name == 'Sword'){
+  console.log(props.piece.name, ' tiles: ', props.piece.tiles)
+}
+
 const getDirectionClass = (tile: Coordinate, index: number) => {
   const prev = props.piece.tiles[index - 1]
   if (!prev) return ''

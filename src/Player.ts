@@ -10,24 +10,18 @@ export class Player {
     items: Item[]
     programs: PieceBlueprint[]
     //admins: Admin[]
-    isPlacing: boolean
-    hasFinishedTurn: boolean
     constructor(
         money = 5,
         memory = 3,
         adminSlots = 4,
         items: Item[] = [],
         programs: PieceBlueprint[] = [],
-        isPlacing = false,
-        hasFinishedTurn = false
     ) {
         this.money = money;
         this.memory = memory;
         this.adminSlots = adminSlots;
         this.items = items;
         this.programs = programs;
-        this.isPlacing = isPlacing;
-        this.hasFinishedTurn = hasFinishedTurn;
     }
 
     /** Total "memory" usage from items + programs */

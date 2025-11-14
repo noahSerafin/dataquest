@@ -10,8 +10,10 @@ interface Props{
   pieces: Piece[]
   placementHighlights: Coordinate[]
   placementMode: boolean
+  isFirstTurn: boolean
 }
 const props = defineProps<Props>()
+console.log('pm: ', props.placementMode)
 console.log('in board: ', props.placementHighlights.length);
 
 const emit = defineEmits<{
@@ -102,7 +104,7 @@ function getAvailableMoves(
 
 //cleanup
 const moveHighlights = ref<Coordinate[]>([])
-const placeHighlights = ref<Coordinate[]>([])
+//const placeHighlights = ref<Coordinate[]>([])
 
 const highlightMoves = (piece: InstanceType<typeof Piece>) => {
   moveHighlights.value = getAvailableMoves(piece, tileSet.value, pieceMap.value);
@@ -178,7 +180,7 @@ const movePiece = (coord : Coordinate) => {//todo moves piece, but does not add 
       }"
     />
     <div
-      v-if="props.placementMode" v-for="(tile, index) in props.placementHighlights"
+      v-if="props.placementMode || props.isFirstTurn" v-for="(tile, index) in props.placementHighlights"
       :key="index"
       class="highlight-tile yellow"
       v-on:click="handlePlaceClick(tile)"

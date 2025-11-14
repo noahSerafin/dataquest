@@ -56,7 +56,7 @@ const setDropper = (newDropper: DropperState) => {
     dropper.value = {
       ...current,
       mode: 'extend',
-      pieceToExtend: newDropper.pieceToExtend
+      pieceToExtend: current.pieceToExtend
     };
     return;
   }
@@ -105,9 +105,7 @@ function placePiece(coord: Coordinate) {
   const pieceClass = pieceClasses.find(p => p.name === dropper.value.pieceName)
   if (!pieceClass) return
 
-  const newPiece = new pieceClass(coord);
-  console.log('team: ', dropper.value.team)
-  newPiece.team = dropper.value.team ?? 'enemy'
+  const newPiece = new pieceClass(coord, dropper.value.team ?? 'enemy');
 
   dropper.value.pieceToExtend = newPiece.id;
   piecesToExport.value.push(newPiece)
@@ -130,6 +128,7 @@ function handleMouseDown(x: number, y: number) {
     dragMode.value = isActive(x, y) ? "deactivate" : "activate"
     applyDrag(x, y)
   } else if (dropper.value.mode == 'extend' && dropper.value.pieceToExtend){
+    console.log('dropper: ', dropper.value)
     extendPiece(dropper.value.pieceToExtend, {x, y});  
   } else if (dropper.value.mode == 'piece'){
     placePiece({x, y});

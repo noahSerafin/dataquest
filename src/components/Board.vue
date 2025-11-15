@@ -69,7 +69,7 @@ const pieceMap = computed(() => {
       map.set(`${tile.x},${tile.y}`, piece)
     })
   })
-  console.log('piecemap:', map)
+  //console.log('piecemap:', map)
   return map
 });
 

@@ -101,7 +101,7 @@
         // Enemy spawn → replace with random enemy piece
         if (piece.team === 'enemy') {
           const EnemyClass = Allpieces[Math.floor(Math.random() * Allpieces.length)];//base this off rarity/difficulty later
-          const enemyInstance = new EnemyClass(piece.headPosition, 'enemy');
+          const enemyInstance = new EnemyClass(piece.headPosition, 'enemy', removePiece);
           enemyInstance.team = 'enemy'
           processed.push(enemyInstance);
           continue;
@@ -134,7 +134,7 @@
     pieceClasses.unshift(Spawn);
     return rawPieces.map(p => {
       const PieceClass = pieceClasses.find(cls => cls.name === p.name)
-      return PieceClass ? Object.assign(new PieceClass(p.headPosition, p.team), p) : p
+      return PieceClass ? Object.assign(new PieceClass(p.headPosition, p.team, removePiece), p) : p
     })
   }
   
@@ -151,6 +151,11 @@
     }
   }
 
+  function removePiece(piece: Piece) {
+    activePieces.value = activePieces.value.filter(p => p.id !== piece.id);
+  }
+  //graveyard?
+
   function placePieceOnBoardAt(coord: Coordinate) {
     if (!pieceToPlace.value) return
 
@@ -159,7 +164,7 @@
     const PieceClass = Allpieces.find(p => p.name === bp.name)
     if (!PieceClass) return
 
-    const instance = new PieceClass(coord, 'player', bp.id);   // now real placement!
+    const instance = new PieceClass(coord, 'player', removePiece, bp.id);   // now real placement!
 
     activePieces.value.push(instance)
 
@@ -170,7 +175,7 @@
     pieceToPlace.value = null;
     playerSpawns.value = newPlacementHighlights();
     isPlacing.value = false;
-  }
+  }  
 
   function handleSell(piece: Piece) {
     console.log('sell clicked');

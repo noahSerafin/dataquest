@@ -1,6 +1,8 @@
 import type { Coordinate } from "./types"
 
 export abstract class Piece {
+  removeCallback?: (piece: Piece) => void;
+
   id: string
   static name : string
   static description : string
@@ -34,9 +36,9 @@ export abstract class Piece {
     headPosition: Coordinate | null = null, 
     tiles: Coordinate[] = [],
     team: string,
+    removeCallback?: (piece: Piece) => void,
     id?: string,
   ) {
-    this.id = id ?? crypto.randomUUID()
     this.name = name
     this.description = description
     this.unicode = unicode
@@ -51,6 +53,8 @@ export abstract class Piece {
     this.movesRemaining = moves // default to full moves at start of turn
     this.actions = 1
     this.team = team
+    this.removeCallback = removeCallback
+    this.id = id ?? crypto.randomUUID()
   }
 
 //name desc unicode || maxsize moves range atk def
@@ -95,8 +99,11 @@ export abstract class Piece {
     const removeCount = Math.min(received, this.tiles.length); // safety
     //console.log('recieving total: ', removeCount)
     //console.log('splice: ', this.tiles.length-removeCount, removeCount)
-
     this.tiles.splice(this.tiles.length - removeCount, removeCount);
+    if (this.tiles.length === 0 && this.removeCallback) {
+      console.log('Piecets: removing')
+      this.removeCallback(this);
+    }
   }
 
   // Example method
@@ -111,8 +118,8 @@ export class Spawn extends Piece {
   static description = "A load point for programs";
   static unicode = "U+2BD0";
   static color = "#242424ff";
-  constructor(headPosition: Coordinate, team: string, id?: string) {
-    super(Spawn.name, Spawn.description, Spawn.unicode, 1, 0, 0, 0, 0, Spawn.color, headPosition, [headPosition], team, id);
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string) {
+    super(Spawn.name, Spawn.description, Spawn.unicode, 1, 0, 0, 0, 0, Spawn.color, headPosition, [headPosition], team, removeCallback, id);
   }
 }
 
@@ -122,8 +129,8 @@ export class Sword extends Piece {
   static description = "A basic attack piece";
   static unicode = "U+1F5E1";
   static color = "#dddcd7";
-  constructor(headPosition: Coordinate, team: string, id?: string){
-  super(Sword.name, Sword.description, Sword.unicode, 3, 2, 1, 2, 0, Sword.color, headPosition, [headPosition], team, id)
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+  super(Sword.name, Sword.description, Sword.unicode, 3, 2, 1, 2, 0, Sword.color, headPosition, [headPosition], team, removeCallback, id)
     //name desc utf || maxsize moves range atk def
   }
   // Sword-specific ability example
@@ -138,8 +145,8 @@ class Sword2 extends Piece {
   static description = "Sword, but two";
   static unicode = "U+2694";
   static color = "#dddcd7";
-  constructor(headPosition: Coordinate, team: string, id?: string){
-  super(Sword2.name, Sword2.description, Sword2.unicode, 3, 2, 1, 4, 0, Sword2.color, headPosition, [headPosition], team, id)
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+  super(Sword2.name, Sword2.description, Sword2.unicode, 3, 2, 1, 4, 0, Sword2.color, headPosition, [headPosition], team, removeCallback, id)
   }
 
   // Sword-specific ability example
@@ -154,8 +161,8 @@ export class Shield extends Piece {
   static description = "A basic defensive piece";
   static unicode = "U+1F6E1";
   static color = "#2fa7ca";
-  constructor(headPosition: Coordinate, team: string, id?: string){
-   super(Shield.name, Shield.description, Shield.unicode, 3, 2, 0, 0, 1, Shield.color, headPosition, [headPosition], team, id)
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Shield.name, Shield.description, Shield.unicode, 3, 2, 0, 0, 1, Shield.color, headPosition, [headPosition], team, removeCallback, id)
   }
 }
 
@@ -164,8 +171,8 @@ class Aegis extends Piece {
   static description = "An advanced defensive piece";
   static unicode = "U+26FB";
   static color = "#2fa7ca";
-  constructor(headPosition: Coordinate, team: string, id?: string){
-   super(Aegis.name, Aegis.description, Aegis.unicode, 3, 2, 0, 0, 1, Aegis.color, headPosition, [headPosition], team, id)
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Aegis.name, Aegis.description, Aegis.unicode, 3, 2, 0, 0, 1, Aegis.color, headPosition, [headPosition], team, removeCallback, id)
   }
 
   //parry next incoming attack (damage the attacker)
@@ -176,8 +183,8 @@ class Sling extends Piece {
   static description = "A basic ranged piece";
   static unicode = "U+1F94F";
   static color = "#019700";
-  constructor(headPosition: Coordinate, team: string, id?: string){
-   super(Sling.name, Sling.description, Sling.unicode, 3, 2, 2, 1, 0, Sling.color, headPosition, [headPosition], team, id) //disk
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Sling.name, Sling.description, Sling.unicode, 3, 2, 2, 1, 0, Sling.color, headPosition, [headPosition], team, removeCallback, id) //disk
   }
 }
 
@@ -186,8 +193,8 @@ class Bow extends Piece {
   static description = "A longer ranged piece";
   static unicode = "U+1F3F9";
   static color = "#019700";
-  constructor(headPosition: Coordinate, team: string, id?: string){
-   super(Bow.name, Bow.description, Bow.unicode, 3, 2, 3, 2, 0, Bow.color, headPosition, [headPosition], team, id)
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Bow.name, Bow.description, Bow.unicode, 3, 2, 3, 2, 0, Bow.color, headPosition, [headPosition], team, removeCallback, id)
   }
 }
 
@@ -196,8 +203,8 @@ class SAM extends Piece {
   static description = "A slow moving but long ranged piece with high damage";
   static unicode = "U+1F680";//"U+1F94D";
   static color = "#019700";
-  constructor(headPosition: Coordinate, team: string, id?: string){
-   super(SAM.name, SAM.description, SAM.unicode, 3, 1, 4, 2, 0, SAM.color, headPosition, [headPosition], team, id) //lacrosse
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(SAM.name, SAM.description, SAM.unicode, 3, 1, 4, 2, 0, SAM.color, headPosition, [headPosition], team, removeCallback, id) //lacrosse
   }
 }
 
@@ -206,8 +213,8 @@ class Gate extends Piece {
   static description = "A defensive piece friendly pieces can pass through";
   static unicode = "U+13208";//"U+26E9";
   static color = "#ffa700";
-  constructor(headPosition: Coordinate, team: string, id?: string){
-   super(Gate.name, Gate.description, Gate.unicode, 1, 1, 0, 0, 2, Gate.color, headPosition, [headPosition], team, id)
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Gate.name, Gate.description, Gate.unicode, 1, 1, 0, 0, 2, Gate.color, headPosition, [headPosition], team, removeCallback, id)
   }
 }
 
@@ -216,8 +223,8 @@ class Stonewall extends Piece {
   static description = "A large defensive piece";
   static unicode = "U+1F9F1";
   static color = "#ffa700";
-  constructor(headPosition: Coordinate, team: string, id?: string){
-   super(Stonewall.name, Stonewall.description, Stonewall.unicode, 12, 2, 0, 0, 1, Stonewall.color, headPosition, [headPosition], team, id)
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Stonewall.name, Stonewall.description, Stonewall.unicode, 12, 2, 0, 0, 1, Stonewall.color, headPosition, [headPosition], team, removeCallback, id)
   }
 }
 
@@ -226,8 +233,8 @@ class Firewall extends Piece {
   static description = "A large defensive piece with a short range attack";
   static unicode = "U+1F525";
   static color = "#ff0000";
-  constructor(headPosition: Coordinate, team: string, id?: string){
-   super(Firewall.name, Firewall.description, Firewall.unicode, 12, 2, 1, 2, 0, Firewall.color, headPosition, [headPosition], team, id)
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Firewall.name, Firewall.description, Firewall.unicode, 12, 2, 1, 2, 0, Firewall.color, headPosition, [headPosition], team, removeCallback, id)
   }
 }
 
@@ -236,8 +243,8 @@ class Trench extends Piece {
   static description = "A piece that boosts the defence of pieces inside it";
   static unicode = "U+1F573";
   static color = "#5d3900";
-  constructor(headPosition: Coordinate, team: string, id?: string){
-   super(Trench.name, Trench.description, Trench.unicode, 6, 1, 0, 0, 0, Trench.color, headPosition, [headPosition], team, id)
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Trench.name, Trench.description, Trench.unicode, 6, 1, 0, 0, 0, Trench.color, headPosition, [headPosition], team, removeCallback, id)
   }
 
   //special method to give +1 def to pieces with headposition inside it
@@ -248,8 +255,8 @@ class Mole extends Piece {
   static description = "Can burrow under other pieces";
   static unicode = "U+1F9A1";
   static color = "#727272";
-  constructor(headPosition: Coordinate, team: string, id?: string){
-   super(Mole.name, Mole.description, Mole.unicode, 1, 2, 0, 0, 0, Mole.color, headPosition, [headPosition], team, id) //	U+1F400 rat
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Mole.name, Mole.description, Mole.unicode, 1, 2, 0, 0, 0, Mole.color, headPosition, [headPosition], team, removeCallback, id) //	U+1F400 rat
   }
 
   //burrow
@@ -260,8 +267,8 @@ class Lance extends Piece {
   static description = "Can charge, attacking multiple targets in one move";
   static unicode = "U+1F3A0";
   static color = "#f9f9f9";
-  constructor(headPosition: Coordinate, team: string, id?: string){
-  super(Lance.name, Lance.description, Lance.unicode, 3, 3, 3, 2, 0, Lance.color, headPosition, [headPosition], team, id)//horse carousel atm //cane: "U+1F9AF"
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+  super(Lance.name, Lance.description, Lance.unicode, 3, 3, 3, 2, 0, Lance.color, headPosition, [headPosition], team, removeCallback, id)//horse carousel atm //cane: "U+1F9AF"
     //name desc unicode || maxsize moves range atk def
   }
 
@@ -277,8 +284,8 @@ class Trojan extends Piece {
   static description = "Can create clones of itself";
   static unicode = "U+1F434";
   static color = "#7c0000";
-  constructor(headPosition: Coordinate, team: string, id?: string){
-   super(Trojan.name, Trojan.description, Trojan.unicode, 1, 1, 1, 1, 0, Trojan.color, headPosition, [headPosition], team, id)//horse head atm //military helmet "U+1FA96"
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Trojan.name, Trojan.description, Trojan.unicode, 1, 1, 1, 1, 0, Trojan.color, headPosition, [headPosition], team, removeCallback, id)//horse head atm //military helmet "U+1FA96"
   }
   //canpassThroughbool?
 
@@ -293,8 +300,8 @@ class Cannon extends Piece {
   static description = "Ranged program that can damage multiple targets in a straight line";
   static unicode = "U+1F52B";
   static color = "#2e2e2e";
-  constructor(headPosition: Coordinate, team: string, id?: string){
-   super(Cannon.name, Cannon.description, Cannon.unicode, 1, 1, 6, 3, 0, Cannon.color, headPosition, [headPosition], team, id) //water pistol
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Cannon.name, Cannon.description, Cannon.unicode, 1, 1, 6, 3, 0, Cannon.color, headPosition, [headPosition], team, removeCallback, id) //water pistol
   }
 }
 
@@ -303,8 +310,8 @@ class Tank extends Piece {
   static description = "A mobile ranged program with high defence that can damage multiple targets in a straight line";
   static unicode = "U+1F94C";
   static color = "#00470a";
-  constructor(headPosition: Coordinate, team: string, id?: string){
-   super(Tank.name, Tank.description, Tank.unicode, 1, 2, 6, 3, 2, Tank.color, headPosition, [headPosition], team, id)//curling stone //cog "U+2699 U+FE0F",
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Tank.name, Tank.description, Tank.unicode, 1, 2, 6, 3, 2, Tank.color, headPosition, [headPosition], team, removeCallback, id)//curling stone //cog "U+2699 U+FE0F",
   }
 }
 
@@ -313,8 +320,8 @@ class Bomb extends Piece {
   static description = "Can be sacrificed to inflict high damage over a wide area";
   static unicode = "U+1F4A3";
   static color = "#000000";
-  constructor(headPosition: Coordinate, team: string, id?: string){
-   super(Bomb.name, Bomb.description, Bomb.unicode, 1, 3, 1, 10, 0, Bomb.color, headPosition, [headPosition], team, id)
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Bomb.name, Bomb.description, Bomb.unicode, 1, 3, 1, 10, 0, Bomb.color, headPosition, [headPosition], team, removeCallback, id)
   }
 }
 
@@ -323,8 +330,8 @@ class Dataworm extends Piece {
   static description = "A large program that can tunnel through other pieces";
   static unicode = "U+1FAB1";//"U+1F41B";
   static color = "#c031c3";
-  constructor(headPosition: Coordinate, team: string, id?: string){
-   super(Dataworm.name, Dataworm.description, Dataworm.unicode, 6, 3, 1, 2, 0, Dataworm.color, headPosition, [headPosition], team, id)
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Dataworm.name, Dataworm.description, Dataworm.unicode, 6, 3, 1, 2, 0, Dataworm.color, headPosition, [headPosition], team, removeCallback, id)
   }
 
   //tunnel
@@ -335,8 +342,8 @@ class Copycat extends Piece {
   static description = "Can take on the traits of any piece in range";
   static unicode = "U+1F63C";//"U+1F431";
   static color = "#fff643";
-  constructor(headPosition: Coordinate, team: string, id?: string){
-   super(Copycat.name, Copycat.description, Copycat.unicode, 1, 0, 1, 0, 0, Copycat.color, headPosition, [headPosition], team, id)
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Copycat.name, Copycat.description, Copycat.unicode, 1, 0, 1, 0, 0, Copycat.color, headPosition, [headPosition], team, removeCallback, id)
   }
 
   //check for pieces in range, inheret methods from them
@@ -348,8 +355,8 @@ class Trap extends Piece {
   static description = "A piece invisble to the enemy that immobilises pieces moving over it";
   static unicode = "U+1FAA4";
   static color = "#686026";
-  constructor(headPosition: Coordinate, team: string, id?: string){
-   super(Trap.name, Trap.description, Trap.unicode, 1, 1, 0, 0, 0, Trap.color, headPosition, [headPosition], team, id)
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Trap.name, Trap.description, Trap.unicode, 1, 1, 0, 0, 0, Trap.color, headPosition, [headPosition], team, removeCallback, id)
   }
 }
   //check for pieces on top, make their movement 0
@@ -359,8 +366,8 @@ class Mine extends Piece {
   static description = "A piece invisble to the enemy that damages pieces moving over it";
   static unicode = "U+1F4A5";
   static color = "#ff9d00";
-  constructor(headPosition: Coordinate, team: string, id?: string){
-   super(Mine.name, Mine.description, Mine.unicode, 1, 1, 0, 3, 0, Mine.color, headPosition, [headPosition], team, id)
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Mine.name, Mine.description, Mine.unicode, 1, 1, 0, 3, 0, Mine.color, headPosition, [headPosition], team, removeCallback, id)
   }
 
   //check for pieces on top, damage them
@@ -372,8 +379,8 @@ class Spider extends Piece {
   static unicode = "U+1F577";
   static color = "#a8743f";
   //U+1F577 U+FE0F spider trail is trap
-  constructor(headPosition: Coordinate, team: string, id?: string){
-   super(Spider.name, Spider.description, Spider.unicode, 6, 3, 1, 3, 0, Spider.color, headPosition, [headPosition], team, id)
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Spider.name, Spider.description, Spider.unicode, 6, 3, 1, 3, 0, Spider.color, headPosition, [headPosition], team, removeCallback, id)
   }
 
   //check for pieces in path, set their moves to 0
@@ -388,8 +395,8 @@ class Germ extends Piece {
   static description = "A piece that infects other pieces, draining their max size over time";
   static unicode = "U+1F9A0";
   static color = "#27ff00";
-  constructor(headPosition: Coordinate, team: string, id?: string){
-   super(Germ.name, Germ.description, Germ.unicode, 1, 4, 1, 0, 0, Germ.color, headPosition, [headPosition], team, id)
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Germ.name, Germ.description, Germ.unicode, 1, 4, 1, 0, 0, Germ.color, headPosition, [headPosition], team, removeCallback, id)
   }
 
   //infect a piece, drain it's max size every turn
@@ -401,8 +408,8 @@ class Vice extends Piece {
   static description = "A piece that can reduce other pieces moves to 0";
   static unicode = "U+1F5DC";
   static color = "#f5d58d";
-  constructor(headPosition: Coordinate, team: string, id?: string){
-   super(Vice.name, Vice.description, Vice.unicode, 1, 2, 1, 0, 1, Vice.color, headPosition, [headPosition], team, id)
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Vice.name, Vice.description, Vice.unicode, 1, 2, 1, 0, 1, Vice.color, headPosition, [headPosition], team, removeCallback, id)
   }
 
   //set another piece's moves to 0 when in range
@@ -414,8 +421,8 @@ class Watchman extends Piece {
   static description = "A piece that spots other pieces, reducing their defence";
   static unicode = "U+1F441";
   static color = "#6730cf";
-  constructor(headPosition: Coordinate, team: string, id?: string){
-   super(Watchman.name, Watchman.description, Watchman.unicode, 2, 2, 3, 0, 0, Watchman.color, headPosition, [headPosition], team, id)
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Watchman.name, Watchman.description, Watchman.unicode, 2, 2, 3, 0, 0, Watchman.color, headPosition, [headPosition], team, removeCallback, id)
   }
 
   //spot, reduce a pieces defence by 1 if not already spotted
@@ -427,8 +434,8 @@ class Magnet extends Piece {
   static description = "A piece that moves other pieces";
   static unicode = "U+1F9F2";
   static color = "#f12020";
-  constructor(headPosition: Coordinate, team: string, id?: string){
-   super(Magnet.name, Magnet.description, Magnet.unicode, 2, 2, 3, 0, 0, Magnet.color, headPosition, [headPosition], team, id)
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Magnet.name, Magnet.description, Magnet.unicode, 2, 2, 3, 0, 0, Magnet.color, headPosition, [headPosition], team, removeCallback, id)
   }
 
   // pull pieces toward it
@@ -440,8 +447,8 @@ class Turtle extends Piece {
   static description = "A slow piece with high defence";
   static unicode = "U+1F422";
   static color = "#84cd48";
-  constructor(headPosition: Coordinate, team: string, id?: string){
-   super(Turtle.name, Turtle.description, Turtle.unicode, 1, 1, 1, 3, 4, Turtle.color, headPosition, [headPosition], team, id)
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Turtle.name, Turtle.description, Turtle.unicode, 1, 1, 1, 3, 4, Turtle.color, headPosition, [headPosition], team, removeCallback, id)
   }
   // slow, high defence, snap low range atk
 }
@@ -452,8 +459,8 @@ class Hopper extends Piece {
   static description = "A piece that can jump over pieces next to it";
   static unicode = "U+1F997";
   static color = "#9aff46";
-  constructor(headPosition: Coordinate, team: string, id?: string){
-   super(Hopper.name, Hopper.description, Hopper.unicode, 1, 3, 1, 2, 2, Hopper.color, headPosition, [headPosition], team, id)
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Hopper.name, Hopper.description, Hopper.unicode, 1, 3, 1, 2, 2, Hopper.color, headPosition, [headPosition], team, removeCallback, id)
   }
   //jump over other pieces next to it
 }
@@ -464,8 +471,8 @@ class Sponge extends Piece {
   static description = "A piece that can permanently copy stats of nearby pieces";
   static unicode = "U+1F9FD";
   static color = "#ffd446";
-  constructor(headPosition: Coordinate, team: string, id?: string){
-   super(Sponge.name, Sponge.description, Sponge.unicode, 4, 0, 1, 0, 0, Sponge.color, headPosition, [headPosition], team, id)
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Sponge.name, Sponge.description, Sponge.unicode, 4, 0, 1, 0, 0, Sponge.color, headPosition, [headPosition], team, removeCallback, id)
   }
   //choose a stat to absorb from a nearby piece
 }

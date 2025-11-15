@@ -13,7 +13,7 @@ function isInstance(p: any): p is InstanceType<typeof Piece> {
   return p instanceof Piece
 }
 
-defineEmits(['highlightMoves', 'attack', 'special', 'highlightPlacements', 'sell'])//TODO place goes in board/player //sell goes in player
+defineEmits(['highlightMoves', 'attack', 'special', 'highlightPlacements', 'highlightTargets', 'sell'])//TODO place goes in board/player //sell goes in player
 
 /*
  <button
@@ -45,6 +45,7 @@ defineEmits(['highlightMoves', 'attack', 'special', 'highlightPlacements', 'sell
         <p>Range: {{ piece.range }}</p>
         <p>Attack: {{ piece.attack }}</p>
         <p>Defence: {{ piece.defence }}</p>
+        <p v-if="isInstance(piece)">Actions: {{ piece.actions }}</p>
       </div>
 
       <div class="actions">
@@ -54,7 +55,7 @@ defineEmits(['highlightMoves', 'attack', 'special', 'highlightPlacements', 'sell
         </template>
         <template v-else-if="isInstance(piece) && piece.team == 'player'">
           <button @click="$emit('highlightMoves', piece)">Move</button>
-          <button @click="$emit('attack', piece)">Attack</button>
+          <button v-if="piece.actions > 0" @click="$emit('highlightTargets', piece)">Attack</button>
           <button @click="$emit('special', piece)">Special</button>
         </template>
       </div>

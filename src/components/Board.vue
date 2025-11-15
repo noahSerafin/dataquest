@@ -163,15 +163,22 @@ function checkTileIsOccupied(coord:Coordinate): Piece | undefined{
 
 //(damageReceiver: InstanceType<typeof Piece>) => {
 
-const damagePieceAt = (coord:Coordinate){
+const damagePieceAt = (coord:Coordinate) => {
+  //console.log('props pieces:', props.pieces.map(p => p.tiles))
+  //console.log('selected:', selectedPiece.value)
   if (!selectedPiece.value) return
+  //console.log('looking at ', coord, 'in ', props.pieces)
   const damageReceiver = props.pieces.find(piece =>
     piece.tiles.some(t => t.x === coord.x && t.y === coord.y)
   );
+  //console.log('receiver: ', damageReceiver?.name)
   if (!damageReceiver) return;
   const damage = selectedPiece.value.attack;
+  //console.log("Damage call:", coord, damage)
   damageReceiver.takeDamage(damage);
   selectedPiece.value.actions --
+  //console.log(damageReceiver?.name, ' tiles afterdmg: ', damageReceiver.tiles)
+  clearHighlights();
 }
 
 const highlightTargets = (piece: InstanceType<typeof Piece>) => {
@@ -237,8 +244,9 @@ const highlightTargets = (piece: InstanceType<typeof Piece>) => {
       }"
     />
     <div
-      v-for="(tile, index) in inRangeHighlights"
-      :key="index"
+    v-for="(tile, index) in inRangeHighlights"
+    :key="index"
+    :id="`atk-${tile.x}-${tile.y}`"
       class="highlight-tile red"
       v-on:click="damagePieceAt(tile)"
       :style="{
@@ -269,7 +277,6 @@ const highlightTargets = (piece: InstanceType<typeof Piece>) => {
       @highlightTargets="highlightTargets"
       />
       <!--
-        @attack="onAttack"
         @special="console.log('Special', $event)"
       -->
     </div>
@@ -310,6 +317,6 @@ const highlightTargets = (piece: InstanceType<typeof Piece>) => {
 }
 .red{
   background-color: rgba(255, 0, 0, 0.432);
-  z-index: 1;
+  z-index: 3;
 }
 </style>

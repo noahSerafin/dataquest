@@ -79,7 +79,7 @@ export abstract class Piece {
   }
 
   moveTo(newPosition: Coordinate): void {
-    console.log('attempting move')
+    //console.log('attempting move')
     this.headPosition = newPosition
     this.tiles.unshift(newPosition)
     // If exceeding maxSize, remove the oldest tile
@@ -89,11 +89,14 @@ export abstract class Piece {
     this.useMove();
   }
 
-  takeDamage(damage: number){
-    const received = damage - this.defence;
-    for (let index = 0; index < received; index++) {
-      this.tiles.shift();
-    }
+  takeDamage(damage: number) {
+    //console.log('recieving: ', damage)
+    const received = Math.max(0, damage - this.defence);
+    const removeCount = Math.min(received, this.tiles.length); // safety
+    //console.log('recieving total: ', removeCount)
+    //console.log('splice: ', this.tiles.length-removeCount, removeCount)
+
+    this.tiles.splice(this.tiles.length - removeCount, removeCount);
   }
 
   // Example method

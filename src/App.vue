@@ -189,9 +189,12 @@
   };
 
   const endTurn = () => {
+    //hasFinishedTurn.value = true;
     activePieces.value.forEach(piece => {
       piece.movesRemaining = piece.moves;
+      piece.actions = 1;
     });
+    //takeAIturn()
   }
 </script>
 

@@ -53,6 +53,7 @@
 
   const pieceToPlace = ref<PieceBlueprint | null>(null);
   const playerSpawns = ref<Coordinate[]>([]);
+  
   const newPlacementHighlights = () => {//board should only show these if isPlacing
     const highlights: Coordinate[] = [];
     const tileSet = new Set(level.value.tiles.map(t => `${t.x},${t.y}`));

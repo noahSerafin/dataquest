@@ -103,7 +103,8 @@ function getAvailableMoves(
 }
 
 //cleanup
-const moveHighlights = ref<Coordinate[]>([])
+const moveHighlights = ref<Coordinate[]>([]);
+const inRangeHighlights = ref<Coordinate[]>([]);
 //const placeHighlights = ref<Coordinate[]>([])
 
 const highlightMoves = (piece: InstanceType<typeof Piece>) => {
@@ -112,6 +113,7 @@ const highlightMoves = (piece: InstanceType<typeof Piece>) => {
 
 const clearHighlights = () => {
   moveHighlights.value = [];
+  inRangeHighlights.value = [];
 }
 
 const movePiece = (coord : Coordinate) => {//todo moves piece, but does not add more tiles visually
@@ -125,6 +127,61 @@ const movePiece = (coord : Coordinate) => {//todo moves piece, but does not add 
     console.log('tiles: ', selectedPiece.value.tiles);
   }
 }
+
+function getTilesInRange(
+  piece: Piece,
+  tileSet: Set<string>,       // valid board tiles like "x,y"
+): Coordinate[] {
+  const tiles: Coordinate[] = [];
+  const { x, y } = piece.headPosition;
+  const r = piece.range;
+
+  for (let dx = -r; dx <= r; dx++) {
+    for (let dy = -r; dy <= r; dy++) {
+      const dist = Math.abs(dx) + Math.abs(dy);
+
+      // Only include tiles within Manhattan range
+      if (dist > 0 && dist <= r) {
+        const tx = x + dx;
+        const ty = y + dy;
+        const key = `${tx},${ty}`;
+
+        // Only add if tile exists on board
+        if (tileSet.has(key)) {
+          tiles.push({ x: tx, y: ty });
+        }
+      }
+    }
+  }
+
+  return tiles;
+}
+
+function checkTileIsOccupied(coord:Coordinate): Piece | undefined{
+  return pieceMap.value.get(`${coord.x},${coord.y}`);
+}
+
+//(damageReceiver: InstanceType<typeof Piece>) => {
+
+const damagePieceAt = (coord:Coordinate){
+  if (!selectedPiece.value) return
+  const damageReceiver = props.pieces.find(piece =>
+    piece.tiles.some(t => t.x === coord.x && t.y === coord.y)
+  );
+  if (!damageReceiver) return;
+  const damage = selectedPiece.value.attack;
+  damageReceiver.takeDamage(damage);
+  selectedPiece.value.actions --
+}
+
+const highlightTargets = (piece: InstanceType<typeof Piece>) => {
+  inRangeHighlights.value = getTilesInRange(
+    piece,
+    tileSet.value,
+  ); 
+}
+
+//attackHighlights.value = getTilesInRange(piece, tileSet.value, pieceMap.value);
 
 </script>
 
@@ -180,6 +237,18 @@ const movePiece = (coord : Coordinate) => {//todo moves piece, but does not add 
       }"
     />
     <div
+      v-for="(tile, index) in inRangeHighlights"
+      :key="index"
+      class="highlight-tile red"
+      v-on:click="damagePieceAt(tile)"
+      :style="{
+        left: tile.x * tileSize + 'px',
+        top: tile.y * tileSize + 'px',
+        width: tileSize + 'px',
+        height: tileSize + 'px',
+      }"
+    />
+    <div
       v-if="props.placementMode || props.isFirstTurn" v-for="(tile, index) in props.placementHighlights"
       :key="index"
       class="highlight-tile yellow"
@@ -197,6 +266,7 @@ const movePiece = (coord : Coordinate) => {//todo moves piece, but does not add 
       :piece="selectedPiece"
       mode="action"
       @highlightMoves="highlightMoves"
+      @highlightTargets="highlightTargets"
       />
       <!--
         @attack="onAttack"
@@ -236,6 +306,10 @@ const movePiece = (coord : Coordinate) => {//todo moves piece, but does not add 
 }
 .yellow{
   background-color: rgba(255, 251, 0, 0.432);
+  z-index: 1;
+}
+.red{
+  background-color: rgba(255, 0, 0, 0.432);
   z-index: 1;
 }
 </style>

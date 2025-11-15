@@ -18,6 +18,7 @@ export abstract class Piece {
   headPosition: Coordinate
   tiles: Coordinate[] // an array of (x, y) positions
   movesRemaining: number
+  actions: number
   team: string //'player' or 'enemy'
 
   constructor(
@@ -48,6 +49,7 @@ export abstract class Piece {
     this.headPosition = headPosition ?? { x: -1, y: -1 };
     this.tiles = tiles.length ? tiles : headPosition ? [headPosition] : []; //default to head
     this.movesRemaining = moves // default to full moves at start of turn
+    this.actions = 1
     this.team = team
   }
 

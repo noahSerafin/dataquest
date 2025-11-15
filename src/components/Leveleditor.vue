@@ -5,6 +5,7 @@ import PieceView from "./PieceView.vue";
 import type { Piece } from "../Pieces";
 import { Spawn } from '../Pieces';
 import {Allpieces} from "../Pieces";
+import { visitFunctionBody } from "typescript";
 
 //const pieceClasses: Array<typeof Piece>
 //switch to object for fast lookup when there are "dozens" of pieces
@@ -102,11 +103,9 @@ function applyDrag(x: number, y: number) {
 const piecesToExport = ref<InstanceType<typeof Piece>[]>([]);
 
 function findPieceAt(coord : Coordinate) {
-  const piece = piecesToExport.value.find(p =>
+  return piecesToExport.value.find(p =>
     p.tiles.some(t => t.x === coord.x && t.y === coord.y)
   );
-
-  return piece;// || false;
 }
 
 function placePiece(coord: Coordinate) {
@@ -117,6 +116,7 @@ function placePiece(coord: Coordinate) {
 
   dropper.value.pieceToExtend = newPiece.id;
   piecesToExport.value.push(newPiece)
+  console.log('piece placed')
 }
 
 function extendPiece(pieceID: string, coord: Coordinate) {
@@ -126,26 +126,34 @@ function extendPiece(pieceID: string, coord: Coordinate) {
   pieceToExtend.addTile(coord.x, coord.y); //todo not a . value, its a function
 }
 
+function removePieceById(id: string) {
+  piecesToExport.value = piecesToExport.value.filter(piece => piece.id !== id);
+}
+
 // Handle mouse down
 function handleMouseDown(x: number, y: number) {
   console.log('dropper mode: ', dropper.value.mode);
+  const found = findPieceAt({x, y});
   if (dropper.value.mode === "tile") {
     //todo: check coord isn't occupied before removing a tile
-    //if coord is occupied remove piece??
+    if(found){
+      //remove piece??
+      removePieceById(found.id)
+    }
     isDragging.value = true
     dragMode.value = isActive(x, y) ? "deactivate" : "activate"
     applyDrag(x, y)
   } else if (dropper.value.mode == 'extend'){
     //tile is below piece
-    console.log('lookingforpieceat', x, y, findPieceAt({x, y}))
-    if(findPieceAt({x, y})){
-      console.log('switching pieceToExtend to ', findPieceAt({x, y})?.name)
-      dropper.value.pieceToExtend = findPieceAt({x, y})?.id;
+    console.log('lookingforpieceat', x, y, found)
+    if(found){
+      console.log('switching pieceToExtend to ', found?.name)
+      dropper.value.pieceToExtend = found.id;
     } else if(dropper.value.pieceToExtend){
       console.log('dropper: ', dropper.value)
       extendPiece(dropper.value.pieceToExtend, {x, y});  
     }
-  } else if (dropper.value.mode == 'piece'){
+  } else if (dropper.value.mode == 'piece' && !found){ //what todo if piece found here?
     placePiece({x, y});
   }
 }

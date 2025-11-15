@@ -153,7 +153,7 @@ function handleMouseDown(x: number, y: number) {
       console.log('dropper: ', dropper.value)
       extendPiece(dropper.value.pieceToExtend, {x, y});  
     }
-  } else if (dropper.value.mode == 'piece' && !found){ //what todo if piece found here?
+  } else if (dropper.value.mode == 'piece' && !found){
     placePiece({x, y});
   }
 }

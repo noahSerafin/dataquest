@@ -141,6 +141,9 @@ const onAttack = (piece : Piece) => {
 </template>
 
 <style scoped>
+.editor-piece{
+  pointer-events: none;
+}
 .piece, .board-piece, .piece-tile{
   text-align: center;
   transition: all 0.2s ease;

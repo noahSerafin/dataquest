@@ -8,9 +8,9 @@ EDITOR
 
 -set up spawner pieces - done
 
-add extender function to dropper, using previous piece 1
+- add extender function to dropper, using previous piece - done
 
-clicking on an already dropped piece changes the pieceToExtend 2
+- clicking on an already dropped piece changes the pieceToExtend - done
 
 
 BOARD
@@ -33,7 +33,7 @@ move
 -move should add to size up to max size - done
 
 
-atk function 2
+-atk function -done-
 
 
 special functions
@@ -87,7 +87,7 @@ implement item functions
 
 SHOP 3
 rarity
-2 piece/item slots
+two piece/item slots
 piece packs/item packs
 reroll button
 

@@ -101,6 +101,14 @@ function applyDrag(x: number, y: number) {
 
 const piecesToExport = ref<InstanceType<typeof Piece>[]>([]);
 
+function findPieceAt(coord : Coordinate) {
+  const piece = piecesToExport.value.find(p =>
+    p.tiles.some(t => t.x === coord.x && t.y === coord.y)
+  );
+
+  return piece;// || false;
+}
+
 function placePiece(coord: Coordinate) {
   const pieceClass = pieceClasses.find(p => p.name === dropper.value.pieceName)
   if (!pieceClass) return
@@ -127,9 +135,16 @@ function handleMouseDown(x: number, y: number) {
     isDragging.value = true
     dragMode.value = isActive(x, y) ? "deactivate" : "activate"
     applyDrag(x, y)
-  } else if (dropper.value.mode == 'extend' && dropper.value.pieceToExtend){
-    console.log('dropper: ', dropper.value)
-    extendPiece(dropper.value.pieceToExtend, {x, y});  
+  } else if (dropper.value.mode == 'extend'){
+    //tile is below piece
+    console.log('lookingforpieceat', x, y, findPieceAt({x, y}))
+    if(findPieceAt({x, y})){
+      console.log('switching pieceToExtend to ', findPieceAt({x, y})?.name)
+      dropper.value.pieceToExtend = findPieceAt({x, y})?.id;
+    } else if(dropper.value.pieceToExtend){
+      console.log('dropper: ', dropper.value)
+      extendPiece(dropper.value.pieceToExtend, {x, y});  
+    }
   } else if (dropper.value.mode == 'piece'){
     placePiece({x, y});
   }
@@ -324,7 +339,7 @@ const boardHeight = computed(() => tileSize.value * height.value)
         :key="piece.id"
       >
         <PieceView
-          cssclass="board"
+          cssclass="editor"
           :piece="piece"
           :tileSize="tileSize"
           :mapTiles="tileMap"

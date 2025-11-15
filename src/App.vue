@@ -9,6 +9,7 @@
   import { Spawn } from './Pieces';
   import { Allpieces } from "./Pieces"
   import type { Coordinate, PieceBlueprint } from "./types";
+  import { takeEnemyTurn } from "./Enemy";
 
   //import { Map } from "./components/Map.vue";
 
@@ -19,6 +20,19 @@
   
   const testSword = {
     id: "274ec329-8c17-4265-8c12-e9a28bcf0833",
+    name: "Sword",
+    description: "A basic attack piece",
+    unicode: "U+1F5E1",
+    maxSize: 3,
+    moves: 2,
+    range: 1,
+    attack: 2,
+    defence: 0,
+    color: "#dddcd7",
+    isPlaced: false
+  }
+  const testSword2 = {
+    id: "274ec329-8c17-4265-8c12-e9a28bcf0111",
     name: "Sword",
     description: "A basic attack piece",
     unicode: "U+1F5E1",
@@ -43,7 +57,7 @@
     5,  // memory limit
     3, //admin slots
     [], // no items yet
-    [testSword]//, testShield] // starting pieces
+    [testSword, testSword2]//, testShield] // starting pieces
   ));
   const level = ref(castled);
   const displayEditor = ref(false);
@@ -175,6 +189,8 @@
     pieceToPlace.value = null;
     playerSpawns.value = newPlacementHighlights();
     isPlacing.value = false;
+
+    endTurn();
   }  
 
   function handleSell(piece: Piece) {
@@ -182,6 +198,37 @@
     //player.value.sell(piece)
   }
 
+  async function enemyTurn() {
+    const enemyPieces = activePieces.value.filter(p => p.team === 'enemy');
+    const playerPieces = activePieces.value.filter(p => p.team === 'player');
+    const tileSet = new Set(level.value.tiles.map(t => `${t.x},${t.y}`));
+
+    await takeEnemyTurn(
+      enemyPieces,
+      playerPieces,
+      activePieces.value,
+      tileSet,
+      removePiece // callback to remove dead pieces
+    );
+
+    // Reset enemy actions/moves after their turn if needed
+    enemyPieces.forEach(p => {
+      p.actions = 1;
+      p.movesRemaining = p.moves;
+    });
+    hasFinishedTurn.value = false;
+  }
+
+  const endTurn = () => {
+    hasFinishedTurn.value = true;
+    activePieces.value.forEach(piece => {
+      piece.movesRemaining = piece.moves;
+      piece.actions = 1;
+    });
+    enemyTurn();  
+  }
+
+  
   // When editor exports a new level, shouldn't be needed in final
   const handleExport = (levelData: any) => {
     level.value.tiles = levelData.tiles;
@@ -192,33 +239,28 @@
 
     displayEditor.value = false; // swap to board view
   };
-
-  const endTurn = () => {
-    //hasFinishedTurn.value = true;
-    activePieces.value.forEach(piece => {
-      piece.movesRemaining = piece.moves;
-      piece.actions = 1;
-    });
-    //takeAIturn()
-  }
 </script>
 
 <template>
   <button class="swap-display" @mousedown="swapDisplay()">
     {{ displayEditor ? "Show Board" : "Show Editor" }}
   </button>
+  <div v-if="isPlacing && pieceToPlace">
+    <p>Placing:</p>
+  </div>
   <div v-if="isPlacing && pieceToPlace"
     class="info">
-    <p>Placing:</p>
     <BlueprintView :blueprint="pieceToPlace"
     :tileSize="60"
     :cssclass="'placing'"
     />
   </div>
+  <div v-if="!hasFinishedTurn && !isPlacing">Your turn</div>
+
   <PlayerView v-if="!displayEditor" :player="player" @highlightPlacements="highlightPlacements"/>
   <Board v-if="!displayEditor" :tiles="level.tiles" :pieces="activePieces" :placementHighlights="playerSpawns" :isFirstTurn="isFirstTurn" :placementMode="isPlacing" @place-on-board="placePieceOnBoardAt"/>
   <Leveleditor v-else @export-level="handleExport"/>
-  <button v-if="!displayEditor" class="end-turn" v-on:click="endTurn()">End Turn</button>
+  <button v-if="!displayEditor && !hasFinishedTurn" class="end-turn" v-on:click="endTurn()">End Turn</button>
 </template>
 
 <style scoped>

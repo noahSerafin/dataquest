@@ -57,12 +57,20 @@ sell
 rarity = value ?+=no. of upgrades used on a piece? 3
 
 AI 2/3
-pathfinding
-isPlayerInRange
+functions:
+    findNearestPlayerPiece
+    pathfinding a -> b in a grid
+    moveTowards player
+    isPlayerPieceInRange
+
+enemyPieces = get a list of piece.team = 'enemy' from activePieces
+
+for each piece found:
+(use js timeouts to slow down execution for visibility)
 
 while movesRemaining:
 if maxSize && playerInRange {
-    pieces should try to use special move if possible
+    //pieces should try to use special move if possible
     if(atk > player's def){
         attack
     } else if movesRemaining{
@@ -72,7 +80,7 @@ if maxSize && playerInRange {
     move toward nearest player 
     every move:
     if(isPlayerInRange){
-        pieces should try to use special move if possible
+        //pieces should try to use special move if possible
     } else if(atk > player's def){
         attack
     } else {

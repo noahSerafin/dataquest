@@ -108,6 +108,7 @@ const inRangeHighlights = ref<Coordinate[]>([]);
 //const placeHighlights = ref<Coordinate[]>([])
 
 const highlightMoves = (piece: InstanceType<typeof Piece>) => {
+  clearHighlights();
   moveHighlights.value = getAvailableMoves(piece, tileSet.value, pieceMap.value);
 }
 
@@ -172,7 +173,7 @@ const damagePieceAt = (coord:Coordinate) => {
     piece.tiles.some(t => t.x === coord.x && t.y === coord.y)
   );
   //console.log('receiver: ', damageReceiver?.name)
-  if (!damageReceiver) return;
+  if (!damageReceiver || damageReceiver.team === selectedPiece.value.team) return;
   const damage = selectedPiece.value.attack;
   //console.log("Damage call:", coord, damage)
   damageReceiver.takeDamage(damage);
@@ -182,6 +183,7 @@ const damagePieceAt = (coord:Coordinate) => {
 }
 
 const highlightTargets = (piece: InstanceType<typeof Piece>) => {
+  clearHighlights();
   inRangeHighlights.value = getTilesInRange(
     piece,
     tileSet.value,

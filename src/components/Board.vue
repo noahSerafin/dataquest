@@ -11,6 +11,7 @@ interface Props{
   placementHighlights: Coordinate[]
   placementMode: boolean
   isFirstTurn: boolean
+  hasFinishedTurn: boolean
 }
 const props = defineProps<Props>()
 console.log('pm: ', props.placementMode)
@@ -280,9 +281,10 @@ defineExpose({
     />
     <!--&& selectedPiece.team === 'player'"-->
     <PieceController
-      v-if="selectedPiece"
+      v-if="selectedPiece && !hasFinishedTurn"
       :piece="selectedPiece"
       mode="action"
+      :hasFinishedTurn="hasFinishedTurn"
       @highlightMoves="highlightMoves"
       @highlightTargets="highlightTargets"
       />

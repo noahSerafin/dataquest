@@ -265,7 +265,14 @@
   <div v-if="!hasFinishedTurn && !isPlacing">Your turn</div>
 
   <PlayerView v-if="!displayEditor" :player="player" @highlightPlacements="highlightPlacements"/>
-  <Board ref="boardRef" v-if="!displayEditor" :tiles="level.tiles" :pieces="activePieces" :placementHighlights="playerSpawns" :isFirstTurn="isFirstTurn" :placementMode="isPlacing" @place-on-board="placePieceOnBoardAt"/>
+  <Board ref="boardRef" v-if="!displayEditor"
+  :tiles="level.tiles"
+  :pieces="activePieces"
+  :placementHighlights="playerSpawns"
+  :isFirstTurn="isFirstTurn"
+  :placementMode="isPlacing"
+  :hasFinishedTurn="hasFinishedTurn"
+  @place-on-board="placePieceOnBoardAt"/>
   <Leveleditor v-else @export-level="handleExport"/>
   <button v-if="!displayEditor && !hasFinishedTurn" class="end-turn" v-on:click="endTurn()">End Turn</button>
 </template>

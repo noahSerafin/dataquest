@@ -70,19 +70,21 @@ const pieceStyle = computed(() => {
   let styles = {
     left: (props.piece.headPosition.x * props.tileSize)+6 + 'px',
     top: (props.piece.headPosition.y * props.tileSize)+6 + 'px',
-    position: 'absolute',
     width: props.tileSize-16 + 'px',
     height: props.tileSize-16 + 'px',
     fontSize: props.tileSize * 0.6 + 'px',
     lineHeight: props.tileSize -24 + 'px',
     backgroundColor: props.piece.color,
     '--piece-color': props.piece.color,
-    'z-index': 2
+    'z-index': 2,
+    position: 'unset'
   }
   if (props.cssclass === 'inventory'){
     styles.left = 'unset'
     styles.top = 'unset'
     styles.position =  'relative';
+  } else {
+    styles.position = 'absolute'
   }
   return styles;
 })

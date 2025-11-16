@@ -7,7 +7,7 @@
   import PlayerView from "./components/PlayerView.vue";
   import type { Piece } from "./Pieces"
   import { Spawn } from './Pieces';
-  import { Allpieces } from "./Pieces"
+  import { allPieces } from "./Pieces"
   import type { Coordinate, PieceBlueprint } from "./types";
   import { takeEnemyTurn } from "./Enemy";
 
@@ -20,7 +20,7 @@
   
   const testSword = {
     id: "274ec329-8c17-4265-8c12-e9a28bcf0833",
-    name: "Sword",
+    name: "Knife",
     description: "A basic attack piece",
     unicode: "U+1F5E1",
     maxSize: 3,
@@ -33,7 +33,7 @@
   }
   const testSword2 = {
     id: "274ec329-8c17-4265-8c12-e9a28bcf0111",
-    name: "Sword",
+    name: "Knife",
     description: "A basic attack piece",
     unicode: "U+1F5E1",
     maxSize: 3,
@@ -114,7 +114,7 @@
 
         // Enemy spawn → replace with random enemy piece
         if (piece.team === 'enemy') {
-          const EnemyClass = Allpieces[Math.floor(Math.random() * Allpieces.length)];//base this off rarity/difficulty later
+          const EnemyClass = allPieces[Math.floor(Math.random() * allPieces.length)];//base this off rarity/difficulty later
           const enemyInstance = new EnemyClass(piece.headPosition, 'enemy', removePiece);
           enemyInstance.team = 'enemy'
           processed.push(enemyInstance);
@@ -144,7 +144,7 @@
   }
 
   function rehydratePieces(rawPieces: any[]): InstanceType<typeof Piece>[] {
-    const pieceClasses = [...Allpieces];
+    const pieceClasses = [...allPieces];
     pieceClasses.unshift(Spawn);
     return rawPieces.map(p => {
       const PieceClass = pieceClasses.find(cls => cls.name === p.name)
@@ -175,7 +175,7 @@
 
     const bp = pieceToPlace.value
 
-    const PieceClass = Allpieces.find(p => p.name === bp.name)
+    const PieceClass = allPieces.find(p => p.name === bp.name)
     if (!PieceClass) return
 
     const instance = new PieceClass(coord, 'player', removePiece, bp.id);   // now real placement!

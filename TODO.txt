@@ -35,7 +35,7 @@ move
 
 -atk function -done-
 
-
+statuses
 special functions
 
 ADMIN PIECES 5
@@ -58,10 +58,10 @@ rarity = value ?+=no. of upgrades used on a piece? 3
 
 AI 2/3
 functions:
-    findNearestPlayerPiece
+    - findNearestPlayerPiece - done
     pathfinding a -> b in a grid
-    moveTowards player
-    isPlayerPieceInRange
+    moveTowards player - incomplete
+    - isPlayerPieceInRange - done
 
 enemyPieces = get a list of piece.team = 'enemy' from activePieces
 

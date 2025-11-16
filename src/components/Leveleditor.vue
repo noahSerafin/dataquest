@@ -4,12 +4,12 @@ import type { Coordinate } from "../types";
 import PieceView from "./PieceView.vue";
 import type { Piece } from "../Pieces";
 import { Spawn } from '../Pieces';
-import {Allpieces} from "../Pieces";
+import {allPieces} from "../Pieces";
 import { visitFunctionBody } from "typescript";
 
 //const pieceClasses: Array<typeof Piece>
 //switch to object for fast lookup when there are "dozens" of pieces
-const pieceClasses = [...Allpieces];
+const pieceClasses = [...allPieces];
 pieceClasses.unshift(Spawn);
 
 const size = ref(9);

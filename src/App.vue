@@ -158,11 +158,11 @@
   });
 
   function highlightPlacements(pieceBlueprint: PieceBlueprint) {
+    if(!isFirstTurn){
+      playerSpawns.value = newPlacementHighlights();
+    }
     pieceToPlace.value = pieceBlueprint;
     isPlacing.value = true;
-    if(isFirstTurn){
-      isFirstTurn.value = false;
-    }
   }
 
   function removePiece(piece: Piece) {
@@ -187,9 +187,11 @@
 
     // Reset placement state
     pieceToPlace.value = null;
-    playerSpawns.value = newPlacementHighlights();
+    //playerSpawns.value = newPlacementHighlights();
     isPlacing.value = false;
-
+    if(isFirstTurn){
+      isFirstTurn.value = false;
+    }
     endTurn();
   }  
 
@@ -197,6 +199,8 @@
     console.log('sell clicked');
     //player.value.sell(piece)
   }
+
+  const boardRef = ref();
 
   async function enemyTurn() {
     const enemyPieces = activePieces.value.filter(p => p.team === 'enemy');
@@ -207,8 +211,11 @@
       enemyPieces,
       playerPieces,
       activePieces.value,
-      tileSet,
-      removePiece // callback to remove dead pieces
+      removePiece, // callback to remove dead pieces
+      boardRef.value.highlightMoves,
+      boardRef.value.highlightTargets,
+      boardRef.value.clearHighlights,
+      tileSet
     );
 
     // Reset enemy actions/moves after their turn if needed
@@ -258,7 +265,7 @@
   <div v-if="!hasFinishedTurn && !isPlacing">Your turn</div>
 
   <PlayerView v-if="!displayEditor" :player="player" @highlightPlacements="highlightPlacements"/>
-  <Board v-if="!displayEditor" :tiles="level.tiles" :pieces="activePieces" :placementHighlights="playerSpawns" :isFirstTurn="isFirstTurn" :placementMode="isPlacing" @place-on-board="placePieceOnBoardAt"/>
+  <Board ref="boardRef" v-if="!displayEditor" :tiles="level.tiles" :pieces="activePieces" :placementHighlights="playerSpawns" :isFirstTurn="isFirstTurn" :placementMode="isPlacing" @place-on-board="placePieceOnBoardAt"/>
   <Leveleditor v-else @export-level="handleExport"/>
   <button v-if="!displayEditor && !hasFinishedTurn" class="end-turn" v-on:click="endTurn()">End Turn</button>
 </template>

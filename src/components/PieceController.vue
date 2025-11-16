@@ -53,10 +53,11 @@ defineEmits(['highlightMoves', 'attack', 'special', 'highlightPlacements', 'high
           <button @click="$emit('highlightPlacements', piece)">Place</button>
           <button @click="$emit('sell', piece)">Sell</button>
         </template>
-        <template v-else-if="isInstance(piece) && piece.team == 'player'">
-          <button @click="$emit('highlightMoves', piece)">Move</button>
-          <button v-if="piece.actions > 0" @click="$emit('highlightTargets', piece)">Attack</button>
-          <button @click="$emit('special', piece)">Special</button>
+        <template v-else-if="isInstance(piece)">
+          <button v-if="piece.team == 'player'" @click="$emit('highlightMoves', piece)">Move</button>
+          <button v-if="piece.team == 'player' && piece.actions > 0" @click="$emit('highlightTargets', piece)">Attack</button>
+          <button v-if="piece.team == 'enemy'" @click="$emit('highlightTargets', piece)">Show Range</button>
+          <button v-if="piece.team == 'player'" @click="$emit('special', piece)">Special</button>
         </template>
       </div>
     </div>

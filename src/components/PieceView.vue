@@ -112,7 +112,7 @@ const onAttack = (piece : Piece) => {
 
 <template>
   <div
-  :class="`piece ${props.cssclass}-piece team-${props.piece.team}`"
+  :class="`piece ${piece.headPosition.x}-${piece.headPosition.y} ${props.cssclass}-piece team-${props.piece.team}`"
     :name="piece?.name"
     :id="piece?.id"
     :style="pieceStyle"
@@ -131,8 +131,7 @@ const onAttack = (piece : Piece) => {
   <div
     v-for="(tile, index) in bodyTiles"
     :key="index"
-    class="piece-tile"
-    :class="getDirectionClass(tile, index+1)"
+    :class="`piece-tile ${tile.x}-${tile.y} ${getDirectionClass(tile, index+1)}`"
     :style="{
       ...pieceStyle,
       ...getTileStyle(tile),

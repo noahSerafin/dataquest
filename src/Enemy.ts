@@ -5,19 +5,31 @@ export async function takeEnemyTurn(
   enemyPieces: Piece[],
   playerPieces: Piece[],
   activePieces: Piece[],
-  tileSet: Set<string>,
   removePieceCallback: (piece: Piece) => void,
+  highlightMoves: (piece: Piece) => void,
+  highlightTargets: (piece: Piece) => void,
+  clearHighlights: () => void,
+  tileSet: Set<string>,
   delay = 500 // ms between moves for visibility
 ) {
   for (const enemy of enemyPieces) {
     while (enemy.movesRemaining > 0 && enemy.actions > 0) {
 
+      const isMaxSize = enemy.tiles.length === enemy.maxSize ? true : false
+
       // Check for any player piece in attack range
       const target = findPlayerInRange(enemy, playerPieces);
       if (target) {
+        highlightTargets(enemy);
+        await sleep(300);
         attackPiece(enemy, target);
         await sleep(delay);
-        continue;
+        clearHighlights()
+        if(isMaxSize){
+          continue;
+        } //else {
+          //move laterally to the player
+        //}
       }
 
       // Otherwise, move toward nearest player piece
@@ -26,8 +38,11 @@ export async function takeEnemyTurn(
 
       const nextStep = getNextStepTowards(enemy.headPosition, nearest.headPosition, tileSet, activePieces);
       if (nextStep) {
+        highlightMoves(enemy);
+        await sleep(300);
         enemy.moveTo(nextStep);
         await sleep(delay);
+        clearHighlights()
       } else {
         // Cannot move, skip
         break;
@@ -106,6 +121,7 @@ function getNextStepTowards(
   if (validMoves.length === 0) return null;
 
   // Pick the move that minimizes Manhattan distance to the target
+  // if range is low, should really find a path to target around obstacles
   validMoves.sort((a, b) => {
     const distA = Math.abs(a.x - end.x) + Math.abs(a.y - end.y);
     const distB = Math.abs(b.x - end.x) + Math.abs(b.y - end.y);

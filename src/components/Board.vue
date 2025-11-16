@@ -118,15 +118,16 @@ const clearHighlights = () => {
 }
 
 const movePiece = (coord : Coordinate) => {//todo moves piece, but does not add more tiles visually
-  if(selectedPiece.value){
-    selectedPiece.value?.moveTo(coord);
-    if(selectedPiece.value.movesRemaining > 0){
-      highlightMoves(selectedPiece.value);
-    }else {
-      clearHighlights();
-    }
-    console.log('tiles: ', selectedPiece.value.tiles);
+  if(!selectedPiece.value) return;
+  if (selectedPiece.value.team !== 'player') return;
+  
+  selectedPiece.value?.moveTo(coord);
+  if(selectedPiece.value.movesRemaining > 0){
+    highlightMoves(selectedPiece.value);
+  }else {
+    clearHighlights();
   }
+  console.log('tiles: ', selectedPiece.value.tiles);
 }
 
 function getTilesInRange(
@@ -168,6 +169,7 @@ const damagePieceAt = (coord:Coordinate) => {
   //console.log('props pieces:', props.pieces.map(p => p.tiles))
   //console.log('selected:', selectedPiece.value)
   if (!selectedPiece.value) return
+  if (selectedPiece.value.team !== 'player') return
   //console.log('looking at ', coord, 'in ', props.pieces)
   const damageReceiver = props.pieces.find(piece =>
     piece.tiles.some(t => t.x === coord.x && t.y === coord.y)
@@ -191,6 +193,12 @@ const highlightTargets = (piece: InstanceType<typeof Piece>) => {
 }
 
 //attackHighlights.value = getTilesInRange(piece, tileSet.value, pieceMap.value);
+
+defineExpose({
+  highlightMoves,
+  highlightTargets,
+  clearHighlights
+});
 
 </script>
 

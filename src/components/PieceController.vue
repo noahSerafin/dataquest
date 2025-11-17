@@ -3,9 +3,9 @@ import { ref, computed, onMounted } from "vue"
 import type { Coordinate, PieceBlueprint } from "../types"
 import { Piece } from "../Pieces"
 
-defineProps<{ 
+const props = defineProps<{ 
   piece: InstanceType<typeof Piece> | PieceBlueprint
-  mode: 'inventory' | 'action'
+  mode: 'shop' | 'inventory' | 'action'
 }>()
 
 // Type guard: true if this is a real in-game instance
@@ -13,8 +13,34 @@ function isInstance(p: any): p is InstanceType<typeof Piece> {
   return p instanceof Piece
 }
 
-defineEmits(['highlightMoves', 'attack', 'special', 'highlightPlacements', 'highlightTargets', 'sell'])//TODO place goes in board/player //sell goes in player
+defineEmits(['highlightMoves', 'attack', 'special', 'highlightPlacements', 'highlightTargets', 'sell', 'buy'])//TODO place goes in board/player //sell goes in player
 
+function showRarity(rarity: number) {
+  switch (rarity) {
+    case 1:
+      return { text: "Common", color: "green" };
+
+    case 2:
+      return { text: "Uncommon", color: "orange" };
+
+    case 3:
+      return { text: "Rare", color: "red" };
+
+    case 4:
+      return { text: "Ultra Rare", color: "purple" };
+
+    case 5:
+      return { text: "Black Market", color: "pink" };
+
+    case 6:
+      return { text: "Legendary", color: "gold" };
+
+    default:
+      return { text: "Unknown", color: "grey" };
+  }
+}
+
+const rarityInfo = computed(() => showRarity(props.piece.rarity));
 /*
  <button
           v-if="typeof piece.special === 'function'"
@@ -36,7 +62,9 @@ defineEmits(['highlightMoves', 'attack', 'special', 'highlightPlacements', 'high
       </div>
 
       <p class="desc">{{ piece.description }}</p>
-
+      <div :style="{ color: rarityInfo.color }">
+        {{ rarityInfo.text }}
+      </div>
       <div class="stats">
         <p v-if="isInstance(piece)">Size: {{ piece.tiles.length }}</p>
         <p>Max Size: {{ piece.maxSize }}</p>
@@ -49,6 +77,9 @@ defineEmits(['highlightMoves', 'attack', 'special', 'highlightPlacements', 'high
       </div>
 
       <div class="actions">
+        <template v-if="mode === 'shop'">
+          <button @click="$emit('buy', piece)">Buy (${{ piece.rarity * 2 - 1 }})</button>
+        </template>
         <template v-if="mode === 'inventory'">
           <button @click="$emit('highlightPlacements', piece)">Place</button>
           <button @click="$emit('sell', piece)">Sell</button>

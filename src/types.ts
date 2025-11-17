@@ -11,6 +11,7 @@ export type PieceBlueprint = {
   range: number
   attack: number
   defence: number
+  rarity: number
   color: string
   isPlaced: boolean
   // maybe upgrade info later, etc...

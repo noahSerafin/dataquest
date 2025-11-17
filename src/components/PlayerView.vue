@@ -4,7 +4,7 @@
     import type { Coordinate, PieceBlueprint } from "../types";
     import { Item } from "../Items";
     import PieceController from "./PieceController.vue";
-import BlueprintView from "./BlueprintView.vue";
+    import BlueprintView from "./BlueprintView.vue";
 
     const props = defineProps<{
         player: Player,
@@ -126,8 +126,9 @@ import BlueprintView from "./BlueprintView.vue";
         padding: 1rem;
     }
     .inventory-relative{
+        padding: 0;
         position: relative;
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr;
+        display: flex;
+        gap: 5px;
     }
 </style>

@@ -10,6 +10,7 @@
   import { allPieces } from "./Pieces"
   import type { Coordinate, PieceBlueprint } from "./types";
   import { takeEnemyTurn } from "./Enemy";
+  import Shop from "./components/Shop.vue";
 
   //import { Map } from "./components/Map.vue";
 
@@ -28,6 +29,7 @@
     range: 1,
     attack: 2,
     defence: 0,
+    rarity: 1,
     color: "#dddcd7",
     isPlaced: false
   }
@@ -41,6 +43,7 @@
     range: 1,
     attack: 2,
     defence: 0,
+    rarity: 1,
     color: "#dddcd7",
     isPlaced: false
   }
@@ -265,6 +268,7 @@
   <div v-if="!hasFinishedTurn && !isPlacing">Your turn</div>
 
   <PlayerView v-if="!displayEditor" :player="player" @highlightPlacements="highlightPlacements"/>
+  <Shop/>
   <Board ref="boardRef" v-if="!displayEditor"
   :tiles="level.tiles"
   :pieces="activePieces"

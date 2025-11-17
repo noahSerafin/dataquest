@@ -1,34 +1,119 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount } from "vue"
-import type { Coordinate } from "../types"
-//import Piece from "./Piece.vue"
-import type { Piece } from "../Pieces"
+import type { PieceBlueprint } from "../types"
+import { Piece } from "../Pieces.ts"
+import BlueprintView from "./BlueprintView.vue";
+import { allPieces } from "../Pieces"
+import PieceController from "./PieceController.vue";
 
 
-interface Props{
-  tiles : Coordinate[]
-  forSalePieces: Piece[]
+function makeBlueprint(PieceClass: any) {
+  const temp = new PieceClass({ x: -1, y: -1 }, "player");
+
+  return {
+    id: crypto.randomUUID(),
+    name: PieceClass.name,
+    description: PieceClass.description,
+    unicode: PieceClass.unicode,
+    maxSize: temp.maxSize,
+    moves: temp.moves,
+    range: temp.range,
+    attack: temp.attack,
+    defence: temp.defence,
+    rarity: temp.rarity,
+    color: PieceClass.color,
+    isPlaced: false
+  };
 }
-const props = defineProps<Props>()
+
+const shopBlueprints = ref<PieceBlueprint[]>([]);
+const selectedPiece = ref<PieceBlueprint | null>(null)
+const shopSeed = ref(0)
+
+function pickWeightedRandom(PieceClasses: any[]) {
+  const weighted: any[] = [];
+
+  for (const PieceClass of PieceClasses) {
+    const temp = new PieceClass({ x: -1, y: -1 }, "player"); 
+    const weight = 7 - temp.rarity;
+
+    for (let i = 0; i < weight; i++) {
+      weighted.push(PieceClass);
+    }
+  }
+
+  const idx = Math.floor(Math.random() * weighted.length);
+  return weighted[idx];
+}
+
+function pickThreePieces(PieceClasses: any[]) {
+  return [
+    pickWeightedRandom(PieceClasses),
+    pickWeightedRandom(PieceClasses),
+    pickWeightedRandom(PieceClasses),
+  ];
+}
+
+function refreshShop() {
+  const classes = pickThreePieces(allPieces);
+  shopBlueprints.value = classes.map(c => makeBlueprint(c));
+}
+
+onMounted(() => {
+  refreshShop()
+});
+console.log("ALL PIECES:", allPieces)
+console.log("Chosen:", pickThreePieces(allPieces))
+
+function openShopController(piece: PieceBlueprint) {///TODO SORT OUT IMPORTS
+  selectedPiece.value = piece;
+}
+
+function handleBuy() {
+  //pass up to app so blueprint can be passed to player
+}
 
 </script>
 
-
 <template>
-  <h3>Market</h3>
-  <div
-  >
-  <!-- Render pieces -->
-  <Piece v-for="p in forSalePieces" :key="p.name" :piece="p" :tileSize="1" />
-</div>
+  <div class="shop-container">
+    <h2>Shop</h2>
+    <button @click="refreshShop">Reroll</button>
+    <div class="blueprint-row">
+      <BlueprintView
+        v-for="bp in shopBlueprints"
+        :key="bp.id"
+        :blueprint="bp"
+        :tileSize="60"
+        cssclass="inventory"
+        :class="'placed-'+bp.isPlaced"
+        @select="openShopController"
+      />
+    </div>
+    <PieceController
+        v-if="selectedPiece"
+        :piece="selectedPiece"
+        mode="shop"
+        @buy="handleBuy"
+        />
+  </div>
 </template>
 
 <style scoped>
-.grid {
-  display: grid;
+.shop-container{
+  background-color: black;
+  border: 1px dashed white;
+  position: absolute;
+  z-index: 10;
+  width: 54%;
+  height: 60%;
+}
+.blueprint-row {
+  display: flex;
+  justify-content: space-around;
   margin: auto; /* center horizontally */
   position: relative;
-  top: 0;
+  top: 10%;
   left: 0;
 }
 .tile{

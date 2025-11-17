@@ -247,7 +247,7 @@ class Gate extends Piece {
 
 class Fence extends Piece {
   static name = "Fence";
-  static description = "A large program for cosuming spaces";
+  static description = "A large program for consuming spaces";
   static unicode = "U+1F6A7";
   static color = "#ffd000ff";
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
@@ -292,7 +292,7 @@ class Mole extends Piece {
   static name = "Mole";
   static description = "Can burrow under other programs";
   static unicode = "U+1F9A1";
-  static color = "#727272";
+  static color = "#441d0eff";
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Mole.name, Mole.description, Mole.unicode, 1, 2, 0, 0, 0, Mole.color, headPosition, [headPosition], team, 3, removeCallback, id) //	U+1F400 rat
   }
@@ -336,7 +336,7 @@ class Trojan extends Piece {
 class Cannon extends Piece {
   static name = "Cannon";
   static description = "a slow ranged program that can damage multiple targets in a straight line";
-  static unicode = "U+1F52B";
+  static unicode = "U+1FA65";//TODO change this
   static color = "#bb3030ff";
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Cannon.name, Cannon.description, Cannon.unicode, 1, 1, 6, 3, 0, Cannon.color, headPosition, [headPosition], team, 4, removeCallback, id) //water pistol
@@ -490,7 +490,7 @@ class Watchman extends Piece {
   static unicode = "U+1F441";
   static color = "#6730cf";
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Watchman.name, Watchman.description, Watchman.unicode, 2, 2, 3, 0, 0, Watchman.color, headPosition, [headPosition], team, 2, removeCallback, id)
+   super(Watchman.name, Watchman.description, Watchman.unicode, 2, 2, 3, 1, 0, Watchman.color, headPosition, [headPosition], team, 2, removeCallback, id)
   }
 
   //spot, reduce a programs defence by 1 if not already spotted
@@ -501,7 +501,7 @@ class Magnet extends Piece {
   static name = "Magnet";
   static description = "A program that moves other programs";
   static unicode = "U+1F9F2";
-  static color = "#f12020";
+  static color = "#6fa9ffff";
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Magnet.name, Magnet.description, Magnet.unicode, 2, 2, 3, 0, 0, Magnet.color, headPosition, [headPosition], team, 3, removeCallback, id)
   }
@@ -562,7 +562,7 @@ class Nuke extends Piece {
   static unicode = "U+2622";
   static color = "#ff0000ff";
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Nuke.name, Nuke.description, Nuke.unicode, 1, 1, 4, 4, 0, Nuke.color, headPosition, [headPosition], team, 3, removeCallback, id)
+   super(Nuke.name, Nuke.description, Nuke.unicode, 1, 1, 4, 4, 0, Nuke.color, headPosition, [headPosition], team, 5, removeCallback, id)
   }
   //destroy self on attack
 }
@@ -615,7 +615,7 @@ class Fencer extends Piece {
   static name = "Fencer";
   static description = "A close range program that can deflect incoming attacks";
   static unicode = "U+1F93A";
-  static color = "#ada89dff";
+  static color = "#3b79c9ff";
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Fencer.name, Fencer.description, Fencer.unicode, 3, 0, 1, 2, 0, Fencer.color, headPosition, [headPosition], team, 3, removeCallback, id)
   }
@@ -625,7 +625,7 @@ class Fencer extends Piece {
 class Pawn extends Piece {
   static name = "Pawn";
   static description = "A slow program that can be promoted into an enemy piece";
-  static unicode = "";
+  static unicode = "U+265F";
   static color = "#ffe9b8e1";
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Pawn.name, Pawn.description, Pawn.unicode, 1, 1, 1, 1, 0, Pawn.color, headPosition, [headPosition], team, 3, removeCallback, id)
@@ -683,7 +683,7 @@ class Squid extends Piece {
   static name = "Squid";
   static description = "A program that can creat ink decoy tiles that last for one turn";
   static unicode = "U+1F991";
-  static color = "#ff0d72ff";
+  static color = "#08004dff";
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Squid.name, Squid.description, Squid.unicode, 4, 1, 1, 2, 0, Squid.color, headPosition, [headPosition], team, 2, removeCallback, id)
   }
@@ -805,7 +805,7 @@ class Cockroach extends Piece {
   static name = "Cockroach";
   static description = "A faster, tougher bug";
   static unicode = "U+1FAB3";
-  static color = "#913500ff";
+  static color = "#e09f79ff";
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Cockroach.name, Cockroach.description, Cockroach.unicode, 1, 5, 1, 1, 1, Cockroach.color, headPosition, [headPosition], team, 2, removeCallback, id)
   }
@@ -826,7 +826,7 @@ class Mosquito extends Piece {
 class Scorpion extends Piece {
   static name = "Scorpion";
   static description = "Can sting enemies inflicting a poison that lowers their defence by 1 each turn";
-  static unicode = "";
+  static unicode = "U+1F982";
   static color = "#681f08ff";
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Scorpion.name, Scorpion.description, Scorpion.unicode, 3, 1, 1, 2, 0, Scorpion.color, headPosition, [headPosition], team, 3, removeCallback, id)
@@ -871,7 +871,7 @@ class Gman extends Piece {
 class Guard extends Piece {
   static name = "Guard";
   static description = "A basic all round program";
-  static unicode = "";
+  static unicode = "U+1F482";
   static color = "#ff6e0dff";
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Guard.name, Guard.description, Guard.unicode, 3, 1, 1, 1, 1, Guard.color, headPosition, [headPosition], team, 1, removeCallback, id)
@@ -881,7 +881,7 @@ class Guard extends Piece {
 class Officer extends Piece {
   static name = "Officer";
   static description = "A mid level all round piece ";
-  static unicode = "";
+  static unicode = "U+1F46E";
   static color = "#ff310dff";
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Officer.name, Officer.description, Officer.unicode, 4, 2, 1, 2, 2, Officer.color, headPosition, [headPosition], team, 2, removeCallback, id)

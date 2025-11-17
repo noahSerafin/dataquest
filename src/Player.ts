@@ -1,5 +1,4 @@
 import type { Coordinate, PieceBlueprint } from "./types";
-import { Piece, type Allpieces } from "./Pieces";
 import { Item } from "./Items";
 
 export class Player {

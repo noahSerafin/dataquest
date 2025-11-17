@@ -35,7 +35,7 @@ const unicodeSymbol = computed(() =>
 const pieceStyle = computed(() => {
   if (!props.blueprint) return {}
   let styles = {
-    position: 'absolute',
+    position: 'relative',
     width: props.tileSize-16 + 'px',
     height: props.tileSize-16 + 'px',
     fontSize: props.tileSize * 0.6 + 'px',
@@ -52,6 +52,7 @@ const getTileStyle = (tile: Coordinate) => ({
 })
 
 function handleSelect() {
+  if(props.cssclass == 'placing') return
   showController.value = !showController.value;
   if (props.blueprint) emit('select', props.blueprint)
 }
@@ -71,6 +72,9 @@ function handleSelect() {
 </template>
 
 <style scoped>
+.inventory-piece, .shop-piece{
+  position: relative;
+}
 .blueprint, .piece, .blueprint-tile{
   text-align: center;
   transition: all 0.2s ease;

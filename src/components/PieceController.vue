@@ -27,7 +27,7 @@ function showRarity(rarity: number) {
       return { text: "Rare", color: "red" };
 
     case 4:
-      return { text: "Ultra Rare", color: "purple" };
+      return { text: "Ultra Rare", color: "#9052f3ff" };
 
     case 5:
       return { text: "Black Market", color: "pink" };

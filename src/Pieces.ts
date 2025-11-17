@@ -127,7 +127,7 @@ export abstract class Piece {
 export class Spawn extends Piece {
   static name = "Spawn";
   static description = "A load point for programs";
-  static unicode = "U+2BD0";
+  static unicode = "U+1F532";//"U+2BD0";
   static color = "#242424ff";
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string) {
     super(Spawn.name, Spawn.description, Spawn.unicode, 1, 0, 0, 0, 0, Spawn.color, headPosition, [headPosition], team, 1, removeCallback, id);
@@ -367,15 +367,29 @@ class Tank extends Piece {
   }
 }
 
+class Dynamite extends Piece {
+  static name = "Dynamite";
+  static description = "Can be sacrificed to inflict high damage";
+  static unicode = "U+1F9E8";
+  static color = "#be3737ff";
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Dynamite.name, Dynamite.description, Dynamite.unicode, 1, 3, 1, 6, 0, Dynamite.color, headPosition, [headPosition], team, 3, removeCallback, id)
+  }
+
+  //regular attack disabled
+  //destory self
+}
+
 class Bomb extends Piece {
   static name = "Bomb";
   static description = "Can be sacrificed to inflict high damage over a wide area";
   static unicode = "U+1F4A3";
-  static color = "#000000";
+  static color = "#2c2c2cff";
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Bomb.name, Bomb.description, Bomb.unicode, 1, 3, 1, 10, 0, Bomb.color, headPosition, [headPosition], team, 3, removeCallback, id)
+   super(Bomb.name, Bomb.description, Bomb.unicode, 1, 2, 1, 10, 0, Bomb.color, headPosition, [headPosition], team, 3, removeCallback, id)
   }
 
+  //regular attack disabled
   //destory self
 }
 
@@ -383,7 +397,7 @@ class Dataworm extends Piece {
   static name = "Dataworm";
   static description = "A large program that can tunnel through other programs";
   static unicode = "U+1FAB1";//"U+1F41B";
-  static color = "#c031c3";
+  static color = "#ee74eeff";
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Dataworm.name, Dataworm.description, Dataworm.unicode, 6, 3, 1, 2, 0, Dataworm.color, headPosition, [headPosition], team, 5, removeCallback, id)
   }
@@ -433,7 +447,7 @@ class Web extends Piece {
   static unicode = "U+1F578";
   static color = "#cfcfcfff";
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Web.name, Web.description, Web.unicode, 1, 0, 0, 0, 0, Web.color, headPosition, [headPosition], team, 3, removeCallback, id)
+   super(Web.name, Web.description, Web.unicode, 1, 0, 0, 0, 0, Web.color, headPosition, [headPosition], team, 1, removeCallback, id)
   }
 
   // default cloaked and passable
@@ -528,7 +542,7 @@ class Hopper extends Piece {
   static unicode = "U+1F997";
   static color = "#9aff46";
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Hopper.name, Hopper.description, Hopper.unicode, 1, 3, 1, 2, 2, Hopper.color, headPosition, [headPosition], team, 3, removeCallback, id)
+   super(Hopper.name, Hopper.description, Hopper.unicode, 1, 3, 1, 2, 2, Hopper.color, headPosition, [headPosition], team, 2, removeCallback, id)
   }
   //jump over other programs next to it
 }
@@ -571,7 +585,7 @@ class Highwayman extends Piece {
   static name = "Highway man";
   static description = "A program the generates money on destroying a piece";
   static unicode = "U+1F9B9";
-  static color = "#181818ff";
+  static color = "#494646ff";
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Highwayman.name, Highwayman.description, Highwayman.unicode, 3, 0, 1, 1, 0, Highwayman.color, headPosition, [headPosition], team, 3, removeCallback, id)
   }
@@ -586,6 +600,16 @@ class Elephant extends Piece {
   static color = "#77736bff";
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Elephant.name, Elephant.description, Elephant.unicode, 5, 2, 1, 2, 2, Elephant.color, headPosition, [headPosition], team, 3, removeCallback, id)
+  }
+}
+
+class Mammoth extends Piece {
+  static name = "Mammoth";
+  static description = "A larger Elephant";
+  static unicode = "U+1F9A3"
+  static color = "#77736bff";
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Mammoth.name, Mammoth.description, Mammoth.unicode, 6, 2, 1, 3, 2, Mammoth.color, headPosition, [headPosition], team, 4, removeCallback, id)
   }
 }
 
@@ -686,6 +710,17 @@ class Squid extends Piece {
   static color = "#08004dff";
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Squid.name, Squid.description, Squid.unicode, 4, 1, 1, 2, 0, Squid.color, headPosition, [headPosition], team, 2, removeCallback, id)
+  }
+  //create a self destroying decoy on a free tile
+}
+
+class Ink extends Piece {
+  static name = "Ink";
+  static description = "An ink decoy that lasts for one turn";
+  static unicode = "U+1F322";//"U+26AB";
+  static color = "#303030ff";
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Ink.name, Ink.description, Ink.unicode, 1, 0, 0, 0, 0, Ink.color, headPosition, [headPosition], team, 8, removeCallback, id)
   }
   //create a self destroying decoy on a free tile
 }
@@ -898,13 +933,13 @@ class Troll extends Piece {
   }
 }
 
-class Tater extends Piece {
-  static name = "Tater";
-  static description = "An unassuming program";
+class Potato extends Piece {
+  static name = "Potato";
+  static description = "A low-level all round program";
   static unicode = "U+1F954";
   static color = "#ad8226ff";
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Tater.name, Tater.description, Tater.unicode, 3, 1, 1, 1, 1, Tater.color, headPosition, [headPosition], team, 1, removeCallback, id)
+   super(Potato.name, Potato.description, Potato.unicode, 3, 1, 1, 1, 1, Potato.color, headPosition, [headPosition], team, 1, removeCallback, id)
   }
 }
 
@@ -959,14 +994,119 @@ class Bee extends Piece {
   static unicode = "U+1F41D";
   static color = "#eeff00ff";
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Bee.name, Bee.description, Bee.unicode, 1, 2, 1, 3, 0, Bee.color, headPosition, [headPosition], team, 3, removeCallback, id)
+   super(Bee.name, Bee.description, Bee.unicode, 1, 2, 1, 3, 0, Bee.color, headPosition, [headPosition], team, 1, removeCallback, id)
   }
 }
 
-export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Trench, Lance, Mole, Trojan, Cannon, Nerf, Tank, Bomb, Dataworm, Copycat, Trap, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Snail, Shark, Greatshield, Wizard, Ninja, Fairy, Genie, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Tater, Ghost, Beetle, LadyBeetle, Yarn, Bee];
+class Decoy extends Piece {
+  static name = "Decoy";
+  static description = "A mobile defensive program ";
+  static unicode = "U+1FAB5";
+  static color = "#96ff0dff";
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Decoy.name, Decoy.description, Decoy.unicode, 4, 3, 0, 0, 2, Decoy.color, headPosition, [headPosition], team, 3, removeCallback, id)
+  }
+}
 
-//SPIDER WEB, U+1F578
-//BALL OF YARN, U+1F9F6
+class Extinguisher extends Piece {
+  static name = "Extinguisher";
+  static description = "A program that can remove burning";
+  static unicode = "U+1F9EF";
+  static color = "#e7aa92ff";
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Extinguisher.name, Extinguisher.description, Extinguisher.unicode, 4, 2, 1, 1, 0, Extinguisher.color, headPosition, [headPosition], team, 3, removeCallback, id)
+  }
+
+  //remove burning
+}
+
+class Donkey extends Piece {
+  static name = "Donkey";
+  static description = "A slow program with a powerful kick";
+  static unicode = "U+1FACF";
+  static color = "#76c928ff";
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Donkey.name, Donkey.description, Donkey.unicode, 4, 1, 1, 5, 0, Donkey.color, headPosition, [headPosition], team, 1, removeCallback, id)
+  }
+}
+
+class Jellyfish extends Piece {
+  static name = "Jellyfish";
+  static description = "A slow program that can apply shock";
+  static unicode = "U+1FABC";
+  static color = "#0d8affff";
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Jellyfish.name, Jellyfish.description, Jellyfish.unicode, 2, 1, 1, 4, 0, Jellyfish.color, headPosition, [headPosition], team, 2, removeCallback, id)
+  }
+  //sting
+}
+
+class Screwdriver extends Piece {
+  static name = "Screwdriver";
+  static description = "A program that can adjust other programs stats by 1";
+  static unicode = "U+1FA9B";
+  static color = "#ffb20dff";
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Screwdriver.name, Screwdriver.description, Screwdriver.unicode, 1, 1, 1, 0, 0, Screwdriver.color, headPosition, [headPosition], team, 5, removeCallback, id)
+  }
+  //tinker
+}
+
+class Axe extends Piece {
+  static name = "Axe";
+  static description = "A short ranged program with a high attack";
+  static unicode = "U+1FA93";
+  static color = "#ff0d0dff";
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Axe.name, Axe.description, Axe.unicode, 4, 2, 2, 4, 0, Axe.color, headPosition, [headPosition], team, 3, removeCallback, id)
+  }
+}
+
+class Boomerang extends Piece {
+  static name = "Boomerang";
+  static description = "A mobile program that can move after attacking";
+  static unicode = "U+1FA83";
+  static color = "#ffcf4bff";
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Boomerang.name, Boomerang.description, Boomerang.unicode, 3, 3, 1, 2, 0, Boomerang.color, headPosition, [headPosition], team, 3, removeCallback, id)
+  }
+  //attack resets moves once
+}
+
+class Hamsa extends Piece {
+  static name = "Hamsa";
+  static description = "A well rounded program that can raise allies defence whilst in play";
+  static unicode = "U+1FAAC";
+  static color = "#2b0d96ff";
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Hamsa.name, Hamsa.description, Hamsa.unicode, 4, 1, 1, 2, 2, Hamsa.color, headPosition, [headPosition], team, 4, removeCallback, id)
+  }
+  //increase defence temporarily
+}
+
+class Plunger extends Piece {
+  static name = "Plunger";
+  static description = "A program that can remove the slow status effect";
+  static unicode = "U+1FAA0";
+  static color = "#82e2ffff";
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Plunger.name, Plunger.description, Plunger.unicode, 4, 2, 1, 1, 0, Plunger.color, headPosition, [headPosition], team, 2, removeCallback, id)
+  }
+  //remove slow?
+  //clear a space?
+}
+
+export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Trench, Lance, Mole, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Copycat, Trap, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Ink, Snail, Shark, Greatshield, Wizard, Ninja, Fairy, Genie, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Hamsa, Plunger];
+
+// NESTING DOLLS, U+1FA86
+
+//DANCER, U+1F483
+
+// HAMSA, U+1FAAC
+
+//ROLL OF PAPER, U+1F9FB
+
+//U+1F9C3 ice cube dcreases size each round?
 
 //snowball moving increases max size,// and movement speed?
 

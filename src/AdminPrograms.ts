@@ -1,53 +1,203 @@
-//name desc utf || maxsize moves range atk def
-//Angel
-//ressurect
-// WING, U+1FABD angel
+import { Item } from "./Items";
+import { Piece } from "./Pieces";
 
-//STOPWATCH, U+23F1 take an extra turn/prevent enemy turn
+export class Admin extends Item {
+  isConsumedOnUse = false;
+  //actions: number
+}
+
+export class Meteor extends Admin {
+  static name = "Meteor Shower";
+  static description = "Deals 3 damage to every enemy piece";
+  static unicode = "☄️";
+  static color = "#000000ff";
+
+  constructor() {
+    super(Meteor.name, Meteor.description, Meteor.unicode, Meteor.color, 10, 4)
+  }
+
+  activate({ activePieces }: { activePieces: Piece[] }) {
+    for (const p of activePieces) p.takeDamage(3);
+  }
+}
+
+export class Angel extends Admin {
+  static name = "Angel";
+  static description = "Ressurect a deleted piece";
+  static unicode = "U+1FABD";
+  static color = "#a8a8a8ff";
+
+  constructor() {
+    super(Angel.name, Angel.description, Angel.unicode, Angel.color, 10, 5)
+  }
+  //acces graveyard
+}
+
+export class Stopwatch extends Admin {
+  static name = "Stopwatch";
+  static description = "Replenish all pieces moves and actions";
+  static unicode = "U+23F1";
+  static color = "#ff5555";
+
+  constructor() {
+    super(Stopwatch.name, Stopwatch.description, Stopwatch.unicode, Stopwatch.color, 10, 5)
+  }
+  //
+}
+
+export class Miner extends Admin {
+  static name = "Miner";
+  static description = "Collect $5 every round";
+  static unicode = "U+26CF";
+  static color = "#ffa600d3";
+
+  constructor() {
+    super(Miner.name, Miner.description, Miner.unicode, Miner.color, 10, 3)
+  }
+  //
+}
+
+export class Bubble extends Admin {
+  static name = "Bubble";
+  static description = "Increases interest by 1 every round, 10% chance to pop and reduce money to 0";
+  static unicode = "U+1FAE7";
+  static color = "#0400daff";
+
+  constructor() {
+    super(Bubble.name, Bubble.description, Bubble.unicode, Bubble.color, 10, 2)
+  }
+  //
+}
+
+export class Crystal extends Admin {
+  static name = "Crystal Ball";
+  static description = "See the next shop or level in advance";
+  static unicode = "U+1F52E";
+  static color = "#4b003bff";
+
+  constructor() {
+    super(Crystal.name, Crystal.description, Crystal.unicode, Crystal.color, 10, 5)
+  }
+  //
+}
+
+export class Clover extends Admin {
+  static name = "Lucky Clover";
+  static description = "Raises chance of rarer items appearing";
+  static unicode = "U+1F340";
+  static color = "#00ff0dff";
+
+  constructor() {
+    super(Clover.name, Clover.description, Clover.unicode, Clover.color, 10, 5)
+  }
+  //interact with shop
+}
+
+export class Onion extends Admin {
+  static name = "Onion";
+  static description = "An extra layer of defence, saves you from one lost round but is destroyed in the process.";
+  static unicode = "U+1F9C5";
+  static color = "#00af17ad";
+
+  constructor() {
+    super(Onion.name, Onion.description, Onion.unicode, Onion.color, 10, 5)
+  }
+  //
+}
+//name desc utf || maxsize moves range atk def
+export class Blood extends Admin {
+  static name = "Blood Tax";
+  static description = "Each time damage is dealt earns $1";
+  static unicode = "U+1FA78";
+  static color = "#790000ff";
+
+  constructor() {
+    super(Blood.name, Blood.description, Blood.unicode, Blood.color, 10, 5)
+  }
+  //
+}
+
+export class BionicArm extends Admin {
+  static name = "Bionic Arms";
+  static description = "Raises all program's attack by 1";
+  static unicode = "U+1F9BE";
+  static color = "#ff4040ff";
+
+  constructor() {
+    super(BionicArm.name, BionicArm.description, BionicArm.unicode, BionicArm.color, 10, 5)
+  }
+  //
+}
+
+export class BionicLeg extends Admin {
+  static name = "Bionic Legs";
+  static description = "Raises all program's moves by 1";
+  static unicode = "U+1F9BF";
+  static color = "#d240ffff";
+
+  constructor() {
+    super(BionicLeg.name, BionicLeg.description, BionicLeg.unicode, BionicLeg.color, 10, 5)
+  }
+  //
+}
+
+export class Convenience extends Admin {
+  static name = "Convenience Store";
+  static description = "Open the shop any time";
+  static unicode = "U+1F3EA";
+  static color = "#55ff71ff";
+
+  constructor() {
+    super(Convenience.name, Convenience.description, Convenience.unicode, Convenience.color, 10, 2)
+  }
+  //
+}
+
+export class Department extends Admin {
+  static name = "Department Store";
+  static description = "1 free reroll every shop";
+  static unicode = "U+1F3EC";
+  static color = "#bebebeff";
+
+  constructor() {
+    super(Department.name, Department.description, Department.unicode, Department.color, 10, 2)
+  }
+  //
+}
+
+export class Eye extends Admin {
+  static name = "Evil Eye";
+  static description = "Mark any program to lower it's defence";
+  static unicode = "U+1F9FF";
+  static color = "#020072ff";
+
+  constructor() {
+    super(Eye.name, Eye.description, Eye.unicode, Eye.color, 10, 3)
+  }
+  //// NAZAR AMULET, U+1F9FF 
+}
+
+export class Sol extends Admin {
+  static name = "Sol";
+  static description = "Deal 9 damage to any target";
+  static unicode = "U+1F6F0";
+  static color = "#000000ff";
+
+  constructor() {
+    super(Sol.name, Sol.description, Sol.unicode, Sol.color, 10, 5)
+  }
+  //
+}
 
 //Daemon
 //IMP, U+1F47F
 
 //passive programs
 
-//Miner collect money each round
-//PICK, U+26CF
-
-//BUBBLES, U+1FAE7 increase interest
-
-// CRYSTAL BALL, U+1F52E //see next level/shop in advance
-
-//FOUR LEAF CLOVER, U+1F340 //raise rare item proability
-
-//Onion extra life
-//U+1F9C5
-
-//OS-vouchers???
-// PENGUIN, U+1F427
-//+1 to all player stats - memory admin interest
-
-//WINDOW, U+1FA9F
-//+1 admin -1 memory
-
-// GREEN APPLE, U+1F34F
-//+1 memory -1 interest
-
-// SCALES, U+2696 --- CLASSICAL BUILDING, U+1F3DB --- CROSSED SWORDS, U+2694
-//temple - +1 admin +1 memory -1 interest
-//---------
 
 //EUROPEAN CASTLE, U+1F3F0
 
 //JAPANESE CASTLE, U+1F3EF
-
-//MECHANICAL ARM, U+1F9BE
-//buff - atk +1 on all pieces
-
-//CONVENIENCE STORE, U+1F3EA
-//open the shop during levels
-
-//DEPARTMENT STORE, U+1F3EC
-//free rerolls
 
 //clippy - provides hints
 //PAPERCLIP, U+1F4CE
@@ -55,6 +205,8 @@
 //FISHING POLE AND FISH, U+1F3A3
 
 //8ball  BILLIARDS, U+1F3B1
+
+//BOUQUET, U+1F490 reappering pieces
 
 //LEFT-POINTING MAGNIFYING GLASS, U+1F50D
 // //reveal secrets
@@ -64,13 +216,14 @@
 //GREEK SMALL LETTER PI, U+3C0
 
 //HAMSA, U+1FAAC hand with eye
-// NAZAR AMULET, U+1F9FF 
 
 //SATELLITE, U+1F6F0 //orbital laser
+//SATELLITE ANTENNA, U+1F4E1
 
 //copier - copy a program
 //EMPTY NOTE PAD, U+1F5C7 increase memory
 
+//SAFETY VEST, U+1F9BA
 
 //PAPERCLIP, U+1F4CE
 // PUSHPIN, U+1F4CC
@@ -82,7 +235,14 @@
 
 // PERFORMING ARTS, U+1F3AD
 
+// SEWING NEEDLE, U+1FAA1
+
 // LOCK, U+1F512
+
+// PETRI DISH, U+1F9EB
+// TEST TUBE, U+1F9EA
+
+//JIGSAW PUZZLE PIECE, U+1F9E9
 
 //hex SOFTWARE-FUNCTION SYMBOL, U+2394
 
@@ -353,3 +513,19 @@
 //DROP OF BLOOD, U+1FA78
 
 // HIGH VOLTAGE SIGN, U+26A1
+
+
+
+//OS-vouchers???
+// PENGUIN, U+1F427
+//+1 to all player stats - memory admin interest
+
+//WINDOW, U+1FA9F
+//+1 admin -1 memory
+
+// GREEN APPLE, U+1F34F
+//+1 memory -1 interest
+
+// SCALES, U+2696 --- CLASSICAL BUILDING, U+1F3DB --- CROSSED SWORDS, U+2694
+//temple - +1 admin +1 memory -1 interest
+//---------

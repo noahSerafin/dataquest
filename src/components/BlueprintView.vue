@@ -31,6 +31,30 @@ const unicodeSymbol = computed(() =>
 )
 
 // --- reactive properties derived from the piece instance ---
+function showRarity(rarity: number) {
+  switch (rarity) {
+    case 1:
+      return "green";
+
+    case 2:
+      return "orange";
+
+    case 3:
+      return "red";
+
+    case 4:
+      return  "#9052f3ff";
+      
+    case 5:
+      return "pink";
+
+    case 6:
+      return "gold";
+
+    default:
+      return "grey";
+  }
+}
 
 const pieceStyle = computed(() => {
   if (!props.blueprint) return {}
@@ -42,6 +66,7 @@ const pieceStyle = computed(() => {
     lineHeight: props.tileSize -24 + 'px',
     backgroundColor: props.blueprint.color,
     '--piece-color': props.blueprint.color,
+    'border-color': showRarity(props.blueprint.rarity)
   }
   return styles;
 })

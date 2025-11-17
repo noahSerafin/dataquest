@@ -5,6 +5,8 @@ import { Piece } from "../Pieces.ts"
 import BlueprintView from "./BlueprintView.vue";
 import { allPieces } from "../Pieces"
 import PieceController from "./PieceController.vue";
+import { Item, allItems } from "../Items.ts";
+import ItemView from "./ItemView.vue";
 
 
 function makeBlueprint(PieceClass: any) {
@@ -27,6 +29,7 @@ function makeBlueprint(PieceClass: any) {
 }
 
 const shopBlueprints = ref<PieceBlueprint[]>([]);
+const shopItems = ref<Item[]>([]);
 const selectedPiece = ref<PieceBlueprint | null>(null)
 const shopSeed = ref(0)
 
@@ -54,9 +57,38 @@ function pickThreePieces(PieceClasses: any[]) {
   ];
 }
 
+function pickWeightedRandomItem(itemClasses: any[]) {
+  const weighted: any[] = [];
+
+  for (const itemClass of itemClasses) {
+    const rarity = itemClass.rarity ?? 1;   // fallback default
+    const weight = 7 - rarity;
+
+    for (let i = 0; i < weight; i++) {
+      weighted.push(itemClass);
+    }
+  }
+
+  const idx = Math.floor(Math.random() * weighted.length);
+  console.log('idx: ', weighted[idx])
+  const PickedClass = weighted[idx];
+
+  return new PickedClass();  // RETURN INSTANCE
+}
+
+function pickThreeItems(itemClasses: any[]) {
+  return [
+    pickWeightedRandomItem(itemClasses),
+    pickWeightedRandomItem(itemClasses),
+    pickWeightedRandomItem(itemClasses),
+  ];
+}
+
 function refreshShop() {
   const classes = pickThreePieces(allPieces);
   shopBlueprints.value = classes.map(c => makeBlueprint(c));
+  shopItems.value = pickThreeItems(allItems);
+  console.log('shopitems: ', shopItems);
 }
 
 onMounted(() => {
@@ -73,6 +105,11 @@ function handleBuy() {
   //pass up to app so blueprint can be passed to player
 }
 
+function openItemController(piece: PieceBlueprint) {///TODO SORT OUT IMPORTS
+  selectedPiece.value = null;
+}
+
+//        @select="openItemController"
 </script>
 
 <template>
@@ -80,14 +117,23 @@ function handleBuy() {
     <h2>Shop</h2>
     <button @click="refreshShop">Reroll</button>
     <div class="blueprint-row">
+      Programs:
       <BlueprintView
         v-for="bp in shopBlueprints"
         :key="bp.id"
         :blueprint="bp"
         :tileSize="60"
-        cssclass="inventory"
+        cssclass="shop"
         :class="'placed-'+bp.isPlaced"
         @select="openShopController"
+      />
+    </div>
+    <div class="item-row">
+      Items:
+      <ItemView v-for="item in shopItems"
+        :item="item"
+        cssclass="shop"
+        :tileSize="60"
       />
     </div>
     <PieceController
@@ -108,7 +154,7 @@ function handleBuy() {
   width: 54%;
   height: 60%;
 }
-.blueprint-row {
+.blueprint-row, .item-row {
   display: flex;
   justify-content: space-around;
   margin: auto; /* center horizontally */
@@ -116,6 +162,9 @@ function handleBuy() {
   top: 10%;
   left: 0;
 }
+.item-row{
+  top: 20%;
+} 
 .tile{
   background-color: gainsboro;
   border: 2px solid black;

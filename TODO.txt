@@ -38,7 +38,7 @@ move
 statuses
 special functions
 
-ADMIN PIECES 5
+ADMIN PIECES 4
 
 make class 
 
@@ -56,7 +56,7 @@ grey out from inventory until round end - retain ID for stats? return will have 
 sell
 rarity = value ?+=no. of upgrades used on a piece? 3
 
-AI 2/3
+AI 3
 functions:
     - findNearestPlayerPiece - done
     pathfinding a -> b in a grid
@@ -94,10 +94,10 @@ ITEMS 4
 implement item functions
 
 SHOP 3
-rarity
+- rarity - done
 two piece/item slots
 piece packs/item packs
-reroll button
+reroll button - incomplete
 
 vouchers?
 

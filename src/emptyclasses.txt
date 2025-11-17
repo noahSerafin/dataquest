@@ -1,0 +1,36 @@
+TRY player game state later
+
+class ¬ extends Piece {
+  static name = "¬";
+  static description = "A program ";
+  static unicode = "";
+  static color = "#ffb20dff";
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(¬.name, ¬.description, ¬.unicode, 4, 0, 1, 0, 0, ¬.color, headPosition, [headPosition], team, 3, removeCallback, id)
+  }
+}
+
+
+export class ¬ extends Item {
+    static name: "¬";
+    static description: "increases a programs max size by 1 for one round";
+    static unicode: "";
+    constructor(){
+        super(¬.name, ¬.description, ¬.unicode, 2, 3)
+        //name desc utf || maxsize moves range atk def
+    }
+}
+
+
+
+export class ¬ extends Admin {
+  static name = "¬";
+  static description = "";
+  static unicode = "";
+  static color = "#ff5555";
+
+  constructor() {
+    super(¬.name, ¬.description, ¬.unicode, ¬.color, 10, 5)
+  }
+  //
+}

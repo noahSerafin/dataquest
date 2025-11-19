@@ -4,6 +4,8 @@
   import Leveleditor from './components/Leveleditor.vue';
   import { castled } from './levels';
   import { Player } from "./Player";
+  import { Item, allItems} from "./Items";
+  import { Admin } from "./AdminPrograms";
   import PlayerView from "./components/PlayerView.vue";
   import type { Piece } from "./Pieces"
   import { Spawn } from './Pieces';
@@ -60,8 +62,126 @@
     5,  // memory limit
     3, //admin slots
     [], // no items yet
-    [testSword, testSword2]//, testShield] // starting pieces
+    [testSword, testSword2],//, testShield] // starting pieces
+    []//no admins yet
   ));
+
+  //SHOP functions
+
+  function makeBlueprint(PieceClass: any) {
+    const temp = new PieceClass({ x: -1, y: -1 }, "player");
+
+    return {
+      id: crypto.randomUUID(),
+      name: PieceClass.name,
+      description: PieceClass.description,
+      unicode: PieceClass.unicode,
+      maxSize: temp.maxSize,
+      moves: temp.moves,
+      range: temp.range,
+      attack: temp.attack,
+      defence: temp.defence,
+      rarity: temp.rarity,
+      color: PieceClass.color,
+      isPlaced: false                       
+      };
+  }
+  
+  function pickWeightedRandom(PieceClasses: any[]) {
+    const weighted: any[] = [];
+
+    for (const PieceClass of PieceClasses) {
+      const temp = new PieceClass({ x: -1, y: -1 }, "player"); 
+      const weight = 7 - temp.rarity;
+
+      for (let i = 0; i < weight; i++) {
+        weighted.push(PieceClass);
+      }
+    }
+
+    const idx = Math.floor(Math.random() * weighted.length);
+    return weighted[idx];
+  }
+
+  function pickThreePieces(PieceClasses: any[]) {
+    return [
+      pickWeightedRandom(PieceClasses),
+      pickWeightedRandom(PieceClasses),
+      pickWeightedRandom(PieceClasses),
+    ];
+  }
+
+  function pickWeightedRandomItem(itemClasses: any[]) {
+    const weighted: any[] = [];
+
+    for (const itemClass of itemClasses) {
+      const rarity = itemClass.rarity ?? 1;   // fallback default
+      const weight = 7 - rarity;
+
+      for (let i = 0; i < weight; i++) {
+        weighted.push(itemClass);
+      }
+    }
+
+    const idx = Math.floor(Math.random() * weighted.length);
+    console.log('idx: ', weighted[idx])
+    const PickedClass = weighted[idx];
+
+    return new PickedClass();  // RETURN INSTANCE
+  }
+
+  function pickThreeItems(itemClasses: any[]) {
+    return [
+      pickWeightedRandomItem(itemClasses),
+      pickWeightedRandomItem(itemClasses),
+      pickWeightedRandomItem(itemClasses),
+    ];
+  }
+
+  const shopBlueprints = ref<PieceBlueprint[]>([]);
+  const shopItems = ref<Item[]>([]);
+  const rerollCost = ref(5);//to be reset after shop
+  const prevFib = ref(1);//to be reset after shop
+  const currentFib = ref(1);//to be reset after shop
+
+  function refreshShop(isFree: boolean) {
+    console.log(rerollCost.value)
+    if(!isFree && player.value.money < rerollCost.value) return;//show to shop for disabled button
+    if(!isFree) {
+      player.value.money -= rerollCost.value;
+      const nextFib = prevFib.value + currentFib.value;
+      prevFib.value = currentFib.value;
+      currentFib.value = nextFib;
+
+    rerollCost.value = currentFib.value;
+      // 1, 2, 3, 5, etc
+    }
+
+    const classes = pickThreePieces(allPieces);
+    shopBlueprints.value = classes.map(c => makeBlueprint(c));
+    shopItems.value = pickThreeItems(allItems);
+    //if triggered by player
+  }
+
+  function buyBlueprint(bp: PieceBlueprint) {
+    shopBlueprints.value = shopBlueprints.value.filter(b => b.id !== bp.id);
+    player.value.money -= (bp.rarity * 2 -1);
+    player.value.programs.push(bp);
+  }
+  function buyItem(item: Item) {
+    // remove from shop
+    shopItems.value = shopItems.value.filter(i => i.id !== item.id);
+    player.value.money -= item.cost;
+    // add to player inventory
+    player.value.items.push(item);
+  }
+  function buyAdmin(admin: Admin) {
+    shopItems.value = shopItems.value.filter(i => i.id !== admin.id);
+    player.value.money -= admin.cost;
+    player.value.admins.push(admin);
+  }
+  //--shop-----
+
   const level = ref(castled);
   const displayEditor = ref(false);
   const isPlacing = ref(false);
@@ -158,6 +278,7 @@
   onMounted(() => {
     const initPieces = rehydratePieces(level.value.pieces);
     activePieces.value = processSpawnPoints(initPieces); // sets placementHighlights internally
+    refreshShop(true)//handle in round, or don't for crystal ball
   });
 
   function highlightPlacements(pieceBlueprint: PieceBlueprint) {
@@ -268,7 +389,16 @@
   <div v-if="!hasFinishedTurn && !isPlacing">Your turn</div>
 
   <PlayerView v-if="!displayEditor" :player="player" @highlightPlacements="highlightPlacements"/>
-  <Shop/>
+  <Shop
+    :shopBlueprints="shopBlueprints"
+    :shopItems="shopItems"
+    :rerollCost="rerollCost"
+    @refresh-shop="refreshShop(false)"
+    @buy-blueprint="buyBlueprint"
+    @buy-item="buyItem"
+    @buy-admin="buyAdmin"
+    :player="player"
+  />
   <Board ref="boardRef" v-if="!displayEditor"
   :tiles="level.tiles"
   :pieces="activePieces"

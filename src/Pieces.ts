@@ -386,7 +386,7 @@ class Bomb extends Piece {
   static unicode = "U+1F4A3";
   static color = "#2c2c2cff";
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Bomb.name, Bomb.description, Bomb.unicode, 1, 2, 1, 10, 0, Bomb.color, headPosition, [headPosition], team, 3, removeCallback, id)
+   super(Bomb.name, Bomb.description, Bomb.unicode, 1, 2, 0, 10, 0, Bomb.color, headPosition, [headPosition], team, 3, removeCallback, id)
   }
 
   //regular attack disabled
@@ -576,7 +576,7 @@ class Nuke extends Piece {
   static unicode = "U+2622";
   static color = "#ff0000ff";
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Nuke.name, Nuke.description, Nuke.unicode, 1, 1, 4, 4, 0, Nuke.color, headPosition, [headPosition], team, 5, removeCallback, id)
+   super(Nuke.name, Nuke.description, Nuke.unicode, 1, 1, 4, 25, 0, Nuke.color, headPosition, [headPosition], team, 5, removeCallback, id)
   }
   //destroy self on attack
 }
@@ -617,7 +617,7 @@ class Snowman extends Piece {
   static name = "Snowman";
   static description = "A program that increases its size with each move";
   static unicode = "U+2603";
-  static color = "#ffffffff";
+  static color = "#4e4e4eff";
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Snowman.name, Snowman.description, Snowman.unicode, 1, 1, 0, 0, 0, Snowman.color, headPosition, [headPosition], team, 4, removeCallback, id)
   }
@@ -1000,7 +1000,7 @@ class Bee extends Piece {
 
 class Decoy extends Piece {
   static name = "Decoy";
-  static description = "A mobile defensive program ";
+  static description = "A defensive program that can swap places with other pieces";
   static unicode = "U+1FAB5";
   static color = "#96ff0dff";
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){

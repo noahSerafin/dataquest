@@ -8,7 +8,7 @@ export class Admin extends Item {
 
 export class Meteor extends Admin {
   static name = "Meteor Shower";
-  static description = "Deals 3 damage to every enemy piece";
+  static description = "Deals 3 damage to every piece at the start of a round";
   static unicode = "☄️";
   static color = "#000000ff";
 
@@ -21,7 +21,7 @@ export class Meteor extends Admin {
   }
 }
 
-export class Angel extends Admin {
+export class Angel extends Admin {//not passive
   static name = "Angel";
   static description = "Ressurect a deleted piece";
   static unicode = "U+1FABD";
@@ -33,7 +33,7 @@ export class Angel extends Admin {
   //acces graveyard
 }
 
-export class Stopwatch extends Admin {
+export class Stopwatch extends Admin {//not passive
   static name = "Stopwatch";
   static description = "Replenish all pieces moves and actions";
   static unicode = "U+23F1";
@@ -165,7 +165,7 @@ export class Department extends Admin {
   //
 }
 
-export class Eye extends Admin {
+export class Eye extends Admin {//not passive
   static name = "Evil Eye";
   static description = "Mark any program to lower it's defence";
   static unicode = "U+1F9FF";
@@ -177,7 +177,7 @@ export class Eye extends Admin {
   //// NAZAR AMULET, U+1F9FF 
 }
 
-export class Sol extends Admin {
+export class Sol extends Admin {//not passive
   static name = "Sol";
   static description = "Deal 9 damage to any target";
   static unicode = "U+1F6F0";

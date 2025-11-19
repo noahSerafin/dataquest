@@ -3,6 +3,7 @@
     import type { Player } from "../Player";
     import type { Coordinate, PieceBlueprint } from "../types";
     import { Item } from "../Items";
+    import ItemView from "./ItemView.vue";
     import PieceController from "./PieceController.vue";
     import BlueprintView from "./BlueprintView.vue";
 
@@ -23,7 +24,7 @@
     }
 
     // Reactive toggles
-    const showInventory = ref(false);
+    const showInventory = ref(true);
 
     // Derived/computed properties
     const memoryUsage = computed(() => 
@@ -81,14 +82,15 @@
         <h3 class="font-semibold mt-2">Items</h3>
         <div v-if="props.player.items.length === 0">No items</div>
         <ul class="inventory-relative">
-            <li 
-            v-for="(item, index) in props.player.items" 
-            :key="'item-' + index"
-            class="p-1 border rounded mb-1 flex justify-between items-center"
-            >
-            <span>{{ item.name }}</span>
-            <button class="text-sm bg-purple-500 text-white px-2 rounded">Use</button>
-            </li>
+            <ItemView 
+                v-for="(item in props.player.items"
+                class="p-1 border rounded mb-1 flex justify-between items-center"
+                :item="item"
+                type="consumable"
+                cssclass="inventory"
+                :tileSize="60"
+                :canBuy= "false"
+            />
         </ul>
         <PieceController
         v-if="selectedPiece"

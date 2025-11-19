@@ -1,5 +1,6 @@
 import type { Coordinate, PieceBlueprint } from "./types";
 import { Item } from "./Items";
+import { Admin } from "./AdminPrograms";
 
 export class Player {
     money: number
@@ -8,19 +9,21 @@ export class Player {
     // /InstanceType typeof 
     items: Item[]
     programs: PieceBlueprint[]
-    //admins: Admin[]
+    admins: Admin[]
     constructor(
         money = 5,
-        memory = 3,
+        memory = 4,
         adminSlots = 4,
         items: Item[] = [],
         programs: PieceBlueprint[] = [],
+        admins: Admin[] = []
     ) {
         this.money = money;
         this.memory = memory;
         this.adminSlots = adminSlots;
         this.items = items;
         this.programs = programs;
+        this.admins = admins;
     }
 
     /** Total "memory" usage from items + programs */

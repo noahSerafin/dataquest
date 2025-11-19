@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
 import { Item } from "../Items"; // adjust path
+import type { Player } from "../Player";
 
 const props = defineProps<{
   item: InstanceType<typeof Item>;
+  type: 'consumable' | 'admin';
   cssclass?: string;
-  tileSize: number;         // for custom styling (shop / inventory)
+  tileSize: number;
+  canBuy: boolean;       // for custom styling (shop / inventory)
 }>();
 
 console.log('item: ', props.item)
@@ -17,9 +20,8 @@ const emit = defineEmits<{
 
 const showController = ref(false);
 function handleSelect() {
-  console.log('selecting item')
   showController.value = !showController.value
-  console.log(showController.value)
+  console.log('selected item: ', showController.value)
   emit("select", props.item);
 }
 
@@ -55,13 +57,18 @@ const itemStyle = computed(() => {
   return styles
 });
 
+const handleUse = () => {
+  //emit up to game state
+  //remove this item
+}
+
 </script>
 
 <template>
   <div
     :id="item.id"
     class="item"
-    :class="cssclass"
+    :class="`item-${cssclass}`"
     @click="handleSelect"
     :style="itemStyle"
   >
@@ -73,7 +80,19 @@ const itemStyle = computed(() => {
       </div>
       <div class="desc">{{ item.description }}</div>
       
-      <button @click="$emit('buy', item)">Buy ${{ item.cost }}</button>
+      <button v-if="(cssclass == 'shop')"
+      @click="$emit('buy', item)"
+      :disabled="!canBuy"
+      >
+        Buy ${{ item.cost }}
+      </button>
+       <button v-if="(cssclass == 'inventory' && type == 'consumable')">
+        Use ${{ handleUse }}
+      </button>
+      <button v-if="(cssclass == 'inventory')">
+        Sell ${{ item.cost }}
+      </button>
+
     
     </div>
   </div>
@@ -139,5 +158,9 @@ button{
   padding: 4px;
   margin: auto;
   margin-top: 5px;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 </style>

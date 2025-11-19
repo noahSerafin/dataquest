@@ -82,6 +82,8 @@ function handleSelect() {
   if (props.blueprint) emit('select', props.blueprint)
 }
 
+//buy button must check for money
+//must check for memory
 </script>
 
 <template>

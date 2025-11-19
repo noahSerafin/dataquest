@@ -2,124 +2,64 @@
 import { ref, computed, onMounted, onBeforeUnmount } from "vue"
 import type { PieceBlueprint } from "../types"
 import { Piece } from "../Pieces.ts"
+import { Player } from "../Player.ts";
 import BlueprintView from "./BlueprintView.vue";
 import { allPieces } from "../Pieces"
 import PieceController from "./PieceController.vue";
 import { Item, allItems } from "../Items.ts";
 import ItemView from "./ItemView.vue";
+import { Admin } from "../AdminPrograms.ts";
 
+const emit = defineEmits<{
+  (e: 'buy-blueprint', blueprint: PieceBlueprint): void;
+  (e: 'buy-item', item: Item): void;
+  (e: 'buy-admin', admin: Admin): void;
+  (e: 'refresh-shop'): void;
+}>();
 
-function makeBlueprint(PieceClass: any) {
-  const temp = new PieceClass({ x: -1, y: -1 }, "player");
+const props = defineProps<{
+  shopBlueprints: PieceBlueprint[];
+  shopItems: InstanceType<typeof Item>[];
+  rerollCost: Number;
+  player: Player;
+}>();
 
-  return {
-    id: crypto.randomUUID(),
-    name: PieceClass.name,
-    description: PieceClass.description,
-    unicode: PieceClass.unicode,
-    maxSize: temp.maxSize,
-    moves: temp.moves,
-    range: temp.range,
-    attack: temp.attack,
-    defence: temp.defence,
-    rarity: temp.rarity,
-    color: PieceClass.color,
-    isPlaced: false
-  };
-}
-
-const shopBlueprints = ref<PieceBlueprint[]>([]);
-const shopItems = ref<Item[]>([]);
+//const shopBlueprints = ref<PieceBlueprint[]>([]);
+//const shopItems = ref<Item[]>([]);
 const selectedPiece = ref<PieceBlueprint | null>(null)
-const shopSeed = ref(0)
-
-function pickWeightedRandom(PieceClasses: any[]) {
-  const weighted: any[] = [];
-
-  for (const PieceClass of PieceClasses) {
-    const temp = new PieceClass({ x: -1, y: -1 }, "player"); 
-    const weight = 7 - temp.rarity;
-
-    for (let i = 0; i < weight; i++) {
-      weighted.push(PieceClass);
-    }
-  }
-
-  const idx = Math.floor(Math.random() * weighted.length);
-  return weighted[idx];
-}
-
-function pickThreePieces(PieceClasses: any[]) {
-  return [
-    pickWeightedRandom(PieceClasses),
-    pickWeightedRandom(PieceClasses),
-    pickWeightedRandom(PieceClasses),
-  ];
-}
-
-function pickWeightedRandomItem(itemClasses: any[]) {
-  const weighted: any[] = [];
-
-  for (const itemClass of itemClasses) {
-    const rarity = itemClass.rarity ?? 1;   // fallback default
-    const weight = 7 - rarity;
-
-    for (let i = 0; i < weight; i++) {
-      weighted.push(itemClass);
-    }
-  }
-
-  const idx = Math.floor(Math.random() * weighted.length);
-  console.log('idx: ', weighted[idx])
-  const PickedClass = weighted[idx];
-
-  return new PickedClass();  // RETURN INSTANCE
-}
-
-function pickThreeItems(itemClasses: any[]) {
-  return [
-    pickWeightedRandomItem(itemClasses),
-    pickWeightedRandomItem(itemClasses),
-    pickWeightedRandomItem(itemClasses),
-  ];
-}
-
-function refreshShop() {
-  const classes = pickThreePieces(allPieces);
-  shopBlueprints.value = classes.map(c => makeBlueprint(c));
-  shopItems.value = pickThreeItems(allItems);
-  console.log('shopitems: ', shopItems);
-}
-
-onMounted(() => {
-  refreshShop()
-});
-console.log("ALL PIECES:", allPieces)
-console.log("Chosen:", pickThreePieces(allPieces))
 
 function openShopController(piece: PieceBlueprint) {///TODO SORT OUT IMPORTS
   selectedPiece.value = piece;
 }
 
-function handleBuy() {
-  //pass up to app so blueprint can be passed to player
+function handleBuyBlueprint(blueprint: PieceBlueprint) {
+  emit("buy-blueprint", blueprint);
 }
-
-function openItemController(piece: PieceBlueprint) {///TODO SORT OUT IMPORTS
-  selectedPiece.value = null;
+function handleBuyItem(item: Item) {
+  emit("buy-item", item);
 }
-
+function handleBuyAdmin(admin: Admin) {
+  emit("buy-admin", admin);
+}
 //        @select="openItemController"
+
+const canBuyItem = ((item: Item) => {
+  //check if item {
+  return (props.player.money >= item.cost && props.player.programs.length + props.player.items.length < props. player.memory);
+  //} then must check for admin slots if admin
+});
 </script>
 
 <template>
   <div class="shop-container">
     <h2>Shop</h2>
-    <button @click="refreshShop">Reroll</button>
+    <button @click="emit('refresh-shop')">
+      Reroll {{ props.rerollCost }}
+    </button>
     <div class="blueprint-row">
       Programs:
       <BlueprintView
-        v-for="bp in shopBlueprints"
+        v-for="bp in props.shopBlueprints"
         :key="bp.id"
         :blueprint="bp"
         :tileSize="60"
@@ -130,17 +70,21 @@ function openItemController(piece: PieceBlueprint) {///TODO SORT OUT IMPORTS
     </div>
     <div class="item-row">
       Items:
-      <ItemView v-for="item in shopItems"
+      <ItemView 
+        v-for="item in props.shopItems"
         :item="item"
+        type="consumable"
         cssclass="shop"
         :tileSize="60"
+        :canBuy= "canBuyItem(item)"
+        @buy="handleBuyItem"
       />
     </div>
     <PieceController
         v-if="selectedPiece"
         :piece="selectedPiece"
         mode="shop"
-        @buy="handleBuy"
+        @buy="handleBuyBlueprint"
         />
   </div>
 </template>

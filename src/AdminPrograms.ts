@@ -6,9 +6,9 @@ export class Admin extends Item {
   //actions: number
 }
 
-export class Meteor extends Admin {
+class Meteor extends Admin {
   static name = "Meteor Shower";
-  static description = "Deals 3 damage to every piece at the start of a round";
+  static description = "Deals 3 damage to every piece at the start of a round before placement";
   static unicode = "☄️";
   static color = "#000000ff";
 
@@ -21,43 +21,19 @@ export class Meteor extends Admin {
   }
 }
 
-export class Angel extends Admin {//not passive
-  static name = "Angel";
-  static description = "Ressurect a deleted piece";
-  static unicode = "U+1FABD";
-  static color = "#a8a8a8ff";
-
-  constructor() {
-    super(Angel.name, Angel.description, Angel.unicode, Angel.color, 10, 5)
-  }
-  //acces graveyard
-}
-
-export class Stopwatch extends Admin {//not passive
-  static name = "Stopwatch";
-  static description = "Replenish all pieces moves and actions";
-  static unicode = "U+23F1";
-  static color = "#ff5555";
-
-  constructor() {
-    super(Stopwatch.name, Stopwatch.description, Stopwatch.unicode, Stopwatch.color, 10, 5)
-  }
-  //
-}
-
-export class Miner extends Admin {
+class Miner extends Admin {
   static name = "Miner";
-  static description = "Collect $5 every round";
+  static description = "Collect $2 every round";
   static unicode = "U+26CF";
   static color = "#ffa600d3";
 
   constructor() {
-    super(Miner.name, Miner.description, Miner.unicode, Miner.color, 10, 3)
+    super(Miner.name, Miner.description, Miner.unicode, Miner.color, 10, 1)
   }
   //
 }
 
-export class Bubble extends Admin {
+class Bubble extends Admin {
   static name = "Bubble";
   static description = "Increases interest by 1 every round, 10% chance to pop and reduce money to 0";
   static unicode = "U+1FAE7";
@@ -69,33 +45,33 @@ export class Bubble extends Admin {
   //
 }
 
-export class Crystal extends Admin {
+class Crystal extends Admin {
   static name = "Crystal Ball";
-  static description = "See the next shop or level in advance";
+  static description = "See the next shop in advance";
   static unicode = "U+1F52E";
   static color = "#4b003bff";
 
   constructor() {
-    super(Crystal.name, Crystal.description, Crystal.unicode, Crystal.color, 10, 5)
+    super(Crystal.name, Crystal.description, Crystal.unicode, Crystal.color, 5, 1)
   }
   //
 }
 
-export class Clover extends Admin {
+class Clover extends Admin {
   static name = "Lucky Clover";
   static description = "Raises chance of rarer items appearing";
   static unicode = "U+1F340";
   static color = "#00ff0dff";
 
   constructor() {
-    super(Clover.name, Clover.description, Clover.unicode, Clover.color, 10, 5)
+    super(Clover.name, Clover.description, Clover.unicode, Clover.color, 7, 2)
   }
   //interact with shop
 }
 
-export class Onion extends Admin {
+class Onion extends Admin {
   static name = "Onion";
-  static description = "An extra layer of defence, saves you from one lost round but is destroyed in the process.";
+  static description = "Saves you from one lost round but is destroyed in the process.";
   static unicode = "U+1F9C5";
   static color = "#00af17ad";
 
@@ -105,99 +81,589 @@ export class Onion extends Admin {
   //
 }
 //name desc utf || maxsize moves range atk def
-export class Blood extends Admin {
+class Blood extends Admin {
   static name = "Blood Tax";
-  static description = "Each time damage is dealt earns $1";
+  static description = "Each time damage is dealt earn $1";
   static unicode = "U+1FA78";
   static color = "#790000ff";
 
   constructor() {
-    super(Blood.name, Blood.description, Blood.unicode, Blood.color, 10, 5)
+    super(Blood.name, Blood.description, Blood.unicode, Blood.color, 10, 3)
   }
   //
 }
 
-export class BionicArm extends Admin {
+class BionicArm extends Admin {
   static name = "Bionic Arms";
-  static description = "Raises all program's attack by 1";
+  static description = "Raises all your program's attack by 2";
   static unicode = "U+1F9BE";
   static color = "#ff4040ff";
 
   constructor() {
-    super(BionicArm.name, BionicArm.description, BionicArm.unicode, BionicArm.color, 10, 5)
+    super(BionicArm.name, BionicArm.description, BionicArm.unicode, BionicArm.color, 7, 4)
   }
   //
 }
 
-export class BionicLeg extends Admin {
+class BionicLeg extends Admin {
   static name = "Bionic Legs";
-  static description = "Raises all program's moves by 1";
+  static description = "Raises all your program's moves by 2";
   static unicode = "U+1F9BF";
   static color = "#d240ffff";
 
   constructor() {
-    super(BionicLeg.name, BionicLeg.description, BionicLeg.unicode, BionicLeg.color, 10, 5)
+    super(BionicLeg.name, BionicLeg.description, BionicLeg.unicode, BionicLeg.color, 7, 4)
   }
   //
 }
 
-export class Convenience extends Admin {
+class Convenience extends Admin {
   static name = "Convenience Store";
   static description = "Open the shop any time";
   static unicode = "U+1F3EA";
   static color = "#55ff71ff";
 
   constructor() {
-    super(Convenience.name, Convenience.description, Convenience.unicode, Convenience.color, 10, 2)
+    super(Convenience.name, Convenience.description, Convenience.unicode, Convenience.color, 4, 2)
   }
   //
 }
 
-export class Department extends Admin {
+class Department extends Admin {
   static name = "Department Store";
-  static description = "1 free reroll every shop";
+  static description = "+3 shop slots";
   static unicode = "U+1F3EC";
   static color = "#bebebeff";
 
   constructor() {
-    super(Department.name, Department.description, Department.unicode, Department.color, 10, 2)
+    super(Department.name, Department.description, Department.unicode, Department.color, 5, 3)
   }
   //
 }
 
-export class Eye extends Admin {//not passive
+class Eye extends Admin {//not passive
   static name = "Evil Eye";
-  static description = "Mark any program to lower it's defence";
+  static description = "Lower's the defences of all enemy progams by 1";
   static unicode = "U+1F9FF";
   static color = "#020072ff";
 
   constructor() {
-    super(Eye.name, Eye.description, Eye.unicode, Eye.color, 10, 3)
+    super(Eye.name, Eye.description, Eye.unicode, Eye.color, 8, 4)
   }
   //// NAZAR AMULET, U+1F9FF 
 }
 
-export class Sol extends Admin {//not passive
-  static name = "Sol";
-  static description = "Deal 9 damage to any target";
-  static unicode = "U+1F6F0";
-  static color = "#000000ff";
+class Bouquet extends Admin {
+  static name = "Bouquet";
+  static description = "Held admin program's can reappear in the shop";
+  static unicode = "U+1F490";
+  static color = "#85e758ff";
 
   constructor() {
-    super(Sol.name, Sol.description, Sol.unicode, Sol.color, 10, 5)
+    super(Bouquet.name, Bouquet.description, Bouquet.unicode, Bouquet.color, 3, 3)
   }
   //
 }
+
+class Heartbreaker extends Admin {
+  static name = "Heartbreaker";
+  static description = "Makes your programs immune to being charmed";
+  static unicode = "U+1F498";
+  static color = "#dadadaff";
+  constructor() {
+    super(Heartbreaker.name, Heartbreaker.description, Heartbreaker.unicode, Heartbreaker.color, 5, 3)
+  }
+  //
+}
+
+class Hamsa extends Admin {
+  static name = "Hamsa";
+  static description = "Raises all your program's defence by 1";
+  static unicode = "U+1FAAC";
+  static color = "#5560ffff";
+  constructor() {
+    super(Hamsa.name, Hamsa.description, Hamsa.unicode, Hamsa.color, 8, 5)
+  }
+  //
+}
+
+class Relay extends Admin {
+  static name = "Relay";
+  static description = "All programs with a range < 1 gain +1 attack";
+  static unicode = "U+1F4E1";
+  static color = "#e4d26fff";
+  constructor() {
+    super(Relay.name, Relay.description, Relay.unicode, Relay.color, 5, 3)
+  }
+  //
+}
+
+class Hivis extends Admin {
+  static name = "Hi-Vis";
+  static description = "Saves a program from destruction once, then is deleted";
+  static unicode = "U+1F9BA";
+  static color = "#a7ff55ff";
+  constructor() {
+    super(Hivis.name, Hivis.description, Hivis.unicode, Hivis.color, 5, 1)
+  }
+  //
+}
+
+class Notepad extends Admin {
+  static name = "Notepad";
+  static description = "Increases memory by 3";
+  static unicode = "U+1F5C7";
+  static color = "#4b4b4bff";
+  constructor() {
+    super(Notepad.name, Notepad.description, Notepad.unicode, Notepad.color, 5, 3)
+  }
+  //
+}
+
+class Map extends Admin {
+  static name = "Map";
+  static description = "See the incoming level in advance";
+  static unicode = "U+1F5FA";
+  static color = "#001cbbff";
+  constructor() {
+    super(Map.name, Map.description, Map.unicode, Map.color, 1, 2)
+  }
+  //
+}
+
+class PetriDish extends Admin {
+  static name = "Petri Dish";
+  static description = "Status effects can spread to adjacent enemy programs";
+  static unicode = "U+1F9EB";
+  static color = "#14532dff";
+  constructor() {
+    super(PetriDish.name, PetriDish.description, PetriDish.unicode, PetriDish.color, 7, 4)
+  }
+  //
+}
+
+class Volatile extends Admin {
+  static name = "Volatile";
+  static description = "Status effects are doubled";//sell for buying price?
+  static unicode = "U+1F9EA";
+  static color = "#00ff22c7";
+  constructor() {
+    super(Volatile.name, Volatile.description, Volatile.unicode, Volatile.color, 6, 4)
+  }
+  //
+}
+
+class Inheritance extends Admin {
+  static name = "Inheritance";
+  static description = "Interest is doubled";
+  static unicode = "U+1F911";
+  static color = "#ffc955ff";
+  constructor() {
+    super(Inheritance.name, Inheritance.description, Inheritance.unicode, Inheritance.color, 10, 5)
+  }
+  //
+}
+
+class CreditCard extends Admin {
+  static name = "Credit Card";
+  static description = "Go up to $20 in debt";
+  static unicode = "U+1F4B3";
+  static color = "#ff5555";
+  constructor() {
+    super(CreditCard.name, CreditCard.description, CreditCard.unicode, CreditCard.color, 1, 2)
+  }
+  //
+}
+
+class Needle extends Admin {
+  static name = "Needle";
+  static description = "Winning with one program boosts all it's stats by one";
+  static unicode = "U+1FAA1";
+  static color = "#b448a6ff";
+  constructor() {
+    super(Needle.name, Needle.description, Needle.unicode, Needle.color, 10, 5)//6
+  }
+  //
+}
+
+class Rune extends Admin {
+  static name = "Rune";
+  static description = "Programs with a range of 1 deal x2 damage";
+  static unicode = "U+16B1";
+  static color = "#ff5555";
+  constructor() {
+    super(Rune.name, Rune.description, Rune.unicode, Rune.color, 5, 3)
+  }
+  //
+}
+
+class Joker extends Admin {
+  static name = "Joker";
+  static description = "Player damage is x1.5";
+  static unicode = "U+1F0CF";
+  static color = "#ff5555";
+  constructor() {
+    super(Joker.name, Joker.description, Joker.unicode, Joker.color, 7, 2)
+  }
+  //
+}
+
+class Chemistry extends Admin {
+  static name = "Chemistry";
+  static description = "Items effects are doubled";
+  static unicode = "U+2697";
+  static color = "#4eb95cff";
+  constructor() {
+    super(Chemistry.name, Chemistry.description, Chemistry.unicode, Chemistry.color, 6, 5)
+  }
+  //
+}
+
+class Aesculapius extends Admin {
+  static name = "Aesculapius";
+  static description = "Programs are immune to posion and disease";
+  static unicode = "U+2695";
+  static color = "#55ff6cff";
+  constructor() {
+    super(Aesculapius.name, Aesculapius.description, Aesculapius.unicode, Aesculapius.color, 4, 2)
+  }
+  //
+}
+
+class Heart extends Admin {
+  static name = "Heart";
+  static description = "Programs all gain +1 max size";
+  static unicode = "U+1FAC0";
+  static color = "#ff5555";
+  constructor() {
+    super(Heart.name, Heart.description, Heart.unicode, Heart.color, 6, 3)
+  }
+  //
+}
+
+class Lungs extends Admin {
+  static name = "Lungs";
+  static description = "Programs all gain +1 moves";
+  static unicode = "U+1FAC1";
+  static color = "#ff5555";
+  constructor() {
+    super(Lungs.name, Lungs.description, Lungs.unicode, Lungs.color, 5, 3)
+  }
+  //
+}
+
+class Brain extends Admin {
+  static name = "Brain";
+  static description = "+1 actions";
+  static unicode = "U+1F9E0";
+  static color = "#ff5555";
+  constructor() {
+    super(Brain.name, Brain.description, Brain.unicode, Brain.color, 9, 4)
+  }
+  //
+}
+
+class GoldenTicket extends Admin {
+  static name = "Golden Ticket";
+  static description = "Skip a level for $5";
+  static unicode = "U+1F3AB";
+  static color = "#dfba42ff";
+  constructor() {
+    super(GoldenTicket.name, GoldenTicket.description, GoldenTicket.unicode, GoldenTicket.color, 5, 4)
+  }
+  //
+}
+
+class Dove extends Admin {
+  static name = "Dove";
+  static description = "1 free turn at the start of every round";
+  static unicode = "U+1F54A";
+  static color = "#3be2ffff";
+  constructor() {
+    super(Dove.name, Dove.description, Dove.unicode, Dove.color, 7, 5)
+  }
+  //
+}
+
+class Stonks extends Admin {
+  static name = "Stonks";
+  static description = "+1 interest for every $5 you have";
+  static unicode = "U+1F4C8";
+  static color = "#55ff6cff";
+  constructor() {
+    super(Stonks.name, Stonks.description, Stonks.unicode, Stonks.color, 5, 3)
+  }
+  //
+}
+
+class Trolley extends Admin {
+  static name = "Trolley";
+  static description = "Items only use 0.5 memory each";
+  static unicode = "U+1F6D2";
+  static color = "#55fff1ff";
+  constructor() {
+    super(Trolley.name, Trolley.description, Trolley.unicode, Trolley.color, 5, 2)
+  }
+  //
+}
+
+class Backdoor extends Admin {
+  static name = "Backdoor";
+  static description = "Load Progams anywhere";
+  static unicode = "U+1F6AA";
+  static color = "#0a0a0aff";
+  constructor() {
+    super(Backdoor.name, Backdoor.description, Backdoor.unicode, Backdoor.color, 8, 4)
+  }
+  //
+}
+
+class Communism extends Admin {
+  static name = "Communism";
+  static description = "+1 all stats to all programs while money is under 4";
+  static unicode = "U+262D";
+  static color = "#ff0000ff";
+  constructor() {
+    super(Communism.name, Communism.description, Communism.unicode, Communism.color, 5, 3)
+  }
+  //
+}
+
+class Palette extends Admin {
+  static name = "Pallete";
+  static description = "Place twice at the start of a round";
+  static unicode = "U+1F3A8";
+  static color = "#ff55f6ff";
+  constructor() {
+    super(Palette.name, Palette.description, Palette.unicode, Palette.color, 6, 4)
+  }
+  //
+}
+
+class Osiris extends Admin {
+  static name = "Osiris";
+  static description = "+1 damage every time one of your programs is destroyed";
+  static unicode = "U+1314A";
+  static color = "#33073bff";
+  constructor() {
+    super(Osiris.name, Osiris.description, Osiris.unicode, Osiris.color, 8, 5)
+  }
+  //
+}
+
+class Slots extends Admin {
+  static name = "Slots";
+  static description = "Rerolls cos $2 less";
+  static unicode = "U+1F3B0";
+  static color = "#ff5555";
+  constructor() {
+    super(Slots.name, Slots.description, Slots.unicode, Slots.color, 5, 1)
+  }
+  //
+}
+
+class Newspaper extends Admin {
+  static name = "Millwall Brick";
+  static description = "+1 damage for programs with 1 range";
+  static unicode = "U+1F5DE";
+  static color = "#5c5c5cff";
+  constructor() {
+    super(Newspaper.name, Newspaper.description, Newspaper.unicode, Newspaper.color, 1, 2)
+  }
+  //
+}
+
+class Crown extends Admin {
+  static name = "Crown";
+  static description = "Gain $5 every round";
+  static unicode = " U+1F451";
+  static color = "#e6c98bff";
+  constructor() {
+    super(Crown.name, Crown.description, Crown.unicode, Crown.color, 9, 3)
+  }
+  //
+}
+
+class Cactus extends Admin {
+  static name = "Cactus";
+  static description = "Programs retaliate 1 damage when they are attacked";
+  static unicode = "U+1F335";
+  static color = "#dfb372ff";
+  constructor() {
+    super(Cactus.name, Cactus.description, Cactus.unicode, Cactus.color, 10, 5)
+  }
+  //
+}
+
+class Compass extends Admin {
+  static name = "Compass";
+  static description = "Always show the path to the nearest shop";
+  static unicode = "U+1F9ED";
+  static color = "#ff5555";
+  constructor() {
+    super(Compass.name, Compass.description, Compass.unicode, Compass.color, 2, 1)
+  }
+  //
+}
+
+class Seed extends Admin {
+  static name = "Seed";
+  static description = "Raises maximum interest to $10";
+  static unicode = "U+1F331";
+  static color = "#ff5555";
+  constructor() {
+    super(Seed.name, Seed.description, Seed.unicode, Seed.color, 10, 1)
+  }
+  //
+}
+
+class Puzzle extends Admin {
+  static name = "Puzzle Piece";
+  static description = "Programs with an adjacent ally gain +1 defence";
+  static unicode = " U+1F9E9";
+  static color = "#ff5555";
+  constructor() {
+    super(Puzzle.name, Puzzle.description, Puzzle.unicode, Puzzle.color, 6, 3)
+  }
+  //
+}
+
+class Roger extends Admin {
+  static name = "Jolly Roger";
+  static description = "Gain $1 per destroyed program";
+  static unicode = "U+2620";
+  static color = "#ff5555";
+  constructor() {
+    super(Roger.name, Roger.description, Roger.unicode, Roger.color, 6, 3)
+  }
+  //
+}
+
+class Bucket extends Admin {
+  static name = "Bucket";
+  static description = "+2 memory";
+  static unicode = "U+1FAA3";
+  static color = "#ff5555";
+  constructor() {
+    super(Bucket.name, Bucket.description, Bucket.unicode, Bucket.color, 4, 1)
+  }
+  //
+}
+
+class Diamond extends Admin {
+  static name = "Diamond";
+  static description = "Every $10 increases defence by 1";
+  static unicode = "U+1F48E";
+  static color = "#ff5555";
+  constructor() {
+    super(Diamond.name, Diamond.description, Diamond.unicode, Diamond.color, 8, 5)
+  }
+  //
+}
+
+class Drum extends Admin {
+  static name = "Marching Drum";
+  static description = "+1 moves for all programs";
+  static unicode = "U+1F941";
+  static color = "#ff5555";
+  constructor() {
+    super(Drum.name, Drum.description, Drum.unicode, Drum.color, 3, 1)
+  }
+  //
+}
+
+class Candle extends Admin {
+  static name = "Candle";
+  static description = "+1 range for all programs";
+  static unicode = "U+1F56F";
+  static color = "#ff5555";
+  constructor() {
+    super(Candle.name, Candle.description, Candle.unicode, Candle.color, 4, 1)
+  }
+  //
+}
+
+class Feather extends Admin {
+  static name = "Feather";
+  static description = "+3 moves for all programs";
+  static unicode = "U+1FAB6";
+  static color = "#ff5555";
+  constructor() {
+    super(Feather.name, Feather.description, Feather.unicode, Feather.color, 8, 4)
+  }
+  //
+}
+
+class Copier extends Admin {
+  static name = "Copier";
+  static description = "Places a copy of your first placed program 1 space to the right";
+  static unicode = "U+1F5A8";
+  static color = "#ff5555";
+  constructor() {
+    super(Copier.name, Copier.description, Copier.unicode, Copier.color, 9, 5)
+  }
+  //
+}
+
+class Telescope extends Admin {
+  static name = "Telescope";
+  static description = "+2 range";
+  static unicode = "U+1F52D";
+  static color = "#ff5555";
+  constructor() {
+    super(Telescope.name, Telescope.description, Telescope.unicode, Telescope.color, 6, 4)
+  }
+  //
+}
+
+class Microscope extends Admin {
+  static name = "Microscope";
+  static description = "Programs with a size of 1 get +1 defence";
+  static unicode = "U+1F52C";
+  static color = "#ff5555";
+  constructor() {
+    super(Microscope.name, Microscope.description, Microscope.unicode, Microscope.color, 5, 3)
+  }
+  //
+}
+
+class Lotus extends Admin {
+  static name = "Lotus";
+  static description = "Rare pieces give x1.5 damage";
+  static unicode = "U+1FAB7";
+  static color = "#ff5555";
+  constructor() {
+    super(Lotus.name, Lotus.description, Lotus.unicode, Lotus.color, 10, 5)
+  }
+  //
+}
+
+export class Broom extends Admin {
+  static name = "Broom";
+  static description = "Automatically clears all enemies with 1 size and 0 defence";
+  static unicode = "U+1F9F9";
+  static color = "#c7b07eff";
+  constructor() {
+    super(Broom.name, Broom.description, Broom.unicode, Broom.color, 10, 5)
+  }
+  //
+}
+
+export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, Map, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, Seed, Puzzle, Roger, Bucket, Diamond, Drum, Candle, Feather, Copier, Telescope, Microscope, Lotus, Broom];
 
 //Daemon
 //IMP, U+1F47F
 
 //passive programs
 
+//PEA POD, U+1FADB
+// PLACARD, U+1FAA7
+//disco  CARPENTRY SAW, U+1FA9A
+//FOLDING HAND FAN, U+1FAAD
+//// MONEY BAG, U+1F4B0
+//BANKNOTE WITH DOLLAR SIGN, U+1F4B5
 
-//EUROPEAN CASTLE, U+1F3F0
-
-//JAPANESE CASTLE, U+1F3EF
+// BROOM, U+1F9F9
 
 //clippy - provides hints
 //PAPERCLIP, U+1F4CE
@@ -206,41 +672,21 @@ export class Sol extends Admin {//not passive
 
 //8ball  BILLIARDS, U+1F3B1
 
-//BOUQUET, U+1F490 reappering pieces
-
 //LEFT-POINTING MAGNIFYING GLASS, U+1F50D
 // //reveal secrets
 
-// HEART WITH ARROW, U+1F498
-
 //GREEK SMALL LETTER PI, U+3C0
 
-//HAMSA, U+1FAAC hand with eye
-
-//SATELLITE, U+1F6F0 //orbital laser
-//SATELLITE ANTENNA, U+1F4E1
-
 //copier - copy a program
-//EMPTY NOTE PAD, U+1F5C7 increase memory
 
-//SAFETY VEST, U+1F9BA
+
 
 //PAPERCLIP, U+1F4CE
 // PUSHPIN, U+1F4CC
 
-// CREDIT CARD, U+1F4B3
-
-// WORLD MAP, U+1F5FA
-// golden TICKET, U+1F3AB
-
 // PERFORMING ARTS, U+1F3AD
 
-// SEWING NEEDLE, U+1FAA1
-
 // LOCK, U+1F512
-
-// PETRI DISH, U+1F9EB
-// TEST TUBE, U+1F9EA
 
 //JIGSAW PUZZLE PIECE, U+1F9E9
 
@@ -248,83 +694,51 @@ export class Sol extends Admin {//not passive
 
 //BENZENE RING, U+232C
 
-//MAGE, U+1F9D9
-//NINJA, U+1F977
-//FAIRY, U+1F9DA
-// BABY ANGEL, U+1F47C
-// GENIE, U+1F9DE //create three pieces
-//JAPANESE GOBLIN, U+1F47A
-// JAPANESE OGRE, U+1F479
 //EXTRATERRESTRIAL ALIEN, U+1F47D
 //space invaders ALIEN MONSTER, U+1F47E
-//MONEY-MOUTH FACE, U+1F911
 
 // AUTOMATED TELLER MACHINE, U+1F3E7
 // SNOWFLAKE, U+2744
 //AI TRACKBALL, U+1F5B2
 // WHALE, U+1F40B
 //CANDLE, U+1F56F
- // ELECTRIC TORCH, U+1F526
- //CLOUD, U+2601
- // WIND BLOWING FACE, U+1F32C
+// ELECTRIC TORCH, U+1F526
 
- // MONEY BAG, U+1F4B0
- //BANKNOTE WITH DOLLAR SIGN, U+1F4B5
 
-// /MIRROR, U+1FA9E
+//Bosses
 
-//HELICOPTER, U+1F681
+//CLOUD, U+2601 //fog of war
+// WIND BLOWING FACE, U+1F32C //move's your pieces down 1 every turn
+// /MIRROR, U+1FA9E //copies your pieces
+//CLASSICAL BUILDING, U+
+//BANK, U+1F3E6 //lose money every tuen
+//EUROPEAN CASTLE, U+1F3F0
+//JAPANESE CASTLE, U+1F3EF
+//FACTORY, U+1F3ED //enemy places every other turn
+// ANCHOR, U+2693 //reduce your moves by 1
+//  CLOUD WITH TORNADO, U+1F32A scrambles spawn points
+//CASTLE, U+26EB
+//CUSTOMS, U+1F6C3
 
-//SEWING NEEDLE, U+1FAA1
 
-// BRAIN, U+1F9E0
-// ANATOMICAL HEART, U+1FAC0
-//LUNGS, U+1FAC1
 
 // ICE CUBE, U+1F9CA
 
-
 //BLACK CHESS KNIGHT, U+265E
 //TURNED BLACK SHOGI PIECE, U+26CA //black shield 
-
-// / DOOR, U+1F6AA
-
-//FACTORY, U+1F3ED
-
-//BANK, U+1F3E6
-
-//CLASSICAL BUILDING, U+
 
 //BUILDING CONSTRUCTION, U+1F3D7 crane
 
 //8ball BILLIARDS, U+1F3B1
 
-//SLOT MACHINE, U+1F3B0
-
 //LINK SYMBOL, U+1F517
 
 //BLACK SPADE SUIT, U+2660
 
-//JIGSAW PUZZLE PIECE, U+1F9E9
-
-// PLAYING CARD BLACK JOKER, U+1F0CF
-
 // MILKY WAY, U+1F30C
-
-// GARLIC, U+1F9C4
-
-// MUSHROOM, U+1F344
-
-// VAMPIRE, U+1F9DB
-
-//TEST TUBE, U+1F9EA
 
 //stag
 // LINEAR B IDEOGRAM B104 DEER, U+10082
-
-//RUNIC LETTER RAIDO RAD REID R, U+16B1
-
-// MOYAI, U+1F5FF MAOI
 
 //horse
 //LINEAR B IDEOGRAM B105 EQUID, U+10083
@@ -341,87 +755,34 @@ export class Sol extends Admin {//not passive
 
 //DNA DOUBLE HELIX, U+1F9EC
 
-// ALEMBIC, U+2697 chemistry
-
-// ALEMBIC, U+2697
-
-// ANCHOR, U+2693
-
 // FEATHER, U+1FAB6
 
-// GEM STONE, U+1F48E
-
-//DRUM WITH DRUMSTICKS, U+1F941
-
-//DOVE OF PEACE, U+1F54A
-
-//STAFF OF AESCULAPIUS, U+2695
-
 //SKULL, U+1F480
-
-//HAMMER AND SICKLE, U+262D
 
 //CHEQUERED FLAG, U+1F3C1
 
 //interest
-// CHART WITH UPWARDS TREND, U+1F4C8
 //CHART WITH UPWARDS TREND AND YEN SIGN, U+1F4B9
-
-//SHOPPING TROLLEY, U+1F6D2 //expand invetory size
-
-
-
-// COMPASS, U+1F9ED
-
-// MAGIC WAND, U+1FA84
-
-//FIRE EXTINGUISHER, U+1F9EF
-
-//NESTING DOLLS, U+1FA86
-
-//ARTIST PALETTE, U+1F3A8
 
 // TEDDY BEAR, U+1F9F8
 
 //WHITE-FEATHERED RIGHTWARDS ARROW, U+27B3
 
-//ROCK, U+1FAA8
-
 //BRIEFCASE, U+1F4BC
 
-//NAME BADGE, U+1F4DB red shield
-
 // COFFIN, U+26B0
-
-//ROCK, U+1FAA8
 
 // HEADSTONE, U+1FAA6
 
 //FUNERAL URN, U+26B1
 
-//  CLOUD WITH TORNADO, U+1F32A
-
-// RADIOACTIVE SIGN, U+2622
-
 // HIGH VOLTAGE SIGN, U+26A1
-
-// SKULL AND CROSSBONES, U+2620
 
 // PASSPORT CONTROL, U+1F6C2
 
-//CUSTOMS, U+1F6C3
-
 // LEFT LUGGAGE, U+1F6C5 Key and suitcase
 
-//CASTLE, U+26EB
-
 // MAP SYMBOL FOR LIGHTHOUSE, U+26EF
-
-//FLYING SAUCER, U+1F6F8
-
-// ROLLED-UP NEWSPAPER, U+1F5DE
-
-// WOOD log, U+1FAB5
 
 // BLACK SCISSORS, U+2702
 
@@ -457,8 +818,6 @@ export class Sol extends Admin {//not passive
 
 //EGYPTIAN HIEROGLYPH D009, U+1307F //eye on stilts
 
-// SATELLITE ANTENNA, U+1F4E1
-
 //PURSE, U+1F45B
 
 //DARK SUNGLASSES, U+1F576
@@ -467,15 +826,11 @@ export class Sol extends Admin {//not passive
 
 //SEEDLING, U+1F331
 
-//CACTUS, U+1F335
-
 // //bull
 //EGYPTIAN HIEROGLYPH E001, U+130D2
 //EGYPTIAN HIEROGLYPH F002, U+13100
 // EGYPTIAN HIEROGLYPH F001, U+130FE
 
-//osiris bird with circle
-// EGYPTIAN HIEROGLYPH G009, U+1314A
 
 //turtle
 // EGYPTIAN HIEROGLYPH I002, U+13189
@@ -492,11 +847,6 @@ export class Sol extends Admin {//not passive
 //cricket
 //EGYPTIAN HIEROGLYPH L004, U+131A7
 
-//centipede
-// EGYPTIAN HIEROGLYPH L005, U+131A8
-
-//SCORPION, U+1F982
-
 //MONEY BAG, U+1F4B0
 
 //MONEY WITH WINGS, U+1F4B8
@@ -506,11 +856,6 @@ export class Sol extends Admin {//not passive
 // TICKET, U+1F3AB
 
 //ADMISSION TICKETS, U+1F39F
-
-//big knife
-// HOCHO, U+1F52A
-
-//DROP OF BLOOD, U+1FA78
 
 // HIGH VOLTAGE SIGN, U+26A1
 

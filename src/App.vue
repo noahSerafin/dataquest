@@ -5,6 +5,7 @@
   import { castled } from './levels';
   import { Player } from "./Player";
   import { Item, allItems} from "./Items";
+  import { allAdmins } from "./AdminPrograms";
   import { Admin } from "./AdminPrograms";
   import PlayerView from "./components/PlayerView.vue";
   import type { Piece } from "./Pieces"
@@ -154,7 +155,7 @@
     return new PickedClass();  // RETURN INSTANCE
   }
 
-  function pickThreeItems(itemClasses: any[]) {
+  function pickThreeItems(itemClasses: Array<typeof Item>) {
     return [
       pickWeightedRandomItem(itemClasses),
       pickWeightedRandomItem(itemClasses),
@@ -183,7 +184,8 @@
 
     const classes = pickThreePieces(allPieces);
     shopBlueprints.value = classes.map(c => makeBlueprint(c));
-    shopItems.value = pickThreeItems(allItems);
+    const allItemsAndAdmins = [...allItems, ...allAdmins];
+    shopItems.value = pickThreeItems(allItemsAndAdmins);
     //if triggered by player
   }
 
@@ -196,13 +198,12 @@
     // remove from shop
     shopItems.value = shopItems.value.filter(i => i.id !== item.id);
     player.value.money -= item.cost;
-    // add to player inventory
-    player.value.items.push(item);
-  }
-  function buyAdmin(admin: Admin) {
-    shopItems.value = shopItems.value.filter(i => i.id !== admin.id);
-    player.value.money -= admin.cost;
-    player.value.admins.push(admin);
+    // decide which inventory to place it in
+    if (item instanceof Admin) {
+      player.value.admins.push(item);
+    } else {
+      player.value.items.push(item);
+    }
   }
   //--shop-----
 

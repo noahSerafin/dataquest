@@ -792,19 +792,6 @@ class Fairy extends Piece {
   }
 }
 
-class Genie extends Piece {
-  static name = "Genie";
-  static description = "Can create any 3 programs once";
-  static unicode = "U+1F9DE";
-  static color = "#0dbaffff";
-  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Genie.name, Genie.description, Genie.unicode, 3, 1, 1, 0, 0, Genie.color, headPosition, [headPosition], team, 6, removeCallback, id)
-  }
-
-  //create any program, keep track of uses
-  //after 3 destroy genie
-}
-
 class Cupid extends Piece {
   static name = "Cupid";
   static description = "Can charm an enemy on the board, putting it under your control for the round";
@@ -1073,17 +1060,6 @@ class Boomerang extends Piece {
   //attack resets moves once
 }
 
-class Hamsa extends Piece {
-  static name = "Hamsa";
-  static description = "A well rounded program that can raise allies defence whilst in play";
-  static unicode = "U+1FAAC";
-  static color = "#2b0d96ff";
-  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Hamsa.name, Hamsa.description, Hamsa.unicode, 4, 1, 1, 2, 2, Hamsa.color, headPosition, [headPosition], team, 4, removeCallback, id)
-  }
-  //increase defence temporarily
-}
-
 class Plunger extends Piece {
   static name = "Plunger";
   static description = "A program that can remove the slow status effect";
@@ -1096,27 +1072,136 @@ class Plunger extends Piece {
   //clear a space?
 }
 
-export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Trench, Lance, Mole, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Copycat, Trap, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Ink, Snail, Shark, Greatshield, Wizard, Ninja, Fairy, Genie, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Hamsa, Plunger];
+export class Angel extends Piece {//not passive
+  static name = "Angel";
+  static description = "Can ressurect a destroyed program";
+  static unicode = "U+1FABD";
+  static color = "#a8a8a8ff";
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Angel.name, Angel.description, Angel.unicode, 4, 0, 1, 0, 0, Angel.color, headPosition, [headPosition], team, 3, removeCallback, id)
+  }
+  //acces graveyard
+}
 
-// NESTING DOLLS, U+1FA86
+export class Stopwatch extends Piece {//not passive
+  static name = "Stopwatch";
+  static description = "Replenish a program#s moves and actions";
+  static unicode = "U+23F1";
+  static color = "#ff5555";
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Stopwatch.name, Stopwatch.description, Stopwatch.unicode, 4, 0, 1, 0, 0, Stopwatch.color, headPosition, [headPosition], team, 3, removeCallback, id)
+  }
+  //
+}
+
+export class Sol extends Piece {//not passive
+  static name = "Sol";
+  static description = "extreme range and damage";
+  static unicode = "U+1F6F0";
+  static color = "#000000ff";
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Sol.name, Sol.description, Sol.unicode, 1, 1, 7, 7, 0, Sol.color, headPosition, [headPosition], team, 6, removeCallback, id)
+  }
+  //
+}
+
+class Vampire extends Piece {
+  static name = "Vampire";
+  static description = "Steals tiles of other programs, increasing its max size";
+  static unicode = "U+1F9DB";
+  static color = "#000000ff";
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Vampire.name, Vampire.description, Vampire.unicode, 4, 0, 1, 1, 0, Vampire.color, headPosition, [headPosition], team, 6, removeCallback, id)
+  }
+}
+
+class Centipede extends Piece {
+  static name = "Centipede";
+  static description = "A large piece with a high attack that can poision";
+  static unicode = "U+131A8";
+  static color = "#3b2108ff";
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Centipede.name, Centipede.description, Centipede.unicode, 8, 2, 1, 3, 0, Centipede.color, headPosition, [headPosition], team, 5, removeCallback, id)
+  }
+  //
+}
+
+class Helicopter extends Piece {
+  static name = "Helicopter";
+  static description = "A program that can move over empty spaces";
+  static unicode = "U+1F681";
+  static color = "#0d9effff";
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Helicopter.name, Helicopter.description, Helicopter.unicode, 2, 2, 2, 1, 1, Helicopter.color, headPosition, [headPosition], team, 6, removeCallback, id)
+  }
+}
+
+class Dolls extends Piece {
+  static name = "Nesting Dolls";
+  static description = "Replaced by a copy with -1 max size if destroyed"
+  static unicode = " U+1FA86";
+  static color = "#ff5a0dff";
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Dolls.name, Dolls.description, Dolls.unicode, 3, 0, 1, 0, 0, Dolls.color, headPosition, [headPosition], team, 6, removeCallback, id)
+  }
+}
+
+class UFO extends Piece {
+  static name = "UFO";
+  static description = "A program that can move enemies without increasing their size";
+  static unicode = "";
+  static color = "#000000ff";
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(UFO.name, UFO.description, UFO.unicode, 4, 0, 1, 0, 0, UFO.color, headPosition, [headPosition], team, 4, removeCallback, id)
+  }
+}
+
+class TP extends Piece {
+  static name = "TP";
+  static description = "A large program with high movement";
+  static unicode = "U+1F9FB";
+  static color = "#0d92ffff";
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(TP.name, TP.description, TP.unicode, 6, 3, 0, 0, 0, TP.color, headPosition, [headPosition], team, 1, removeCallback, id)
+  }
+}
+
+class Saw extends Piece {
+  static name = "Saw";
+  static description = "A program that can remove a tile from an enemy, regadless of its defence";
+  static unicode = "U+1FA9A";
+  static color = "#ffb20dff";
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Saw.name, Saw.description, Saw.unicode, 3, 2, 1, 0, 0, Saw.color, headPosition, [headPosition], team, 3, removeCallback, id)
+  }
+  //
+}
+
+export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Trench, Lance, Mole, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Copycat, Trap, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Ink, Snail, Shark, Greatshield, Wizard, Ninja, Fairy, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, Dolls, UFO, TP, Saw];
 
 //DANCER, U+1F483
 
-// HAMSA, U+1FAAC
-
-//ROLL OF PAPER, U+1F9FB
-
-//U+1F9C3 ice cube dcreases size each round?
-
-//snowball moving increases max size,// and movement speed?
+//U+1F9C3 ice cube decreases size each round?
 
 //name desc || maxsize moves range atk def
 
 
+//JAPANESE GOBLIN, U+1F47A
+// JAPANESE OGRE, U+1F479
+
 //all +1 variants get +1 added to non 0 number stats
 
-//JAPANESE GOBLIN, U+1F47A
 //EXTRATERRESTRIAL ALIEN, U+1F47D
-//MONEY-MOUTH FACE, U+1F911
 
 //Strongarm FLEXED BICEPS, U+1F4AA
+/*
+class Hamsa extends Piece {
+  static name = "Hamsa";
+  static description = "A well rounded program that can raise allies defence whilst in play";
+  static unicode = "U+1FAAC";
+  static color = "#2b0d96ff";
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Hamsa.name, Hamsa.description, Hamsa.unicode, 4, 1, 1, 2, 2, Hamsa.color, headPosition, [headPosition], team, 4, removeCallback, id)
+  }
+  //increase defence temporarily
+}*/

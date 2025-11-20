@@ -197,7 +197,7 @@ export class Bandage extends Item {
     static name = "Bandage";
     static description = "Removes 1 harmful status effect from a program";
     static unicode = "U+1FA79";
-    static color = "#56cdebff";
+    static color = "#5659ebff";
     constructor(){
         super(Bandage.name, Bandage.description, Bandage.unicode, Bandage.color, 1, 2)
         //name desc utf || maxsize moves range atk def
@@ -269,11 +269,39 @@ export class Box extends Item {
     }
 }
 
-export const allItems = [Whetstone, Iron, Blueberry, Carrot, Lightning, Blessing, Supplement, Juice, Roids, Formula, Garlic, RedMeat, Coffee, Bandage, Soap, Voucher, Mushroom, Rations, Beans, Box]
+export class Wand extends Item {
+  static name = "Magic Wand";
+  static description = "Undo a turn";
+  static unicode = " U+1FA84";
+  static color = "#440975ff";
+  constructor() {
+    super(Wand.name, Wand.description, Wand.unicode, Wand.color, 7, 5)
+  }
+  //
+}
+
+class Genie extends Item {
+  static name = "Genie";
+  static description = "Can create any 3 programs once";
+  static unicode = "U+1F9DE";
+  static color = "#0dbaffff";
+  constructor() {
+   super(Genie.name, Genie.description, Genie.unicode, Genie.color, 10, 5)
+  }
+
+  //create any program, keep track of uses
+  //after 3 destroy genie
+}
+
+export const allItems = [Whetstone, Iron, Blueberry, Carrot, Lightning, Blessing, Supplement, Juice, Roids, Formula, Garlic, RedMeat, Coffee, Bandage, Soap, Voucher, Mushroom, Rations, Beans, Box, Wand, Genie]
+
+// PINATA, U+1FA85
 
 // / HOT PEPPER, U+1F336
 
  //GINGER ROOT, U+1FADA
+
+ // U+1F47A
 
 // / RING, U+1F48D
 
@@ -287,8 +315,9 @@ export const allItems = [Whetstone, Iron, Blueberry, Carrot, Lightning, Blessing
 
 //BLACK HEART SUIT, U+2665
 
-
+//statuses
 //status symbols
+//burning, poisoned/diseased, slowed
 //OVERHEATED FACE, U+1F975
 //NAUSEATED FACE, U+1F922
 //FACE WITH OPEN MOUTH VOMITING, U+1F92E

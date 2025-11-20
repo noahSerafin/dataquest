@@ -28,7 +28,6 @@ export class ¬ extends Admin {
   static description = "";
   static unicode = "";
   static color = "#ff5555";
-
   constructor() {
     super(¬.name, ¬.description, ¬.unicode, ¬.color, 10, 5)
   }

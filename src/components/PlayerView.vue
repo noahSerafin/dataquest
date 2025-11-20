@@ -49,13 +49,23 @@
 
 <template>
     <div class="player p-4 border rounded-lg bg-gray-100 shadow-md w-64">
-        <div class="flex">
+        <div class="flex full-width">
             <!-- Money -->
             <p><strong>Money:</strong> {{ props.player.money }}</p>
             
-            <!-- Memory -->
-            <p><strong>Memory:</strong> {{ memoryUsage }}</p>
-            
+            <ul class="admins">
+                <ItemView 
+                    v-for="(item in props.player.admins"
+                    class="p-1 border rounded mb-1 flex justify-between items-center"
+                    :item="item"
+                    type="admin"
+                    cssclass="inventory"
+                    :tileSize="60"
+                    :canBuy= "false"
+                    @sell="$emit('sellItem', item.id)"
+                />
+            </ul>
+
             <!-- Inventory Button -->
             <button 
             class="mt-2 px-2 py-1 bg-blue-500 text-white rounded"
@@ -68,6 +78,8 @@
     </div>
     <!-- Inventory Popup -->
     <div v-if="showInventory" class="inventory mt-3 border-t pt-2">
+        <!-- Memory -->
+        <p><strong>Memory:</strong> {{ memoryUsage }}</p>
         <h3 class="font-semibold">Programs</h3>
         <div v-if="props.player.programs.length === 0">No programs</div>
         <ul class="inventory-relative">
@@ -112,6 +124,9 @@
         top: 10px;
         left: 20%;
         margin: auto;
+        width: 50%;
+        display: flex;
+        justify-content: space-between;
         max-width: 1280px;
         border: 2px solid #ccc;
         border-radius: 0.75rem;
@@ -131,8 +146,8 @@
         color: #fff;
         padding: 1rem;
     }
-    .inventory-relative{
-        padding: 0;
+    .admins, .inventory-relative{
+        padding: 0 20px 0 20px;
         position: relative;
         display: flex;
         gap: 5px;

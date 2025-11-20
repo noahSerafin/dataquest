@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
-import type { Coordinate } from "../types";
+import type { Coordinate, PieceBlueprint } from "../types";
 import { Piece } from "../Pieces";
+import type { Item } from "../Items";
 
 //construction-------------
 
@@ -19,7 +20,7 @@ const showController = ref(false);//todo change to selected piece
 
 //emits
 const emit = defineEmits<{ 
-  select:[piece:Piece],
+  select:[piece:Piece]
 }>()
 
 //computed

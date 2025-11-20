@@ -20,7 +20,7 @@ const emit = defineEmits<{
 const props = defineProps<{
   shopBlueprints: PieceBlueprint[];
   shopItems: InstanceType<typeof Item>[];
-  rerollCost: Number;
+  rerollCost: number;
   player: Player;
 }>();
 
@@ -43,6 +43,10 @@ function handleBuyAdmin(admin: Admin) {
 }
 //        @select="openItemController"
 
+//canAfford???
+
+const canReroll = computed(() => props.player.money >= props.rerollCost);
+
 const canBuyItem = ((item: Item) => {
   //check if item {
   return (props.player.money >= item.cost && props.player.programs.length + props.player.items.length < props. player.memory);
@@ -53,7 +57,9 @@ const canBuyItem = ((item: Item) => {
 <template>
   <div class="shop-container">
     <h2>Shop</h2>
-    <button @click="emit('refresh-shop')">
+    <button
+      :disabled="!canReroll"
+      @click="emit('refresh-shop')">
       Reroll {{ props.rerollCost }}
     </button>
     <div class="blueprint-row">
@@ -117,5 +123,9 @@ const canBuyItem = ((item: Item) => {
 }
 .tile-empty{
   background-color: black;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 </style>

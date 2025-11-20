@@ -16,6 +16,7 @@ console.log('item: ', props.item)
 const emit = defineEmits<{
   select: [item: Item];
   buy: [item: Item];
+  sell: [item: Item];
 }>();
 
 const showController = ref(false);
@@ -89,8 +90,10 @@ const handleUse = () => {
        <button v-if="(cssclass == 'inventory' && type == 'consumable')">
         Use ${{ handleUse }}
       </button>
-      <button v-if="(cssclass == 'inventory')">
-        Sell ${{ item.cost }}
+      <button v-if="(cssclass == 'inventory')"
+      @click="$emit('sell', item)"
+      >
+        Sell ${{ Math.round(item.cost / 2) }}
       </button>
 
     

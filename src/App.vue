@@ -66,6 +66,30 @@
     []//no admins yet
   ));
 
+  function sellPiece(pieceId: string) {
+    // find the index
+    const idx = player.value.programs.findIndex(p => p.id === pieceId);
+    if (idx === -1) return; // piece not found
+
+    const piece = player.value.programs[idx];
+    
+    // remove from programs
+    player.value.programs.splice(idx, 1);
+
+    // refund money (e.g., half cost or some formula)
+    player.value.money += piece.rarity;
+  }
+
+  function sellItem(itemId: string) {
+    const idx = player.value.items.findIndex(i => i.id === itemId);
+    if (idx === -1) return;
+
+    const item = player.value.items[idx];
+    player.value.items.splice(idx, 1);
+    player.value.money += Math.round(item.cost / 2);
+  }
+
+
   //SHOP functions
 
   function makeBlueprint(PieceClass: any) {
@@ -388,7 +412,7 @@
   </div>
   <div v-if="!hasFinishedTurn && !isPlacing">Your turn</div>
 
-  <PlayerView v-if="!displayEditor" :player="player" @highlightPlacements="highlightPlacements"/>
+  <PlayerView v-if="!displayEditor" :player="player" @highlightPlacements="highlightPlacements" @sellPiece="sellPiece" @sellItem="sellItem"/>
   <Shop
     :shopBlueprints="shopBlueprints"
     :shopItems="shopItems"

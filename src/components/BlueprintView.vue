@@ -21,6 +21,7 @@ const showController = ref(false);//todo change to selected piece
 //emits
 const emit = defineEmits<{ 
   select:[piece:PieceBlueprint],
+  sell:[piece:PieceBlueprint]
 }>()
 
 //computed
@@ -93,6 +94,7 @@ function handleSelect() {
     :id="props.blueprint?.id"
     :style="pieceStyle"
     @click="handleSelect"
+    @sell="$emit('sell', props.blueprint)"
   >
     {{ unicodeSymbol }}
   </div>

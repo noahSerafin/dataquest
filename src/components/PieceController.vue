@@ -82,7 +82,7 @@ const rarityInfo = computed(() => showRarity(props.piece.rarity));
         </template>
         <template v-if="mode === 'inventory'">
           <button @click="$emit('highlightPlacements', piece)">Place</button>
-          <button @click="$emit('sell', piece)">Sell</button>
+          <button @click="$emit('sell', piece)">Sell (${{ piece.rarity}})</button>
         </template>
         <template v-else-if="isInstance(piece)">
           <button v-if="piece.team == 'player'" @click="$emit('highlightMoves', piece)">Move</button>

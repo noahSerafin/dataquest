@@ -15,6 +15,8 @@
     const emit = defineEmits<{//move to controller???
         (e: 'highlightPlacements', blueprint: PieceBlueprint): void;
         (e: 'use-item', item: Item): void;
+        (e: 'sellPiece', id:string):void;
+        (e: 'sellItem', id:string):void;
     }>();
 
     const selectedPiece = ref<PieceBlueprint | null>(null)
@@ -36,10 +38,11 @@
         selectedPiece.value = null
     }
 
-    const handleSell = () => {
-        //do in player class
-        //pieces/items need a sell value, tie it to rarity?
+     const handleSellPiece = (blueprint: PieceBlueprint) => {
+        emit('sellPiece', blueprint.id);
+        selectedPiece.value = null
     }
+
     //progams can be placed on board, greying them out in inventory, use a similar popup to pieceController but with place/sell buttons
     //items can be used on programs, confirmation window to execute their function
 </script>
@@ -90,6 +93,7 @@
                 cssclass="inventory"
                 :tileSize="60"
                 :canBuy= "false"
+                @sell="$emit('sellItem', item.id)"
             />
         </ul>
         <PieceController
@@ -97,7 +101,7 @@
         :piece="selectedPiece"
         mode="inventory"
         @highlightPlacements="handlePlace(selectedPiece)"
-        @sell="handleSell"
+        @sell="handleSellPiece(selectedPiece)"
         />
     </div>
 </template>

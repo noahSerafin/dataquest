@@ -76,6 +76,7 @@ const handleUse = () => {
     <div class="icon">{{ unicodeSymbol }}</div>
     <div v-if="showController" class="info" @click.stop >
       <div class="name">{{ item.name }}</div>
+      <div v-if="(cssclass == 'shop')" class="type">- {{ type }} -</div>
       <div class="rarity" :style="{ color: rarityStyle(item.rarity).color }">
         {{ rarityStyle(item.rarity).label }}
       </div>
@@ -116,11 +117,12 @@ const handleUse = () => {
   align-items: center;
   padding: 10px;
 }
-
 .item:hover {
   transform: scale(1.03);
 }
-
+.type, .name{
+  margin-bottom: 5px;
+}
 .icon {
   font-size: 36px;
   margin-right: 12px;

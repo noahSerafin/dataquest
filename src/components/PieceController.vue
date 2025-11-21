@@ -60,6 +60,7 @@ const rarityInfo = computed(() => showRarity(props.piece.rarity));
         </span>
         <span class="name">{{ piece.name }}</span>
       </div>
+      <div v-if="mode === 'shop'">- program -</div>
 
       <p class="desc">{{ piece.description }}</p>
       <div :style="{ color: rarityInfo.color }">
@@ -101,7 +102,7 @@ const rarityInfo = computed(() => showRarity(props.piece.rarity));
   position: fixed;
   bottom: 1rem;
   left: 1rem;
-  width: 15%;
+  width: 17%;
   background: #222;
   color: #fff;
   padding: 1rem;

@@ -13,11 +13,12 @@ import { Admin } from "../AdminPrograms.ts";
 const emit = defineEmits<{
   (e: 'buy-blueprint', blueprint: PieceBlueprint): void;
   (e: 'buy-item', item: Item): void;
-  (e: 'buy-admin', admin: Admin): void;
   (e: 'refresh-shop'): void;
+  //close shop, open map
 }>();
 
 const props = defineProps<{
+  cssclass: string;
   shopBlueprints: PieceBlueprint[];
   shopItems: InstanceType<typeof Item>[];
   rerollCost: number;
@@ -38,9 +39,6 @@ function handleBuyBlueprint(blueprint: PieceBlueprint) {
 function handleBuyItem(item: Item) {
   emit("buy-item", item);
 }
-function handleBuyAdmin(admin: Admin) {
-  emit("buy-admin", admin);
-}
 //        @select="openItemController"
 
 //canAfford???
@@ -52,10 +50,16 @@ const canBuyItem = ((item: Item) => {
   return (props.player.money >= item.cost && props.player.programs.length + props.player.items.length < props. player.memory);
   //} then must check for admin slots if admin
 });
+
+const type = ((item: Item) => {
+  console.log(item instanceof Admin)
+  return ((item instanceof Admin) ? "admin" : "consumable")
+});
 </script>
 
 <template>
-  <div class="shop-container">
+  <div class="shop-container"
+    :class="props.cssclass">
     <h2>Shop</h2>
     <button
       :disabled="!canReroll"
@@ -79,7 +83,7 @@ const canBuyItem = ((item: Item) => {
       <ItemView 
         v-for="item in props.shopItems"
         :item="item"
-        type="consumable"
+        :type="type(item)"
         cssclass="shop"
         :tileSize="60"
         :canBuy= "canBuyItem(item)"
@@ -103,6 +107,9 @@ const canBuyItem = ((item: Item) => {
   z-index: 10;
   width: 54%;
   height: 60%;
+  transition: transform 0.3s ease;
+  top: 20%;
+  z-index: 99;
 }
 .blueprint-row, .item-row {
   display: flex;
@@ -127,5 +134,12 @@ const canBuyItem = ((item: Item) => {
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+.visible {
+  transform: translateY(0);
+}
+
+.collapsed {
+  transform: translateY(500%);
 }
 </style>

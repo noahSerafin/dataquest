@@ -26,28 +26,28 @@
     id: "274ec329-8c17-4265-8c12-e9a28bcf0833",
     name: "Knife",
     description: "A basic attack piece",
-    unicode: "U+1F5E1",
+    unicode: "U+1F52A",
     maxSize: 3,
     moves: 2,
     range: 1,
     attack: 2,
     defence: 0,
     rarity: 1,
-    color: "#dddcd7",
+    color: "#2fc5ebff",
     isPlaced: false
   }
   const testSword2 = {
     id: "274ec329-8c17-4265-8c12-e9a28bcf0111",
     name: "Knife",
     description: "A basic attack piece",
-    unicode: "U+1F5E1",
+    unicode: "U+1F52A",
     maxSize: 3,
     moves: 2,
     range: 1,
     attack: 2,
     defence: 0,
     rarity: 1,
-    color: "#dddcd7",
+    color: "#2fc5ebff",
     isPlaced: false
   }
 
@@ -205,8 +205,19 @@
       player.value.items.push(item);
     }
   }
+  const showShop = ref(false)
   //--shop-----
 
+  //map
+
+  //game loop
+  const toggleShop = () => {
+    showShop.value = !showShop.value;
+  }
+  //linear: round -> shop -> map
+  //split paths: round -> map -> shopIfShop -> else jround
+
+  //round logic
   const level = ref(castled);
   const displayEditor = ref(false);
   const isPlacing = ref(false);
@@ -395,11 +406,20 @@
 
     displayEditor.value = false; // swap to board view
   };
+
+  //css
+  const shopClass = computed(() => 
+    showShop.value ? 'visible' : 'collapsed'
+  )
+
 </script>
 
 <template>
   <button class="swap-display" @mousedown="swapDisplay()">
     {{ displayEditor ? "Show Board" : "Show Editor" }}
+  </button>
+  <button class="shop-toggle" @mousedown="toggleShop()">
+    Toggle Shop
   </button>
   <div v-if="isPlacing && pieceToPlace">
     <p>Placing:</p>
@@ -415,13 +435,13 @@
 
   <PlayerView v-if="!displayEditor" :player="player" @highlightPlacements="highlightPlacements" @sellPiece="sellPiece" @sellItem="sellItem"/>
   <Shop
+    :cssclass="shopClass"
     :shopBlueprints="shopBlueprints"
     :shopItems="shopItems"
     :rerollCost="rerollCost"
     @refresh-shop="refreshShop(false)"
     @buy-blueprint="buyBlueprint"
     @buy-item="buyItem"
-    @buy-admin="buyAdmin"
     :player="player"
   />
   <Board ref="boardRef" v-if="!displayEditor"
@@ -454,6 +474,10 @@ button{
   top: 2%;
   left: 2%;
 }
+.shop-toggle{
+  top: 6%;
+  left: 2%;
+}
 .end-turn{
   margin-top: 1rem;
 }
@@ -468,5 +492,8 @@ button{
 }
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
+}
+.collapsed{
+  top: 100%;
 }
 </style>

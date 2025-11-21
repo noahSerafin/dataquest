@@ -2,7 +2,7 @@
   import { ref, onMounted, computed} from "vue";
   import Board from './components/Board.vue';
   import Leveleditor from './components/Leveleditor.vue';
-  import { castled } from './levels';
+  import { castled, testMaps } from './levels';
   import { Player } from "./Player";
   import { Item, allItems} from "./Items";
   import { allAdmins } from "./AdminPrograms";

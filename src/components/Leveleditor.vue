@@ -5,7 +5,6 @@ import PieceView from "./PieceView.vue";
 import type { Piece } from "../Pieces";
 import { Spawn } from '../Pieces';
 import {allPieces} from "../Pieces";
-import { visitFunctionBody } from "typescript";
 
 //const pieceClasses: Array<typeof Piece>
 //switch to object for fast lookup when there are "dozens" of pieces

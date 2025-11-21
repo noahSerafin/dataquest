@@ -297,11 +297,15 @@ export const allItems = [Whetstone, Iron, Blueberry, Carrot, Lightning, Blessing
 
 // PINATA, U+1FA85
 
+// IZAKAYA LANTERN, U+1F3EE range
+
 // / HOT PEPPER, U+1F336
 
  //GINGER ROOT, U+1FADA
 
  // U+1F47A
+
+ // TOOLBOX, U+1F9F0
 
 // / RING, U+1F48D
 

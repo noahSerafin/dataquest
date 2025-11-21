@@ -134,7 +134,7 @@ const onAttack = (piece : Piece) => {
   <div
     v-for="(tile, index) in bodyTiles"
     :key="index"
-    :class="`piece-tile ${tile.x}-${tile.y} ${getDirectionClass(tile, index+1)}`"
+    :class="`piece-tile ${tile.x}-${tile.y} ${getDirectionClass(tile, index+1)} team-${props.piece.team}`"
     :style="{
       ...pieceStyle,
       ...getTileStyle(tile),

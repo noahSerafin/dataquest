@@ -572,6 +572,17 @@ class Drum extends Admin {
   //
 }
 
+class Sneakers extends Admin {
+  static name = "Marching Drum";
+  static description = "+2 moves for all programs";
+  static unicode = "U+1F45F";
+  static color = "#36c723ff";
+  constructor() {
+    super(Sneakers.name, Sneakers.description, Sneakers.unicode, Sneakers.color, 6, 3)
+  }
+  //
+}
+
 class Candle extends Admin {
   static name = "Candle";
   static description = "+1 range for all programs";
@@ -589,7 +600,7 @@ class Feather extends Admin {
   static unicode = "U+1FAB6";
   static color = "#ff5555";
   constructor() {
-    super(Feather.name, Feather.description, Feather.unicode, Feather.color, 8, 4)
+    super(Feather.name, Feather.description, Feather.unicode, Feather.color, 8, 5)
   }
   //
 }
@@ -649,12 +660,17 @@ export class Broom extends Admin {
   //
 }
 
-export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, Map, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, Seed, Puzzle, Roger, Bucket, Diamond, Drum, Candle, Feather, Copier, Telescope, Microscope, Lotus, Broom];
+export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, Map, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, Seed, Puzzle, Roger, Bucket, Diamond, Drum, Sneakers, Candle, Feather, Copier, Telescope, Microscope, Lotus, Broom];
 
+// GLOBE WITH MERIDIANS, U+1F310
 //Daemon
 //IMP, U+1F47F
 
 //passive programs
+
+// FLOWER PLAYING CARDS, U+1F3B4
+
+// GAME DIE, U+1F3B2
 
 //PEA POD, U+1FADB
 // PLACARD, U+1FAA7
@@ -704,23 +720,7 @@ export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, 
 //CANDLE, U+1F56F
 // ELECTRIC TORCH, U+1F526
 
-
-//Bosses
-
-//CLOUD, U+2601 //fog of war
-// WIND BLOWING FACE, U+1F32C //move's your pieces down 1 every turn
-// /MIRROR, U+1FA9E //copies your pieces
-//CLASSICAL BUILDING, U+
-//BANK, U+1F3E6 //lose money every tuen
-//EUROPEAN CASTLE, U+1F3F0
-//JAPANESE CASTLE, U+1F3EF
-//FACTORY, U+1F3ED //enemy places every other turn
-// ANCHOR, U+2693 //reduce your moves by 1
-//  CLOUD WITH TORNADO, U+1F32A scrambles spawn points
-//CASTLE, U+26EB
-//CUSTOMS, U+1F6C3
-
-
+// TOOLBOX, U+1F9F0
 
 // ICE CUBE, U+1F9CA
 

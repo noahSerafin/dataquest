@@ -1149,7 +1149,7 @@ class Dolls extends Piece {
 class UFO extends Piece {
   static name = "UFO";
   static description = "A program that can move enemies without increasing their size";
-  static unicode = "";
+  static unicode = "U+1F6F8";
   static color = "#000000ff";
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(UFO.name, UFO.description, UFO.unicode, 4, 0, 1, 0, 0, UFO.color, headPosition, [headPosition], team, 4, removeCallback, id)
@@ -1179,9 +1179,15 @@ class Saw extends Piece {
 
 export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Trench, Lance, Mole, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Copycat, Trap, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Ink, Snail, Shark, Greatshield, Wizard, Ninja, Fairy, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, Dolls, UFO, TP, Saw];
 
+//SNAKE, U+1F40D
+// CROCODILE, U+1F40A
+//T-REX, U+1F996
 //DANCER, U+1F483
-
+// WATER BUFFALO, U+1F403
+// AMBULANCE, U+1F691
 //U+1F9C3 ice cube decreases size each round?
+
+//FROG FACE, U+1F438
 
 //name desc || maxsize moves range atk def
 

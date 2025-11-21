@@ -79,6 +79,8 @@ const isOccupied = (x: number, y: number) => pieceMap.value.has(`${x},${y}`);
 const selectedPiece = ref<Piece | null>(null)
 function handlePieceSelect(piece: Piece) {
   selectedPiece.value = piece
+  //highlight range
+  //if friendly and moves highlight moves
 }
 
 //change to one move at a time

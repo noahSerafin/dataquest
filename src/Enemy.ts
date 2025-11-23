@@ -22,7 +22,9 @@ export async function takeEnemyTurn(
       if (target) {
         highlightTargets(enemy);
         await sleep(300);
-        attackPiece(enemy, target);
+        if(enemy.attack > target.defence){
+          attackPiece(enemy, target);
+        }
         await sleep(delay);
         clearHighlights()
         if(isMaxSize){
@@ -33,10 +35,32 @@ export async function takeEnemyTurn(
       }
 
       // Otherwise, move toward nearest player piece
-      const nearest = findNearestPlayerPiece(enemy, playerPieces);
-      if (!nearest) break;
+      const nearestAttackable = findNearestAttackableCoordinate(enemy, playerPieces);
+      const nearest = findNearestPieceCoordinate(enemy, activePieces);//differentiate between playerPieces/enemyPieces if enemy has a damaging/helpful special
+      //also prioritise nearest if special move??
+      //or decide randomly?
+      
+      console.log(playerPieces, 'nearest:' , nearest);
+      if (!nearest && !nearestAttackable) break;
 
-      const nextStep = getNextStepTowards(enemy.headPosition, nearest.headPosition, tileSet, activePieces);
+      let pathToNearest: Coordinate[] = [];
+      if(nearestAttackable){
+        pathToNearest = findShortestPath(enemy.headPosition, nearestAttackable, tileSet, activePieces) ?? []
+      } else if(nearest){//can't attack but can increase enemies size
+        pathToNearest = findShortestPath(enemy.headPosition, nearest, tileSet, activePieces) ?? []//move toward another piece
+      }
+      console.log(nearest, nearestAttackable, 'path:' , pathToNearest);
+
+
+      let nextStep = null;
+      if(pathToNearest.length > 1){//if there is a path
+        nextStep = pathToNearest[1]//next move should be along this path
+      } else if(nearestAttackable){
+        nextStep = getNextStepTowards(enemy.headPosition, nearestAttackable, tileSet, activePieces);//attempt to get in range
+        //for ranged pieces only??
+      } else if(nearest){
+        nextStep = getNextStepTowards(enemy.headPosition, nearest, tileSet, activePieces);//attempt to get closer to another piece
+      }
       if (nextStep) {
         highlightMoves(enemy);
         await sleep(300);
@@ -63,6 +87,53 @@ function attackPiece(attacker: Piece, defender: Piece) {
   attacker.actions--;
 }
 
+function findNearestAttackableCoordinate(
+  enemy: Piece,
+  playerPieces: Piece[]
+): Coordinate | null {
+  // Filter out pieces that the enemy can't damage
+  const attackable = playerPieces.filter(p => enemy.attack > p.defence);
+  if (attackable.length === 0) return null;
+
+  let minDist = Infinity;
+  let nearestCoord: Coordinate | null = null;
+
+  for (const player of attackable) {
+    for (const tile of player.tiles) {
+      const dist = Math.abs(enemy.headPosition.x - tile.x)
+                 + Math.abs(enemy.headPosition.y - tile.y);
+      if (dist < minDist) {
+        minDist = dist;
+        nearestCoord = tile;
+      }
+    }
+  }
+
+  return nearestCoord;
+}
+
+function findNearestPieceCoordinate(
+  enemy: Piece,
+  otherPieces: Piece[]
+): Coordinate | null {
+
+  let minDist = Infinity;
+  let nearestCoord: Coordinate | null = null;
+
+  for (const player of otherPieces) {
+    for (const tile of player.tiles) {
+      const dist = Math.abs(enemy.headPosition.x - tile.x)
+                 + Math.abs(enemy.headPosition.y - tile.y);
+      if (dist < minDist) {
+        minDist = dist;
+        nearestCoord = tile;
+      }
+    }
+  }
+
+  return nearestCoord;
+}
+
 // Simple "nearest piece" by Manhattan distance
 function findNearestPlayerPiece(enemy: Piece, playerPieces: Piece[]): Piece | null {
   if (playerPieces.length === 0) return null;
@@ -71,6 +142,26 @@ function findNearestPlayerPiece(enemy: Piece, playerPieces: Piece[]): Piece | nu
   let nearest: Piece | null = null;
 
   for (const player of playerPieces) {
+    const dist = Math.abs(enemy.headPosition.x - player.headPosition.x)
+               + Math.abs(enemy.headPosition.y - player.headPosition.y);
+    if (dist < minDist) {
+      minDist = dist;
+      nearest = player;
+    }
+  }
+
+  return nearest;
+}
+
+function findNearestAttackablePlayerPiece(enemy: Piece, playerPieces: Piece[]): Piece | null {
+  // Filter out pieces that the enemy can't damage
+  const attackable = playerPieces.filter(p => enemy.attack > p.defence);
+  if (attackable.length === 0) return null;
+
+  let minDist = Infinity;
+  let nearest: Piece | null = null;
+
+  for (const player of attackable) {
     const dist = Math.abs(enemy.headPosition.x - player.headPosition.x)
                + Math.abs(enemy.headPosition.y - player.headPosition.y);
     if (dist < minDist) {
@@ -95,6 +186,54 @@ function findPlayerInRange(enemy: Piece, playerPieces: Piece[]): Piece | null {
 }
 
 // Move one tile toward the target using simple orthogonal movement
+function findShortestPath(
+  start: Coordinate,
+  goal: Coordinate,
+  levelTiles: Set<string>,        // e.g., Set of "x,y" strings for walkable tiles
+  activePieces: Piece[]
+): Coordinate[] | null {
+  const queue: { pos: Coordinate; path: Coordinate[] }[] = [{ pos: start, path: [start] }];
+  const visited = new Set<string>();
+  visited.add(`${start.x},${start.y}`);
+
+  const directions = [
+    { x: 1, y: 0 },
+    { x: -1, y: 0 },
+    { x: 0, y: 1 },
+    { x: 0, y: -1 },
+  ];
+
+  const occupiedTiles = new Set<string>();
+  for (const p of activePieces) {
+    for (const t of p.tiles) {
+      occupiedTiles.add(`${t.x},${t.y}`);
+    }
+  }
+
+  while (queue.length > 0) {
+    const current = queue.shift()!;
+    const { pos, path } = current;
+
+    // Reached goal
+    if (pos.x === goal.x && pos.y === goal.y) return path;
+
+    for (const dir of directions) {
+      const next = { x: pos.x + dir.x, y: pos.y + dir.y };
+      const key = `${next.x},${next.y}`;
+
+      // Skip if tile is invalid or occupied
+      if (!levelTiles.has(key)) continue;
+      if (occupiedTiles.has(key)) continue;
+      if (visited.has(key)) continue;
+
+      visited.add(key);
+      queue.push({ pos: next, path: [...path, next] });
+    }
+  }
+
+  return null; // No path found
+}
+
 function getNextStepTowards(
   start: Coordinate,
   end: Coordinate,
@@ -130,3 +269,5 @@ function getNextStepTowards(
 
   return validMoves[0];
 }
+
+

@@ -112,6 +112,7 @@
         v-if="selectedPiece"
         :piece="selectedPiece"
         mode="inventory"
+        :canBuy="false"
         @highlightPlacements="handlePlace(selectedPiece)"
         @sell="handleSellPiece(selectedPiece)"
         />

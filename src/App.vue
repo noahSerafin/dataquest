@@ -54,8 +54,8 @@
   }
   const testSling = {
     id: "274ec329-8c17-4265-8c12-e9a28bcf0112",
-    name: "Shield",
-    description: "A basic defensive piece",
+    name: "Sling",
+    description: "A basic ranged piece",
     unicode: "U+1F94F",
     maxSize: 3,
     moves: 2,

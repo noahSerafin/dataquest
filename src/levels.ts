@@ -2974,6 +2974,24 @@ export const siege = {
       "color": "#1b84caff",
       "moves": 2,
       "range": 1
+    },
+    {
+      "id": "c0682cb6-c262-4475-8400-9790921e3765",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 4,
+        "y": 8
+      },
+      "tiles": [
+        {
+          "x": 4,
+          "y": 8
+        }
+      ],
+      "color": "#242424ff",
+      "moves": 0,
+      "range": 0
     }
   ]
 }
@@ -3478,4 +3496,4 @@ export const league = {
   ]
 }
 
-export const testMaps = [castled, siege, siege2, river, cave, forest, arena, alley, ringed, gauntlet, league];
+export const testLevels = [castled, siege, siege2, river, cave, forest, arena, alley, ringed, gauntlet, league];

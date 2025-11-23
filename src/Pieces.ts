@@ -991,7 +991,7 @@ class Decoy extends Piece {
   static unicode = "U+1FAB5";
   static color = "#96ff0dff";
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Decoy.name, Decoy.description, Decoy.unicode, 4, 3, 0, 0, 2, Decoy.color, headPosition, [headPosition], team, 3, removeCallback, id)
+   super(Decoy.name, Decoy.description, Decoy.unicode, 4, 3, 3, 0, 2, Decoy.color, headPosition, [headPosition], team, 3, removeCallback, id)
   }
 }
 

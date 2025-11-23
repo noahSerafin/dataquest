@@ -15,4 +15,10 @@ export type PieceBlueprint = {
   color: string
   isPlaced: boolean
   // maybe upgrade info later, etc...
+  //tiles optional for maps
+}
+
+export type Level = {
+  tiles: Coordinate[],
+  pieces: any[]//change to blueprints later
 }

@@ -117,3 +117,6 @@ APP
 game logic
 swap between shop -> map -> board
 increment difficulty
+
+
+I've made a few test levels with the editor, and I'd like to make a map component to display in the App.vue that emits a new tileset to app. I'd like the map to display minature views of each tileset, just showing the shape of a level, and coloring the tiles in the minature red for enemies and blue for player spawns.

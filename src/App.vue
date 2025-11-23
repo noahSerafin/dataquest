@@ -2,7 +2,7 @@
   import { ref, onMounted, computed} from "vue";
   import Board from './components/Board.vue';
   import Leveleditor from './components/Leveleditor.vue';
-  import { castled, testMaps } from './levels';
+  import { castled, testLevels } from './levels';
   import { Player } from "./Player";
   import { Item, allItems} from "./Items";
   import { allAdmins } from "./AdminPrograms";
@@ -11,8 +11,9 @@
   import type { Piece } from "./Pieces"
   import { Spawn } from './Pieces';
   import { allPieces } from "./Pieces"
-  import type { Coordinate, PieceBlueprint } from "./types";
+  import type { Coordinate, PieceBlueprint, Level } from "./types";
   import { takeEnemyTurn } from "./Enemy";
+  import Map from "./components/Map.vue";
   import Shop from "./components/Shop.vue";
 
   //import { Map } from "./components/Map.vue";
@@ -54,9 +55,6 @@
   const swapDisplay = () => {
     displayEditor.value = !displayEditor.value;//add map later, make shop an overlay?
   }
-
-  //pieceMap to track occupied spaces
-  const activePieces = ref<InstanceType<typeof Piece>[]>([]);
   
   const player = ref(new Player(
     20, // starting money
@@ -206,9 +204,32 @@
     }
   }
   const showShop = ref(false)
+  const showMap = ref(false)
   //--shop-----
 
+  //round logic
+  //pieceMap to track occupied spaces
+  const activePieces = ref<InstanceType<typeof Piece>[]>([]);
+  const playerSpawns = ref<Coordinate[]>([]);
+  const level = ref(castled);//tiles
+  const displayEditor = ref(false);
+  const isPlacing = ref(false);
+  const hasFinishedTurn = ref(false);
+  const isFirstTurn = ref(true);
+  
+  const pieceToPlace = ref<PieceBlueprint | null>(null);
+  
   //map
+  const toggleMap = () => {
+    showMap.value = !showMap.value;
+  }
+
+  const selectLevel = (newLevel: Level) => {
+    level.value = newLevel;
+    const newPieces = rehydratePieces(newLevel.pieces);
+    activePieces.value = processSpawnPoints(newPieces);
+    toggleMap();
+  }
 
   //game loop
   const toggleShop = () => {
@@ -217,16 +238,6 @@
   //linear: round -> shop -> map
   //split paths: round -> map -> shopIfShop -> else jround
 
-  //round logic
-  const level = ref(castled);
-  const displayEditor = ref(false);
-  const isPlacing = ref(false);
-  const hasFinishedTurn = ref(false);
-  const isFirstTurn = ref(true);
-
-  const pieceToPlace = ref<PieceBlueprint | null>(null);
-  const playerSpawns = ref<Coordinate[]>([]);
-  
   const newPlacementHighlights = () => {//board should only show these if isPlacing
     const highlights: Coordinate[] = [];
     const tileSet = new Set(level.value.tiles.map(t => `${t.x},${t.y}`));
@@ -412,15 +423,24 @@
     showShop.value ? 'visible' : 'collapsed'
   )
 
+  const mapClass = computed(() => 
+    showMap.value ? 'visible' : 'collapsed'
+  )
+
 </script>
 
 <template>
-  <button class="swap-display" @mousedown="swapDisplay()">
-    {{ displayEditor ? "Show Board" : "Show Editor" }}
-  </button>
-  <button class="shop-toggle" @mousedown="toggleShop()">
-    Toggle Shop
-  </button>
+  <div class="controls">
+    <button class="swap-display" @mousedown="swapDisplay()">
+      {{ displayEditor ? "Show Board" : "Show Editor" }}
+    </button>
+    <button class="shop-toggle" @mousedown="toggleShop()">
+      Toggle Shop
+    </button>
+    <button class="map-toggle" @mousedown="toggleMap()">
+      Toggle Map
+    </button>
+  </div>
   <div v-if="isPlacing && pieceToPlace">
     <p>Placing:</p>
   </div>
@@ -434,6 +454,11 @@
   <div v-if="!hasFinishedTurn && !isPlacing">Your turn</div>
 
   <PlayerView v-if="!displayEditor" :player="player" @highlightPlacements="highlightPlacements" @sellPiece="sellPiece" @sellItem="sellItem"/>
+  <Map
+    :levels="testLevels"
+    @select-level="selectLevel"
+    :cssclass="mapClass"
+  />
   <Shop
     :cssclass="shopClass"
     :shopBlueprints="shopBlueprints"
@@ -463,20 +488,18 @@
   display: flex;
   justify-content: center;
 }
-button{
+.controls{
   position: absolute;
   background-color: transparent;
   color: white;
   border: 1px solid white;
   padding: 2px 4px;
-}
-.swap-display{
   top: 2%;
   left: 2%;
-}
-.shop-toggle{
-  top: 6%;
-  left: 2%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
 }
 .end-turn{
   margin-top: 1rem;

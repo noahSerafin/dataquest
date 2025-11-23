@@ -241,11 +241,19 @@
     showMap.value = !showMap.value;
   }
 
+  const renewBlueprints = () => {
+    player.value.programs.forEach(blueprint => {
+      blueprint.isPlaced = false;
+    });
+  }
+
   const selectLevel = (newLevel: Level) => {
+    isFirstTurn.value = true;
     activePieces.value = []
     level.value = newLevel;
     const newPieces = rehydratePieces(newLevel.pieces);
     activePieces.value = processSpawnPoints(newPieces);
+    renewBlueprints();
     toggleMap();
   }
 

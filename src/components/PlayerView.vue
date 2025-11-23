@@ -42,6 +42,9 @@
         emit('sellPiece', blueprint.id);
         selectedPiece.value = null
     }
+    const handleClose = () => [
+        selectedPiece.value = null
+    ]
 
     //progams can be placed on board, greying them out in inventory, use a similar popup to pieceController but with place/sell buttons
     //items can be used on programs, confirmation window to execute their function
@@ -117,6 +120,7 @@
         :canBuy="false"
         @highlightPlacements="handlePlace(selectedPiece)"
         @sell="handleSellPiece(selectedPiece)"
+        @close="handleClose"
         />
     </div>
 </template>

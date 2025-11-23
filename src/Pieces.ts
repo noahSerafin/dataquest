@@ -577,7 +577,7 @@ class Hopper extends Piece {
   static color = "#9aff46";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Hopper.name, Hopper.description, Hopper.unicode, 1, 3, 1, 2, 2, Hopper.color, headPosition, [headPosition], team, Hopper.rarity, removeCallback, id)
+   super(Hopper.name, Hopper.description, Hopper.unicode, 1, 3, 1, 2, 1, Hopper.color, headPosition, [headPosition], team, Hopper.rarity, removeCallback, id)
   }
   //jump over other programs next to it
 }
@@ -914,7 +914,7 @@ class Scorpion extends Piece {
   static color = "#681f08ff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Scorpion.name, Scorpion.description, Scorpion.unicode, 3, 1, 1, 2, 0, Scorpion.color, headPosition, [headPosition], team, Scorpion.rarity, removeCallback, id)
+   super(Scorpion.name, Scorpion.description, Scorpion.unicode, 2, 1, 1, 2, 1, Scorpion.color, headPosition, [headPosition], team, Scorpion.rarity, removeCallback, id)
   }
 
   //apply poison status

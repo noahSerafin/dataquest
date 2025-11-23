@@ -24,14 +24,14 @@ export async function takeEnemyTurn(
         await sleep(300);
         if(enemy.attack > target.defence){
           attackPiece(enemy, target);
+          await sleep(delay);
+          clearHighlights()
+          if(isMaxSize){
+            continue;
+          }
+        } else {
+          clearHighlights();//move laterally to the player
         }
-        await sleep(delay);
-        clearHighlights()
-        if(isMaxSize){
-          continue;
-        } //else {
-          //move laterally to the player
-        //}
       }
 
       // Otherwise, move toward nearest player piece
@@ -40,7 +40,8 @@ export async function takeEnemyTurn(
       //also prioritise nearest if special move??
       //or decide randomly?
       
-      console.log(playerPieces, 'nearest:' , nearest);
+      console.log('nearest:' , nearest);
+      console.log('nearestAttackable:' , nearestAttackable);
       if (!nearest && !nearestAttackable) break;
 
       let pathToNearest: Coordinate[] = [];
@@ -49,7 +50,7 @@ export async function takeEnemyTurn(
       } else if(nearest){//can't attack but can increase enemies size
         pathToNearest = findShortestPath(enemy.headPosition, nearest, tileSet, activePieces) ?? []//move toward another piece
       }
-      console.log(nearest, nearestAttackable, 'path:' , pathToNearest);
+      console.log('path:' , pathToNearest);
 
 
       let nextStep = null;
@@ -66,10 +67,20 @@ export async function takeEnemyTurn(
         await sleep(300);
         enemy.moveTo(nextStep);
         await sleep(delay);
-        clearHighlights()
+        clearHighlights();
       } else {
         // Cannot move, skip
         break;
+      }
+
+      const newTarget = findPlayerInRange(enemy, playerPieces);
+      if (newTarget && enemy.attack > newTarget.defence) {
+        highlightTargets(enemy);
+        await sleep(300);
+        attackPiece(enemy, newTarget);
+        await sleep(delay);
+        clearHighlights();
+        continue; // still in loop if actions > 0
       }
     }
   }
@@ -112,7 +123,7 @@ function findNearestAttackableCoordinate(
   return nearestCoord;
 }
 
-function findNearestPieceCoordinate(
+function findNearestPieceCoordinate(//player/ enemy
   enemy: Piece,
   otherPieces: Piece[]
 ): Coordinate | null {
@@ -134,54 +145,22 @@ function findNearestPieceCoordinate(
   return nearestCoord;
 }
 
-// Simple "nearest piece" by Manhattan distance
-function findNearestPlayerPiece(enemy: Piece, playerPieces: Piece[]): Piece | null {
-  if (playerPieces.length === 0) return null;
-
-  let minDist = Infinity;
-  let nearest: Piece | null = null;
-
-  for (const player of playerPieces) {
-    const dist = Math.abs(enemy.headPosition.x - player.headPosition.x)
-               + Math.abs(enemy.headPosition.y - player.headPosition.y);
-    if (dist < minDist) {
-      minDist = dist;
-      nearest = player;
-    }
-  }
-
-  return nearest;
-}
-
-function findNearestAttackablePlayerPiece(enemy: Piece, playerPieces: Piece[]): Piece | null {
-  // Filter out pieces that the enemy can't damage
-  const attackable = playerPieces.filter(p => enemy.attack > p.defence);
-  if (attackable.length === 0) return null;
-
-  let minDist = Infinity;
-  let nearest: Piece | null = null;
-
-  for (const player of attackable) {
-    const dist = Math.abs(enemy.headPosition.x - player.headPosition.x)
-               + Math.abs(enemy.headPosition.y - player.headPosition.y);
-    if (dist < minDist) {
-      minDist = dist;
-      nearest = player;
-    }
-  }
-
-  return nearest;
-}
-
 // Check if any player piece is in range
 function findPlayerInRange(enemy: Piece, playerPieces: Piece[]): Piece | null {
+  const ex = enemy.headPosition.x;
+  const ey = enemy.headPosition.y;
+
   for (const player of playerPieces) {
-    const dx = Math.abs(enemy.headPosition.x - player.headPosition.x);
-    const dy = Math.abs(enemy.headPosition.y - player.headPosition.y);
-    if (dx + dy <= enemy.range) {
-      return player;
+    for (const tile of player.tiles) {
+      const dx = Math.abs(ex - tile.x);
+      const dy = Math.abs(ey - tile.y);
+
+      if (dx + dy <= enemy.range) {
+        return player;//{ player, tile };
+      }
     }
   }
+
   return null;
 }
 

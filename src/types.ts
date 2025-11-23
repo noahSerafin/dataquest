@@ -18,7 +18,7 @@ export type PieceBlueprint = {
 }
 
 export type Level = {
-  difficulty: number,
+  name: string
   tiles: Coordinate[],
   pieces: any[]
 }

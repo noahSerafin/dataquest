@@ -473,7 +473,7 @@ class Web extends Piece {
   static description = "A program that freezes enemies moving over it";
   static unicode = "U+1F578";
   static color = "#cfcfcfff";
-  static rarity = 1;
+  static rarity = 8; //should not appear on its own
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Web.name, Web.description, Web.unicode, 1, 0, 0, 0, 0, Web.color, headPosition, [headPosition], team, Web.rarity, removeCallback, id)
   }

@@ -46,8 +46,16 @@ function handleBuyItem(item: Item) {
 const canReroll = computed(() => props.player.money >= props.rerollCost);
 
 const canBuyItem = ((item: Item) => {
+  if(item instanceof Admin){
+    return (props.player.money >= item.cost && props.player.admins.length < props.player.adminSlots)
+  } else {
+    return (props.player.money >= item.cost && props.player.programs.length + props.player.items.length < props. player.memory);
+  }
+});
+
+const canBuyPiece = ((piece: PieceBlueprint) => {
   //check if item {
-  return (props.player.money >= item.cost && props.player.programs.length + props.player.items.length < props. player.memory);
+  return (props.player.money >= ((piece.rarity*2) -1) && props.player.programs.length + props.player.items.length < props. player.memory);
   //} then must check for admin slots if admin
 });
 
@@ -94,6 +102,7 @@ const type = ((item: Item) => {
         v-if="selectedPiece"
         :piece="selectedPiece"
         mode="shop"
+        :canBuy= "canBuyPiece(selectedPiece)"
         @buy="handleBuyBlueprint"
         />
   </div>

@@ -6,6 +6,7 @@ import { Piece } from "../Pieces"
 const props = defineProps<{ 
   piece: InstanceType<typeof Piece> | PieceBlueprint
   mode: 'shop' | 'inventory' | 'action'
+  canBuy: boolean;
 }>()
 
 // Type guard: true if this is a real in-game instance
@@ -13,7 +14,7 @@ function isInstance(p: any): p is InstanceType<typeof Piece> {
   return p instanceof Piece
 }
 
-defineEmits(['highlightMoves', 'attack', 'special', 'highlightPlacements', 'highlightTargets', 'sell', 'buy'])//TODO place goes in board/player //sell goes in player
+defineEmits(['highlightMoves', 'attack', 'special', 'highlightPlacements', 'highlightTargets', 'sell', 'buy', 'close'])//TODO place goes in board/player //sell goes in player
 
 function showRarity(rarity: number) {
   switch (rarity) {
@@ -59,6 +60,7 @@ const rarityInfo = computed(() => showRarity(props.piece.rarity));
           {{ String.fromCodePoint(parseInt(piece.unicode.replace('U+', ''), 16)) }}
         </span>
         <span class="name">{{ piece.name }}</span>
+        <button class="close" @click="$emit('close', piece)">X</button>
       </div>
       <div v-if="mode === 'shop'">- program -</div>
 
@@ -79,7 +81,7 @@ const rarityInfo = computed(() => showRarity(props.piece.rarity));
 
       <div class="actions">
         <template v-if="mode === 'shop'">
-          <button @click="$emit('buy', piece)">Buy (${{ piece.rarity * 2 - 1 }})</button>
+          <button :disabled="!canBuy" @click="$emit('buy', piece)">Buy (${{ piece.rarity * 2 - 1 }})</button>
         </template>
         <template v-if="mode === 'inventory'">
           <button @click="$emit('highlightPlacements', piece)">Place</button>
@@ -97,6 +99,11 @@ const rarityInfo = computed(() => showRarity(props.piece.rarity));
 </template>
 
 <style scoped>
+.close{
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+}
 .piece-controller {
   text-align: left;
   position: fixed;
@@ -149,7 +156,10 @@ button {
 button:hover {
   background: #777;
 }
-
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.2s;
 }

@@ -38,20 +38,35 @@
     color: "#2fc5ebff",
     isPlaced: false
   }
-  const testSword2 = {
+  const testShield = {
     id: "274ec329-8c17-4265-8c12-e9a28bcf0111",
-    name: "Knife",
-    description: "A basic attack piece",
-    unicode: "U+1F52A",
+    name: "Shield",
+    description: "A basic defensive piece",
+    unicode: "U+1F6E1",
     maxSize: 3,
     moves: 2,
-    range: 1,
-    attack: 2,
+    range: 0,
+    attack: 0,
+    defence: 1,
+    rarity: 1,
+    color: "#2fc5ebff",
+    isPlaced: false
+  }
+  const testSling = {
+    id: "274ec329-8c17-4265-8c12-e9a28bcf0112",
+    name: "Shield",
+    description: "A basic defensive piece",
+    unicode: "U+1F94F",
+    maxSize: 3,
+    moves: 2,
+    range: 2,
+    attack: 1,
     defence: 0,
     rarity: 1,
     color: "#2fc5ebff",
     isPlaced: false
   }
+
 
   const swapDisplay = () => {
     displayEditor.value = !displayEditor.value;//add map later, make shop an overlay?
@@ -62,7 +77,7 @@
     5,  // memory limit
     3, //admin slots
     [], // no items yet
-    [testSword, testSword2],//, testShield] // starting pieces
+    [testSword, testShield, testSling],//, testShield] // starting pieces
     []//no admins yet
   ));
 

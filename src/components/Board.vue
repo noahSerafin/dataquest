@@ -203,6 +203,10 @@ defineExpose({
   clearHighlights
 });
 
+const deselect = () => {
+  selectedPiece.value = null;
+}
+
 </script>
 
 
@@ -289,6 +293,7 @@ defineExpose({
       :hasFinishedTurn="hasFinishedTurn"
       @highlightMoves="highlightMoves"
       @highlightTargets="highlightTargets"
+      @close="deselect"
       />
       <!--
         @special="console.log('Special', $event)"

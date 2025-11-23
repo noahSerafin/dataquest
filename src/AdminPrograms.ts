@@ -220,13 +220,13 @@ class Notepad extends Admin {
   //
 }
 
-class Map extends Admin {
-  static name = "Map";
+class AdminMap extends Admin {
+  static name = "AdminMap";
   static description = "See the incoming level in advance";
   static unicode = "U+1F5FA";
   static color = "#001cbbff";
   constructor() {
-    super(Map.name, Map.description, Map.unicode, Map.color, 1, 2)
+    super(AdminMap.name, AdminMap.description, AdminMap.unicode, AdminMap.color, 1, 2)
   }
   //
 }
@@ -660,7 +660,7 @@ export class Broom extends Admin {
   //
 }
 
-export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, Map, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, Seed, Puzzle, Roger, Bucket, Diamond, Drum, Sneakers, Candle, Feather, Copier, Telescope, Microscope, Lotus, Broom];
+export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, Seed, Puzzle, Roger, Bucket, Diamond, Drum, Sneakers, Candle, Feather, Copier, Telescope, Microscope, Lotus, Broom];
 
 // GLOBE WITH MERIDIANS, U+1F310
 //Daemon

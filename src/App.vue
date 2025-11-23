@@ -13,7 +13,7 @@
   import { allPieces } from "./Pieces"
   import type { Coordinate, PieceBlueprint, Level } from "./types";
   import { takeEnemyTurn } from "./Enemy";
-  import Map from "./components/Map.vue";
+  import WorldMap from "./components/WorldMap.vue";
   import Shop from "./components/Shop.vue";
 
   //import { Map } from "./components/Map.vue";
@@ -238,7 +238,7 @@
   //linear: round -> shop -> map
   //split paths: round -> map -> shopIfShop -> else jround
 
-  const newPlacementHighlights = () => {//board should only show these if isPlacing
+  const newPlacementHighlights = (): Coordinate[] => {//board should only show these if isPlacing
     const highlights: Coordinate[] = [];
     const tileSet = new Set(level.value.tiles.map(t => `${t.x},${t.y}`));
 
@@ -454,7 +454,7 @@
   <div v-if="!hasFinishedTurn && !isPlacing">Your turn</div>
 
   <PlayerView v-if="!displayEditor" :player="player" @highlightPlacements="highlightPlacements" @sellPiece="sellPiece" @sellItem="sellItem"/>
-  <Map
+  <WorldMap
     :levels="testLevels"
     @select-level="selectLevel"
     :cssclass="mapClass"

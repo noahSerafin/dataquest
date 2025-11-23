@@ -419,6 +419,7 @@
       p.actions = 1;
       p.movesRemaining = p.moves;
     });
+    playerSpawns.value = newPlacementHighlights();
     hasFinishedTurn.value = false;
   }
 

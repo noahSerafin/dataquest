@@ -77,10 +77,14 @@ const pieceMap = computed(() => {
 const isOccupied = (x: number, y: number) => pieceMap.value.has(`${x},${y}`);
 
 const selectedPiece = ref<Piece | null>(null)
-function handlePieceSelect(piece: Piece) {
+function handlePieceSelect(piece: Piece) {//handleselect
   selectedPiece.value = piece
   //highlight range
-  //if friendly and moves highlight moves
+  if(piece.team === 'enemy'){
+    highlightTargets(piece);
+  } else {
+    highlightMoves(piece);
+  }
 }
 
 //change to one move at a time
@@ -130,7 +134,7 @@ const movePiece = (coord : Coordinate) => {//todo moves piece, but does not add 
   }else {
     clearHighlights();
   }
-  console.log('tiles: ', selectedPiece.value.tiles);
+  //console.log('tiles: ', selectedPiece.value.tiles);
 }
 
 function getTilesInRange(
@@ -205,6 +209,7 @@ defineExpose({
 
 const deselect = () => {
   selectedPiece.value = null;
+  clearHighlights();
 }
 
 </script>
@@ -291,6 +296,7 @@ const deselect = () => {
       :piece="selectedPiece"
       mode="action"
       :hasFinishedTurn="hasFinishedTurn"
+      :canBuy="false"
       @highlightMoves="highlightMoves"
       @highlightTargets="highlightTargets"
       @close="deselect"

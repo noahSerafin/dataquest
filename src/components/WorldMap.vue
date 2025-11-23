@@ -112,6 +112,7 @@
         gap: 0.5px;
         gap: 12px;
         width: 48%;
+        height: 70%;
         background-color: beige;
         padding: 1rem;
     }
@@ -123,6 +124,7 @@
         border-radius: 4px;
         background-color: black;
         transition: transform 0.1s;
+        height: fit-content;
     }
 
     .map-wrapper:hover {
@@ -135,8 +137,8 @@
 
     .mini-tile {
         position: absolute;
-        width: 8px;
-        height: 8px;
+        width: 6px;
+        height: 6px;
         outline: 1px solid black;
     }
 

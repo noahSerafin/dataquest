@@ -21,42 +21,48 @@ BOARD
 -allow placing on spawners, then next to owned tiles - done
 
 
-PIECES
+ITEMS 3
+implement item functions
 
-implement rarity/value 3
+PIECES 4
 
-move
+statuses 3
+
 -test highlights - done
 
 -moving piece should update board - done
 
 -move should add to size up to max size - done
 
-
 -atk function -done-
 
 statuses
 special functions
+keep track of upgrades and display on piece
+variants? 
 
 ADMIN PIECES 4
 
-make class 
+- make class - done 
 
 work out how abilities will effect every piece 4
 
 
 PLAYER
+disable moving if placing/disable placing if moving 3
+
 -placement 
 -allow placing on spawners - done
 -and next to owned tiles - done
 -placing on a spawner should remove the highlight for that spwaner - done
 
-grey out from inventory until round end - retain ID for stats? return will have to reset tiles to [] - done with blueprints
+- grey out from inventory until round end - retain ID for stats? return will have to reset tiles to [] - done with blueprints
 
-sell
+- sell - done
 rarity = value ?+=no. of upgrades used on a piece? 3
 
-AI 3
+
+AI 2/3
 functions:
     - findNearestPlayerPiece - done
     pathfinding a -> b in a grid
@@ -89,34 +95,38 @@ if maxSize && playerInRange {
 }
 
 
-ITEMS 4
 
-implement item functions
-
-SHOP 3
+SHOP
 - rarity - done
-two piece/item slots
-piece packs/item packs
-reroll button - incomplete
+- two piece/item slots
+piece packs/item packs?
+- reroll button - done
 
 vouchers?
 
 
 MAP 5
 
-loads from levels.ts
+- loads from levels.ts - done
 isometric view?
 branching paths
 see two maps ahead?
-hover/click to show map preview of tiles + spawns in popout
-increments difficutly, multiple levels files?
+path examples before boss(paths meeting point):
+    one level +1 difficulty, shop
+    one level +0 difficulty, one level +0 difficulty
+    one level +0 difficulty, one level +1 difficulty
+    one level +2 difficulty, shop
+
+- hover/click to show map preview of tiles + spawns in popout - done
+- increments difficutly - done
+multiple levels files?
 boss levels
 
 
-APP 
+APP 6
 game logic
+disable moving if placing/disable placing if moving 3
+end rounds, reset board -> open map
+map -> click on shop, open shop, click on level, open board
 swap between shop -> map -> board
 increment difficulty
-
-
-I've made a few test levels with the editor, and I'd like to make a map component to display in the App.vue that emits a new tileset to app. I'd like the map to display minature views of each tileset, just showing the shape of a level, and coloring the tiles in the minature red for enemies and blue for player spawns.

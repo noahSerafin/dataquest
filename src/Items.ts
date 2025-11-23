@@ -293,7 +293,20 @@ class Genie extends Item {
   //after 3 destroy genie
 }
 
-export const allItems = [Whetstone, Iron, Blueberry, Carrot, Lightning, Blessing, Supplement, Juice, Roids, Formula, Garlic, RedMeat, Coffee, Bandage, Soap, Voucher, Mushroom, Rations, Beans, Box, Wand, Genie]
+class Hourglass extends Item {
+  static name = "Hourglass";
+  static description = "Retry a round";
+  static unicode = "U+231B";
+  static color = "#000000ff";
+  constructor() {
+   super(Hourglass.name, Hourglass.description, Hourglass.unicode, Hourglass.color, 10, 4)
+  }
+
+  //create any program, keep track of uses
+  //after 3 destroy genie
+}
+
+export const allItems = [Whetstone, Iron, Blueberry, Carrot, Lightning, Blessing, Supplement, Juice, Roids, Formula, Garlic, RedMeat, Coffee, Bandage, Soap, Voucher, Mushroom, Rations, Beans, Box, Wand, Genie, Hourglass]
 
 // PINATA, U+1FA85
 

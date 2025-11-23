@@ -734,7 +734,7 @@ class Bat extends Piece {
   static color = "#ff290dff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Bat.name, Bat.description, Bat.unicode, 1, 3, 1, 1, 0, Bat.color, headPosition, [headPosition], team, Bat.rarity, removeCallback, id)
+   super(Bat.name, Bat.description, Bat.unicode, 2, 3, 1, 1, 0, Bat.color, headPosition, [headPosition], team, Bat.rarity, removeCallback, id)
   }
 
   //raise defence +1 if total dmg > 0
@@ -1193,12 +1193,12 @@ export class Sol extends Piece {//not passive
 
 class Vampire extends Piece {
   static name = "Vampire";
-  static description = "Steals tiles of other programs, increasing its max size";
+  static description = "Steals tiles of other programs, increasing its max size and stats";
   static unicode = "U+1F9DB";
   static color = "#000000ff";
   static rarity = 6;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Vampire.name, Vampire.description, Vampire.unicode, 4, 0, 1, 1, 0, Vampire.color, headPosition, [headPosition], team, Vampire.rarity, removeCallback, id)
+   super(Vampire.name, Vampire.description, Vampire.unicode, 4, 1, 1, 1, 0, Vampire.color, headPosition, [headPosition], team, Vampire.rarity, removeCallback, id)
   }
 }
 

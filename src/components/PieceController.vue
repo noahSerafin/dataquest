@@ -156,4 +156,13 @@ button:hover {
 .fade-enter-from, .fade-leave-to {
   opacity: 0;
 }
+p{
+  margin-top: 5px;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+  border-bottom: 1px solid white;
+}
+.desc{
+  border-bottom: none;
+}
 </style>

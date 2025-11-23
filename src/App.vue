@@ -15,6 +15,7 @@
   import { takeEnemyTurn } from "./Enemy";
   import WorldMap from "./components/WorldMap.vue";
   import Shop from "./components/Shop.vue";
+  import { DIFFICULTY_RARITY } from "./constants";
 
   //import { Map } from "./components/Map.vue";
 
@@ -212,11 +213,11 @@
   const activePieces = ref<InstanceType<typeof Piece>[]>([]);
   const playerSpawns = ref<Coordinate[]>([]);
   const level = ref(castled);//tiles
+  const difficulty = ref(1);
   const displayEditor = ref(false);
   const isPlacing = ref(false);
   const hasFinishedTurn = ref(false);
   const isFirstTurn = ref(true);
-  
   const pieceToPlace = ref<PieceBlueprint | null>(null);
   
   //map
@@ -284,9 +285,18 @@
 
         // Enemy spawn → replace with random enemy piece
         if (piece.team === 'enemy') {
-          const EnemyClass = allPieces[Math.floor(Math.random() * allPieces.length)];//base this off rarity/difficulty later
+          //difficulty from constants ramp
+          const { min, max } = DIFFICULTY_RARITY[difficulty.value];
+          const validEnemies = allPieces.filter(p =>
+            p.rarity >= min && p.rarity <= max
+          );
+          const pool = validEnemies.length > 0 ? validEnemies : allPieces;
+          console.log('lengths:', min, max, allPieces.length, pool.length)
+
+          const EnemyClass = pool[Math.floor(Math.random() * pool.length)];
+          //allPieces[Math.floor(Math.random() * allPieces.length)];//base this off rarity/difficulty later
+
           const enemyInstance = new EnemyClass(piece.headPosition, 'enemy', removePiece);
-          enemyInstance.team = 'enemy'
           processed.push(enemyInstance);
           continue;
         }
@@ -427,6 +437,13 @@
     showMap.value ? 'visible' : 'collapsed'
   )
 
+  const increaseDifficulty = () => {
+    difficulty.value += 1;
+  }
+  const decreaseDifficulty = () => {
+    difficulty.value -= 1;
+  }
+
 </script>
 
 <template>
@@ -439,6 +456,13 @@
     </button>
     <button class="map-toggle" @mousedown="toggleMap()">
       Toggle Map
+    </button>
+    <p>Security level: {{ difficulty }}</p>
+    <button class="difficulty" @mousedown="increaseDifficulty()">
+      Increase Security
+    </button>
+    <button class="difficulty" @mousedown="decreaseDifficulty()">
+      Decrease Security
     </button>
   </div>
   <div v-if="isPlacing && pieceToPlace">

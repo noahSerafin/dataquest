@@ -14,11 +14,11 @@ export type PieceBlueprint = {
   rarity: number
   color: string
   isPlaced: boolean
-  // maybe upgrade info later, etc...
-  //tiles optional for maps
+  //headposition, tiles optional for maps
 }
 
 export type Level = {
+  difficulty: number,
   tiles: Coordinate[],
-  pieces: any[]//change to blueprints later
+  pieces: any[]
 }

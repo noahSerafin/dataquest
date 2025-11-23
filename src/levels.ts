@@ -116,7 +116,6 @@ export const castled = {
           "y": 0
         }
       ],
-      "color": "#242424ff",
       "moves": 0,
       "range": 0
     },
@@ -146,7 +145,6 @@ export const castled = {
           "y": 1
         }
       ],
-      "color": "#ffa700",
       "moves": 2,
       "range": 0
     },
@@ -164,7 +162,7 @@ export const castled = {
           "y": 4
         }
       ],
-      "color": "#242424ff",
+    
       "moves": 0,
       "range": 0
     }
@@ -488,7 +486,6 @@ export const siege2 = {
           "y": 3
         }
       ],
-      "color": "#ff5100ff",
       "moves": 2,
       "range": 0
     },
@@ -506,7 +503,6 @@ export const siege2 = {
           "y": 4
         }
       ],
-      "color": "#019700",
       "moves": 2,
       "range": 3
     },
@@ -524,7 +520,6 @@ export const siege2 = {
           "y": 4
         }
       ],
-      "color": "#019700",
       "moves": 2,
       "range": 3
     },
@@ -542,7 +537,7 @@ export const siege2 = {
           "y": 3
         }
       ],
-      "color": "#242424ff",
+    
       "moves": 0,
       "range": 0
     },
@@ -560,7 +555,7 @@ export const siege2 = {
           "y": 3
         }
       ],
-      "color": "#242424ff",
+    
       "moves": 0,
       "range": 0
     },
@@ -578,7 +573,7 @@ export const siege2 = {
           "y": 7
         }
       ],
-      "color": "#242424ff",
+    
       "moves": 0,
       "range": 0
     }
@@ -774,7 +769,7 @@ export const cave = {
           "y": 6
         }
       ],
-      "color": "#242424ff",
+    
       "moves": 0,
       "range": 0
     },
@@ -792,7 +787,7 @@ export const cave = {
           "y": 0
         }
       ],
-      "color": "#242424ff",
+    
       "moves": 0,
       "range": 0
     },
@@ -810,7 +805,7 @@ export const cave = {
           "y": 0
         }
       ],
-      "color": "#242424ff",
+    
       "moves": 0,
       "range": 0
     },
@@ -828,7 +823,7 @@ export const cave = {
           "y": 0
         }
       ],
-      "color": "#242424ff",
+    
       "moves": 0,
       "range": 0
     }
@@ -1252,7 +1247,7 @@ export const forest = {
           "y": 2
         }
       ],
-      "color": "#242424ff",
+    
       "moves": 0,
       "range": 0
     },
@@ -1270,7 +1265,7 @@ export const forest = {
           "y": 6
         }
       ],
-      "color": "#242424ff",
+    
       "moves": 0,
       "range": 0
     },
@@ -1288,7 +1283,7 @@ export const forest = {
           "y": 5
         }
       ],
-      "color": "#242424ff",
+    
       "moves": 0,
       "range": 0
     },
@@ -1306,7 +1301,7 @@ export const forest = {
           "y": 3
         }
       ],
-      "color": "#242424ff",
+    
       "moves": 0,
       "range": 0
     },
@@ -1324,7 +1319,7 @@ export const forest = {
           "y": 2
         }
       ],
-      "color": "#242424ff",
+    
       "moves": 0,
       "range": 0
     },
@@ -1342,7 +1337,7 @@ export const forest = {
           "y": 4
         }
       ],
-      "color": "#242424ff",
+    
       "moves": 0,
       "range": 0
     },
@@ -1360,7 +1355,7 @@ export const forest = {
           "y": 10
         }
       ],
-      "color": "#242424ff",
+    
       "moves": 0,
       "range": 0
     }
@@ -1548,7 +1543,7 @@ export const arena = {
           "y": 2
         }
       ],
-      "color": "#242424ff",
+    
       "moves": 0,
       "range": 0
     },
@@ -1566,7 +1561,7 @@ export const arena = {
           "y": 6
         }
       ],
-      "color": "#242424ff",
+    
       "moves": 0,
       "range": 0
     }
@@ -1710,7 +1705,7 @@ export const river = {
           "y": 0
         }
       ],
-      "color": "#242424ff",
+    
       "moves": 0,
       "range": 0
     },
@@ -1728,7 +1723,6 @@ export const river = {
           "y": 0
         }
       ],
-      "color": "#019700",
       "moves": 2,
       "range": 3
     },
@@ -1746,7 +1740,6 @@ export const river = {
           "y": 0
         }
       ],
-      "color": "#019700",
       "moves": 2,
       "range": 3
     },
@@ -1764,7 +1757,7 @@ export const river = {
           "y": 5
         }
       ],
-      "color": "#242424ff",
+    
       "moves": 0,
       "range": 0
     }
@@ -1873,7 +1866,7 @@ export const alley = {
           "y": 1
         }
       ],
-      "color": "#242424ff",
+    
       "moves": 0,
       "range": 0
     },
@@ -1891,7 +1884,7 @@ export const alley = {
           "y": 8
         }
       ],
-      "color": "#242424ff",
+    
       "moves": 0,
       "range": 0
     },
@@ -1909,7 +1902,7 @@ export const alley = {
           "y": 0
         }
       ],
-      "color": "#242424ff",
+    
       "moves": 0,
       "range": 0
     }
@@ -2161,7 +2154,7 @@ export const ringed = {
           "y": 4
         }
       ],
-      "color": "#242424ff",
+    
       "moves": 0,
       "range": 0
     },
@@ -2179,7 +2172,7 @@ export const ringed = {
           "y": 4
         }
       ],
-      "color": "#242424ff",
+    
       "moves": 0,
       "range": 0
     },
@@ -2197,7 +2190,6 @@ export const ringed = {
           "y": 0
         }
       ],
-      "color": "#242424ff",
       "moves": 0,
       "range": 0
     },
@@ -2215,7 +2207,6 @@ export const ringed = {
           "y": 4
         }
       ],
-      "color": "#242424ff",
       "moves": 0,
       "range": 0
     },
@@ -2233,7 +2224,6 @@ export const ringed = {
           "y": 8
         }
       ],
-      "color": "#242424ff",
       "moves": 0,
       "range": 0
     }
@@ -2401,7 +2391,6 @@ export const gauntlet = {
           "y": 7
         }
       ],
-      "color": "#242424ff",
       "moves": 0,
       "range": 0
     },
@@ -2419,7 +2408,6 @@ export const gauntlet = {
           "y": 7
         }
       ],
-      "color": "#242424ff",
       "moves": 0,
       "range": 0
     },
@@ -2437,7 +2425,7 @@ export const gauntlet = {
           "y": 3
         }
       ],
-      "color": "#242424ff",
+    
       "moves": 0,
       "range": 0
     },
@@ -2455,7 +2443,6 @@ export const gauntlet = {
           "y": 1
         }
       ],
-      "color": "#242424ff",
       "moves": 0,
       "range": 0
     },
@@ -2473,7 +2460,6 @@ export const gauntlet = {
           "y": 0
         }
       ],
-      "color": "#242424ff",
       "moves": 0,
       "range": 0
     }
@@ -2833,7 +2819,6 @@ export const siege = {
           "y": 2
         }
       ],
-      "color": "#ff5100ff",
       "moves": 2,
       "range": 0
     },
@@ -2863,7 +2848,6 @@ export const siege = {
           "y": 2
         }
       ],
-      "color": "#ff5100ff",
       "moves": 2,
       "range": 0
     },
@@ -2881,7 +2865,6 @@ export const siege = {
           "y": 2
         }
       ],
-      "color": "#ff9900ff",
       "moves": 1,
       "range": 0
     },
@@ -2899,7 +2882,6 @@ export const siege = {
           "y": 1
         }
       ],
-      "color": "#019700",
       "moves": 2,
       "range": 3
     },
@@ -2917,7 +2899,6 @@ export const siege = {
           "y": 1
         }
       ],
-      "color": "#019700",
       "moves": 2,
       "range": 3
     },
@@ -2927,15 +2908,14 @@ export const siege = {
       "team": "enemy",
       "headPosition": {
         "x": 5,
-        "y": 1
+        "y": 3
       },
       "tiles": [
         {
           "x": 5,
-          "y": 1
+          "y": 3
         }
       ],
-      "color": "#f9f9f9",
       "moves": 3,
       "range": 3
     },
@@ -2945,15 +2925,14 @@ export const siege = {
       "team": "enemy",
       "headPosition": {
         "x": 3,
-        "y": 1
+        "y": 3
       },
       "tiles": [
         {
           "x": 3,
-          "y": 1
+          "y": 3
         }
       ],
-      "color": "#f9f9f9",
       "moves": 3,
       "range": 3
     },
@@ -2971,7 +2950,6 @@ export const siege = {
           "y": 1
         }
       ],
-      "color": "#1b84caff",
       "moves": 2,
       "range": 1
     },
@@ -2989,7 +2967,6 @@ export const siege = {
           "y": 8
         }
       ],
-      "color": "#242424ff",
       "moves": 0,
       "range": 0
     }
@@ -3417,7 +3394,6 @@ export const league = {
           "y": 2
         }
       ],
-      "color": "#ffd000ff",
       "moves": 2,
       "range": 0
     },
@@ -3435,7 +3411,6 @@ export const league = {
           "y": 1
         }
       ],
-      "color": "#242424ff",
       "moves": 0,
       "range": 0
     },
@@ -3453,7 +3428,7 @@ export const league = {
           "y": 1
         }
       ],
-      "color": "#242424ff",
+    
       "moves": 0,
       "range": 0
     },
@@ -3471,7 +3446,6 @@ export const league = {
           "y": 5
         }
       ],
-      "color": "#242424ff",
       "moves": 0,
       "range": 0
     },
@@ -3489,7 +3463,6 @@ export const league = {
           "y": 10
         }
       ],
-      "color": "#242424ff",
       "moves": 0,
       "range": 0
     }

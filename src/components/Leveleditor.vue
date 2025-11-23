@@ -228,9 +228,12 @@ const exportLevel = async () => {
     team: p.team,
     headPosition: p.headPosition,
     tiles: p.tiles,
-    color: p.color,
+    rarity: p.rarity,
+    /*maxSize: p.maxSize,
     moves: p.moves,
     range: p.range,
+    attack: p.attack,
+    defence: p.defence*/
   }))
 
   // Step 3: Build the final level object

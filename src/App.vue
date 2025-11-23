@@ -2,7 +2,8 @@
   import { ref, onMounted, computed} from "vue";
   import Board from './components/Board.vue';
   import Leveleditor from './components/Leveleditor.vue';
-  import { castled, testLevels } from './levels';
+  import { testLevels } from './levels';
+  import { castled, level1Levels } from './level1Levels';
   import { Player } from "./Player";
   import { Item, allItems} from "./Items";
   import { allAdmins } from "./AdminPrograms";
@@ -73,9 +74,9 @@
   }
   
   const player = ref(new Player(
-    20, // starting money
+    5, // starting money
     5,  // memory limit
-    3, //admin slots
+    5, //admin slots
     [], // no items yet
     [testSword, testShield, testSling],//, testShield] // starting pieces
     []//no admins yet
@@ -163,7 +164,7 @@
     }
 
     const idx = Math.floor(Math.random() * weighted.length);
-    console.log('idx: ', weighted[idx])
+    //console.log('idx: ', weighted[idx])
     const PickedClass = weighted[idx];
 
     return new PickedClass();  // RETURN INSTANCE
@@ -184,7 +185,7 @@
   const currentFib = ref(1);//to be reset after shop
 
   function refreshShop(isFree: boolean) {
-    console.log(rerollCost.value)
+    //console.log(rerollCost.value)
     if(!isFree && player.value.money < rerollCost.value) return;//show to shop for disabled button
     if(!isFree) {
       player.value.money -= rerollCost.value;
@@ -241,6 +242,7 @@
   }
 
   const selectLevel = (newLevel: Level) => {
+    activePieces.value = []
     level.value = newLevel;
     const newPieces = rehydratePieces(newLevel.pieces);
     activePieces.value = processSpawnPoints(newPieces);
@@ -293,8 +295,6 @@
     const processed: Piece[] = [];
     playerSpawns.value = []
 
-    console.log("processSpawnPoints called with:", pieces);
-
     for (const piece of pieces) {
       if (piece instanceof Spawn) {
 
@@ -306,7 +306,7 @@
             p.rarity >= min && p.rarity <= max
           );
           const pool = validEnemies.length > 0 ? validEnemies : allPieces;
-          console.log('lengths:', min, max, allPieces.length, pool.length)
+          //console.log('lengths:', min, max, allPieces.length, pool.length)
 
           const EnemyClass = pool[Math.floor(Math.random() * pool.length)];
           //allPieces[Math.floor(Math.random() * allPieces.length)];//base this off rarity/difficulty later
@@ -321,7 +321,6 @@
         //} else if
         // Player spawn → record placement highlight coordinates
         if (piece.team === 'player') {
-          console.log("FOUND SPAWN:", piece);
           //placementHighlights.value.push(piece.headPosition);
           playerSpawns.value = [//for reactivity
             ...playerSpawns.value,
@@ -331,7 +330,7 @@
           continue;
         }
       }
-      console.log("placementHighlights after:", playerSpawns.value);
+      //console.log("placementHighlights after:", playerSpawns.value);
       processed.push(piece);
     }
 
@@ -389,11 +388,6 @@
       isFirstTurn.value = false;
     }
     endTurn();
-  }  
-
-  function handleSell(piece: Piece) {
-    console.log('sell clicked');
-    //player.value.sell(piece)
   }
 
   const boardRef = ref();

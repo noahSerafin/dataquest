@@ -296,12 +296,12 @@ const boardHeight = computed(() => tileSize.value * height.value)
         Height: {{ height }}
         <input type="range" min="5" max="48" v-model.number="height" @input="fillGrid"/>
       </label>
-      <label>
-        team: {{ dropper.team }}
-      </label>
   </div>
   <!-- Place Pieces -->
    <div class="droppers">
+     <label>
+        team: {{ dropper.team }}
+      </label>
      <div class="piece-selector">
       <!-- todo set new buttons, check dropperState is changing
        mode: DropperMode
@@ -395,7 +395,7 @@ const boardHeight = computed(() => tileSize.value * height.value)
 }
 .droppers{
   position: absolute;
-  left: 2%;
+  right: 5%;
   top: 10%;
   overflow-y: scroll;
   height: 80%;

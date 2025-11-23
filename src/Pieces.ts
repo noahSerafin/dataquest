@@ -263,7 +263,7 @@ class Fence extends Piece {
   static color = "#ffd000ff";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Fence.name, Fence.description, Fence.unicode, 10, 2, 0, 0, 0, Fence.color, headPosition, [headPosition], team, Fence.rarity, removeCallback, id)
+    super(Fence.name, Fence.description, Fence.unicode, 8, 1, 0, 0, 0, Fence.color, headPosition, [headPosition], team, Fence.rarity, removeCallback, id)
   }
 }
 
@@ -274,7 +274,7 @@ class Stonewall extends Piece {
   static color = "#ff5100ff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Stonewall.name, Stonewall.description, Stonewall.unicode, 12, 2, 0, 0, 1, Stonewall.color, headPosition, [headPosition], team, Stonewall.rarity, removeCallback, id)
+   super(Stonewall.name, Stonewall.description, Stonewall.unicode, 10, 2, 0, 0, 1, Stonewall.color, headPosition, [headPosition], team, Stonewall.rarity, removeCallback, id)
   }
 }
 
@@ -620,7 +620,7 @@ class Nuke extends Piece {
 }
 
 class Highwayman extends Piece {
-  static name = "Highway man";
+  static name = "Highwayman";
   static description = "A program the generates money on destroying a piece";
   static unicode = "U+1F9B9";
   static color = "#494646ff";
@@ -955,7 +955,6 @@ class Gman extends Piece {
   }
 }
 
-// GUARDSMAN, U+1F482
 class Guard extends Piece {
   static name = "Guard";
   static description = "A basic all round program";
@@ -963,7 +962,7 @@ class Guard extends Piece {
   static color = "#ff6e0dff";
   static rarity = 1;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Guard.name, Guard.description, Guard.unicode, 3, 1, 1, 1, 1, Guard.color, headPosition, [headPosition], team, Guard.rarity, removeCallback, id)
+   super(Guard.name, Guard.description, Guard.unicode, 2, 1, 1, 1, 0, Guard.color, headPosition, [headPosition], team, Guard.rarity, removeCallback, id)
   }
 }
 
@@ -974,7 +973,7 @@ class Officer extends Piece {
   static color = "#ff310dff";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Officer.name, Officer.description, Officer.unicode, 4, 2, 1, 2, 2, Officer.color, headPosition, [headPosition], team, Officer.rarity, removeCallback, id)
+   super(Officer.name, Officer.description, Officer.unicode, 4, 2, 1, 2, 1, Officer.color, headPosition, [headPosition], team, Officer.rarity, removeCallback, id)
   }
 }
 

@@ -51,8 +51,10 @@
     <div class="player p-4 border rounded-lg bg-gray-100 shadow-md w-64">
         <div class="flex full-width">
             <!-- Money -->
-            <p><strong>Money:</strong> {{ props.player.money }}</p>
-            
+            <div>
+                <p><strong>Money:</strong> {{ props.player.money }}</p>
+                <p><strong>Admin Programs:</strong> {{ props.player.admins.length }}/{{ props.player.adminSlots }}</p>
+            </div>
             <ul class="admins">
                 <ItemView 
                     v-for="(item in props.player.admins"
@@ -135,6 +137,8 @@
         z-index: 50;
     .flex{
         display: flex;
+        width: 100%;
+        justify-content: space-between;
     }
     }
     .inventory{

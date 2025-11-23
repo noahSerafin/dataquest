@@ -2694,10 +2694,6 @@ export const siege = {
       "y": 0
     },
     {
-      "x": 8,
-      "y": 0
-    },
-    {
       "x": 0,
       "y": 1
     },
@@ -2707,14 +2703,6 @@ export const siege = {
     },
     {
       "x": 2,
-      "y": 1
-    },
-    {
-      "x": 3,
-      "y": 1
-    },
-    {
-      "x": 4,
       "y": 1
     },
     {
@@ -2730,10 +2718,6 @@ export const siege = {
       "y": 1
     },
     {
-      "x": 8,
-      "y": 1
-    },
-    {
       "x": 0,
       "y": 2
     },
@@ -2747,14 +2731,6 @@ export const siege = {
     },
     {
       "x": 3,
-      "y": 2
-    },
-    {
-      "x": 4,
-      "y": 2
-    },
-    {
-      "x": 5,
       "y": 2
     },
     {
@@ -2786,19 +2762,7 @@ export const siege = {
       "y": 3
     },
     {
-      "x": 5,
-      "y": 3
-    },
-    {
-      "x": 6,
-      "y": 3
-    },
-    {
       "x": 7,
-      "y": 3
-    },
-    {
-      "x": 8,
       "y": 3
     },
     {
@@ -2826,15 +2790,7 @@ export const siege = {
       "y": 4
     },
     {
-      "x": 6,
-      "y": 4
-    },
-    {
       "x": 7,
-      "y": 4
-    },
-    {
-      "x": 8,
       "y": 4
     },
     {
@@ -2870,10 +2826,6 @@ export const siege = {
       "y": 5
     },
     {
-      "x": 8,
-      "y": 5
-    },
-    {
       "x": 0,
       "y": 6
     },
@@ -2903,10 +2855,6 @@ export const siege = {
     },
     {
       "x": 7,
-      "y": 6
-    },
-    {
-      "x": 8,
       "y": 6
     },
     {
@@ -2940,97 +2888,20 @@ export const siege = {
     {
       "x": 7,
       "y": 7
-    },
-    {
-      "x": 8,
-      "y": 7
-    },
-    {
-      "x": 0,
-      "y": 8
-    },
-    {
-      "x": 1,
-      "y": 8
-    },
-    {
-      "x": 2,
-      "y": 8
-    },
-    {
-      "x": 3,
-      "y": 8
-    },
-    {
-      "x": 4,
-      "y": 8
-    },
-    {
-      "x": 5,
-      "y": 8
-    },
-    {
-      "x": 6,
-      "y": 8
-    },
-    {
-      "x": 7,
-      "y": 8
-    },
-    {
-      "x": 8,
-      "y": 8
-    },
-    {
-      "x": 8,
-      "y": 2
     }
   ],
   "pieces": [
     {
-      "id": "81f9f56e-1a2e-415a-9637-86359a9f5e26",
-      "name": "Stonewall",
+      "id": "03bd7e97-da27-40c6-8bda-9569294e70e9",
+      "name": "Fence",
       "team": "enemy",
       "headPosition": {
-        "x": 8,
+        "x": 3,
         "y": 2
       },
       "tiles": [
         {
-          "x": 8,
-          "y": 2
-        },
-        {
-          "x": 7,
-          "y": 2
-        },
-        {
-          "x": 6,
-          "y": 2
-        },
-        {
-          "x": 5,
-          "y": 2
-        }
-      ],
-      "moves": 2,
-      "range": 0
-    },
-    {
-      "id": "81046925-fb5f-4519-bf13-4c688df5be90",
-      "name": "Stonewall",
-      "team": "enemy",
-      "headPosition": {
-        "x": 0,
-        "y": 2
-      },
-      "tiles": [
-        {
-          "x": 0,
-          "y": 2
-        },
-        {
-          "x": 1,
+          "x": 3,
           "y": 2
         },
         {
@@ -3038,84 +2909,39 @@ export const siege = {
           "y": 2
         },
         {
+          "x": 2,
+          "y": 3
+        },
+        {
+          "x": 2,
+          "y": 4
+        },
+        {
+          "x": 2,
+          "y": 5
+        },
+        {
           "x": 3,
-          "y": 2
-        }
-      ],
-      "moves": 2,
-      "range": 0
-    },
-    {
-      "id": "ff0ad00b-0f46-49e3-95b1-24166871aaae",
-      "name": "Gate",
-      "team": "enemy",
-      "headPosition": {
-        "x": 4,
-        "y": 2
-      },
-      "tiles": [
+          "y": 5
+        },
         {
           "x": 4,
-          "y": 2
-        }
-      ],
-      "moves": 1,
-      "range": 0
-    },
-    {
-      "id": "e81180a5-6714-48c2-a6ae-8b6b6ad57ac9",
-      "name": "Bow",
-      "team": "enemy",
-      "headPosition": {
-        "x": 1,
-        "y": 1
-      },
-      "tiles": [
-        {
-          "x": 1,
-          "y": 1
-        }
-      ],
-      "moves": 2,
-      "range": 3
-    },
-    {
-      "id": "7b410532-5dda-4192-ba64-2c1c843ef0c3",
-      "name": "Bow",
-      "team": "enemy",
-      "headPosition": {
-        "x": 7,
-        "y": 1
-      },
-      "tiles": [
-        {
-          "x": 7,
-          "y": 1
-        }
-      ],
-      "moves": 2,
-      "range": 3
-    },
-    {
-      "id": "62ff0d7e-5361-417e-aef8-06102b15fbe1",
-      "name": "Lance",
-      "team": "enemy",
-      "headPosition": {
-        "x": 5,
-        "y": 3
-      },
-      "tiles": [
+          "y": 5
+        },
         {
           "x": 5,
-          "y": 3
+          "y": 5
+        },
+        {
+          "x": 5,
+          "y": 4
         }
       ],
-      "moves": 3,
-      "range": 3
+      "rarity": 2
     },
     {
-      "id": "3a9f4ce5-f37f-41a3-86e2-81999d31d0a3",
-      "name": "Lance",
+      "id": "3a40cc5e-42c6-4ead-be44-d1e2cd952b89",
+      "name": "Sling",
       "team": "enemy",
       "headPosition": {
         "x": 3,
@@ -3127,42 +2953,71 @@ export const siege = {
           "y": 3
         }
       ],
-      "moves": 3,
-      "range": 3
+      "rarity": 1
     },
     {
-      "id": "910893f8-be4c-4ae2-8724-d98e092e813e",
-      "name": "Arms",
+      "id": "72e04da9-9fde-4f43-b08b-1423d9f9f13d",
+      "name": "Sling",
       "team": "enemy",
       "headPosition": {
         "x": 4,
-        "y": 1
+        "y": 4
       },
       "tiles": [
         {
           "x": 4,
-          "y": 1
+          "y": 4
         }
       ],
-      "moves": 2,
-      "range": 1
+      "rarity": 1
     },
     {
-      "id": "c0682cb6-c262-4475-8400-9790921e3765",
+      "id": "58e3593c-75ce-4111-9cb8-ce1beebc7cf2",
+      "name": "Spawn",
+      "team": "enemy",
+      "headPosition": {
+        "x": 4,
+        "y": 3
+      },
+      "tiles": [
+        {
+          "x": 4,
+          "y": 3
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "4c43a5bf-c284-4efe-9d56-709b68a1050f",
+      "name": "Spawn",
+      "team": "enemy",
+      "headPosition": {
+        "x": 3,
+        "y": 4
+      },
+      "tiles": [
+        {
+          "x": 3,
+          "y": 4
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "801183b5-2bfa-46d1-b669-dc086634c057",
       "name": "Spawn",
       "team": "player",
       "headPosition": {
-        "x": 4,
-        "y": 8
+        "x": 0,
+        "y": 7
       },
       "tiles": [
         {
-          "x": 4,
-          "y": 8
+          "x": 0,
+          "y": 7
         }
       ],
-      "moves": 0,
-      "range": 0
+      "rarity": 1
     }
   ]
 }
@@ -3663,4 +3518,4 @@ export const league = {
   ]
 }
 
-export const testLevels = [castled, siege, siege2, river, cave, forest, arena, alley, ringed, gauntlet, league];
+export const level1Levels = [castled, siege, river, cave, forest, arena, alley, ringed, gauntlet, league];

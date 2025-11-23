@@ -14,8 +14,8 @@ interface Props{
   hasFinishedTurn: boolean
 }
 const props = defineProps<Props>()
-console.log('pm: ', props.placementMode)
-console.log('in board: ', props.placementHighlights.length);
+//console.log('pm: ', props.placementMode)
+//console.log('in board: ', props.placementHighlights.length);
 
 const emit = defineEmits<{
   (e: 'place-on-board', coord: Coordinate): void
@@ -87,20 +87,26 @@ function handlePieceSelect(piece: Piece) {//handleselect
   }
 }
 
+//cleanup
+const moveButtons = ref<Array<{ x: number; y: number; direction: string }>>([]);
+const moveHighlights = ref<Coordinate[]>([]);
+const inRangeHighlights = ref<Coordinate[]>([]);
+//const placeHighlights = ref<Coordinate[]>([])
+
 //change to one move at a time
 function getAvailableMoves(
   piece: Piece,
   tileSet: Set<string>, // the valid board tiles like "x,y"
   pieceMap: Map<string, Piece> // all occupied tiles by other pieces
-): Coordinate[] {
+): Array<{ x: number; y: number; direction: string }> {
   if (piece.movesRemaining <= 0) return [] // no moves left
 
   const { x, y } = piece.headPosition
-  const potentialMoves: Coordinate[] = [
-    { x: x + 1, y },
-    { x: x - 1, y },
-    { x: x, y: y + 1 },
-    { x: x, y: y - 1 }
+  const potentialMoves = [
+    { x: x + 1, y, direction: "right" },
+    { x: x - 1, y, direction: "left" },
+    { x, y: y + 1, direction: "down" },
+    { x, y: y - 1, direction: "up" },
   ]
 
   return potentialMoves.filter(pos => {
@@ -109,26 +115,27 @@ function getAvailableMoves(
   })
 }
 
-//cleanup
-const moveHighlights = ref<Coordinate[]>([]);
-const inRangeHighlights = ref<Coordinate[]>([]);
-//const placeHighlights = ref<Coordinate[]>([])
+function highlightMoveRange(piece: InstanceType<typeof Piece>){
+ //console.log('movesquares:', moveHighlights);
+}
 
 const highlightMoves = (piece: InstanceType<typeof Piece>) => {
   clearHighlights();
-  moveHighlights.value = getAvailableMoves(piece, tileSet.value, pieceMap.value);
+  moveHighlights.value = getTilesInRange(piece.headPosition, piece.movesRemaining, tileSet.value)
+  moveButtons.value = getAvailableMoves(piece, tileSet.value, pieceMap.value);
 }
 
 const clearHighlights = () => {
   moveHighlights.value = [];
   inRangeHighlights.value = [];
+  moveButtons.value = [];
 }
 
 const movePiece = (coord : Coordinate) => {//todo moves piece, but does not add more tiles visually
   if(!selectedPiece.value) return;
   if (selectedPiece.value.team !== 'player') return;
-  
-  selectedPiece.value?.moveTo(coord);
+    moveButtons.value = []
+    selectedPiece.value?.moveTo(coord);
   if(selectedPiece.value.movesRemaining > 0){
     highlightMoves(selectedPiece.value);
   }else {
@@ -138,12 +145,13 @@ const movePiece = (coord : Coordinate) => {//todo moves piece, but does not add 
 }
 
 function getTilesInRange(
-  piece: Piece,
+  center: Coordinate,
+  range: number,
   tileSet: Set<string>,       // valid board tiles like "x,y"
 ): Coordinate[] {
   const tiles: Coordinate[] = [];
-  const { x, y } = piece.headPosition;
-  const r = piece.range;
+  const { x, y } = center;
+  const r = range;
 
   for (let dx = -r; dx <= r; dx++) {
     for (let dy = -r; dy <= r; dy++) {
@@ -194,7 +202,8 @@ const damagePieceAt = (coord:Coordinate) => {
 const highlightTargets = (piece: InstanceType<typeof Piece>) => {
   clearHighlights();
   inRangeHighlights.value = getTilesInRange(
-    piece,
+    piece.headPosition,
+    piece.range,
     tileSet.value,
   ); 
 }
@@ -257,6 +266,18 @@ const deselect = () => {
       v-for="(tile, index) in moveHighlights"
       :key="index"
       class="highlight-tile"
+      :style="{
+        left: tile.x * tileSize + 'px',
+        top: tile.y * tileSize + 'px',
+        width: tileSize + 'px',
+        height: tileSize + 'px',
+      }"
+    />
+    <div
+      v-for="(tile, index) in moveButtons"
+      :key="index"
+      class="highlight-tile"
+      :class="['move-button', `move-button-${tile.direction}`]"
       v-on:click="movePiece(tile)"
       :style="{
         left: tile.x * tileSize + 'px',
@@ -332,6 +353,45 @@ const deselect = () => {
   background-color: rgba(0, 200, 255, 0.3);
   border: 1px solid rgba(0, 200, 255, 0.5);
   cursor: pointer;
+}
+.move-button{
+
+}
+.move-button:before {
+  position: absolute;
+  content: '';
+  background-color: aliceblue;
+}
+.move-button-up:before {
+  left: 10%;
+  bottom: 4%;
+  width: 80%;
+  height: 32%;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+.move-button-down:before {
+  width: 80%;
+  height: 32%;
+  left: 10%;
+  top: 4%;
+  clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+}
+.move-button-right:before {
+  left: 4%;
+  top: 10%;
+  width: 32%;
+  height: 80%;
+  clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+}
+.move-button-left:before {
+  right: 4%;
+  top: 10%;
+  width: 32%;
+  height: 80%;
+  clip-path: polygon(0% 50%, 100% 0%, 100% 100%);
+}
+.move-button:after {
+  right: 0;
 }
 .piece-layer.piece{
   z-index: 2;

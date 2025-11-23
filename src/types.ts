@@ -18,7 +18,7 @@ export type PieceBlueprint = {
 }
 
 export type Level = {
-  name: string
+  //name: string
   tiles: Coordinate[],
   pieces: any[]
 }

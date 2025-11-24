@@ -1,10 +1,18 @@
 import { Item } from "./Items";
 import { Piece } from "./Pieces";
+import { Player } from "./Player";
+import type { StatModifier } from "./types";
 
 export abstract class Admin extends Item {
   isConsumedOnUse = false;
-  apply(target: any){
+  apply(target: any):void{
     //do not destroy the admin
+  }
+  remove(target: any):void{
+
+  }
+  getModifier(): StatModifier {
+    return {}
   }
 }
 
@@ -104,7 +112,7 @@ class BionicArm extends Admin {
   constructor() {
     super(BionicArm.name, BionicArm.description, BionicArm.unicode, BionicArm.color, 7, 4, 'player')
   }
-  //
+  
 }
 
 class BionicLeg extends Admin {
@@ -116,7 +124,26 @@ class BionicLeg extends Admin {
   constructor() {
     super(BionicLeg.name, BionicLeg.description, BionicLeg.unicode, BionicLeg.color, 7, 4, 'player')
   }
-  //
+  /*
+  apply(player: Player) {
+    const mod = player.adminModifiers.global ?? {};
+    mod.moves = (mod.moves ?? 0) + 2;
+    player.adminModifiers.global = mod;
+  }
+
+  remove(player: Player) {
+    const mod = player.adminModifiers.global;
+    if (!mod) return;
+
+    mod.moves = (mod.moves ?? 0) - 2;
+    if (mod.moves === 0) delete mod.moves;
+    if (Object.keys(mod).length === 0) delete player.adminModifiers.global;
+  }
+
+  getModifier(): StatModifier {
+    return { moves: 2 }
+  }
+  */
 }
 
 class Convenience extends Admin {

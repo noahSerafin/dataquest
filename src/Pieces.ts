@@ -1,7 +1,9 @@
-import type { Coordinate } from "./types"
+import type { Coordinate, StatModifier } from "./types"
 
 export abstract class Piece {
   removeCallback?: (piece: Piece) => void;
+
+  private statModifiers: StatModifier = {};//why is this breaking activePieces/enemypieces
 
   id: string
   static name : string
@@ -61,10 +63,37 @@ export abstract class Piece {
     this.id = id ?? crypto.randomUUID()
   }
 
-//name desc unicode || maxsize moves range atk def
-  getStats(): string {
-    return `${this.name} | Size: ${this.maxSize}, Moves: ${this.moves}, Range: ${this.range}, Attack: ${this.attack}, Defence: ${this.defence}`
+  // --- Methods to handle modifiers ---
+  addModifier(mod: StatModifier) {
+    Object.entries(mod).forEach(([key, val]) => {
+      this.statModifiers[key as keyof StatModifier] =
+        (this.statModifiers[key as keyof StatModifier] ?? 0) + val;
+    });
   }
+
+  removeModifier(mod: StatModifier) {
+    Object.entries(mod).forEach(([key, val]) => {
+      if (!this.statModifiers[key as keyof StatModifier]) return;
+      this.statModifiers[key as keyof StatModifier]! -= val;
+      if (this.statModifiers[key as keyof StatModifier]! <= 0) {
+        delete this.statModifiers[key as keyof StatModifier];
+      }
+    });
+  }
+
+  // --- Accessors for base / modifiers / total ---
+  getBaseStat(stat: keyof StatModifier) {
+    return this[stat] as number; // base value from constructor
+  }
+
+  getModifier(stat: keyof StatModifier) {
+    return this.statModifiers[stat] ?? 0;
+  }
+
+  getStat(stat: keyof StatModifier) {
+    return this.getBaseStat(stat) + this.getModifier(stat);
+  }
+  //----------------
 
   // Example method: add a new tile position
   addTile(x: number, y: number): void {

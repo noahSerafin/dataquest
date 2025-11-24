@@ -13,7 +13,7 @@
   import type { Piece } from "./Pieces"
   import { Spawn } from './Pieces';
   import { allPieces } from "./Pieces"
-  import type { Coordinate, PieceBlueprint, Level } from "./types";
+  import type { Coordinate, PieceBlueprint, StatModifier, Level } from "./types";
   import { takeEnemyTurn } from "./Enemy";
   import WorldMap from "./components/WorldMap.vue";
   import Shop from "./components/Shop.vue";
@@ -109,7 +109,7 @@
     player.value.money += Math.round(item.cost / 2);
   }
 
-  function handleApplyAdmin(){
+  function handleApplyAdmin(admin: Admin, id:string){
 
   }
 
@@ -306,6 +306,34 @@
   //round logic
   //pieceMap to track occupied spaces
   const activePieces = ref<InstanceType<typeof Piece>[]>([]);
+  const modifiedStats = ref<Record<string, StatModifier>>({});
+    //stats should be applied to activePieces after select level
+    //can be removed during a level
+  function applyStatModifications() {
+    /* does any of this already exist?
+    activePieces.value = player.value.programs.map(bp => {
+      const pieceInstance = rehydratePiece(bp);
+
+      // Compute modifiers from all current admins
+      const mods: StatModifier = {};
+      player.value.admins.forEach(admin => {
+        if (typeof admin.getModifiers === 'function') {
+          const adminMods = admin.getModifiers(pieceInstance);
+          Object.entries(adminMods).forEach(([stat, val]) => {
+            mods[stat as keyof StatModifier] =
+              (mods[stat as keyof StatModifier] ?? 0) + val;
+          });
+        }
+      });
+
+      // Store in modifiedStats keyed by piece id
+      modifiedStats.value[pieceInstance.id] = mods;
+
+      return pieceInstance;
+    });
+    */
+  }
+
   const selectedPiece = ref<Piece | null>(null)
   const playerSpawns = ref<Coordinate[]>([]);
   const isPlacing = ref(false);
@@ -465,6 +493,7 @@
     if (!PieceClass) return
 
     const instance = new PieceClass(coord, 'player', removePiece, bp.id);   // now real placement!
+    //pass admin modifiers to the piece
 
     activePieces.value.push(instance)
 
@@ -542,7 +571,7 @@
     const tileSet = new Set(level.value.tiles.map(t => `${t.x},${t.y}`));
 
     await takeEnemyTurn(
-      enemyPieces,
+      enemyPieces,//no statmodifiers?
       playerPieces,
       activePieces.value,
       removePiece, // callback to remove dead pieces

@@ -15,7 +15,14 @@ export type PieceBlueprint = {
   color: string
   isPlaced: boolean
   cost: number
-  //headposition, tiles optional for maps
+}
+
+export type StatModifier = {
+  moves?: number
+  attack?: number
+  defence?: number
+  range?: number
+  maxSize?: number
 }
 
 export type Level = {

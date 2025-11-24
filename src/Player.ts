@@ -1,4 +1,4 @@
-import type { Coordinate, PieceBlueprint } from "./types";
+import type { Coordinate, PieceBlueprint, StatModifier } from "./types";
 import { Item } from "./Items";
 import { Admin } from "./AdminPrograms";
 
@@ -10,13 +10,15 @@ export class Player {
     items: Item[]
     programs: PieceBlueprint[]
     admins: Admin[]
+    //adminModifiers: Record<string, StatModifier>
     constructor(
         money = 5,
         memory = 4,
         adminSlots = 4,
         items: Item[] = [],
         programs: PieceBlueprint[] = [],
-        admins: Admin[] = []
+        admins: Admin[] = [],
+        //adminModifiers: Record<string, StatModifier> = {}
     ) {
         this.money = money;
         this.memory = memory;
@@ -24,6 +26,7 @@ export class Player {
         this.items = items;
         this.programs = programs;
         this.admins = admins;
+        //this.adminModifiers = adminModifiers;
     }
 
     /** Total "memory" usage from items + programs */
@@ -34,6 +37,18 @@ export class Player {
   /** Returns whether player can hold more items/programs */
   get hasMemorySpace(): boolean {
     return this.usedMemory < this.memory;
+  }
+
+  addAdmin(admin: Admin, target: Player ) {
+    this.admins.push(admin)
+    admin.apply(target);
+  }
+
+  removeAdmin(admin: Admin, target: Player ) {
+    this.admins = this.admins.filter(a => a.id !== admin.id)
+    const i = this.admins.indexOf(admin);
+    if (i !== -1) this.admins.splice(i, 1);
+    admin.remove(target);
   }
 
   /** Add an item if there's enough memory */
@@ -102,4 +117,29 @@ export class Player {
   modifyMemory(delta: number): void {
     this.memory = Math.max(0, this.memory + delta);
   }
+
+  // -------------- GET MODIFIED STATS --------------
+
+  /*getTotalModifier(pieceId: string, stat: keyof StatModifier): number {
+    const mod = this.adminModifiers[pieceId];
+    return mod?.[stat] ?? 0;
+  }
+
+  getModifiedStat(piece: PieceBlueprint, stat: keyof StatModifier): number {
+    const base = piece[stat] ?? 0;
+    return base + this.getTotalModifier(piece.id, stat);
+  }*/
+
+  /*getModifiedPiece(piece: PieceBlueprint) {
+    const totalMods = this.getTotalModifier(piece.id, )
+
+    return {
+      ...piece,
+      moves: piece.moves + (totalMods.moves ?? 0),
+      attack: piece.attack + (totalMods.attack ?? 0),
+      defence: piece.defence + (totalMods.defence ?? 0),
+      range: piece.range + (totalMods.range ?? 0),
+      maxSize: piece.maxSize + (totalMods.maxSize ?? 0),
+    }
+  }*/
 }

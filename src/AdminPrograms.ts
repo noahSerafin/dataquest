@@ -15,7 +15,7 @@ class Meteor extends Admin {
   static color = "#000000ff";
 
   constructor() {
-    super(Meteor.name, Meteor.description, Meteor.unicode, Meteor.color, 10, 4)
+    super(Meteor.name, Meteor.description, Meteor.unicode, Meteor.color, 10, 4, 'gameState')
   }
 
   apply({ activePieces }: { activePieces: Piece[] }) {
@@ -30,7 +30,7 @@ class Miner extends Admin {
   static color = "#ffa600d3";
 
   constructor() {
-    super(Miner.name, Miner.description, Miner.unicode, Miner.color, 10, 1)
+    super(Miner.name, Miner.description, Miner.unicode, Miner.color, 10, 1, 'player')
   }
   //
 }
@@ -42,7 +42,7 @@ class Bubble extends Admin {
   static color = "#0400daff";
 
   constructor() {
-    super(Bubble.name, Bubble.description, Bubble.unicode, Bubble.color, 10, 2)
+    super(Bubble.name, Bubble.description, Bubble.unicode, Bubble.color, 10, 2, 'player')
   }
   //
 }
@@ -54,7 +54,7 @@ class Crystal extends Admin {
   static color = "#4b003bff";
 
   constructor() {
-    super(Crystal.name, Crystal.description, Crystal.unicode, Crystal.color, 5, 1)
+    super(Crystal.name, Crystal.description, Crystal.unicode, Crystal.color, 5, 1, 'gameState')
   }
   //
 }
@@ -66,7 +66,7 @@ class Clover extends Admin {
   static color = "#00ff0dff";
 
   constructor() {
-    super(Clover.name, Clover.description, Clover.unicode, Clover.color, 7, 2)
+    super(Clover.name, Clover.description, Clover.unicode, Clover.color, 7, 2, 'gameState')//shop state
   }
   //interact with shop
 }
@@ -78,7 +78,7 @@ class Onion extends Admin {
   static color = "#00af17ad";
 
   constructor() {
-    super(Onion.name, Onion.description, Onion.unicode, Onion.color, 10, 5)
+    super(Onion.name, Onion.description, Onion.unicode, Onion.color, 10, 5, 'player')
   }
   //
 }
@@ -90,7 +90,7 @@ class Blood extends Admin {
   static color = "#790000ff";
 
   constructor() {
-    super(Blood.name, Blood.description, Blood.unicode, Blood.color, 10, 3)
+    super(Blood.name, Blood.description, Blood.unicode, Blood.color, 10, 3, 'gameState')//player?
   }
   //
 }
@@ -102,7 +102,7 @@ class BionicArm extends Admin {
   static color = "#ff4040ff";
 
   constructor() {
-    super(BionicArm.name, BionicArm.description, BionicArm.unicode, BionicArm.color, 7, 4)
+    super(BionicArm.name, BionicArm.description, BionicArm.unicode, BionicArm.color, 7, 4, 'player')
   }
   //
 }
@@ -114,7 +114,7 @@ class BionicLeg extends Admin {
   static color = "#d240ffff";
 
   constructor() {
-    super(BionicLeg.name, BionicLeg.description, BionicLeg.unicode, BionicLeg.color, 7, 4)
+    super(BionicLeg.name, BionicLeg.description, BionicLeg.unicode, BionicLeg.color, 7, 4, 'player')
   }
   //
 }
@@ -126,7 +126,7 @@ class Convenience extends Admin {
   static color = "#55ff71ff";
 
   constructor() {
-    super(Convenience.name, Convenience.description, Convenience.unicode, Convenience.color, 4, 2)
+    super(Convenience.name, Convenience.description, Convenience.unicode, Convenience.color, 4, 2, 'gameState')//shop
   }
   //
 }
@@ -136,9 +136,8 @@ class Department extends Admin {
   static description = "+3 shop slots";
   static unicode = "U+1F3EC";
   static color = "#bebebeff";
-
   constructor() {
-    super(Department.name, Department.description, Department.unicode, Department.color, 5, 3)
+    super(Department.name, Department.description, Department.unicode, Department.color, 5, 3, 'gameState')//shop
   }
   //
 }
@@ -150,7 +149,7 @@ class Eye extends Admin {//not passive
   static color = "#020072ff";
 
   constructor() {
-    super(Eye.name, Eye.description, Eye.unicode, Eye.color, 8, 4)
+    super(Eye.name, Eye.description, Eye.unicode, Eye.color, 8, 4, 'gameState')
   }
   //// NAZAR AMULET, U+1F9FF 
 }
@@ -162,7 +161,7 @@ class Bouquet extends Admin {
   static color = "#85e758ff";
 
   constructor() {
-    super(Bouquet.name, Bouquet.description, Bouquet.unicode, Bouquet.color, 3, 3)
+    super(Bouquet.name, Bouquet.description, Bouquet.unicode, Bouquet.color, 3, 3, 'gameState')//shop
   }
   //
 }
@@ -173,7 +172,7 @@ class Heartbreaker extends Admin {
   static unicode = "U+1F498";
   static color = "#dadadaff";
   constructor() {
-    super(Heartbreaker.name, Heartbreaker.description, Heartbreaker.unicode, Heartbreaker.color, 5, 3)
+    super(Heartbreaker.name, Heartbreaker.description, Heartbreaker.unicode, Heartbreaker.color, 5, 3, 'player')
   }
   //
 }
@@ -184,7 +183,7 @@ class Hamsa extends Admin {
   static unicode = "U+1FAAC";
   static color = "#5560ffff";
   constructor() {
-    super(Hamsa.name, Hamsa.description, Hamsa.unicode, Hamsa.color, 8, 5)
+    super(Hamsa.name, Hamsa.description, Hamsa.unicode, Hamsa.color, 8, 5, 'player')
   }
   //
 }
@@ -195,7 +194,7 @@ class Relay extends Admin {
   static unicode = "U+1F4E1";
   static color = "#e4d26fff";
   constructor() {
-    super(Relay.name, Relay.description, Relay.unicode, Relay.color, 5, 3)
+    super(Relay.name, Relay.description, Relay.unicode, Relay.color, 5, 3, 'player')
   }
   //
 }
@@ -206,7 +205,7 @@ class Hivis extends Admin {
   static unicode = "U+1F9BA";
   static color = "#a7ff55ff";
   constructor() {
-    super(Hivis.name, Hivis.description, Hivis.unicode, Hivis.color, 5, 1)
+    super(Hivis.name, Hivis.description, Hivis.unicode, Hivis.color, 5, 1, 'gameState')//??
   }
   //
 }
@@ -217,7 +216,7 @@ class Notepad extends Admin {
   static unicode = "U+1F5C7";
   static color = "#4b4b4bff";
   constructor() {
-    super(Notepad.name, Notepad.description, Notepad.unicode, Notepad.color, 5, 3)
+    super(Notepad.name, Notepad.description, Notepad.unicode, Notepad.color, 5, 3, 'player')
   }
   //
 }
@@ -228,7 +227,7 @@ class AdminMap extends Admin {
   static unicode = "U+1F5FA";
   static color = "#001cbbff";
   constructor() {
-    super(AdminMap.name, AdminMap.description, AdminMap.unicode, AdminMap.color, 1, 2)
+    super(AdminMap.name, AdminMap.description, AdminMap.unicode, AdminMap.color, 1, 2, 'gameState')
   }
   //
 }
@@ -239,7 +238,7 @@ class PetriDish extends Admin {
   static unicode = "U+1F9EB";
   static color = "#14532dff";
   constructor() {
-    super(PetriDish.name, PetriDish.description, PetriDish.unicode, PetriDish.color, 7, 4)
+    super(PetriDish.name, PetriDish.description, PetriDish.unicode, PetriDish.color, 7, 4, 'gameState')
   }
   //
 }
@@ -250,7 +249,7 @@ class Volatile extends Admin {
   static unicode = "U+1F9EA";
   static color = "#00ff22c7";
   constructor() {
-    super(Volatile.name, Volatile.description, Volatile.unicode, Volatile.color, 6, 4)
+    super(Volatile.name, Volatile.description, Volatile.unicode, Volatile.color, 6, 4, 'gameState')
   }
   //
 }
@@ -261,7 +260,7 @@ class Inheritance extends Admin {
   static unicode = "U+1F911";
   static color = "#ffc955ff";
   constructor() {
-    super(Inheritance.name, Inheritance.description, Inheritance.unicode, Inheritance.color, 10, 5)
+    super(Inheritance.name, Inheritance.description, Inheritance.unicode, Inheritance.color, 10, 5, 'player')
   }
   //
 }
@@ -272,7 +271,7 @@ class CreditCard extends Admin {
   static unicode = "U+1F4B3";
   static color = "#ff5555";
   constructor() {
-    super(CreditCard.name, CreditCard.description, CreditCard.unicode, CreditCard.color, 1, 2)
+    super(CreditCard.name, CreditCard.description, CreditCard.unicode, CreditCard.color, 1, 2, 'gameState')//shop
   }
   //
 }
@@ -283,7 +282,7 @@ class Needle extends Admin {
   static unicode = "U+1FAA1";
   static color = "#b448a6ff";
   constructor() {
-    super(Needle.name, Needle.description, Needle.unicode, Needle.color, 10, 5)//6
+    super(Needle.name, Needle.description, Needle.unicode, Needle.color, 10, 5, 'gameState')//6 and player?
   }
   //
 }
@@ -294,7 +293,7 @@ class Rune extends Admin {
   static unicode = "U+16B1";
   static color = "#ff5555";
   constructor() {
-    super(Rune.name, Rune.description, Rune.unicode, Rune.color, 5, 3)
+    super(Rune.name, Rune.description, Rune.unicode, Rune.color, 5, 3, 'player')
   }
   //
 }
@@ -305,7 +304,7 @@ class Joker extends Admin {
   static unicode = "U+1F0CF";
   static color = "#ff5555";
   constructor() {
-    super(Joker.name, Joker.description, Joker.unicode, Joker.color, 7, 2)
+    super(Joker.name, Joker.description, Joker.unicode, Joker.color, 7, 2, 'player')
   }
   //
 }
@@ -316,7 +315,7 @@ class Chemistry extends Admin {
   static unicode = "U+2697";
   static color = "#4eb95cff";
   constructor() {
-    super(Chemistry.name, Chemistry.description, Chemistry.unicode, Chemistry.color, 6, 5)
+    super(Chemistry.name, Chemistry.description, Chemistry.unicode, Chemistry.color, 6, 5, 'gameState')
   }
   //
 }
@@ -327,7 +326,7 @@ class Aesculapius extends Admin {
   static unicode = "U+2695";
   static color = "#55ff6cff";
   constructor() {
-    super(Aesculapius.name, Aesculapius.description, Aesculapius.unicode, Aesculapius.color, 4, 2)
+    super(Aesculapius.name, Aesculapius.description, Aesculapius.unicode, Aesculapius.color, 4, 2, 'player')//or gamestate?
   }
   //
 }
@@ -338,7 +337,7 @@ class Heart extends Admin {
   static unicode = "U+1FAC0";
   static color = "#ff5555";
   constructor() {
-    super(Heart.name, Heart.description, Heart.unicode, Heart.color, 6, 3)
+    super(Heart.name, Heart.description, Heart.unicode, Heart.color, 6, 3, 'player')
   }
   //
 }
@@ -349,7 +348,7 @@ class Lungs extends Admin {
   static unicode = "U+1FAC1";
   static color = "#ff5555";
   constructor() {
-    super(Lungs.name, Lungs.description, Lungs.unicode, Lungs.color, 5, 3)
+    super(Lungs.name, Lungs.description, Lungs.unicode, Lungs.color, 5, 3, 'player')
   }
   //
 }
@@ -360,7 +359,7 @@ class Brain extends Admin {
   static unicode = "U+1F9E0";
   static color = "#ff5555";
   constructor() {
-    super(Brain.name, Brain.description, Brain.unicode, Brain.color, 9, 4)
+    super(Brain.name, Brain.description, Brain.unicode, Brain.color, 9, 4, 'player')
   }
   //
 }
@@ -371,7 +370,7 @@ class GoldenTicket extends Admin {
   static unicode = "U+1F3AB";
   static color = "#dfba42ff";
   constructor() {
-    super(GoldenTicket.name, GoldenTicket.description, GoldenTicket.unicode, GoldenTicket.color, 5, 4)
+    super(GoldenTicket.name, GoldenTicket.description, GoldenTicket.unicode, GoldenTicket.color, 5, 4, 'gameState')
   }
   //
 }
@@ -382,7 +381,7 @@ class Dove extends Admin {
   static unicode = "U+1F54A";
   static color = "#3be2ffff";
   constructor() {
-    super(Dove.name, Dove.description, Dove.unicode, Dove.color, 7, 5)
+    super(Dove.name, Dove.description, Dove.unicode, Dove.color, 7, 5, 'gameState')
   }
   //
 }
@@ -393,7 +392,7 @@ class Stonks extends Admin {
   static unicode = "U+1F4C8";
   static color = "#55ff6cff";
   constructor() {
-    super(Stonks.name, Stonks.description, Stonks.unicode, Stonks.color, 5, 3)
+    super(Stonks.name, Stonks.description, Stonks.unicode, Stonks.color, 5, 3, 'player')
   }
   //
 }
@@ -404,7 +403,7 @@ class Trolley extends Admin {
   static unicode = "U+1F6D2";
   static color = "#55fff1ff";
   constructor() {
-    super(Trolley.name, Trolley.description, Trolley.unicode, Trolley.color, 5, 2)
+    super(Trolley.name, Trolley.description, Trolley.unicode, Trolley.color, 5, 2, 'gameState')//'player')??
   }
   //
 }
@@ -415,7 +414,7 @@ export class Toolbox extends Admin {
   static unicode = "U+1F9F0";
   static color = "#ff55c6ff";
   constructor() {
-    super(Toolbox.name, Toolbox.description, Toolbox.unicode, Toolbox.color, 7, 3)
+    super(Toolbox.name, Toolbox.description, Toolbox.unicode, Toolbox.color, 7, 3, 'gameState')//'player')??
   }
   //
 }
@@ -426,7 +425,7 @@ class Backdoor extends Admin {
   static unicode = "U+1F6AA";
   static color = "#0a0a0aff";
   constructor() {
-    super(Backdoor.name, Backdoor.description, Backdoor.unicode, Backdoor.color, 8, 4)
+    super(Backdoor.name, Backdoor.description, Backdoor.unicode, Backdoor.color, 8, 4, 'gameState')
   }
   //
 }
@@ -437,7 +436,7 @@ class Communism extends Admin {
   static unicode = "U+262D";
   static color = "#ff0000ff";
   constructor() {
-    super(Communism.name, Communism.description, Communism.unicode, Communism.color, 5, 3)
+    super(Communism.name, Communism.description, Communism.unicode, Communism.color, 5, 3, 'player')
   }
   //
 }
@@ -448,18 +447,18 @@ class Palette extends Admin {
   static unicode = "U+1F3A8";
   static color = "#ff55f6ff";
   constructor() {
-    super(Palette.name, Palette.description, Palette.unicode, Palette.color, 6, 4)
+    super(Palette.name, Palette.description, Palette.unicode, Palette.color, 6, 4, 'gameState')
   }
   //
 }
 
 class Osiris extends Admin {
   static name = "Osiris";
-  static description = "+1 damage every time one of your programs is destroyed";
+  static description = "+1 damage to every placed piece each time one of your programs is destroyed";
   static unicode = "U+1314A";
   static color = "#33073bff";
   constructor() {
-    super(Osiris.name, Osiris.description, Osiris.unicode, Osiris.color, 8, 5)
+    super(Osiris.name, Osiris.description, Osiris.unicode, Osiris.color, 8, 4, 'gameState')
   }
   //
 }
@@ -470,7 +469,7 @@ class Slots extends Admin {
   static unicode = "U+1F3B0";
   static color = "#ff5555";
   constructor() {
-    super(Slots.name, Slots.description, Slots.unicode, Slots.color, 5, 1)
+    super(Slots.name, Slots.description, Slots.unicode, Slots.color, 5, 1, 'gameState')//shop
   }
   //
 }
@@ -481,7 +480,7 @@ class Newspaper extends Admin {
   static unicode = "U+1F5DE";
   static color = "#5c5c5cff";
   constructor() {
-    super(Newspaper.name, Newspaper.description, Newspaper.unicode, Newspaper.color, 1, 2)
+    super(Newspaper.name, Newspaper.description, Newspaper.unicode, Newspaper.color, 1, 2, 'player')
   }
   //
 }
@@ -492,7 +491,7 @@ class Crown extends Admin {
   static unicode = " U+1F451";
   static color = "#e6c98bff";
   constructor() {
-    super(Crown.name, Crown.description, Crown.unicode, Crown.color, 9, 3)
+    super(Crown.name, Crown.description, Crown.unicode, Crown.color, 9, 3, 'gameState')//maybe player
   }
   //
 }
@@ -503,7 +502,7 @@ class Cactus extends Admin {
   static unicode = "U+1F335";
   static color = "#dfb372ff";
   constructor() {
-    super(Cactus.name, Cactus.description, Cactus.unicode, Cactus.color, 10, 5)
+    super(Cactus.name, Cactus.description, Cactus.unicode, Cactus.color, 10, 5, 'gameState')//pieces?
   }
   //
 }
@@ -514,7 +513,7 @@ class Compass extends Admin {
   static unicode = "U+1F9ED";
   static color = "#ff5555";
   constructor() {
-    super(Compass.name, Compass.description, Compass.unicode, Compass.color, 2, 1)
+    super(Compass.name, Compass.description, Compass.unicode, Compass.color, 2, 1, 'gameState')
   }
   //
 }
@@ -525,7 +524,7 @@ class Seed extends Admin {
   static unicode = "U+1F331";
   static color = "#ff5555";
   constructor() {
-    super(Seed.name, Seed.description, Seed.unicode, Seed.color, 10, 1)
+    super(Seed.name, Seed.description, Seed.unicode, Seed.color, 10, 1, 'player')
   }
   //
 }
@@ -536,7 +535,7 @@ class Puzzle extends Admin {
   static unicode = " U+1F9E9";
   static color = "#ff5555";
   constructor() {
-    super(Puzzle.name, Puzzle.description, Puzzle.unicode, Puzzle.color, 6, 3)
+    super(Puzzle.name, Puzzle.description, Puzzle.unicode, Puzzle.color, 6, 3, 'gameState')
   }
   //
 }
@@ -547,7 +546,7 @@ class Roger extends Admin {
   static unicode = "U+2620";
   static color = "#ff5555";
   constructor() {
-    super(Roger.name, Roger.description, Roger.unicode, Roger.color, 6, 3)
+    super(Roger.name, Roger.description, Roger.unicode, Roger.color, 6, 3, 'player')
   }
   //
 }
@@ -558,7 +557,7 @@ class Bucket extends Admin {
   static unicode = "U+1FAA3";
   static color = "#ff5555";
   constructor() {
-    super(Bucket.name, Bucket.description, Bucket.unicode, Bucket.color, 4, 1)
+    super(Bucket.name, Bucket.description, Bucket.unicode, Bucket.color, 4, 1, 'player')
   }
   //
 }
@@ -569,7 +568,7 @@ class Diamond extends Admin {
   static unicode = "U+1F48E";
   static color = "#ff5555";
   constructor() {
-    super(Diamond.name, Diamond.description, Diamond.unicode, Diamond.color, 8, 5)
+    super(Diamond.name, Diamond.description, Diamond.unicode, Diamond.color, 8, 5, 'player')
   }
   //
 }
@@ -580,7 +579,7 @@ class Drum extends Admin {
   static unicode = "U+1F941";
   static color = "#ff5555";
   constructor() {
-    super(Drum.name, Drum.description, Drum.unicode, Drum.color, 3, 1)
+    super(Drum.name, Drum.description, Drum.unicode, Drum.color, 3, 1, 'player')
   }
   //
 }
@@ -591,7 +590,7 @@ class Sneakers extends Admin {//item???
   static unicode = "U+1F45F";
   static color = "#36c723ff";
   constructor() {
-    super(Sneakers.name, Sneakers.description, Sneakers.unicode, Sneakers.color, 6, 3)
+    super(Sneakers.name, Sneakers.description, Sneakers.unicode, Sneakers.color, 6, 3, 'player')
   }
   //
 }
@@ -603,18 +602,18 @@ class Torch extends Admin {
   static unicode = "U+1F526";
   static color = "#f0aa13ff";
   constructor() {
-    super(Torch.name, Torch.description, Torch.unicode, Torch.color, 4, 1)
+    super(Torch.name, Torch.description, Torch.unicode, Torch.color, 4, 1, 'player')
   }
   //
 }
 
 class Feather extends Admin {
   static name = "Feather";
-  static description = "+3 moves for all programs";
+  static description = "+3 moves, -1 defence for all programs";
   static unicode = "U+1FAB6";
   static color = "#ff5555";
   constructor() {
-    super(Feather.name, Feather.description, Feather.unicode, Feather.color, 8, 5)
+    super(Feather.name, Feather.description, Feather.unicode, Feather.color, 8, 5, 'player')
   }
   //
 }
@@ -625,7 +624,7 @@ class Copier extends Admin {
   static unicode = "U+1F5A8";
   static color = "#ff5555";
   constructor() {
-    super(Copier.name, Copier.description, Copier.unicode, Copier.color, 9, 5)
+    super(Copier.name, Copier.description, Copier.unicode, Copier.color, 9, 5, 'gameState')
   }
   //
 }
@@ -636,29 +635,29 @@ class Telescope extends Admin {
   static unicode = "U+1F52D";
   static color = "#ff5555";
   constructor() {
-    super(Telescope.name, Telescope.description, Telescope.unicode, Telescope.color, 6, 4)
+    super(Telescope.name, Telescope.description, Telescope.unicode, Telescope.color, 6, 4, 'player')
   }
   //
 }
 
 class Microscope extends Admin {
-  static name = "Microscope";
+  static name = "Microbiology";
   static description = "Programs with a size of 1 get +1 defence";
   static unicode = "U+1F52C";
   static color = "#ff5555";
   constructor() {
-    super(Microscope.name, Microscope.description, Microscope.unicode, Microscope.color, 5, 3)
+    super(Microscope.name, Microscope.description, Microscope.unicode, Microscope.color, 5, 3, 'gameState')
   }
   //
 }
 
-class Lotus extends Admin {
+class Lotus extends Admin {//boss? remove money?
   static name = "Lotus";
-  static description = "Rare pieces give x1.5 damage";
+  static description = "Rare admin pieces give x1.5 damage";
   static unicode = "U+1FAB7";
   static color = "#ff5555";
   constructor() {
-    super(Lotus.name, Lotus.description, Lotus.unicode, Lotus.color, 10, 5)
+    super(Lotus.name, Lotus.description, Lotus.unicode, Lotus.color, 10, 5, 'player')
   }
   //
 }
@@ -669,7 +668,7 @@ export class Broom extends Admin {
   static unicode = "U+1F9F9";
   static color = "#c7b07eff";
   constructor() {
-    super(Broom.name, Broom.description, Broom.unicode, Broom.color, 10, 5)
+    super(Broom.name, Broom.description, Broom.unicode, Broom.color, 10, 5, 'gameState')
   }
   //
 }

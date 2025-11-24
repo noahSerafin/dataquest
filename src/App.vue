@@ -6,6 +6,7 @@
   import { castled, level1Levels } from './level1Levels';
   import { Player } from "./Player";
   import { Item, allItems} from "./Items";
+  import type { ItemConstructor } from "./Items";
   import { allAdmins } from "./AdminPrograms";
   import { Admin } from "./AdminPrograms";
   import PlayerView from "./components/PlayerView.vue";
@@ -105,12 +106,52 @@
     player.value.money += Math.round(item.cost / 2);
   }
 
+  function handleApplyAdmin(){
+
+  }
+
   function handleApplyItem(payload: {item: Item, id:string}) {
-    //check it is to be applied to player
-    player.value.applyItemToPiece(payload);
+    const item = payload.item;
+    //check it is to be applied to playerBlueprints
+    if (item.targetType === "blueprint") {
+      const id = payload.id;
+      const blueprint = player.value.programs.find(bp => bp.id === id);
+      if (!blueprint) return;
+      player.value.applyItemToPieceBlueprint(payload);
+      return;
+    }
+    ////if targetType === Piece
+    if (item.targetType === "piece" && selectedPiece.value) {
+      const id = selectedPiece.value?.id;
+      const piece = activePieces.value.find(p => p.id === id);
+      if (!piece) return;
+      item.apply(piece);
+      player.value.removeItem(item)
+      return;
+    }
+    
+    if (item.targetType === "player") {
+      if(item.name === 'Mystery Box' && player.value.memory >= player.value.usedMemory){
+        player.value.items.push(pickWeightedRandomItem(allItems))
+        player.value.removeItem(item)
+      }
+      if(item.name === 'Pinata' && player.value.adminSlots > player.value.admins.length){
+        player.value.admins.push(pickWeightedRandomItem(allAdmins))
+        player.value.removeItem(item)
+      }
+      if(item.name === 'Genie' && player.value.memory - 2 >= player.value.usedMemory){
+        const classes = pickThreePieces(allPieces);
+        const bps = classes.map(c => makeBlueprint(c));
+        player.value.programs.push(...bps);
+        player.value.removeItem(item)
+      }
+    }
+
+    console.warn("Item has unknown target type:", item.targetType);
+    //selectedPiece.value =
+  }
     //or gameState
     //or shop/shop items
-  }
 
 
   //SHOP functions
@@ -177,7 +218,7 @@
     return new PickedClass();  // RETURN INSTANCE
   }
 
-  function pickThreeItems(itemClasses: Array<typeof Item>) {
+  function pickThreeItems(itemClasses: ItemConstructor[]) {
     return [
       pickWeightedRandomItem(itemClasses),
       pickWeightedRandomItem(itemClasses),
@@ -206,7 +247,7 @@
 
     const classes = pickThreePieces(allPieces);
     shopBlueprints.value = classes.map(c => makeBlueprint(c));
-    const allItemsAndAdmins = [...allItems, ...allAdmins];
+    const allItemsAndAdmins: ItemConstructor[] = [...allItems, ...allAdmins];
     shopItems.value = pickThreeItems(allItemsAndAdmins);
     //if triggered by player
   }
@@ -234,14 +275,16 @@
   //round logic
   //pieceMap to track occupied spaces
   const activePieces = ref<InstanceType<typeof Piece>[]>([]);
+  const selectedPiece = ref<Piece | null>(null)
   const playerSpawns = ref<Coordinate[]>([]);
-  const level = ref(castled);//tiles
-  const difficulty = ref(1);
-  const displayEditor = ref(false);
   const isPlacing = ref(false);
   const hasFinishedTurn = ref(false);
   const isFirstTurn = ref(true);
   const pieceToPlace = ref<PieceBlueprint | null>(null);
+  //world logic
+  const level = ref(castled);//tiles
+  const difficulty = ref(1);
+  const displayEditor = ref(false);
   
   //map
   const toggleMap = () => {
@@ -269,7 +312,7 @@
     showShop.value = !showShop.value;
   }
   //linear: round -> shop -> map
-  //split paths: round -> map -> shopIfShop -> else jround
+  //split paths: round -> map -> shopIfShop -> else round
 
   const newPlacementHighlights = (): Coordinate[] => {//board should only show these if isPlacing
     const highlights: Coordinate[] = [];
@@ -367,6 +410,7 @@
     refreshShop(true)//handle in round, or don't for crystal ball
   });
 
+  //round state functions
   function highlightPlacements(pieceBlueprint: PieceBlueprint) {
     if(!isFirstTurn){
       playerSpawns.value = newPlacementHighlights();
@@ -405,7 +449,59 @@
     endTurn();
   }
 
+  //previous board functions
+  //highlight functions
   const boardRef = ref();
+  
+  //selectedPiece functions
+  function handlePieceSelect(piece: Piece) {//handleselect
+    selectedPiece.value = piece
+    //highlight range
+    if(piece.team === 'enemy'){
+      boardRef.value.highlightTargets(piece);
+    } else {
+      boardRef.value.highlightMoves(piece);
+    }
+  }
+
+  const deselectPiece = () => {
+    selectedPiece.value = null;
+    boardRef.value.clearHighlights();
+  }
+
+  const movePiece = (coord : Coordinate) => {//todo moves piece, but does not add more tiles visually
+    if(!selectedPiece.value) return;
+    if (selectedPiece.value.team !== 'player') return;
+      boardRef.value.clearHighlights();
+      selectedPiece.value?.moveTo(coord);
+    if(selectedPiece.value.movesRemaining > 0){
+      boardRef.value.highlightMoves(selectedPiece.value);
+    }else {
+      boardRef.value.clearHighlights();
+    }
+    //console.log('tiles: ', selectedPiece.value.tiles);
+  }
+
+  const damagePieceAt = (coord:Coordinate) => {
+    //console.log('props pieces:', props.pieces.map(p => p.tiles))
+    //console.log('selected:', selectedPiece.value)
+    if (!selectedPiece.value) return
+    if (selectedPiece.value.team !== 'player') return
+    //console.log('looking at ', coord, 'in ', props.pieces)
+    const damageReceiver = activePieces.value.find(piece =>
+      piece.tiles.some(t => t.x === coord.x && t.y === coord.y)
+    );
+    //console.log('receiver: ', damageReceiver?.name)
+    if (!damageReceiver || damageReceiver.team === selectedPiece.value.team) return;
+    const damage = selectedPiece.value.attack;
+    //console.log("Damage call:", coord, damage)
+    damageReceiver.takeDamage(damage);
+    selectedPiece.value.actions --
+    //console.log(damageReceiver?.name, ' tiles afterdmg: ', damageReceiver.tiles)
+    boardRef.value.clearHighlights();
+  }
+
+  //enemy moves
 
   async function enemyTurn() {
     const enemyPieces = activePieces.value.filter(p => p.team === 'enemy');
@@ -521,11 +617,17 @@
   <Board ref="boardRef" v-if="!displayEditor"
   :tiles="level.tiles"
   :pieces="activePieces"
+  :selectedPiece="selectedPiece"
   :placementHighlights="playerSpawns"
   :isFirstTurn="isFirstTurn"
   :placementMode="isPlacing"
   :hasFinishedTurn="hasFinishedTurn"
-  @place-on-board="placePieceOnBoardAt"/>
+  @placeOnBoard="placePieceOnBoardAt"
+  @handlePieceSelect="handlePieceSelect"
+  @deselect="deselectPiece"
+  @movePiece="movePiece"
+  @damagePieceAt="damagePieceAt"
+  />
   <Leveleditor v-else @export-level="handleExport"/>
   <button v-if="!displayEditor && !hasFinishedTurn" class="end-turn" v-on:click="endTurn()">End Turn</button>
 </template>

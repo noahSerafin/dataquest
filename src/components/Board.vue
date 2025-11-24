@@ -8,22 +8,28 @@ import { Piece } from "../Pieces"
 interface Props{
   tiles : Coordinate[]//Set<string>
   pieces: Piece[]
+  selectedPiece: InstanceType<typeof Piece> | null
   placementHighlights: Coordinate[]
   placementMode: boolean
   isFirstTurn: boolean
   hasFinishedTurn: boolean
 }
 const props = defineProps<Props>()
+
 //console.log('pm: ', props.placementMode)
 //console.log('in board: ', props.placementHighlights.length);
 
 const emit = defineEmits<{
-  (e: 'place-on-board', coord: Coordinate): void
+  (e: 'placeOnBoard', coord: Coordinate): void
+  (e: 'handlePieceSelect', piece: Piece): void
+  (e: 'deselect'): void
+  (e: 'movePiece', coord: Coordinate): void
+  (e: 'damagePieceAt', coord: Coordinate): void
 }>()
 function handlePlaceClick(tile: Coordinate) {
   if (!props.placementMode) return
   if (!props.placementHighlights.some(h => h.x === tile.x && h.y === tile.y)) return
-  emit('place-on-board', tile)
+  emit('placeOnBoard', tile)
 }
 
 // Make a Set for fast lookup
@@ -76,16 +82,7 @@ const pieceMap = computed(() => {
 
 const isOccupied = (x: number, y: number) => pieceMap.value.has(`${x},${y}`);
 
-const selectedPiece = ref<Piece | null>(null)
-function handlePieceSelect(piece: Piece) {//handleselect
-  selectedPiece.value = piece
-  //highlight range
-  if(piece.team === 'enemy'){
-    highlightTargets(piece);
-  } else {
-    highlightMoves(piece);
-  }
-}
+
 
 //cleanup
 const moveButtons = ref<Array<{ x: number; y: number; direction: string }>>([]);
@@ -115,13 +112,9 @@ function getAvailableMoves(
   })
 }
 
-function highlightMoveRange(piece: InstanceType<typeof Piece>){
- //console.log('movesquares:', moveHighlights);
-}
-
 const highlightMoves = (piece: InstanceType<typeof Piece>) => {
   clearHighlights();
-  moveHighlights.value = getTilesInRange(piece.headPosition, piece.movesRemaining, tileSet.value)
+  moveHighlights.value = getTilesInRange(piece.headPosition, piece.movesRemaining, tileSet.value)//not really providing possible with pieces in the way
   moveButtons.value = getAvailableMoves(piece, tileSet.value, pieceMap.value);
 }
 
@@ -129,19 +122,6 @@ const clearHighlights = () => {
   moveHighlights.value = [];
   inRangeHighlights.value = [];
   moveButtons.value = [];
-}
-
-const movePiece = (coord : Coordinate) => {//todo moves piece, but does not add more tiles visually
-  if(!selectedPiece.value) return;
-  if (selectedPiece.value.team !== 'player') return;
-    moveButtons.value = []
-    selectedPiece.value?.moveTo(coord);
-  if(selectedPiece.value.movesRemaining > 0){
-    highlightMoves(selectedPiece.value);
-  }else {
-    clearHighlights();
-  }
-  //console.log('tiles: ', selectedPiece.value.tiles);
 }
 
 function getTilesInRange(
@@ -180,25 +160,6 @@ function checkTileIsOccupied(coord:Coordinate): Piece | undefined{
 
 //(damageReceiver: InstanceType<typeof Piece>) => {
 
-const damagePieceAt = (coord:Coordinate) => {
-  //console.log('props pieces:', props.pieces.map(p => p.tiles))
-  //console.log('selected:', selectedPiece.value)
-  if (!selectedPiece.value) return
-  if (selectedPiece.value.team !== 'player') return
-  //console.log('looking at ', coord, 'in ', props.pieces)
-  const damageReceiver = props.pieces.find(piece =>
-    piece.tiles.some(t => t.x === coord.x && t.y === coord.y)
-  );
-  //console.log('receiver: ', damageReceiver?.name)
-  if (!damageReceiver || damageReceiver.team === selectedPiece.value.team) return;
-  const damage = selectedPiece.value.attack;
-  //console.log("Damage call:", coord, damage)
-  damageReceiver.takeDamage(damage);
-  selectedPiece.value.actions --
-  //console.log(damageReceiver?.name, ' tiles afterdmg: ', damageReceiver.tiles)
-  clearHighlights();
-}
-
 const highlightTargets = (piece: InstanceType<typeof Piece>) => {
   clearHighlights();
   inRangeHighlights.value = getTilesInRange(
@@ -215,11 +176,6 @@ defineExpose({
   highlightTargets,
   clearHighlights
 });
-
-const deselect = () => {
-  selectedPiece.value = null;
-  clearHighlights();
-}
 
 </script>
 
@@ -256,7 +212,7 @@ const deselect = () => {
       :tileSize=tileSize
       :mapTiles = props.tiles
       cssclass = "board"
-      @select="handlePieceSelect"
+      @select="$emit('handlePieceSelect', piece)"
       />
     </div>
     <!-- 
@@ -278,7 +234,7 @@ const deselect = () => {
       :key="index"
       class="highlight-tile"
       :class="['move-button', `move-button-${tile.direction}`]"
-      v-on:click="movePiece(tile)"
+      v-on:click="$emit('movePiece', tile)"
       :style="{
         left: tile.x * tileSize + 'px',
         top: tile.y * tileSize + 'px',
@@ -291,7 +247,7 @@ const deselect = () => {
     :key="index"
     :id="`atk-${tile.x}-${tile.y}`"
       class="highlight-tile red"
-      v-on:click="damagePieceAt(tile)"
+      v-on:click="$emit('damagePieceAt', tile)"
       :style="{
         left: tile.x * tileSize + 'px',
         top: tile.y * tileSize + 'px',
@@ -311,7 +267,6 @@ const deselect = () => {
         height: tileSize + 'px',
       }"
     />
-    <!--&& selectedPiece.team === 'player'"-->
     <PieceController
       v-if="selectedPiece && !hasFinishedTurn"
       :piece="selectedPiece"
@@ -320,7 +275,7 @@ const deselect = () => {
       :canBuy="false"
       @highlightMoves="highlightMoves"
       @highlightTargets="highlightTargets"
-      @close="deselect"
+      @close="$emit('deselect')"
       />
       <!--
         @special="console.log('Special', $event)"

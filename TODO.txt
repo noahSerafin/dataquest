@@ -130,3 +130,8 @@ end rounds, reset board -> open map
 map -> click on shop, open shop, click on level, open board
 swap between shop -> map -> board
 increment difficulty
+
+HYBRIDS 7
+Hybrid class accepts two pieces
+takes average of both stats, rounded up
+takes speacial move of first piece

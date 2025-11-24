@@ -29,9 +29,9 @@ function handleSelect() {
 
 function rarityStyle(rarity: number) {
   switch (rarity) {
-    case 1: return { label: "Common", color: "#4caf50" };
-    case 2: return { label: "Uncommon", color: "#8bc34a" };
-    case 3: return { label: "Rare", color: "#03a9f4" };
+    case 1: return { label: "Common", color: "lightgreen" };
+    case 2: return { label: "Uncommon", color: "orange" };
+    case 3: return { label: "Rare", color: "orangered" };
     case 4: return { label: "Very Rare", color: "#9052f3ff" };
     case 5: return { label: "Black Market", color: "#ff0df3ff" };
     case 6: return { label: "Legendary", color: "#ffd700" };

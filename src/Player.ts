@@ -69,7 +69,7 @@ export class Player {
   
   }
 
-  applyItemToPiece(payload : {item: Item, id: string}) {
+  applyItemToPieceBlueprint(payload : {item: Item, id: string}) {
     //check item type
     //check target id's type
     //decide which function to use

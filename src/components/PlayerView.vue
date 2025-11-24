@@ -3,6 +3,7 @@
     import type { Player } from "../Player";
     import type { Coordinate, PieceBlueprint } from "../types";
     import { Item } from "../Items";
+    import { Admin } from "../AdminPrograms";
     import ItemView from "./ItemView.vue";
     import PieceController from "./PieceController.vue";
     import BlueprintView from "./BlueprintView.vue";
@@ -17,6 +18,7 @@
         (e: 'sellPiece', id:string):void;
         (e: 'sellItem', id:string):void;
         (e: 'applyItem', payload: {item: Item, id:string}):void;
+        //trigger admin
     }>();
 
     const selectedPiece = ref<PieceBlueprint | null>(null)
@@ -48,10 +50,17 @@
     }
 
     function onUseItem(item: Item) {
-        if(selectedPiece.value) {
+        if(selectedPiece.value && item.targetType === 'blueprint'){
             console.log('using: ', item.name, ' on ', selectedPiece.value?.name)
             emit("applyItem", { item, id: selectedPiece.value.id })  
+        } else {//not for a blueprint so no id needed
+            console.log('using: ', item.name)
+            emit("applyItem", { item, id: '' })  
         }
+    }
+
+    function onUseAdmin(admin: Admin) {//admin: Admin ???
+        //emit("applyAdmin", admin: Admin);
     }
 
     const handleClose = () => [
@@ -80,7 +89,7 @@
                     :tileSize="60"
                     :canBuy= "false"
                     @sell="$emit('sellItem', item.id)"
-                    @use="onUseItem"
+                    @triggerAdmin="onUseAdmin"
                 />
             </ul>
 

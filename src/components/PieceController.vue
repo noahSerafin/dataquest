@@ -19,10 +19,10 @@ defineEmits(['highlightMoves', 'attack', 'special', 'highlightPlacements', 'high
 function showRarity(rarity: number) {
   switch (rarity) {
     case 1:
-      return { text: "Common", color: "green" };
+      return { text: "Common", color: "lightgreen" };
 
     case 2:
-      return { text: "Uncommon", color: "orange" };
+      return { text: "Uncommon", color: "orangered" };
 
     case 3:
       return { text: "Rare", color: "red" };

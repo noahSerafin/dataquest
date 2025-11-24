@@ -61,11 +61,26 @@ export class Player {
     this.items = this.items.filter(i => i !== item);
   }
 
-  applyItemToPiece(payload : {item: Item, id: string}) {//consumables on blueprints
+  applyConsumableToBlueprint(){
+    
+  }
+  
+  applyConsumableToPiece(){
+  
+  }
+
+  applyItemToPiece(payload : {item: Item, id: string}) {
+    //check item type
+    //check target id's type
+    //decide which function to use
+
     const item = payload.item;
     const pieceId = payload.id;
     console.log('using ', item.name, ' on ', pieceId);
-    const piece = this.programs.find(p => p.id === pieceId);
+
+    //if item is consumable and target type is blueprint{
+    ///consumables on blueprints
+    const piece = this.programs.find(p => p.id === pieceId);//will only find id in player blueprints
     if (!piece) return false;
 
     // Each item implements an apply(piece) method

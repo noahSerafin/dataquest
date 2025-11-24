@@ -106,7 +106,10 @@
   }
 
   function handleApplyItem(payload: {item: Item, id:string}) {
+    //check it is to be applied to player
     player.value.applyItemToPiece(payload);
+    //or gameState
+    //or shop/shop items
   }
 
 

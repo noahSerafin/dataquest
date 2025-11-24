@@ -14,6 +14,7 @@ export type PieceBlueprint = {
   rarity: number
   color: string
   isPlaced: boolean
+  cost: number
   //headposition, tiles optional for maps
 }
 

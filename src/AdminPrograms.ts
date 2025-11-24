@@ -324,7 +324,7 @@ class Aesculapius extends Admin {
   static name = "Aesculapius";
   static description = "Programs are immune to posion and disease";
   static unicode = "U+2695";
-  static color = "#55ff6cff";
+  static color = "#084610ff";
   constructor() {
     super(Aesculapius.name, Aesculapius.description, Aesculapius.unicode, Aesculapius.color, 4, 2, 'player')//or gamestate?
   }

@@ -22,6 +22,7 @@
     }>();
 
     const selectedPiece = ref<PieceBlueprint | null>(null)
+    const selectedItem = ref<Item | null>(null)
     
     function openInventoryController(piece: PieceBlueprint) {///TODO SORT OUT IMPORTS
         selectedPiece.value = piece;
@@ -66,6 +67,12 @@
     const handleClose = () => [
         selectedPiece.value = null
     ]
+    function selectItem(item: Item){
+        selectedItem.value = item;
+    }
+    function isSelected(item: Item): boolean{
+        return  selectedItem.value === item ? true : false;
+    }
 
     //progams can be placed on board, greying them out in inventory, use a similar popup to pieceController but with place/sell buttons
     //items can be used on programs, confirmation window to execute their function
@@ -88,8 +95,10 @@
                     cssclass="inventory"
                     :tileSize="60"
                     :canBuy= "false"
+                    :showController="(selectedItem === item)"
                     @sell="$emit('sellItem', item.id)"
                     @triggerAdmin="onUseAdmin"
+                    @select="selectItem"
                 />
             </ul>
 
@@ -132,8 +141,10 @@
                 cssclass="inventory"
                 :tileSize="60"
                 :canBuy= "false"
+                :showController="(selectedItem === item)"
                 @sell="$emit('sellItem', item.id)"
                 @use="onUseItem"
+                @select="selectItem"
             />
         </ul>
         <PieceController

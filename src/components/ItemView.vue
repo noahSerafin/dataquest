@@ -9,6 +9,7 @@ const props = defineProps<{
   cssclass?: string;
   tileSize: number;
   canBuy: boolean;       // for custom styling (shop / inventory)
+  showController: boolean;
 }>();
 
 console.log('item: ', props.item)
@@ -20,10 +21,10 @@ const emit = defineEmits<{
   use: [item: Item];
 }>();
 
-const showController = ref(false);
+//const showController = ref(false);
 function handleSelect() {
-  showController.value = !showController.value
-  console.log('selected item: ', showController.value)
+  //props.showController = !props.showController
+  //console.log('selected item: ', showController)
   emit("select", props.item);
 }
 
@@ -76,7 +77,7 @@ const handleUse = () => {
     :style="itemStyle"
   >
     <div class="icon">{{ unicodeSymbol }}</div>
-    <div v-if="showController" class="info" @click.stop >
+    <div v-if="props.showController" class="info" @click.stop >
       <div class="name">{{ item.name }}</div>
       <div v-if="(cssclass == 'shop')" class="type">- {{ type }} -</div>
       <div class="rarity" :style="{ color: rarityStyle(item.rarity).color }">

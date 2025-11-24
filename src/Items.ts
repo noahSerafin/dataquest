@@ -42,6 +42,11 @@ export abstract class Item<TTarget = any> {
   //method to alter a Pieces stats, possibly in subclasses
   //or players stats
   abstract apply(target: TTarget): void;
+    /*
+    abstract apply(
+    target: Piece | Player | Item | PieceBlueprint | GameState
+    ): void;
+    */
 }
 
 export class Whetstone extends Item<PieceBlueprint> {
@@ -281,10 +286,11 @@ export class Voucher extends Item<Item> {
     static name = "Voucher";
     static description = "Makes one item in the shop free";
     static unicode = "U+1F9FE";
+    static color = "#ffd000ff";
     constructor(){
-        super(Voucher.name, Voucher.description, Voucher.unicode, Voucher.color, 3, 4, 'shopItem')
+        super(Voucher.name, Voucher.description, Voucher.unicode, Voucher.color, 3, 1, 'shopItem')
     }
-    apply(target: Item) {
+    apply(target: Item | PieceBlueprint ) {
         target.cost = 0
     }
 }

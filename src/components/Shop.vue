@@ -14,6 +14,8 @@ const emit = defineEmits<{
   (e: 'buy-blueprint', blueprint: PieceBlueprint): void;
   (e: 'buy-item', item: Item): void;
   (e: 'refresh-shop'): void;
+  (e: 'selectTarget', target: Item | PieceBlueprint | null): void;
+  (e: 'clearTarget'): void;
   //close shop, open map
 }>();
 
@@ -23,14 +25,12 @@ const props = defineProps<{
   shopItems: InstanceType<typeof Item>[];
   rerollCost: number;
   player: Player;
+  target: Item | PieceBlueprint | null;
 }>();
 
-//const shopBlueprints = ref<PieceBlueprint[]>([]);
-//const shopItems = ref<Item[]>([]);
-const selectedPiece = ref<PieceBlueprint | null>(null)
-
-function openShopController(piece: PieceBlueprint) {///TODO SORT OUT IMPORTS
-  selectedPiece.value = piece;
+function openShopController(target: Item | PieceBlueprint | null) {///TODO SORT OUT IMPORTS
+  //selectedPiece.value = piece;
+  emit('selectTarget', target)
 }
 
 function handleBuyBlueprint(blueprint: PieceBlueprint) {
@@ -55,7 +55,7 @@ const canBuyItem = ((item: Item) => {
 
 const canBuyPiece = ((piece: PieceBlueprint) => {
   //check if item {
-  return (props.player.money >= ((piece.rarity*2) -1) && props.player.programs.length + props.player.items.length < props. player.memory);
+  return (props.player.money >= piece.cost && props.player.programs.length + props.player.items.length < props. player.memory);
   //} then must check for admin slots if admin
 });
 
@@ -95,14 +95,16 @@ const type = ((item: Item) => {
         cssclass="shop"
         :tileSize="60"
         :canBuy= "canBuyItem(item)"
+        :showController="(props.target === item)"
         @buy="handleBuyItem"
+        @select="openShopController"
       />
     </div>
     <PieceController
-        v-if="selectedPiece"
-        :piece="selectedPiece"
+        v-if="props.target && !(props.target instanceof Item)"
+        :piece="props.target"
         mode="shop"
-        :canBuy= "canBuyPiece(selectedPiece)"
+        :canBuy= "canBuyPiece(props.target)"
         @buy="handleBuyBlueprint"
         />
   </div>

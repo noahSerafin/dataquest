@@ -694,7 +694,7 @@ class Pawn extends Piece {
   static name = "Pawn";
   static description = "A slow program that can be promoted into an enemy piece";
   static unicode = "U+265F";
-  static color = "#ffe9b8e1";
+  static color = "#131313ff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Pawn.name, Pawn.description, Pawn.unicode, 1, 1, 1, 1, 0, Pawn.color, headPosition, [headPosition], team, Pawn.rarity, removeCallback, id)

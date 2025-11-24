@@ -80,8 +80,8 @@ const rarityInfo = computed(() => showRarity(props.piece.rarity));
       </div>
 
       <div class="actions">
-        <template v-if="mode === 'shop'">
-          <button :disabled="!canBuy" @click="$emit('buy', piece)">Buy (${{ piece.rarity * 2 - 1 }})</button>
+        <template v-if="mode === 'shop' && !(piece instanceof Piece)">
+          <button :disabled="!canBuy" @click="$emit('buy', piece)">Buy (${{ piece.cost }})</button>
         </template>
         <template v-if="mode === 'inventory'">
           <button @click="$emit('highlightPlacements', piece)">Place</button>

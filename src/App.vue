@@ -5,7 +5,7 @@
   import { testLevels } from './levels';
   import { castled, level1Levels } from './level1Levels';
   import { Player } from "./Player";
-  import { Item, allItems} from "./Items";
+  import { Item, Voucher, allItems} from "./Items";
   import type { ItemConstructor } from "./Items";
   import { allAdmins } from "./AdminPrograms";
   import { Admin } from "./AdminPrograms";
@@ -38,7 +38,8 @@
     defence: 0,
     rarity: 1,
     color: "#2fc5ebff",
-    isPlaced: false
+    isPlaced: false,
+    cost: 1
   }
   const testShield = {
     id: "274ec329-8c17-4265-8c12-e9a28bcf0111",
@@ -52,7 +53,8 @@
     defence: 1,
     rarity: 1,
     color: "#2fc5ebff",
-    isPlaced: false
+    isPlaced: false,
+    cost: 1
   }
   const testSling = {
     id: "274ec329-8c17-4265-8c12-e9a28bcf0112",
@@ -66,9 +68,10 @@
     defence: 0,
     rarity: 1,
     color: "#2fc5ebff",
-    isPlaced: false
+    isPlaced: false,
+    cost: 1
   }
-
+  const testVoucher = new Voucher();
 
   const swapDisplay = () => {
     displayEditor.value = !displayEditor.value;//add map later, make shop an overlay?
@@ -78,8 +81,8 @@
     50, // starting money
     5,  // memory limit
     5, //admin slots
-    [], // no items yet
-    [testSword, testShield, testSling],//, testShield] // starting pieces
+    [testVoucher], // no items yet
+    [testSword, testShield],//, testShield] // starting pieces
     []//no admins yet
   ));
 
@@ -147,6 +150,26 @@
       }
     }
 
+    if (item.targetType === "shopItem" && item.name === 'Voucher') {
+      console.log('using voucher on ', shopTarget.value?.name)
+      //const shopBlueprints = ref<PieceBlueprint[]>([]);
+      //const shopItems = ref<Item[]>([]);
+      //selectedShopItem
+      if(shopTarget.value?.id){
+        const id = shopTarget.value.id;
+        const shopBp = shopBlueprints.value.find(p => p.id === id);
+        const shopItem = shopItems.value.find(i => i.id === id);
+        if(shopBp){
+          item.apply(shopBp)
+          player.value.removeItem(item)
+        }
+        if(shopItem){
+          item.apply(shopItem)
+          player.value.removeItem(item)
+        }
+      }
+    }
+
     console.warn("Item has unknown target type:", item.targetType);
     //selectedPiece.value =
   }
@@ -155,6 +178,13 @@
 
 
   //SHOP functions
+  const shopTarget = ref<PieceBlueprint | Item | null>(null);
+  function clearShopTarget(){
+    shopTarget.value = null;
+  }
+  function selectShopTarget(target: Item | PieceBlueprint | null){
+    shopTarget.value=target;
+  }
 
   function makeBlueprint(PieceClass: any) {
     const temp = new PieceClass({ x: -1, y: -1 }, "player");
@@ -171,7 +201,8 @@
       defence: temp.defence,
       rarity: temp.rarity,
       color: PieceClass.color,
-      isPlaced: false                       
+      isPlaced: false,
+      cost: temp.rarity*2-1                     
       };
   }
   
@@ -609,9 +640,12 @@
     :shopBlueprints="shopBlueprints"
     :shopItems="shopItems"
     :rerollCost="rerollCost"
+    :target="shopTarget"
     @refresh-shop="refreshShop(false)"
     @buy-blueprint="buyBlueprint"
     @buy-item="buyItem"
+    @selectTarget="selectShopTarget"
+    @clearTarget="clearShopTarget"
     :player="player"
   />
   <Board ref="boardRef" v-if="!displayEditor"

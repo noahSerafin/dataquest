@@ -61,6 +61,23 @@ export class Player {
     this.items = this.items.filter(i => i !== item);
   }
 
+  applyItemToPiece(payload : {item: Item, id: string}) {//consumables on blueprints
+    const item = payload.item;
+    const pieceId = payload.id;
+    console.log('using ', item.name, ' on ', pieceId);
+    const piece = this.programs.find(p => p.id === pieceId);
+    if (!piece) return false;
+
+    // Each item implements an apply(piece) method
+    item.apply(piece);
+
+    // Remove item from inventory
+    this.removeItem(item);
+
+    return true;
+  }
+
+
   /** Remove a program by reference */
   removeProgram(program: PieceBlueprint): void {
     this.programs = this.programs.filter(p => p !== program);

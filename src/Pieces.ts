@@ -602,7 +602,7 @@ class Puffer extends Piece {
   static color = "#ffb20dff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Puffer.name, Puffer.description, Puffer.unicode, 4, 0, 1, 0, 0, Puffer.color, headPosition, [headPosition], team, Puffer.rarity, removeCallback, id)
+   super(Puffer.name, Puffer.description, Puffer.unicode, 4, 2, 1, 0, 0, Puffer.color, headPosition, [headPosition], team, Puffer.rarity, removeCallback, id)
   }
   //return damage on takedamage
 }

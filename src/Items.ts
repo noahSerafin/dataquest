@@ -1,3 +1,7 @@
+import type { PieceBlueprint } from "./types"
+import type { Piece } from "./Pieces"
+import type { Player } from "./Player"
+
 export abstract class Item {
   id: string
   static name : string
@@ -34,6 +38,7 @@ export abstract class Item {
 
   //method to alter a Pieces stats, possibly in subclasses
   //or players stats
+  abstract apply(target: any): void;
 }
 
 export class Whetstone extends Item {
@@ -43,13 +48,27 @@ export class Whetstone extends Item {
     static color = "#ff2222ff";
     constructor(){
         super(Whetstone.name, Whetstone.description, Whetstone.unicode, Whetstone.color, 3, 1)
-        //name desc utf || maxsize moves range atk def
     }
-    
-    //increases a pieces atk by 1
+    //increases a pieces atk by 
+    apply(target: PieceBlueprint) {
+        console.log('taerget: ', target)
+        target.attack += 1;
+    }
 }
-//WEIGHT LIFTER, U+1F3CB
-// FENCER, U+1F93A
+
+export class Training extends Item {
+    static name: "Training";
+    static description: "increases a pieces attack by 2";
+    static unicode: "U+1F3CB";
+    static color = "#ff5656ff";
+    constructor(){
+        super(Training.name, Training.description, Training.unicode, Training.color, 5, 4)
+    }
+    apply(target: PieceBlueprint) {
+        console.log('taerget: ', target)
+        target.attack += 1;
+    }
+}
 
 export class Iron extends Item {
     static name = "Iron";
@@ -57,10 +76,13 @@ export class Iron extends Item {
     static unicode = "U+1F96C"
     static color = "#54a4ffff"
     constructor(){
-        super(Iron.name, Iron.description, Iron.unicode, Iron.color, 3, 1)
-        //name desc utf || maxsize moves range atk def
+        super(Iron.name, Iron.description, Iron.unicode, Iron.color, 3, 1)      
     }
     //increases a pieces def by 1
+    apply(target: PieceBlueprint) {
+        console.log('taerget: ', target)
+        target.defence += 1;
+    }
 }
 //"U+1F356" //meat
  //??"U+26E8";
@@ -71,10 +93,13 @@ export class Blueberry extends Item {
     static unicode = "U+1FAD0";
     static color = "#1cff42ff";
     constructor(){
-        super(Blueberry.name, Blueberry.description, Blueberry.unicode, Blueberry.color, 3, 1)
-        //name desc utf || maxsize moves range atk def
+        super(Blueberry.name, Blueberry.description, Blueberry.unicode, Blueberry.color, 3, 1)      
     }
     //increases a pieces maxSize by 1
+    apply(target: PieceBlueprint) {
+        console.log('taerget: ', target)
+        target.maxSize += 1;
+    }
 }
 
 export class Carrot extends Item {
@@ -84,9 +109,12 @@ export class Carrot extends Item {
     static color = "#fff12bff";
     constructor(){
         super(Carrot.name, Carrot.description, Carrot.unicode, Carrot.color, 3, 1)
-        //name desc utf || maxsize moves range atk def
     }
-    //increases a pieces moves by 1
+    //increases a pieces range by 1
+    apply(target: PieceBlueprint) {
+        console.log('taerget: ', target)
+        target.range += 1;
+    }
 }
 
 export class Lightning extends Item {
@@ -96,11 +124,13 @@ export class Lightning extends Item {
     static color = "#dc00e4ff";
     constructor(){
         super(Lightning.name, Lightning.description, Lightning.unicode, Lightning.color, 3, 1)
-        //name desc utf || maxsize moves range atk def
     }
     //increases a pieces moves by 1
+    apply(target: PieceBlueprint) {
+        console.log('taerget: ', target)
+        target.moves += 1;
+    }
 }
-//ATHLETIC SHOE, U+1F45F
 
 export class Blessing extends Item {
     static name = "Blessing";
@@ -109,9 +139,15 @@ export class Blessing extends Item {
     static color = "#a9ffffff";
     constructor(){
         super(Blessing.name, Blessing.description, Blessing.unicode, Blessing.color, 9, 5)
-        //name desc utf || maxsize moves range atk def
     }
-    //increases a pieces moves by 1
+    apply(target: PieceBlueprint) {
+        console.log('taerget: ', target)
+        target.maxSize += 1;
+        target.moves += 1;
+        target.range += 1;
+        target.attack += 1;
+        target.defence += 1;
+    }
 }
 
 export class Supplement extends Item {
@@ -121,10 +157,15 @@ export class Supplement extends Item {
     static color = "#6e0c8bff";
     constructor(){
         super(Supplement.name, Supplement.description, Supplement.unicode, Supplement.color, 5, 5)
-        //name desc utf || maxsize moves range atk def
     }
-    //increases player memory by 1
-}//FISH, U+1F41F
+    apply(target: Piece) {
+        target.maxSize += 1;
+        target.moves += 1;
+        target.range += 1;
+        target.attack += 1;
+        target.defence += 1;
+    }
+}
 
 export class Juice extends Item {
     static name = "Juice";
@@ -132,19 +173,23 @@ export class Juice extends Item {
     static unicode = "U+1F9C3";
     static color = "#fcff47ff";
     constructor(){
-        super(Juice.name, Juice.description, Juice.unicode, Juice.color, 1, 2)
-        //name desc utf || maxsize moves range atk def
+        super(Juice.name, Juice.description, Juice.unicode, Juice.color, 1, 2)  
+    }
+    apply(target: Piece) {
+        target.moves += 1;
     }
 }
 
 export class Roids extends Item {
     static name = "Roids";
-    static description = "increases all a program's stats by 1 for one round";
+    static description = "increases all a program's attack by 1 for one round";
     static unicode = "U+1F489";
     static color = "#00e4b3ff";
     constructor(){
         super(Roids.name, Roids.description, Roids.unicode, Roids.color, 1, 2)
-        //name desc utf || maxsize moves range atk def
+    }
+    apply(target: Piece) {
+        target.attack += 1;
     }
 }
 
@@ -155,7 +200,9 @@ export class Formula extends Item {
     static color = "#27f743ff";
     constructor(){
         super(Formula.name, Formula.description, Formula.unicode, Formula.color, 1, 2)
-        //name desc utf || maxsize moves range atk def
+    }
+    apply(target: Piece) {
+        target.maxSize += 1;
     }
 }
 
@@ -166,7 +213,9 @@ export class Garlic extends Item {
     static color = "#26d0faff";
     constructor(){
         super(Garlic.name, Garlic.description, Garlic.unicode, Garlic.color, 1, 2)
-        //name desc utf || maxsize moves range atk def
+    }
+    apply(target: Piece) {
+        target.defence += 1;
     }
 }
 
@@ -177,7 +226,9 @@ export class RedMeat extends Item {
     static color = "#ff3737ff";
     constructor(){
         super(RedMeat.name, RedMeat.description, RedMeat.unicode, RedMeat.color, 1, 2)
-        //name desc utf || maxsize moves range atk def
+    }
+    apply(target: Piece) {
+        target.attack += 1;
     }
 }
 
@@ -188,7 +239,9 @@ export class Coffee extends Item {
     static color = "#e346f1ff";
     constructor(){
         super(Coffee.name, Coffee.description, Coffee.unicode, Coffee.color, 1, 2)
-        //name desc utf || maxsize moves range atk def
+    }
+    apply(target: Piece) {
+        target.moves += 1;
     }
 }
 
@@ -200,7 +253,9 @@ export class Bandage extends Item {
     static color = "#5659ebff";
     constructor(){
         super(Bandage.name, Bandage.description, Bandage.unicode, Bandage.color, 1, 2)
-        //name desc utf || maxsize moves range atk def
+    }
+    apply(target: Piece) {
+        //target.statuses = []
     }
 }
 
@@ -211,7 +266,9 @@ export class Soap extends Item {
     static color = "#821391ff";
     constructor(){
         super(Soap.name, Soap.description, Soap.unicode, Soap.color, 3, 4)
-        //name desc utf || maxsize moves range atk def
+    }
+    apply(target: Piece) {
+        //target.statuses = []
     }
 }
 
@@ -221,7 +278,9 @@ export class Voucher extends Item {
     static unicode = "U+1F9FE";
     constructor(){
         super(Voucher.name, Voucher.description, Voucher.unicode, Voucher.color, 3, 4)
-        //name desc utf || maxsize moves range atk def
+    }
+    apply(target: Item) {
+        //target.cost = 0
     }
 }
 
@@ -232,7 +291,10 @@ export class Mushroom extends Item {
     static color = "#5c0000ff";
     constructor(){
         super(Mushroom.name, Mushroom.description, Mushroom.unicode, Mushroom.color, 3, 4)
-        //name desc utf || maxsize moves range atk def
+    }
+    apply(target: Piece) {
+        target.movesRemaining = target.moves;
+        target.actions = 1;
     }
 }
 
@@ -243,7 +305,9 @@ export class Rations extends Item {
     static color = "#f7eb45ff";
     constructor(){
         super(Rations.name, Rations.description, Rations.unicode, Rations.color, 2, 3)
-        //name desc utf || maxsize moves range atk def
+    }
+    apply(target: Piece) {
+        target.movesRemaining = target.moves;
     }
 }
 
@@ -254,7 +318,9 @@ export class Beans extends Item {
     static color = "#f03030ff";
     constructor(){
         super(Beans.name, Beans.description, Beans.unicode, Beans.color, 2, 3)
-        //name desc utf || maxsize moves range atk def
+    }
+    apply(target: Piece) {
+        target.actions = 1;
     }
 }
 
@@ -265,7 +331,11 @@ export class Box extends Item {
     static color = "#926439ff";
     constructor(){
         super(Box.name, Box.description, Box.unicode, Box.color, 3, 3)
-        //name desc utf || maxsize moves range atk def
+    }
+    apply(target: Player) {
+        //check there is room (- this item)
+        //makerandomItem
+        //target.items.push(randomItem)
     }
 }
 
@@ -277,7 +347,9 @@ export class Wand extends Item {
   constructor() {
     super(Wand.name, Wand.description, Wand.unicode, Wand.color, 7, 5)
   }
-  //
+    apply(target: Piece[]) {
+        //should know previous state of activePieces
+    }
 }
 
 class Genie extends Item {
@@ -288,7 +360,10 @@ class Genie extends Item {
   constructor() {
    super(Genie.name, Genie.description, Genie.unicode, Genie.color, 10, 5)
   }
-
+    apply(target: Player) {
+        //bring up list of programs from collection, allow 3 to be selected
+        //target.programs.push()
+    }
   //create any program, keep track of uses
   //after 3 destroy genie
 }
@@ -301,9 +376,11 @@ class Hourglass extends Item {
   constructor() {
    super(Hourglass.name, Hourglass.description, Hourglass.unicode, Hourglass.color, 10, 4)
   }
+  apply(target: Player) {//game state from app??
+       //receive game state, and map
+    //reload level
+    }
 
-  //create any program, keep track of uses
-  //after 3 destroy genie
 }
 
 export const allItems = [Whetstone, Iron, Blueberry, Carrot, Lightning, Blessing, Supplement, Juice, Roids, Formula, Garlic, RedMeat, Coffee, Bandage, Soap, Voucher, Mushroom, Rations, Beans, Box, Wand, Genie, Hourglass]

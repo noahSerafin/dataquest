@@ -31,7 +31,7 @@ function showRarity(rarity: number) {
       return { text: "Very Rare", color: "#9052f3ff" };
 
     case 5:
-      return { text: "Black Market", color: "pink" };
+      return { text: "Black Market", color: "#ff0df3ff" };
 
     case 6:
       return { text: "Legendary", color: "gold" };

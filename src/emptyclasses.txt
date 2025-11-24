@@ -15,8 +15,9 @@ export class ¬ extends Item {
     static name: "¬";
     static description: "increases a programs max size by 1 for one round";
     static unicode: "";
+    static color = "#ffb20dff";
     constructor(){
-        super(¬.name, ¬.description, ¬.unicode, 2, 3)
+        super(¬.name, ¬.description, ¬.unicode, ¬.color 2, 3)
         //name desc utf || maxsize moves range atk def
     }
 }

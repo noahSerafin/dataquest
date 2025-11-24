@@ -1,9 +1,11 @@
 import { Item } from "./Items";
 import { Piece } from "./Pieces";
 
-export class Admin extends Item {
+export abstract class Admin extends Item {
   isConsumedOnUse = false;
-  //actions: number
+  apply(target: any){
+    //do not destroy the admin
+  }
 }
 
 class Meteor extends Admin {
@@ -16,7 +18,7 @@ class Meteor extends Admin {
     super(Meteor.name, Meteor.description, Meteor.unicode, Meteor.color, 10, 4)
   }
 
-  activate({ activePieces }: { activePieces: Piece[] }) {
+  apply({ activePieces }: { activePieces: Piece[] }) {
     for (const p of activePieces) p.takeDamage(3);
   }
 }
@@ -277,7 +279,7 @@ class CreditCard extends Admin {
 
 class Needle extends Admin {
   static name = "Needle";
-  static description = "Winning with one program boosts all it's stats by one";
+  static description = "Winning a round with one program placed boosts all it's stats by one";
   static unicode = "U+1FAA1";
   static color = "#b448a6ff";
   constructor() {
@@ -403,6 +405,17 @@ class Trolley extends Admin {
   static color = "#55fff1ff";
   constructor() {
     super(Trolley.name, Trolley.description, Trolley.unicode, Trolley.color, 5, 2)
+  }
+  //
+}
+
+export class Toolbox extends Admin {
+  static name = "Toolbox";
+  static description = "Programs only use 0.5 memory each";
+  static unicode = "U+1F9F0";
+  static color = "#ff55c6ff";
+  constructor() {
+    super(Toolbox.name, Toolbox.description, Toolbox.unicode, Toolbox.color, 7, 3)
   }
   //
 }
@@ -572,8 +585,8 @@ class Drum extends Admin {
   //
 }
 
-class Sneakers extends Admin {
-  static name = "Marching Drum";
+class Sneakers extends Admin {//item???
+  static name = "Trainers";
   static description = "+2 moves for all programs";
   static unicode = "U+1F45F";
   static color = "#36c723ff";
@@ -583,13 +596,14 @@ class Sneakers extends Admin {
   //
 }
 
-class Candle extends Admin {
-  static name = "Candle";
+//candle U+1F56F
+class Torch extends Admin {
+  static name = "Torch";
   static description = "+1 range for all programs";
-  static unicode = "U+1F56F";
-  static color = "#ff5555";
+  static unicode = "U+1F526";
+  static color = "#f0aa13ff";
   constructor() {
-    super(Candle.name, Candle.description, Candle.unicode, Candle.color, 4, 1)
+    super(Torch.name, Torch.description, Torch.unicode, Torch.color, 4, 1)
   }
   //
 }
@@ -660,7 +674,7 @@ export class Broom extends Admin {
   //
 }
 
-export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, Seed, Puzzle, Roger, Bucket, Diamond, Drum, Sneakers, Candle, Feather, Copier, Telescope, Microscope, Lotus, Broom];
+export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, Seed, Puzzle, Roger, Bucket, Diamond, Drum, Sneakers, Torch, Feather, Copier, Telescope, Microscope, Lotus, Broom];
 
 // GLOBE WITH MERIDIANS, U+1F310
 //Daemon
@@ -717,8 +731,6 @@ export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, 
 // SNOWFLAKE, U+2744
 //AI TRACKBALL, U+1F5B2
 // WHALE, U+1F40B
-//CANDLE, U+1F56F
-// ELECTRIC TORCH, U+1F526
 
 // TOOLBOX, U+1F9F0
 

@@ -74,7 +74,7 @@
   }
   
   const player = ref(new Player(
-    5, // starting money
+    50, // starting money
     5,  // memory limit
     5, //admin slots
     [], // no items yet
@@ -103,6 +103,10 @@
     const item = player.value.items[idx];
     player.value.items.splice(idx, 1);
     player.value.money += Math.round(item.cost / 2);
+  }
+
+  function handleApplyItem(payload: {item: Item, id:string}) {
+    player.value.applyItemToPiece(payload);
   }
 
 
@@ -495,7 +499,7 @@
   </div>
   <div v-if="!hasFinishedTurn && !isPlacing">Your turn</div>
 
-  <PlayerView v-if="!displayEditor" :player="player" @highlightPlacements="highlightPlacements" @sellPiece="sellPiece" @sellItem="sellItem"/>
+  <PlayerView v-if="!displayEditor" :player="player" @highlightPlacements="highlightPlacements" @sellPiece="sellPiece" @sellItem="sellItem" @applyItem="handleApplyItem"/>
   <WorldMap
     :levels="testLevels"
     @select-level="selectLevel"

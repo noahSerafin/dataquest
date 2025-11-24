@@ -14,9 +14,9 @@
     
     const emit = defineEmits<{//move to controller???
         (e: 'highlightPlacements', blueprint: PieceBlueprint): void;
-        (e: 'use-item', item: Item): void;
         (e: 'sellPiece', id:string):void;
         (e: 'sellItem', id:string):void;
+        (e: 'applyItem', payload: {item: Item, id:string}):void;
     }>();
 
     const selectedPiece = ref<PieceBlueprint | null>(null)
@@ -33,15 +33,27 @@
         `${props.player.usedMemory}/${props.player.memory}`
     );
 
-    function handlePlace(piece: PieceBlueprint) {
-        emit('highlightPlacements', piece)
-        selectedPiece.value = null
+    function handlePlace() {
+        if(selectedPiece.value){
+            emit("highlightPlacements", selectedPiece.value);
+            selectedPiece.value = null
+        }
     }
 
-     const handleSellPiece = (blueprint: PieceBlueprint) => {
-        emit('sellPiece', blueprint.id);
-        selectedPiece.value = null
+    function handleSellPiece() {
+        if(selectedPiece.value){
+            emit('sellPiece', selectedPiece.value.id);
+            selectedPiece.value = null
+        }
     }
+
+    function onUseItem(item: Item) {
+        if(selectedPiece.value) {
+            console.log('using: ', item.name, ' on ', selectedPiece.value?.name)
+            emit("applyItem", { item, id: selectedPiece.value.id })  
+        }
+    }
+
     const handleClose = () => [
         selectedPiece.value = null
     ]
@@ -60,7 +72,7 @@
             </div>
             <ul class="admins">
                 <ItemView 
-                    v-for="(item in props.player.admins"
+                    v-for="item in props.player.admins"
                     class="p-1 border rounded mb-1 flex justify-between items-center"
                     :item="item"
                     type="admin"
@@ -68,6 +80,7 @@
                     :tileSize="60"
                     :canBuy= "false"
                     @sell="$emit('sellItem', item.id)"
+                    @use="onUseItem"
                 />
             </ul>
 
@@ -103,7 +116,7 @@
         <div v-if="props.player.items.length === 0">No items</div>
         <ul class="inventory-relative">
             <ItemView 
-                v-for="(item in props.player.items"
+                v-for="item in props.player.items"
                 class="p-1 border rounded mb-1 flex justify-between items-center"
                 :item="item"
                 type="consumable"
@@ -111,6 +124,7 @@
                 :tileSize="60"
                 :canBuy= "false"
                 @sell="$emit('sellItem', item.id)"
+                @use="onUseItem"
             />
         </ul>
         <PieceController
@@ -118,8 +132,8 @@
         :piece="selectedPiece"
         mode="inventory"
         :canBuy="false"
-        @highlightPlacements="handlePlace(selectedPiece)"
-        @sell="handleSellPiece(selectedPiece)"
+        @highlightPlacements="handlePlace"
+        @sell="handleSellPiece"
         @close="handleClose"
         />
     </div>

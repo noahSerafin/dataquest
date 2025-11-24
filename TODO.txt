@@ -22,7 +22,7 @@ BOARD
 
 
 ITEMS 3
-implement item functions
+implement item functions - doing next
 
 PIECES 4
 
@@ -65,7 +65,7 @@ rarity = value ?+=no. of upgrades used on a piece? 3
 AI 2/3
 functions:
     - findNearestPlayerPiece - done
-    pathfinding a -> b in a grid
+    pathfinding a -> b in a grid - needsreviewing
     moveTowards player - incomplete
     - isPlayerPieceInRange - done
 

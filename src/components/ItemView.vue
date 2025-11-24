@@ -17,6 +17,7 @@ const emit = defineEmits<{
   select: [item: Item];
   buy: [item: Item];
   sell: [item: Item];
+  use: [item: Item];
 }>();
 
 const showController = ref(false);
@@ -59,8 +60,9 @@ const itemStyle = computed(() => {
 });
 
 const handleUse = () => {
-  //emit up to game state
-  //remove this item
+  //$emit('use', item)
+  console.log('using item:', props.item)
+  emit('use', props.item);
 }
 
 </script>
@@ -88,8 +90,8 @@ const handleUse = () => {
       >
         Buy ${{ item.cost }}
       </button>
-       <button v-if="(cssclass == 'inventory' && type == 'consumable')">
-        Use ${{ handleUse }}
+      <button v-if="(cssclass == 'inventory' && type == 'consumable')"  @click="handleUse">
+        Use
       </button>
       <button v-if="(cssclass == 'inventory')"
       @click="$emit('sell', item)"

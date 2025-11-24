@@ -82,7 +82,7 @@
     5,  // memory limit
     5, //admin slots
     [testVoucher], // no items yet
-    [testSword, testShield],//, testShield] // starting pieces
+    [testSword, testShield, testSling],//, testShield] // starting pieces
     []//no admins yet
   ));
 
@@ -334,6 +334,7 @@
     level.value = newLevel;
     const newPieces = rehydratePieces(newLevel.pieces);
     activePieces.value = processSpawnPoints(newPieces);
+    boardRef.value.clearHighlights();
     renewBlueprints();
     toggleMap();
   }
@@ -510,6 +511,7 @@
     }else {
       boardRef.value.clearHighlights();
     }
+    playerSpawns.value = newPlacementHighlights();
     //console.log('tiles: ', selectedPiece.value.tiles);
   }
 

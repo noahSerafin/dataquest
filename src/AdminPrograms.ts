@@ -1,33 +1,62 @@
 import { Item } from "./Items";
-import { Piece } from "./Pieces";
+import { Piece, allPieces } from "./Pieces";
 import { Player } from "./Player";
-import type { StatModifier } from "./types";
+import type { Coordinate, StatModifier } from "./types";
 
-export abstract class Admin extends Item {
-  isConsumedOnUse = false;
+export type AdminTrigger =
+  | 'onPlacement'
+  | 'onTurnEnd'
+  | 'onRoundStart'
+  | 'onRoundEnd'
+  | 'onDealDamage'
+  | 'onReceiveDamage'
+  | 'onPieceDestruction'
+  | 'other';
+
+export abstract class Admin<
+  TTarget = any,
+  TTrigger extends AdminTrigger = AdminTrigger
+> extends Item<TTarget> {
+  triggerType: TTrigger;
+
+  constructor(
+    name: string,
+    description: string,
+    unicode: string,
+    color: string,
+    cost: number,
+    rarity: number,
+    targetType: "blueprint" | "piece" | "shopItem" | "player" | "gameState"  | 'playerAndGame',
+    triggerType: TTrigger
+  ) {
+    super(name, description, unicode, color, cost, rarity, targetType);
+    this.triggerType = triggerType;
+  }
+
   apply(target: any):void{
     //do not destroy the admin
   }
   remove(target: any):void{
 
   }
-  getModifier(): StatModifier {
+  getModifier(): StatModifier {//remove this???
     return {}
   }
 }
 
 class Meteor extends Admin {
   static name = "Meteor Shower";
-  static description = "Deals 3 damage to every piece at the start of a round before placement";
+  static description = "Deals 3 damage to every piece at the start of a round";
   static unicode = "☄️";
   static color = "#000000ff";
 
   constructor() {
-    super(Meteor.name, Meteor.description, Meteor.unicode, Meteor.color, 10, 4, 'gameState')
+    super(Meteor.name, Meteor.description, Meteor.unicode, Meteor.color, 10, 4, 'gameState', 'onRoundStart')
   }
 
+  //onRoundStart
   apply({ activePieces }: { activePieces: Piece[] }) {
-    for (const p of activePieces) p.takeDamage(3);
+    for (const p of activePieces) p.takeDamage(3); //enemy pieces only?
   }
 }
 
@@ -38,7 +67,12 @@ class Miner extends Admin {
   static color = "#ffa600d3";
 
   constructor() {
-    super(Miner.name, Miner.description, Miner.unicode, Miner.color, 10, 1, 'player')
+    super(Miner.name, Miner.description, Miner.unicode, Miner.color, 10, 1, 'player', 'onRoundEnd')
+  }
+
+  //noRoundend
+  apply({ player }: { player: Player }) {
+    player.money += 2
   }
   //
 }
@@ -50,9 +84,15 @@ class Bubble extends Admin {
   static color = "#0400daff";
 
   constructor() {
-    super(Bubble.name, Bubble.description, Bubble.unicode, Bubble.color, 10, 2, 'player')
+    super(Bubble.name, Bubble.description, Bubble.unicode, Bubble.color, 10, 2, 'player', 'onRoundEnd')
   }
-  //
+
+  //at end of round
+  /*
+  apply({ player }: { player: Player }) {
+    player.interest += 1
+  }*/
+
 }
 
 class Crystal extends Admin {
@@ -62,9 +102,9 @@ class Crystal extends Admin {
   static color = "#4b003bff";
 
   constructor() {
-    super(Crystal.name, Crystal.description, Crystal.unicode, Crystal.color, 5, 1, 'gameState')
+    super(Crystal.name, Crystal.description, Crystal.unicode, Crystal.color, 5, 1, 'gameState', 'other')
   }
-  //
+  //modify app for this one
 }
 
 class Clover extends Admin {
@@ -74,9 +114,9 @@ class Clover extends Admin {
   static color = "#00ff0dff";
 
   constructor() {
-    super(Clover.name, Clover.description, Clover.unicode, Clover.color, 7, 2, 'gameState')//shop state
+    super(Clover.name, Clover.description, Clover.unicode, Clover.color, 7, 2, 'gameState', 'other')//shop state, on round end? on OpenShop?
   }
-  //interact with shop
+  //interact with shop, modify shop for this
 }
 
 class Onion extends Admin {
@@ -86,9 +126,12 @@ class Onion extends Admin {
   static color = "#00af17ad";
 
   constructor() {
-    super(Onion.name, Onion.description, Onion.unicode, Onion.color, 10, 5, 'player')
+    super(Onion.name, Onion.description, Onion.unicode, Onion.color, 10, 5, 'player', 'other')
   }
   //
+  apply({ player }: { player: Player }) {
+    player.lives += 1
+  }//add a if for player death to remove this
 }
 //name desc utf || maxsize moves range atk def
 class Blood extends Admin {
@@ -98,9 +141,14 @@ class Blood extends Admin {
   static color = "#790000ff";
 
   constructor() {
-    super(Blood.name, Blood.description, Blood.unicode, Blood.color, 10, 3, 'gameState')//player?
+    super(Blood.name, Blood.description, Blood.unicode, Blood.color, 10, 3, 'gameState', 'onDealDamage')//player?
   }
-  //
+
+  //on damage
+  apply({ player }: { player: Player }) {
+    player.money += 2 //enemy pieces only?
+  }
+  
 }
 
 class BionicArm extends Admin {
@@ -110,9 +158,17 @@ class BionicArm extends Admin {
   static color = "#ff4040ff";
 
   constructor() {
-    super(BionicArm.name, BionicArm.description, BionicArm.unicode, BionicArm.color, 7, 4, 'player')
+    super(BionicArm.name, BionicArm.description, BionicArm.unicode, BionicArm.color, 7, 4, 'gameState', 'onPlacement')
   }
   
+  //on placement/after hydration
+  apply({ activePieces }: { activePieces: Piece[] }) {
+    for (const p of activePieces){
+      if(p.team==='player'){
+        p.addModifier({attack: 2})//enemy pieces only?
+      }
+    }
+  }
 }
 
 class BionicLeg extends Admin {
@@ -122,28 +178,16 @@ class BionicLeg extends Admin {
   static color = "#d240ffff";
 
   constructor() {
-    super(BionicLeg.name, BionicLeg.description, BionicLeg.unicode, BionicLeg.color, 7, 4, 'player')
-  }
-  /*
-  apply(player: Player) {
-    const mod = player.adminModifiers.global ?? {};
-    mod.moves = (mod.moves ?? 0) + 2;
-    player.adminModifiers.global = mod;
+    super(BionicLeg.name, BionicLeg.description, BionicLeg.unicode, BionicLeg.color, 7, 4, 'gameState', 'onPlacement')
   }
 
-  remove(player: Player) {
-    const mod = player.adminModifiers.global;
-    if (!mod) return;
-
-    mod.moves = (mod.moves ?? 0) - 2;
-    if (mod.moves === 0) delete mod.moves;
-    if (Object.keys(mod).length === 0) delete player.adminModifiers.global;
+  apply({ activePieces }: { activePieces: Piece[] }) {
+    for (const p of activePieces){
+      if(p.team==='player'){
+        p.addModifier({moves: 2})//enemy pieces only?
+      }
+    }
   }
-
-  getModifier(): StatModifier {
-    return { moves: 2 }
-  }
-  */
 }
 
 class Convenience extends Admin {
@@ -153,9 +197,9 @@ class Convenience extends Admin {
   static color = "#55ff71ff";
 
   constructor() {
-    super(Convenience.name, Convenience.description, Convenience.unicode, Convenience.color, 4, 2, 'gameState')//shop
+    super(Convenience.name, Convenience.description, Convenience.unicode, Convenience.color, 4, 2, 'gameState', 'other')//shop
   }
-  //
+  //modify shop/player
 }
 
 class Department extends Admin {
@@ -164,21 +208,28 @@ class Department extends Admin {
   static unicode = "U+1F3EC";
   static color = "#bebebeff";
   constructor() {
-    super(Department.name, Department.description, Department.unicode, Department.color, 5, 3, 'gameState')//shop
+    super(Department.name, Department.description, Department.unicode, Department.color, 5, 3, 'gameState', 'other')//shop
   }
-  //
+  //modify shop/player bool for this
 }
 
 class Eye extends Admin {//not passive
   static name = "Evil Eye";
-  static description = "Lower's the defences of all enemy progams by 1";
+  static description = "Lower's the defences of all enemy progams by 1 at start of round";
   static unicode = "U+1F9FF";
   static color = "#020072ff";
 
   constructor() {
-    super(Eye.name, Eye.description, Eye.unicode, Eye.color, 8, 4, 'gameState')
+    super(Eye.name, Eye.description, Eye.unicode, Eye.color, 8, 4, 'gameState', 'onRoundStart')
   }
-  //// NAZAR AMULET, U+1F9FF 
+  
+  apply({ activePieces }: { activePieces: Piece[] }) {
+    for (const p of activePieces){
+      if(p.team==='enemy'){
+        p.addModifier({defence: -2})//enemy pieces only?
+      }
+    }
+  }
 }
 
 class Bouquet extends Admin {
@@ -188,42 +239,62 @@ class Bouquet extends Admin {
   static color = "#85e758ff";
 
   constructor() {
-    super(Bouquet.name, Bouquet.description, Bouquet.unicode, Bouquet.color, 3, 3, 'gameState')//shop
+    super(Bouquet.name, Bouquet.description, Bouquet.unicode, Bouquet.color, 3, 3, 'gameState', 'other')//shop
   }
-  //
+  //shop, disable for now
 }
 
 class Heartbreaker extends Admin {
   static name = "Heartbreaker";
-  static description = "Makes your programs immune to being charmed";
+  static description = "Makes your programs immune to being charmed on placement";
   static unicode = "U+1F498";
   static color = "#dadadaff";
   constructor() {
-    super(Heartbreaker.name, Heartbreaker.description, Heartbreaker.unicode, Heartbreaker.color, 5, 3, 'player')
+    super(Heartbreaker.name, Heartbreaker.description, Heartbreaker.unicode, Heartbreaker.color, 5, 3, 'player', 'onPlacement')
   }
-  //
+
+  //on placement
+  apply({ activePieces }: { activePieces: Piece[] }) {
+    for (const p of activePieces){
+      if(p.team==='player'){
+       // p.charmImmune == true
+      }
+    }
+  }
 }
 
 class Hamsa extends Admin {
   static name = "Hamsa";
-  static description = "Raises all your program's defence by 1";
+  static description = "Raises all your placed program's defences by 1";
   static unicode = "U+1FAAC";
   static color = "#5560ffff";
   constructor() {
-    super(Hamsa.name, Hamsa.description, Hamsa.unicode, Hamsa.color, 8, 5, 'player')
+    super(Hamsa.name, Hamsa.description, Hamsa.unicode, Hamsa.color, 8, 5, 'player', 'onPlacement')
   }
-  //
+  apply({ activePieces }: { activePieces: Piece[] }) {
+    for (const p of activePieces){
+      if(p.team==='player'){
+        p.addModifier({defence: 1})//enemy pieces only?
+      }
+    }
+  }
 }
 
 class Relay extends Admin {
   static name = "Relay";
-  static description = "All programs with a range < 1 gain +1 attack";
+  static description = "All placed programs with a range < 1 gain +1 attack";
   static unicode = "U+1F4E1";
   static color = "#e4d26fff";
   constructor() {
-    super(Relay.name, Relay.description, Relay.unicode, Relay.color, 5, 3, 'player')
+    super(Relay.name, Relay.description, Relay.unicode, Relay.color, 5, 3, 'player', 'onPlacement')
   }
-  //
+  apply({ activePieces }: { activePieces: Piece[] }) {
+    for (const p of activePieces){
+      if(p.team==='player' && p.getStat('range') > 1){
+        p.addModifier({attack: 1})//enemy pieces only?
+      }
+    }
+  }
 }
 
 class Hivis extends Admin {
@@ -232,9 +303,15 @@ class Hivis extends Admin {
   static unicode = "U+1F9BA";
   static color = "#a7ff55ff";
   constructor() {
-    super(Hivis.name, Hivis.description, Hivis.unicode, Hivis.color, 5, 1, 'gameState')//??
+    super(Hivis.name, Hivis.description, Hivis.unicode, Hivis.color, 5, 1, 'gameState', 'onPieceDestruction')//??//onroundstart
   }
-  //
+  apply({ activePieces }: { activePieces: Piece[] }) {
+    for (const p of activePieces){
+      if(p.team==='player'){
+        //p.addModifier({lives: 1})
+      }
+    }
+  }
 }
 
 class Notepad extends Admin {
@@ -243,31 +320,45 @@ class Notepad extends Admin {
   static unicode = "U+1F5C7";
   static color = "#4b4b4bff";
   constructor() {
-    super(Notepad.name, Notepad.description, Notepad.unicode, Notepad.color, 5, 3, 'player')
+    super(Notepad.name, Notepad.description, Notepad.unicode, Notepad.color, 5, 3, 'player', 'other')
   }
-  //
+  apply({ player }: { player: Player }) {
+    player.memory += 3
+  }
+  remove({ player }: { player: Player }) {
+    player.memory -= 3
+  }
 }
 
+// GLOBE WITH MERIDIANS, U+1F310
 class AdminMap extends Admin {
   static name = "AdminMap";
   static description = "See the incoming level in advance";
   static unicode = "U+1F5FA";
   static color = "#001cbbff";
   constructor() {
-    super(AdminMap.name, AdminMap.description, AdminMap.unicode, AdminMap.color, 1, 2, 'gameState')
+    super(AdminMap.name, AdminMap.description, AdminMap.unicode, AdminMap.color, 1, 2, 'gameState', 'other')
   }
-  //
+  //player bool
 }
 
 class PetriDish extends Admin {
   static name = "Petri Dish";
-  static description = "Status effects can spread to adjacent enemy programs";
+  static description = "Status effects can spread to adjacent enemy programs at the end of your turn";
   static unicode = "U+1F9EB";
   static color = "#14532dff";
   constructor() {
-    super(PetriDish.name, PetriDish.description, PetriDish.unicode, PetriDish.color, 7, 4, 'gameState')
+    super(PetriDish.name, PetriDish.description, PetriDish.unicode, PetriDish.color, 7, 4, 'gameState', 'onTurnEnd')
   }
-  //
+  //on turn end
+  /*apply({ activePieces }: { activePieces: Piece[] }) {
+    for (const p of activePieces){
+      if(p.team==='player' && p.statuses.length > 0){
+        //find enemies next to it
+        //50% chance to add 1 status from player to enemy
+      }
+    }
+  }*/
 }
 
 class Volatile extends Admin {
@@ -276,9 +367,9 @@ class Volatile extends Admin {
   static unicode = "U+1F9EA";
   static color = "#00ff22c7";
   constructor() {
-    super(Volatile.name, Volatile.description, Volatile.unicode, Volatile.color, 6, 4, 'gameState')
+    super(Volatile.name, Volatile.description, Volatile.unicode, Volatile.color, 6, 4, 'gameState', 'onTurnEnd')
   }
-  //
+  //mod status
 }
 
 class Inheritance extends Admin {
@@ -287,9 +378,15 @@ class Inheritance extends Admin {
   static unicode = "U+1F911";
   static color = "#ffc955ff";
   constructor() {
-    super(Inheritance.name, Inheritance.description, Inheritance.unicode, Inheritance.color, 10, 5, 'player')
+    super(Inheritance.name, Inheritance.description, Inheritance.unicode, Inheritance.color, 10, 5, 'player', 'onRoundEnd')
   }
-  //
+  /*
+  apply({ player }: { player: Player }) {
+    player.interest = player.interest * 2
+  }
+  remove({ player }: { player: Player }) {
+    player.interest = player.interest / 2
+  }*/
 }
 
 class CreditCard extends Admin {
@@ -298,42 +395,66 @@ class CreditCard extends Admin {
   static unicode = "U+1F4B3";
   static color = "#ff5555";
   constructor() {
-    super(CreditCard.name, CreditCard.description, CreditCard.unicode, CreditCard.color, 1, 2, 'gameState')//shop
+    super(CreditCard.name, CreditCard.description, CreditCard.unicode, CreditCard.color, 1, 2, 'gameState', 'other')//shop
   }
-  //
+  //shop lower limit change
 }
 
 class Needle extends Admin {
   static name = "Needle";
-  static description = "Winning a round with one program placed boosts all it's stats by one";
+  static description = "Winning a round with one program placed boosts all it's stats by one permanently - unfinished";
   static unicode = "U+1FAA1";
   static color = "#b448a6ff";
   constructor() {
-    super(Needle.name, Needle.description, Needle.unicode, Needle.color, 10, 5, 'gameState')//6 and player?
+    super(Needle.name, Needle.description, Needle.unicode, Needle.color, 10, 5, 'gameState', 'onRoundEnd')//6 and player?
   }
-  //
+  apply({ activePieces }: { activePieces: Piece[] }) {
+    for (const p of activePieces){
+      const playerPieces = [];
+      if(p.team==='player'){
+        playerPieces.push(p)
+        //p.addModifier({lives: 1})
+      }
+      if(playerPieces.length = 1){
+       //needs to interact with the blueprint
+      }
+    }
+  }
 }
 
 class Rune extends Admin {
   static name = "Rune";
-  static description = "Programs with a range of 1 deal x2 damage";
+  static description = "Programs with a range of 1 deal x2 damage on attacking";
   static unicode = "U+16B1";
   static color = "#ff5555";
   constructor() {
-    super(Rune.name, Rune.description, Rune.unicode, Rune.color, 5, 3, 'player')
+    super(Rune.name, Rune.description, Rune.unicode, Rune.color, 5, 3, 'player', 'onDealDamage')
   }
-  //
+  //onDamage
+  apply({ activePieces }: { activePieces: Piece[] }) {
+    for (const p of activePieces){
+      if(p.team==='player' && p.getStat('range') === 1){
+        p.attack = p.attack *2 //include mods??? add a mult to takeDamage function
+      }
+    }
+  }
 }
 
 class Joker extends Admin {
   static name = "Joker";
-  static description = "Player damage is x1.5";
+  static description = "Player damage is x1.5 on attacking";
   static unicode = "U+1F0CF";
   static color = "#ff5555";
   constructor() {
-    super(Joker.name, Joker.description, Joker.unicode, Joker.color, 7, 2, 'player')
+    super(Joker.name, Joker.description, Joker.unicode, Joker.color, 7, 2, 'player', 'onDealDamage')
   }
-  //
+  apply({ activePieces }: { activePieces: Piece[] }) {
+    for (const p of activePieces){
+      if(p.team==='player' && p.getStat('range') === 1){
+        p.attack = p.attack *1.5 //include mods???
+      }
+    }
+  }
 }
 
 class Chemistry extends Admin {
@@ -342,20 +463,37 @@ class Chemistry extends Admin {
   static unicode = "U+2697";
   static color = "#4eb95cff";
   constructor() {
-    super(Chemistry.name, Chemistry.description, Chemistry.unicode, Chemistry.color, 6, 5, 'gameState')
+    super(Chemistry.name, Chemistry.description, Chemistry.unicode, Chemistry.color, 6, 5, 'gameState', 'other')//on Item use
   }
-  //
+  //seperate flag for this
 }
 
 class Aesculapius extends Admin {
   static name = "Aesculapius";
-  static description = "Programs are immune to posion and disease";
+  static description = "All placed programs are immune to posion and disease";
   static unicode = "U+2695";
   static color = "#084610ff";
   constructor() {
-    super(Aesculapius.name, Aesculapius.description, Aesculapius.unicode, Aesculapius.color, 4, 2, 'player')//or gamestate?
+    super(Aesculapius.name, Aesculapius.description, Aesculapius.unicode, Aesculapius.color, 4, 2, 'player', 'onPlacement')//or gamestate?
   }
-  //
+
+  //on placement
+  apply({ activePieces }: { activePieces: Piece[] }) {
+    for (const p of activePieces){
+      if(p.team==='player'){
+        //p.poisonImmune = true;
+        //p.diseaseImmune = true;
+      }
+    }
+  }
+  remove({ activePieces }: { activePieces: Piece[] }) {
+    for (const p of activePieces){
+      if(p.team==='player'){
+        //p.poisonImmune = false;
+        //p.diseaseImmune = false;
+      }
+    }
+  }
 }
 
 class Heart extends Admin {
@@ -364,9 +502,15 @@ class Heart extends Admin {
   static unicode = "U+1FAC0";
   static color = "#ff5555";
   constructor() {
-    super(Heart.name, Heart.description, Heart.unicode, Heart.color, 6, 3, 'player')
+    super(Heart.name, Heart.description, Heart.unicode, Heart.color, 6, 3, 'player', 'onPlacement')
   }
-  //
+  apply({ activePieces }: { activePieces: Piece[] }) {
+    for (const p of activePieces){
+      if(p.team==='player'){
+        p.addModifier({maxSize: 1})
+      }
+    }
+  }
 }
 
 class Lungs extends Admin {
@@ -375,20 +519,32 @@ class Lungs extends Admin {
   static unicode = "U+1FAC1";
   static color = "#ff5555";
   constructor() {
-    super(Lungs.name, Lungs.description, Lungs.unicode, Lungs.color, 5, 3, 'player')
+    super(Lungs.name, Lungs.description, Lungs.unicode, Lungs.color, 5, 3, 'player', 'onPlacement')
   }
-  //
+  apply({ activePieces }: { activePieces: Piece[] }) {
+    for (const p of activePieces){
+      if(p.team==='player'){
+        p.addModifier({moves: 1})
+      }
+    }
+  }
 }
 
 class Brain extends Admin {
   static name = "Brain";
-  static description = "+1 actions";
+  static description = "placed programs all have +1 actions";
   static unicode = "U+1F9E0";
   static color = "#ff5555";
   constructor() {
-    super(Brain.name, Brain.description, Brain.unicode, Brain.color, 9, 4, 'player')
+    super(Brain.name, Brain.description, Brain.unicode, Brain.color, 9, 4, 'player', 'onPlacement')
   }
-  //
+  apply({ activePieces }: { activePieces: Piece[] }) {
+    for (const p of activePieces){
+      if(p.team==='player'){
+        p.addModifier({actions: 1})
+      }
+    }
+  }
 }
 
 class GoldenTicket extends Admin {
@@ -397,20 +553,20 @@ class GoldenTicket extends Admin {
   static unicode = "U+1F3AB";
   static color = "#dfba42ff";
   constructor() {
-    super(GoldenTicket.name, GoldenTicket.description, GoldenTicket.unicode, GoldenTicket.color, 5, 4, 'gameState')
+    super(GoldenTicket.name, GoldenTicket.description, GoldenTicket.unicode, GoldenTicket.color, 5, 4, 'gameState', 'other');
   }
-  //
+  //intereact with map
 }
 
 class Dove extends Admin {
   static name = "Dove";
-  static description = "1 free turn at the start of every round";
+  static description = "1 free move after placing at the start of every round";
   static unicode = "U+1F54A";
   static color = "#3be2ffff";
   constructor() {
-    super(Dove.name, Dove.description, Dove.unicode, Dove.color, 7, 5, 'gameState')
+    super(Dove.name, Dove.description, Dove.unicode, Dove.color, 7, 5, 'gameState', 'onRoundStart')//other
   }
-  //
+  //bool
 }
 
 class Stonks extends Admin {
@@ -419,9 +575,17 @@ class Stonks extends Admin {
   static unicode = "U+1F4C8";
   static color = "#55ff6cff";
   constructor() {
-    super(Stonks.name, Stonks.description, Stonks.unicode, Stonks.color, 5, 3, 'player')
+    super(Stonks.name, Stonks.description, Stonks.unicode, Stonks.color, 5, 3, 'player', 'onRoundEnd')
   }
-  //
+
+  //on end of round
+  apply({ player }: { player: Player }) {
+    //const noOfFives = player.interest / 5 //round down
+    //player.interest += noOfFives;
+  }
+  remove({ player }: { player: Player }) {
+   
+  }
 }
 
 class Trolley extends Admin {
@@ -430,9 +594,9 @@ class Trolley extends Admin {
   static unicode = "U+1F6D2";
   static color = "#55fff1ff";
   constructor() {
-    super(Trolley.name, Trolley.description, Trolley.unicode, Trolley.color, 5, 2, 'gameState')//'player')??
+    super(Trolley.name, Trolley.description, Trolley.unicode, Trolley.color, 5, 2, 'gameState', 'other')//'player')??
   }
-  //
+  //all items/ shop mod
 }
 
 export class Toolbox extends Admin {
@@ -441,9 +605,9 @@ export class Toolbox extends Admin {
   static unicode = "U+1F9F0";
   static color = "#ff55c6ff";
   constructor() {
-    super(Toolbox.name, Toolbox.description, Toolbox.unicode, Toolbox.color, 7, 3, 'gameState')//'player')??
+    super(Toolbox.name, Toolbox.description, Toolbox.unicode, Toolbox.color, 7, 3, 'gameState', 'other')//'player')??
   }
-  //
+  //all items/ shop mod
 }
 
 class Backdoor extends Admin {
@@ -452,20 +616,49 @@ class Backdoor extends Admin {
   static unicode = "U+1F6AA";
   static color = "#0a0a0aff";
   constructor() {
-    super(Backdoor.name, Backdoor.description, Backdoor.unicode, Backdoor.color, 8, 4, 'gameState')
+    super(Backdoor.name, Backdoor.description, Backdoor.unicode, Backdoor.color, 8, 4, 'gameState', 'other')
   }
-  //
+  //bool for placement function
 }
 
 class Communism extends Admin {
   static name = "Communism";
-  static description = "+1 all stats to all programs while money is under 4";
+  static description = "+1 all stats to all placed programs while money is under 4";
   static unicode = "U+262D";
   static color = "#ff0000ff";
   constructor() {
-    super(Communism.name, Communism.description, Communism.unicode, Communism.color, 5, 3, 'player')
+    super(Communism.name, Communism.description, Communism.unicode, Communism.color, 5, 3, 'playerAndGame', 'onPlacement')
   }
-  //
+
+  //on placement
+  apply({ player, activePieces }: { player: Player, activePieces: Piece[] }) {
+    if (player.money <= 4){
+      for (const p of activePieces){
+        if(p.team==='player'){
+          p.addModifier({
+            attack: 1,
+            defence: 1,
+            maxSize: 1,
+            moves: 1,
+            range: 1
+          })
+        }
+      }
+    }
+  }
+  remove({ activePieces }: { activePieces: Piece[] }) {
+      for (const p of activePieces){
+        if(p.team==='player'){
+          p.addModifier({
+            attack: -1,
+            defence: -1,
+            maxSize: -1,
+            moves: -1,
+            range: -1
+          })
+        }
+      }
+  }
 }
 
 class Palette extends Admin {
@@ -474,20 +667,27 @@ class Palette extends Admin {
   static unicode = "U+1F3A8";
   static color = "#ff55f6ff";
   constructor() {
-    super(Palette.name, Palette.description, Palette.unicode, Palette.color, 6, 4, 'gameState')
+    super(Palette.name, Palette.description, Palette.unicode, Palette.color, 6, 4, 'gameState', 'onRoundStart')//other
   }
-  //
+  //round logic edit
 }
 
 class Osiris extends Admin {
   static name = "Osiris";
-  static description = "+1 damage to every placed piece each time one of your programs is destroyed";
+  static description = "+1 damage to every placed piece each time one of a program is destroyed";
   static unicode = "U+1314A";
   static color = "#33073bff";
   constructor() {
-    super(Osiris.name, Osiris.description, Osiris.unicode, Osiris.color, 8, 4, 'gameState')
+    super(Osiris.name, Osiris.description, Osiris.unicode, Osiris.color, 8, 4, 'gameState', 'onPieceDestruction')
   }
-  //
+  //on receive damage //on piece destrcution
+  apply({ activePieces }: { activePieces: Piece[] }) {
+    for (const p of activePieces){
+      if(p.team==='player'){
+        p.addModifier({attack: 1})
+      }
+    }
+  }
 }
 
 class Slots extends Admin {
@@ -496,31 +696,40 @@ class Slots extends Admin {
   static unicode = "U+1F3B0";
   static color = "#ff5555";
   constructor() {
-    super(Slots.name, Slots.description, Slots.unicode, Slots.color, 5, 1, 'gameState')//shop
+    super(Slots.name, Slots.description, Slots.unicode, Slots.color, 5, 1, 'gameState', 'other')//shop
   }
-  //
+  //shop edit
 }
 
 class Newspaper extends Admin {
   static name = "Millwall Brick";
-  static description = "+1 damage for programs with 1 range";
+  static description = "+1 damage for programs with 1 range on load";
   static unicode = "U+1F5DE";
   static color = "#5c5c5cff";
   constructor() {
-    super(Newspaper.name, Newspaper.description, Newspaper.unicode, Newspaper.color, 1, 2, 'player')
+    super(Newspaper.name, Newspaper.description, Newspaper.unicode, Newspaper.color, 1, 2, 'player', 'onPlacement')
   }
-  //
+  apply({ activePieces }: { activePieces: Piece[] }) {
+    for (const p of activePieces){
+      if(p.team==='player' && p.getStat('range')===1){
+        p.addModifier({attack: 1})
+      }
+    }
+  }
 }
 
 class Crown extends Admin {
-  static name = "Crown";
+  static name = "Landed";
   static description = "Gain $5 every round";
   static unicode = " U+1F451";
   static color = "#e6c98bff";
   constructor() {
-    super(Crown.name, Crown.description, Crown.unicode, Crown.color, 9, 3, 'gameState')//maybe player
+    super(Crown.name, Crown.description, Crown.unicode, Crown.color, 9, 3, 'gameState', 'onRoundEnd')//maybe player
   }
-  //
+  //on round end
+  apply({ player }: { player: Player }) {
+   player.money += 5;
+  }
 }
 
 class Cactus extends Admin {
@@ -529,20 +738,20 @@ class Cactus extends Admin {
   static unicode = "U+1F335";
   static color = "#dfb372ff";
   constructor() {
-    super(Cactus.name, Cactus.description, Cactus.unicode, Cactus.color, 10, 5, 'gameState')//pieces?
+    super(Cactus.name, Cactus.description, Cactus.unicode, Cactus.color, 10, 5, 'gameState', 'onReceiveDamage')//pieces?
   }
-  //
+  //on receive damage
 }
 
 class Compass extends Admin {
   static name = "Compass";
-  static description = "Always show the path to the nearest shop";
+  static description = "Always show the path to the nearest shop - unfinished";
   static unicode = "U+1F9ED";
   static color = "#ff5555";
   constructor() {
-    super(Compass.name, Compass.description, Compass.unicode, Compass.color, 2, 1, 'gameState')
+    super(Compass.name, Compass.description, Compass.unicode, Compass.color, 2, 1, 'gameState', 'other')
   }
-  //
+  //map edit
 }
 
 class Seed extends Admin {
@@ -551,20 +760,37 @@ class Seed extends Admin {
   static unicode = "U+1F331";
   static color = "#ff5555";
   constructor() {
-    super(Seed.name, Seed.description, Seed.unicode, Seed.color, 10, 1, 'player')
+    super(Seed.name, Seed.description, Seed.unicode, Seed.color, 10, 1, 'player', 'other')
   }
-  //
+  //interest
+  /*
+  apply({ player }: { player: Player }) {
+   player.interestCap = 10;
+  }
+  remove({ player }: { player: Player }) {
+   player.interestCap = 5;
+  }
+   */
 }
 
 class Puzzle extends Admin {
   static name = "Puzzle Piece";
-  static description = "Programs with an adjacent ally gain +1 defence";
+  static description = "Programs with an ally adjacent to their head gain +1 defence at the end of your turn";
   static unicode = " U+1F9E9";
   static color = "#ff5555";
   constructor() {
-    super(Puzzle.name, Puzzle.description, Puzzle.unicode, Puzzle.color, 6, 3, 'gameState')
+    super(Puzzle.name, Puzzle.description, Puzzle.unicode, Puzzle.color, 6, 3, 'gameState', 'onTurnEnd')
   }
-  //
+  //on turn end
+  apply({ activePieces }: { activePieces: Piece[] }) {
+    for (const p of activePieces){
+      if(p.team==='player'){
+        //from the headposition, look for adjacent player tiles
+        p.addModifier({defence: 1})
+        //else no buff
+      }
+    }
+  }
 }
 
 class Roger extends Admin {
@@ -573,9 +799,12 @@ class Roger extends Admin {
   static unicode = "U+2620";
   static color = "#ff5555";
   constructor() {
-    super(Roger.name, Roger.description, Roger.unicode, Roger.color, 6, 3, 'player')
+    super(Roger.name, Roger.description, Roger.unicode, Roger.color, 6, 3, 'player', 'onPieceDestruction')
   }
-  //
+  //on piece destruction
+  apply({ player }: { player: Player }) {
+   player.money += 1;
+  }
 }
 
 class Bucket extends Admin {
@@ -584,42 +813,73 @@ class Bucket extends Admin {
   static unicode = "U+1FAA3";
   static color = "#ff5555";
   constructor() {
-    super(Bucket.name, Bucket.description, Bucket.unicode, Bucket.color, 4, 1, 'player')
+    super(Bucket.name, Bucket.description, Bucket.unicode, Bucket.color, 4, 1, 'player', 'other')
   }
   //
+  apply({ player }: { player: Player }) {
+   player.memory += 2;
+  }
+  remove({ player }: { player: Player }) {
+   player.memory -= 2;
+  }
 }
 
 class Diamond extends Admin {
-  static name = "Diamond";
-  static description = "Every $10 increases defence by 1";
+  static name = "Diamond";//payroll
+  static description = "Every $10 at the end of your turn increases all program's defence by 1";
   static unicode = "U+1F48E";
   static color = "#ff5555";
   constructor() {
-    super(Diamond.name, Diamond.description, Diamond.unicode, Diamond.color, 8, 5, 'player')
+    super(Diamond.name, Diamond.description, Diamond.unicode, Diamond.color, 8, 5, 'playerAndGame', 'onTurnEnd')
   }
-  //
+  apply({ player, activePieces }: { player: Player, activePieces: Piece[] }) {
+    for (const p of activePieces){
+      if(p.team==='player'){
+        //from the headposition, look for adjacent player tiles
+        const noOfTens = player.money / 10 //rounded down
+        p.addModifier({defence: noOfTens})
+        //else no buff
+      }
+    }
+  }
 }
 
 class Drum extends Admin {
   static name = "Marching Drum";
-  static description = "+1 moves for all programs";
+  static description = "+1 moves for all placed programs";
   static unicode = "U+1F941";
   static color = "#ff5555";
   constructor() {
-    super(Drum.name, Drum.description, Drum.unicode, Drum.color, 3, 1, 'player')
+    super(Drum.name, Drum.description, Drum.unicode, Drum.color, 3, 1, 'gameState', 'onPlacement')
   }
-  //
+  apply({ activePieces }: { activePieces: Piece[] }) {
+    for (const p of activePieces){
+      if(p.team==='player'){
+        //from the headposition, look for adjacent player tiles
+        p.addModifier({moves: 1})
+        //else no buff
+      }
+    }
+  }
 }
 
 class Sneakers extends Admin {//item???
   static name = "Trainers";
-  static description = "+2 moves for all programs";
+  static description = "+1 moves for all placed programs";
   static unicode = "U+1F45F";
   static color = "#36c723ff";
   constructor() {
-    super(Sneakers.name, Sneakers.description, Sneakers.unicode, Sneakers.color, 6, 3, 'player')
+    super(Sneakers.name, Sneakers.description, Sneakers.unicode, Sneakers.color, 6, 3, 'gameState', 'onPlacement')
   }
-  //
+  apply({ activePieces }: { activePieces: Piece[] }) {
+    for (const p of activePieces){
+      if(p.team==='player'){
+        //from the headposition, look for adjacent player tiles
+        p.addModifier({moves: 1})
+        //else no buff
+      }
+    }
+  }
 }
 
 //candle U+1F56F
@@ -629,20 +889,35 @@ class Torch extends Admin {
   static unicode = "U+1F526";
   static color = "#f0aa13ff";
   constructor() {
-    super(Torch.name, Torch.description, Torch.unicode, Torch.color, 4, 1, 'player')
+    super(Torch.name, Torch.description, Torch.unicode, Torch.color, 4, 1, 'gameState', 'onPlacement')
   }
-  //
+  apply({ activePieces }: { activePieces: Piece[] }) {
+    for (const p of activePieces){
+      if(p.team==='player'){
+        //from the headposition, look for adjacent player tiles
+        p.addModifier({range: 1})
+        //else no buff
+      }
+    }
+  }
 }
 
 class Feather extends Admin {
   static name = "Feather";
-  static description = "+3 moves, -1 defence for all programs";
+  static description = "+3 moves, -1 maxSize for all placed programs";
   static unicode = "U+1FAB6";
   static color = "#ff5555";
   constructor() {
-    super(Feather.name, Feather.description, Feather.unicode, Feather.color, 8, 5, 'player')
+    super(Feather.name, Feather.description, Feather.unicode, Feather.color, 8, 5, 'gameState', 'onPlacement')
   }
-  //
+  apply({ activePieces }: { activePieces: Piece[] }) {
+    for (const p of activePieces){
+      if(p.team==='player'){
+        p.addModifier({moves: 1})
+        p.addModifier({maxSize: -1})
+      }
+    }
+  }
 }
 
 class Copier extends Admin {
@@ -651,31 +926,60 @@ class Copier extends Admin {
   static unicode = "U+1F5A8";
   static color = "#ff5555";
   constructor() {
-    super(Copier.name, Copier.description, Copier.unicode, Copier.color, 9, 5, 'gameState')
+    super(Copier.name, Copier.description, Copier.unicode, Copier.color, 9, 5, 'playerAndGame', 'onPlacement')
   }
-  //
+  //on placement, handle in App
+  apply({ activePieces }: { activePieces: Piece[] }) {
+    const playerPieces : Piece[] = [];
+    for (const p of activePieces){
+      if(p.team==='player'){
+        playerPieces.push(p)
+      }
+    }
+    if(playerPieces.length === 1){
+      const PieceClass = allPieces.find(p => p.name === playerPieces[0].name)
+      if (!PieceClass) return
+      const newHead : Coordinate = {x: playerPieces[0].headPosition.x + 1, y: playerPieces[0].headPosition.y}
+      //no ref of activePieces to removePiece from
+      //const copy = new PieceClass(newHead, 'player', removePiece, crypto.randomUUID());
+      //const copy = playerPieces[0]//new Instance???
+      //activePieces.push(copy)
+    }
+  }
 }
 
 class Telescope extends Admin {
   static name = "Telescope";
-  static description = "+2 range";
+  static description = "+2 range for all your placed programs";
   static unicode = "U+1F52D";
   static color = "#ff5555";
   constructor() {
-    super(Telescope.name, Telescope.description, Telescope.unicode, Telescope.color, 6, 4, 'player')
+    super(Telescope.name, Telescope.description, Telescope.unicode, Telescope.color, 6, 4, 'gameState', 'onPlacement')
   }
-  //
+  apply({ activePieces }: { activePieces: Piece[] }) {
+    for (const p of activePieces){
+      if(p.team==='player'){
+        p.addModifier({range: 1})
+      }
+    }
+  }
 }
 
 class Microscope extends Admin {
   static name = "Microbiology";
-  static description = "Programs with a size of 1 get +1 defence";
+  static description = "Placed programs with a max size of 1 get +1 defence";
   static unicode = "U+1F52C";
   static color = "#ff5555";
   constructor() {
-    super(Microscope.name, Microscope.description, Microscope.unicode, Microscope.color, 5, 3, 'gameState')
+    super(Microscope.name, Microscope.description, Microscope.unicode, Microscope.color, 5, 3, 'gameState', 'onPlacement')
   }
-  //
+  apply({ activePieces }: { activePieces: Piece[] }) {
+    for (const p of activePieces){
+      if(p.team==='player' && p.maxSize === 1){
+        p.addModifier({defence: 1})
+      }
+    }
+  }
 }
 
 class Lotus extends Admin {//boss? remove money?
@@ -684,20 +988,36 @@ class Lotus extends Admin {//boss? remove money?
   static unicode = "U+1FAB7";
   static color = "#ff5555";
   constructor() {
-    super(Lotus.name, Lotus.description, Lotus.unicode, Lotus.color, 10, 5, 'player')
+    super(Lotus.name, Lotus.description, Lotus.unicode, Lotus.color, 10, 5, 'player', 'onDealDamage')
   }
-  //
+  //on damage
+  apply({ player}: { player: Player}) {
+    let mult = 0;
+    for (const a of player.admins){
+      if(a.rarity === 3){
+        mult +=1
+      }
+    }
+    //player.dmgMult += mult;
+  }
 }
 
 export class Broom extends Admin {
   static name = "Broom";
-  static description = "Automatically clears all enemies with 1 size and 0 defence";
+  static description = "Automatically clears all enemies with 1 size and 0 defence on the end of your turn";
   static unicode = "U+1F9F9";
   static color = "#c7b07eff";
   constructor() {
-    super(Broom.name, Broom.description, Broom.unicode, Broom.color, 10, 5, 'gameState')
+    super(Broom.name, Broom.description, Broom.unicode, Broom.color, 10, 5, 'gameState', 'onTurnEnd')
   }
-  //
+  apply({ activePieces }: { activePieces: Piece[] }) {
+    for (const p of activePieces){
+      if(p.team==='enemy' && p.tiles.length === 1 && p.defence === 0){
+        //activePieces.value = activePieces.value.filter(p => p.id !== piece.id);
+        //splice or equivalent???
+      }
+    }
+  }
 }
 
 export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, Seed, Puzzle, Roger, Bucket, Diamond, Drum, Sneakers, Torch, Feather, Copier, Telescope, Microscope, Lotus, Broom];

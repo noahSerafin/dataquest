@@ -34,3 +34,22 @@ export class ¬ extends Admin {
   }
   //
 }
+
+'other' admin bools for shop
+
+Crystal Ball
+Convenience Store
+Department Store
+Credit Card
+Slots
+trolley
+toolbox
+
+map-
+golden ticket
+
+//round
+dove - place and move
+pallette - place and place
+
+Copier - onPlacement

@@ -23,6 +23,7 @@ export type StatModifier = {
   defence?: number
   range?: number
   maxSize?: number
+  actions?: number
 }
 
 export type Level = {

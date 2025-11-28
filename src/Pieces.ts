@@ -3,7 +3,8 @@ import type { Coordinate, StatModifier } from "./types"
 export abstract class Piece {
   removeCallback?: (piece: Piece) => void;
 
-  private statModifiers: StatModifier = {};//why is this breaking activePieces/enemypieces
+  //protected ??
+  statModifiers: StatModifier = {};//why is this breaking activePieces/enemypieces
 
   id: string
   static name : string

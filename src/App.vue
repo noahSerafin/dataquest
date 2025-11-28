@@ -83,7 +83,8 @@
     5, //admin slots
     [testVoucher], // no items yet
     [testSword, testShield, testSling],//, testShield] // starting pieces
-    []//no admins yet
+    [],//no admins yet
+    3
   ));
 
   function sellPiece(pieceId: string) {
@@ -107,10 +108,6 @@
     const item = player.value.items[idx];
     player.value.items.splice(idx, 1);
     player.value.money += Math.round(item.cost / 2);
-  }
-
-  function handleApplyAdmin(admin: Admin, id:string){
-
   }
 
   function handleApplyItem(payload: {item: Item, id:string}) {
@@ -307,31 +304,20 @@
   //pieceMap to track occupied spaces
   const activePieces = ref<InstanceType<typeof Piece>[]>([]);
   const modifiedStats = ref<Record<string, StatModifier>>({});
+  //Record: key ID, Modifier for piece with that ID
     //stats should be applied to activePieces after select level
+  function handleApplyAdmin(admin: Admin, id:string){//admin and target
+    //admin type, switch case by target type?
+  }
     //can be removed during a level
-  function applyStatModifications() {
-    /* does any of this already exist?
-    activePieces.value = player.value.programs.map(bp => {
-      const pieceInstance = rehydratePiece(bp);
-
-      // Compute modifiers from all current admins
-      const mods: StatModifier = {};
-      player.value.admins.forEach(admin => {
-        if (typeof admin.getModifiers === 'function') {
-          const adminMods = admin.getModifiers(pieceInstance);
-          Object.entries(adminMods).forEach(([stat, val]) => {
-            mods[stat as keyof StatModifier] =
-              (mods[stat as keyof StatModifier] ?? 0) + val;
-          });
-        }
-      });
-
-      // Store in modifiedStats keyed by piece id
-      modifiedStats.value[pieceInstance.id] = mods;
-
-      return pieceInstance;
-    });
-    */
+  function applyStatModifications() { //at start of round, on placement, on sell of admin 
+    for (const piece of activePieces.value) {
+      const mods = modifiedStats.value;
+      if (!mods) continue;
+      if(piece.team !== 'player') continue
+      piece.addModifier(mods);//for general mods
+      //if admin has target piece// we apply that function to the piece, then update activePieces? or will it be done already as it is in ref?
+    }
   }
 
   const selectedPiece = ref<Piece | null>(null)

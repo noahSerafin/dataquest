@@ -4,11 +4,11 @@ import { Player } from "./Player";
 import type { Coordinate, StatModifier } from "./types";
 
 export type AdminTrigger =
-  | 'onPlacement'
-  | 'onTurnEnd'
+  | 'onPlacement' //piece id and activePieces passed to apply
+  | 'onTurnEnd' //player 
   | 'onRoundStart'
   | 'onRoundEnd'
-  | 'onDealDamage'
+  | 'onDealDamage' //piece id of receiver?
   | 'onReceiveDamage'
   | 'onPieceDestruction'
   | 'other';

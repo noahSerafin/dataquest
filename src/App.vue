@@ -9,6 +9,7 @@
   import type { ItemConstructor } from "./Items";
   import { allAdmins } from "./AdminPrograms";
   import { Admin } from "./AdminPrograms";
+  import type { AdminTrigger } from "./AdminPrograms";
   import PlayerView from "./components/PlayerView.vue";
   import type { Piece } from "./Pieces"
   import { Spawn } from './Pieces';
@@ -306,9 +307,7 @@
   const modifiedStats = ref<Record<string, StatModifier>>({});
   //Record: key ID, Modifier for piece with that ID
     //stats should be applied to activePieces after select level
-  function handleApplyAdmin(admin: Admin, id:string){//admin and target
-    //admin type, switch case by target type?
-  }
+ 
     //can be removed during a level
   function applyStatModifications() { //at start of round, on placement, on sell of admin 
     for (const piece of activePieces.value) {
@@ -318,6 +317,42 @@
       piece.addModifier(mods);//for general mods
       //if admin has target piece// we apply that function to the piece, then update activePieces? or will it be done already as it is in ref?
     }
+  }
+
+  function handleApplyAdmins(trigger: AdminTrigger, id:string){//admin and target
+    //admin type, switch case by target type?
+    const playerAdmins = player.value.admins;
+    playerAdmins.forEach(admin => {
+      if(trigger === admin.triggerType){
+        // sort through target types, decide what to pass
+        if(admin.targetType === 'gameState'){
+          admin.apply({id, activePieces})
+        }
+        if(admin.targetType === 'playerAndGame'){
+          admin.apply({player, id, activePieces})
+        }
+        /*
+        if(admin.targetType === 'onRoundStart'){
+          admin.apply({activePieces})
+        }
+        if(admin.targetType === 'onRoundEnd'){
+          admin.apply({player})
+        }
+        if(admin.targetType === 'onDealDamage'){
+          admin.apply({id, activePieces})
+        }
+        if(admin.targetType === 'onRecieveDamage'){
+          admin.apply({id, activePieces})
+        }
+        if(admin.targetType === 'onPieceDestruction'){
+          admin.apply({player, id, activePieces})
+        }
+        if(admin.targetType === 'other'){//handle outside?
+        admin.apply({player})
+      }
+      */
+      }
+    });
   }
 
   const selectedPiece = ref<Piece | null>(null)
@@ -493,6 +528,11 @@
     if(isFirstTurn){
       isFirstTurn.value = false;
     }
+    playerSpawns.value = newPlacementHighlights();
+
+    applyStatModifications()
+
+    //if !isfisrtTurn && !player has (pallette/dove)
     endTurn();
   }
 

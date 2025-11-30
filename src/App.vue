@@ -329,7 +329,7 @@
           admin.apply({id, activePieces})
         }
         if(admin.targetType === 'playerAndGame'){
-          admin.apply({player, id, activePieces})
+          admin.apply({id, activePieces, player})
         }
         /*
         if(admin.targetType === 'onRoundStart'){
@@ -530,8 +530,8 @@
     }
     playerSpawns.value = newPlacementHighlights();
 
-    applyStatModifications()
-
+    //applyStatModifications()
+    handleApplyAdmins('onPlacement', instance.id)
     //if !isfisrtTurn && !player has (pallette/dove)
     endTurn();
   }

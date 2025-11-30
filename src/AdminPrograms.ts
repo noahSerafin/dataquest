@@ -162,12 +162,9 @@ class BionicArm extends Admin {
   }
   
   //on placement/after hydration
-  apply({ activePieces }: { activePieces: Piece[] }) {
-    for (const p of activePieces){
-      if(p.team==='player'){
-        p.addModifier({attack: 2})//enemy pieces only?
-      }
-    }
+  apply({ id, activePieces }: {  id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    activePieces[idx].addModifier({attack: 2})//enemy pieces only?  
   }
 }
 
@@ -181,12 +178,9 @@ class BionicLeg extends Admin {
     super(BionicLeg.name, BionicLeg.description, BionicLeg.unicode, BionicLeg.color, 7, 4, 'gameState', 'onPlacement')
   }
 
-  apply({ activePieces }: { activePieces: Piece[] }) {
-    for (const p of activePieces){
-      if(p.team==='player'){
-        p.addModifier({moves: 2})//enemy pieces only?
-      }
-    }
+  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    activePieces[idx].addModifier({moves: 2})
   }
 }
 
@@ -254,45 +248,39 @@ class Heartbreaker extends Admin {
   }
 
   //on placement
-  apply({ activePieces }: { activePieces: Piece[] }) {
-    for (const p of activePieces){
-      if(p.team==='player'){
-       // p.charmImmune == true
-      }
-    }
+  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    //activePieces[idx].charmImmunity = true
   }
 }
 
 class Hamsa extends Admin {
   static name = "Hamsa";
-  static description = "Raises all your placed program's defences by 1";
+  static description = "Raises program's defence by 1 on placement";
   static unicode = "U+1FAAC";
   static color = "#5560ffff";
   constructor() {
     super(Hamsa.name, Hamsa.description, Hamsa.unicode, Hamsa.color, 8, 5, 'player', 'onPlacement')
   }
-  apply({ activePieces }: { activePieces: Piece[] }) {
-    for (const p of activePieces){
-      if(p.team==='player'){
-        p.addModifier({defence: 1})//enemy pieces only?
-      }
-    }
+  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    activePieces[idx].addModifier({defence: 2})
   }
 }
 
 class Relay extends Admin {
   static name = "Relay";
-  static description = "All placed programs with a range < 1 gain +1 attack";
+  static description = "All placed programs with a range < 1 on placement gain +1 attack";
   static unicode = "U+1F4E1";
   static color = "#e4d26fff";
   constructor() {
     super(Relay.name, Relay.description, Relay.unicode, Relay.color, 5, 3, 'player', 'onPlacement')
   }
-  apply({ activePieces }: { activePieces: Piece[] }) {
-    for (const p of activePieces){
-      if(p.team==='player' && p.getStat('range') > 1){
-        p.addModifier({attack: 1})//enemy pieces only?
-      }
+
+  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    if(activePieces[idx].team==='player' && activePieces[idx].getStat('range') > 1){
+      activePieces[idx].addModifier({attack: 2})
     }
   }
 }
@@ -478,72 +466,61 @@ class Aesculapius extends Admin {
   }
 
   //on placement
-  apply({ activePieces }: { activePieces: Piece[] }) {
-    for (const p of activePieces){
-      if(p.team==='player'){
+  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    if(activePieces[idx].team==='player' && activePieces[idx].getStat('range') > 1){
+      //activePieces[idx].
         //p.poisonImmune = true;
         //p.diseaseImmune = true;
-      }
     }
   }
-  remove({ activePieces }: { activePieces: Piece[] }) {
-    for (const p of activePieces){
-      if(p.team==='player'){
-        //p.poisonImmune = false;
-        //p.diseaseImmune = false;
-      }
-    }
+
+  remove({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    //p.poisonImmune = false;
+    //p.diseaseImmune = false;  
   }
 }
 
 class Heart extends Admin {
   static name = "Heart";
-  static description = "Programs all gain +1 max size";
+  static description = "Programs all gain +1 max size on placement";
   static unicode = "U+1FAC0";
   static color = "#ff5555";
   constructor() {
     super(Heart.name, Heart.description, Heart.unicode, Heart.color, 6, 3, 'player', 'onPlacement')
   }
-  apply({ activePieces }: { activePieces: Piece[] }) {
-    for (const p of activePieces){
-      if(p.team==='player'){
-        p.addModifier({maxSize: 1})
-      }
-    }
+  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    activePieces[idx].addModifier({maxSize: 1})
   }
 }
 
 class Lungs extends Admin {
   static name = "Lungs";
-  static description = "Programs all gain +1 moves";
+  static description = "Programs all gain +1 moves on placement";
   static unicode = "U+1FAC1";
   static color = "#ff5555";
   constructor() {
     super(Lungs.name, Lungs.description, Lungs.unicode, Lungs.color, 5, 3, 'player', 'onPlacement')
   }
-  apply({ activePieces }: { activePieces: Piece[] }) {
-    for (const p of activePieces){
-      if(p.team==='player'){
-        p.addModifier({moves: 1})
-      }
-    }
+  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    activePieces[idx].addModifier({moves: 1})
   }
 }
 
 class Brain extends Admin {
   static name = "Brain";
-  static description = "placed programs all have +1 actions";
+  static description = "placed programs all have +1 actions on placement";
   static unicode = "U+1F9E0";
   static color = "#ff5555";
   constructor() {
     super(Brain.name, Brain.description, Brain.unicode, Brain.color, 9, 4, 'player', 'onPlacement')
   }
-  apply({ activePieces }: { activePieces: Piece[] }) {
-    for (const p of activePieces){
-      if(p.team==='player'){
-        p.addModifier({actions: 1})
-      }
-    }
+  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    activePieces[idx].addModifier({actions: 1})
   }
 }
 
@@ -623,7 +600,7 @@ class Backdoor extends Admin {
 
 class Communism extends Admin {
   static name = "Communism";
-  static description = "+1 all stats to all placed programs while money is under 4";
+  static description = "+1 all stats to all placed programs while money is under 5";
   static unicode = "U+262D";
   static color = "#ff0000ff";
   constructor() {
@@ -631,33 +608,18 @@ class Communism extends Admin {
   }
 
   //on placement
-  apply({ player, activePieces }: { player: Player, activePieces: Piece[] }) {
-    if (player.money <= 4){
-      for (const p of activePieces){
-        if(p.team==='player'){
-          p.addModifier({
+  apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+    if(player.money<=4){
+      const idx = activePieces.findIndex(p => p.id === id);
+      activePieces[idx].addModifier({
             attack: 1,
             defence: 1,
+
             maxSize: 1,
             moves: 1,
             range: 1
-          })
-        }
-      }
+      })
     }
-  }
-  remove({ activePieces }: { activePieces: Piece[] }) {
-      for (const p of activePieces){
-        if(p.team==='player'){
-          p.addModifier({
-            attack: -1,
-            defence: -1,
-            maxSize: -1,
-            moves: -1,
-            range: -1
-          })
-        }
-      }
   }
 }
 
@@ -707,24 +669,23 @@ class Newspaper extends Admin {
   static unicode = "U+1F5DE";
   static color = "#5c5c5cff";
   constructor() {
-    super(Newspaper.name, Newspaper.description, Newspaper.unicode, Newspaper.color, 1, 2, 'player', 'onPlacement')
+    super(Newspaper.name, Newspaper.description, Newspaper.unicode, Newspaper.color, 1, 2, 'playerAndGame', 'onPlacement')
   }
-  apply({ activePieces }: { activePieces: Piece[] }) {
-    for (const p of activePieces){
-      if(p.team==='player' && p.getStat('range')===1){
-        p.addModifier({attack: 1})
-      }
+  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    if(activePieces[idx].team==='player' && activePieces[idx].getStat('range')===1){
+      activePieces[idx].addModifier({attack: 1})
     }
   }
 }
 
 class Crown extends Admin {
-  static name = "Landed";
+  static name = "Tithe";
   static description = "Gain $5 every round";
   static unicode = " U+1F451";
   static color = "#e6c98bff";
   constructor() {
-    super(Crown.name, Crown.description, Crown.unicode, Crown.color, 9, 3, 'gameState', 'onRoundEnd')//maybe player
+    super(Crown.name, Crown.description, Crown.unicode, Crown.color, 9, 3, 'player', 'onRoundEnd')//maybe player
   }
   //on round end
   apply({ player }: { player: Player }) {
@@ -741,6 +702,10 @@ class Cactus extends Admin {
     super(Cactus.name, Cactus.description, Cactus.unicode, Cactus.color, 10, 5, 'gameState', 'onReceiveDamage')//pieces?
   }
   //on receive damage
+  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    activePieces[idx].takeDamage(1);
+  }
 }
 
 class Compass extends Admin {
@@ -775,20 +740,35 @@ class Seed extends Admin {
 
 class Puzzle extends Admin {
   static name = "Puzzle Piece";
-  static description = "Programs with an ally adjacent to their head gain +1 defence at the end of your turn";
+  static description = "Pieces with an ally adjacent to their head gain +1 defence at the end of your turn";
   static unicode = " U+1F9E9";
   static color = "#ff5555";
   constructor() {
     super(Puzzle.name, Puzzle.description, Puzzle.unicode, Puzzle.color, 6, 3, 'gameState', 'onTurnEnd')
   }
   //on turn end
-  apply({ activePieces }: { activePieces: Piece[] }) {
+  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const directions = [
+      {x: 1, y:0},
+      {x: 0, y:1},
+      {x: -1, y:0},
+      {x: 0, y:-1}
+    ]
     for (const p of activePieces){
       if(p.team==='player'){
-        //from the headposition, look for adjacent player tiles
-        p.addModifier({defence: 1})
-        //else no buff
-      }
+        const neighbours = activePieces.some(piece =>
+          piece.team === 'player' &&
+          piece.tiles.some(t =>
+          Math.abs(t.x - p.headPosition.x) + Math.abs(t.y - p.headPosition.y) === 1
+          )
+        )
+
+        if(neighbours){
+         p.addModifier({defence: 1})
+        } else {
+          p.addModifier({defence: -1})
+        }  
+      } 
     }
   }
 }
@@ -846,18 +826,16 @@ class Diamond extends Admin {
 
 class Drum extends Admin {
   static name = "Marching Drum";
-  static description = "+1 moves for all placed programs";
+  static description = "+1 moves for all placed programs on the end of your turn";
   static unicode = "U+1F941";
   static color = "#ff5555";
   constructor() {
-    super(Drum.name, Drum.description, Drum.unicode, Drum.color, 3, 1, 'gameState', 'onPlacement')
+    super(Drum.name, Drum.description, Drum.unicode, Drum.color, 3, 1, 'gameState', 'onTurnEnd')
   }
-  apply({ activePieces }: { activePieces: Piece[] }) {
+  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces){
       if(p.team==='player'){
-        //from the headposition, look for adjacent player tiles
         p.addModifier({moves: 1})
-        //else no buff
       }
     }
   }
@@ -871,34 +849,24 @@ class Sneakers extends Admin {//item???
   constructor() {
     super(Sneakers.name, Sneakers.description, Sneakers.unicode, Sneakers.color, 6, 3, 'gameState', 'onPlacement')
   }
-  apply({ activePieces }: { activePieces: Piece[] }) {
-    for (const p of activePieces){
-      if(p.team==='player'){
-        //from the headposition, look for adjacent player tiles
-        p.addModifier({moves: 1})
-        //else no buff
-      }
-    }
+  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    activePieces[idx].addModifier({moves: 1})
   }
 }
 
 //candle U+1F56F
 class Torch extends Admin {
   static name = "Torch";
-  static description = "+1 range for all programs";
+  static description = "+1 range for all programs on placement";
   static unicode = "U+1F526";
   static color = "#f0aa13ff";
   constructor() {
     super(Torch.name, Torch.description, Torch.unicode, Torch.color, 4, 1, 'gameState', 'onPlacement')
   }
-  apply({ activePieces }: { activePieces: Piece[] }) {
-    for (const p of activePieces){
-      if(p.team==='player'){
-        //from the headposition, look for adjacent player tiles
-        p.addModifier({range: 1})
-        //else no buff
-      }
-    }
+  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    activePieces[idx].addModifier({range: 1})
   }
 }
 
@@ -910,40 +878,46 @@ class Feather extends Admin {
   constructor() {
     super(Feather.name, Feather.description, Feather.unicode, Feather.color, 8, 5, 'gameState', 'onPlacement')
   }
-  apply({ activePieces }: { activePieces: Piece[] }) {
-    for (const p of activePieces){
-      if(p.team==='player'){
-        p.addModifier({moves: 1})
-        p.addModifier({maxSize: -1})
-      }
-    }
+  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    activePieces[idx].addModifier({moves: 1})
+    activePieces[idx].addModifier({maxSize: -1})
   }
 }
 
 class Copier extends Admin {
   static name = "Copier";
-  static description = "Places a copy of your first placed program 1 space to the right";
+  static description = "Places a copy of your first placed program 1 space to the right if it is unnocupied";
   static unicode = "U+1F5A8";
   static color = "#ff5555";
   constructor() {
-    super(Copier.name, Copier.description, Copier.unicode, Copier.color, 9, 5, 'playerAndGame', 'onPlacement')
+    super(Copier.name, Copier.description, Copier.unicode, Copier.color, 9, 5, 'gameState', 'onPlacement')
   }
   //on placement, handle in App
-  apply({ activePieces }: { activePieces: Piece[] }) {
+    apply({ id, activePieces }: { id: string, activePieces: Piece[]}) {
+    //const idx = activePieces.findIndex(p => p.id === id);
     const playerPieces : Piece[] = [];
     for (const p of activePieces){
       if(p.team==='player'){
         playerPieces.push(p)
       }
     }
-    if(playerPieces.length === 1){
+
+    function removePiece(piece: Piece) {
+      activePieces = activePieces.filter(p => p.id !== piece.id);
+    }
+
+    if(playerPieces.length === 1 ){//&& player.isfirstTurn){
       const PieceClass = allPieces.find(p => p.name === playerPieces[0].name)
       if (!PieceClass) return
       const newHead : Coordinate = {x: playerPieces[0].headPosition.x + 1, y: playerPieces[0].headPosition.y}
-      //no ref of activePieces to removePiece from
-      //const copy = new PieceClass(newHead, 'player', removePiece, crypto.randomUUID());
-      //const copy = playerPieces[0]//new Instance???
-      //activePieces.push(copy)
+      const isOccupied = activePieces.some(p =>
+        p.tiles.some(t => t.x === newHead.x && t.y === newHead.y)
+      );
+      if(!isOccupied){
+        const copy = new PieceClass(newHead, 'player', removePiece, crypto.randomUUID());
+        activePieces.push(copy);
+      }
     }
   }
 }
@@ -956,28 +930,24 @@ class Telescope extends Admin {
   constructor() {
     super(Telescope.name, Telescope.description, Telescope.unicode, Telescope.color, 6, 4, 'gameState', 'onPlacement')
   }
-  apply({ activePieces }: { activePieces: Piece[] }) {
-    for (const p of activePieces){
-      if(p.team==='player'){
-        p.addModifier({range: 1})
-      }
-    }
+  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    activePieces[idx].addModifier({range: 2})
   }
 }
 
 class Microscope extends Admin {
   static name = "Microbiology";
-  static description = "Placed programs with a max size of 1 get +1 defence";
+  static description = "Placed programs with a max size of 1 get +1 defence on load";
   static unicode = "U+1F52C";
   static color = "#ff5555";
   constructor() {
     super(Microscope.name, Microscope.description, Microscope.unicode, Microscope.color, 5, 3, 'gameState', 'onPlacement')
   }
-  apply({ activePieces }: { activePieces: Piece[] }) {
-    for (const p of activePieces){
-      if(p.team==='player' && p.maxSize === 1){
-        p.addModifier({defence: 1})
-      }
+  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    if(activePieces[idx].maxSize === 1){
+      activePieces[idx].addModifier({defence: 1})
     }
   }
 }

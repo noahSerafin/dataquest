@@ -206,7 +206,7 @@ class Convenience extends Admin {
   //modify shop/player
 }
 
-class Department extends Admin {
+class Department extends Admin {//unfinished
   static name = "Department Store";
   static description = "+3 shop slots";
   static unicode = "U+1F3EC";
@@ -236,7 +236,7 @@ class Eye extends Admin {
   }
 }
 
-class Bouquet extends Admin {
+class Bouquet extends Admin {//unfinished
   static name = "Bouquet";
   static description = "Held admin program's can reappear in the shop";
   static unicode = "U+1F490";
@@ -297,20 +297,13 @@ class Relay extends Admin {
   }
 }
 
-class Hivis extends Admin {//unfinished
+class Hivis extends Admin {
   static name = "Hi-Vis";
   static description = "Saves a program from destruction once, then is deleted";
   static unicode = "U+1F9BA";
   static color = "#a7ff55ff";
   constructor() {
-    super(Hivis.name, Hivis.description, Hivis.unicode, Hivis.color, 5, 1, 'gameState', 'onPieceDestruction')
-  }
-  async apply({ activePieces }: { activePieces: Piece[] }) {
-    for (const p of activePieces){
-      if(p.team==='player'){
-        //p.addModifier({lives: 1})
-      }
-    }
+    super(Hivis.name, Hivis.description, Hivis.unicode, Hivis.color, 5, 1, 'gameState', 'other')
   }
 }
 
@@ -332,7 +325,7 @@ class Notepad extends Admin {
 
 // GLOBE WITH MERIDIANS, U+1F310
 class AdminMap extends Admin {
-  static name = "AdminMap";
+  static name = "Map";
   static description = "See the incoming level in advance";
   static unicode = "U+1F5FA";
   static color = "#001cbbff";
@@ -374,7 +367,7 @@ class Volatile extends Admin {//unfinished
 
 class Inheritance extends Admin {
   static name = "Inheritance";
-  static description = "Earn double your interest and bonus interest after winning a round, does not stack with itself";
+  static description = "Earn double your interest after winning a round, does not stack with itself";
   static unicode = "U+1F911";
   static color = "#ffc955ff";
   constructor() {
@@ -390,7 +383,7 @@ class Inheritance extends Admin {
     */
 }
 
-class CreditCard extends Admin {
+class CreditCard extends Admin {//unfinished
   static name = "Credit Card";
   static description = "Go up to $20 in debt";
   static unicode = "U+1F4B3";
@@ -465,7 +458,7 @@ class Joker extends Admin {
   }
 }
 
-class Chemistry extends Admin {
+class Chemistry extends Admin {//unfinished
   static name = "Chemistry";
   static description = "Items effects are doubled";
   static unicode = "U+2697";
@@ -548,7 +541,7 @@ class Brain extends Admin {
   }
 }
 
-class GoldenTicket extends Admin {
+class GoldenTicket extends Admin {//unfinished
   static name = "Golden Ticket";
   static description = "Skip a level for $5";
   static unicode = "U+1F3AB";
@@ -659,7 +652,7 @@ class Palette extends Admin {
 
 class Osiris extends Admin {
   static name = "Osiris";
-  static description = "+1 damage to every placed piece each time one of a program is destroyed";
+  static description = "+1 damage all your placed programs each time a program is destroyed";
   static unicode = "U+1314A";
   static color = "#33073bff";
   constructor() {
@@ -723,7 +716,7 @@ class Cactus extends Admin {
   static unicode = "U+1F335";
   static color = "#dfb372ff";
   constructor() {
-    super(Cactus.name, Cactus.description, Cactus.unicode, Cactus.color, 10, 5, 'gameState', 'onReceiveDamage')//pieces?
+    super(Cactus.name, Cactus.description, Cactus.unicode, Cactus.color, 4, 2, 'gameState', 'onReceiveDamage')//pieces?
   }
   //on receive damage
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {

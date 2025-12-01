@@ -94,7 +94,7 @@
     return player.value.admins.some(a => a.name === name);
   }
 
-  function sellPiece(pieceId: string) {
+  function sellBlueprint(pieceId: string) {
     // find the index
     const idx = player.value.programs.findIndex(p => p.id === pieceId);
     if (idx === -1) return; // piece not found
@@ -495,9 +495,16 @@
   }
 
   function removePiece(piece: Piece) {
-    activePieces.value = activePieces.value.filter(p => p.id !== piece.id);
+    if(playerHasAdmin('Hi-Vis')){
+      piece.tiles = [piece.headPosition];
+      const index = player.value.admins.findIndex(a => a.name === 'Hi-vis');
+      if (index !== -1) player.value.admins.splice(index, 1);
+    } else {
+      activePieces.value = activePieces.value.filter(p => p.id !== piece.id);
+      handleApplyAdmins('onPieceDestruction', piece.id);
+      //graveyard?
+    }
   }
-  //graveyard?
 
   function placePieceOnBoardAt(coord: Coordinate) {
     if (!pieceToPlace.value) return
@@ -527,7 +534,9 @@
     //applyStatModifications()
     handleApplyAdmins('onPlacement', instance.id)
     //if !isfisrtTurn && !player has (pallette/dove)
-    endTurn();
+    if(!isFirstTurn && (!playerHasAdmin('Dove') || !playerHasAdmin('Pallete'))){
+      endTurn();
+    }
   }
 
   //previous board functions
@@ -626,6 +635,10 @@
     }
   }
       
+  function onReceiveDamage (id: string) {
+    handleApplyAdmins("onReceiveDamage", id);
+  }
+
   //enemy moves
   async function enemyTurn() {
     const enemyPieces = activePieces.value.filter(p => p.team === 'enemy');
@@ -646,7 +659,8 @@
       boardRef.value.highlightMoves,
       boardRef.value.highlightTargets,
       boardRef.value.clearHighlights,
-      tileSet
+      tileSet,
+      onReceiveDamage
     );
 
     // Reset enemy actions/moves after their turn if needed
@@ -736,7 +750,7 @@
   </div>
   <div v-if="!hasFinishedTurn && !isPlacing">Your turn</div>
 
-  <PlayerView v-if="!displayEditor" :player="player" @highlightPlacements="highlightPlacements" @sellPiece="sellPiece" @sellItem="sellItem" @applyItem="handleApplyItem"  @reorderAdmins="player.admins = $event"/>
+  <PlayerView v-if="!displayEditor" :player="player" @highlightPlacements="highlightPlacements" @sellBlueprint="sellBlueprint" @sellItem="sellItem" @applyItem="handleApplyItem"  @reorderAdmins="player.admins = $event"/>
   <WorldMap
     :levels="testLevels"
     @select-level="selectLevel"

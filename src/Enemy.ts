@@ -10,6 +10,7 @@ export async function takeEnemyTurn(
   highlightTargets: (piece: Piece) => void,
   clearHighlights: () => void,
   tileSet: Set<string>,
+  onReceiveDamage: (id: string) => void,
   delay = 500 // ms between moves for visibility
 ) {
   for (const enemy of enemyPieces) {
@@ -22,8 +23,9 @@ export async function takeEnemyTurn(
       if (target) {
         highlightTargets(enemy);
         await sleep(300);
-        if(enemy.attack > target.defence){
+        if(enemy.attack > target.defence && enemy.actions > 0){
           attackPiece(enemy, target);
+          onReceiveDamage(enemy.id);
           await sleep(delay);
           clearHighlights()
           if(isMaxSize){
@@ -74,10 +76,11 @@ export async function takeEnemyTurn(
       }
 
       const newTarget = findPlayerInRange(enemy, playerPieces);
-      if (newTarget && enemy.attack > newTarget.defence) {
+      if (newTarget && enemy.attack > newTarget.defence && enemy.actions > 0) {
         highlightTargets(enemy);
         await sleep(300);
         attackPiece(enemy, newTarget);
+        onReceiveDamage(enemy.id);
         await sleep(delay);
         clearHighlights();
         continue; // still in loop if actions > 0
@@ -97,6 +100,7 @@ function attackPiece(attacker: Piece, defender: Piece) {
     const damage = attacker.attack;
     defender.takeDamage(damage);
     attacker.actions--;
+    // callback to App.vue
   }
 }
 

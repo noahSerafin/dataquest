@@ -5,7 +5,6 @@
     import { Item } from "../Items";
     import { Admin } from "../AdminPrograms";
     import ItemView from "./ItemView.vue";
-    import PieceController from "./PieceController.vue";
     import BlueprintView from "./BlueprintView.vue";
     import BlueprintController from "./BlueprintController.vue";
 
@@ -16,7 +15,7 @@
     
     const emit = defineEmits<{//move to controller???
         (e: 'highlightPlacements', blueprint: PieceBlueprint): void;
-        (e: 'sellPiece', id:string):void;
+        (e: 'sellBlueprint', id:string):void;
         (e: 'sellItem', id:string):void;
         (e: 'applyItem', payload: {item: Item, id:string}):void;
         (e: 'reorderAdmins', admins: Admin[]):void;
@@ -45,9 +44,9 @@
         }
     }
 
-    function handleSellPiece() {
+    function handleSellBlueprint() {
         if(selectedPiece.value){
-            emit('sellPiece', selectedPiece.value.id);
+            emit('sellBlueprint', selectedPiece.value.id);
             selectedPiece.value = null
         }
     }
@@ -184,7 +183,7 @@
         mode="inventory"
         :canBuy="false"
         @highlightPlacements="handlePlace"
-        @sell="handleSellPiece"
+        @sell="handleSellBlueprint"
         @close="handleClose"
         />
     </div>

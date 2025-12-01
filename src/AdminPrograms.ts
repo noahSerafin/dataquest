@@ -102,26 +102,26 @@ class Bubble extends Admin {
 
 }
 
-class Crystal extends Admin {
+class Crystal extends Admin {//unfinished
   static name = "Crystal Ball";
   static description = "See the next shop in advance";
   static unicode = "U+1F52E";
   static color = "#4b003bff";
 
   constructor() {
-    super(Crystal.name, Crystal.description, Crystal.unicode, Crystal.color, 5, 1, 'gameState', 'other')
+    super(Crystal.name, Crystal.description, Crystal.unicode, Crystal.color, 5, 1, 'player', 'other')
   }
   //modify app for this one
 }
 
-class Clover extends Admin {
+class Clover extends Admin {//unfinished
   static name = "Lucky Clover";
   static description = "Raises chance of rarer items appearing";
   static unicode = "U+1F340";
   static color = "#00ff0dff";
 
   constructor() {
-    super(Clover.name, Clover.description, Clover.unicode, Clover.color, 7, 2, 'gameState', 'other')//shop state, on round end? on OpenShop?
+    super(Clover.name, Clover.description, Clover.unicode, Clover.color, 7, 2, 'player', 'other')//shop state, on round end? on OpenShop?
   }
   //interact with shop, modify shop for this
 }
@@ -194,14 +194,14 @@ class BionicLeg extends Admin {
   }
 }
 
-class Convenience extends Admin {
+class Convenience extends Admin {//unfinished
   static name = "Convenience Store";
   static description = "Open the shop any time";
   static unicode = "U+1F3EA";
   static color = "#55ff71ff";
 
   constructor() {
-    super(Convenience.name, Convenience.description, Convenience.unicode, Convenience.color, 4, 2, 'gameState', 'other')//shop
+    super(Convenience.name, Convenience.description, Convenience.unicode, Convenience.color, 4, 2, 'player', 'other')//shop
   }
   //modify shop/player
 }
@@ -212,7 +212,7 @@ class Department extends Admin {//unfinished
   static unicode = "U+1F3EC";
   static color = "#bebebeff";
   constructor() {
-    super(Department.name, Department.description, Department.unicode, Department.color, 5, 3, 'gameState', 'other')//shop
+    super(Department.name, Department.description, Department.unicode, Department.color, 5, 3, 'player', 'other')//shop
   }
   //modify shop/player bool for this
 }
@@ -243,7 +243,7 @@ class Bouquet extends Admin {//unfinished
   static color = "#85e758ff";
 
   constructor() {
-    super(Bouquet.name, Bouquet.description, Bouquet.unicode, Bouquet.color, 3, 3, 'gameState', 'other')//shop
+    super(Bouquet.name, Bouquet.description, Bouquet.unicode, Bouquet.color, 3, 3, 'player', 'other')//shop
   }
   //shop, disable for now
 }
@@ -303,7 +303,7 @@ class Hivis extends Admin {
   static unicode = "U+1F9BA";
   static color = "#a7ff55ff";
   constructor() {
-    super(Hivis.name, Hivis.description, Hivis.unicode, Hivis.color, 5, 1, 'gameState', 'other')
+    super(Hivis.name, Hivis.description, Hivis.unicode, Hivis.color, 5, 1, 'player', 'other')
   }
 }
 
@@ -324,13 +324,13 @@ class Notepad extends Admin {
 }
 
 // GLOBE WITH MERIDIANS, U+1F310
-class AdminMap extends Admin {
+class AdminMap extends Admin {//unfinished
   static name = "Map";
   static description = "See the incoming level in advance";
   static unicode = "U+1F5FA";
   static color = "#001cbbff";
   constructor() {
-    super(AdminMap.name, AdminMap.description, AdminMap.unicode, AdminMap.color, 1, 2, 'gameState', 'other')
+    super(AdminMap.name, AdminMap.description, AdminMap.unicode, AdminMap.color, 1, 2, 'player', 'other')
   }
   //player bool
 }
@@ -389,7 +389,7 @@ class CreditCard extends Admin {//unfinished
   static unicode = "U+1F4B3";
   static color = "#ff5555";
   constructor() {
-    super(CreditCard.name, CreditCard.description, CreditCard.unicode, CreditCard.color, 1, 2, 'gameState', 'other')//shop
+    super(CreditCard.name, CreditCard.description, CreditCard.unicode, CreditCard.color, 1, 2, 'player', 'other')//shop
   }
   //shop lower limit change
 }
@@ -464,7 +464,7 @@ class Chemistry extends Admin {//unfinished
   static unicode = "U+2697";
   static color = "#4eb95cff";
   constructor() {
-    super(Chemistry.name, Chemistry.description, Chemistry.unicode, Chemistry.color, 6, 5, 'gameState', 'other')//on Item use
+    super(Chemistry.name, Chemistry.description, Chemistry.unicode, Chemistry.color, 6, 5, 'gameState', 'onTurnEnd')//on Item use
   }
   //seperate flag for this
 }
@@ -547,7 +547,7 @@ class GoldenTicket extends Admin {//unfinished
   static unicode = "U+1F3AB";
   static color = "#dfba42ff";
   constructor() {
-    super(GoldenTicket.name, GoldenTicket.description, GoldenTicket.unicode, GoldenTicket.color, 5, 4, 'gameState', 'other');
+    super(GoldenTicket.name, GoldenTicket.description, GoldenTicket.unicode, GoldenTicket.color, 5, 4, 'player', 'other');
   }
   //intereact with map
 }
@@ -558,7 +558,7 @@ class Dove extends Admin {
   static unicode = "U+1F54A";
   static color = "#3be2ffff";
   constructor() {
-    super(Dove.name, Dove.description, Dove.unicode, Dove.color, 7, 5, 'gameState', 'other')//other
+    super(Dove.name, Dove.description, Dove.unicode, Dove.color, 7, 5, 'player', 'other')
   }
   //bool
 }
@@ -586,9 +586,14 @@ class Trolley extends Admin {
   static unicode = "U+1F6D2";
   static color = "#55fff1ff";
   constructor() {
-    super(Trolley.name, Trolley.description, Trolley.unicode, Trolley.color, 5, 2, 'gameState', 'other')//'player')??
+    super(Trolley.name, Trolley.description, Trolley.unicode, Trolley.color, 5, 2, 'player', 'other')//'player')??
   }
-  //all items/ shop mod
+  async apply({ player }: { player: Player }) {
+   player.hasTrolley = true;
+  }
+  async remove({ player }: { player: Player }) {
+   player.hasToolbox = false;
+  }
 }
 
 export class Toolbox extends Admin {
@@ -597,9 +602,14 @@ export class Toolbox extends Admin {
   static unicode = "U+1F9F0";
   static color = "#ff55c6ff";
   constructor() {
-    super(Toolbox.name, Toolbox.description, Toolbox.unicode, Toolbox.color, 7, 3, 'gameState', 'other')//'player')??
+    super(Toolbox.name, Toolbox.description, Toolbox.unicode, Toolbox.color, 7, 3, 'player', 'other')//'player')??
   }
-  //all items/ shop mod
+  async apply({ player }: { player: Player }) {
+   player.hasToolbox = true;
+  }
+  async remove({ player }: { player: Player }) {
+   player.hasToolbox = false;
+  }
 }
 
 class Backdoor extends Admin {
@@ -608,7 +618,7 @@ class Backdoor extends Admin {
   static unicode = "U+1F6AA";
   static color = "#0a0a0aff";
   constructor() {
-    super(Backdoor.name, Backdoor.description, Backdoor.unicode, Backdoor.color, 8, 4, 'gameState', 'other')
+    super(Backdoor.name, Backdoor.description, Backdoor.unicode, Backdoor.color, 8, 4, 'player', 'other')
   }
   //bool for placement function
 }
@@ -645,7 +655,7 @@ class Palette extends Admin {
   static unicode = "U+1F3A8";
   static color = "#ff55f6ff";
   constructor() {
-    super(Palette.name, Palette.description, Palette.unicode, Palette.color, 6, 4, 'gameState', 'other')//other
+    super(Palette.name, Palette.description, Palette.unicode, Palette.color, 6, 4, 'player', 'other')
   }
   //round logic edit
 }
@@ -668,13 +678,13 @@ class Osiris extends Admin {
   }
 }
 
-class Slots extends Admin {
+class Slots extends Admin {//unfinished
   static name = "Slots";
   static description = "Rerolls cos $2 less";
   static unicode = "U+1F3B0";
   static color = "#ff5555";
   constructor() {
-    super(Slots.name, Slots.description, Slots.unicode, Slots.color, 5, 1, 'gameState', 'other')//shop
+    super(Slots.name, Slots.description, Slots.unicode, Slots.color, 5, 1, 'player', 'other')//shop
   }
   //shop edit
 }
@@ -725,13 +735,13 @@ class Cactus extends Admin {
   }
 }
 
-class Compass extends Admin {
+class Compass extends Admin {//unfinished
   static name = "Compass";
-  static description = "Always show the path to the nearest shop - unfinished";
+  static description = "Always show the path to the nearest shop";
   static unicode = "U+1F9ED";
   static color = "#ff5555";
   constructor() {
-    super(Compass.name, Compass.description, Compass.unicode, Compass.color, 2, 1, 'gameState', 'other')
+    super(Compass.name, Compass.description, Compass.unicode, Compass.color, 2, 1, 'player', 'other')
   }
   //map edit
 }
@@ -744,15 +754,12 @@ class Seed extends Admin {
   constructor() {
     super(Seed.name, Seed.description, Seed.unicode, Seed.color, 10, 1, 'player', 'other')
   }
-  //interest
-  /*
   async apply({ player }: { player: Player }) {
    player.interestCap = 10;
   }
   remove({ player }: { player: Player }) {
    player.interestCap = 5;
   }
-   */
 }
 
 class Puzzle extends Admin {

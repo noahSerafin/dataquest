@@ -87,7 +87,9 @@
     [],//no admins yet
     2,
     5,
-    0
+    0,
+    false,
+    false
   ));
 
   function playerHasAdmin(name: string) {
@@ -111,10 +113,20 @@
   function sellItem(itemId: string) {
     const idx = player.value.items.findIndex(i => i.id === itemId);
     if (idx === -1) return;
-
     const item = player.value.items[idx];
     player.value.items.splice(idx, 1);
     player.value.money += Math.round(item.cost / 2);
+  }
+
+  function sellAdmin(itemId: string) {//TODO NEXT
+    const idx = player.value.admins.findIndex(i => i.id === itemId);
+    if (idx === -1) return;
+    const admin = player.value.admins[idx];
+    if(admin.triggerType === 'other'){
+      admin.remove(player.value);
+    }
+    player.value.items.splice(idx, 1);
+    player.value.money += Math.round(admin.cost / 2);
   }
 
   function handleApplyItem(payload: {item: Item, id:string}) {
@@ -299,6 +311,7 @@
     // decide which inventory to place it in
     if (item instanceof Admin) {
       player.value.admins.push(item);
+      handleApplyAdmins('other', item.id)
     } else {
       player.value.items.push(item);
     }
@@ -310,20 +323,8 @@
   //round logic
   //pieceMap to track occupied spaces
   const activePieces = ref<InstanceType<typeof Piece>[]>([]);
-  const modifiedStats = ref<Record<string, StatModifier>>({});
   //Record: key ID, Modifier for piece with that ID
     //stats should be applied to activePieces after select level
- 
-    //can be removed during a level
-  function applyStatModifications() { //at start of round, on placement, on sell of admin 
-    for (const piece of activePieces.value) {
-      const mods = modifiedStats.value;
-      if (!mods) continue;
-      if(piece.team !== 'player') continue
-      piece.addModifier(mods);//for general mods
-      //if admin has target piece// we apply that function to the piece, then update activePieces? or will it be done already as it is in ref?
-    }
-  }
 
   async function handleApplyAdmins(trigger: AdminTrigger, id:string){//admin and target
     //admin type, switch case by target type?
@@ -340,11 +341,6 @@
         if(admin.targetType === 'player'){
           await admin.apply({player: player.value})
         }
-        /*
-        if(admin.targetType === 'other'){//handle outside?
-        admin.apply({player})
-        }
-        */
       }
     };
   }
@@ -449,10 +445,6 @@
           continue;
         }
 
-        //if player has backdoor{
-        //all unnoccupied tiles are placementHighlights
-        //} else if
-        // Player spawn → record placement highlight coordinates
         if (piece.team === 'player') {
           //placementHighlights.value.push(piece.headPosition);
           playerSpawns.value = [//for reactivity
@@ -485,9 +477,21 @@
     refreshShop(true)//handle in round, or don't for crystal ball
   });
 
+
+
   //round state functions
   function highlightPlacements(pieceBlueprint: PieceBlueprint) {
-    if(!isFirstTurn){
+    if(playerHasAdmin('Backdoor')){
+      const unnocupiedSpaces: Coordinate[] = [] ;
+      level.value.tiles.forEach(tile => {
+        const isOccupied = activePieces.value.some(p =>
+         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
+        );
+        if (!isOccupied) unnocupiedSpaces.push(tile); 
+      });
+      playerSpawns.value = unnocupiedSpaces;
+    }
+    else if(!isFirstTurn){
       playerSpawns.value = newPlacementHighlights();
     }
     pieceToPlace.value = pieceBlueprint;
@@ -750,7 +754,7 @@
   </div>
   <div v-if="!hasFinishedTurn && !isPlacing">Your turn</div>
 
-  <PlayerView v-if="!displayEditor" :player="player" @highlightPlacements="highlightPlacements" @sellBlueprint="sellBlueprint" @sellItem="sellItem" @applyItem="handleApplyItem"  @reorderAdmins="player.admins = $event"/>
+  <PlayerView v-if="!displayEditor" :player="player" @highlightPlacements="highlightPlacements" @sellBlueprint="sellBlueprint" @sellItem="sellItem" @applyItem="handleApplyItem" @sellAdmin="sellAdmin" @reorderAdmins="player.admins = $event"/>
   <WorldMap
     :levels="testLevels"
     @select-level="selectLevel"

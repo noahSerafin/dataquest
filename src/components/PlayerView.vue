@@ -18,6 +18,7 @@
         (e: 'sellBlueprint', id:string):void;
         (e: 'sellItem', id:string):void;
         (e: 'applyItem', payload: {item: Item, id:string}):void;
+        (e: 'sellAdmin', id:string):void;//TODO
         (e: 'reorderAdmins', admins: Admin[]):void;
         //trigger admin
     }>();
@@ -125,7 +126,7 @@
                         :tileSize="60"
                         :canBuy="false"
                         :showController="(selectedItem === item)"
-                        @sell="$emit('sellItem', item.id)"
+                        @sell="$emit('sellAdmin', item.id)"
                         @triggerAdmin="onUseAdmin"
                         @select="selectItem"
                     />

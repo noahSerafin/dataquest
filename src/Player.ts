@@ -13,6 +13,8 @@ export class Player {
     lives: number
     interestCap: number
     bonusInterest: number
+    hasTrolley: boolean
+    hasToolbox: boolean
     //adminModifiers: Record<string, StatModifier>
     constructor(
         money = 5,
@@ -23,7 +25,9 @@ export class Player {
         admins: Admin[] = [],
         lives: number,
         interestCap: number,
-        bonusInterest: number
+        bonusInterest: number,
+        hasTrolley: boolean,
+        hasToolbox: boolean
         //adminModifiers: Record<string, StatModifier> = {}
     ) {
         this.money = money;
@@ -35,12 +39,16 @@ export class Player {
         this.lives = lives;
         this.interestCap = interestCap;
         this.bonusInterest = bonusInterest;
+        this.hasTrolley = hasTrolley;
+        this.hasToolbox = hasToolbox;
         //this.adminModifiers = adminModifiers;
     }
 
     /** Total "memory" usage from items + programs */
   get usedMemory(): number {
-    return this.items.length + this.programs.length;
+    const itemUsage = this.hasTrolley ? (this.items.length/2) : this.items.length 
+    const bpUsage = this.hasToolbox ? (this.programs.length/2) : this.programs.length 
+    return itemUsage + bpUsage;
   }
 
   /** Returns whether player can hold more items/programs */

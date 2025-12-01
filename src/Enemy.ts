@@ -40,8 +40,8 @@ export async function takeEnemyTurn(
       //also prioritise nearest if special move??
       //or decide randomly?
       
-      console.log('nearest:' , nearest);
-      console.log('nearestAttackable:' , nearestAttackable);
+      //console.log('nearest:' , nearest);
+      //console.log('nearestAttackable:' , nearestAttackable);
       if (!nearest && !nearestAttackable) break;
 
       let pathToNearest: Coordinate[] = [];
@@ -50,7 +50,7 @@ export async function takeEnemyTurn(
       } else if(nearest){//can't attack but can increase enemies size
         pathToNearest = findShortestPath(enemy.headPosition, nearest, tileSet, activePieces) ?? []//move toward another piece
       }
-      console.log('path:' , pathToNearest);
+      //console.log('path:' , pathToNearest);
 
 
       let nextStep = null;

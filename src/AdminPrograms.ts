@@ -33,7 +33,7 @@ export abstract class Admin<
     this.triggerType = triggerType;
   }
 
-  apply(target: any):void{
+  async apply(target: any):Promise<void>{
     //do not destroy the admin
   }
   remove(target: any):void{
@@ -55,7 +55,7 @@ class Meteor extends Admin {
   }
 
   //onRoundStart
-  apply({ activePieces }: { activePieces: Piece[] }) {
+  async apply({ activePieces }: { activePieces: Piece[] }) {
     for (const p of activePieces) p.takeDamage(3); //enemy pieces only?
   }
 }
@@ -71,7 +71,7 @@ class Miner extends Admin {
   }
 
   //noRoundend
-  apply({ player }: { player: Player }) {
+  async apply({ player }: { player: Player }) {
     player.money += 2
   }
   //
@@ -89,7 +89,7 @@ class Bubble extends Admin {
 
   //at end of round
   /*
-  apply({ player }: { player: Player }) {
+  async apply({ player }: { player: Player }) {
     player.interest += 1
   }*/
 
@@ -129,7 +129,7 @@ class Onion extends Admin {
     super(Onion.name, Onion.description, Onion.unicode, Onion.color, 10, 5, 'player', 'other')
   }
   //
-  apply({ player }: { player: Player }) {
+  async apply({ player }: { player: Player }) {
     player.lives += 1
   }//add a if for player death to remove this
 }
@@ -145,7 +145,7 @@ class Blood extends Admin {
   }
 
   //on damage
-  apply({ player }: { player: Player }) {
+  async apply({ player }: { player: Player }) {
     player.money += 2 //enemy pieces only?
   }
   
@@ -162,8 +162,9 @@ class BionicArm extends Admin {
   }
   
   //on placement/after hydration
-  apply({ id, activePieces }: {  id: string, activePieces: Piece[] }) {
+  async apply({ id, activePieces }: {  id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
+    console.log('applying:', this.name)
     activePieces[idx].addModifier({attack: 2})//enemy pieces only?  
   }
 }
@@ -178,9 +179,11 @@ class BionicLeg extends Admin {
     super(BionicLeg.name, BionicLeg.description, BionicLeg.unicode, BionicLeg.color, 7, 4, 'gameState', 'onPlacement')
   }
 
-  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
+    console.log('applying:', this.name)
     activePieces[idx].addModifier({moves: 2})
+    activePieces[idx].movesRemaining += 2;
   }
 }
 
@@ -217,7 +220,7 @@ class Eye extends Admin {//not passive
     super(Eye.name, Eye.description, Eye.unicode, Eye.color, 8, 4, 'gameState', 'onRoundStart')
   }
   
-  apply({ activePieces }: { activePieces: Piece[] }) {
+  async apply({ activePieces }: { activePieces: Piece[] }) {
     for (const p of activePieces){
       if(p.team==='enemy'){
         p.addModifier({defence: -2})//enemy pieces only?
@@ -248,7 +251,7 @@ class Heartbreaker extends Admin {
   }
 
   //on placement
-  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
     //activePieces[idx].charmImmunity = true
   }
@@ -262,8 +265,9 @@ class Hamsa extends Admin {
   constructor() {
     super(Hamsa.name, Hamsa.description, Hamsa.unicode, Hamsa.color, 8, 5, 'player', 'onPlacement')
   }
-  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
+    console.log('applying:', this.name)
     activePieces[idx].addModifier({defence: 2})
   }
 }
@@ -277,10 +281,11 @@ class Relay extends Admin {
     super(Relay.name, Relay.description, Relay.unicode, Relay.color, 5, 3, 'player', 'onPlacement')
   }
 
-  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
     if(activePieces[idx].team==='player' && activePieces[idx].getStat('range') > 1){
-      activePieces[idx].addModifier({attack: 2})
+      console.log('applying:', this.name)
+    activePieces[idx].addModifier({attack: 2})
     }
   }
 }
@@ -293,7 +298,7 @@ class Hivis extends Admin {
   constructor() {
     super(Hivis.name, Hivis.description, Hivis.unicode, Hivis.color, 5, 1, 'gameState', 'onPieceDestruction')//??//onroundstart
   }
-  apply({ activePieces }: { activePieces: Piece[] }) {
+  async apply({ activePieces }: { activePieces: Piece[] }) {
     for (const p of activePieces){
       if(p.team==='player'){
         //p.addModifier({lives: 1})
@@ -310,7 +315,7 @@ class Notepad extends Admin {
   constructor() {
     super(Notepad.name, Notepad.description, Notepad.unicode, Notepad.color, 5, 3, 'player', 'other')
   }
-  apply({ player }: { player: Player }) {
+  async apply({ player }: { player: Player }) {
     player.memory += 3
   }
   remove({ player }: { player: Player }) {
@@ -339,7 +344,7 @@ class PetriDish extends Admin {
     super(PetriDish.name, PetriDish.description, PetriDish.unicode, PetriDish.color, 7, 4, 'gameState', 'onTurnEnd')
   }
   //on turn end
-  /*apply({ activePieces }: { activePieces: Piece[] }) {
+  /*async apply({ activePieces }: { activePieces: Piece[] }) {
     for (const p of activePieces){
       if(p.team==='player' && p.statuses.length > 0){
         //find enemies next to it
@@ -369,7 +374,7 @@ class Inheritance extends Admin {
     super(Inheritance.name, Inheritance.description, Inheritance.unicode, Inheritance.color, 10, 5, 'player', 'onRoundEnd')
   }
   /*
-  apply({ player }: { player: Player }) {
+  async apply({ player }: { player: Player }) {
     player.interest = player.interest * 2
   }
   remove({ player }: { player: Player }) {
@@ -396,7 +401,7 @@ class Needle extends Admin {
   constructor() {
     super(Needle.name, Needle.description, Needle.unicode, Needle.color, 10, 5, 'gameState', 'onRoundEnd')//6 and player?
   }
-  apply({ activePieces }: { activePieces: Piece[] }) {
+  async apply({ activePieces }: { activePieces: Piece[] }) {
     for (const p of activePieces){
       const playerPieces = [];
       if(p.team==='player'){
@@ -419,7 +424,7 @@ class Rune extends Admin {
     super(Rune.name, Rune.description, Rune.unicode, Rune.color, 5, 3, 'player', 'onDealDamage')
   }
   //onDamage
-  apply({ activePieces }: { activePieces: Piece[] }) {
+  async apply({ activePieces }: { activePieces: Piece[] }) {
     for (const p of activePieces){
       if(p.team==='player' && p.getStat('range') === 1){
         p.attack = p.attack *2 //include mods??? add a mult to takeDamage function
@@ -436,7 +441,7 @@ class Joker extends Admin {
   constructor() {
     super(Joker.name, Joker.description, Joker.unicode, Joker.color, 7, 2, 'player', 'onDealDamage')
   }
-  apply({ activePieces }: { activePieces: Piece[] }) {
+  async apply({ activePieces }: { activePieces: Piece[] }) {
     for (const p of activePieces){
       if(p.team==='player' && p.getStat('range') === 1){
         p.attack = p.attack *1.5 //include mods???
@@ -466,7 +471,7 @@ class Aesculapius extends Admin {
   }
 
   //on placement
-  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
     if(activePieces[idx].team==='player' && activePieces[idx].getStat('range') > 1){
       //activePieces[idx].
@@ -490,8 +495,9 @@ class Heart extends Admin {
   constructor() {
     super(Heart.name, Heart.description, Heart.unicode, Heart.color, 6, 3, 'player', 'onPlacement')
   }
-  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
+    console.log('applying:', this.name)
     activePieces[idx].addModifier({maxSize: 1})
   }
 }
@@ -504,9 +510,11 @@ class Lungs extends Admin {
   constructor() {
     super(Lungs.name, Lungs.description, Lungs.unicode, Lungs.color, 5, 3, 'player', 'onPlacement')
   }
-  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
+    console.log('applying:', this.name)
     activePieces[idx].addModifier({moves: 1})
+        activePieces[idx].movesRemaining += 1;
   }
 }
 
@@ -518,8 +526,9 @@ class Brain extends Admin {
   constructor() {
     super(Brain.name, Brain.description, Brain.unicode, Brain.color, 9, 4, 'player', 'onPlacement')
   }
-  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
+    console.log('applying:', this.name)
     activePieces[idx].addModifier({actions: 1})
   }
 }
@@ -556,7 +565,7 @@ class Stonks extends Admin {
   }
 
   //on end of round
-  apply({ player }: { player: Player }) {
+  async apply({ player }: { player: Player }) {
     //const noOfFives = player.interest / 5 //round down
     //player.interest += noOfFives;
   }
@@ -608,10 +617,11 @@ class Communism extends Admin {
   }
 
   //on placement
-  apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+  async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     if(player.money<=4){
       const idx = activePieces.findIndex(p => p.id === id);
-      activePieces[idx].addModifier({
+      console.log('applying:', this.name)
+    activePieces[idx].addModifier({
             attack: 1,
             defence: 1,
 
@@ -643,7 +653,7 @@ class Osiris extends Admin {
     super(Osiris.name, Osiris.description, Osiris.unicode, Osiris.color, 8, 4, 'gameState', 'onPieceDestruction')
   }
   //on receive damage //on piece destrcution
-  apply({ activePieces }: { activePieces: Piece[] }) {
+  async apply({ activePieces }: { activePieces: Piece[] }) {
     for (const p of activePieces){
       if(p.team==='player'){
         p.addModifier({attack: 1})
@@ -671,10 +681,11 @@ class Newspaper extends Admin {
   constructor() {
     super(Newspaper.name, Newspaper.description, Newspaper.unicode, Newspaper.color, 1, 2, 'playerAndGame', 'onPlacement')
   }
-  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
     if(activePieces[idx].team==='player' && activePieces[idx].getStat('range')===1){
-      activePieces[idx].addModifier({attack: 1})
+      console.log('applying:', this.name)
+    activePieces[idx].addModifier({attack: 1})
     }
   }
 }
@@ -688,7 +699,7 @@ class Crown extends Admin {
     super(Crown.name, Crown.description, Crown.unicode, Crown.color, 9, 3, 'player', 'onRoundEnd')//maybe player
   }
   //on round end
-  apply({ player }: { player: Player }) {
+  async apply({ player }: { player: Player }) {
    player.money += 5;
   }
 }
@@ -702,7 +713,7 @@ class Cactus extends Admin {
     super(Cactus.name, Cactus.description, Cactus.unicode, Cactus.color, 10, 5, 'gameState', 'onReceiveDamage')//pieces?
   }
   //on receive damage
-  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].takeDamage(1);
   }
@@ -729,7 +740,7 @@ class Seed extends Admin {
   }
   //interest
   /*
-  apply({ player }: { player: Player }) {
+  async apply({ player }: { player: Player }) {
    player.interestCap = 10;
   }
   remove({ player }: { player: Player }) {
@@ -747,7 +758,7 @@ class Puzzle extends Admin {
     super(Puzzle.name, Puzzle.description, Puzzle.unicode, Puzzle.color, 6, 3, 'gameState', 'onTurnEnd')
   }
   //on turn end
-  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const directions = [
       {x: 1, y:0},
       {x: 0, y:1},
@@ -782,7 +793,7 @@ class Roger extends Admin {
     super(Roger.name, Roger.description, Roger.unicode, Roger.color, 6, 3, 'player', 'onPieceDestruction')
   }
   //on piece destruction
-  apply({ player }: { player: Player }) {
+  async apply({ player }: { player: Player }) {
    player.money += 1;
   }
 }
@@ -796,7 +807,7 @@ class Bucket extends Admin {
     super(Bucket.name, Bucket.description, Bucket.unicode, Bucket.color, 4, 1, 'player', 'other')
   }
   //
-  apply({ player }: { player: Player }) {
+  async apply({ player }: { player: Player }) {
    player.memory += 2;
   }
   remove({ player }: { player: Player }) {
@@ -812,7 +823,7 @@ class Diamond extends Admin {
   constructor() {
     super(Diamond.name, Diamond.description, Diamond.unicode, Diamond.color, 8, 5, 'playerAndGame', 'onTurnEnd')
   }
-  apply({ player, activePieces }: { player: Player, activePieces: Piece[] }) {
+  async apply({ player, activePieces }: { player: Player, activePieces: Piece[] }) {
     for (const p of activePieces){
       if(p.team==='player'){
         //from the headposition, look for adjacent player tiles
@@ -832,10 +843,11 @@ class Drum extends Admin {
   constructor() {
     super(Drum.name, Drum.description, Drum.unicode, Drum.color, 3, 1, 'gameState', 'onTurnEnd')
   }
-  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces){
       if(p.team==='player'){
         p.addModifier({moves: 1})
+        //p.movesRemaining += 1;
       }
     }
   }
@@ -849,9 +861,11 @@ class Sneakers extends Admin {//item???
   constructor() {
     super(Sneakers.name, Sneakers.description, Sneakers.unicode, Sneakers.color, 6, 3, 'gameState', 'onPlacement')
   }
-  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({moves: 1})
+    console.log('applying:', this.name)
+    activePieces[idx].addModifier({moves: 1});
+    activePieces[idx].movesRemaining += 1;
   }
 }
 
@@ -864,8 +878,9 @@ class Torch extends Admin {
   constructor() {
     super(Torch.name, Torch.description, Torch.unicode, Torch.color, 4, 1, 'gameState', 'onPlacement')
   }
-  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
+    console.log('applying:', this.name)
     activePieces[idx].addModifier({range: 1})
   }
 }
@@ -878,9 +893,12 @@ class Feather extends Admin {
   constructor() {
     super(Feather.name, Feather.description, Feather.unicode, Feather.color, 8, 5, 'gameState', 'onPlacement')
   }
-  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
+    console.log('applying:', this.name)
     activePieces[idx].addModifier({moves: 1})
+    activePieces[idx].movesRemaining += 1;
+    console.log('applying:', this.name)
     activePieces[idx].addModifier({maxSize: -1})
   }
 }
@@ -894,7 +912,7 @@ class Copier extends Admin {
     super(Copier.name, Copier.description, Copier.unicode, Copier.color, 9, 5, 'gameState', 'onPlacement')
   }
   //on placement, handle in App
-    apply({ id, activePieces }: { id: string, activePieces: Piece[]}) {
+    async apply({ id, activePieces }: { id: string, activePieces: Piece[]}) {
     //const idx = activePieces.findIndex(p => p.id === id);
     const playerPieces : Piece[] = [];
     for (const p of activePieces){
@@ -930,8 +948,9 @@ class Telescope extends Admin {
   constructor() {
     super(Telescope.name, Telescope.description, Telescope.unicode, Telescope.color, 6, 4, 'gameState', 'onPlacement')
   }
-  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
+    console.log('applying:', this.name)
     activePieces[idx].addModifier({range: 2})
   }
 }
@@ -944,10 +963,11 @@ class Microscope extends Admin {
   constructor() {
     super(Microscope.name, Microscope.description, Microscope.unicode, Microscope.color, 5, 3, 'gameState', 'onPlacement')
   }
-  apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
     if(activePieces[idx].maxSize === 1){
-      activePieces[idx].addModifier({defence: 1})
+      console.log('applying:', this.name)
+    activePieces[idx].addModifier({defence: 1})
     }
   }
 }
@@ -961,7 +981,7 @@ class Lotus extends Admin {//boss? remove money?
     super(Lotus.name, Lotus.description, Lotus.unicode, Lotus.color, 10, 5, 'player', 'onDealDamage')
   }
   //on damage
-  apply({ player}: { player: Player}) {
+  async apply({ player}: { player: Player}) {
     let mult = 0;
     for (const a of player.admins){
       if(a.rarity === 3){
@@ -980,7 +1000,7 @@ export class Broom extends Admin {
   constructor() {
     super(Broom.name, Broom.description, Broom.unicode, Broom.color, 10, 5, 'gameState', 'onTurnEnd')
   }
-  apply({ activePieces }: { activePieces: Piece[] }) {
+  async apply({ activePieces }: { activePieces: Piece[] }) {
     for (const p of activePieces){
       if(p.team==='enemy' && p.tiles.length === 1 && p.defence === 0){
         //activePieces.value = activePieces.value.filter(p => p.id !== piece.id);

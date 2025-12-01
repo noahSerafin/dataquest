@@ -192,7 +192,7 @@
       name: PieceClass.name,
       description: PieceClass.description,
       unicode: PieceClass.unicode,
-      maxSize: temp.maxSize,
+      maxSize: temp.maxSize,//get stat?
       moves: temp.moves,
       range: temp.range,
       attack: temp.attack,
@@ -319,17 +319,17 @@
     }
   }
 
-  function handleApplyAdmins(trigger: AdminTrigger, id:string){//admin and target
+  async function handleApplyAdmins(trigger: AdminTrigger, id:string){//admin and target
     //admin type, switch case by target type?
     const playerAdmins = player.value.admins;
-    playerAdmins.forEach(admin => {
+    for (const admin of playerAdmins) {
       if(trigger === admin.triggerType){
         // sort through target types, decide what to pass
         if(admin.targetType === 'gameState'){
-          admin.apply({id, activePieces})
+          await admin.apply({id, activePieces: activePieces.value})
         }
         if(admin.targetType === 'playerAndGame'){
-          admin.apply({id, activePieces, player})
+          await admin.apply({id, activePieces: activePieces.value, player: player.value})
         }
         /*
         if(admin.targetType === 'onRoundStart'){
@@ -352,7 +352,7 @@
       }
       */
       }
-    });
+    };
   }
 
   const selectedPiece = ref<Piece | null>(null)
@@ -581,10 +581,10 @@
     );
     //console.log('receiver: ', damageReceiver?.name)
     if (!damageReceiver || damageReceiver.team === selectedPiece.value.team) return;
-    const damage = selectedPiece.value.attack;
+    const damage = selectedPiece.value.getStat('attack');
     //console.log("Damage call:", coord, damage)
     damageReceiver.takeDamage(damage);
-    selectedPiece.value.actions --
+    selectedPiece.value.actions --//getstat?
     //console.log(damageReceiver?.name, ' tiles afterdmg: ', damageReceiver.tiles)
     boardRef.value.clearHighlights();
   }
@@ -686,7 +686,7 @@
   </div>
   <div v-if="!hasFinishedTurn && !isPlacing">Your turn</div>
 
-  <PlayerView v-if="!displayEditor" :player="player" @highlightPlacements="highlightPlacements" @sellPiece="sellPiece" @sellItem="sellItem" @applyItem="handleApplyItem"/>
+  <PlayerView v-if="!displayEditor" :player="player" @highlightPlacements="highlightPlacements" @sellPiece="sellPiece" @sellItem="sellItem" @applyItem="handleApplyItem"  @reorderAdmins="player.admins = $event"/>
   <WorldMap
     :levels="testLevels"
     @select-level="selectLevel"

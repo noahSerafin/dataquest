@@ -1,20 +1,17 @@
 <script setup lang="ts">
-import { Piece } from "../Pieces"
+import type { PieceBlueprint } from "../types"
 
 const props = defineProps<{
-  piece: InstanceType<typeof Piece>
+  piece: PieceBlueprint
+  mode: "shop" | "inventory"
+  canBuy?: boolean
 }>()
 
-defineEmits([
-  "highlightMoves",
-  "highlightTargets",
-  "special",
-  "close"
-])
+defineEmits(["buy", "sell", "highlightPlacements", "close"])
 </script>
 
 <template>
-  <div class="piece-controller instance">
+  <div class="piece-controller blueprint">
     <div class="header">
       <span class="symbol">
         {{ String.fromCodePoint(parseInt(piece.unicode.replace("U+", ""), 16)) }}
@@ -26,39 +23,28 @@ defineEmits([
     <p class="desc">{{ piece.description }}</p>
 
     <div class="stats">
-      <p>Size: {{ piece.tiles.length }}</p>
-      <p>Max Size: {{ piece.getStat('maxSize') }}</p>
-      <p>Moves: {{ piece.getStat('moves') }}</p>
-      <p>Moves Left: {{ piece.movesRemaining }}</p>
-      <p>Range: {{ piece.getStat('range') }}</p>
-      <p>Attack: {{ piece.getStat('attack') }}</p>
-      <p>Defence: {{ piece.getStat('defence') }}</p>
-      <p>Actions: {{ piece.getStat('actions') }}</p>
+      <p>Max Size: {{ piece.maxSize }}</p>
+      <p>Moves: {{ piece.moves }}</p>
+      <p>Range: {{ piece.range }}</p>
+      <p>Attack: {{ piece.attack }}</p>
+      <p>Defence: {{ piece.defence }}</p>
     </div>
 
     <div class="actions">
-      <button v-if="piece.team === 'player'" @click="$emit('highlightMoves', piece)">
-        Move
-      </button>
-      <button
-        v-if="piece.team === 'player' && piece.actions > 0"
-        @click="$emit('highlightTargets', piece)">
-        Attack
-      </button>
-      <button
-        v-if="piece.team === 'player'"
-        @click="$emit('special', piece)">
-        Special
-      </button>
+      <template v-if="mode === 'shop'">
+        <button :disabled="!canBuy" @click="$emit('buy', piece)">
+          Buy (${{ piece.cost }})
+        </button>
+      </template>
 
-      <button
-        v-if="piece.team === 'enemy'"
-        @click="$emit('highlightTargets', piece)">
-        Show Range
-      </button>
+      <template v-if="mode === 'inventory'">
+        <button @click="$emit('highlightPlacements', piece)">Place</button>
+        <button @click="$emit('sell', piece)">Sell (${{ piece.rarity }})</button>
+      </template>
     </div>
   </div>
 </template>
+
 <style scoped>
 .close{
   position: absolute;

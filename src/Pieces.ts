@@ -56,7 +56,7 @@ export abstract class Piece {
     this.color = color
     this.headPosition = headPosition ?? { x: -1, y: -1 };
     this.tiles = tiles.length ? tiles : headPosition ? [headPosition] : []; //default to head
-    this.movesRemaining = moves // default to full moves at start of turn
+    this.movesRemaining = this.getStat('moves') // default to full moves at start of turn
     this.actions = 1
     this.team = team
     this.rarity = rarity
@@ -102,7 +102,7 @@ export abstract class Piece {
   }
 
   resetMoves() {
-    this.movesRemaining = this.moves
+    this.movesRemaining = this.getStat('moves');
   }
 
   useMove() {
@@ -121,7 +121,7 @@ export abstract class Piece {
     this.headPosition = newPosition
     this.tiles.unshift(newPosition)
     // If exceeding maxSize, remove the oldest tile
-    if (this.tiles.length > this.maxSize) {
+    if (this.tiles.length > this.getStat('maxSize')) {
       this.tiles.pop() // removes first element
     }
     this.useMove();
@@ -129,7 +129,7 @@ export abstract class Piece {
 
   takeDamage(damage: number) {
     //console.log('recieving: ', damage)
-    const received = Math.max(0, damage - this.defence);
+    const received = Math.max(0, damage - this.getStat('defence'));
     const removeCount = Math.min(received, this.tiles.length); // safety
     //console.log('recieving total: ', removeCount)
     //console.log('splice: ', this.tiles.length-removeCount, removeCount)

@@ -164,7 +164,7 @@ const highlightTargets = (piece: InstanceType<typeof Piece>) => {
   clearHighlights();
   inRangeHighlights.value = getTilesInRange(
     piece.headPosition,
-    piece.range,
+    piece.getStat('range'),
     tileSet.value,
   ); 
 }

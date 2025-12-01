@@ -7,6 +7,7 @@
     import ItemView from "./ItemView.vue";
     import PieceController from "./PieceController.vue";
     import BlueprintView from "./BlueprintView.vue";
+    import BlueprintController from "./BlueprintController.vue";
 
     const props = defineProps<{
         player: Player,
@@ -18,6 +19,7 @@
         (e: 'sellPiece', id:string):void;
         (e: 'sellItem', id:string):void;
         (e: 'applyItem', payload: {item: Item, id:string}):void;
+        (e: 'reorderAdmins', admins: Admin[]):void;
         //trigger admin
     }>();
 
@@ -74,6 +76,27 @@
         return  selectedItem.value === item ? true : false;
     }
 
+    const dragIndex = ref<number | null>(null);
+
+    function onDragStart(index: number) {
+        console.log('dragging');
+    dragIndex.value = index;
+    }
+
+    function onDrop(dropIndex: number) {
+        console.log('dropping');
+        if (dragIndex.value === null) return;
+
+        const newOrder = [...props.player.admins];
+        const moved = newOrder.splice(dragIndex.value, 1)[0];
+        newOrder.splice(dropIndex, 0, moved);
+
+        dragIndex.value = null;
+
+        // Tell parent to update player.admins
+        emit("reorderAdmins", newOrder);
+    }
+
     //progams can be placed on board, greying them out in inventory, use a similar popup to pieceController but with place/sell buttons
     //items can be used on programs, confirmation window to execute their function
 </script>
@@ -87,19 +110,26 @@
                 <p><strong>Admin Programs:</strong> {{ props.player.admins.length }}/{{ props.player.adminSlots }}</p>
             </div>
             <ul class="admins">
-                <ItemView 
-                    v-for="item in props.player.admins"
-                    class="p-1 border rounded mb-1 flex justify-between items-center"
-                    :item="item"
-                    type="admin"
-                    cssclass="inventory"
-                    :tileSize="60"
-                    :canBuy= "false"
-                    :showController="(selectedItem === item)"
-                    @sell="$emit('sellItem', item.id)"
-                    @triggerAdmin="onUseAdmin"
-                    @select="selectItem"
-                />
+                <li v-for="(item, index) in props.player.admins"
+                    :key="item.id"
+                    draggable="true"
+                    @dragstart="onDragStart(index)"
+                    @dragover.prevent
+                    @drop="onDrop(index)"
+                    class="p-1 border rounded mb-1 flex justify-between items-center">
+
+                    <ItemView 
+                        :item="item"
+                        type="admin"
+                        cssclass="inventory"
+                        :tileSize="60"
+                        :canBuy="false"
+                        :showController="(selectedItem === item)"
+                        @sell="$emit('sellItem', item.id)"
+                        @triggerAdmin="onUseAdmin"
+                        @select="selectItem"
+                    />
+                </li>
             </ul>
 
             <!-- Inventory Button -->
@@ -147,7 +177,7 @@
                 @select="selectItem"
             />
         </ul>
-        <PieceController
+        <BlueprintController
         v-if="selectedPiece"
         :piece="selectedPiece"
         mode="inventory"

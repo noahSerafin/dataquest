@@ -107,7 +107,8 @@
             <!-- Money -->
             <div>
                 <p><strong>Money:</strong> {{ props.player.money }}</p>
-                <p><strong>Admin Programs:</strong> {{ props.player.admins.length }}/{{ props.player.adminSlots }}</p>
+                <p><strong>Lives:</strong> {{ props.player.lives }}</p>
+                <p><strong>Admins:</strong> {{ props.player.admins.length }}/{{ props.player.adminSlots }}</p>
             </div>
             <ul class="admins">
                 <li v-for="(item, index) in props.player.admins"
@@ -224,5 +225,9 @@
         position: relative;
         display: flex;
         gap: 5px;
+    }
+    .inventory-relative{
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
     }
 </style>

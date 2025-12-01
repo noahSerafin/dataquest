@@ -85,8 +85,14 @@
     [testVoucher], // no items yet
     [testSword, testShield, testSling],//, testShield] // starting pieces
     [],//no admins yet
-    3
+    2,
+    5,
+    0
   ));
+
+  function playerHasAdmin(name: string) {
+    return player.value.admins.some(a => a.name === name);
+  }
 
   function sellPiece(pieceId: string) {
     // find the index
@@ -331,26 +337,14 @@
         if(admin.targetType === 'playerAndGame'){
           await admin.apply({id, activePieces: activePieces.value, player: player.value})
         }
+        if(admin.targetType === 'player'){
+          await admin.apply({player: player.value})
+        }
         /*
-        if(admin.targetType === 'onRoundStart'){
-          admin.apply({activePieces})
-        }
-        if(admin.targetType === 'onRoundEnd'){
-          admin.apply({player})
-        }
-        if(admin.targetType === 'onDealDamage'){
-          admin.apply({id, activePieces})
-        }
-        if(admin.targetType === 'onRecieveDamage'){
-          admin.apply({id, activePieces})
-        }
-        if(admin.targetType === 'onPieceDestruction'){
-          admin.apply({player, id, activePieces})
-        }
         if(admin.targetType === 'other'){//handle outside?
         admin.apply({player})
-      }
-      */
+        }
+        */
       }
     };
   }
@@ -377,14 +371,14 @@
     });
   }
 
-  const selectLevel = (newLevel: Level) => {
+  const selectLevel = (newLevel: Level) => {//load level, start round
     isFirstTurn.value = true;
-    activePieces.value = []
+    activePieces.value = [];
     level.value = newLevel;
     const newPieces = rehydratePieces(newLevel.pieces);
     activePieces.value = processSpawnPoints(newPieces);
     boardRef.value.clearHighlights();
-    renewBlueprints();
+    handleApplyAdmins('onRoundStart', '');
     toggleMap();
   }
 
@@ -589,11 +583,54 @@
     boardRef.value.clearHighlights();
   }
 
-  //enemy moves
+  const addPlayerInterest = () => {
+    const noOfFives = Math.floor(player.value.money / 5);
+    if(noOfFives > player.value.interestCap){
+      player.value.money += player.value.interestCap;
+    } else {
+      player.value.money += noOfFives;
+    }
+    //bubble
+    player.value.money += player.value.bonusInterest;
+    if(playerHasAdmin('Inheritance')){
+      player.value.money += (noOfFives+player.value.bonusInterest)
+    }
+  }
 
+  const endRound = (roundWon: boolean) => {
+    activePieces.value = [];
+    renewBlueprints();//move to end round?
+    if(roundWon){
+      //bring up round summary
+      addPlayerInterest();
+      handleApplyAdmins('onRoundEnd', '');
+      //move to btn inside round summary
+      toggleMap();
+    } else {
+      alert('node failed! Retry?');
+      //check admins for onion
+      if(playerHasAdmin('Onion')){
+        const index = player.value.admins.findIndex(a => a.name === 'Onion');
+        if (index !== -1) player.value.admins.splice(index, 1);
+      }
+      else if(player.value.lives > 0){
+        player.value.lives -= 1
+      }else{
+        alert('game over!')
+      }
+    }
+  }
+      
+  //enemy moves
   async function enemyTurn() {
     const enemyPieces = activePieces.value.filter(p => p.team === 'enemy');
     const playerPieces = activePieces.value.filter(p => p.team === 'player');
+
+    if (enemyPieces.length === 0) {
+      console.log('round won!')
+      endRound(true);
+    }
+
     const tileSet = new Set(level.value.tiles.map(t => `${t.x},${t.y}`));
 
     await takeEnemyTurn(
@@ -614,14 +651,22 @@
     });
     playerSpawns.value = newPlacementHighlights();
     hasFinishedTurn.value = false;
+
+    const playerPiecesRemaining = activePieces.value.filter(p => p.team === 'player');
+    // If no player pieces → round lost
+    if (playerPiecesRemaining.length === 0) {
+      console.log('round failed!')
+      endRound(false);
+    }
   }
 
   const endTurn = () => {
     hasFinishedTurn.value = true;
     activePieces.value.forEach(piece => {
-      piece.movesRemaining = piece.moves;
+      piece.resetMoves();
       piece.actions = 1;
     });
+    handleApplyAdmins('onTurnEnd', '')
     enemyTurn();  
   }
 

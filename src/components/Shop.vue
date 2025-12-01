@@ -1,14 +1,12 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount } from "vue"
+import {computed} from "vue"
 import type { PieceBlueprint } from "../types"
-import { Piece } from "../Pieces.ts"
 import { Player } from "../Player.ts";
 import BlueprintView from "./BlueprintView.vue";
-import { allPieces } from "../Pieces"
-import PieceController from "./PieceController.vue";
-import { Item, allItems } from "../Items.ts";
+import { Item } from "../Items.ts";
 import ItemView from "./ItemView.vue";
 import { Admin } from "../AdminPrograms.ts";
+import BlueprintController from "./BlueprintController.vue";
 
 const emit = defineEmits<{
   (e: 'buy-blueprint', blueprint: PieceBlueprint): void;
@@ -100,7 +98,7 @@ const type = ((item: Item) => {
         @select="openShopController"
       />
     </div>
-    <PieceController
+    <BlueprintController
         v-if="props.target && !(props.target instanceof Item)"
         :piece="props.target"
         mode="shop"

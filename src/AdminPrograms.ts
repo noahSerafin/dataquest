@@ -4,8 +4,8 @@ import { Player } from "./Player";
 import type { Coordinate, StatModifier } from "./types";
 
 export type AdminTrigger =
-  | 'onPlacement' //piece id and activePieces passed to apply
-  | 'onTurnEnd' //player 
+  | 'onPlacement'
+  | 'onTurnEnd'
   | 'onRoundStart'
   | 'onRoundEnd'
   | 'onDealDamage' //piece id of receiver?
@@ -55,7 +55,7 @@ class Meteor extends Admin {
   }
 
   //onRoundStart
-  async apply({ activePieces }: { activePieces: Piece[] }) {
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces) p.takeDamage(3); //enemy pieces only?
   }
 }
@@ -79,7 +79,7 @@ class Miner extends Admin {
 
 class Bubble extends Admin {
   static name = "Bubble";
-  static description = "Increases interest by 1 every round, 10% chance to pop and reduce money to 0";
+  static description = "Increases interest by 1 every round, 10% chance to pop and reset, also reducing money to 0";
   static unicode = "U+1FAE7";
   static color = "#0400daff";
 
@@ -88,10 +88,17 @@ class Bubble extends Admin {
   }
 
   //at end of round
-  /*
   async apply({ player }: { player: Player }) {
-    player.interest += 1
-  }*/
+    //calc 10% chance for pop
+    const pop = Math.random() < 0.1;
+    if(pop){
+      player.money = 0
+      player.bonusInterest = 0
+    }else{
+      player.bonusInterest += 1
+    }
+
+  }
 
 }
 
@@ -210,7 +217,7 @@ class Department extends Admin {
   //modify shop/player bool for this
 }
 
-class Eye extends Admin {//not passive
+class Eye extends Admin {
   static name = "Evil Eye";
   static description = "Lower's the defences of all enemy progams by 1 at start of round";
   static unicode = "U+1F9FF";
@@ -220,10 +227,10 @@ class Eye extends Admin {//not passive
     super(Eye.name, Eye.description, Eye.unicode, Eye.color, 8, 4, 'gameState', 'onRoundStart')
   }
   
-  async apply({ activePieces }: { activePieces: Piece[] }) {
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces){
       if(p.team==='enemy'){
-        p.addModifier({defence: -2})//enemy pieces only?
+        p.addModifier({defence: -1})//enemy pieces only?
       }
     }
   }
@@ -241,13 +248,13 @@ class Bouquet extends Admin {
   //shop, disable for now
 }
 
-class Heartbreaker extends Admin {
+class Heartbreaker extends Admin {//unfinished
   static name = "Heartbreaker";
   static description = "Makes your programs immune to being charmed on placement";
   static unicode = "U+1F498";
   static color = "#dadadaff";
   constructor() {
-    super(Heartbreaker.name, Heartbreaker.description, Heartbreaker.unicode, Heartbreaker.color, 5, 3, 'player', 'onPlacement')
+    super(Heartbreaker.name, Heartbreaker.description, Heartbreaker.unicode, Heartbreaker.color, 5, 3, 'gameState', 'onPlacement')
   }
 
   //on placement
@@ -263,7 +270,7 @@ class Hamsa extends Admin {
   static unicode = "U+1FAAC";
   static color = "#5560ffff";
   constructor() {
-    super(Hamsa.name, Hamsa.description, Hamsa.unicode, Hamsa.color, 8, 5, 'player', 'onPlacement')
+    super(Hamsa.name, Hamsa.description, Hamsa.unicode, Hamsa.color, 8, 5, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
@@ -278,7 +285,7 @@ class Relay extends Admin {
   static unicode = "U+1F4E1";
   static color = "#e4d26fff";
   constructor() {
-    super(Relay.name, Relay.description, Relay.unicode, Relay.color, 5, 3, 'player', 'onPlacement')
+    super(Relay.name, Relay.description, Relay.unicode, Relay.color, 5, 3, 'gameState', 'onPlacement')
   }
 
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
@@ -290,13 +297,13 @@ class Relay extends Admin {
   }
 }
 
-class Hivis extends Admin {
+class Hivis extends Admin {//unfinished
   static name = "Hi-Vis";
   static description = "Saves a program from destruction once, then is deleted";
   static unicode = "U+1F9BA";
   static color = "#a7ff55ff";
   constructor() {
-    super(Hivis.name, Hivis.description, Hivis.unicode, Hivis.color, 5, 1, 'gameState', 'onPieceDestruction')//??//onroundstart
+    super(Hivis.name, Hivis.description, Hivis.unicode, Hivis.color, 5, 1, 'gameState', 'onPieceDestruction')
   }
   async apply({ activePieces }: { activePieces: Piece[] }) {
     for (const p of activePieces){
@@ -335,7 +342,7 @@ class AdminMap extends Admin {
   //player bool
 }
 
-class PetriDish extends Admin {
+class PetriDish extends Admin {//unfinished
   static name = "Petri Dish";
   static description = "Status effects can spread to adjacent enemy programs at the end of your turn";
   static unicode = "U+1F9EB";
@@ -354,7 +361,7 @@ class PetriDish extends Admin {
   }*/
 }
 
-class Volatile extends Admin {
+class Volatile extends Admin {//unfinished
   static name = "Volatile";
   static description = "Status effects are doubled";//sell for buying price?
   static unicode = "U+1F9EA";
@@ -367,19 +374,20 @@ class Volatile extends Admin {
 
 class Inheritance extends Admin {
   static name = "Inheritance";
-  static description = "Interest is doubled";
+  static description = "Earn double your interest and bonus interest after winning a round, does not stack with itself";
   static unicode = "U+1F911";
   static color = "#ffc955ff";
   constructor() {
-    super(Inheritance.name, Inheritance.description, Inheritance.unicode, Inheritance.color, 10, 5, 'player', 'onRoundEnd')
+    super(Inheritance.name, Inheritance.description, Inheritance.unicode, Inheritance.color, 10, 5, 'player', 'other')//onroundend, but we handle outside
   }
   /*
   async apply({ player }: { player: Player }) {
-    player.interest = player.interest * 2
+    player.bonusInterest = player.interest * 2
   }
   remove({ player }: { player: Player }) {
     player.interest = player.interest / 2
-  }*/
+  }
+    */
 }
 
 class CreditCard extends Admin {
@@ -399,17 +407,24 @@ class Needle extends Admin {
   static unicode = "U+1FAA1";
   static color = "#b448a6ff";
   constructor() {
-    super(Needle.name, Needle.description, Needle.unicode, Needle.color, 10, 5, 'gameState', 'onRoundEnd')//6 and player?
+    super(Needle.name, Needle.description, Needle.unicode, Needle.color, 10, 5, 'playerAndGame', 'onRoundEnd')//6 and player?
   }
-  async apply({ activePieces }: { activePieces: Piece[] }) {
+  async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     for (const p of activePieces){
       const playerPieces = [];
       if(p.team==='player'){
         playerPieces.push(p)
         //p.addModifier({lives: 1})
       }
-      if(playerPieces.length = 1){
+      if(playerPieces.length === 1){
        //needs to interact with the blueprint
+       const bpID = playerPieces[0].id
+       const idx = player.programs.findIndex(p => p.id === bpID);
+       player.programs[idx].maxSize += 1;
+       player.programs[idx].moves += 1;
+       player.programs[idx].attack += 1;
+       player.programs[idx].range += 1;
+       player.programs[idx].defence += 1;
       }
     }
   }
@@ -467,7 +482,7 @@ class Aesculapius extends Admin {
   static unicode = "U+2695";
   static color = "#084610ff";
   constructor() {
-    super(Aesculapius.name, Aesculapius.description, Aesculapius.unicode, Aesculapius.color, 4, 2, 'player', 'onPlacement')//or gamestate?
+    super(Aesculapius.name, Aesculapius.description, Aesculapius.unicode, Aesculapius.color, 4, 2, 'gameState', 'onPlacement')//or gamestate?
   }
 
   //on placement
@@ -493,7 +508,7 @@ class Heart extends Admin {
   static unicode = "U+1FAC0";
   static color = "#ff5555";
   constructor() {
-    super(Heart.name, Heart.description, Heart.unicode, Heart.color, 6, 3, 'player', 'onPlacement')
+    super(Heart.name, Heart.description, Heart.unicode, Heart.color, 6, 3, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
@@ -508,7 +523,7 @@ class Lungs extends Admin {
   static unicode = "U+1FAC1";
   static color = "#ff5555";
   constructor() {
-    super(Lungs.name, Lungs.description, Lungs.unicode, Lungs.color, 5, 3, 'player', 'onPlacement')
+    super(Lungs.name, Lungs.description, Lungs.unicode, Lungs.color, 5, 3, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
@@ -524,7 +539,7 @@ class Brain extends Admin {
   static unicode = "U+1F9E0";
   static color = "#ff5555";
   constructor() {
-    super(Brain.name, Brain.description, Brain.unicode, Brain.color, 9, 4, 'player', 'onPlacement')
+    super(Brain.name, Brain.description, Brain.unicode, Brain.color, 9, 4, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
@@ -550,7 +565,7 @@ class Dove extends Admin {
   static unicode = "U+1F54A";
   static color = "#3be2ffff";
   constructor() {
-    super(Dove.name, Dove.description, Dove.unicode, Dove.color, 7, 5, 'gameState', 'onRoundStart')//other
+    super(Dove.name, Dove.description, Dove.unicode, Dove.color, 7, 5, 'gameState', 'other')//other
   }
   //bool
 }
@@ -566,12 +581,10 @@ class Stonks extends Admin {
 
   //on end of round
   async apply({ player }: { player: Player }) {
-    //const noOfFives = player.interest / 5 //round down
-    //player.interest += noOfFives;
+    const noOfFives = Math.floor(player.money / 5) //round down
+    player.money += noOfFives
   }
-  remove({ player }: { player: Player }) {
-   
-  }
+
 }
 
 class Trolley extends Admin {
@@ -639,7 +652,7 @@ class Palette extends Admin {
   static unicode = "U+1F3A8";
   static color = "#ff55f6ff";
   constructor() {
-    super(Palette.name, Palette.description, Palette.unicode, Palette.color, 6, 4, 'gameState', 'onRoundStart')//other
+    super(Palette.name, Palette.description, Palette.unicode, Palette.color, 6, 4, 'gameState', 'other')//other
   }
   //round logic edit
 }
@@ -679,7 +692,7 @@ class Newspaper extends Admin {
   static unicode = "U+1F5DE";
   static color = "#5c5c5cff";
   constructor() {
-    super(Newspaper.name, Newspaper.description, Newspaper.unicode, Newspaper.color, 1, 2, 'playerAndGame', 'onPlacement')
+    super(Newspaper.name, Newspaper.description, Newspaper.unicode, Newspaper.color, 1, 2, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
@@ -759,12 +772,6 @@ class Puzzle extends Admin {
   }
   //on turn end
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
-    const directions = [
-      {x: 1, y:0},
-      {x: 0, y:1},
-      {x: -1, y:0},
-      {x: 0, y:-1}
-    ]
     for (const p of activePieces){
       if(p.team==='player'){
         const neighbours = activePieces.some(piece =>
@@ -817,13 +824,13 @@ class Bucket extends Admin {
 
 class Diamond extends Admin {
   static name = "Diamond";//payroll
-  static description = "Every $10 at the end of your turn increases all program's defence by 1";
+  static description = "Every $10 on placement increases a program's defence by 1";
   static unicode = "U+1F48E";
   static color = "#ff5555";
   constructor() {
-    super(Diamond.name, Diamond.description, Diamond.unicode, Diamond.color, 8, 5, 'playerAndGame', 'onTurnEnd')
+    super(Diamond.name, Diamond.description, Diamond.unicode, Diamond.color, 8, 5, 'playerAndGame', 'onPlacement')
   }
-  async apply({ player, activePieces }: { player: Player, activePieces: Piece[] }) {
+  async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     for (const p of activePieces){
       if(p.team==='player'){
         //from the headposition, look for adjacent player tiles
@@ -835,7 +842,7 @@ class Diamond extends Admin {
   }
 }
 
-class Drum extends Admin {
+class Drum extends Admin {//unfinished
   static name = "Marching Drum";
   static description = "+1 moves for all placed programs on the end of your turn";
   static unicode = "U+1F941";
@@ -1000,12 +1007,12 @@ export class Broom extends Admin {
   constructor() {
     super(Broom.name, Broom.description, Broom.unicode, Broom.color, 10, 5, 'gameState', 'onTurnEnd')
   }
-  async apply({ activePieces }: { activePieces: Piece[] }) {
-    for (const p of activePieces){
-      if(p.team==='enemy' && p.tiles.length === 1 && p.defence === 0){
-        //activePieces.value = activePieces.value.filter(p => p.id !== piece.id);
-        //splice or equivalent???
-      }
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    for (let index = 0; index < activePieces.length; index++) {
+      const p = activePieces[index];
+      if(p.team==='enemy' && p.tiles.length === 1 && p.getStat('defence') === 0){
+        activePieces.splice(index, 1);
+      }    
     }
   }
 }

@@ -93,9 +93,11 @@ function sleep(ms: number) {
 }
 
 function attackPiece(attacker: Piece, defender: Piece) {
-  const damage = attacker.attack;
-  defender.takeDamage(damage);
-  attacker.actions--;
+  if(attacker.actions > 0){
+    const damage = attacker.attack;
+    defender.takeDamage(damage);
+    attacker.actions--;
+  }
 }
 
 function findNearestAttackableCoordinate(

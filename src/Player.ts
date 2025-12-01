@@ -11,6 +11,8 @@ export class Player {
     programs: PieceBlueprint[]
     admins: Admin[]
     lives: number
+    interestCap: number
+    bonusInterest: number
     //adminModifiers: Record<string, StatModifier>
     constructor(
         money = 5,
@@ -19,7 +21,9 @@ export class Player {
         items: Item[] = [],
         programs: PieceBlueprint[] = [],
         admins: Admin[] = [],
-        lives: 3
+        lives: number,
+        interestCap: number,
+        bonusInterest: number
         //adminModifiers: Record<string, StatModifier> = {}
     ) {
         this.money = money;
@@ -28,7 +32,9 @@ export class Player {
         this.items = items;
         this.programs = programs;
         this.admins = admins;
-        this.lives = lives
+        this.lives = lives;
+        this.interestCap = interestCap;
+        this.bonusInterest = bonusInterest;
         //this.adminModifiers = adminModifiers;
     }
 

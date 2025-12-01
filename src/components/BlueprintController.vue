@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from "vue"
 import type { PieceBlueprint } from "../types"
 
 const props = defineProps<{
@@ -7,11 +8,38 @@ const props = defineProps<{
   canBuy?: boolean
 }>()
 
+function showRarity(rarity: number) {
+  switch (rarity) {
+    case 1:
+      return { text: "Common", color: "lightgreen" };
+
+    case 2:
+      return { text: "Uncommon", color: "orangered" };
+
+    case 3:
+      return { text: "Rare", color: "red" };
+
+    case 4:
+      return { text: "Very Rare", color: "#9052f3ff" };
+
+    case 5:
+      return { text: "Black Market", color: "#ff0df3ff" };
+
+    case 6:
+      return { text: "Legendary", color: "gold" };
+
+    default:
+      return { text: "Unknown", color: "grey" };
+  }
+}
+
+const rarityInfo = computed(() => showRarity(props.piece.rarity));
+
 defineEmits(["buy", "sell", "highlightPlacements", "close"])
 </script>
 
 <template>
-  <div class="piece-controller blueprint">
+  <div :class="`piece-controller ${props.mode}-controller blueprint`">
     <div class="header">
       <span class="symbol">
         {{ String.fromCodePoint(parseInt(piece.unicode.replace("U+", ""), 16)) }}
@@ -21,7 +49,9 @@ defineEmits(["buy", "sell", "highlightPlacements", "close"])
     </div>
 
     <p class="desc">{{ piece.description }}</p>
-
+    <div :style="{ color: rarityInfo.color }">
+      {{ rarityInfo.text }}
+    </div>
     <div class="stats">
       <p>Max Size: {{ piece.maxSize }}</p>
       <p>Moves: {{ piece.moves }}</p>

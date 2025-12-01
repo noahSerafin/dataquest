@@ -27,6 +27,7 @@ export abstract class Piece {
   actions: number
   team: string //'player' or 'enemy'
   rarity: number
+  damageMult: number = 1;
 
   constructor(
     name: string, 

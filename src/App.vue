@@ -564,7 +564,7 @@
     //console.log('tiles: ', selectedPiece.value.tiles);
   }
 
-  const damagePieceAt = (coord:Coordinate) => {
+  const damagePieceAt = async (coord:Coordinate) => {
     //console.log('props pieces:', props.pieces.map(p => p.tiles))
     //console.log('selected:', selectedPiece.value)
     if (!selectedPiece.value) return
@@ -575,10 +575,15 @@
     );
     //console.log('receiver: ', damageReceiver?.name)
     if (!damageReceiver || damageReceiver.team === selectedPiece.value.team) return;
-    const damage = selectedPiece.value.getStat('attack');
     //console.log("Damage call:", coord, damage)
+    const baseDamage = selectedPiece.value.getStat('attack');
+    await handleApplyAdmins('onDealDamage', selectedPiece.value.id)//attacker's id, (bug: blood tax will trigger even on no damage)
+    const damage = Math.floor(baseDamage * selectedPiece.value.damageMult)
     damageReceiver.takeDamage(damage);
+    //could trigger blood tax here using 'other'
+
     selectedPiece.value.actions --//getstat?
+    selectedPiece.value.damageMult = 1;
     //console.log(damageReceiver?.name, ' tiles afterdmg: ', damageReceiver.tiles)
     boardRef.value.clearHighlights();
   }

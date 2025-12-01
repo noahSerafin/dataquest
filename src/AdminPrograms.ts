@@ -148,12 +148,12 @@ class Blood extends Admin {
   static color = "#790000ff";
 
   constructor() {
-    super(Blood.name, Blood.description, Blood.unicode, Blood.color, 10, 3, 'gameState', 'onDealDamage')//player?
+    super(Blood.name, Blood.description, Blood.unicode, Blood.color, 10, 3, 'player', 'onDealDamage')//player?
   }
 
   //on damage
   async apply({ player }: { player: Player }) {
-    player.money += 2 //enemy pieces only?
+    player.money += 1 //enemy pieces only?
   }
   
 }
@@ -292,7 +292,7 @@ class Relay extends Admin {
     const idx = activePieces.findIndex(p => p.id === id);
     if(activePieces[idx].team==='player' && activePieces[idx].getStat('range') > 1){
       console.log('applying:', this.name)
-    activePieces[idx].addModifier({attack: 2})
+      activePieces[idx].addModifier({attack: 2})
     }
   }
 }
@@ -432,17 +432,17 @@ class Needle extends Admin {
 
 class Rune extends Admin {
   static name = "Rune";
-  static description = "Programs with a range of 1 deal x2 damage on attacking";
+  static description = "Programs with a range of 1 on attacking deal x2 damage";
   static unicode = "U+16B1";
   static color = "#ff5555";
   constructor() {
-    super(Rune.name, Rune.description, Rune.unicode, Rune.color, 5, 3, 'player', 'onDealDamage')
+    super(Rune.name, Rune.description, Rune.unicode, Rune.color, 5, 3, 'gameState', 'onDealDamage')
   }
   //onDamage
   async apply({ activePieces }: { activePieces: Piece[] }) {
     for (const p of activePieces){
       if(p.team==='player' && p.getStat('range') === 1){
-        p.attack = p.attack *2 //include mods??? add a mult to takeDamage function
+        p.damageMult += 1 //include mods??? add a mult to takeDamage function
       }
     }
   }
@@ -450,7 +450,7 @@ class Rune extends Admin {
 
 class Joker extends Admin {
   static name = "Joker";
-  static description = "Player damage is x1.5 on attacking";
+  static description = "Damage dealt is x1.5 on attacking";
   static unicode = "U+1F0CF";
   static color = "#ff5555";
   constructor() {
@@ -459,7 +459,7 @@ class Joker extends Admin {
   async apply({ activePieces }: { activePieces: Piece[] }) {
     for (const p of activePieces){
       if(p.team==='player' && p.getStat('range') === 1){
-        p.attack = p.attack *1.5 //include mods???
+        p.damageMult += 0.5
       }
     }
   }
@@ -698,7 +698,7 @@ class Newspaper extends Admin {
     const idx = activePieces.findIndex(p => p.id === id);
     if(activePieces[idx].team==='player' && activePieces[idx].getStat('range')===1){
       console.log('applying:', this.name)
-    activePieces[idx].addModifier({attack: 1})
+      activePieces[idx].addModifier({attack: 1})
     }
   }
 }
@@ -974,28 +974,27 @@ class Microscope extends Admin {
     const idx = activePieces.findIndex(p => p.id === id);
     if(activePieces[idx].maxSize === 1){
       console.log('applying:', this.name)
-    activePieces[idx].addModifier({defence: 1})
+      activePieces[idx].addModifier({defence: 1})
     }
   }
 }
 
 class Lotus extends Admin {//boss? remove money?
   static name = "Lotus";
-  static description = "Rare admin pieces give x1.5 damage";
+  static description = "Rare admin pieces give + 0.5 damage mult on attacking";
   static unicode = "U+1FAB7";
   static color = "#ff5555";
   constructor() {
-    super(Lotus.name, Lotus.description, Lotus.unicode, Lotus.color, 10, 5, 'player', 'onDealDamage')
+    super(Lotus.name, Lotus.description, Lotus.unicode, Lotus.color, 10, 5, 'playerAndGame', 'onDealDamage')
   }
   //on damage
-  async apply({ player}: { player: Player}) {
-    let mult = 0;
+  async apply({id, activePieces, player}: { id: string, activePieces: Piece[], player: Player}) {
+    const idx = activePieces.findIndex(p => p.id === id);
     for (const a of player.admins){
       if(a.rarity === 3){
-        mult +=1
+        activePieces[idx].damageMult += 1.5
       }
     }
-    //player.dmgMult += mult;
   }
 }
 

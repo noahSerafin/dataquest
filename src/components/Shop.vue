@@ -43,29 +43,36 @@ function handleBuyItem(item: Item) {
 //        @select="openItemController"
 
 //canAfford???
+const effectiveMoney = computed(() => (props.player.admins.some(a => a.name === 'CreditCard')? props.player.money + 20 : props.player.money));
 
 const canReroll = computed(() => props.player.money >= props.rerollCost);
 
 const canBuyItem = ((item: Item) => {
-  if(item instanceof Admin){
-    return (props.player.money >= item.cost && props.player.admins.length < props.player.adminSlots)
-  } else {
-    if((props.player.admins.some(a => a.name === 'Toolbox'))&&(props.player.admins.some(a => a.name === 'Trolley'))){
-      return (props.player.money >= item.cost && (props.player.programs.length /2) + (props.player.items.length /2) < props. player.memory);
-    } else if((props.player.admins.some(a => a.name === 'Toolbox'))){
-      return (props.player.money >= item.cost && (props.player.programs.length /2) + props.player.items.length < props. player.memory);
-    } else if((props.player.admins.some(a => a.name === 'Trolley'))){
-      return (props.player.money >= item.cost && props.player.programs.length + (props.player.items.length /2) < props. player.memory);
-    } else {
-      return (props.player.money >= item.cost && props.player.programs.length + props.player.items.length < props. player.memory);
-    }
+  if (item instanceof Admin) {
+    return effectiveMoney.value >= item.cost && props.player.admins.length < props.player.adminSlots;
   }
+
+  const hasToolbox = props.player.admins.some(a => a.name === 'Toolbox');
+  const hasTrolley = props.player.admins.some(a => a.name === 'Trolley');
+
+  const effectivePrograms = props.player.programs.length * (hasTrolley ? 0.5 : 1);
+  const effectiveItems    = props.player.items.length    * (hasToolbox ? 0.5 : 1);
+
+  const memoryUsed = effectivePrograms + effectiveItems;
+
+  return effectiveMoney.value >= item.cost && memoryUsed < props.player.memory;
 });
 
 const canBuyPiece = ((piece: PieceBlueprint) => {
-  //check if item {
-  return (props.player.money >= piece.cost && props.player.programs.length + props.player.items.length < props. player.memory);
-  //} then must check for admin slots if admin
+  const hasToolbox = props.player.admins.some(a => a.name === 'Toolbox');
+  const hasTrolley = props.player.admins.some(a => a.name === 'Trolley');
+
+  const effectivePrograms = props.player.programs.length * (hasTrolley ? 0.5 : 1);
+  const effectiveItems    = props.player.items.length    * (hasToolbox ? 0.5 : 1);
+
+  const memoryUsed = effectivePrograms + effectiveItems;
+
+  return effectiveMoney.value >= piece.cost && memoryUsed < props.player.memory;
 });
 
 const type = ((item: Item) => {

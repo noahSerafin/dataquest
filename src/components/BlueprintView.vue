@@ -47,7 +47,7 @@ function showRarity(rarity: number) {
       return  "#9052f3ff";
       
     case 5:
-      return "pink";
+      return "#ff0df3ff";
 
     case 6:
       return "gold";

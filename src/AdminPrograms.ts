@@ -102,7 +102,7 @@ class Bubble extends Admin {
 
 }
 
-class Crystal extends Admin {//unfinished
+class Crystal extends Admin {//unfinished rounds
   static name = "Crystal Ball";
   static description = "See the next shop in advance";
   static unicode = "U+1F52E";
@@ -114,7 +114,7 @@ class Crystal extends Admin {//unfinished
   //modify app for this one
 }
 
-class Clover extends Admin {//unfinished
+class Clover extends Admin {
   static name = "Lucky Clover";
   static description = "Raises chance of rarer items appearing";
   static unicode = "U+1F340";
@@ -194,7 +194,7 @@ class BionicLeg extends Admin {
   }
 }
 
-class Convenience extends Admin {//unfinished
+class Convenience extends Admin {//unfinished rounds
   static name = "Convenience Store";
   static description = "Open the shop any time";
   static unicode = "U+1F3EA";
@@ -206,7 +206,7 @@ class Convenience extends Admin {//unfinished
   //modify shop/player
 }
 
-class Department extends Admin {//unfinished
+class Department extends Admin {
   static name = "Department Store";
   static description = "+3 shop slots";
   static unicode = "U+1F3EC";
@@ -217,7 +217,7 @@ class Department extends Admin {//unfinished
   //modify shop/player bool for this
 }
 
-class Eye extends Admin {
+class Eye extends Admin {//test try
   static name = "Evil Eye";
   static description = "Lower's the defences of all enemy progams by 1 at start of round";
   static unicode = "U+1F9FF";
@@ -236,7 +236,7 @@ class Eye extends Admin {
   }
 }
 
-class Bouquet extends Admin {//unfinished
+class Bouquet extends Admin {
   static name = "Bouquet";
   static description = "Held admin program's can reappear in the shop";
   static unicode = "U+1F490";
@@ -248,7 +248,7 @@ class Bouquet extends Admin {//unfinished
   //shop, disable for now
 }
 
-class Heartbreaker extends Admin {//unfinished
+class Heartbreaker extends Admin {//unfinished status
   static name = "Heartbreaker";
   static description = "Makes your programs immune to being charmed on placement";
   static unicode = "U+1F498";
@@ -325,7 +325,7 @@ class Notepad extends Admin {
 }
 
 // GLOBE WITH MERIDIANS, U+1F310
-class AdminMap extends Admin {//unfinished
+class AdminMap extends Admin {//unfinished round
   static name = "Map";
   static description = "See the incoming level in advance";
   static unicode = "U+1F5FA";
@@ -336,7 +336,7 @@ class AdminMap extends Admin {//unfinished
   //player bool
 }
 
-class PetriDish extends Admin {//unfinished
+class PetriDish extends Admin {//unfinished status
   static name = "Petri Dish";
   static description = "Status effects can spread to adjacent enemy programs at the end of your turn";
   static unicode = "U+1F9EB";
@@ -355,7 +355,7 @@ class PetriDish extends Admin {//unfinished
   }*/
 }
 
-class Volatile extends Admin {//unfinished
+class Volatile extends Admin {//unfinished status
   static name = "Volatile";
   static description = "Status effects are doubled";//sell for buying price?
   static unicode = "U+1F9EA";
@@ -384,7 +384,7 @@ class Inheritance extends Admin {
     */
 }
 
-class CreditCard extends Admin {//unfinished
+class CreditCard extends Admin {
   static name = "Credit Card";
   static description = "Go up to $20 in debt";
   static unicode = "U+1F4B3";
@@ -395,9 +395,9 @@ class CreditCard extends Admin {//unfinished
   //shop lower limit change
 }
 
-class Needle extends Admin {
+class Needle extends Admin {//try it out test
   static name = "Needle";
-  static description = "Winning a round with one program placed boosts all it's stats by one permanently - unfinished";
+  static description = "Winning a round with one program placed boosts all it's stats by one permanently";
   static unicode = "U+1FAA1";
   static color = "#b448a6ff";
   constructor() {
@@ -459,7 +459,7 @@ class Joker extends Admin {
   }
 }
 
-class Chemistry extends Admin {//unfinished
+class Chemistry extends Admin {//unfinished statuses
   static name = "Chemistry";
   static description = "Items effects are doubled";
   static unicode = "U+2697";
@@ -542,7 +542,7 @@ class Brain extends Admin {
   }
 }
 
-class GoldenTicket extends Admin {//unfinished
+class GoldenTicket extends Admin {//unfinished rounds
   static name = "Golden Ticket";
   static description = "Skip a level for $5";
   static unicode = "U+1F3AB";
@@ -679,9 +679,9 @@ class Osiris extends Admin {
   }
 }
 
-class Slots extends Admin {//unfinished
+class Slots extends Admin {
   static name = "Slots";
-  static description = "Rerolls cos $2 less";
+  static description = "Rerolls cost $2 less";
   static unicode = "U+1F3B0";
   static color = "#ff5555";
   constructor() {
@@ -736,7 +736,7 @@ class Cactus extends Admin {
   }
 }
 
-class Compass extends Admin {//unfinished
+class Compass extends Admin {//unfinished rounds
   static name = "Compass";
   static description = "Always show the path to the nearest shop";
   static unicode = "U+1F9ED";
@@ -843,7 +843,7 @@ class Diamond extends Admin {
   }
 }
 
-class Drum extends Admin {//unfinished
+class Drum extends Admin {//try it out
   static name = "Marching Drum";
   static description = "+1 moves for all placed programs on the end of your turn";
   static unicode = "U+1F941";
@@ -1026,10 +1026,10 @@ export class Pickup extends Admin {
     super(Pickup.name, Pickup.description, Pickup.unicode, Pickup.color, 7, 2, 'player', 'other')
   }
   async apply({ player }: { player: Player }) {
-    player.memory += 2
+    player.memory += 3
   }
   remove({ player }: { player: Player }) {
-    player.memory -= 2
+    player.memory -= 3
   }
 }
 
@@ -1039,13 +1039,13 @@ export class Artic extends Admin {
   static unicode = "U+1F69B";
   static color = "#ff5555";
   constructor() {
-    super(Artic.name, Artic.description, Artic.unicode, Artic.color, 10, 4, 'player', 'other')
+    super(Artic.name, Artic.description, Artic.unicode, Artic.color, 10, 5, 'player', 'other')
   }
   async apply({ player }: { player: Player }) {
-    player.memory += 2
+    player.memory += 5
   }
   remove({ player }: { player: Player }) {
-    player.memory -= 2
+    player.memory -= 5
   }
 }
 
@@ -1138,7 +1138,7 @@ export class Spoon extends Admin {
 
 }
 
-export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, Seed, Puzzle, Roger, Bucket, Diamond, Drum, Sneakers, Torch, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Prayer, Fountain, Spoon];//66
+export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, Seed, Puzzle, Roger, Bucket, Diamond, Drum, Sneakers, Torch, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Helmet, Prayer, Fountain, Spoon];//67
 
 //doctor STETHOSCOPE, U+1FA7A
 

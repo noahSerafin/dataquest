@@ -159,7 +159,11 @@
         player.value.removeItem(item)
       }
       if(item.name === 'Genie' && player.value.memory - 2 >= player.value.usedMemory){
-        const classes = pickThreePieces(allPieces);
+        const classes = [
+          pickWeightedRandom(allPieces),
+          pickWeightedRandom(allPieces),
+          pickWeightedRandom(allPieces),
+        ];
         const bps = classes.map(c => makeBlueprint(c));
         player.value.programs.push(...bps);
         player.value.removeItem(item)
@@ -222,12 +226,17 @@
       };
   }
   
-  function pickWeightedRandom(PieceClasses: any[]) {
+  function pickWeightedRandom(PieceClasses: any[]) {//clover edit
     const weighted: any[] = [];
+
+    //stacking
+    const cloverCount = player.value.admins.filter(a => a.name === 'Clover').length;
+    const cloverMultiplier = 1 + cloverCount * 0.3; // each clover +30%
 
     for (const PieceClass of PieceClasses) {
       const temp = new PieceClass({ x: -1, y: -1 }, "player"); 
-      const weight = 7 - temp.rarity;
+      let weight = 7 - temp.rarity;
+      weight = Math.max(1, Math.floor(weight * cloverMultiplier));
 
       for (let i = 0; i < weight; i++) {
         weighted.push(PieceClass);
@@ -238,20 +247,21 @@
     return weighted[idx];
   }
 
-  function pickThreePieces(PieceClasses: any[]) {
-    return [
-      pickWeightedRandom(PieceClasses),
-      pickWeightedRandom(PieceClasses),
-      pickWeightedRandom(PieceClasses),
-    ];
-  }
-
-  function pickWeightedRandomItem(itemClasses: any[]) {
+  function pickWeightedRandomItem(itemClasses: any[]) {//clover edit
     const weighted: any[] = [];
+
+    //non stacking
+    //const hasClover = playerHasAdmin('Lucky Clover');
+    //const cloverMultiplier = hasClover ? 1.5 : 1;
+
+    //stacking
+    const cloverCount = player.value.admins.filter(a => a.name === 'Clover').length;
+    const cloverMultiplier = 1 + cloverCount * 0.3; // each clover +30%
 
     for (const itemClass of itemClasses) {
       const rarity = itemClass.rarity ?? 1;   // fallback default
-      const weight = 7 - rarity;
+      let weight = 7 - rarity;
+      weight = Math.max(1, Math.floor(weight * cloverMultiplier));
 
       for (let i = 0; i < weight; i++) {
         weighted.push(itemClass);
@@ -265,37 +275,55 @@
     return new PickedClass();  // RETURN INSTANCE
   }
 
-  function pickThreeItems(itemClasses: ItemConstructor[]) {
-    return [
-      pickWeightedRandomItem(itemClasses),
-      pickWeightedRandomItem(itemClasses),
-      pickWeightedRandomItem(itemClasses),
-    ];
-  }
-
   const shopBlueprints = ref<PieceBlueprint[]>([]);
   const shopItems = ref<Item[]>([]);
   const rerollCost = ref(5);//to be reset after shop
-  const prevFib = ref(1);//to be reset after shop
+  const prevFib = ref(0);//to be reset after shop
   const currentFib = ref(1);//to be reset after shop
 
   function refreshShop(isFree: boolean) {
     //console.log(rerollCost.value)
     if(!isFree && player.value.money < rerollCost.value) return;//show to shop for disabled button
-    if(!isFree) {
+    if(!isFree) {//player is rerolling
       player.value.money -= rerollCost.value;
       const nextFib = prevFib.value + currentFib.value;
       prevFib.value = currentFib.value;
       currentFib.value = nextFib;
 
-    rerollCost.value = currentFib.value;
-      // 1, 2, 3, 5, etc
+      rerollCost.value += currentFib.value;
+      if(playerHasAdmin('Slots')){
+        rerollCost.value-=2;
+      }
     }
 
-    const classes = pickThreePieces(allPieces);
+    const classes = [
+      pickWeightedRandom(allPieces),
+      pickWeightedRandom(allPieces),
+      pickWeightedRandom(allPieces),
+    ];
     shopBlueprints.value = classes.map(c => makeBlueprint(c));
-    const allItemsAndAdmins: ItemConstructor[] = [...allItems, ...allAdmins];
-    shopItems.value = pickThreeItems(allItemsAndAdmins);
+
+    //no reappearing admins
+    let availableAdmins = allAdmins;
+    if(playerHasAdmin('Bouquet')){
+      const ownedAdmins = new Set(player.value.admins.map(a => a.name));
+      availableAdmins = allAdmins.filter(
+        AdminClass => !ownedAdmins.has(AdminClass.name) // or .name
+      );
+    }
+    const allItemsAndAdmins: ItemConstructor[] = [...allItems, ...availableAdmins];
+    shopItems.value = [
+      pickWeightedRandomItem(allItemsAndAdmins),
+      pickWeightedRandomItem(allItemsAndAdmins),
+      pickWeightedRandomItem(allItemsAndAdmins),
+    ];
+    if(playerHasAdmin('Department Store')){
+      const extraP = pickWeightedRandom(allPieces);
+      shopBlueprints.value.push(makeBlueprint(extraP));
+      const extraI = pickWeightedRandomItem(allItems);
+      const extraA = pickWeightedRandomItem(availableAdmins);
+      shopItems.value.push(extraI, extraA);
+    }
     //if triggered by player
   }
 
@@ -603,7 +631,9 @@
   }
 
   const addPlayerInterest = () => {
-    const noOfFives = Math.floor(player.value.money / 5);
+
+    const baseMoney = Math.max(0, player.value.money);   // ← prevents negative interest
+    const noOfFives = Math.floor(baseMoney / 5);
     if(noOfFives > player.value.interestCap){
       player.value.money += player.value.interestCap;
     } else {

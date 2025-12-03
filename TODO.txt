@@ -22,7 +22,9 @@ BOARD
 
 
 ITEMS 3
-implement item functions - doing next
+- implement item functions - done except statuses
+cleanup targets: allow player as accepted target? 9
+
 
 PIECES 4
 
@@ -36,17 +38,18 @@ statuses 3
 
 -atk function -done-
 
-statuses
-special functions
+special functions 4
 keep track of upgrades and display on piece
 variants? 
 
-ADMIN PIECES 4
+ADMIN PIECES
 
 - make class - done 
 
-work out how abilities will effect every piece 4
+- work out how abilities will effect every piece - done
 
+status admins (immunities) 4
+round admins 6
 
 PLAYER
 disable moving if placing/disable placing if moving 3
@@ -62,7 +65,7 @@ disable moving if placing/disable placing if moving 3
 rarity = value ?+=no. of upgrades used on a piece? 3
 
 
-AI 2/3
+AI 2/3 nearly-done
 functions:
     - findNearestPlayerPiece - done
     pathfinding a -> b in a grid - needsreviewing
@@ -125,7 +128,7 @@ boss levels
 
 APP 6
 game logic
-disable moving if placing/disable placing if moving 3
+- disable moving if placing/disable placing if moving - done
 end rounds, reset board -> open map
 map -> click on shop, open shop, click on level, open board
 swap between shop -> map -> board
@@ -137,6 +140,6 @@ takes average of both stats, rounded up
 takes speacial move of first piece
 
 
-EDITOR
+EDITOR 8
 Add a Spawn for a 'wall' type piece
 Have logic for spawning any piece on single spawn, then only pieces with max size >= to the spawn's size

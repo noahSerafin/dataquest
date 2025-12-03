@@ -1,0 +1,60 @@
+priority - serach numbers descending
+
+ITEMS 3
+- implement item functions - done except statuses
+cleanup targets: allow player as accepted target? 9
+
+PIECES 4
+statuses 3
+special functions 4
+keep track of upgrades and display on piece
+variants? 
+
+ADMIN PIECES
+status admins (immunities) 4
+round admins 6
+
+PLAYER
+disable moving if placing/disable placing if moving 3
+rarity = value ?+=no. of upgrades used on a piece? 6 but test
+
+AI 6 nearly-done
+functions:
+    pathfinding a -> b in a grid - needsreviewing, don't search for new path inside one pieces while loop
+    moveTowards player - incomplete
+
+SHOP
+- two piece/item slots
+piece packs/item packs?
+vouchers?
+
+MAP 5
+isometric view?
+branching paths
+see two maps ahead?
+path examples before boss(paths meeting point):
+    one level +1 difficulty, shop
+    one level +0 difficulty, one level +0 difficulty
+    one level +0 difficulty, one level +1 difficulty
+    one level +2 difficulty, shop
+multiple levels files?
+
+BOSSES 5
+modifier bosses behave like admins, but non purchasable and for the enemy
+
+APP 6
+game logic
+- disable moving if placing/disable placing if moving - done
+end rounds, reset board -> open map
+map -> click on shop, open shop, click on level, open board
+swap between shop -> map -> board
+increment difficulty
+
+HYBRIDS 7
+Hybrid class accepts two pieces
+takes average of both stats, rounded up
+takes speacial move of first piece
+
+EDITOR 8
+Add a Spawn for a 'wall' type piece
+Have logic for spawning any piece on single spawn, then only pieces with max size >= to the spawn's size

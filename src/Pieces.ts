@@ -226,7 +226,7 @@ class Shield extends Piece {
   static color = "#2fa7ca";
   static rarity = 1;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Shield.name, Shield.description, Shield.unicode, 3, 2, 0, 0, 1, Shield.color, headPosition, [headPosition], team, Shield.rarity, removeCallback, id)
+   super(Shield.name, Shield.description, Shield.unicode, 3, 1, 0, 0, 1, Shield.color, headPosition, [headPosition], team, Shield.rarity, removeCallback, id)
   }
 }
 

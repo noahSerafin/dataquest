@@ -135,3 +135,8 @@ HYBRIDS 7
 Hybrid class accepts two pieces
 takes average of both stats, rounded up
 takes speacial move of first piece
+
+
+EDITOR
+Add a Spawn for a 'wall' type piece
+Have logic for spawning any piece on single spawn, then only pieces with max size >= to the spawn's size

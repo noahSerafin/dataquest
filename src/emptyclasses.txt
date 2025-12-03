@@ -10,7 +10,6 @@ class ¬ extends Piece {
   }
 }
 
-
 export class ¬ extends Item {
     static name: "¬";
     static description: "increases a programs max size by 1 for one round";
@@ -22,34 +21,55 @@ export class ¬ extends Item {
     }
 }
 
-
+class ¬ extends Admin {
+  static name = "¬";
+  static description = "";
+  static unicode = "U+1F52C";
+  static color = "#ff5555";
+  constructor() {
+    super(¬.name, ¬.description, ¬.unicode, ¬.color, 5, 3, 'gameState', 'onPlacement')
+  }
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    console.log('applying:', this.name)
+    activePieces[idx].addModifier({defence: 1})
+  }
+}
 
 export class ¬ extends Admin {
   static name = "¬";
-  static description = "";
+  static description = "Inreases Memory by 3";
   static unicode = "";
   static color = "#ff5555";
   constructor() {
-    super(¬.name, ¬.description, ¬.unicode, ¬.color, 10, 5)
+    super(¬.name, ¬.description, ¬.unicode, ¬.color, 7, 2, 'player', 'other')
   }
-  //
+  async apply({ player }: { player: Player }) {
+    player.memory += 2
+  }
+  remove({ player }: { player: Player }) {
+    player.memory -= 2
+  }
 }
 
 'other' admin bools for shop
 
+//game-based:
 Crystal Ball
 Convenience Store
 Department Store
+
+//Shop based:
 Credit Card
 Slots
-trolley
-toolbox
 
-map-
+//map-
 golden ticket
 
 //round
 dove - place and move
 pallette - place and place
 
-Copier - onPlacement
+//statuses
+petri dish
+chemistry

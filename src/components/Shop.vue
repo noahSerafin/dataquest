@@ -30,6 +30,9 @@ function openShopController(target: Item | PieceBlueprint | null) {///TODO SORT 
   //selectedPiece.value = piece;
   emit('selectTarget', target)
 }
+function deselect() {
+  emit('clearTarget')
+}
 
 function handleBuyBlueprint(blueprint: PieceBlueprint) {
   emit("buy-blueprint", blueprint);
@@ -47,7 +50,15 @@ const canBuyItem = ((item: Item) => {
   if(item instanceof Admin){
     return (props.player.money >= item.cost && props.player.admins.length < props.player.adminSlots)
   } else {
-    return (props.player.money >= item.cost && props.player.programs.length + props.player.items.length < props. player.memory);
+    if((props.player.admins.some(a => a.name === 'Toolbox'))&&(props.player.admins.some(a => a.name === 'Trolley'))){
+      return (props.player.money >= item.cost && (props.player.programs.length /2) + (props.player.items.length /2) < props. player.memory);
+    } else if((props.player.admins.some(a => a.name === 'Toolbox'))){
+      return (props.player.money >= item.cost && (props.player.programs.length /2) + props.player.items.length < props. player.memory);
+    } else if((props.player.admins.some(a => a.name === 'Trolley'))){
+      return (props.player.money >= item.cost && props.player.programs.length + (props.player.items.length /2) < props. player.memory);
+    } else {
+      return (props.player.money >= item.cost && props.player.programs.length + props.player.items.length < props. player.memory);
+    }
   }
 });
 
@@ -82,6 +93,7 @@ const type = ((item: Item) => {
         cssclass="shop"
         :class="'placed-'+bp.isPlaced"
         @select="openShopController"
+        @deselect="deselect"
       />
     </div>
     <div class="item-row">
@@ -96,6 +108,7 @@ const type = ((item: Item) => {
         :showController="(props.target === item)"
         @buy="handleBuyItem"
         @select="openShopController"
+        @deselect="deselect"
       />
     </div>
     <BlueprintController
@@ -104,6 +117,7 @@ const type = ((item: Item) => {
         mode="shop"
         :canBuy= "canBuyPiece(props.target)"
         @buy="handleBuyBlueprint"
+        @close="deselect"
         />
   </div>
 </template>

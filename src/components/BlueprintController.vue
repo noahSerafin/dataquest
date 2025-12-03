@@ -86,7 +86,7 @@ defineEmits(["buy", "sell", "highlightPlacements", "close"])
   position: fixed;
   bottom: 1rem;
   left: 1rem;
-  width: 17%;
+  width: 20%;
   background: #222;
   color: #fff;
   padding: 1rem;

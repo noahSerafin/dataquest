@@ -335,6 +335,24 @@ export class Beans extends Item<Piece> {
     }
 }
 
+//target all ActivePieces
+//megaphone U+1F4E3
+//Bugle, U+1F4EF, "+1 attack for all placed programs"
+//"Marching Drum" U+1F941 "+1 moves for all placed programs";
+
+//hotline, U+1F4DE
+//load a random program into the level
+
+//BATTERY, Fresh Batteries U+1F50B
+//renew all placed programs moves
+
+//target player
+// OPTICAL DISC, U+1F4BF +1 memory
+
+//FLOPPY DISK, U+1F4BE +1 memory
+
+// golden disc, U+1F4C0 +1 admin slot
+
 export class Box extends Item<Player> {
     static name = "Mystery Box";
     static description = "Grants a random consumable item";
@@ -352,6 +370,9 @@ export class Box extends Item<Player> {
        // }
     }
 }
+
+//WRAPPED PRESENT, U+1F381
+//grants a rare item
 
 class Genie extends Item<Player> {
   static name = "Genie";
@@ -415,7 +436,13 @@ export const allItems = [Whetstone, Iron, Blueberry, Carrot, Lightning, Blessing
 
 export type ItemConstructor = new (...args: any[]) => Item<any>;
 
+// /SCROLL, U+1F4DC
+
+//PAGE WITH CURL, U+1F4C3
+
 // IZAKAYA LANTERN, U+1F3EE range
+
+//PIG, U+1F416 money?
 
 // / HOT PEPPER, U+1F336
 
@@ -431,9 +458,13 @@ export type ItemConstructor = new (...args: any[]) => Item<any>;
 
 //POSTAL HORN, U+1F4EF
 
+//djembe LONG DRUM, U+1FA98
+
 //PACKAGE, U+1F4E6
 
 //BLACK HEART SUIT, U+2665
+
+//lifeboat ROWBOAT, U+1F6A3
 
 //statuses
 //status symbols

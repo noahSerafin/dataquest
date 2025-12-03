@@ -163,7 +163,7 @@ export class Spawn extends Piece {
   static color = "#242424ff";
   static rarity = 1;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string) {
-    super(Spawn.name, Spawn.description, Spawn.unicode, 1, 0, 0, 0, 0, Spawn.color, headPosition, [headPosition], team, 1, removeCallback, id);
+    super(Spawn.name, Spawn.description, Spawn.unicode, 50, 0, 0, 0, 0, Spawn.color, headPosition, [headPosition], team, 1, removeCallback, id);
   }
 }
 
@@ -630,7 +630,7 @@ class Puffer extends Piece {
   static name = "Puffer";
   static description = "A program that damages programs that attack it";
   static unicode = "U+1F421";
-  static color = "#ffb20dff";
+  static color = "#0d8affff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Puffer.name, Puffer.description, Puffer.unicode, 4, 2, 1, 0, 0, Puffer.color, headPosition, [headPosition], team, Puffer.rarity, removeCallback, id)
@@ -991,20 +991,20 @@ class Guard extends Piece {
   static description = "A basic all round program";
   static unicode = "U+1F482";
   static color = "#ff6e0dff";
-  static rarity = 1;
+  static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Guard.name, Guard.description, Guard.unicode, 2, 1, 1, 1, 0, Guard.color, headPosition, [headPosition], team, Guard.rarity, removeCallback, id)
+   super(Guard.name, Guard.description, Guard.unicode, 2, 1, 1, 1, 1, Guard.color, headPosition, [headPosition], team, Guard.rarity, removeCallback, id)
   }
 }
 
 class Officer extends Piece {
   static name = "Officer";
-  static description = "A mid level all round piece ";
+  static description = "A mid level all round program";
   static unicode = "U+1F46E";
   static color = "#ff310dff";
-  static rarity = 2;
+  static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Officer.name, Officer.description, Officer.unicode, 4, 2, 1, 2, 1, Officer.color, headPosition, [headPosition], team, Officer.rarity, removeCallback, id)
+   super(Officer.name, Officer.description, Officer.unicode, 4, 2, 2, 2, 2, Officer.color, headPosition, [headPosition], team, Officer.rarity, removeCallback, id)
   }
 }
 
@@ -1026,7 +1026,7 @@ class Potato extends Piece {
   static color = "#ad8226ff";
   static rarity = 1;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Potato.name, Potato.description, Potato.unicode, 3, 1, 1, 1, 1, Potato.color, headPosition, [headPosition], team, Potato.rarity, removeCallback, id)
+   super(Potato.name, Potato.description, Potato.unicode, 3, 1, 1, 1, 0, Potato.color, headPosition, [headPosition], team, Potato.rarity, removeCallback, id)
   }
 }
 
@@ -1302,15 +1302,27 @@ class Saw extends Piece {
 
 export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Trench, Lance, Mole, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Copycat, Trap, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Ink, Snail, Shark, Greatshield, Wizard, Ninja, Fairy, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, Dolls, UFO, TP, Saw];
 
-//SNAKE, U+1F40D
-// CROCODILE, U+1F40A
-//T-REX, U+1F996
-//DANCER, U+1F483
-// WATER BUFFALO, U+1F403
-// AMBULANCE, U+1F691
-//U+1F9C3 ice cube decreases size each round?
+// TOP HAT, U+1F3A9 spawns a random piece/or rabbit?
+// RABBIT, U+1F407 high movement 1 atk 1 maxsize
 
-//FROG FACE, U+1F438
+//SNAKE, U+1F40D dealing damage increases max size
+
+// CROCODILE, U+1F40A //moves 0 high damage
+
+//T-REX, U+1F996
+
+//DANCER, U+1F483 //high movement no damage
+
+//ANT, U+1F41C //high movement
+
+// WATER BUFFALO, U+1F403
+
+//U+1F9C3 ice cube decreases size each round?
+// BIRD, U+1F426
+// EAGLE, U+1F985
+// LIZARD, U+1F98E
+
+//FROG FACE, U+1F438 //range 3 low atk
 
 //name desc || maxsize moves range atk def
 

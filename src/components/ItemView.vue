@@ -16,6 +16,7 @@ console.log('item: ', props.item)
 
 const emit = defineEmits<{
   select: [item: Item];
+  deselect: [];
   buy: [item: Item];
   sell: [item: Item];
   use: [item: Item];
@@ -23,8 +24,6 @@ const emit = defineEmits<{
 
 //const showController = ref(false);
 function handleSelect() {
-  //props.showController = !props.showController
-  //console.log('selected item: ', showController)
   emit("select", props.item);
 }
 
@@ -78,6 +77,7 @@ const handleUse = () => {
   >
     <div class="icon">{{ unicodeSymbol }}</div>
     <div v-if="props.showController" class="info" @click.stop >
+      <button @click="emit('deselect')" class="close">X</button>
       <div class="name">{{ item.name }}</div>
       <div v-if="(cssclass == 'shop')" class="type">- {{ type }} -</div>
       <div class="rarity" :style="{ color: rarityStyle(item.rarity).color }">
@@ -122,6 +122,11 @@ const handleUse = () => {
 }
 .item:hover {
   transform: scale(1.03);
+}
+.close{
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
 }
 .type, .name{
   margin-bottom: 5px;

@@ -72,6 +72,9 @@
     function selectItem(item: Item){
         selectedItem.value = item;
     }
+    function deselectItem(){
+        selectedItem.value = null;
+    }
     function isSelected(item: Item): boolean{
         return  selectedItem.value === item ? true : false;
     }
@@ -129,6 +132,7 @@
                         @sell="$emit('sellAdmin', item.id)"
                         @triggerAdmin="onUseAdmin"
                         @select="selectItem"
+                        @deselect="deselectItem"
                     />
                 </li>
             </ul>
@@ -176,6 +180,7 @@
                 @sell="$emit('sellItem', item.id)"
                 @use="onUseItem"
                 @select="selectItem"
+                @deselect="deselectItem"
             />
         </ul>
         <BlueprintController

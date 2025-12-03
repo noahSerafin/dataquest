@@ -125,7 +125,7 @@
     if(admin.triggerType === 'other'){
       admin.remove(player.value);
     }
-    player.value.items.splice(idx, 1);
+    player.value.admins.splice(idx, 1);
     player.value.money += Math.round(admin.cost / 2);
   }
 
@@ -315,6 +315,7 @@
     } else {
       player.value.items.push(item);
     }
+    shopTarget.value = null;
   }
   const showShop = ref(false)
   const showMap = ref(false)

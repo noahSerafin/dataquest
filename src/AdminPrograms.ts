@@ -281,7 +281,7 @@ class Hamsa extends Admin {
 
 class Relay extends Admin {
   static name = "Relay";
-  static description = "All placed programs with a range < 1 on placement gain +1 attack";
+  static description = "All placed programs with a range bigger than 1 on placement gain +1 attack";
   static unicode = "U+1F4E1";
   static color = "#e4d26fff";
   constructor() {
@@ -297,6 +297,7 @@ class Relay extends Admin {
   }
 }
 
+//AMBULANCE, U+1F691
 class Hivis extends Admin {
   static name = "Hi-Vis";
   static description = "Saves a program from destruction once, then is deleted";
@@ -309,17 +310,17 @@ class Hivis extends Admin {
 
 class Notepad extends Admin {
   static name = "Notepad";
-  static description = "Increases memory by 3";
-  static unicode = "U+1F5C7";
+  static description = "Increases memory by 1";
+  static unicode = "U+1F4DD";//"U+1F4C4";//"U+1F5C7";
   static color = "#4b4b4bff";
   constructor() {
     super(Notepad.name, Notepad.description, Notepad.unicode, Notepad.color, 5, 3, 'player', 'other')
   }
   async apply({ player }: { player: Player }) {
-    player.memory += 3
+    player.memory += 1
   }
   remove({ player }: { player: Player }) {
-    player.memory -= 3
+    player.memory -= 1
   }
 }
 
@@ -514,7 +515,7 @@ class Lungs extends Admin {
   static name = "Lungs";
   static description = "Programs all gain +1 moves on placement";
   static unicode = "U+1FAC1";
-  static color = "#ff5555";
+  static color = "#9e0e0eff";
   constructor() {
     super(Lungs.name, Lungs.description, Lungs.unicode, Lungs.color, 5, 3, 'gameState', 'onPlacement')
   }
@@ -795,7 +796,7 @@ class Roger extends Admin {
   static name = "Jolly Roger";
   static description = "Gain $1 per destroyed program";
   static unicode = "U+2620";
-  static color = "#ff5555";
+  static color = "#000000ff";
   constructor() {
     super(Roger.name, Roger.description, Roger.unicode, Roger.color, 6, 3, 'player', 'onPieceDestruction')
   }
@@ -913,7 +914,7 @@ class Feather extends Admin {
 class Copier extends Admin {
   static name = "Copier";
   static description = "Places a copy of your first placed program 1 space to the right if it is unnocupied";
-  static unicode = "U+1F5A8";
+  static unicode = "U+1F4E0";//"U+1F5A8";
   static color = "#ff5555";
   constructor() {
     super(Copier.name, Copier.description, Copier.unicode, Copier.color, 9, 5, 'gameState', 'onPlacement')
@@ -1016,26 +1017,181 @@ export class Broom extends Admin {
   }
 }
 
-export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, Seed, Puzzle, Roger, Bucket, Diamond, Drum, Sneakers, Torch, Feather, Copier, Telescope, Microscope, Lotus, Broom];
+export class Pickup extends Admin {
+  static name = "Pickup";
+  static description = "Inreases Memory by 3";
+  static unicode = "U+1F6FB";
+  static color = "#c9804fff";
+  constructor() {
+    super(Pickup.name, Pickup.description, Pickup.unicode, Pickup.color, 7, 2, 'player', 'other')
+  }
+  async apply({ player }: { player: Player }) {
+    player.memory += 2
+  }
+  remove({ player }: { player: Player }) {
+    player.memory -= 2
+  }
+}
 
-// GLOBE WITH MERIDIANS, U+1F310
+export class Artic extends Admin {
+  static name = "Artic";
+  static description = "Inreases Memory by 5";
+  static unicode = "U+1F69B";
+  static color = "#ff5555";
+  constructor() {
+    super(Artic.name, Artic.description, Artic.unicode, Artic.color, 10, 4, 'player', 'other')
+  }
+  async apply({ player }: { player: Player }) {
+    player.memory += 2
+  }
+  remove({ player }: { player: Player }) {
+    player.memory -= 2
+  }
+}
+
+export class FireEngine extends Admin {
+  static name = "Fire Engine";
+  static description = "Programs become immune to burning on placment";
+  static unicode = "U+1F692";
+  static color = "#cc1515ff";
+  constructor() {
+    super(FireEngine.name, FireEngine.description, FireEngine.unicode, FireEngine.color, 3, 2, 'gameState', 'onPlacement')
+  }
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    //activePieces[idx].burnImmunity = true
+  }
+}
+
+class Prayer extends Admin {
+  static name = "Prayer Beads";
+  static description = "Programs get +2 defence on load";
+  static unicode = "U+1F52C";
+  static color = "#9c7800ff";
+  constructor() {
+    super(Prayer.name, Prayer.description, Prayer.unicode, Prayer.color, 7, 4, 'gameState', 'onPlacement')
+  }
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    console.log('applying:', this.name)
+    activePieces[idx].addModifier({defence: 1})
+  }
+
+}
+class Helmet extends Admin {
+  static name = "Helmet";
+  static description = "Programs get +1 defence on load";
+  static unicode = "U+26D1";
+  static color = "#df9d22ff";
+  constructor() {
+    super(Helmet.name, Helmet.description, Helmet.unicode, Helmet.color, 5, 3, 'gameState', 'onPlacement')
+  }
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    console.log('applying:', this.name)
+    activePieces[idx].addModifier({defence: 1})
+  }
+}
+
+// EGG, U+1F95A
+class Protein extends Admin {
+  static name = "Protein";
+  static description = "Programs get +1 max size on load";
+  static unicode = "U+1F52C";
+  static color = "#b0ff55ff";
+  constructor() {
+    super(Protein.name, Protein.description, Protein.unicode, Protein.color, 4, 1, 'gameState', 'onPlacement')
+  }
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    console.log('applying:', this.name)
+    activePieces[idx].addModifier({maxSize: 1})
+  }
+}
+
+class Fountain extends Admin {
+  static name = "Fountain of Youth";
+  static description = "Programs get +2 max size on load";
+  static unicode = "U+1F52C";
+  static color = "#a3a3a3ff";
+  constructor() {
+    super(Fountain.name, Fountain.description, Fountain.unicode, Fountain.color, 6, 3, 'gameState', 'onPlacement')
+  }
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    console.log('applying:', this.name)
+    activePieces[idx].addModifier({maxSize: 2})
+  }
+}
+
+export class Spoon extends Admin {
+  static name =  "Silver Spoon";
+  static description = "Gain $5 at the start of every round";
+  static unicode = "U+1F69B";
+  static color = "#f7e018ff";
+  constructor() {
+    super (Spoon.name, Spoon.description, Spoon.unicode, Spoon.color, 10, 4, 'player', 'onRoundStart')
+  }
+  async apply({ player }: { player: Player }) {
+    player.money += 5
+  }
+
+}
+
+export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, Seed, Puzzle, Roger, Bucket, Diamond, Drum, Sneakers, Torch, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Prayer, Fountain, Spoon];//66
+
+//doctor STETHOSCOPE, U+1FA7A
+
+// EGG, U+1F95A
+
+//RING, U+1F48D
+
+//YIN YANG, U+262F
+
 //Daemon
 //IMP, U+1F47F
+
+// TOILET, U+1F6BD circling the drain, common admins provide +1 to all stats on placement
+
+// MAN DANCING, flashy U+1F57A money increases movement
+
+//ALCHEMICAL SYMBOL FOR GOLD, U+1F71A gold comet
+
+//SYMBOL FOR SALT OF ANTIMONY, U+1F72D sceptre
 
 //passive programs
 
 // FLOWER PLAYING CARDS, U+1F3B4
 
+//SCHOOL SATCHEL, U+1F392
+
+//WILTED FLOWER, U+1F940
+
+//dartboard
+//DIRECT HIT, U+1F3AF
+
 // GAME DIE, U+1F3B2
 
-//PEA POD, U+1FADB
+//PEA POD, U+1FADB admin slots??
+
 // PLACARD, U+1FAA7
+
 //disco  CARPENTRY SAW, U+1FA9A
+
 //FOLDING HAND FAN, U+1FAAD
+
 //// MONEY BAG, U+1F4B0
 //BANKNOTE WITH DOLLAR SIGN, U+1F4B5
+// MONEY WITH WINGS, U+1F4B8
 
-// BROOM, U+1F9F9
+//UMBRELLA WITH RAIN DROPS, U+2614
+
+//harvest//EAR OF RICE, U+1F33E
+
+// CHESTNUT, U+1F330
+// POTTED PLANT, U+1FAB4
+
+//AMBULANCE, U+1F691
 
 //clippy - provides hints
 //PAPERCLIP, U+1F4CE
@@ -1049,18 +1205,11 @@ export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, 
 
 //GREEK SMALL LETTER PI, U+3C0
 
-//copier - copy a program
-
-
-
-//PAPERCLIP, U+1F4CE
 // PUSHPIN, U+1F4CC
 
 // PERFORMING ARTS, U+1F3AD
 
 // LOCK, U+1F512
-
-//JIGSAW PUZZLE PIECE, U+1F9E9
 
 //hex SOFTWARE-FUNCTION SYMBOL, U+2394
 
@@ -1073,8 +1222,6 @@ export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, 
 // SNOWFLAKE, U+2744
 //AI TRACKBALL, U+1F5B2
 // WHALE, U+1F40B
-
-// TOOLBOX, U+1F9F0
 
 // ICE CUBE, U+1F9CA
 
@@ -1142,12 +1289,13 @@ export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, 
 
 //HORSE RACING, U+1F3C7
 
-// FENCER, U+1F93A
+// SPARKLES, U+2728
 
 //BOXING GLOVE, U+1F94A
 
 //ankh
 //EGYPTIAN HIEROGLYPH S034, U+132F9
+//EGYPTIAN HIEROGLYPH O010A, U+13262
 
 //alien
 //EGYPTIAN HIEROGLYPH R028, U+132CF
@@ -1203,16 +1351,14 @@ export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, 
 
 //MONEY BAG, U+1F4B0
 
-//MONEY WITH WINGS, U+1F4B8
 
 // LUGGAGE, U+1F9F3
-
-// TICKET, U+1F3AB
 
 //ADMISSION TICKETS, U+1F39F
 
 // HIGH VOLTAGE SIGN, U+26A1
 
+//HOSPITAL, U+1F3E5
 
 
 //OS-vouchers???
@@ -1225,6 +1371,12 @@ export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, 
 // GREEN APPLE, U+1F34F
 //+1 memory -1 interest
 
-// SCALES, U+2696 --- CLASSICAL BUILDING, U+1F3DB --- CROSSED SWORDS, U+2694
+// SCALES, U+2696 --- CROSSED SWORDS, U+2694
+//scales: EGYPTIAN HIEROGLYPH U038, U+1335D
 //temple - +1 admin +1 memory -1 interest
 //---------
+
+//STEAM LOCOMOTIVE, U+1F682
+//+2 admin 
+
+//BITCOIN SIGN, U+20BF

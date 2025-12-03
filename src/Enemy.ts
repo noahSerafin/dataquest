@@ -14,6 +14,8 @@ export async function takeEnemyTurn(
   delay = 500 // ms between moves for visibility
 ) {
   for (const enemy of enemyPieces) {
+    //pathing for high move pieces still not really working/
+    //maybe we find the path here outside the loop???
     while (enemy.movesRemaining > 0 && enemy.actions > 0) {
 
       const isMaxSize = enemy.tiles.length === enemy.maxSize ? true : false

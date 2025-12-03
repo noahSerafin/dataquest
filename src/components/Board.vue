@@ -4,6 +4,7 @@ import type { Coordinate } from "../types"
 import PieceView from "./PieceView.vue";
 import PieceController from "./PieceController.vue";
 import { Piece } from "../Pieces"
+import { Player } from "../Player";
 
 interface Props{
   tiles : Coordinate[]//Set<string>
@@ -13,6 +14,7 @@ interface Props{
   placementMode: boolean
   isFirstTurn: boolean
   hasFinishedTurn: boolean
+  player: Player
 }
 const props = defineProps<Props>()
 
@@ -273,6 +275,8 @@ defineExpose({
       mode="action"
       :hasFinishedTurn="hasFinishedTurn"
       :canBuy="false"
+      :canMove="player.canMove"
+      :canAction="player.canAction"
       @highlightMoves="highlightMoves"
       @highlightTargets="highlightTargets"
       @close="$emit('deselect')"

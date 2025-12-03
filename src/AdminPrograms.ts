@@ -425,10 +425,10 @@ class Needle extends Admin {//try it out test
 }
 
 class Rune extends Admin {
-  static name = "Rune";
+  static name = "Rune";//
   static description = "Programs with a range of 1 on attacking deal x2 damage";
   static unicode = "U+16B1";
-  static color = "#ff5555";
+  static color = "#640909ff";
   constructor() {
     super(Rune.name, Rune.description, Rune.unicode, Rune.color, 5, 3, 'gameState', 'onDealDamage')
   }

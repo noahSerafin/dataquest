@@ -3,6 +3,8 @@ import { Piece } from "../Pieces"
 
 const props = defineProps<{
   piece: InstanceType<typeof Piece>
+  canMove?: boolean
+  canAction?: boolean
 }>()
 
 defineEmits([
@@ -37,15 +39,19 @@ defineEmits([
     </div>
 
     <div class="actions">
-      <button v-if="piece.team === 'player'" @click="$emit('highlightMoves', piece)">
+      <button
+        :disabled="!canMove" 
+        v-if="piece.team === 'player'" @click="$emit('highlightMoves', piece)">
         Move
       </button>
       <button
+        :disabled="!canAction"
         v-if="piece.team === 'player' && piece.actions > 0"
         @click="$emit('highlightTargets', piece)">
         Attack
       </button>
       <button
+        :disabled="!canAction"
         v-if="piece.team === 'player'"
         @click="$emit('special', piece)">
         Special

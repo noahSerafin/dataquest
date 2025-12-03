@@ -6,6 +6,7 @@ const props = defineProps<{
   piece: PieceBlueprint
   mode: "shop" | "inventory"
   canBuy?: boolean
+  canPlace?: boolean
 }>()
 
 function showRarity(rarity: number) {
@@ -68,7 +69,7 @@ defineEmits(["buy", "sell", "highlightPlacements", "close"])
       </template>
 
       <template v-if="mode === 'inventory'">
-        <button @click="$emit('highlightPlacements', piece)">Place</button>
+        <button :disabled="!canPlace" @click="$emit('highlightPlacements', piece)">Place</button>
         <button @click="$emit('sell', piece)">Sell (${{ piece.rarity }})</button>
       </template>
     </div>

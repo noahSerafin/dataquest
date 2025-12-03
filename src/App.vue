@@ -89,7 +89,10 @@
     5,
     0,
     false,
-    false
+    false,
+    true, //canPlace
+    true, //canMove
+    true //canAction
   ));
 
   function playerHasAdmin(name: string) {
@@ -559,15 +562,38 @@
     pieceToPlace.value = null;
     //playerSpawns.value = newPlacementHighlights();
     isPlacing.value = false;
-    if(isFirstTurn){
-      isFirstTurn.value = false;
-    }
     playerSpawns.value = newPlacementHighlights();
-
+    
     //applyStatModifications()
     handleApplyAdmins('onPlacement', instance.id)
-    //if !isfisrtTurn && !player has (pallette/dove)
-    if(!isFirstTurn && (!playerHasAdmin('Dove') || !playerHasAdmin('Pallete'))){
+
+    const hasDove = playerHasAdmin('Dove');
+  const hasPalette = playerHasAdmin('Palette');
+
+    // First-turn special rules
+    if (isFirstTurn.value) {
+      isFirstTurn.value = false;
+      player.value.canAction = false;//admin for attacking on first turn?
+      // palette: allow one extra placement
+      if (hasPalette) {
+        player.value.canPlace = true; // allow next placement
+      } else {
+        player.value.canPlace = false; // normally cannot place again
+      }
+      // dove: allow one move after placing
+      if (hasDove) {
+        player.value.canMove = true;
+      } else {
+        player.value.canMove = false;
+      }
+
+      // If neither admin, end immediately
+      if (!hasDove && !hasPalette) {
+        endTurn();
+      }
+
+    } else {
+      // Not first turn -> normal behaviour
       endTurn();
     }
   }
@@ -582,7 +608,7 @@
     //highlight range
     if(piece.team === 'enemy'){
       boardRef.value.highlightTargets(piece);
-    } else {
+    } else if(player.value.canMove){
       boardRef.value.highlightMoves(piece);
     }
   }
@@ -593,7 +619,7 @@
   }
 
   const movePiece = (coord : Coordinate) => {//todo moves piece, but does not add more tiles visually
-    if(!selectedPiece.value) return;
+    if(!selectedPiece.value || !player.value.canMove) return;
     if (selectedPiece.value.team !== 'player') return;
       boardRef.value.clearHighlights();
       selectedPiece.value?.moveTo(coord);
@@ -714,14 +740,17 @@
     }
   }
 
-  const endTurn = () => {
+  const endTurn = async () => {
     hasFinishedTurn.value = true;
     activePieces.value.forEach(piece => {
       piece.resetMoves();
       piece.actions = 1;
     });
     handleApplyAdmins('onTurnEnd', '')
-    enemyTurn();  
+    await enemyTurn();
+    player.value.canPlace = true;
+    player.value.canMove = true;
+    player.value.canAction = true;
   }
 
   
@@ -812,6 +841,7 @@
   :isFirstTurn="isFirstTurn"
   :placementMode="isPlacing"
   :hasFinishedTurn="hasFinishedTurn"
+  :player="player"
   @placeOnBoard="placePieceOnBoardAt"
   @handlePieceSelect="handlePieceSelect"
   @deselect="deselectPiece"

@@ -188,6 +188,7 @@
         :piece="selectedPiece"
         mode="inventory"
         :canBuy="false"
+        :canPlace="player.canPlace"
         @highlightPlacements="handlePlace"
         @sell="handleSellBlueprint"
         @close="handleClose"

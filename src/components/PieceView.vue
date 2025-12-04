@@ -12,7 +12,6 @@ const props = defineProps<{
   tileSize: number//provided by board.vue
   mapTiles?: Coordinate[] // optional when in inventory
   cssclass: string
-  player: Player
 }>();
 
 

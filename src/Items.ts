@@ -465,19 +465,3 @@ export type ItemConstructor = new (...args: any[]) => Item<any>;
 //BLACK HEART SUIT, U+2665
 
 //lifeboat ROWBOAT, U+1F6A3
-
-//statuses
-//status symbols
-//negative:
-//burning, poisoned/diseased, slowed, charmed
-//OVERHEATED FACE, U+1F975 overheating
-//NAUSEATED FACE, U+1F922
-//FACE WITH OPEN MOUTH VOMITING, U+1F92E
-//FACE WITH OPEN MOUTH AND COLD SWEAT, U+1F630
-// SNEEZING FACE, U+1F927
-// FACE WITH HEAD-BANDAGE, U+1F915
-//FREEZING FACE, U+ slowed
-//HEART WITH ARROW, U+1F498 charmed
-//positive:
-//FACE WITH FINGER COVERING CLOSED LIPS, U+1F92B hidden
-//negative

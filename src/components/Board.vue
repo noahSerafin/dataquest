@@ -27,6 +27,7 @@ const emit = defineEmits<{
   (e: 'deselect'): void
   (e: 'movePiece', coord: Coordinate): void
   (e: 'damagePieceAt', coord: Coordinate): void
+  (e: 'specialAction', id: string, coord: Coordinate): void
 }>()
 function handlePlaceClick(tile: Coordinate) {
   if (!props.placementMode) return

@@ -51,10 +51,10 @@ defineEmits([
         Attack
       </button>
       <button
+        v-if="piece.specialName && piece.team === 'player'"
         :disabled="!canAction"
-        v-if="piece.team === 'player'"
         @click="$emit('special', piece)">
-        Special
+        {{ piece.specialName }}
       </button>
 
       <button

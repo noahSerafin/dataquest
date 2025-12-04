@@ -260,7 +260,7 @@ class Heartbreaker extends Admin {//unfinished status
   //on placement
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    //activePieces[idx].charmImmunity = true
+    activePieces[idx].immunities = {charmImmune: true}//add on, don't replace
   }
 }
 
@@ -483,16 +483,9 @@ class Aesculapius extends Admin {
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
     if(activePieces[idx].team==='player' && activePieces[idx].getStat('range') > 1){
-      //activePieces[idx].
-        //p.poisonImmune = true;
-        //p.diseaseImmune = true;
+      activePieces[idx].immunities = {poisonImmune: true}
+      activePieces[idx].immunities = {diseaseImmune: true}
     }
-  }
-
-  remove({ id, activePieces }: { id: string, activePieces: Piece[] }) {
-    const idx = activePieces.findIndex(p => p.id === id);
-    //p.poisonImmune = false;
-    //p.diseaseImmune = false;  
   }
 }
 
@@ -1128,17 +1121,52 @@ export class Spoon extends Admin {
   static name =  "Silver Spoon";
   static description = "Gain $5 at the start of every round";
   static unicode = "U+1F69B";
-  static color = "#f7e018ff";
+  static color = "#c9a91dff";
   constructor() {
     super (Spoon.name, Spoon.description, Spoon.unicode, Spoon.color, 10, 4, 'player', 'onRoundStart')
   }
   async apply({ player }: { player: Player }) {
     player.money += 5
   }
-
 }
 
-export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, Seed, Puzzle, Roger, Bucket, Diamond, Drum, Sneakers, Torch, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Helmet, Prayer, Fountain, Spoon];//67
+class Hermes extends Admin {
+  static name = "Hermes";
+  static description = "All placed programs are immune to being slowed or frozen";
+  static unicode = "U+1FABD";//wing, icarus?
+  static color = "#083546ff";
+  constructor() {
+    super(Hermes.name, Hermes.description, Hermes.unicode, Hermes.color, 4, 2, 'gameState', 'onPlacement')//or gamestate?
+  }
+
+  //on placement
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    if(activePieces[idx].team==='player' && activePieces[idx].getStat('range') > 1){
+      activePieces[idx].immunities = {slowImmune: true}
+    }
+  }
+}
+
+class Warmth extends Admin {
+  static name = "Inner Warmth";
+  static description = "All placed programs are immune to being frozen";
+  static unicode = "U+2668";
+  static color = "#ece7d0ff";
+  constructor() {
+    super(Warmth.name, Warmth.description, Warmth.unicode, Warmth.color, 4, 2, 'gameState', 'onPlacement')//or gamestate?
+  }
+
+  //on placement
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    if(activePieces[idx].team==='player' && activePieces[idx].getStat('range') > 1){
+      activePieces[idx].immunities = {freezeImmune: true}
+    }
+  }
+}
+
+export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, Seed, Puzzle, Roger, Bucket, Diamond, Drum, Sneakers, Torch, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Helmet, Prayer, Fountain, Spoon, Hermes, Warmth];//69
 
  //BANK, U+1F3E6 //increases sell value of held programs?
 

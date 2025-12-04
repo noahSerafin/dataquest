@@ -153,6 +153,10 @@
     }
     
     if (item.targetType === "player") {
+      if(item.name === 'Gift Box' && player.value.memory >= player.value.usedMemory){
+        player.value.programs.push(pickWeightedRandom(allPieces));
+        player.value.removeItem(item);
+      }
       if(item.name === 'Mystery Box' && player.value.memory >= player.value.usedMemory){
         player.value.items.push(pickWeightedRandomItem(allItems))
         player.value.removeItem(item)
@@ -570,7 +574,7 @@
     const hasDove = playerHasAdmin('Dove');
   const hasPalette = playerHasAdmin('Palette');
 
-    // First-turn special rules
+    // First-turn rules
     if (isFirstTurn.value) {
       isFirstTurn.value = false;
       player.value.canAction = false;//admin for attacking on first turn?
@@ -656,6 +660,71 @@
     boardRef.value.clearHighlights();
   }
 
+  const handleSpecialActionAt = async (id: string, target: Coordinate) => {
+    //for player we could use selected piece, but the enemy should also be able to use special moves.
+    const idx = activePieces.value.findIndex(p => p.id === id);
+    if (idx === -1) return;
+
+    const actingPiece = activePieces.value[idx];
+
+    // find piece at targeted coordinate
+    const targetPiece = activePieces.value.find(piece =>
+      piece.tiles.some(t => t.x === target.x && t.y === target.y)
+    );
+    // --- piece target ---
+    if (actingPiece.targetType === 'piece') {
+      if (targetPiece) {
+        await actingPiece.special(targetPiece);
+      }
+      return;
+    }
+    // --- piece + player payload ---
+    if (actingPiece.targetType === 'pieceAndPlayer') {
+      if (targetPiece) {
+        await actingPiece.special({
+          piece: targetPiece,
+          player: player.value
+        });
+      }
+      return;
+    }
+    if (actingPiece.targetType === 'pieceAndPlace') {
+      if (targetPiece) {
+        await actingPiece.special({
+          piece: targetPiece,
+          place: target
+        });
+      }
+      return;
+    }
+    // --- space target ---
+    if (actingPiece.targetType === 'space') {
+      if (!targetPiece) {
+        actingPiece.special({
+          target: target,
+          pieces: activePieces.value
+        });
+      }
+      return;
+    }
+    // --- group target (AOE) ---
+    if (actingPiece.targetType === 'group') {
+      // get every piece inside actingPiece.range
+      const inRange = activePieces.value.filter(p => 
+        p.tiles.some(tile => 
+          Math.abs(tile.x - target.x) + Math.abs(tile.y - target.y) <= actingPiece.getStat('range')
+        )
+      );
+      await actingPiece.special(inRange);
+      return;
+    }
+    // --- self target ---
+    if (actingPiece.targetType === 'self') {
+      await actingPiece.special(actingPiece);
+      return;
+    }
+  };
+
   const addPlayerInterest = () => {
 
     const baseMoney = Math.max(0, player.value.money);   // ← prevents negative interest
@@ -740,14 +809,24 @@
     }
   }
 
+  const applyStatusEffects = (team: string) => {
+    activePieces.value.forEach(piece => {
+      if(piece.team === team){
+        piece.applyStatusEffects();
+      }
+    });
+  }
+
   const endTurn = async () => {
     hasFinishedTurn.value = true;
     activePieces.value.forEach(piece => {
       piece.resetMoves();
       piece.actions = 1;
     });
-    handleApplyAdmins('onTurnEnd', '')
+    handleApplyAdmins('onTurnEnd', '');
+    applyStatusEffects('player');
     await enemyTurn();
+    applyStatusEffects('enemy');
     player.value.canPlace = true;
     player.value.canMove = true;
     player.value.canAction = true;
@@ -847,6 +926,7 @@
   @deselect="deselectPiece"
   @movePiece="movePiece"
   @damagePieceAt="damagePieceAt"
+  @specialAction="handleSpecialActionAt"
   />
   <Leveleditor v-else @export-level="handleExport"/>
   <button v-if="!displayEditor && !hasFinishedTurn" class="end-turn" v-on:click="endTurn()">End Turn</button>

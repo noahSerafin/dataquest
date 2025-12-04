@@ -111,32 +111,33 @@
             <div>
                 <p><strong>Money:</strong> {{ props.player.money }}</p>
                 <p><strong>Lives:</strong> {{ props.player.lives }}</p>
-                <p><strong>Admins:</strong> {{ props.player.admins.length }}/{{ props.player.adminSlots }}</p>
             </div>
-            <ul class="admins">
-                <li v-for="(item, index) in props.player.admins"
-                    :key="item.id"
-                    draggable="true"
-                    @dragstart="onDragStart(index)"
-                    @dragover.prevent
-                    @drop="onDrop(index)"
-                    class="p-1 border rounded mb-1 flex justify-between items-center">
+            <div>
+                <p><strong>Admins:</strong> {{ props.player.admins.length }}/{{ props.player.adminSlots }}</p>
+                <ul class="admins">
+                    <li v-for="(item, index) in props.player.admins"
+                        :key="item.id"
+                        draggable="true"
+                        @dragstart="onDragStart(index)"
+                        @dragover.prevent
+                        @drop="onDrop(index)"
+                        class="p-1 border rounded mb-1 flex justify-between items-center">
 
-                    <ItemView 
-                        :item="item"
-                        type="admin"
-                        cssclass="inventory"
-                        :tileSize="60"
-                        :canBuy="false"
-                        :showController="(selectedItem === item)"
-                        @sell="$emit('sellAdmin', item.id)"
-                        @triggerAdmin="onUseAdmin"
-                        @select="selectItem"
-                        @deselect="deselectItem"
-                    />
-                </li>
-            </ul>
-
+                        <ItemView 
+                            :item="item"
+                            type="admin"
+                            cssclass="inventory"
+                            :tileSize="60"
+                            :canBuy="false"
+                            :showController="(selectedItem === item)"
+                            @sell="$emit('sellAdmin', item.id)"
+                            @triggerAdmin="onUseAdmin"
+                            @select="selectItem"
+                            @deselect="deselectItem"
+                        />
+                    </li>
+                </ul>
+            </div>
             <!-- Inventory Button -->
             <button 
             class="mt-2 px-2 py-1 bg-blue-500 text-white rounded"

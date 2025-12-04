@@ -6,7 +6,8 @@ cleanup targets: allow player as accepted target? 9
 
 PIECES 4
 statuses 3
-special functions 4
+active special functions 4
+passive special functions //on walk over, retaliate, buff nearby
 keep track of upgrades and display on piece
 variants? 
 

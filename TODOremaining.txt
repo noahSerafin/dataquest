@@ -4,9 +4,12 @@ ITEMS 3
 - implement item functions - done except statuses
 cleanup targets: allow player as accepted target? 9
 
-PIECES 4
 statuses 3
+visually show statuses with emoji 3
+
+PIECES 4
 active special functions 4
+visually show takeDamage with short lived red colour and shake animation, bonus: particles 4
 passive special functions //on walk over, retaliate, buff nearby
 keep track of upgrades and display on piece
 variants? 

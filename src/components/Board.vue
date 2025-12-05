@@ -27,7 +27,7 @@ const emit = defineEmits<{
   (e: 'deselect'): void
   (e: 'movePiece', coord: Coordinate): void
   (e: 'damagePieceAt', coord: Coordinate): void
-  (e: 'specialAction', id: string, coord: Coordinate): void
+  (e: 'specialActionAt', coord: Coordinate): void
 }>()
 function handlePlaceClick(tile: Coordinate) {
   if (!props.placementMode) return
@@ -36,7 +36,6 @@ function handlePlaceClick(tile: Coordinate) {
 }
 
 // Make a Set for fast lookup
-//will need to be ref if you have a bitman
 const tileSet = computed(() => new Set(props.tiles.map(t => `${t.x},${t.y}`)))
 
 // Get cols/rows from tiles
@@ -91,6 +90,7 @@ const isOccupied = (x: number, y: number) => pieceMap.value.has(`${x},${y}`);
 const moveButtons = ref<Array<{ x: number; y: number; direction: string }>>([]);
 const moveHighlights = ref<Coordinate[]>([]);
 const inRangeHighlights = ref<Coordinate[]>([]);
+const specialHighlights = ref<Coordinate[]>([]);
 //const placeHighlights = ref<Coordinate[]>([])
 
 //change to one move at a time
@@ -124,6 +124,7 @@ const highlightMoves = (piece: InstanceType<typeof Piece>) => {
 const clearHighlights = () => {
   moveHighlights.value = [];
   inRangeHighlights.value = [];
+  specialHighlights.value = [];
   moveButtons.value = [];
 }
 
@@ -166,6 +167,14 @@ function checkTileIsOccupied(coord:Coordinate): Piece | undefined{
 const highlightTargets = (piece: InstanceType<typeof Piece>) => {
   clearHighlights();
   inRangeHighlights.value = getTilesInRange(
+    piece.headPosition,
+    piece.getStat('range'),
+    tileSet.value,
+  ); 
+}
+const highlightSpecials = (piece: InstanceType<typeof Piece>) => {
+  clearHighlights();
+  specialHighlights.value = getTilesInRange(
     piece.headPosition,
     piece.getStat('range'),
     tileSet.value,
@@ -259,6 +268,19 @@ defineExpose({
       }"
     />
     <div
+    v-for="(tile, index) in specialHighlights"
+    :key="index"
+    :id="`atk-${tile.x}-${tile.y}`"
+      class="highlight-tile red"
+      v-on:click="$emit('specialActionAt', tile)"
+      :style="{
+        left: tile.x * tileSize + 'px',
+        top: tile.y * tileSize + 'px',
+        width: tileSize + 'px',
+        height: tileSize + 'px',
+      }"
+    />
+    <div
       v-if="props.placementMode || props.isFirstTurn" v-for="(tile, index) in props.placementHighlights"
       :key="index"
       class="highlight-tile yellow"
@@ -280,6 +302,7 @@ defineExpose({
       :canAction="player.canAction"
       @highlightMoves="highlightMoves"
       @highlightTargets="highlightTargets"
+      @highlightSpecials="highlightSpecials"
       @close="$emit('deselect')"
       />
       <!--

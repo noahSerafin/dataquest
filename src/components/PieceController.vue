@@ -10,7 +10,7 @@ const props = defineProps<{
 defineEmits([
   "highlightMoves",
   "highlightTargets",
-  "special",
+  "highlightSpecials",
   "close"
 ])
 </script>
@@ -53,7 +53,7 @@ defineEmits([
       <button
         v-if="piece.specialName && piece.team === 'player'"
         :disabled="!canAction"
-        @click="$emit('special', piece)">
+        @click="$emit('highlightSpecials', piece)">
         {{ piece.specialName }}
       </button>
 

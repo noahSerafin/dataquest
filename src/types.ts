@@ -1,5 +1,6 @@
 // Define a coordinate type for readability
 export type Coordinate = { x: number; y: number }
+import { Piece } from "./Pieces";
 
 export type PieceBlueprint = {
   id: string
@@ -104,6 +105,6 @@ export function createDefaultImmunities() {
     charmImmune: false,
     confuseImmune: false,
     //positive immunity (bad)
-    hideImmune: false
+    hideImmune: false //FACE WITH PEEKING EYE, U+1FAE3
   }
 }

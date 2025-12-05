@@ -260,7 +260,7 @@ class Heartbreaker extends Admin {//unfinished status
   //on placement
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].immunities = {charmImmune: true}//add on, don't replace
+    activePieces[idx].immunities.charmImmune = true;
   }
 }
 
@@ -326,9 +326,9 @@ class Notepad extends Admin {
 
 // GLOBE WITH MERIDIANS, U+1F310
 class AdminMap extends Admin {//unfinished round
-  static name = "Map";
+  static name = "World Map";
   static description = "See the incoming level in advance";
-  static unicode = "U+1F5FA";
+  static unicode = "U+1F30D";
   static color = "#001cbbff";
   constructor() {
     super(AdminMap.name, AdminMap.description, AdminMap.unicode, AdminMap.color, 1, 2, 'player', 'other')
@@ -483,8 +483,8 @@ class Aesculapius extends Admin {
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
     if(activePieces[idx].team==='player' && activePieces[idx].getStat('range') > 1){
-      activePieces[idx].immunities = {poisonImmune: true}
-      activePieces[idx].immunities = {diseaseImmune: true}
+      activePieces[idx].immunities.poisonImmune = true
+      activePieces[idx].immunities.diseaseImmune = true
     }
   }
 }
@@ -1090,7 +1090,7 @@ class Helmet extends Admin {
 class Protein extends Admin {
   static name = "Protein";
   static description = "Programs get +1 max size on load";
-  static unicode = "U+1F52C";
+  static unicode = "U+1F95A";//steak "U+1F52C";
   static color = "#b0ff55ff";
   constructor() {
     super(Protein.name, Protein.description, Protein.unicode, Protein.color, 4, 1, 'gameState', 'onPlacement')
@@ -1143,7 +1143,7 @@ class Hermes extends Admin {
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
     if(activePieces[idx].team==='player' && activePieces[idx].getStat('range') > 1){
-      activePieces[idx].immunities = {slowImmune: true}
+      activePieces[idx].immunities.slowImmune = true;
     }
   }
 }
@@ -1161,18 +1161,26 @@ class Warmth extends Admin {
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
     if(activePieces[idx].team==='player' && activePieces[idx].getStat('range') > 1){
-      activePieces[idx].immunities = {freezeImmune: true}
+      activePieces[idx].immunities.freezeImmune = true;
     }
   }
 }
 
 export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, Seed, Puzzle, Roger, Bucket, Diamond, Drum, Sneakers, Torch, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Helmet, Prayer, Fountain, Spoon, Hermes, Warmth];//69
 
- //BANK, U+1F3E6 //increases sell value of held programs?
+//BANK, U+1F3E6 //increases sell value of held programs?
 
-//doctor STETHOSCOPE, U+1FA7A
+//doctor STETHOSCOPE, U+1FA7A medic, return killed pieces to hand as blueprints
 
-// EGG, U+1F95A
+//X-RAY, U+1FA7B immune to blinding? //need more pieces that blind
+//DARK SUNGLASSES, U+1F576
+
+//STATUE OF LIBERTY, U+1F5FD 
+
+//ELECTRIC LIGHT BULB, U+1F4A1
+// Bright ideas, special modifier does not consume actions??
+
+// EGG, U+1F95A 
 
 //RING, U+1F48D
 

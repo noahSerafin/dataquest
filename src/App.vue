@@ -12,7 +12,7 @@
   import type { AdminTrigger } from "./AdminPrograms";
   import PlayerView from "./components/PlayerView.vue";
   import type { Piece } from "./Pieces"
-  import { Spawn } from './Pieces';
+  import { Spawn, Dolls } from './Pieces';
   import { allPieces } from "./Pieces"
   import type { Coordinate, PieceBlueprint, StatModifier, Level } from "./types";
   import { takeEnemyTurn } from "./Enemy";
@@ -543,6 +543,18 @@
       activePieces.value = activePieces.value.filter(p => p.id !== piece.id);
       handleApplyAdmins('onPieceDestruction', piece.id);
       //graveyard?
+      if (piece.name == 'Dolls') {//hybrids need a flag other than name
+      if (piece.getStat('maxSize') > 1) {
+        const NewDoll = new Dolls(
+          piece.headPosition,
+          piece.team,
+          removePiece,
+          crypto.randomUUID()
+        );
+        NewDoll.maxSize = piece.getStat('maxSize') - 1;
+        activePieces.value.push(NewDoll);
+      }
+    }
     }
   }
 
@@ -622,7 +634,7 @@
     boardRef.value.clearHighlights();
   }
 
-  const movePiece = (coord : Coordinate) => {//todo moves piece, but does not add more tiles visually
+  const movePiece = (coord : Coordinate) => {
     if(!selectedPiece.value || !player.value.canMove) return;
     if (selectedPiece.value.team !== 'player') return;
       boardRef.value.clearHighlights();
@@ -650,8 +662,9 @@
     //console.log("Damage call:", coord, damage)
     const baseDamage = selectedPiece.value.getStat('attack');
     await handleApplyAdmins('onDealDamage', selectedPiece.value.id)//attacker's id, (bug: blood tax will trigger even on no damage)
-    const damage = Math.floor(baseDamage * selectedPiece.value.damageMult)
+    const damage = Math.floor(baseDamage * selectedPiece.value.damageMult)//mult should be applyed inside takeDamage for special moves
     damageReceiver.takeDamage(damage);
+    selectedPiece.value.willRetaliate = false;//pieces that have enacted defensive option
     //could trigger blood tax here using 'other'
 
     selectedPiece.value.actions --//getstat?
@@ -660,37 +673,34 @@
     boardRef.value.clearHighlights();
   }
 
-  const handleSpecialActionAt = async (id: string, target: Coordinate) => {
-    //for player we could use selected piece, but the enemy should also be able to use special moves.
-    const idx = activePieces.value.findIndex(p => p.id === id);
-    if (idx === -1) return;
-
-    const actingPiece = activePieces.value[idx];
+  const handleSpecialActionAt = async (target: Coordinate) => {
+    //the enemy should also be able to use special moves, handle in enemy?
+    if(!selectedPiece.value) return
 
     // find piece at targeted coordinate
     const targetPiece = activePieces.value.find(piece =>
       piece.tiles.some(t => t.x === target.x && t.y === target.y)
     );
     // --- piece target ---
-    if (actingPiece.targetType === 'piece') {
+    if (selectedPiece.value.targetType === 'piece') {
       if (targetPiece) {
-        await actingPiece.special(targetPiece);
+        await selectedPiece.value.special(targetPiece);
       }
       return;
     }
     // --- piece + player payload ---
-    if (actingPiece.targetType === 'pieceAndPlayer') {
+    if (selectedPiece.value.targetType === 'pieceAndPlayer') {
       if (targetPiece) {
-        await actingPiece.special({
+        await selectedPiece.value.special({
           piece: targetPiece,
           player: player.value
         });
       }
       return;
     }
-    if (actingPiece.targetType === 'pieceAndPlace') {
+    if (selectedPiece.value.targetType === 'pieceAndPlace') {
       if (targetPiece) {
-        await actingPiece.special({
+        await selectedPiece.value.special({
           piece: targetPiece,
           place: target
         });
@@ -698,29 +708,37 @@
       return;
     }
     // --- space target ---
-    if (actingPiece.targetType === 'space') {
+    if (selectedPiece.value.targetType === 'space') {
       if (!targetPiece) {
-        actingPiece.special({
+        selectedPiece.value.special({
           target: target,
           pieces: activePieces.value
         });
       }
       return;
     }
+     // --- one target but effects all ---
+    if (selectedPiece.value.targetType === 'all') {
+        selectedPiece.value.special({
+          target: target,
+          pieces: activePieces.value
+        });
+      return;
+    }
     // --- group target (AOE) ---
-    if (actingPiece.targetType === 'group') {
-      // get every piece inside actingPiece.range
+    if (selectedPiece.value.targetType === 'group') {
+      // get every piece inside selectedPiece.value.range
       const inRange = activePieces.value.filter(p => 
         p.tiles.some(tile => 
-          Math.abs(tile.x - target.x) + Math.abs(tile.y - target.y) <= actingPiece.getStat('range')
+          Math.abs(tile.x - target.x) + Math.abs(tile.y - target.y) <= selectedPiece.value.getStat('range')
         )
       );
-      await actingPiece.special(inRange);
+      await selectedPiece.value.special(inRange);
       return;
     }
     // --- self target ---
-    if (actingPiece.targetType === 'self') {
-      await actingPiece.special(actingPiece);
+    if (selectedPiece.value.targetType === 'self') {
+      await selectedPiece.value.special(selectedPiece.value);
       return;
     }
   };
@@ -809,7 +827,7 @@
     }
   }
 
-  const applyStatusEffects = (team: string) => {
+  const applyStatusEffects = (team: string) => {//async for animations?
     activePieces.value.forEach(piece => {
       if(piece.team === team){
         piece.applyStatusEffects();
@@ -926,7 +944,7 @@
   @deselect="deselectPiece"
   @movePiece="movePiece"
   @damagePieceAt="damagePieceAt"
-  @specialAction="handleSpecialActionAt"
+  @specialActionAt="handleSpecialActionAt"
   />
   <Leveleditor v-else @export-level="handleExport"/>
   <button v-if="!displayEditor && !hasFinishedTurn" class="end-turn" v-on:click="endTurn()">End Turn</button>

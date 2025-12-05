@@ -7,6 +7,8 @@
 //  CLOUD WITH TORNADO, U+1F32A scrambles spawn points
 // CLOUD WITH LIGHTNING smite/wrath, U+1F329 random player damaged 1 every turn
 // SKULL, Reaper, U+1F480 damages all players 1 every turn
+// VOLCANO, U+1F30B, countdown till round immediately ends in loss
+//WATER WAVE, U+1F30A
 //YIN YANG, U+262F
 //modifiers:
 //CIRCUS TENT, U+1F3AA enemy moves +1
@@ -22,8 +24,6 @@
 
 
 //FIREWORKS, U+1F386 enemy splash damage
-
-//X-RAY, U+1FA7B
 
 //SMOKING SYMBOL, U+1F6AC
 

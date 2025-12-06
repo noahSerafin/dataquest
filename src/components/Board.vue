@@ -174,11 +174,15 @@ const highlightTargets = (piece: InstanceType<typeof Piece>) => {
 }
 const highlightSpecials = (piece: InstanceType<typeof Piece>) => {
   clearHighlights();
-  specialHighlights.value = getTilesInRange(
-    piece.headPosition,
-    piece.getStat('range'),
-    tileSet.value,
-  ); 
+  if(piece.targetType === 'self'){
+    specialHighlights.value = [piece.headPosition]
+  } else {
+    specialHighlights.value = getTilesInRange(
+      piece.headPosition,
+      piece.getStat('range'),
+      tileSet.value,
+    ); 
+  }
 }
 
 //attackHighlights.value = getTilesInRange(piece, tileSet.value, pieceMap.value);

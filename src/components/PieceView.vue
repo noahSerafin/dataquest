@@ -2,7 +2,7 @@
 import { ref, computed, onMounted } from "vue";
 import type { Coordinate, PieceBlueprint } from "../types";
 import { Piece } from "../Pieces";
-import { statusData } from "../statuses";
+import { STATUS_ICONS } from "../statuses";
 
 //construction-------------
 
@@ -111,28 +111,12 @@ const onAttack = (piece : Piece) => {
  // emit('attack', piece)
 }
 
-const statusUnicodes: Record<keyof typeof props.piece.statuses, string> = {
-  diseased: '🤮', // U+1F92E
-  slowed: '😰',   // U+1F630
-  blinded: '😵',  // U+1F635
-  burning: '🥵',  // U+1F975
-  poisoned: '🤢', // U+1F922
-  frozen: '🥶',   // U+1F976
-  charmed: '😍',  // U+1F60D
-  confused: '🤕', // U+1F915
-  hidden: '🤫',   // U+1F92B
-  negative: '🫥'  // U+1FAE5
-}
-
-const activeStatusSymbols = computed(() => {
-  const symbols: string[] = []
-  for (const [key, value] of Object.entries(props.piece.statuses)) {
-    if (value && key in statusUnicodes) {
-      symbols.push(statusUnicodes[key as keyof typeof statusUnicodes])
-    }
-  }
-  return symbols
-})
+const activeStatuses = computed((): [string, boolean][] => {
+  // Object.entries returns (string | boolean)[], so we assert/carefully filter
+  return Object.entries(props.piece.statuses)
+    .map(([k, v]) => [k, Boolean(v)] as [string, boolean]) // normalize to boolean
+    .filter(([, active]) => active);
+});
 </script>
 
 <template>
@@ -144,9 +128,16 @@ const activeStatusSymbols = computed(() => {
     @click="handleSelect"
   >
     {{ unicodeSymbol }}
-    <span class="status-icons">
-      <span v-for="(sym, i) in activeStatusSymbols" :key="i">{{ sym }}</span>
-    </span>
+    <div class="status-icons">
+      <span
+        v-for="([key, active], idx) in activeStatuses"
+        :key="key"
+        class="status-icon"
+        title="key"          
+      >
+        {{ STATUS_ICONS[key] ?? '?' }}
+      </span>
+    </div>
     <button
       v-if="showController"
       class="move-btn"

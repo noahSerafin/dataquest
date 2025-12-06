@@ -8,6 +8,7 @@ export async function takeEnemyTurn(
   removePieceCallback: (piece: Piece) => void,
   highlightMoves: (piece: Piece) => void,
   highlightTargets: (piece: Piece) => void,
+  //handleSpecialActionAt: (target: Coordinate) => Promise<void>,
   clearHighlights: () => void,
   tileSet: Set<string>,
   onReceiveDamage: (id: string) => void,
@@ -55,7 +56,6 @@ export async function takeEnemyTurn(
         pathToNearest = findShortestPath(enemy.headPosition, nearest, tileSet, activePieces) ?? []//move toward another piece
       }
       //console.log('path:' , pathToNearest);
-
 
       let nextStep = null;
       if(pathToNearest.length > 1){//if there is a path

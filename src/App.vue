@@ -827,6 +827,7 @@
       boardRef.value.highlightMoves,
       boardRef.value.highlightTargets,
       boardRef.value.clearHighlights,
+      //handleSpecialActionAt,
       tileSet,
       onReceiveDamage
     );

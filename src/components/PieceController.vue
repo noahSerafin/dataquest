@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Piece } from "../Pieces"
-import { statusData } from "../statuses";
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { STATUS_ICONS, STATUS_INFO } from "../statuses";
 
 const props = defineProps<{
   piece: InstanceType<typeof Piece>
@@ -16,9 +16,22 @@ defineEmits([
   "close"
 ])
 
+const activeStatuses = computed((): [string, boolean][] => {
+  // Object.entries returns (string | boolean)[], so we assert/carefully filter
+  return Object.entries(props.piece.statuses)
+    .map(([k, v]) => [k, Boolean(v)] as [string, boolean]) // normalize to boolean
+    .filter(([, active]) => active);
+});
+
 const openTooltip = ref<string|null>(null);
-function toggleTooltip(status: string) {
-  openTooltip.value = openTooltip.value === status ? null : status;
+function toggleTooltip(key: string) {
+  // If clicking the already-open one, close it
+  if (openTooltip.value === key) {
+    openTooltip.value = null;
+    return;
+  }
+  // Otherwise open the new one (AND close all others automatically)
+  openTooltip.value = key;
 }
 </script>
 
@@ -34,8 +47,23 @@ function toggleTooltip(status: string) {
 
     <p class="desc">{{ piece.description }}</p>
 
-    <div class="status-bar">
-      
+    <div class="controller-status-list">
+      <span
+        v-for="([key, active], idx) in activeStatuses"
+        :key="key"
+        class="status-icon"
+        title="key"  
+        @click="toggleTooltip(key)"        
+      >
+        {{ STATUS_ICONS[key] ?? '?' }}
+         <!-- Tooltip -->
+        <div
+          v-if="openTooltip === key"
+          class="tooltip-popup"
+        >
+          {{ STATUS_INFO[key] }}
+        </div>
+      </span>
     </div>
 
     <div class="stats">
@@ -161,7 +189,7 @@ p{
 }
 .status-icon {
   position: relative;
-  font-size: 26px;
+  font-size: 16px;
   cursor: pointer;
 }
 .tooltip {
@@ -176,5 +204,8 @@ p{
   font-size: 12px;
   z-index: 100;
   box-shadow: 0 2px 8px #0005;
+}
+.tooltip-popup{
+  font-size: 0.5em;
 }
 </style>

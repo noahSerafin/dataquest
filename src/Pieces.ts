@@ -17,7 +17,19 @@ export abstract class Piece {
 
   //protected ??
   statModifiers: StatModifier = {};//why is this breaking activePieces/enemypieces
-  statuses: Statuses = createDefaultStatuses();
+  statuses: Record<string, boolean> = {
+    diseased: false,
+    slowed: false,
+    blinded: false,
+    burning: false,
+    poisoned: false,
+    frozen: false,
+    charmed: false,
+    confused: false,
+    exposed: false,
+    hidden: false,
+    negative: false,
+  };
   immunities: Immunities = createDefaultImmunities();
   canAttack: boolean = true; 
   willRetaliate: boolean = false; 
@@ -570,7 +582,7 @@ class Bomb extends Piece {
   //destory self
 }
 
-class Dataworm extends Piece {
+class Dataworm extends Piece {//test
   static name = "Dataworm";
   static description = "A large program that can tunnel through adjacent programs, removing a piece of memory regardless of defence (head excluded)";
   static unicode = "U+1FAB1";//"U+1F41B";
@@ -590,12 +602,56 @@ class Dataworm extends Piece {
     if (!isAdjacent) return;
     // --- 2. Identify if target tile belongs to that piece ---
     const tileIndex = piece.tiles.findIndex(t => t.x === target.x && t.y === target.y);
-    if (tileIndex === -1) return;  // No tile there
+   if (tileIndex === -1){
+      console.log('no tile')
+      return;  // No tile there
+    }
     // Do NOT remove head tile
-    if (tileIndex === 0) return;
+    if (tileIndex === 0){
+      console.log('cant head tile')
+      return;
+    } 
     // --- 3. Remove that tile from the piece ---
     piece.tiles.splice(tileIndex, 1);
     // --- 4. Move Dataworm into that tile ---
+    this.moveTo(target);
+    this.actions --
+  }
+}
+
+class Snake extends Piece {//test
+  static name = "Snake";
+  static description = "A large program that can swallow tiles (head excluded), removing a piece of memory regardless of defence and adding to its own max size";
+  static unicode = "U+1F40D";
+  static color = "#034d22ff";
+  static rarity = 4;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+    super(Snake.name, Snake.description, Snake.unicode, 3, 1, 1, 1, 0, Snake.color, headPosition, [headPosition], team, Snake.rarity, removeCallback, id)
+    this.specialName = 'Swallow';
+    this.targetType = 'pieceAndPlace'
+  }
+
+  async special({piece, target} : {piece: Piece, target: Coordinate}):Promise<void>{
+    // --- 1. Check adjacency ---
+    const isAdjacent =
+      Math.abs(piece.headPosition.x - target.x) +
+      Math.abs(piece.headPosition.y - target.y) === 1;
+    if (!isAdjacent) return;
+    // --- 2. Identify if target tile belongs to that piece ---
+    const tileIndex = piece.tiles.findIndex(t => t.x === target.x && t.y === target.y);
+    if (tileIndex === -1){
+      console.log('no tile')
+      return;  // No tile there
+    }
+    // Do NOT remove head tile
+    if (tileIndex === 0){
+      console.log('cant head tile')
+      return;
+    } 
+    // --- 3. Remove that tile from the piece ---
+    piece.tiles.splice(tileIndex, 1);
+    this.maxSize += 1;
+    // --- 4. Move Snake into that tile ---
     this.moveTo(target);
     this.actions --
   }
@@ -904,7 +960,7 @@ class Puffer extends Piece {
   static color = "#0d8affff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Puffer.name, Puffer.description, Puffer.unicode, 4, 2, 1, 0, 0, Puffer.color, headPosition, [headPosition], team, Puffer.rarity, removeCallback, id)
+   super(Puffer.name, Puffer.description, Puffer.unicode, 4, 2, 1, 2, 0, Puffer.color, headPosition, [headPosition], team, Puffer.rarity, removeCallback, id)
    this.specialName = 'Puffup';
    this.targetType = 'self'
   }
@@ -989,7 +1045,7 @@ class Snowman extends Piece {
   static color = "#4e4e4eff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Snowman.name, Snowman.description, Snowman.unicode, 1, 1, 0, 0, 0, Snowman.color, headPosition, [headPosition], team, Snowman.rarity, removeCallback, id)
+   super(Snowman.name, Snowman.description, Snowman.unicode, 1, 1, 1, 0, 0, Snowman.color, headPosition, [headPosition], team, Snowman.rarity, removeCallback, id)
     this.specialName = 'Snowball';
     this.targetType = 'space'
     //this.canMove = false;
@@ -1904,8 +1960,7 @@ class Saw extends Piece {
   
 }
 
-export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Trench, Lance, Mole, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Copycat, Trap, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Ink, Snail, Shark, Greatshield, Wizard, Ninja, Fairy, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, Dolls, UFO, TP, Saw];
-//SNAKE, U+1F40D dealing damage increases max size 
+export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Trench, Lance, Mole, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Ink, Snail, Shark, Greatshield, Wizard, Ninja, Fairy, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, Dolls, UFO, TP, Saw];
 // CROCODILE, U+1F40A //moves 0 high damage
 
 //CAMERA WITH FLASH, U+1F4F8 blinds

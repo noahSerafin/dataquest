@@ -372,7 +372,19 @@ export class Box extends Item<Player> {
 }
 
 //WRAPPED PRESENT, U+1F381
-//grants a rare item
+export class Gift extends Item<Player> {
+    static name = "Gift Box";
+    static description = "Grants a random program (must have room)";
+    static unicode = "U+1F381";
+    static color = "#e9ab27ff";
+    constructor(){
+        super(Gift.name, Gift.description, Gift.unicode, Gift.color, 3, 3, 'player')
+    }
+    apply(target: Player) {
+           // target.programs.push(random)
+       // }
+    }
+}
 
 class Genie extends Item<Player> {
   static name = "Genie";
@@ -392,7 +404,7 @@ class Genie extends Item<Player> {
 
 export class Pinata extends Item {//untested
     static name: "Pinata";
-    static description: "Grants a random admin program";
+    static description: "Grants a random admin program (must have room)";
     static unicode: "U+1FA85";
     static color = "#e30dffff";
     constructor(){

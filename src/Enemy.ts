@@ -101,6 +101,12 @@ function attackPiece(attacker: Piece, defender: Piece) {
   if(attacker.actions > 0){
     const damage = attacker.attack;
     defender.takeDamage(damage);
+    if(defender.willRetaliate){
+      attacker.takeDamage(defender.getStat('attack'));
+      if(defender.name === 'Puffer' && !attacker.immunities.poisonImmune){
+        attacker.statuses.poisoned = true;
+      }
+    }
     attacker.actions--;
     // callback to App.vue
   }

@@ -83,7 +83,7 @@
     5,  // memory limit
     5, //admin slots
     [testVoucher], // no items yet
-    [testSword, testShield, testSling],//, testShield] // starting pieces
+    [testSword, testShield],//, testShield] // starting pieces
     [],//no admins yet
     2,
     5,
@@ -544,17 +544,17 @@
       handleApplyAdmins('onPieceDestruction', piece.id);
       //graveyard?
       if (piece.name == 'Dolls') {//hybrids need a flag other than name
-      if (piece.getStat('maxSize') > 1) {
-        const NewDoll = new Dolls(
-          piece.headPosition,
-          piece.team,
-          removePiece,
-          crypto.randomUUID()
-        );
-        NewDoll.maxSize = piece.getStat('maxSize') - 1;
-        activePieces.value.push(NewDoll);
+        if (piece.getStat('maxSize') > 1) {
+          const NewDoll = new Dolls(
+            piece.headPosition,
+            piece.team,
+            removePiece,
+            crypto.randomUUID()
+          );
+          NewDoll.maxSize = piece.getStat('maxSize') - 1;
+          activePieces.value.push(NewDoll);
+        }
       }
-    }
     }
   }
 
@@ -649,11 +649,8 @@
   }
 
   const damagePieceAt = async (coord:Coordinate) => {
-    //console.log('props pieces:', props.pieces.map(p => p.tiles))
-    //console.log('selected:', selectedPiece.value)
     if (!selectedPiece.value) return
-    if (selectedPiece.value.team !== 'player') return
-    //console.log('looking at ', coord, 'in ', props.pieces)
+    //if (selectedPiece.value.team !== 'player') return //damaging your own pieces is actually useful sometimes
     const damageReceiver = activePieces.value.find(piece =>
       piece.tiles.some(t => t.x === coord.x && t.y === coord.y)
     );
@@ -664,8 +661,28 @@
     await handleApplyAdmins('onDealDamage', selectedPiece.value.id)//attacker's id, (bug: blood tax will trigger even on no damage)
     const damage = Math.floor(baseDamage * selectedPiece.value.damageMult)//mult should be applyed inside takeDamage for special moves
     damageReceiver.takeDamage(damage);
+    if(damageReceiver.willRetaliate){
+      selectedPiece.value.takeDamage(damageReceiver.getStat('attack'));
+      if(damageReceiver.name === 'Puffer' && !selectedPiece.value.immunities.poisonImmune){
+        selectedPiece.value.statuses.poisoned = true;
+      }
+    }
     selectedPiece.value.willRetaliate = false;//pieces that have enacted defensive option
     //could trigger blood tax here using 'other'
+
+    //checkForRoundend()
+    const enemyPieces = activePieces.value.filter(p => p.team === 'enemy');
+    const playerPiecesRemaining = activePieces.value.filter(p => p.team === 'player');
+    if (enemyPieces.length === 0) {
+      console.log('round won!')
+      endRound(true);
+    }
+    // If no player pieces → round lost
+    if (playerPiecesRemaining.length === 0) {
+      console.log('round failed!')
+      endRound(false);
+    }
+    //
 
     selectedPiece.value.actions --//getstat?
     selectedPiece.value.damageMult = 1;
@@ -676,7 +693,7 @@
   const handleSpecialActionAt = async (target: Coordinate) => {
     //the enemy should also be able to use special moves, handle in enemy?
     if(!selectedPiece.value) return
-
+    boardRef.value.clearHighlights();
     // find piece at targeted coordinate
     const targetPiece = activePieces.value.find(piece =>
       piece.tiles.some(t => t.x === target.x && t.y === target.y)
@@ -686,6 +703,7 @@
       if (targetPiece) {
         await selectedPiece.value.special(targetPiece);
       }
+      selectedPiece.value = null;
       return;
     }
     // --- piece + player payload ---
@@ -696,15 +714,17 @@
           player: player.value
         });
       }
+      selectedPiece.value = null;
       return;
     }
     if (selectedPiece.value.targetType === 'pieceAndPlace') {
       if (targetPiece) {
         await selectedPiece.value.special({
           piece: targetPiece,
-          place: target
+          target: target
         });
       }
+      selectedPiece.value = null;
       return;
     }
     // --- space target ---
@@ -712,33 +732,38 @@
       if (!targetPiece) {
         selectedPiece.value.special({
           target: target,
-          pieces: activePieces.value
+          activePieces: activePieces.value
         });
       }
+      selectedPiece.value = null;
       return;
     }
      // --- one target but effects all ---
     if (selectedPiece.value.targetType === 'all') {
         selectedPiece.value.special({
           target: target,
-          pieces: activePieces.value
+          activePieces: activePieces.value
         });
+      selectedPiece.value = null;
       return;
     }
     // --- group target (AOE) ---
     if (selectedPiece.value.targetType === 'group') {
       // get every piece inside selectedPiece.value.range
+      const thisRange = selectedPiece.value.getStat('range');
       const inRange = activePieces.value.filter(p => 
         p.tiles.some(tile => 
-          Math.abs(tile.x - target.x) + Math.abs(tile.y - target.y) <= selectedPiece.value.getStat('range')
+          Math.abs(tile.x - target.x) + Math.abs(tile.y - target.y) <= thisRange
         )
       );
       await selectedPiece.value.special(inRange);
+      selectedPiece.value = null;
       return;
     }
     // --- self target ---
     if (selectedPiece.value.targetType === 'self') {
       await selectedPiece.value.special(selectedPiece.value);
+      selectedPiece.value = null;
       return;
     }
   };
@@ -792,11 +817,6 @@
     const enemyPieces = activePieces.value.filter(p => p.team === 'enemy');
     const playerPieces = activePieces.value.filter(p => p.team === 'player');
 
-    if (enemyPieces.length === 0) {
-      console.log('round won!')
-      endRound(true);
-    }
-
     const tileSet = new Set(level.value.tiles.map(t => `${t.x},${t.y}`));
 
     await takeEnemyTurn(
@@ -818,19 +838,14 @@
     });
     playerSpawns.value = newPlacementHighlights();
     hasFinishedTurn.value = false;
-
-    const playerPiecesRemaining = activePieces.value.filter(p => p.team === 'player');
-    // If no player pieces → round lost
-    if (playerPiecesRemaining.length === 0) {
-      console.log('round failed!')
-      endRound(false);
-    }
   }
 
   const applyStatusEffects = (team: string) => {//async for animations?
     activePieces.value.forEach(piece => {
+      //petri dish, spread statuses here
       if(piece.team === team){
-        piece.applyStatusEffects();
+        const mult = playerHasAdmin('Volatile') ? 2 : 1
+        piece.applyStatusEffects(mult);
       }
     });
   }
@@ -877,13 +892,17 @@
   const decreaseDifficulty = () => {
     difficulty.value -= 1;
   }
-
+/*
+<button class="swap-display" @mousedown="swapDisplay()">
+  {{ displayEditor ? "Show Board" : "Show Editor" }}
+</button>
+*/
 </script>
 
 <template>
   <div class="controls">
-    <button class="swap-display" @mousedown="swapDisplay()">
-      {{ displayEditor ? "Show Board" : "Show Editor" }}
+    <button class="swap-display" @mousedown="renewBlueprints()">
+      Renew Blueprints
     </button>
     <button class="shop-toggle" @mousedown="toggleShop()">
       Toggle Shop

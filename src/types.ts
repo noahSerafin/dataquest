@@ -108,3 +108,16 @@ export function createDefaultImmunities() {
     hideImmune: false //FACE WITH PEEKING EYE, U+1FAE3
   }
 }
+/*
+export const statusUnicodes: Record<keyof typeof props.piece.statuses, string> = {
+  diseased: '🤮', // U+1F92E
+  slowed: '😰',   // U+1F630
+  blinded: '😵',  // U+1F635
+  burning: '🥵',  // U+1F975
+  poisoned: '🤢', // U+1F922
+  frozen: '🥶',   // U+1F976
+  charmed: '😍',  // U+1F60D
+  confused: '🤕', // U+1F915
+  hidden: '🤫',   // U+1F92B
+  negative: '🫥'  // U+1FAE5
+}*/

@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { Piece } from "../Pieces"
+import { statusData } from "../statuses";
+import { ref } from "vue";
 
 const props = defineProps<{
   piece: InstanceType<typeof Piece>
@@ -13,6 +15,11 @@ defineEmits([
   "highlightSpecials",
   "close"
 ])
+
+const openTooltip = ref<string|null>(null);
+function toggleTooltip(status: string) {
+  openTooltip.value = openTooltip.value === status ? null : status;
+}
 </script>
 
 <template>
@@ -26,6 +33,10 @@ defineEmits([
     </div>
 
     <p class="desc">{{ piece.description }}</p>
+
+    <div class="status-bar">
+      
+    </div>
 
     <div class="stats">
       <p>Size: {{ piece.tiles.length }}</p>
@@ -141,5 +152,29 @@ p{
 }
 .desc{
   border-bottom: none;
+}
+
+.status-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.status-icon {
+  position: relative;
+  font-size: 26px;
+  cursor: pointer;
+}
+.tooltip {
+  position: absolute;
+  top: 32px;
+  left: 0;
+  padding: 8px;
+  background: #222;
+  color: white;
+  border-radius: 6px;
+  width: 180px;
+  font-size: 12px;
+  z-index: 100;
+  box-shadow: 0 2px 8px #0005;
 }
 </style>

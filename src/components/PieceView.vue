@@ -2,7 +2,7 @@
 import { ref, computed, onMounted } from "vue";
 import type { Coordinate, PieceBlueprint } from "../types";
 import { Piece } from "../Pieces";
-import type { Item } from "../Items";
+import { statusData } from "../statuses";
 
 //construction-------------
 
@@ -111,6 +111,28 @@ const onAttack = (piece : Piece) => {
  // emit('attack', piece)
 }
 
+const statusUnicodes: Record<keyof typeof props.piece.statuses, string> = {
+  diseased: '🤮', // U+1F92E
+  slowed: '😰',   // U+1F630
+  blinded: '😵',  // U+1F635
+  burning: '🥵',  // U+1F975
+  poisoned: '🤢', // U+1F922
+  frozen: '🥶',   // U+1F976
+  charmed: '😍',  // U+1F60D
+  confused: '🤕', // U+1F915
+  hidden: '🤫',   // U+1F92B
+  negative: '🫥'  // U+1FAE5
+}
+
+const activeStatusSymbols = computed(() => {
+  const symbols: string[] = []
+  for (const [key, value] of Object.entries(props.piece.statuses)) {
+    if (value && key in statusUnicodes) {
+      symbols.push(statusUnicodes[key as keyof typeof statusUnicodes])
+    }
+  }
+  return symbols
+})
 </script>
 
 <template>
@@ -122,6 +144,9 @@ const onAttack = (piece : Piece) => {
     @click="handleSelect"
   >
     {{ unicodeSymbol }}
+    <span class="status-icons">
+      <span v-for="(sym, i) in activeStatusSymbols" :key="i">{{ sym }}</span>
+    </span>
     <button
       v-if="showController"
       class="move-btn"
@@ -200,5 +225,15 @@ const onAttack = (piece : Piece) => {
 }
 .move-btn:hover {
   background: rgba(0, 0, 0, 0.7);
+}
+.status-icons {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  gap: 2px;
+  font-size: 0.3em;
+  height: 0.3em;
+  margin-left: 0.2rem;
+  top: -40%;
 }
 </style>

@@ -5,10 +5,10 @@ ITEMS 3
 cleanup targets: allow player as accepted target? 9
 
 statuses 3
-visually show statuses with emoji 3
+visually show statuses with emoji 3 -done
 
 PIECES 4
-active special functions 4
+active special functions 4 - done except line and trap pieces
 visually show takeDamage with short lived red colour and shake animation, bonus: particles 4
 passive special functions //on walk over, retaliate, buff nearby
 keep track of upgrades and display on piece
@@ -26,6 +26,10 @@ AI 6 nearly-done
 functions:
     pathfinding a -> b in a grid - needsreviewing, don't search for new path inside one pieces while loop
     moveTowards player - incomplete
+
+    ignore hidden pieces when attacking/specials
+    ignore negative pieces when moving
+    maybe ignore statuses if already has a status??? or dont consume an action??
 
 SHOP
 - two piece/item slots

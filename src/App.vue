@@ -640,18 +640,24 @@
     boardRef.value.clearHighlights();
   }
 
-  const movePiece = (coord : Coordinate) => {
+  const movePiece = async (coord : Coordinate) => {
     if(!selectedPiece.value || !player.value.canMove) return;
-    if (selectedPiece.value.team !== 'player') return;
+    //if (selectedPiece.value.team !== 'player') return; //charmed pieces can still move
       boardRef.value.clearHighlights();
       selectedPiece.value?.moveTo(coord);
+      //checkForTrap
+      const trap = activePieces.value.find(p =>
+        p.targetType == 'trapPiece' && p.tiles.some(t => t.x === coord.x && t.y === coord.y)
+      );
+      if (trap) {
+        await trap.special(selectedPiece.value);
+      }
     if(selectedPiece.value.movesRemaining > 0){
       boardRef.value.highlightMoves(selectedPiece.value);
     }else {
       boardRef.value.clearHighlights();
     }
     playerSpawns.value = newPlacementHighlights();
-    //console.log('tiles: ', selectedPiece.value.tiles);
   }
 
   const damagePieceAt = async (coord:Coordinate) => {
@@ -763,6 +769,43 @@
         )
       );
       await selectedPiece.value.special(inRange);
+      selectedPiece.value = null;
+      return;
+    }
+    if (selectedPiece.value.targetType === 'line') {
+      const actor = selectedPiece.value;
+      const ax = actor.headPosition.x;
+      const ay = actor.headPosition.y;
+      const tx = target.x;
+      const ty = target.y;
+      if (ax !== tx && ay !== ty) {
+        // optional: warn player
+        selectedPiece.value = null;
+        return;
+      }
+      const dx = Math.sign(tx - ax);
+      const dy = Math.sign(ty - ay);
+      const tilesInLine: Coordinate[] = [];
+      const affectedPieces: Piece[] = [];
+      // Step along the line *from actor towards target*
+      let x = ax + dx;
+      let y = ay + dy;
+      while (x !== tx || y !== ty) {
+        tilesInLine.push({x, y})
+        const pieceOnTile = activePieces.value.find(p =>
+          p.tiles.some(t => t.x === x && t.y === y)
+        );
+        if (pieceOnTile) {
+          affectedPieces.push(pieceOnTile);
+          //break; would add line of sight(stop at first block)
+        }
+        x += dx;
+        y += dy;
+      }
+      await actor.special({
+        line: tilesInLine,
+        activePieces: affectedPieces
+      });
       selectedPiece.value = null;
       return;
     }

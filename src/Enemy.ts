@@ -70,6 +70,13 @@ export async function takeEnemyTurn(
         highlightMoves(enemy);
         await sleep(300);
         enemy.moveTo(nextStep);
+        //checkForTrap
+        const trap = activePieces.find(p =>
+          p.targetType == 'trapPiece' && p.tiles.some(t => t.x === nextStep.x && t.y === nextStep.y)
+        );
+        if (trap) {
+          await trap.special(enemy);
+        }
         await sleep(delay);
         clearHighlights();
       } else {
@@ -198,8 +205,10 @@ function findShortestPath(
 
   const occupiedTiles = new Set<string>();
   for (const p of activePieces) {
-    for (const t of p.tiles) {
-      occupiedTiles.add(`${t.x},${t.y}`);
+    if(!p.statuses.negative){
+      for (const t of p.tiles) {
+        occupiedTiles.add(`${t.x},${t.y}`);
+      }
     }
   }
 

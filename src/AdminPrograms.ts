@@ -357,7 +357,7 @@ class PetriDish extends Admin {//unfinished status
 
 class Volatile extends Admin {//unfinished status
   static name = "Volatile";
-  static description = "Status effects are doubled";//sell for buying price?
+  static description = "Status effects are doubled, does not stack";//sell for buying price?
   static unicode = "U+1F9EA";
   static color = "#00ff22c7";
   constructor() {

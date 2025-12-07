@@ -35,7 +35,7 @@ export abstract class Piece {
   willRetaliate: boolean = false; 
 
   specialName?: string;
-  targetType: 'piece' | 'pieceAndPlayer' | 'space' | 'pieceAndPlace' | 'group' | 'self' | 'all' | 'trapPiece' = 'piece';
+  targetType: 'piece' | 'pieceAndPlayer' | 'space' | 'pieceAndPlace' | 'group' | 'line' | 'self' | 'all' | 'trapPiece' = 'piece';
 
   id: string
   static name : string
@@ -438,25 +438,39 @@ class Mole extends Piece {//unfinished - test
   }
 }
 
-class Lance extends Piece {//unfinished line
-  static name = "Lance";
-  static description = "Can charge, attacking multiple targets in one move";
+class Lance extends Piece {
+  static description = "Can charge, attacking targets in a staight line and moving forward until stopped";
   static unicode = "U+1F3A0";
   static color = "#f9f9f9";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
   super(Lance.name, Lance.description, Lance.unicode, 3, 3, 3, 2, 0, Lance.color, headPosition, [headPosition], team, Lance.rarity, removeCallback, id)//horse carousel atm //cane: "U+1F9AF"
     this.specialName = 'Charge';
-    this.targetType = 'pieceAndPlace'
+    this.targetType = 'line'
   }
 
-  // Lance-specific ability example line
-  async special({piece, target} : {piece: Piece, target: Coordinate}):Promise<void>{
-    piece.takeDamage(this.getStat('attack'));
-    this.moveTo(target)//should really only move if that space becomes free, we also need to move to every space in between
+  async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
+    for (const tile of line) {
+      const occupier = activePieces.find(p =>
+        p.tiles.some(t => t.x === tile.x && t.y === tile.y)
+      );
+      if(!occupier) {
+        this.moveTo(tile);
+        continue;
+      }
+      occupier.takeDamage(this.getStat('attack'));
+      const stillOccupied = activePieces.find(p =>
+        p.tiles.some(t => t.x === tile.x && t.y === tile.y)
+      );
+      if (!stillOccupied) {
+        // The enemy died → Lance can move into the tile
+        this.moveTo(tile);
+        continue;
+      }
+      break;
+    }
     this.actions--
   }
-
 }
 
 class Trojan extends Piece {
@@ -490,15 +504,23 @@ class Trojan extends Piece {
 
 class Cannon extends Piece {
   static name = "Cannon";
-  static description = "a slow ranged program that can damage multiple targets in a straight line (unfinished)";
-  static unicode = "U+1FA65";//TODO change this
+  static description = "a slow ranged program that can damage multiple targets in a straight line";
+  static unicode = "U+1F3B1";//TODO change this
   static color = "#bb3030ff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Cannon.name, Cannon.description, Cannon.unicode, 1, 1, 6, 3, 0, Cannon.color, headPosition, [headPosition], team, Cannon.rarity, removeCallback, id) //water pistol
+    this.specialName = 'Charge';
+    this.targetType = 'line'
   }
 
-  //target multiple line
+  async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
+    for (const target of activePieces) {
+      target.takeDamage(this.getStat('attack'));
+    }
+    this.actions--
+  }
+
 }
 
 class Nerf extends Piece {
@@ -532,6 +554,7 @@ class Tank extends Piece {
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Tank.name, Tank.description, Tank.unicode, 1, 2, 6, 3, 2, Tank.color, headPosition, [headPosition], team, Tank.rarity, removeCallback, id)//curling stone //cog "U+2699 U+FE0F",
   }
+  //line?
 }
 
 class Dynamite extends Piece {
@@ -1294,13 +1317,39 @@ class Shark extends Piece {
 
 class Greatshield extends Piece {
   static name = "Greatshield";
-  static description = "A slow but highly defensive program";
+  static description = "A slow but highly defensive program, can charge to deal damage and move";
   static unicode = "U+26C9";
   static color = "rgba(0, 82, 85, 1)";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Greatshield.name, Greatshield.description, Greatshield.unicode, 5, 1, 1, 1, 4, Greatshield.color, headPosition, [headPosition], team, Greatshield.rarity, removeCallback, id)
+    super(Greatshield.name, Greatshield.description, Greatshield.unicode, 5, 1, 1, 1, 4, Greatshield.color, headPosition, [headPosition], team, Greatshield.rarity, removeCallback, id)
+    this.specialName = 'Charge';
+    this.targetType = 'line'
   }
+
+  async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
+    for (const tile of line) {
+      const occupier = activePieces.find(p =>
+        p.tiles.some(t => t.x === tile.x && t.y === tile.y)
+      );
+      if(!occupier) {
+        this.moveTo(tile);
+        continue;
+      }
+      occupier.takeDamage(this.getStat('attack'));
+      const stillOccupied = activePieces.find(p =>
+        p.tiles.some(t => t.x === tile.x && t.y === tile.y)
+      );
+      if (!stillOccupied) {
+        // The enemy died → Lance can move into the tile
+        this.moveTo(tile);
+        continue;
+      }
+      break;
+    }
+    this.actions--
+  }
+
 }
 
 class Wizard extends Piece {

@@ -158,6 +158,38 @@ function getTilesInRange(
   return tiles;
 }
 
+function getTilesInStraightLine(
+  center: Coordinate,
+  range: number,
+  tileSet: Set<string>
+): Coordinate[] {
+  const tiles: Coordinate[] = [];
+  const { x, y } = center;
+
+  // Four cardinal directions
+  const directions = [
+    { dx: 1, dy: 0 },   // right
+    { dx: -1, dy: 0 },  // left
+    { dx: 0, dy: 1 },   // down
+    { dx: 0, dy: -1 },  // up
+  ];
+
+  for (const { dx, dy } of directions) {
+    for (let step = 1; step <= range; step++) {
+      const tx = x + dx * step;
+      const ty = y + dy * step;
+      const key = `${tx},${ty}`;
+
+      // Stop if tile isn’t on the board
+      if (!tileSet.has(key)) break;
+
+      tiles.push({ x: tx, y: ty });
+    }
+  }
+
+  return tiles;
+}
+
 function checkTileIsOccupied(coord:Coordinate): Piece | undefined{
   return pieceMap.value.get(`${coord.x},${coord.y}`);
 }
@@ -174,7 +206,13 @@ const highlightTargets = (piece: InstanceType<typeof Piece>) => {
 }
 const highlightSpecials = (piece: InstanceType<typeof Piece>) => {
   clearHighlights();
-  if(piece.targetType === 'self'){
+  if(piece.targetType === 'line'){
+    specialHighlights.value = getTilesInStraightLine(
+      piece.headPosition,
+      piece.getStat('range'),
+      tileSet.value,
+    )
+  } else if(piece.targetType === 'self'){
     specialHighlights.value = [piece.headPosition]
   } else {
     specialHighlights.value = getTilesInRange(

@@ -1,7 +1,7 @@
 priority - serach numbers descending
 
 ITEMS 3
-- implement item functions - done except statuses
+- implement item functions - done except round restarters
 cleanup targets: allow player as accepted target? 9
 
 PIECES 4

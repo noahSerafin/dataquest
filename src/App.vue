@@ -254,7 +254,7 @@
     return weighted[idx];
   }
 
-  function pickWeightedRandomItem(itemClasses: any[]) {//clover edit
+  function pickWeightedRandomItem(itemClasses: any[]) {//move to items.ts?
     const weighted: any[] = [];
 
     //non stacking
@@ -567,8 +567,14 @@
     if (!PieceClass) return
 
     const instance = new PieceClass(coord, 'player', removePiece, bp.id);   // now real placement!
-    //pass admin modifiers to the piece
+    //add stats from blueprint
+    instance.maxSize = bp.maxSize
+    instance.moves = bp.moves
+    instance.range = bp.range
+    instance.attack = bp.attack
+    instance.defence = bp.defence
 
+    //pass admin modifiers to the piece
     activePieces.value.push(instance)
 
     // Mark blueprint as placed so it greys in inventory
@@ -894,14 +900,14 @@
     difficulty.value -= 1;
   }
 /*
-<button class="swap-display" @mousedown="swapDisplay()">
-  {{ displayEditor ? "Show Board" : "Show Editor" }}
-</button>
 */
 </script>
 
 <template>
   <div class="controls">
+  <button class="swap-display" @mousedown="swapDisplay()">
+    {{ displayEditor ? "Show Board" : "Show Editor" }}
+  </button>
     <button class="swap-display" @mousedown="renewBlueprints()">
       Renew Blueprints
     </button>

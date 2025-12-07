@@ -830,7 +830,7 @@ class Watchman extends Piece {
     this.specialName = 'Spot'
   }
   async special(target: Piece): Promise<void> {
-    target.immunities.hideImmune = true
+    target.statuses.exposed = true
     if(target.getStat('defence') > 0){
       target.defence -= 1
     } else {
@@ -1333,7 +1333,7 @@ class Ninja extends Piece {
     this.targetType='self'
   }
   async special(target: Piece):Promise<void>{
-    if(!this.immunities.hideImmune){
+    if(!this.statuses.exposed){
       this.statuses.hidden = true;
     }
     this.actions--
@@ -1476,12 +1476,19 @@ class Golem extends Piece {
 
 class Gman extends Piece {
   static name = "G-man";
-  static description = "A boss level program";
+  static description = "A boss level program that can freeze enemies and reduce their actions to 0";
   static unicode = "U+1F574";
   static color = "#000000ff";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Gman.name, Gman.description, Gman.unicode, 8, 4, 3, 4, 0, Gman.color, headPosition, [headPosition], team, Gman.rarity, removeCallback, id)
+   this.targetType = 'piece'
+   this.specialName = 'Stun'
+  }
+  async special(targetPiece: Piece):Promise<void>{
+    targetPiece.statuses.frozen = true;
+    targetPiece.actions = 0;
+    this.actions--
   }
 }
 
@@ -1542,7 +1549,7 @@ class Ghost extends Piece {
     this.targetType='self'
   }
   async special(target: Piece):Promise<void>{
-    if(!this.immunities.hideImmune){
+    if(!this.statuses.exposed){
       this.statuses.hidden = true;
     }
     this.actions--

@@ -22,6 +22,7 @@
 //CUSTOMS, U+1F6C3 player movement -1
 //SHINTO SHRINE, U+26E9 player attack down -1
 
+//// IZAKAYA LANTERN, U+1F3EE confsued
 
 //FIREWORKS, U+1F386 enemy splash damage
 

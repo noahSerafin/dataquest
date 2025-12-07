@@ -89,8 +89,6 @@ export type Immunities = {
   blindImmune: boolean
   charmImmune: boolean
   confuseImmune: boolean
-  //positive immunity (bad)
-  hideImmune: boolean
 }
 
 export function createDefaultImmunities() {
@@ -104,8 +102,6 @@ export function createDefaultImmunities() {
     blindImmune: false,
     charmImmune: false,
     confuseImmune: false,
-    //positive immunity (bad)
-    hideImmune: false //FACE WITH PEEKING EYE, U+1FAE3
   }
 }
 /*

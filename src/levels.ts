@@ -3575,4 +3575,263 @@ export const league = {
   ]
 }
 
-export const testLevels = [castled, siege, siege2, river, cave, forest, arena, alley, ringed, gauntlet, league];
+export const penopticon = {
+  "tiles": [
+    {
+      "x": 2,
+      "y": 1
+    },
+    {
+      "x": 3,
+      "y": 1
+    },
+    {
+      "x": 4,
+      "y": 1
+    },
+    {
+      "x": 5,
+      "y": 1
+    },
+    {
+      "x": 6,
+      "y": 1
+    },
+    {
+      "x": 2,
+      "y": 2
+    },
+    {
+      "x": 3,
+      "y": 2
+    },
+    {
+      "x": 4,
+      "y": 2
+    },
+    {
+      "x": 5,
+      "y": 2
+    },
+    {
+      "x": 6,
+      "y": 2
+    },
+    {
+      "x": 7,
+      "y": 2
+    },
+    {
+      "x": 1,
+      "y": 3
+    },
+    {
+      "x": 2,
+      "y": 3
+    },
+    {
+      "x": 4,
+      "y": 3
+    },
+    {
+      "x": 6,
+      "y": 3
+    },
+    {
+      "x": 7,
+      "y": 3
+    },
+    {
+      "x": 1,
+      "y": 4
+    },
+    {
+      "x": 2,
+      "y": 4
+    },
+    {
+      "x": 4,
+      "y": 4
+    },
+    {
+      "x": 6,
+      "y": 4
+    },
+    {
+      "x": 7,
+      "y": 4
+    },
+    {
+      "x": 1,
+      "y": 5
+    },
+    {
+      "x": 6,
+      "y": 5
+    },
+    {
+      "x": 7,
+      "y": 5
+    },
+    {
+      "x": 1,
+      "y": 6
+    },
+    {
+      "x": 2,
+      "y": 6
+    },
+    {
+      "x": 3,
+      "y": 6
+    },
+    {
+      "x": 4,
+      "y": 6
+    },
+    {
+      "x": 5,
+      "y": 6
+    },
+    {
+      "x": 6,
+      "y": 6
+    },
+    {
+      "x": 7,
+      "y": 6
+    },
+    {
+      "x": 1,
+      "y": 7
+    },
+    {
+      "x": 2,
+      "y": 7
+    },
+    {
+      "x": 3,
+      "y": 7
+    },
+    {
+      "x": 4,
+      "y": 7
+    },
+    {
+      "x": 5,
+      "y": 7
+    },
+    {
+      "x": 6,
+      "y": 7
+    },
+    {
+      "x": 7,
+      "y": 7
+    },
+    {
+      "x": 4,
+      "y": 8
+    },
+    {
+      "x": 5,
+      "y": 8
+    },
+    {
+      "x": 3,
+      "y": 8
+    },
+    {
+      "x": 1,
+      "y": 2
+    },
+    {
+      "x": 2,
+      "y": 5
+    }
+  ],
+  "pieces": [
+    {
+      "id": "ba8e2f06-2f50-4d41-8755-2c11f99fc0f7",
+      "name": "Watchman",
+      "team": "enemy",
+      "headPosition": {
+        "x": 4,
+        "y": 4
+      },
+      "tiles": [
+        {
+          "x": 4,
+          "y": 4
+        }
+      ],
+      "rarity": 2
+    },
+    {
+      "id": "5ea58ce2-1f45-4b43-8a88-7b3cd19fd852",
+      "name": "Shield",
+      "team": "enemy",
+      "headPosition": {
+        "x": 4,
+        "y": 3
+      },
+      "tiles": [
+        {
+          "x": 4,
+          "y": 3
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "799b9e6f-eca0-490b-a853-0a513c60bf2c",
+      "name": "Spawn",
+      "team": "enemy",
+      "headPosition": {
+        "x": 6,
+        "y": 4
+      },
+      "tiles": [
+        {
+          "x": 6,
+          "y": 4
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "67e32eb3-07e0-4fea-ae93-0e92587ef066",
+      "name": "Spawn",
+      "team": "enemy",
+      "headPosition": {
+        "x": 2,
+        "y": 4
+      },
+      "tiles": [
+        {
+          "x": 2,
+          "y": 4
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "a484e65c-16af-409e-bf82-c7c5c6d6ce79",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 4,
+        "y": 8
+      },
+      "tiles": [
+        {
+          "x": 4,
+          "y": 8
+        }
+      ],
+      "rarity": 1
+    }
+  ]
+}
+
+export const testLevels = [castled, siege, siege2, river, cave, forest, arena, alley, ringed, gauntlet, league, penopticon];

@@ -61,7 +61,7 @@ function toggleTooltip(key: string) {
           v-if="openTooltip === key"
           class="tooltip-popup"
         >
-          {{ STATUS_INFO[key] }}
+          <strong>{{ key }}:</strong>{{ STATUS_INFO[key] }}
         </div>
       </span>
     </div>
@@ -84,14 +84,14 @@ function toggleTooltip(key: string) {
         Move
       </button>
       <button
-        :disabled="!canAction"
-        v-if="piece.team === 'player' && piece.actions > 0"
+        :disabled="!canAction && piece.actions > 0"
+        v-if="piece.team === 'player'  && piece.canAttack"
         @click="$emit('highlightTargets', piece)">
         Attack
       </button>
       <button
         v-if="piece.specialName && piece.team === 'player'"
-        :disabled="!canAction"
+        :disabled="!canAction && piece.actions > 0"
         @click="$emit('highlightSpecials', piece)">
         {{ piece.specialName }}
       </button>
@@ -189,7 +189,7 @@ p{
 }
 .status-icon {
   position: relative;
-  font-size: 16px;
+  font-size: 24px;
   cursor: pointer;
 }
 .tooltip {
@@ -201,7 +201,7 @@ p{
   color: white;
   border-radius: 6px;
   width: 180px;
-  font-size: 12px;
+  font-size: 24px;
   z-index: 100;
   box-shadow: 0 2px 8px #0005;
 }

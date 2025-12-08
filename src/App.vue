@@ -18,6 +18,7 @@
   import { takeEnemyTurn } from "./Enemy";
   import WorldMap from "./components/WorldMap.vue";
   import Shop from "./components/Shop.vue";
+  import BossView from "./BossView.vue";
   import { DIFFICULTY_RARITY } from "./constants";
 
   //import { Map } from "./components/Map.vue";
@@ -357,10 +358,27 @@
   //pieceMap to track occupied spaces
   const activePieces = ref<InstanceType<typeof Piece>[]>([]);
   //Record: key ID, Modifier for piece with that ID
-    //stats should be applied to activePieces after select level
+  //stats should be applied to activePieces after select level
+  const bossAdmins = ref<Admin[]>([]);
+  function addBossAdmin(admin: Admin){
+    bossAdmins.value.push(admin)
+  }
 
   async function handleApplyAdmins(trigger: AdminTrigger, id:string){//admin and target
-    //admin type, switch case by target type?
+    for (const admin of bossAdmins.value) {
+      if(trigger === admin.triggerType){
+        // sort through target types, decide what to pass
+        if(admin.targetType === 'gameState'){
+          await admin.apply({id, activePieces: activePieces.value})
+        }
+        if(admin.targetType === 'playerAndGame'){
+          await admin.apply({id, activePieces: activePieces.value, player: player.value})
+        }
+        if(admin.targetType === 'player'){
+          await admin.apply({player: player.value})
+        }
+      }
+    };
     const playerAdmins = player.value.admins;
     for (const admin of playerAdmins) {
       if(trigger === admin.triggerType){
@@ -404,7 +422,7 @@
     });
   }
 
-  const selectLevel = (newLevel: Level) => {//load level, start round
+  const selectLevel = (newLevel: Level, difficultyMod: number) => {//load level, start round
     hasFinishedTurn.value = false;
     player.value.canPlace = true;
     player.value.canMove = true;
@@ -413,7 +431,7 @@
     activePieces.value = [];
     level.value = newLevel;
     const newPieces = rehydratePieces(newLevel.pieces);
-    activePieces.value = processSpawnPoints(newPieces);
+    activePieces.value = processSpawnPoints(newPieces , difficultyMod);
     boardRef.value.clearHighlights();
     handleApplyAdmins('onRoundStart', '');
     toggleMap();
@@ -421,6 +439,7 @@
 
   //game loop
   const toggleShop = () => {
+    refreshShop(true);
     showShop.value = !showShop.value;
   }
   //linear: round -> shop -> map
@@ -461,7 +480,7 @@
     return uniqueHighlights;
   };
 
-  function processSpawnPoints(pieces: Piece[]) {
+  function processSpawnPoints(pieces: Piece[], mod: number) {
     const processed: Piece[] = [];
     playerSpawns.value = []
 
@@ -471,7 +490,7 @@
         // Enemy spawn → replace with random enemy piece
         if (piece.team === 'enemy') {
           //difficulty from constants ramp
-          const { min, max } = DIFFICULTY_RARITY[difficulty.value];
+          const { min, max } = DIFFICULTY_RARITY[difficulty.value + mod];
           const validEnemies = allPieces.filter(p =>
             p.rarity >= min && p.rarity <= max
           );
@@ -514,7 +533,7 @@
   
   onMounted(() => {
     const initPieces = rehydratePieces(level.value.pieces);
-    activePieces.value = processSpawnPoints(initPieces); // sets placementHighlights internally
+    activePieces.value = processSpawnPoints(initPieces, 0); // sets placementHighlights internally
     refreshShop(true)//handle in round, or don't for crystal ball
   });
 
@@ -692,6 +711,7 @@
     await handleApplyAdmins('onDealDamage', selectedPiece.value.id)//attacker's id, (bug: blood tax will trigger even on no damage)
     const damage = Math.floor(baseDamage * selectedPiece.value.damageMult)//mult should be applyed inside takeDamage for special moves
     damageReceiver.takeDamage(damage);
+    selectedPiece.value.damageMult = 1;
     if(damageReceiver.willRetaliate){
       selectedPiece.value.takeDamage(damageReceiver.getStat('attack'));
       if(damageReceiver.name === 'Puffer' && !selectedPiece.value.immunities.poisonImmune){
@@ -720,8 +740,9 @@
     if (selectedPiece.value.targetType === 'piece') {
       if (targetPiece) {
         await selectedPiece.value.special(targetPiece);
+        playerSpawns.value = newPlacementHighlights();
+        selectedPiece.value = null;
       }
-      selectedPiece.value = null;
       return;
     }
     // --- piece + player payload ---
@@ -731,8 +752,9 @@
           piece: targetPiece,
           player: player.value
         });
+        playerSpawns.value = newPlacementHighlights();
+        selectedPiece.value = null;
       }
-      selectedPiece.value = null;
       return;
     }
     if (selectedPiece.value.targetType === 'pieceAndPlace') {
@@ -741,28 +763,29 @@
           piece: targetPiece,
           target: target
         });
+        playerSpawns.value = newPlacementHighlights();
+        selectedPiece.value = null;
       }
-      selectedPiece.value = null;
       return;
     }
     // --- space target ---
     if (selectedPiece.value.targetType === 'space') {
-      //if (!targetPiece) {
-        selectedPiece.value.special({
-          target: target,
-          activePieces: activePieces.value
-        });
-      //}
+      await  selectedPiece.value.special({
+        target: target,
+        activePieces: activePieces.value
+      });
+      playerSpawns.value = newPlacementHighlights();
       selectedPiece.value = null;
       return;
     }
      // --- one target but effects all ---
     if (selectedPiece.value.targetType === 'all') {
-        selectedPiece.value.special({
-          target: target,
-          activePieces: activePieces.value
-        });
+      await selectedPiece.value.special({
+        target: target,
+        activePieces: activePieces.value
+      });
       selectedPiece.value = null;
+      playerSpawns.value = newPlacementHighlights();
       return;
     }
     // --- group target (AOE) ---
@@ -775,6 +798,7 @@
         )
       );
       await selectedPiece.value.special(inRange);
+      playerSpawns.value = newPlacementHighlights();
       selectedPiece.value = null;
       return;
     }
@@ -805,12 +829,14 @@
         line: tilesInLine,
         activePieces: activePieces.value
       });
+      playerSpawns.value = newPlacementHighlights();
       selectedPiece.value = null;
       return;
     }
     // --- self target ---
     if (selectedPiece.value.targetType === 'self') {
       await selectedPiece.value.special(selectedPiece.value);
+      playerSpawns.value = newPlacementHighlights();
       selectedPiece.value = null;
       return;
     }
@@ -924,7 +950,7 @@
     level.value.pieces = levelData.pieces;
     // Hydrate pieces once
     const initPieces = rehydratePieces(level.value.pieces);
-    activePieces.value = processSpawnPoints(initPieces);
+    activePieces.value = processSpawnPoints(initPieces, 0);
 
     displayEditor.value = false; // swap to board view
   };
@@ -940,6 +966,7 @@
 
   const increaseDifficulty = () => {
     difficulty.value += 1;
+    bossAdmins.value = [];
   }
   const decreaseDifficulty = () => {
     difficulty.value -= 1;
@@ -981,14 +1008,15 @@
     />
   </div>
   <div v-if="!hasFinishedTurn && !isPlacing">Your turn</div>
-
-  <PlayerView v-if="!displayEditor" :player="player" @highlightPlacements="highlightPlacements" @sellBlueprint="sellBlueprint" @sellItem="sellItem" @applyItem="handleApplyItem" @sellAdmin="sellAdmin" @reorderAdmins="player.admins = $event"/>
+  <BossView :admins="bossAdmins"/>
   <WorldMap
     :allLevels="testLevels"
     :difficulty="difficulty"
     :cssclass="mapClass"
     @select-level="selectLevel"
     @openShop="toggleShop"
+    @addBoss="addBossAdmin"
+    @increaseDifficulty="increaseDifficulty"
   />
   <Shop
     :cssclass="shopClass"
@@ -1019,8 +1047,9 @@
   @movePiece="movePiece"
   @damagePieceAt="damagePieceAt"
   @specialActionAt="handleSpecialActionAt"
-  />
+  />  
   <Leveleditor v-else @export-level="handleExport"/>
+  <PlayerView v-if="!displayEditor" :player="player" @highlightPlacements="highlightPlacements" @sellBlueprint="sellBlueprint" @sellItem="sellItem" @applyItem="handleApplyItem" @sellAdmin="sellAdmin" @reorderAdmins="player.admins = $event"/>
   <button v-if="!displayEditor && !hasFinishedTurn" class="end-turn" v-on:click="endTurn()">End Turn</button>
 </template>
 

@@ -14,7 +14,7 @@ export abstract class Item<TTarget = any> {
   color : string
   cost: number
   rarity: number
-  targetType: 'blueprint' | 'piece' | 'shopItem' | 'player' | 'gameState'  | 'playerAndGame' // ← new
+  targetType: 'blueprint' | 'piece' | 'shopItem' | 'player' | 'gameState'  | 'playerAndGame' | 'all'
 
   constructor(
     name : string, 
@@ -23,7 +23,7 @@ export abstract class Item<TTarget = any> {
     color : string,
     cost: number,
     rarity: number,
-    targetType: 'blueprint' | 'piece' | 'shopItem' | 'player' | 'gameState'  | 'playerAndGame'
+    targetType: 'blueprint' | 'piece' | 'shopItem' | 'player' | 'gameState'  | 'playerAndGame' | 'all'
   ) {
     this.id = crypto.randomUUID()
     this.name = name

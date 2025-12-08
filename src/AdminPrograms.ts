@@ -26,7 +26,7 @@ export abstract class Admin<
     color: string,
     cost: number,
     rarity: number,
-    targetType: "blueprint" | "piece" | "shopItem" | "player" | "gameState"  | 'playerAndGame',
+    targetType: "blueprint" | "piece" | "shopItem" | "player" | "gameState"  | 'playerAndGame' | 'all',
     triggerType: TTrigger
   ) {
     super(name, description, unicode, color, cost, rarity, targetType);
@@ -426,36 +426,32 @@ class Needle extends Admin {//try it out test
 
 class Rune extends Admin {
   static name = "Rune";//
-  static description = "Programs with a range of 1 on attacking deal x2 damage";
+  static description = "Programs with a range of 1 on attacking get +1 damage multiplyer";
   static unicode = "U+16B1";
   static color = "#640909ff";
   constructor() {
     super(Rune.name, Rune.description, Rune.unicode, Rune.color, 5, 3, 'gameState', 'onDealDamage')
   }
   //onDamage
-  async apply({ activePieces }: { activePieces: Piece[] }) {
-    for (const p of activePieces){
-      if(p.team==='player' && p.getStat('range') === 1){
-        p.damageMult += 1 //include mods??? add a mult to takeDamage function
-      }
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    if(activePieces[idx].getStat('range') === 1){
+      activePieces[idx].damageMult += 1;
     }
   }
 }
 
 class Joker extends Admin {
   static name = "Joker";
-  static description = "Damage dealt is x1.5 on attacking";
+  static description = "+0.5 damage multiplyer on attacking";
   static unicode = "U+1F0CF";
   static color = "#ff5555";
   constructor() {
-    super(Joker.name, Joker.description, Joker.unicode, Joker.color, 7, 2, 'player', 'onDealDamage')
+    super(Joker.name, Joker.description, Joker.unicode, Joker.color, 7, 2, 'piece', 'onDealDamage')
   }
-  async apply({ activePieces }: { activePieces: Piece[] }) {
-    for (const p of activePieces){
-      if(p.team==='player' && p.getStat('range') === 1){
-        p.damageMult += 0.5
-      }
-    }
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    activePieces[idx].damageMult += 0.5;
   }
 }
 
@@ -644,7 +640,7 @@ class Communism extends Admin {
 }
 
 class Palette extends Admin {
-  static name = "Pallete";
+  static name = "Palette";
   static description = "Place twice at the start of a round";
   static unicode = "U+1F3A8";
   static color = "#ff55f6ff";
@@ -975,7 +971,7 @@ class Microscope extends Admin {
 
 class Lotus extends Admin {//boss? remove money?
   static name = "Lotus";
-  static description = "Rare admin pieces give + 0.5 damage mult on attacking";
+  static description = "Each rare admin gives + 0.5 damage mult on attacking";
   static unicode = "U+1FAB7";
   static color = "#ff5555";
   constructor() {
@@ -986,7 +982,7 @@ class Lotus extends Admin {//boss? remove money?
     const idx = activePieces.findIndex(p => p.id === id);
     for (const a of player.admins){
       if(a.rarity === 3){
-        activePieces[idx].damageMult += 1.5
+        activePieces[idx].damageMult += 0.5
       }
     }
   }
@@ -1071,13 +1067,13 @@ class Prayer extends Admin {
   }
 
 }
-class Helmet extends Admin {
-  static name = "Helmet";
+class Scarf extends Admin {
+  static name = "Scarf";
   static description = "Programs get +1 defence on load";
-  static unicode = "U+26D1";
+  static unicode = "U+1F9E3";
   static color = "#df9d22ff";
   constructor() {
-    super(Helmet.name, Helmet.description, Helmet.unicode, Helmet.color, 5, 3, 'gameState', 'onPlacement')
+    super(Scarf.name, Scarf.description, Scarf.unicode, Scarf.color, 5, 3, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
@@ -1200,9 +1196,10 @@ class Ambulance extends Admin {//test
   }
 }
 
-export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, Seed, Puzzle, Roger, Bucket, Diamond, Drum, Sneakers, Candle, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Helmet, Prayer, Fountain, Spoon, Hermes, Warmth, Xray, Ambulance];//71
+export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, Seed, Puzzle, Roger, Bucket, Diamond, Drum, Sneakers, Candle, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Scarf, Prayer, Fountain, Spoon, Hermes, Warmth, Xray, Ambulance];//71
 console.log('admins length: ', allAdmins.length)
 
+//CHEESE WEDGE, U+1F9C0 Chedda
 //BANK, U+1F3E6 //increases sell value of held programs?
 
 //UMBRELLA WITH RAIN DROPS, U+2614 disable bosses
@@ -1217,6 +1214,7 @@ console.log('admins length: ', allAdmins.length)
 //DARK SUNGLASSES, U+1F576
 
 //STATUE OF LIBERTY, U+1F5FD +2 range?
+// UP-POINTING MILITARY AIRPLANE, U+1F6E6
 
 //ELECTRIC LIGHT BULB, U+1F4A1
 // Bright ideas, special modifier does not consume actions??

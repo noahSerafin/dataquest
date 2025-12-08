@@ -2087,11 +2087,13 @@ console.log('pieces length: ', allPieces.length)
 
 //CAMERA WITH FLASH, U+1F4F8 blinds
 
+////recurve bow CANADIAN SYLLABICS CARRIER CHEE, U+1664
+
 //megaphone U+1F4E3
 //Bugle, U+1F4EF, "+1 attack for all in range"
 //"Marching Drum" U+1F941 "+1 moves for all placed programs";
 
-//PLAYGROUND SLIDE, U+1F6DD like gate but with more range?
+//PLAYGROUND SLIDE, U+1F6DD like gate but with more range? line target??
 
 //DANCER, U+1F483 //high movement no damage
 //Pazzaz U+1F57A //starts with 2 actions

@@ -36,6 +36,24 @@ class ¬ extends Admin {
   }
 }
 
+class ¬ extends Admin {
+  static name = "¬";
+  static description = "Every piece loses 1 tile damage each turn after the first";
+  static unicode = "U+1F30A";
+  static color = "#3eebd4ff";
+  constructor() {
+    super(¬.name, ¬.description, ¬.unicode, ¬.color, 5, 9, 'gameState', 'onRoundStart')
+  }
+    async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+        const playerPieces: Piece[] = []
+        activePieces.forEach(piece => {
+            if(piece.team === 'enemy'){
+               piece.addModifier({ moves: 1 })
+            }
+        });
+    }
+}
+
 export class ¬ extends Admin {
   static name = "¬";
   static description = "Inreases Memory by 3";

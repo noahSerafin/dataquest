@@ -149,7 +149,6 @@ export abstract class Piece {
   }
 
   moveTo(newPosition: Coordinate): void {
-    //console.log('attempting move')
     this.headPosition = newPosition
     this.tiles.unshift(newPosition)
     // If exceeding maxSize, remove the oldest tile
@@ -160,14 +159,10 @@ export abstract class Piece {
   }
 
   takeDamage(damage: number) {
-    //console.log('recieving: ', damage)
     const received = Math.max(0, damage - this.getStat('defence'));
     const removeCount = Math.min(received, this.tiles.length); // safety
-    //console.log('recieving total: ', removeCount)
-    //console.log('splice: ', this.tiles.length-removeCount, removeCount)
     this.tiles.splice(this.tiles.length - removeCount, removeCount);
     if (this.tiles.length === 0 && this.removeCallback) {
-      console.log('Piecets: removing')
       this.removeCallback(this);
     }
   }
@@ -231,16 +226,9 @@ class Knife extends Piece {
   static rarity = 1;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
   super(Knife.name, Knife.description, Knife.unicode, 3, 2, 1, 2, 0, Knife.color, headPosition, [headPosition], team, Knife.rarity, removeCallback, id)
-    //name desc utf || maxsize moves range atk def
-  }
-  // specific ability example
-  charge(target: Piece): void {
-    console.log(`${this.name} charges at ${target.name}!`)
-    target.tiles.forEach(tile => console.log(`Hits tile at (${tile.x}, ${tile.y})`))
   }
 }
 
-//name desc unicode || maxsize moves range atk def
 class Dagger extends Piece {
   static name = "Sword";
   static description = "A basic attack piece";
@@ -249,12 +237,6 @@ class Dagger extends Piece {
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
   super(Dagger.name, Dagger.description, Dagger.unicode, 3, 2, 1, 3, 0, Dagger.color, headPosition, [headPosition], team, Dagger.rarity, removeCallback, id)
-    //name desc utf || maxsize moves range atk def
-  }
-  // specific ability example
-  charge(target: Piece): void {
-    console.log(`${this.name} charges at ${target.name}!`)
-    target.tiles.forEach(tile => console.log(`Hits tile at (${tile.x}, ${tile.y})`))
   }
 }
 
@@ -266,12 +248,6 @@ class Arms extends Piece {
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
   super(Arms.name, Arms.description, Arms.unicode, 3, 2, 1, 4, 0, Arms.color, headPosition, [headPosition], team, Arms.rarity, removeCallback, id)
-  }
-
-  // specific ability example
-  charge(target: Piece): void {
-    console.log(`${this.name} charges at ${target.name}!`)
-    target.tiles.forEach(tile => console.log(`Hits tile at (${tile.x}, ${tile.y})`))
   }
 }
 
@@ -301,8 +277,6 @@ class Aegis extends Piece {
     this.willRetaliate = true;
     this.actions--
   }
-
-  //parry next incoming attack (damage the attacker)
 }
 
 class Sling extends Piece {
@@ -489,18 +463,14 @@ class Lance extends Piece {
 
   async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
     for (const tile of line) {
-      console.log('occupiers: ', activePieces)
       const occupier = activePieces.find(p =>
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
       );
-      console.log('occupier: ', occupier?.name)
       if(!occupier) {
         this.moveTo(tile);
         continue;
       }
-      console.log(occupier.name, ' taking damage ', this.getStat('attack'))
       occupier.takeDamage(this.getStat('attack'));
-      console.log('occupiers: ', activePieces)
       const stillOccupied = activePieces.find(p =>
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
       );
@@ -668,12 +638,10 @@ class Dataworm extends Piece {//test
     // --- 2. Identify if target tile belongs to that piece ---
     const tileIndex = piece.tiles.findIndex(t => t.x === target.x && t.y === target.y);
    if (tileIndex === -1){
-      console.log('no tile')
       return;  // No tile there
     }
     // Do NOT remove head tile
     if (tileIndex === 0){
-      console.log('cant head tile')
       return;
     } 
     // --- 3. Remove that tile from the piece ---
@@ -705,12 +673,10 @@ class Snake extends Piece {//test
     // --- 2. Identify if target tile belongs to that piece ---
     const tileIndex = piece.tiles.findIndex(t => t.x === target.x && t.y === target.y);
     if (tileIndex === -1){
-      console.log('no tile')
       return;  // No tile there
     }
     // Do NOT remove head tile
     if (tileIndex === 0){
-      console.log('cant head tile')
       return;
     } 
     // --- 3. Remove that tile from the piece ---
@@ -2124,6 +2090,8 @@ console.log('pieces length: ', allPieces.length)
 //megaphone U+1F4E3
 //Bugle, U+1F4EF, "+1 attack for all in range"
 //"Marching Drum" U+1F941 "+1 moves for all placed programs";
+
+//PLAYGROUND SLIDE, U+1F6DD like gate but with more range?
 
 //DANCER, U+1F483 //high movement no damage
 //Pazzaz U+1F57A //starts with 2 actions

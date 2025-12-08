@@ -39,17 +39,12 @@ const bodyTiles = computed(() =>
     if (!props.piece?.tiles?.length || !props.piece?.headPosition || props.piece.tiles[0] == undefined) {
       return []
     } else {
-      //console.log('tiles: ', props.piece.tiles)
       return props.piece.tiles.filter(
         (p) => p.x !== props.piece.headPosition.x || p.y !== props.piece.headPosition.y
       )
     }
   }
 )
-
-if(props.piece.name == 'Stonewall' || props.piece.name == 'Sword'){
-  console.log(props.piece.name, ' tiles: ', props.piece.tiles)
-}
 
 const getDirectionClass = (tile: Coordinate, index: number) => {
   const prev = props.piece.tiles[index - 1]

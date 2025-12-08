@@ -14,6 +14,7 @@ const emit = defineEmits<{
   (e: 'refresh-shop'): void;
   (e: 'selectTarget', target: Item | PieceBlueprint | null): void;
   (e: 'clearTarget'): void;
+  (e: 'toggleShop'): void;
   //close shop, open map
 }>();
 
@@ -119,13 +120,20 @@ const type = ((item: Item) => {
       />
     </div>
     <BlueprintController
-        v-if="props.target && !(props.target instanceof Item)"
-        :piece="props.target"
-        mode="shop"
-        :canBuy= "canBuyPiece(props.target)"
-        @buy="handleBuyBlueprint"
-        @close="deselect"
-        />
+      v-if="props.target && !(props.target instanceof Item)"
+      :piece="props.target"
+      mode="shop"
+      :canBuy= "canBuyPiece(props.target)"
+      @buy="handleBuyBlueprint"
+      @close="deselect"
+    />
+    <div class="btn-container-centered">
+      <button
+      class="proceed-btn"
+      @click="emit('toggleShop')">
+        Proceed
+      </button>
+    </div>
   </div>
 </template>
 
@@ -165,10 +173,17 @@ button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
+.btn-container-centered{
+  left: 0;
+  position: absolute;
+  bottom: 3rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
 .visible {
   transform: translateY(0);
 }
-
 .collapsed {
   transform: translateY(500%);
 }

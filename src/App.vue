@@ -2,8 +2,8 @@
   import { ref, onMounted, computed} from "vue";
   import Board from './components/Board.vue';
   import Leveleditor from './components/Leveleditor.vue';
-  import { testLevels } from './levels';
-  import { castled, level1Levels } from './level1Levels';
+  import { castled, testLevels } from './levels';
+  //import { castled, level1Levels } from './level1Levels';
   import { Player } from "./Player";
   import { Item, Voucher, allItems} from "./Items";
   import type { ItemConstructor } from "./Items";
@@ -350,7 +350,7 @@
     shopTarget.value = null;
   }
   const showShop = ref(false)
-  const showMap = ref(false)
+  const showMap = ref(true)
   //--shop-----
 
   //round logic
@@ -388,10 +388,14 @@
   const level = ref(castled);//tiles
   const difficulty = ref(1);
   const displayEditor = ref(false);
+  const displaySummary = ref(false);
   
   //map
   const toggleMap = () => {
     showMap.value = !showMap.value;
+  }
+  const toggleSummary = () => {
+    displaySummary.value = !displaySummary.value;
   }
 
   const renewBlueprints = () => {
@@ -401,6 +405,10 @@
   }
 
   const selectLevel = (newLevel: Level) => {//load level, start round
+    hasFinishedTurn.value = false;
+    player.value.canPlace = true;
+    player.value.canMove = true;
+    player.value.canAction = true;
     isFirstTurn.value = true;
     activePieces.value = [];
     level.value = newLevel;
@@ -579,7 +587,6 @@
 
     // Reset placement state
     pieceToPlace.value = null;
-    //playerSpawns.value = newPlacementHighlights();
     isPlacing.value = false;
     playerSpawns.value = newPlacementHighlights();
     
@@ -657,6 +664,21 @@
     playerSpawns.value = newPlacementHighlights();
   }
 
+  function checkForRoundEnd(){
+    console.log('checking for round end')
+    const enemyPieces = activePieces.value.filter(p => p.team === 'enemy');
+    const playerPiecesRemaining = activePieces.value.filter(p => p.team === 'player');
+    if (enemyPieces.length === 0) {
+      console.log('round won!')
+      endRound(true);
+    }
+    // If no player pieces → round lost
+    if (playerPiecesRemaining.length === 0) {
+      console.log('round failed!')
+      endRound(false);
+    }
+  }
+
   const damagePieceAt = async (coord:Coordinate) => {
     if (!selectedPiece.value) return
     //if (selectedPiece.value.team !== 'player') return //damaging your own pieces is actually useful sometimes
@@ -678,25 +700,12 @@
     }
     selectedPiece.value.willRetaliate = false;//pieces that have enacted defensive option
     //could trigger blood tax here using 'other'
-
-    //checkForRoundend()
-    const enemyPieces = activePieces.value.filter(p => p.team === 'enemy');
-    const playerPiecesRemaining = activePieces.value.filter(p => p.team === 'player');
-    if (enemyPieces.length === 0) {
-      console.log('round won!')
-      endRound(true);
-    }
-    // If no player pieces → round lost
-    if (playerPiecesRemaining.length === 0) {
-      console.log('round failed!')
-      endRound(false);
-    }
-    //
-
+    
     selectedPiece.value.actions --//getstat?
     selectedPiece.value.damageMult = 1;
     //console.log(damageReceiver?.name, ' tiles afterdmg: ', damageReceiver.tiles)
     boardRef.value.clearHighlights();
+    checkForRoundEnd();
   }
 
   const handleSpecialActionAt = async (target: Coordinate) => {
@@ -870,7 +879,7 @@
       tileSet,
       onReceiveDamage
     );
-
+    checkForRoundEnd();
     // Reset enemy actions/moves after their turn if needed
     enemyPieces.forEach(p => {
       p.actions = 1;
@@ -892,6 +901,9 @@
 
   const endTurn = async () => {
     hasFinishedTurn.value = true;
+    player.value.canPlace = false;
+    player.value.canMove = false;
+    player.value.canAction = false;
     activePieces.value.forEach(piece => {
       piece.resetMoves();
       piece.actions = 1;
@@ -903,6 +915,7 @@
     player.value.canPlace = true;
     player.value.canMove = true;
     player.value.canAction = true;
+    hasFinishedTurn.value = false;
   }
   
   // When editor exports a new level, shouldn't be needed in final
@@ -971,9 +984,11 @@
 
   <PlayerView v-if="!displayEditor" :player="player" @highlightPlacements="highlightPlacements" @sellBlueprint="sellBlueprint" @sellItem="sellItem" @applyItem="handleApplyItem" @sellAdmin="sellAdmin" @reorderAdmins="player.admins = $event"/>
   <WorldMap
-    :levels="testLevels"
-    @select-level="selectLevel"
+    :allLevels="testLevels"
+    :difficulty="difficulty"
     :cssclass="mapClass"
+    @select-level="selectLevel"
+    @openShop="toggleShop"
   />
   <Shop
     :cssclass="shopClass"
@@ -986,6 +1001,7 @@
     @buy-item="buyItem"
     @selectTarget="selectShopTarget"
     @clearTarget="clearShopTarget"
+    @toggleShop="toggleShop"
     :player="player"
   />
   <Board ref="boardRef" v-if="!displayEditor"

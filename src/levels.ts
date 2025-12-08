@@ -1,4 +1,5 @@
 export const castled = {
+  name: 'Castled',
   "tiles": [
     {
       "x": 0,
@@ -193,6 +194,7 @@ export const castled = {
   ]
 }
 export const castled2 = {
+  name: 'Castled2',
   "tiles": [
     {
       "x": 0,
@@ -363,6 +365,7 @@ export const castled2 = {
   ]
 }
 export const siege2 = {
+  name: 'The Siege2',
   "tiles": [
     {
       "x": 0,
@@ -774,6 +777,7 @@ export const siege2 = {
   ]
 }
 export const cave = {
+  name: 'The Cave',
   "tiles": [
     {
       "x": 0,
@@ -936,6 +940,7 @@ export const cave = {
   ]
 }
 export const forest = {
+  name: 'The Forest',
   "tiles": [
     {
       "x": 0,
@@ -1468,6 +1473,7 @@ export const forest = {
   ]
 }
 export const arena = {
+  name: 'The Arena',
   "tiles": [
     {
       "x": 4,
@@ -1674,6 +1680,7 @@ export const arena = {
   ]
 }
 export const river = {
+  name: 'The River',
   "tiles": [
     {
       "x": 0,
@@ -1871,6 +1878,7 @@ export const river = {
 }
 
 export const alley = {
+  name: 'The Alley',
   "tiles": [
     {
       "x": 0,
@@ -2015,6 +2023,7 @@ export const alley = {
   ]
 }
 export const ringed = {
+  name: 'Encircled',
   "tiles": [
     {
       "x": 0,
@@ -2336,6 +2345,7 @@ export const ringed = {
   ]
 }
 export const gauntlet = {
+  name: 'The Gaunlet',
   "tiles": [
     {
       "x": 0,
@@ -2572,6 +2582,7 @@ export const gauntlet = {
   ]
 }
 export const siege = {
+  name: 'The Siege',
   "tiles": [
     {
       "x": 0,
@@ -3079,6 +3090,7 @@ export const siege = {
   ]
 }
 export const league = {
+  name: 'League',
   "tiles": [
     {
       "x": 1,
@@ -3576,6 +3588,7 @@ export const league = {
 }
 
 export const penopticon = {
+  name: 'The Penopticon',
   "tiles": [
     {
       "x": 2,

@@ -208,7 +208,7 @@ class Convenience extends Admin {//unfinished rounds
 
 class Department extends Admin {
   static name = "Department Store";
-  static description = "+3 shop slots";
+  static description = "+3 shop slots, 1 Program, 1 Item, and 1 Admin";
   static unicode = "U+1F3EC";
   static color = "#bebebeff";
   constructor() {
@@ -1212,9 +1212,11 @@ console.log('admins length: ', allAdmins.length)
 //doctor STETHOSCOPE, U+1FA7A medic, return killed pieces to hand as blueprints
 
 //X-RAY,  immune to blinding? //need more pieces that blind
+// MILKY WAY, U+1F30C
+
 //DARK SUNGLASSES, U+1F576
 
-//STATUE OF LIBERTY, U+1F5FD 
+//STATUE OF LIBERTY, U+1F5FD +2 range?
 
 //ELECTRIC LIGHT BULB, U+1F4A1
 // Bright ideas, special modifier does not consume actions??
@@ -1311,7 +1313,6 @@ console.log('admins length: ', allAdmins.length)
 
 //BLACK SPADE SUIT, U+2660
 
-// MILKY WAY, U+1F30C
 
 //stag
 // LINEAR B IDEOGRAM B104 DEER, U+10082

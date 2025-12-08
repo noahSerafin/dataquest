@@ -12,8 +12,6 @@ const props = defineProps<{
   showController: boolean;
 }>();
 
-console.log('item: ', props.item)
-
 const emit = defineEmits<{
   select: [item: Item];
   deselect: [];
@@ -60,8 +58,6 @@ const itemStyle = computed(() => {
 });
 
 const handleUse = () => {
-  //$emit('use', item)
-  console.log('using item:', props.item)
   emit('use', props.item);
 }
 

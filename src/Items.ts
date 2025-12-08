@@ -356,6 +356,8 @@ export class Beans extends Item<Piece> {
 
 //SHOOTING STAR, U+1F320 immune to all negative statuses
 
+//RING BUOY, U+1F6DF restore the last edstroyed program to hand
+
 //target all Activeprogram's
 //megaphone U+1F4E3
 //Bugle, U+1F4EF, "+1 attack for all placed programs"

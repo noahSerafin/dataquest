@@ -57,15 +57,15 @@
     isPlaced: false,
     cost: 1
   }
-  const testSling = {
+  const test = {
     id: "274ec329-8c17-4265-8c12-e9a28bcf0112",
-    name: "Sling",
-    description: "A basic ranged piece",
-    unicode: "U+1F94F",
+    name: "Lance",
+    description: "A test piece",
+    unicode: "U+1F94",
     maxSize: 3,
     moves: 2,
-    range: 2,
-    attack: 1,
+    range: 3,
+    attack: 2,
     defence: 0,
     rarity: 1,
     color: "#2fc5ebff",
@@ -83,16 +83,13 @@
     5,  // memory limit
     5, //admin slots
     [testVoucher], // no items yet
-    [testSword, testShield],//, testShield] // starting pieces
+    [testSword, testShield, test],//, testShield] // starting pieces
     [],//no admins yet
     2,
     5,
     0,
     false,
-    false,
-    true, //canPlace
-    true, //canMove
-    true //canAction
+    false
   ));
 
   function playerHasAdmin(name: string) {
@@ -704,7 +701,7 @@
 
   const handleSpecialActionAt = async (target: Coordinate) => {
     //the enemy should also be able to use special moves, handle in enemy?
-    if(!selectedPiece.value) return
+    if(!selectedPiece.value || selectedPiece.value.actions <= 0) return
     boardRef.value.clearHighlights();
     // find piece at targeted coordinate
     const targetPiece = activePieces.value.find(piece =>
@@ -741,12 +738,12 @@
     }
     // --- space target ---
     if (selectedPiece.value.targetType === 'space') {
-      if (!targetPiece) {
+      //if (!targetPiece) {
         selectedPiece.value.special({
           target: target,
           activePieces: activePieces.value
         });
-      }
+      //}
       selectedPiece.value = null;
       return;
     }
@@ -786,25 +783,18 @@
       const dx = Math.sign(tx - ax);
       const dy = Math.sign(ty - ay);
       const tilesInLine: Coordinate[] = [];
-      const affectedPieces: Piece[] = [];
       // Step along the line *from actor towards target*
       let x = ax + dx;
       let y = ay + dy;
       while (x !== tx || y !== ty) {
-        tilesInLine.push({x, y})
-        const pieceOnTile = activePieces.value.find(p =>
-          p.tiles.some(t => t.x === x && t.y === y)
-        );
-        if (pieceOnTile) {
-          affectedPieces.push(pieceOnTile);
-          //break; would add line of sight(stop at first block)
-        }
+        tilesInLine.push({x, y})    
         x += dx;
         y += dy;
       }
+      tilesInLine.push(target);
       await actor.special({
         line: tilesInLine,
-        activePieces: affectedPieces
+        activePieces: activePieces.value
       });
       selectedPiece.value = null;
       return;

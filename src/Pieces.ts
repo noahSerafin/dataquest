@@ -340,25 +340,49 @@ class SAM extends Piece {
 
 class Gate extends Piece {//unfinished negative
   static name = "Gate";
-  static description = "A defensive program that allows friendly programs to pass through, but freezes enemies";
+  static description = "A defensive program that can target an empty space and move opposite & adjacent program's heads to that space";
   static unicode = "U+13208";//"U+26E9";
   static color = "#ff9900ff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Gate.name, Gate.description, Gate.unicode, 1, 1, 0, 0, 2, Gate.color, headPosition, [headPosition], team, Gate.rarity, removeCallback, id)
-   this.targetType = 'trapPiece';
-   this.statuses.negative = true;
+   super(Gate.name, Gate.description, Gate.unicode, 1, 1, 1, 0, 2, Gate.color, headPosition, [headPosition], team, Gate.rarity, removeCallback, id)
+   this.targetType = 'space';
+   this.specialName = 'Chaperone'
   }
-  async special(target: Piece): Promise<void> {
-    //how to move friendly into unoccupied space?
-    if(this.team = target.team) return
-    target.movesRemaining = 0;
-    target.statuses.frozen = true;
+  async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
+    const gx = this.headPosition.x;
+    const gy = this.headPosition.y;
+    const tx = target.x;
+    const ty = target.y;
+    // 1. Target must be orthogonally adjacent to the Gate
+    const dx = tx - gx;
+    const dy = ty - gy;
+    if (Math.abs(dx) + Math.abs(dy) !== 1) {
+      // Not adjacent → invalid
+      this.actions--;
+      return;
+    }
+    // 2. Opposite tile = mirror across the Gate
+    const ox = gx - dx;
+    const oy = gy - dy;
+    // 3. Find a piece whose *head* is exactly on the opposite tile
+    const pieceToMove = activePieces.find(p =>
+      p.headPosition.x === ox && p.headPosition.y === oy
+    );
+    if (!pieceToMove) {
+      this.actions--;
+      return; // nothing to move
+    }
+    // 4. Ensure the target tile is free (should already be true)
+    const isOccupied = activePieces.some(p =>
+      p.tiles.some(t => t.x === tx && t.y === ty)
+    );
+    if (isOccupied) {
+      return;
+    }
+    pieceToMove.moveTo({ x: tx, y: ty });
     this.actions--
-    //remove until selection of negative is sorted
-    this.removeCallback?.(this);
   }
-  //negative status for friendlies
 }
 
 class Fence extends Piece {
@@ -403,23 +427,23 @@ class Firewall extends Piece {
   }
 }
 
-class Trench extends Piece {//unfinished
-  static name = "Trench";
-  static description = "A program that boosts the defence of programs inside it";
+class Pitfall extends Piece {//unfinished
+  static name = "Pitfall";
+  static description = "A trap program that freezes programs that pass over it";
   static unicode = "U+1F573";
   static color = "#5d3900";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Trench.name, Trench.description, Trench.unicode, 6, 1, 0, 0, 0, Trench.color, headPosition, [headPosition], team, Trench.rarity, removeCallback, id)
+    super(Pitfall.name, Pitfall.description, Pitfall.unicode, 6, 1, 0, 0, 0, Pitfall.color, headPosition, [headPosition], team, Pitfall.rarity, removeCallback, id)
     this.targetType = 'trapPiece';
     this.statuses.negative = true;
   }
   async special(target: Piece): Promise<void> {
-    //check if headpoisition???
-    target.addModifier({defence: 1})
+    if(!target.immunities.freezeImmune){
+      target.statuses.frozen = true;
+    }
     this.actions--
   }
-  //special method to give +1 def to programs with headposition inside it
 }
 
 class Mole extends Piece {//unfinished - test negative
@@ -452,7 +476,7 @@ class Mole extends Piece {//unfinished - test negative
 }
 
 class Lance extends Piece {
-  static description = "Can charge, attacking targets in a staight line and moving forward until stopped";
+  static description = "Can charge instead of attacking, adamaging targets in a staight line and moving forward until stopped";
   static unicode = "U+1F3A0";
   static color = "#f9f9f9";
   static rarity = 2;
@@ -460,18 +484,23 @@ class Lance extends Piece {
   super(Lance.name, Lance.description, Lance.unicode, 3, 3, 3, 2, 0, Lance.color, headPosition, [headPosition], team, Lance.rarity, removeCallback, id)//horse carousel atm //cane: "U+1F9AF"
     this.specialName = 'Charge';
     this.targetType = 'line'
+    this.canAttack = false;
   }
 
   async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
     for (const tile of line) {
+      console.log('occupiers: ', activePieces)
       const occupier = activePieces.find(p =>
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
       );
+      console.log('occupier: ', occupier?.name)
       if(!occupier) {
         this.moveTo(tile);
         continue;
       }
+      console.log(occupier.name, ' taking damage ', this.getStat('attack'))
       occupier.takeDamage(this.getStat('attack'));
+      console.log('occupiers: ', activePieces)
       const stillOccupied = activePieces.find(p =>
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
       );
@@ -883,30 +912,33 @@ class Watchman extends Piece {
 
 class Magnet extends Piece {//unfinished testing
   static name = "Magnet";
-  static description = "A program that moves other programs";
+  static description = "A program that moves other programs toward itself";
   static unicode = "U+1F9F2";
   static color = "#6fa9ffff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Magnet.name, Magnet.description, Magnet.unicode, 2, 2, 3, 0, 0, Magnet.color, headPosition, [headPosition], team, Magnet.rarity, removeCallback, id)
+   super(Magnet.name, Magnet.description, Magnet.unicode, 2, 2, 3, 0, 1, Magnet.color, headPosition, [headPosition], team, Magnet.rarity, removeCallback, id)
    this.targetType = 'line'
    this.specialName = 'Pull'
   }
 
   async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
+    for (let i = 0; i < line.length; i++) {
+      if (i + 1 >= line.length) break;
+      const here = line[i];
+      const next = line[i + 1];
 
-    for (let tileIdx = 0; tileIdx < line.length; tileIdx++) {
-      const occupier = activePieces.find(p =>
-        p.tiles.some(t => t.x === line[tileIdx].x && t.y === line[tileIdx].y)
+      const occupierHere = activePieces.find(p =>
+        p.tiles.some(t => t.x === here.x && t.y === here.y)
       );
-      if(!occupier) {
-        const pullTarget = activePieces.find(p =>
-          p.tiles.some(t => t.x === line[tileIdx+1].x && t.y === line[tileIdx+1].y)
-        );
-        if(pullTarget) {
-          pullTarget.moveTo(line[tileIdx-1]);
-        }
-      }
+      if (occupierHere) continue;  
+      // Tile is *not* empty → cannot pull anything into it
+      const occupierNext = activePieces.find(p =>
+        p.tiles.some(t => t.x === next.x && t.y === next.y)
+      );
+      if (!occupierNext) continue;
+      // Pull occupier 1 step closer
+      occupierNext.moveTo(here);
     }
     this.actions--
   }
@@ -1099,7 +1131,7 @@ class Mammoth extends Piece {
 class Snowman extends Piece {
   static name = "Snowman";
   static description = "A program that can use moves to snowball, increasing it's size";
-  static unicode = "U+2603";
+  static unicode = "U+26C4";
   static color = "#4e4e4eff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
@@ -1407,7 +1439,7 @@ class Wizard extends Piece {
 
 class Ninja extends Piece {
   static name = "Ninja";
-  static description = "A small program with high attack that can hide itself from enemy pieces for one turn";
+  static description = "A small program with high attack that can hide itself from enemy pieces until attacking";
   static unicode = "U+1F977";
   static color = "#000000ff";
   static rarity = 3;
@@ -2003,7 +2035,7 @@ export class Dolls extends Piece {//finished? needs testing, will have to be han
 
 class UFO extends Piece {//unfinished, line target? test
   static name = "UFO";
-  static description = "A program that can move enemies toward it without increasing their size";
+  static description = "A program that can move enemies away from itself";//without increasing size?? headposition = 
   static unicode = "U+1F6F8";
   static color = "#000000ff";
   static rarity = 4;
@@ -2015,15 +2047,34 @@ class UFO extends Piece {//unfinished, line target? test
 
   async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
 
-    for (let tileIdx = 1; tileIdx < line.length; tileIdx++) {
+    const origin = this.headPosition;
+    for (let i = 0; i < line.length; i++) {
+      const tile = line[i];
+      // Find piece on this tile
       const occupier = activePieces.find(p =>
-        p.tiles.some(t => t.x === line[tileIdx].x && t.y === line[tileIdx].y)
+        p.tiles.some(t => t.x === tile.x && t.y === tile.y)
       );
-      if(!occupier) {
-        this.moveTo(line[tileIdx-1]);
+      if (!occupier) continue;
+      // Determine push direction: from THIS piece outward
+      const dx = tile.x - origin.x;
+      const dy = tile.y - origin.y;
+
+      const targetTile: Coordinate = {
+        x: tile.x + Math.sign(dx),
+        y: tile.y + Math.sign(dy)
+      };
+
+      const blocked = activePieces.some(p =>
+        p.tiles.some(t => t.x === targetTile.x && t.y === targetTile.y)
+      );
+      if (blocked) {
+        // Can't push further after this point
+        break;
       }
+      // Move the occupier away from the pusher
+      occupier.moveTo(targetTile);
     }
-    this.actions--
+    this.actions--;
   }
 }
 
@@ -2061,11 +2112,18 @@ class Saw extends Piece {
   }
   
 }
-
-export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Trench, Lance, Mole, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Ink, Snail, Shark, Greatshield, Wizard, Ninja, Fairy, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, Dolls, UFO, TP, Saw];
+export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Ink, Snail, Shark, Greatshield, Wizard, Ninja, Fairy, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, Dolls, UFO, TP, Saw];//87 +2 (web, ink)
+console.log('pieces length: ', allPieces.length)
 // CROCODILE, U+1F40A //moves 0 high damage
 
+//"U+1F526"; TORCH expose targets
+////POLICE CARS REVOLVING LIGHT, U+1F6A8 expose group
+
 //CAMERA WITH FLASH, U+1F4F8 blinds
+
+//megaphone U+1F4E3
+//Bugle, U+1F4EF, "+1 attack for all in range"
+//"Marching Drum" U+1F941 "+1 moves for all placed programs";
 
 //DANCER, U+1F483 //high movement no damage
 //Pazzaz U+1F57A //starts with 2 actions

@@ -201,6 +201,7 @@ function checkTileIsOccupied(coord:Coordinate): Piece | undefined{
 
 const highlightTargets = (piece: InstanceType<typeof Piece>) => {
   clearHighlights();
+  if(piece.actions <= 0) return;
   inRangeHighlights.value = getTilesInRange(
     piece.headPosition,
     piece.getStat('range'),
@@ -209,6 +210,7 @@ const highlightTargets = (piece: InstanceType<typeof Piece>) => {
 }
 const highlightSpecials = (piece: InstanceType<typeof Piece>) => {
   clearHighlights();
+  if(piece.actions <= 0) return;
   if(piece.targetType === 'line'){
     specialHighlights.value = getTilesInStraightLine(
       piece.headPosition,

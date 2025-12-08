@@ -5,14 +5,13 @@ ITEMS 3
 cleanup targets: allow player as accepted target? 9
 
 PIECES 4
-active special functions 4 - done except trap pieces
-visually show takeDamage with short lived red colour and shake animation, bonus: particles 4
-passive special functions //on walk over, retaliate, buff nearby
+active special functions 4 - done except negative non-trap pieces, fairy
+visually show takeDamage with short lived red colour and shake animation, bonus: particles 4 - this next
+buff nearby
 keep track of upgrades and display on piece
 variants? 
 
 ADMIN PIECES
-status admins (immunities) 4 - change hidden immunity to exposed status (also in Pieces) 4
 round admins 6
 
 PLAYER

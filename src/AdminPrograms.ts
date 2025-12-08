@@ -871,13 +871,13 @@ class Sneakers extends Admin {//item???
 }
 
 //candle U+1F56F
-class Torch extends Admin {
-  static name = "Torch";
+class Candle extends Admin {
+  static name = "Candle";
   static description = "+1 range for all programs on placement";
-  static unicode = "U+1F526";
+  static unicode = "U+1F56F";
   static color = "#f0aa13ff";
   constructor() {
-    super(Torch.name, Torch.description, Torch.unicode, Torch.color, 4, 1, 'gameState', 'onPlacement')
+    super(Candle.name, Candle.description, Candle.unicode, Candle.color, 4, 1, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
@@ -1200,9 +1200,14 @@ class Ambulance extends Admin {//test
   }
 }
 
-export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, Seed, Puzzle, Roger, Bucket, Diamond, Drum, Sneakers, Torch, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Helmet, Prayer, Fountain, Spoon, Hermes, Warmth, Xray, Ambulance];//71
+export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, Seed, Puzzle, Roger, Bucket, Diamond, Drum, Sneakers, Candle, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Helmet, Prayer, Fountain, Spoon, Hermes, Warmth, Xray, Ambulance];//71
+console.log('admins length: ', allAdmins.length)
 
 //BANK, U+1F3E6 //increases sell value of held programs?
+
+//UMBRELLA WITH RAIN DROPS, U+2614 disable bosses
+
+//POLICE CARS REVOLVING LIGHT, U+1F6A8
 
 //doctor STETHOSCOPE, U+1FA7A medic, return killed pieces to hand as blueprints
 

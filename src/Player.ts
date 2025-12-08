@@ -15,9 +15,9 @@ export class Player {
     bonusInterest: number
     hasTrolley: boolean
     hasToolbox: boolean
-    canPlace: boolean
-    canMove: boolean
-    canAction: boolean
+    canPlace: boolean = true;
+    canMove: boolean = true;
+    canAction: boolean = true;
     //adminModifiers: Record<string, StatModifier>
     constructor(
         money = 5,
@@ -31,9 +31,6 @@ export class Player {
         bonusInterest: number,
         hasTrolley: boolean,
         hasToolbox: boolean,
-        canPlace: boolean,//these bools could be statuses? or related to statuses?
-        canMove: boolean,
-        canAction: boolean
         //adminModifiers: Record<string, StatModifier> = {}
     ) {
         this.money = money;
@@ -47,9 +44,6 @@ export class Player {
         this.bonusInterest = bonusInterest;
         this.hasTrolley = hasTrolley;
         this.hasToolbox = hasToolbox;
-        this.canPlace = canPlace;
-        this.canMove = canMove;
-        this.canAction = canAction;
         //this.adminModifiers = adminModifiers;
     }
 

@@ -354,6 +354,8 @@ export class Beans extends Item<Piece> {
     }
 }
 
+//SHOOTING STAR, U+1F320 immune to all negative statuses
+
 //target all Activeprogram's
 //megaphone U+1F4E3
 //Bugle, U+1F4EF, "+1 attack for all placed programs"

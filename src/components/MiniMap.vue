@@ -96,7 +96,7 @@
 <style scoped>
     .map-grid {
         position: absolute;
-        z-index: 99;
+        z-index: 101;
         display: flex;
         flex-wrap: wrap;
         gap: 0.5px;

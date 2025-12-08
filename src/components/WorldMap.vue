@@ -1,26 +1,9 @@
 <script setup lang="ts">
     import { computed, ref, onMounted } from "vue";
-    import type { Company } from "../types";
     import MiniMap from "./MiniMap.vue";
     import { Admin } from "../AdminPrograms";
     import { allBosses } from "../Bosses";
-
-    const companies: Company[] = [
-        { name: 'Nightbridge Corp', unicode: "U+1F309" },
-        { name: 'Meridian Security Inc', unicode: "U+1F310" },
-        { name: 'Longhouse Web Services', unicode: "U+1F6D6" },
-        { name: 'Tsukimi Group', unicode: "U+1F391" },
-        { name: 'Zenith Ltd.', unicode: "U+1F304" },
-        { name: 'Starlane Tech', unicode: "U+1F30C" },
-        { name: 'Sunrise Associates', unicode: "U+1F305" },
-        { name: 'Saturn Solutions', unicode: "U+1FA90" },
-        { name: 'Flyby Surveilance', unicode: "U+1FAB0" },
-        { name: 'Monarch Media', unicode: "U+1F98B" },
-        { name: 'Red Sky Dynamics', unicode: "U+1F3B4" },
-        { name: 'Whiteflower Global', unicode: "U+1F4AE" },
-        { name: 'Cook.io', unicode: "U+1F36A" },
-        { name: 'Sakura Robotics', unicode: "U+1F338"}
-    ]
+    import { watch } from "vue";
 
     //world graph structure
     interface WorldNode {
@@ -60,6 +43,7 @@
     const props = defineProps<{
         difficulty: number;
         allLevels: Level[];
+        seed: number;
         cssclass: 'visible' | 'collapsed';
     }>();
 
@@ -151,6 +135,10 @@
     const world = ref<WorldMap>(generateWorld(props.allLevels));//should be called again with after boss after increase difficulty
     const currentNodeId = ref(world.value.startNode);
     const selectedPreviewNode = ref<WorldNode | null>(null);
+    const boss = ref<Admin>(new allBosses[Math.floor(Math.random() * allBosses.length)])
+    function newBoss(){
+        boss.value = new allBosses[Math.floor(Math.random() * allBosses.length)]
+    }
 
     const worldNodes = computed(() =>
         Object.values(world.value.nodes)
@@ -168,6 +156,8 @@
         selectedPreviewNode.value = node;
     }
 
+  
+
     function enterNode(node: WorldNode) {
         selectedPreviewNode.value = null;
         currentNodeId.value = node.id;
@@ -176,8 +166,7 @@
             emit('openShop')
         }
         if(node.type === 'boss'){
-            const boss = allBosses[Math.floor(Math.random() * allBosses.length)];
-            emit("addBoss", new boss);
+            emit("addBoss", boss.value);
         }
         if (node.level) {
             console.log(node.level)
@@ -190,7 +179,7 @@
             case "start": return "⬤";
             case "shop": return "🛒";
             case "level": return "■";
-            case "boss": return "👑";
+            case "boss": return  String.fromCodePoint(parseInt(boss.value.unicode.replace('U+', ''), 16));
         }
     }
 
@@ -216,6 +205,18 @@
     }
     return list;
     });
+
+    watch(
+        () => props.seed,
+        () => {
+            // rebuild world graph
+            world.value = generateWorld(props.allLevels);
+            // reset node position
+            currentNodeId.value = world.value.startNode;
+            // generate new boss
+            newBoss();
+        }
+    );
 </script>
 
 <template>
@@ -239,6 +240,16 @@
         @click="trySelect(node)"
         >
         {{ displayIcon(node) }}
+        <div v-if="node.type==='boss'"
+        class="boss-info"
+        >
+            <strong>
+                {{ boss.name }}:
+            </strong>
+            <span>
+                {{ boss.description }}
+            </span>
+        </div>
         </div>
         <svg class="map-lines" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;">
             <line
@@ -283,7 +294,7 @@
     .world-map {
         position: absolute;
         width: 50vw;
-        height: 90vh;
+        height: 55vh;
         background-color: rgb(230, 218, 181);
         z-index: 98;
         padding: 2rem;
@@ -296,7 +307,7 @@
         height: 80%;
     }
     .map-lines{
-        z-index: 0;
+        z-index: -1;
     }
     .node {
         position: absolute;
@@ -310,7 +321,15 @@
         justify-content: center;
         user-select: none;
         opacity: 0.4;
-        z-index: 2;
+        z-index: 0;
+    }
+    .boss-info{
+        position: absolute;
+        background-color: #111;
+        font-size: 14px;
+        opacity: 1;
+        width: 300px;
+        left: 120%;
     }
     .node.clickable {
         opacity: 1;

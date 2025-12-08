@@ -1,8 +1,8 @@
 <script setup lang="ts">
     import { ref } from "vue";
-    import { Item } from './Items';
-    import { Admin } from './AdminPrograms';
-    import ItemView from './components/ItemView.vue';
+    import { Item } from '../Items';
+    import { Admin } from '../AdminPrograms';
+    import ItemView from '../components/ItemView.vue';
 
     const props = defineProps<{
         admins: Admin[]

@@ -205,6 +205,14 @@ export abstract class Piece {
       this.movesRemaining = 0;
     }
   }
+
+  clone() {
+    return new (this.constructor as any)(
+      this.headPosition ? { ...this.headPosition } : null,
+      this.team,
+      this.removeCallback,
+    ) // optional if you add a helper
+  }
 }
 
 export class Spawn extends Piece {
@@ -1192,14 +1200,14 @@ class Rat extends Piece {
   }
 }
 
-class Flute extends Piece {
+class Flute extends Piece {//not working
   static name = "Flute";
   static description = "A program that can summon rats";
   static unicode = "U+1FA88";
   static color = "#6ea1caff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Flute.name, Flute.description, Flute.unicode, 1, 0, 0, 0, 0, Flute.color, headPosition, [headPosition], team, Flute.rarity, removeCallback, id)
+   super(Flute.name, Flute.description, Flute.unicode, 1, 0, 1, 0, 0, Flute.color, headPosition, [headPosition], team, Flute.rarity, removeCallback, id)
    this.specialName='Summon'
    this.targetType='space'
    this.canAttack=false;
@@ -1247,10 +1255,10 @@ class Dragon extends Piece {//line?
   static color = "#00b61eff";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Dragon.name, Dragon.description, Dragon.unicode, 6, 2, 1, 3, 2, Dragon.color, headPosition, [headPosition], team, Dragon.rarity, removeCallback, id)
+   super(Dragon.name, Dragon.description, Dragon.unicode, 6, 2, 2, 3, 2, Dragon.color, headPosition, [headPosition], team, Dragon.rarity, removeCallback, id)
    this.specialName = 'Fire Breath';
    this.targetType = 'group'
-   this.canAttack = false;
+   this.immunities.burnImmune = true;
   }
 
   async special(targets: Piece[]):Promise<void>{

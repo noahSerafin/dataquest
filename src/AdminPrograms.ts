@@ -1055,7 +1055,7 @@ export class FireEngine extends Admin {
 class Prayer extends Admin {
   static name = "Prayer Beads";
   static description = "Programs get +2 defence on load";
-  static unicode = "U+1F52C";
+  static unicode = "U+1F4FF";
   static color = "#9c7800ff";
   constructor() {
     super(Prayer.name, Prayer.description, Prayer.unicode, Prayer.color, 7, 4, 'gameState', 'onPlacement')
@@ -1148,7 +1148,7 @@ class Warmth extends Admin {
   static name = "Inner Warmth";
   static description = "All placed programs are immune to being frozen";
   static unicode = "U+2668";
-  static color = "#ece7d0ff";
+  static color = "#f04814ff";
   constructor() {
     super(Warmth.name, Warmth.description, Warmth.unicode, Warmth.color, 4, 2, 'gameState', 'onPlacement')//or gamestate?
   }

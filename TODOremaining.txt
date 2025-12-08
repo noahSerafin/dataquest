@@ -5,7 +5,7 @@ ITEMS 3
 cleanup targets: allow player as accepted target? 9
 
 PIECES 4
-active special functions 4 - done except negative non-trap pieces, fairy
+active special functions 4 - done except fairy
 visually show takeDamage with short lived red colour and shake animation, bonus: particles 4 - this next
 buff nearby
 keep track of upgrades and display on piece
@@ -34,8 +34,8 @@ vouchers?
 
 MAP 5
 isometric view?
-branching paths
-see two maps ahead?
+branching paths - started
+see two maps ahead?-done 
 path examples before boss(paths meeting point):
     one level +1 difficulty, shop
     one level +0 difficulty, one level +0 difficulty
@@ -44,15 +44,7 @@ path examples before boss(paths meeting point):
 multiple levels files?
 
 BOSSES 5
-modifier bosses behave like admins, but non purchasable and for the enemy
-
-APP 6
-game logic
-- disable moving if placing/disable placing if moving - done
-end rounds, reset board -> open map
-map -> click on shop, open shop, click on level, open board
-swap between shop -> map -> board
-increment difficulty
+unque bosses
 
 HYBRIDS 7
 Hybrid class accepts two pieces
@@ -62,3 +54,5 @@ takes speacial move of first piece
 EDITOR 8
 Add a Spawn for a 'wall' type piece
 Have logic for spawning any piece on single spawn, then only pieces with max size >= to the spawn's size
+
+companies - own list of programs;

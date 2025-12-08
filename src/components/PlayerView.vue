@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { computed, ref } from "vue";
     import type { Player } from "../Player";
-    import type { Coordinate, PieceBlueprint } from "../types";
+    import type { PieceBlueprint } from "../types";
     import { Item } from "../Items";
     import { Admin } from "../AdminPrograms";
     import ItemView from "./ItemView.vue";
@@ -13,14 +13,13 @@
         //activePieces: InstanceType<typeof Piece>[]
     }>();
     
-    const emit = defineEmits<{//move to controller???
+    const emit = defineEmits<{
         (e: 'highlightPlacements', blueprint: PieceBlueprint): void;
         (e: 'sellBlueprint', id:string):void;
         (e: 'sellItem', id:string):void;
         (e: 'applyItem', payload: {item: Item, id:string}):void;
         (e: 'sellAdmin', id:string):void;//TODO
         (e: 'reorderAdmins', admins: Admin[]):void;
-        //trigger admin
     }>();
 
     const selectedPiece = ref<PieceBlueprint | null>(null)
@@ -66,17 +65,17 @@
         //emit("applyAdmin", admin: Admin);
     }
 
-    const handleClose = () => [
+    function handleClose() {
         selectedPiece.value = null
-    ]
+        return;
+    }
     function selectItem(item: Item){
         selectedItem.value = item;
+        return;
     }
     function deselectItem(){
         selectedItem.value = null;
-    }
-    function isSelected(item: Item): boolean{
-        return  selectedItem.value === item ? true : false;
+        return;
     }
 
     const dragIndex = ref<number | null>(null);
@@ -99,9 +98,6 @@
         // Tell parent to update player.admins
         emit("reorderAdmins", newOrder);
     }
-
-    //progams can be placed on board, greying them out in inventory, use a similar popup to pieceController but with place/sell buttons
-    //items can be used on programs, confirmation window to execute their function
 </script>
 
 <template>
@@ -110,7 +106,11 @@
             <!-- Money -->
             <div>
                 <p><strong>Money:</strong> {{ props.player.money }}</p>
-                <p><strong>Lives:</strong> {{ props.player.lives }}</p>
+                <p><strong>Lives:</strong>
+                    <span v-for="lives in player.lives">
+                       {{ String.fromCodePoint(0x1FA77) }}
+                    </span>
+                </p>
             </div>
             <div>
                 <p><strong>Admins:</strong> {{ props.player.admins.length }}/{{ props.player.adminSlots }}</p>
@@ -199,8 +199,9 @@
 
 <style scoped>
     .player {
+        background-color: black;
         position: fixed;
-        top: 10px;
+        bottom: 6px;
         left: 20%;
         margin: auto;
         width: 50%;
@@ -220,7 +221,7 @@
     .inventory{
         text-align: left;
         position: fixed;
-        top: 1rem;
+        top: 20%;
         right: 1rem;
         width: 15%;
         background: #222;

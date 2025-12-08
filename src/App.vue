@@ -18,7 +18,8 @@
   import { takeEnemyTurn } from "./Enemy";
   import WorldMap from "./components/WorldMap.vue";
   import Shop from "./components/Shop.vue";
-  import BossView from "./BossView.vue";
+  import BossView from "./components/BossView.vue";
+  import RoundSummary from "./components/RoundSummary.vue";
   import { DIFFICULTY_RARITY } from "./constants";
 
   //import { Map } from "./components/Map.vue";
@@ -336,6 +337,7 @@
     shopBlueprints.value = shopBlueprints.value.filter(b => b.id !== bp.id);
     player.value.money -= (bp.rarity * 2 -1);
     player.value.programs.push(bp);
+    shopTarget.value = null;
   }
   function buyItem(item: Item) {
     // remove from shop
@@ -422,6 +424,9 @@
     });
   }
 
+  const originalPieces = ref<InstanceType<typeof Piece>[]>([]);
+  const originalSpawns = ref<Coordinate[]>([]);
+
   const selectLevel = (newLevel: Level, difficultyMod: number) => {//load level, start round
     hasFinishedTurn.value = false;
     player.value.canPlace = true;
@@ -432,15 +437,35 @@
     level.value = newLevel;
     const newPieces = rehydratePieces(newLevel.pieces);
     activePieces.value = processSpawnPoints(newPieces , difficultyMod);
+    originalPieces.value = activePieces.value.map(p => p.clone());
+    originalSpawns.value = playerSpawns.value;
     boardRef.value.clearHighlights();
     handleApplyAdmins('onRoundStart', '');
     toggleMap();
   }
 
+  function handleProceed(){
+    toggleSummary();
+    if(bossAdmins.value.length > 0){
+      increaseDifficulty();
+    }
+    toggleMap();
+  }
+
+  function reloadLevel(){
+    renewBlueprints();
+    activePieces.value = originalPieces.value.map(p => p.clone());
+    playerSpawns.value = originalSpawns.value;
+    toggleSummary();
+  }
+
   //game loop
   const toggleShop = () => {
-    refreshShop(true);
     showShop.value = !showShop.value;
+  }
+  const openShop = () => {
+    refreshShop(true);
+    showShop.value = true;
   }
   //linear: round -> shop -> map
   //split paths: round -> map -> shopIfShop -> else round
@@ -843,7 +868,6 @@
   };
 
   const addPlayerInterest = () => {
-
     const baseMoney = Math.max(0, player.value.money);   // ← prevents negative interest
     const noOfFives = Math.floor(baseMoney / 5);
     if(noOfFives > player.value.interestCap){
@@ -858,17 +882,21 @@
     }
   }
 
+  const hasWonRound = ref<boolean>(false);
+  
   const endRound = (roundWon: boolean) => {
     activePieces.value = [];
     renewBlueprints();//move to end round?
     if(roundWon){
       //bring up round summary
+      hasWonRound.value = true;
+      toggleSummary();
       addPlayerInterest();
       handleApplyAdmins('onRoundEnd', '');
       //move to btn inside round summary
-      toggleMap();
     } else {
-      alert('node failed! Retry?');
+      hasWonRound.value = false;
+      toggleSummary();
       //check admins for onion
       if(playerHasAdmin('Onion')){
         const index = player.value.admins.findIndex(a => a.name === 'Onion');
@@ -964,9 +992,11 @@
     showMap.value ? 'visible' : 'collapsed'
   )
 
+  const worldSeed = ref(0);
   const increaseDifficulty = () => {
     difficulty.value += 1;
     bossAdmins.value = [];
+    worldSeed.value++
   }
   const decreaseDifficulty = () => {
     difficulty.value -= 1;
@@ -989,7 +1019,6 @@
     <button class="map-toggle" @mousedown="toggleMap()">
       Toggle Map
     </button>
-    <p>Security level: {{ difficulty }}</p>
     <button class="difficulty" @mousedown="increaseDifficulty()">
       Increase Security
     </button>
@@ -997,24 +1026,38 @@
       Decrease Security
     </button>
   </div>
-  <div v-if="isPlacing && pieceToPlace">
-    <p>Placing:</p>
+  <div class="player-helper">
+    <div v-if="!hasFinishedTurn && !isPlacing">Your turn</div>
+      <div v-if="isPlacing && pieceToPlace">
+        <p>Placing:</p>
+      </div>
+      <div v-if="isPlacing && pieceToPlace"
+      class="info">
+      <BlueprintView :blueprint="pieceToPlace"
+      :tileSize="60"
+      :cssclass="'placing'"
+      />
+    </div>
   </div>
-  <div v-if="isPlacing && pieceToPlace"
-    class="info">
-    <BlueprintView :blueprint="pieceToPlace"
-    :tileSize="60"
-    :cssclass="'placing'"
-    />
+  <div class="enemy-info">
+    <p><strong>Security level: </strong>{{ difficulty }}</p>
+    <span>
+      <BossView :admins="bossAdmins"/>
+    </span>
   </div>
-  <div v-if="!hasFinishedTurn && !isPlacing">Your turn</div>
-  <BossView :admins="bossAdmins"/>
+  <RoundSummary v-if="displaySummary"
+    :hasWonRound="hasWonRound"
+    :player="player"
+    @proceedFromEndOfRound="handleProceed"
+    @reloadLevel="reloadLevel"
+  />
   <WorldMap
     :allLevels="testLevels"
     :difficulty="difficulty"
+    :seed="worldSeed"
     :cssclass="mapClass"
     @select-level="selectLevel"
-    @openShop="toggleShop"
+    @openShop="openShop"
     @addBoss="addBossAdmin"
     @increaseDifficulty="increaseDifficulty"
   />
@@ -1054,6 +1097,15 @@
 </template>
 
 <style scoped>
+.player-helper{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.enemy-info{
+  display: flex;
+  gap: 2rem;
+}
 .info{
   position: relative;
   height: 60px;
@@ -1075,6 +1127,9 @@
 }
 .end-turn{
   margin-top: 1rem;
+  position: absolute;
+  left: 20%;
+  bottom: 15%;
 }
 .logo {
   height: 6em;

@@ -338,7 +338,7 @@ class SAM extends Piece {
   }
 }
 
-class Gate extends Piece {
+class Gate extends Piece {//unfinished negative
   static name = "Gate";
   static description = "A defensive program that other programs can pass through";
   static unicode = "U+13208";//"U+26E9";
@@ -393,7 +393,7 @@ class Firewall extends Piece {
   }
 }
 
-class Trench extends Piece {
+class Trench extends Piece {//unfinished
   static name = "Trench";
   static description = "A program that boosts the defence of programs inside it";
   static unicode = "U+1F573";
@@ -412,7 +412,7 @@ class Trench extends Piece {
   //special method to give +1 def to programs with headposition inside it
 }
 
-class Mole extends Piece {//unfinished - test
+class Mole extends Piece {//unfinished - test negative
   static name = "Mole";
   static description = "Can burrow through adjacent programs (does not increase with range)";
   static unicode = "U+1F9A1";
@@ -712,7 +712,7 @@ class Copycat extends Piece {
 
 class Trap extends Piece {
   static name = "Trap";
-  static description = "A program invisble to the enemy that temporarily immobilises programs moving over it and applies posion to them";
+  static description = "A program invisble to the enemy that immobilises programs moving over it and applies posion to them";
   static unicode = "U+1FAA4";
   static color = "#686026";
   static rarity = 2;
@@ -725,10 +725,13 @@ class Trap extends Piece {
   //no active special, but a walkOver function we need to setup await handler in App.vue inside movePiece or even Piece moveTo
   async special(target: Piece): Promise<void> {
     target.movesRemaining = 0;
+    target.statuses.frozen = true;
     if(!target.immunities.poisonImmune){
       target.statuses.poisoned = true
     }
     this.actions--
+    //remove until selection of negative is sorted
+    this.removeCallback?.(this);
   }
   //check for programs on top, make their movement 0
 }
@@ -773,6 +776,8 @@ class Web extends Piece {
       target.movesRemaining = 0;
       target.statuses.frozen = true;//maybe
       this.actions --
+      //remove until selection of negative is sorted
+      this.removeCallback?.(this);
     }
     //remove self?
   }
@@ -1605,16 +1610,16 @@ class Potato extends Piece {
   }
 }
 
-class Ghost extends Piece {
+class Ghost extends Piece {//unfinished negative
   static name = "Ghost";
-  static description = "A program that can pass through other programs and hide itself";
+  static description = "A program that can hide itself";
   static unicode = "U+1F47B";
   static color = "#a1a1a1ff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Ghost.name, Ghost.description, Ghost.unicode, 3, 2, 1, 1, 0, Ghost.color, headPosition, [headPosition], team, Ghost.rarity, removeCallback, id)
-   this.statuses.negative = true;
-   this.specialName='Disappear'
+    super(Ghost.name, Ghost.description, Ghost.unicode, 3, 2, 1, 1, 0, Ghost.color, headPosition, [headPosition], team, Ghost.rarity, removeCallback, id)
+    //this.statuses.negative = true;
+    this.specialName='Disappear'
     this.targetType='self'
   }
   async special(target: Piece):Promise<void>{
@@ -1982,9 +1987,7 @@ export class Dolls extends Piece {//finished? needs testing, will have to be han
   static rarity = 6;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Dolls.name, Dolls.description, Dolls.unicode, 3, 0, 1, 0, 0, Dolls.color, headPosition, [headPosition], team, Dolls.rarity, removeCallback, id)
-   this.targetType = 'trapPiece'
   }
-  
 }
 
 

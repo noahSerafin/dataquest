@@ -29,6 +29,7 @@ const emit = defineEmits<{
   (e: 'damagePieceAt', coord: Coordinate): void
   (e: 'specialActionAt', coord: Coordinate): void
 }>()
+  
 function handlePlaceClick(tile: Coordinate) {
   if (!props.placementMode) return
   if (!props.placementHighlights.some(h => h.x === tile.x && h.y === tile.y)) return
@@ -74,17 +75,15 @@ const boardHeight = computed(() => tileSize.value * rows.value)
 const pieceMap = computed(() => {
   const map = new Map<string, InstanceType<typeof Piece>>()
   props.pieces.forEach(piece => {
-    piece.tiles.forEach(tile => {
-      map.set(`${tile.x},${tile.y}`, piece)
-    })
+    if(!piece.statuses.negative){
+      piece.tiles.forEach(tile => {
+        map.set(`${tile.x},${tile.y}`, piece)
+      })
+    }
   })
   //console.log('piecemap:', map)
   return map
 });
-
-const isOccupied = (x: number, y: number) => pieceMap.value.has(`${x},${y}`);
-
-
 
 //cleanup
 const moveButtons = ref<Array<{ x: number; y: number; direction: string }>>([]);
@@ -111,7 +110,11 @@ function getAvailableMoves(
 
   return potentialMoves.filter(pos => {
     const key = `${pos.x},${pos.y}`
-    return tileSet.has(key) && !pieceMap.has(key)
+    if(piece.statuses.negative){
+      return tileSet.has(key);
+    } else{
+      return tileSet.has(key) && !pieceMap.has(key);
+    }
   })
 }
 
@@ -222,8 +225,6 @@ const highlightSpecials = (piece: InstanceType<typeof Piece>) => {
     ); 
   }
 }
-
-//attackHighlights.value = getTilesInRange(piece, tileSet.value, pieceMap.value);
 
 defineExpose({
   highlightMoves,
@@ -378,6 +379,7 @@ defineExpose({
   background-color: rgba(0, 200, 255, 0.3);
   border: 1px solid rgba(0, 200, 255, 0.5);
   cursor: pointer;
+  z-index: 999;
 }
 .move-button{
 

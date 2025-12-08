@@ -97,7 +97,7 @@ const getTileStyle = (tile: Coordinate) => ({
 
 function handleSelect() {
   showController.value = !showController.value;
-  if (props.piece) emit('select', props.piece)
+  if (props.piece)       emit('select', props.piece)
 }
 
 //controller------------
@@ -107,16 +107,13 @@ const handlePieceMoveClick = () => {
   }
 }
 
-const onAttack = (piece : Piece) => {
- // emit('attack', piece)
-}
-
 const activeStatuses = computed((): [string, boolean][] => {
   // Object.entries returns (string | boolean)[], so we assert/carefully filter
   return Object.entries(props.piece.statuses)
     .map(([k, v]) => [k, Boolean(v)] as [string, boolean]) // normalize to boolean
     .filter(([, active]) => active);
 });
+
 </script>
 
 <template>
@@ -127,7 +124,7 @@ const activeStatuses = computed((): [string, boolean][] => {
     :style="pieceStyle"
     @click="handleSelect"
   >
-    {{ unicodeSymbol }}
+      {{ unicodeSymbol }}
     <div class="status-icons">
       <span
         v-for="([key, active], idx) in activeStatuses"
@@ -138,14 +135,6 @@ const activeStatuses = computed((): [string, boolean][] => {
         {{ STATUS_ICONS[key] ?? '?' }}
       </span>
     </div>
-    <button
-      v-if="showController"
-      class="move-btn"
-      @click.stop="handlePieceMoveClick"
-      title="Move this piece"
-    >
-      M
-    </button>
   </div>
   <div
     v-for="(tile, index) in bodyTiles"

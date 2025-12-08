@@ -340,13 +340,23 @@ class SAM extends Piece {
 
 class Gate extends Piece {//unfinished negative
   static name = "Gate";
-  static description = "A defensive program that other programs can pass through";
+  static description = "A defensive program that allows friendly programs to pass through, but freezes enemies";
   static unicode = "U+13208";//"U+26E9";
   static color = "#ff9900ff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Gate.name, Gate.description, Gate.unicode, 1, 1, 0, 0, 2, Gate.color, headPosition, [headPosition], team, Gate.rarity, removeCallback, id)
+   this.targetType = 'trapPiece';
    this.statuses.negative = true;
+  }
+  async special(target: Piece): Promise<void> {
+    //how to move friendly into unoccupied space?
+    if(this.team = target.team) return
+    target.movesRemaining = 0;
+    target.statuses.frozen = true;
+    this.actions--
+    //remove until selection of negative is sorted
+    this.removeCallback?.(this);
   }
   //negative status for friendlies
 }

@@ -4,6 +4,8 @@
     import { Admin } from "../AdminPrograms";
     import { allBosses } from "../Bosses";
     import { watch } from "vue";
+    import type { Company } from "../types";
+    import { companies } from "../companies";
 
     //world graph structure
     interface WorldNode {
@@ -12,6 +14,7 @@
         level?: Level;             // Only for type: level
         next: string[];            // IDs of next nodes
         position: { x: number; y: number }; // For layout on screen
+        company: Company;
         difficultyMod: number;
         reward: number;
     }
@@ -54,6 +57,10 @@
         (e: "increaseDifficulty"): void;
     }>();
 
+    function chooseRandomCompany(){
+        return companies[Math.floor(Math.random() * companies.length)];
+    }
+
     function generateWorld(levelPool: Level[]): WorldMap {
         const pick = () => levelPool[Math.floor(Math.random() * levelPool.length)];
 
@@ -73,6 +80,7 @@
                 type: "level",
                 next: [a1, b1],
                 position: { x: 200, y: 400 },
+                company: chooseRandomCompany(),
                 difficultyMod: 0,
                 reward: 1
             },
@@ -81,6 +89,7 @@
                 type: "shop",
                 next: [a2],
                 position: { x: 100, y: 250 },
+                company: chooseRandomCompany(),
                 difficultyMod: 0,
                 reward: 0
             },
@@ -90,6 +99,7 @@
                 type: "level",
                 next: [merge],
                 position: { x: 100, y: 100 },
+                company: chooseRandomCompany(),
                 difficultyMod: 1,
                 reward: 2
             },
@@ -99,6 +109,7 @@
                 level: pick(),
                 next: [b2],
                 position: { x: 300, y: 250 },
+                company: chooseRandomCompany(),
                 difficultyMod: 0,
                 reward: 3
             },
@@ -108,14 +119,16 @@
                 level: pick(),
                 next: [merge],
                 position: { x: 300, y: 100 },
+                company: chooseRandomCompany(),
                 difficultyMod: 0,
                 reward: 5
             },
             [merge]: {
                 id: merge,
-                type: "shop",
+                type: "shop", //might have themed shops later
                 next: [final],
                 position: { x: 200, y: 50 },
+                company: chooseRandomCompany(),
                 difficultyMod: 0,
                 reward: 0
             },
@@ -125,6 +138,7 @@
                 level: pick(),
                 next: [],
                 position: { x: 200, y: 0 },
+                company: chooseRandomCompany(),
                 difficultyMod: 0,
                 reward: 2
             }
@@ -178,7 +192,7 @@
         switch (node.type) {
             case "start": return "⬤";
             case "shop": return "🛒";
-            case "level": return "■";
+            case "level": return String.fromCodePoint(parseInt(node.company.unicode.replace('U+', ''), 16));
             case "boss": return  String.fromCodePoint(parseInt(boss.value.unicode.replace('U+', ''), 16));
         }
     }
@@ -239,12 +253,17 @@
             }"
         @click="trySelect(node)"
         >
+        <div v-if="node.type!=='shop'"
+        class="company-info"
+        >
+        {{ node.company.abbr }}
+        </div>
         {{ displayIcon(node) }}
         <div v-if="node.type==='boss'"
         class="boss-info"
         >
             <strong>
-                {{ boss.name }}:
+             {{ boss.name }}:
             </strong>
             <span>
                 {{ boss.description }}
@@ -269,9 +288,11 @@
     <!-- Preview modal -->
     <div v-if="selectedPreviewNode" class="preview-modal">
       <h3>{{ selectedPreviewNode.type.toUpperCase() }}</h3>
+      <h4 v-if="selectedPreviewNode.type!=='shop'">{{ selectedPreviewNode.company.name}}</h4>
 
       <MiniMap v-if="selectedPreviewNode.level"
         :level="selectedPreviewNode.level"
+        :company="selectedPreviewNode.company"
       />
         <div class="btns">
 
@@ -323,14 +344,6 @@
         opacity: 0.4;
         z-index: 0;
     }
-    .boss-info{
-        position: absolute;
-        background-color: #111;
-        font-size: 14px;
-        opacity: 1;
-        width: 300px;
-        left: 120%;
-    }
     .node.clickable {
         opacity: 1;
         cursor: pointer;
@@ -358,5 +371,18 @@
         display: flex;
         justify-content: space-between;
         gap: 1rem;
+    }
+    .boss-info, .company-info{
+        position: absolute;
+        background-color: #111;
+        font-size: 14px;
+        opacity: 1;
+        width: 300px;
+        left: 120%;
+    }
+    .company-info{
+        right: 100%;
+        left: unset;
+        width: 50px;
     }
 </style>

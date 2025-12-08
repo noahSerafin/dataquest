@@ -67,7 +67,7 @@
 </script>
 
 <template>
-    <h4>{{ preview.level.name }}</h4>
+    <h4>Node Structure: {{ preview.level.name }}</h4>
     <div
         class="map-wrapper"
         @click="emit('selectLevel', preview.level)"

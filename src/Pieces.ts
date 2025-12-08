@@ -1059,7 +1059,7 @@ class Nuke extends Piece {
 
 class Highwayman extends Piece {
   static name = "Highwayman";
-  static description = "A program that generates money on succesfully attacking a piece";
+  static description = "A program that generates money on succesfully attacking an enemy piece";
   static unicode = "U+1F9B9";
   static color = "#494646ff";
   static rarity = 3;
@@ -1072,7 +1072,9 @@ class Highwayman extends Piece {
   async special({piece, player} : {piece: Piece, player: Player}):Promise<void>{
     if(this.getStat('attack') > piece.getStat('defence')){
       piece.takeDamage(this.getStat('attack'))
-      player.money += 1;
+      if(piece.team === 'enemy'){
+        player.money += 1;
+      }
       this.actions--
     }
   }
@@ -2088,6 +2090,7 @@ class Saw extends Piece {
 }
 export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Ink, Snail, Shark, Greatshield, Wizard, Ninja, Fairy, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, Dolls, UFO, TP, Saw];//87 +2 (web, ink)
 console.log('pieces length: ', allPieces.length)
+
 // CROCODILE, U+1F40A //moves 0 high damage
 
 //"U+1F526"; TORCH expose targets

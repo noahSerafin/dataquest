@@ -663,7 +663,7 @@ class Osiris extends Admin {
     super(Osiris.name, Osiris.description, Osiris.unicode, Osiris.color, 8, 4, 'gameState', 'onPieceDestruction')
   }
   //on receive damage //on piece destrcution
-  async apply({ activePieces }: { activePieces: Piece[] }) {
+  async apply({id, activePieces }: {id: string, activePieces: Piece[] }) {
     for (const p of activePieces){
       if(p.team==='player'){
         p.addModifier({attack: 1})
@@ -1052,7 +1052,7 @@ export class FireEngine extends Admin {
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    //activePieces[idx].burnImmunity = true
+    activePieces[idx].immunities.burnImmune = true
   }
 }
 
@@ -1166,13 +1166,47 @@ class Warmth extends Admin {
   }
 }
 
-export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, Seed, Puzzle, Roger, Bucket, Diamond, Drum, Sneakers, Torch, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Helmet, Prayer, Fountain, Spoon, Hermes, Warmth];//69
+class Xray extends Admin {
+  static name = "X-Ray";
+  static description = "Programs are immue to being blinded on placement";
+  static unicode = "U+1F52C";
+  static color = "#ff5555";
+  constructor() {
+    super(Xray.name, Xray.description, Xray.unicode, Xray.color, 5, 3, 'gameState', 'onPlacement')
+  }
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    activePieces[idx].immunities.blindImmune = true;
+  }
+}
+
+class Ambulance extends Admin {//test
+  static name = "Ambulance";
+  static description = "Recovers your destroyed programs, letting you reload them";
+  static unicode = "U+1F52C";
+  static color = "#ff5555";
+  constructor() {
+    super(Ambulance.name, Ambulance.description, Ambulance.unicode, Ambulance.color, 5, 3, 'playerAndGame', 'onPieceDestruction')
+  }
+  async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+     activePieces[idx].immunities.freezeImmune = true;
+    if(activePieces[idx].team==='player'){
+    //find right bp by id
+      player.programs.forEach(blueprint => {
+        blueprint.isPlaced = false;
+      });
+    }
+  }
+}
+
+export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, Seed, Puzzle, Roger, Bucket, Diamond, Drum, Sneakers, Torch, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Helmet, Prayer, Fountain, Spoon, Hermes, Warmth, Xray, Ambulance];//71
 
 //BANK, U+1F3E6 //increases sell value of held programs?
 
 //doctor STETHOSCOPE, U+1FA7A medic, return killed pieces to hand as blueprints
 
-//X-RAY, U+1FA7B immune to blinding? //need more pieces that blind
+//X-RAY,  immune to blinding? //need more pieces that blind
 //DARK SUNGLASSES, U+1F576
 
 //STATUE OF LIBERTY, U+1F5FD 
@@ -1228,8 +1262,6 @@ export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, 
 
 // CHESTNUT, U+1F330
 // POTTED PLANT, U+1FAB4
-
-//AMBULANCE, U+1F691
 
 //clippy - provides hints
 //PAPERCLIP, U+1F4CE

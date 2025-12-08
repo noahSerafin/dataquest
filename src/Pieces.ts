@@ -172,6 +172,9 @@ export abstract class Piece {
     }
   }
 
+  hasActions(){
+    return this.actions > 0;
+  }
   async special(target: any):Promise<void>{
     //do not destroy the admin
   }
@@ -766,7 +769,7 @@ class Web extends Piece {
     this.statuses.negative = true;
   }
   async special(target: Piece): Promise<void> {
-    if(target.immunities.freezeImmune){
+    if(!target.immunities.freezeImmune){
       target.movesRemaining = 0;
       target.statuses.frozen = true;//maybe
       this.actions --
@@ -863,8 +866,7 @@ class Watchman extends Piece {
   }
 }
 
-//	U+1F9F2 magnet
-class Magnet extends Piece {//unfinished line
+class Magnet extends Piece {//unfinished testing
   static name = "Magnet";
   static description = "A program that moves other programs";
   static unicode = "U+1F9F2";
@@ -872,9 +874,27 @@ class Magnet extends Piece {//unfinished line
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Magnet.name, Magnet.description, Magnet.unicode, 2, 2, 3, 0, 0, Magnet.color, headPosition, [headPosition], team, Magnet.rarity, removeCallback, id)
+   this.targetType = 'line'
+   this.specialName = 'Pull'
   }
 
-  // pull programs toward it line?
+  async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
+
+    for (let tileIdx = 0; tileIdx < line.length; tileIdx++) {
+      const occupier = activePieces.find(p =>
+        p.tiles.some(t => t.x === line[tileIdx].x && t.y === line[tileIdx].y)
+      );
+      if(!occupier) {
+        const pullTarget = activePieces.find(p =>
+          p.tiles.some(t => t.x === line[tileIdx+1].x && t.y === line[tileIdx+1].y)
+        );
+        if(pullTarget) {
+          pullTarget.moveTo(line[tileIdx-1]);
+        }
+      }
+    }
+    this.actions--
+  }
 }
 
 //	U+1F422 turtle
@@ -1315,7 +1335,7 @@ class Shark extends Piece {
   }
 }
 
-class Greatshield extends Piece {
+class Greatshield extends Piece {//testt
   static name = "Greatshield";
   static description = "A slow but highly defensive program, can charge to deal damage and move";
   static unicode = "U+26C9";
@@ -1327,7 +1347,7 @@ class Greatshield extends Piece {
     this.targetType = 'line'
   }
 
-  async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
+  async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{//not working, test?
     for (const tile of line) {
       const occupier = activePieces.find(p =>
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
@@ -1967,18 +1987,31 @@ export class Dolls extends Piece {//finished? needs testing, will have to be han
   
 }
 
-class UFO extends Piece {//unfinished, line target?
+
+class UFO extends Piece {//unfinished, line target? test
   static name = "UFO";
-  static description = "A program that can move enemies without increasing their size";
+  static description = "A program that can move enemies toward it without increasing their size";
   static unicode = "U+1F6F8";
   static color = "#000000ff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(UFO.name, UFO.description, UFO.unicode, 4, 3, 3, 2, 0, UFO.color, headPosition, [headPosition], team, UFO.rarity, removeCallback, id)
-    this.targetType = 'piece'//piecesInLine
+    this.targetType = 'line'//piecesInLine
     this.specialName = 'Tractor Beam'
   }
-  //line special
+
+  async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
+
+    for (let tileIdx = 1; tileIdx < line.length; tileIdx++) {
+      const occupier = activePieces.find(p =>
+        p.tiles.some(t => t.x === line[tileIdx].x && t.y === line[tileIdx].y)
+      );
+      if(!occupier) {
+        this.moveTo(line[tileIdx-1]);
+      }
+    }
+    this.actions--
+  }
 }
 
 class TP extends Piece {

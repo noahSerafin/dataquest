@@ -251,8 +251,10 @@ function getNextStepTowards(
 
   const occupiedTiles = new Set<string>();
   for (const p of activePieces) {
-    for (const t of p.tiles) {
-      occupiedTiles.add(`${t.x},${t.y}`);
+    if(!p.statuses.negative){
+      for (const t of p.tiles) {
+        occupiedTiles.add(`${t.x},${t.y}`);
+      }
     }
   }
 

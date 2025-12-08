@@ -21,7 +21,7 @@ export const STATUS_INFO: Record<string, string> = {
   frozen: 'Moves set to 0',
   charmed: 'Is controlled by the opposition',
   confused: 'Moves randomly.',
-  exposed: 'Exposed: can no longer hide.',
+  exposed: 'Can no longer hide.',
   hidden: 'Invisible to enemies until next move or action.',
   negative: "Can move through other programs",
 };

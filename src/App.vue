@@ -540,8 +540,8 @@
       const index = player.value.admins.findIndex(a => a.name === 'Hi-vis');
       if (index !== -1) player.value.admins.splice(index, 1);
     } else {
-      activePieces.value = activePieces.value.filter(p => p.id !== piece.id);
       handleApplyAdmins('onPieceDestruction', piece.id);
+      activePieces.value = activePieces.value.filter(p => p.id !== piece.id);
       //graveyard?
       if (piece.name == 'Dolls') {//hybrids need a flag other than name
         if (piece.getStat('maxSize') > 1) {
@@ -863,8 +863,8 @@
 
   //enemy moves
   async function enemyTurn() {
-    const enemyPieces = activePieces.value.filter(p => p.team === 'enemy');
-    const playerPieces = activePieces.value.filter(p => p.team === 'player');
+    const enemyPieces = activePieces.value.filter(p => (p.team === 'enemy' && !p.statuses.charmed));
+    const playerPieces = activePieces.value.filter(p => p.team === 'player' && !p.statuses.charmed);
 
     const tileSet = new Set(level.value.tiles.map(t => `${t.x},${t.y}`));
 
@@ -914,7 +914,6 @@
     player.value.canMove = true;
     player.value.canAction = true;
   }
-
   
   // When editor exports a new level, shouldn't be needed in final
   const handleExport = (levelData: any) => {

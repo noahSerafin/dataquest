@@ -16,7 +16,7 @@ status admins (immunities) 4 - change hidden immunity to exposed status (also in
 round admins 6
 
 PLAYER
-disable moving if placing/disable placing if moving 3
+disable moving if placing, disable placing if moving 3
 rarity = value ?+=no. of upgrades used on a piece? 6 but test
 
 AI 6 nearly-done

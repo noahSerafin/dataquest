@@ -105,6 +105,9 @@
         <div class="flex full-width">
             <!-- Money -->
             <div>
+                <p class="os">
+                    {{ String.fromCodePoint(parseInt(player.osunicode.replace('U+', ''), 16)) }}
+                </p>
                 <p><strong>Money:</strong> {{ props.player.money }}</p>
                 <p><strong>Lives:</strong>
                     <span v-for="lives in player.lives">
@@ -212,11 +215,15 @@
         border-radius: 0.75rem;
         padding: 10px;
         z-index: 50;
-    .flex{
-        display: flex;
-        width: 100%;
-        justify-content: space-between;
+        .flex{
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+        }
     }
+    .os{
+        font-size: 36px;
+        margin: 0;
     }
     .inventory{
         text-align: left;

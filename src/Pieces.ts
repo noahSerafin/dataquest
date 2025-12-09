@@ -294,7 +294,7 @@ class Sling extends Piece {
   static color = "#019700";
   static rarity = 1;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Sling.name, Sling.description, Sling.unicode, 3, 2, 2, 1, 0, Sling.color, headPosition, [headPosition], team, Sling.rarity, removeCallback, id) //disk
+   super(Sling.name, Sling.description, Sling.unicode, 2, 2, 2, 1, 0, Sling.color, headPosition, [headPosition], team, Sling.rarity, removeCallback, id) //disk
   }
 }
 
@@ -1484,7 +1484,7 @@ class Bug extends Piece {
   static color = "#04ca0eff";
   static rarity = 1;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Bug.name, Bug.description, Bug.unicode, 1, 5, 1, 1, 0, Bug.color, headPosition, [headPosition], team, Bug.rarity, removeCallback, id)
+   super(Bug.name, Bug.description, Bug.unicode, 1, 5, 1, 2, 0, Bug.color, headPosition, [headPosition], team, Bug.rarity, removeCallback, id)
   }
 }
 

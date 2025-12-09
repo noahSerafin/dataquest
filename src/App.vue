@@ -14,7 +14,7 @@
   import type { Piece } from "./Pieces"
   import { Spawn, Dolls } from './Pieces';
   import { allPieces } from "./Pieces"
-  import type { Coordinate, PieceBlueprint, StatModifier, Level } from "./types";
+  import type { Coordinate, PieceBlueprint, Level, OS } from "./types";
   import { takeEnemyTurn } from "./Enemy";
   import WorldMap from "./components/WorldMap.vue";
   import Shop from "./components/Shop.vue";
@@ -26,6 +26,7 @@
 
   //testing fields 
   import BlueprintView from "./components/BlueprintView.vue";
+import MainMenu from "./components/MainMenu.vue";
 
   // Instantiate real piece objects
   
@@ -81,6 +82,7 @@
   }
   
   const player = ref(new Player(
+    'U+1F60A',
     50, // starting money
     5,  // memory limit
     5, //admin slots
@@ -93,6 +95,26 @@
     false,
     false
   ));
+  const showMainMenu = ref(true);
+
+  function createNewPlayer(os: OS){
+    difficulty.value = 1 //move to player??
+    player.value = new Player(
+      os.unicode,
+      os.money,
+      os.memory,
+      os.adminSlots,
+      os.items,
+      os.blueprints,
+      os.admins,
+      os.lives,
+      10,
+      0,
+      false,
+      false
+    )
+    showMainMenu.value = false;
+  }
 
   function playerHasAdmin(name: string) {
     return player.value.admins.some(a => a.name === name);
@@ -1045,9 +1067,11 @@
       <BossView :admins="bossAdmins"/>
     </span>
   </div>
+  <MainMenu v-if="showMainMenu" @createNewPlayer="createNewPlayer"/>
   <RoundSummary v-if="displaySummary"
     :hasWonRound="hasWonRound"
     :player="player"
+    :difficulty="difficulty"
     @proceedFromEndOfRound="handleProceed"
     @reloadLevel="reloadLevel"
   />

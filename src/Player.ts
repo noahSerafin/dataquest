@@ -18,8 +18,10 @@ export class Player {
     canPlace: boolean = true;
     canMove: boolean = true;
     canAction: boolean = true;
+    osunicode: string
     //adminModifiers: Record<string, StatModifier>
     constructor(
+        osunicode = '',
         money = 5,
         memory = 4,
         adminSlots = 4,
@@ -33,6 +35,7 @@ export class Player {
         hasToolbox: boolean,
         //adminModifiers: Record<string, StatModifier> = {}
     ) {
+        this.osunicode = osunicode
         this.money = money;
         this.memory = memory;
         this.adminSlots = adminSlots;
@@ -137,29 +140,4 @@ export class Player {
   modifyMemory(delta: number): void {
     this.memory = Math.max(0, this.memory + delta);
   }
-
-  // -------------- GET MODIFIED STATS --------------
-
-  /*getTotalModifier(pieceId: string, stat: keyof StatModifier): number {
-    const mod = this.adminModifiers[pieceId];
-    return mod?.[stat] ?? 0;
-  }
-
-  getModifiedStat(piece: PieceBlueprint, stat: keyof StatModifier): number {
-    const base = piece[stat] ?? 0;
-    return base + this.getTotalModifier(piece.id, stat);
-  }*/
-
-  /*getModifiedPiece(piece: PieceBlueprint) {
-    const totalMods = this.getTotalModifier(piece.id, )
-
-    return {
-      ...piece,
-      moves: piece.moves + (totalMods.moves ?? 0),
-      attack: piece.attack + (totalMods.attack ?? 0),
-      defence: piece.defence + (totalMods.defence ?? 0),
-      range: piece.range + (totalMods.range ?? 0),
-      maxSize: piece.maxSize + (totalMods.maxSize ?? 0),
-    }
-  }*/
 }

@@ -1433,24 +1433,3 @@ console.log('admins length: ', allAdmins.length)
 // HIGH VOLTAGE SIGN, U+26A1
 
 //HOSPITAL, U+1F3E5
-
-
-//OS-vouchers???
-// PENGUIN, U+1F427
-//+1 to all player stats - memory admin interest
-
-//WINDOW, U+1FA9F
-//+1 admin -1 memory
-
-// GREEN APPLE, U+1F34F
-//+1 memory -1 interest
-
-// SCALES, U+2696 --- CROSSED SWORDS, U+2694
-//scales: EGYPTIAN HIEROGLYPH U038, U+1335D
-//temple - +1 admin +1 memory -1 interest
-//---------
-
-//STEAM LOCOMOTIVE, U+1F682
-//+2 admin 
-
-//BITCOIN SIGN, U+20BF

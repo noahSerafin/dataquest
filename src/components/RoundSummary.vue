@@ -4,13 +4,15 @@
 
     interface Props{
         hasWonRound: boolean,
-        player: Player
+        player: Player,
+        difficulty: number
     }
     const props = defineProps<Props>()
 
     const emit = defineEmits<{
         (e: 'proceedFromEndOfRound'): void;
         (e: 'reloadLevel'): void;
+        (e: 'mainMenu'): void;
     }>();
    
     
@@ -23,6 +25,9 @@
 <template>
     <div class="round-summary">
         <div class="if-won" v-if="hasWonRound">
+            <h3 v-if="difficulty >= 6">
+                You win!
+            </h3>
             <h3>
                 Node complete
             </h3>
@@ -42,15 +47,9 @@
         </div>
         <div class="if-lost" v-if="!hasWonRound && player.lives > 0">
             <h3>
-                Node failed
+                Game Over
             </h3>
-            <div class="interest-summary">
-                Lives remaining: 
-                <span v-for="lives in player.lives">
-                  {{ String.fromCodePoint(0x1FA77) }}
-                </span>
-            </div>
-            <button @click="emit('reloadLevel')">Retry</button>
+            <button @click="emit('mainMenu')">Retry</button>
         </div>
         <div class="if-lost" v-if="!hasWonRound && player.lives <= 0">
 

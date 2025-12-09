@@ -1,6 +1,7 @@
 // Define a coordinate type for readability
 export type Coordinate = { x: number; y: number }
-import { Piece } from "./Pieces";
+import { Item } from "./Items";
+import { Admin } from "./AdminPrograms";
 
 export type PieceBlueprint = {
   id: string
@@ -16,6 +17,19 @@ export type PieceBlueprint = {
   color: string
   isPlaced: boolean
   cost: number
+}
+
+export type OS = {
+  name: string
+  unicode: string
+  money: number
+  memory: number
+  adminSlots: number
+  blueprints: PieceBlueprint[]
+  items: Item[]
+  admins: Admin[]
+  lives: number
+  description: string
 }
 
 export type StatModifier = {

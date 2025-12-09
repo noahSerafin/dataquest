@@ -17,6 +17,9 @@ variants?
 ADMIN PIECES
 round admins 5
 
+BOSSES 5
+unique bosses
+
 PLAYER
 disable moving if placing, disable placing if moving 3
 rarity = value ?+=no. of upgrades used on a piece? 6 but test
@@ -34,6 +37,13 @@ functions:
     use special if possible
     !attackingSpecial use on friendly???
 
+
+HYBRIDS 6
+Hybrid class accepts two pieces
+takes average of both stats, rounded up
+takes special move of first piece
+add altar to map nodes
+
 SHOP - 8
 - two piece/item slots
 piece packs/item packs?
@@ -49,15 +59,6 @@ path examples before boss(paths meeting point):
     one level +0 difficulty, one level +1 difficulty
     one level +2 difficulty, shop
 multiple levels files?
-
-BOSSES 5
-unique bosses
-
-HYBRIDS 5
-Hybrid class accepts two pieces
-takes average of both stats, rounded up
-takes special move of first piece
-add altar to map nodes
 
 OSes 7
 types listed at bottom of admins

@@ -31,9 +31,11 @@
                 <span>$:{{os.money }}</span>
             </div>
         <h5>Starts with:</h5>
-        <div class="logo" 
-        v-for="bp in os.blueprints">
-            {{ returnUnicode(bp.unicode) }}
+        <div class="bps">
+            <div class="logo" 
+                v-for="bp in os.blueprints">
+                {{ returnUnicode(bp.unicode) }}
+            </div>
         </div>
         <button @click="emit('createNewPlayer', os)">Choose</button>
         </div>
@@ -65,5 +67,10 @@
     .stats span{
         margin-left: 0.5rem;
         margin-right: 0.5rem;
+    }
+    .bps{
+        display: flex;
+        justify-content: center;
+        margin-bottom: 1rem;
     }
 </style>

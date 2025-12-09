@@ -1,11 +1,5 @@
-priority - serach numbers descending
-
-STATUSES
-confused todo - 3
-
 ITEMS 3
-- implement item functions - done except round restarters 3
-cleanup targets: allow player as accepted target? 9
+- implement item functions - done except round restarters 3 - but renewround func exists
 
 PIECES 4
 active special functions 4 - done except fairy (need graveyard) 4
@@ -18,11 +12,11 @@ ADMIN PIECES
 round admins 5
 
 BOSSES 5
+test damage all bosses
 unique bosses
 
-PLAYER
-disable moving if placing, disable placing if moving 3
-rarity = value ?+=no. of upgrades used on a piece? 6 but test
+STATUSES
+confused todo - 5
 
 AI 6 nearly-done
 functions:
@@ -37,19 +31,7 @@ functions:
     use special if possible
     !attackingSpecial use on friendly???
 
-
-HYBRIDS 6
-Hybrid class accepts two pieces
-takes average of both stats, rounded up
-takes special move of first piece
-add altar to map nodes
-
-SHOP - 8
-- two piece/item slots
-piece packs/item packs?
-vouchers?
-
-MAP 5
+MAP 6.5
 isometric view?
 branching paths - started
 see two maps ahead?-done 
@@ -60,12 +42,22 @@ path examples before boss(paths meeting point):
     one level +2 difficulty, shop
 multiple levels files?
 
-OSes 7
-types listed at bottom of admins
-constructs the player, starting items/programs/admins money/ memory, slots, interest cap
+HYBRIDS 7
+Hybrid class accepts two pieces
+takes average of both stats, rounded up
+takes special move of first piece
+add altar to map nodes
 
 EDITOR 8
 Add a Spawn for a 'wall' type piece
 Have logic for spawning any piece on single spawn, then only pieces with max size >= to the spawn's size
 
 companies 9 - own list of programs;
+
+SHOP - 8
+- two piece/item slots
+piece packs/item packs?
+vouchers?
+
+PLAYER 8
+rarity = value ?+=no. of upgrades used on a piece? 6 but test

@@ -831,7 +831,7 @@ class Diamond extends Admin {
     }
   }
 }
-
+/*
 class Drum extends Admin {//try it out
   static name = "Marching Drum";
   static description = "+1 moves for all placed programs on the end of your turn";
@@ -849,6 +849,7 @@ class Drum extends Admin {//try it out
     }
   }
 }
+  */
 
 class Sneakers extends Admin {//item???
   static name = "Trainers";
@@ -1196,7 +1197,7 @@ class Ambulance extends Admin {//test
   }
 }
 
-export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, Seed, Puzzle, Roger, Bucket, Diamond, Drum, Sneakers, Candle, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Scarf, Prayer, Fountain, Spoon, Hermes, Warmth, Xray, Ambulance];//71
+export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, Seed, Puzzle, Roger, Bucket, Diamond, Sneakers, Candle, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Scarf, Prayer, Fountain, Spoon, Hermes, Warmth, Xray, Ambulance];//71
 console.log('admins length: ', allAdmins.length)
 
 //CHEESE WEDGE, U+1F9C0 Chedda

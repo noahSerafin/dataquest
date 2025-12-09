@@ -2,10 +2,10 @@ import type { Company } from "./types";
 
 export const companies: Company[] = [
     { name: 'Nightbridge Corp', abbr: 'NBC',  unicode: "U+1F309" },
-    { name: 'Meridian Security Inc.', abbr: 'NBC', unicode: "U+1F310" },
+    { name: 'Meridian Security Inc.', abbr: 'MSI', unicode: "U+1F310" },
     { name: 'Longhouse Web Services', abbr: 'LWS', unicode: "U+1F6D6" },
-    { name: 'Tsukimi Group', abbr: 'TSG', unicode: "U+1F391" },
-    { name: 'Zenith Ltd.', abbr: 'ZLTD', unicode: "U+1F304" },
+    { name: 'Tsukimi Group', abbr: 'TKG', unicode: "U+1F391" },
+    { name: 'Zenith Ltd.', abbr: 'ZNT', unicode: "U+1F304" },
     { name: 'Starlane Tech', abbr: 'SLT', unicode: "U+1F30C" },
     { name: 'Sunrise Associates', abbr: 'SRA', unicode: "U+1F305" },
     { name: 'Saturn Solutions', abbr: 'SSL', unicode: "U+1FA90" },
@@ -31,7 +31,7 @@ export const companies: Company[] = [
 
 //Starlane - high move pieces, high range pieces
 
-//Sunrise - all large pieces, mammoth elephant shark
+//Sunrise - animal pieces.
 
 //FlyBy - watchman, ranged pieces, guard officer, bugs
 
@@ -39,7 +39,7 @@ export const companies: Company[] = [
 
 //Red Sky - high attack pieces, defensive pieces
 
-//Whiteflower - non bug animal pieces, traps
+//Whiteflower - all pieces, traps
 
 //Cook.io - Household object pieces
 

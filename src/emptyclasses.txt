@@ -5,8 +5,9 @@ class ¬ extends Piece {
   static description = "A program ";
   static unicode = "";
   static color = "#ffb20dff";
+  static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(¬.name, ¬.description, ¬.unicode, 4, 0, 1, 0, 0, ¬.color, headPosition, [headPosition], team, 3, removeCallback, id)
+   super(¬.name, ¬.description, ¬.unicode, 4, 0, 1, 0, 0, ¬.color, headPosition, [headPosition], team, ¬.rarity, removeCallback, id)
   }
 }
 

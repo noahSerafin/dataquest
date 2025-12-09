@@ -1,7 +1,5 @@
 import type { OS } from "./types";
-import type { PieceBlueprint } from "./types";
-import { allPieces } from "./Pieces";
-import type { Piece } from "./Pieces";
+import { Voucher, Iron, Garlic, Lightning, Blueberry, RedMeat, Roids } from "./Items";
 
 /*
 export function findPieceClassByName(name: string) {
@@ -80,7 +78,7 @@ const knife =  {
 
     const potato =  {
         id: crypto.randomUUID(),
-        name: "Sling",
+        name: "Potato",
         description: '"A basic all around program"',
         unicode: "U+1F954",
         maxSize: 3,
@@ -90,6 +88,118 @@ const knife =  {
         defence: 0,
         rarity: 1,
         color: "#ad8226ff",
+        // blueprint-only fields:
+        isPlaced: false,
+        cost: 1 // or whatever cost formula you want
+    }
+    const tp =  {
+        id: crypto.randomUUID(),
+        name: "TP",
+        description: "A large program with high movement",
+        unicode: "U+1F9FB",
+        color: "#0d92ffff",
+        maxSize: 6,
+        moves: 3,
+        range: 0,
+        attack: 0,
+        defence: 0,
+        rarity: 1,
+        // blueprint-only fields:
+        isPlaced: false,
+        cost: 1 // or whatever cost formula you want
+    }
+    const rat =  {
+        id: crypto.randomUUID(),
+        name: "Rat",
+        description: "A small but fast program ",
+        unicode: "U+1F400",
+        color: "#6e6e6eff",
+        maxSize: 1,
+        moves: 3,
+        range: 1,
+        attack: 1,
+        defence: 0,
+        rarity: 1,
+        // blueprint-only fields:
+        isPlaced: false,
+        cost: 1 // or whatever cost formula you want
+    }
+    const snail =  {
+        id: crypto.randomUUID(),
+        name: "Snail",
+        description: "A slow program that can retract itself to boost its defence",
+        unicode: "U+1F40C",
+        color: "#4d3502ff",
+        maxSize: 3,
+        moves: 1,
+        range: 1,
+        attack: 1,
+        defence: 0,
+        rarity: 1,
+        // blueprint-only fields:
+        isPlaced: false,
+        cost: 1 // or whatever cost formula you want
+    }
+    const bug =  {
+        id: crypto.randomUUID(),
+        name : "Bug",
+        description: "A fast but small program",
+        unicode: "U+1F47E",
+        color: "#04ca0eff",
+        maxSize: 1,
+        moves: 5,
+        range: 1,
+        attack: 2,
+        defence: 0,
+        rarity: 1,
+        // blueprint-only fields:
+        isPlaced: false,
+        cost: 1 // or whatever cost formula you want
+    }
+    const bee =  {
+        id: crypto.randomUUID(),
+        name: "Bee",
+        description: "A small program which can sting, sacrificing itself for a high damage attack",
+        unicode: "U+1F41D",
+        color: "#eeff00ff",
+        maxSize: 1,
+        moves: 2,
+        range: 1,
+        attack: 3,
+        defence: 0,
+        rarity: 1,
+        // blueprint-only fields:
+        isPlaced: false,
+        cost: 1 // or whatever cost formula you want
+    }
+    const aegis =  {
+        id: crypto.randomUUID(),
+        name: "Aegis",
+        description: "An advanced defensive piece that can retaliate against attacks",
+        unicode: "U+26FB",
+        color: "#06789bff",
+        maxSize: 3,
+        moves: 2,
+        range: 0,
+        attack: 1,
+        defence: 2,
+        rarity: 5,
+        // blueprint-only fields:
+        isPlaced: false,
+        cost: 1 // or whatever cost formula you want
+    }
+    const screwdriver =  {
+        id: crypto.randomUUID(),
+        name: "Screwdriver",
+        description: "A program that can tinker with another, boosting a random stat by 1",
+        unicode: "U+1FA9B",
+        color: "#ff1d0dff",
+        maxSize: 1,
+        moves: 1,
+        range: 1,
+        attack: 0,
+        defence: 0,
+        rarity: 5,
         // blueprint-only fields:
         isPlaced: false,
         cost: 1 // or whatever cost formula you want
@@ -110,10 +220,10 @@ const Steam : OS = {//knife //shield //sling
     memory: 6,
     adminSlots: 5,
     blueprints: [knife, shield, sling],
-    items: [],
+    items: [new Voucher],
     admins: [],
     lives: 3,
-    description: 'The Gamers choice. High starting memory, and comes with some unique starting programs'
+    description: 'The Gamers choice. High starting memory, comes with all the essential base programs, and one voucher to redeem a free shop item.'
 }
 const Penguin : OS = {//potato //shield
     name: 'Penguin',
@@ -121,38 +231,38 @@ const Penguin : OS = {//potato //shield
     money: 3,
     memory: 5,
     adminSlots: 5,
-    blueprints: [potato, shield],
-    items: [],
+    blueprints: [potato, aegis],
+    items: [new Iron, new Lightning],
     admins: [],
     lives: 2,
-    description: 'A versatile all around system, though a bit barebones out of the box'
+    description: 'A versatile all around system, though a bit barebones out of the box. Start with some upgrade items.'
 }
 
-const Window : OS = {//knife //gaurd //snail
+const Window : OS = {//knife //shield //snail
     name: 'Window',
     unicode: ' U+1FA9F',
     money: 5,
     memory: 4,
     adminSlots: 5,
-    blueprints: [],
-    items: [],
+    blueprints: [snail, shield],
+    items: [new Blueberry, new Roids],
     admins: [],
     lives: 1,
-    description: 'Limited memory, but starts with some useful programs'
+    description: 'Limited memory, but starts with some useful programs.'
 
 }
 
-const Apple : OS = {//TP //guard
+const Apple : OS = {//TP //rat
     name: 'Apple',
     unicode: 'U+1F34F',
     money: 10,
     memory: 4,
     adminSlots: 4,
-    blueprints: [],
-    items: [],
+    blueprints: [rat, shield],
+    items: [new Garlic, new RedMeat],
     admins: [],
     lives: 1,
-    description: 'Limited admin functionality, but starts with excess money and some situational programs'
+    description: 'Limited admin functionality, but starts with excess money and some single use items.'
 }
 
 const Temple : OS = {//lance //bug //screwdriver
@@ -161,11 +271,11 @@ const Temple : OS = {//lance //bug //screwdriver
     money: 2,
     memory: 3,
     adminSlots: 6,
-    blueprints: [],
+    blueprints: [bug, aegis, screwdriver],
     items: [],
     admins: [],
     lives: 2,
-    description: 'Overclocked admin slots, low money. Some unique starting programs'
+    description: 'Overclocked admin slots, low money. Some unique starting programs.'
 }
 // SCALES, U+2696 --- CROSSED SWORDS, U+2694
 //scales: EGYPTIAN HIEROGLYPH U038, U+1335D

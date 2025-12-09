@@ -86,7 +86,8 @@
             },
             [a1]: {
                 id: a1,
-                type: "shop",
+                level: pick(),
+                type: "level",
                 next: [a2],
                 position: { x: 100, y: 250 },
                 company: chooseRandomCompany(),

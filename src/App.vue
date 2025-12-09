@@ -678,12 +678,10 @@ import MainMenu from "./components/MainMenu.vue";
       } else {
         player.value.canMove = false;
       }
-
       // If neither admin, end immediately
       if (!hasDove && !hasPalette) {
         endTurn();
       }
-
     } else {
       // Not first turn -> normal behaviour
       endTurn();
@@ -712,6 +710,7 @@ import MainMenu from "./components/MainMenu.vue";
 
   const movePiece = async (coord : Coordinate) => {
     if(!selectedPiece.value || !player.value.canMove) return;
+    player.value.canPlace = false;
     //if (selectedPiece.value.team !== 'player') return; //charmed pieces can still move
       boardRef.value.clearHighlights();
       selectedPiece.value?.moveTo(coord);
@@ -747,6 +746,7 @@ import MainMenu from "./components/MainMenu.vue";
 
   const damagePieceAt = async (coord:Coordinate) => {
     if (!selectedPiece.value) return
+    player.value.canPlace = false;
     //if (selectedPiece.value.team !== 'player') return //damaging your own pieces is actually useful sometimes
     const damageReceiver = activePieces.value.find(piece =>
       piece.tiles.some(t => t.x === coord.x && t.y === coord.y)

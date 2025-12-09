@@ -272,12 +272,12 @@ class Shield extends Piece {
 
 class Aegis extends Piece {
   static name = "Aegis";
-  static description = "An advanced defensive piece";
+  static description = "An advanced defensive piece that can retaliate against attacks";
   static unicode = "U+26FB";
   static color = "#06789bff";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Aegis.name, Aegis.description, Aegis.unicode, 3, 2, 0, 0, 2, Aegis.color, headPosition, [headPosition], team, Aegis.rarity, removeCallback, id)
+   super(Aegis.name, Aegis.description, Aegis.unicode, 3, 2, 0, 1, 2, Aegis.color, headPosition, [headPosition], team, Aegis.rarity, removeCallback, id)
     this.specialName = 'Parry';
     this.targetType = 'self'
   }
@@ -427,7 +427,7 @@ class Pitfall extends Piece {//unfinished
     this.actions--
   }
 }
-
+/*
 class Mole extends Piece {//unfinished - test negative
   static name = "Mole";
   static description = "Can burrow through adjacent programs (does not increase with range)";
@@ -456,6 +456,7 @@ class Mole extends Piece {//unfinished - test negative
     this.actions --
   }
 }
+  */
 
 class Lance extends Piece {
   static description = "Can charge instead of attacking, adamaging targets in a staight line and moving forward until stopped";
@@ -1203,7 +1204,7 @@ class Rat extends Piece {
 }
 
 class Flute extends Piece {//not working
-  static name = "Flute";
+  static name = "Piper";
   static description = "A program that can summon rats";
   static unicode = "U+1FA88";
   static color = "#6ea1caff";
@@ -2088,21 +2089,142 @@ class Saw extends Piece {
   }
   
 }
+
+class Croc extends Piece {
+  static name = "Croc";
+  static description = "A slow program with high attack that starts hidden from enemy pieces until attacking";
+  static unicode = "U+1F40A";
+  static color = "#022f0eff";
+  static rarity = 3;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+    super(Croc.name, Croc.description, Croc.unicode, 2, 1, 1, 4, 0, Croc.color, headPosition, [headPosition], team, Croc.rarity, removeCallback, id)
+    this.specialName='Bite'
+    this.targetType='piece'
+    this.statuses.hidden = true;
+  }
+  async special(target: Piece): Promise<void> {
+    target.takeDamage(this.getStat('attack'))
+    this.statuses.hidden = false;
+    this.actions--
+  }
+}
+
+class Lighthouse extends Piece {
+  static name = "Lighthouse";
+  static description = "A program the can expose and blind targets in a wide area";
+  static unicode = "U+1F6A8";
+  static color = "#000000ff";
+   static rarity = 4;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Lighthouse.name, Lighthouse.description, Lighthouse.unicode, 1, 0, 5, 0, 1, Lighthouse.color, headPosition, [headPosition], team, Lighthouse.rarity, removeCallback, id)
+    this.specialName = 'Alarm';
+    this.targetType = 'group'
+    this.canAttack = false;
+  }
+  async special(targets: Piece[]):Promise<void>{
+    for (const t of targets) {
+      if(!t.immunities.blindImmune){
+        t.statuses.blinded = true;
+      }
+      t.statuses.exposed = true;
+    }
+    this.actions--
+  }
+}
+
+class Torch extends Piece {
+  static name = "Torch";
+  static description = "A program the can expose targets in a line";
+  static unicode = "U+1F526";
+  static color = "#000000ff";
+   static rarity = 3;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Torch.name, Torch.description, Torch.unicode, 2, 2, 4, 1, 0, Torch.color, headPosition, [headPosition], team, Torch.rarity, removeCallback, id)
+    this.specialName = 'Shine';
+    this.targetType = 'line'
+    this.canAttack = false;
+  }
+  async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
+    for (const tile of line) {
+      const occupier = activePieces.find(p =>
+        p.tiles.some(t => t.x === tile.x && t.y === tile.y)
+      );
+      if(!occupier) continue;
+      occupier.statuses.exposed = true;
+    }
+    this.actions--
+  }
+}
+
+class Camera extends Piece {
+  static name = "Camera";
+  static description = "A program that can flash and blind others";
+  static unicode = "U+1F4F8";
+  static color = "#69c3f0ff";
+  static rarity = 3;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Camera.name, Camera.description, Camera.unicode, 4, 1, 3, 0, 0, Camera.color, headPosition, [headPosition], team, Camera.rarity, removeCallback, id)
+   this.specialName = 'Flash';
+   this.targetType = 'piece'
+  }
+  async special(target: Piece): Promise<void> {
+    if(!target.immunities.blindImmune){
+        target.statuses.blinded = true;
+    }
+    this.actions--
+  }
+}
+
+class Bugle extends Piece {
+  static name = "Bugle";
+  static description = "A program the can gives +1 attack to all friendlies in range";
+  static unicode = "U+1F4EF";
+  static color = "#d03232ff";
+   static rarity = 4;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Bugle.name, Bugle.description, Bugle.unicode, 1, 0, 5, 0, 1, Bugle.color, headPosition, [headPosition], team, Bugle.rarity, removeCallback, id)
+    this.specialName = 'Trumpet';
+    this.targetType = 'group'
+    this.canAttack = false;
+  }
+  async special(targets: Piece[]):Promise<void>{
+    for (const t of targets) {
+     if(t.team === this. team){
+      t.addModifier({attack: 1})
+     }
+    }
+    this.actions--
+  }
+}
+
+class Drum extends Piece {
+  static name = "Drum";
+  static description = "A program the can gives +1 moves to all firendlies in range";
+  static unicode = "U+1F941";
+  static color = "#57b92eff";
+   static rarity = 3;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Drum.name, Drum.description, Drum.unicode, 1, 0, 4, 0, 0, Drum.color, headPosition, [headPosition], team, Drum.rarity, removeCallback, id)
+    this.specialName = 'March';
+    this.targetType = 'group'
+    this.canAttack = false;
+  }
+  async special(targets: Piece[]):Promise<void>{
+    for (const t of targets) {
+     if(t.team === this. team){
+      t.addModifier({moves: 1})
+     }
+    }
+    this.actions--
+  }
+}
+
 export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Ink, Snail, Shark, Greatshield, Wizard, Ninja, Fairy, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, Dolls, UFO, TP, Saw];//87 +2 (web, ink)
 console.log('pieces length: ', allPieces.length)
-
-// CROCODILE, U+1F40A //moves 0 high damage
-
-//"U+1F526"; TORCH expose targets
-////POLICE CARS REVOLVING LIGHT, U+1F6A8 expose group
-
-//CAMERA WITH FLASH, U+1F4F8 blinds
 
 ////recurve bow CANADIAN SYLLABICS CARRIER CHEE, U+1664
 
 //megaphone U+1F4E3
-//Bugle, U+1F4EF, "+1 attack for all in range"
-//"Marching Drum" U+1F941 "+1 moves for all placed programs";
 
 //PLAYGROUND SLIDE, U+1F6DD like gate but with more range? line target??
 
@@ -2115,7 +2237,7 @@ console.log('pieces length: ', allPieces.length)
 
 //ANT, U+1F41C //high movement
 
-// SMILING FACE WITH HORNS, U+1F608
+// SMILING FACE WITH HORNS, Daemon U+1F608
 //T-REX, U+1F996
 // WATER BUFFALO, U+1F403
 

@@ -40,7 +40,7 @@
             </div>
             <button @click="emit('proceedFromEndOfRound')">Proceed</button>
         </div>
-        <div class="if-lost" v-if="!hasWonRound">
+        <div class="if-lost" v-if="!hasWonRound && player.lives > 0">
             <h3>
                 Node failed
             </h3>
@@ -52,6 +52,9 @@
             </div>
             <button @click="emit('reloadLevel')">Retry</button>
         </div>
+        <div class="if-lost" v-if="!hasWonRound && player.lives <= 0">
+
+        </div>
     </div>
 </template>
 
@@ -62,5 +65,8 @@
         width: 50%;
         height: 50%;
         background-color: black;
+    }
+    .interest-summary{
+        margin-bottom: 2rem;
     }
 </style>

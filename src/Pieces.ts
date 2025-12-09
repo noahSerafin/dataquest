@@ -1116,8 +1116,8 @@ class Snowman extends Piece {
     this.targetType = 'space'
     //this.canMove = false;
   }
-  async special({coord, activePieces} : {coord: Coordinate, activePieces: Piece[]}):Promise<void>{
-    this.moveTo(coord);
+  async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
+    this.moveTo(target);
     this.maxSize+=1;
     this.moves--
   }
@@ -1214,8 +1214,8 @@ class Flute extends Piece {//not working
    this.targetType='space'
    this.canAttack=false;
   }
-  async special({coord, activePieces} : {coord: Coordinate, activePieces: Piece[]}):Promise<void>{
-    const newRat = new Rat(coord, this.team, this.removeCallback, crypto.randomUUID());
+  async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
+    const newRat = new Rat(target, this.team, this.removeCallback, crypto.randomUUID());
     activePieces.push(newRat);
     this.actions--
   }
@@ -1722,8 +1722,8 @@ class Honeypot extends Piece {
     this.targetType='space'
   }
 
-  async special({coord, activePieces} : {coord: Coordinate, activePieces: Piece[]}):Promise<void>{
-    const newBee = new Bee(coord, this.team, this.removeCallback, crypto.randomUUID());
+  async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
+    const newBee = new Bee(target, this.team, this.removeCallback, crypto.randomUUID());
     activePieces.push(newBee);
     this.actions--
   }

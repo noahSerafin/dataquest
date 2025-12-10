@@ -1,3 +1,6 @@
+GAME
+Defense - lose on damage but reset every turn??? - would make ai easier
+
 ITEMS 3
 - implement item functions - done except round restarters 3 - but renewround func exists
 
@@ -14,6 +17,7 @@ round admins 5
 BOSSES 5
 test damage all bosses
 unique bosses
+boss security rank - leave status bosses for 2/3 and up
 
 STATUSES
 confused todo - 5
@@ -27,6 +31,7 @@ functions:
     ignore negative pieces when moving - done?
     maybe ignore statuses if already has a status??? or dont consume an action??
 
+special attacks
     attackingSpecial bool
     use special if possible
     !attackingSpecial use on friendly???
@@ -41,6 +46,8 @@ path examples before boss(paths meeting point):
     one level +0 difficulty, one level +1 difficulty
     one level +2 difficulty, shop
 multiple levels files?
+
+--MORE LEVELS--
 
 HYBRIDS 7
 Hybrid class accepts two pieces

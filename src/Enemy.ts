@@ -27,6 +27,9 @@ export async function takeEnemyTurn(
         highlightTargets(enemy);
         await sleep(300);
         if(enemy.attack > target.defence && enemy.actions > 0){
+          if(enemy.targetType === 'piece'){
+            enemy.special(target)
+          }
           attackPiece(enemy, target);
           onReceiveDamage(enemy.id);
           await sleep(delay);
@@ -105,7 +108,7 @@ function sleep(ms: number) {
 }
 
 function attackPiece(attacker: Piece, defender: Piece) {
-  if(attacker.actions > 0){
+  if(attacker.actions > 0 && attacker.canAttack){//!canAttack should do special
     const damage = attacker.attack;
     defender.takeDamage(damage);
     if(defender.willRetaliate){

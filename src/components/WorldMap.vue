@@ -6,6 +6,7 @@
     import { watch } from "vue";
     import type { Company } from "../types";
     import { companies } from "../companies";
+import { arena } from "../levels";
 
     //world graph structure
     interface WorldNode {
@@ -51,7 +52,7 @@
     }>();
 
     const emit = defineEmits<{
-        (e: "select-level", level: Level, difficultyMod: number): void;
+        (e: "select-level", level: Level, difficultyMod: number, reward: number): void;
         (e: "openShop"): void;
         (e: "addBoss", admin: Admin): void;
         (e: "increaseDifficulty"): void;
@@ -78,11 +79,12 @@
             [start]: {//have a shop at start?
                 id: start,
                 type: "level",
+                level: arena,
                 next: [a1, b1],
                 position: { x: 200, y: 400 },
                 company: chooseRandomCompany(),
                 difficultyMod: 0,
-                reward: 1
+                reward: 3
             },
             [a1]: {
                 id: a1,
@@ -92,7 +94,7 @@
                 position: { x: 100, y: 250 },
                 company: chooseRandomCompany(),
                 difficultyMod: 0,
-                reward: 0
+                reward: 3
             },
             [a2]: {
                 id: a2,
@@ -101,8 +103,8 @@
                 next: [merge],
                 position: { x: 100, y: 100 },
                 company: chooseRandomCompany(),
-                difficultyMod: 1,
-                reward: 2
+                difficultyMod: 0,
+                reward: 3
             },
             [b1]: {
                 id: b1,
@@ -121,7 +123,7 @@
                 next: [merge],
                 position: { x: 300, y: 100 },
                 company: chooseRandomCompany(),
-                difficultyMod: 0,
+                difficultyMod: 1,
                 reward: 5
             },
             [merge]: {
@@ -185,7 +187,7 @@
         }
         if (node.level) {
             console.log(node.level)
-            emit("select-level", node.level, node.difficultyMod);
+            emit("select-level", node.level, node.difficultyMod, node.reward);
         }
     }
 
@@ -257,7 +259,12 @@
         <div v-if="node.type!=='shop'"
         class="company-info"
         >
-        {{ node.company.abbr }}
+        <div>
+            {{ node.company.abbr }}
+        </div>
+        <div>
+            $ {{ node.reward }}
+        </div>
         </div>
         {{ displayIcon(node) }}
         <div v-if="node.type==='boss'"
@@ -290,6 +297,7 @@
     <div v-if="selectedPreviewNode" class="preview-modal">
       <h3>{{ selectedPreviewNode.type.toUpperCase() }}</h3>
       <h4 v-if="selectedPreviewNode.type!=='shop'">{{ selectedPreviewNode.company.name}}</h4>
+      <h6>Reward: ${{ selectedPreviewNode.reward }}</h6>
 
       <MiniMap v-if="selectedPreviewNode.level"
         :level="selectedPreviewNode.level"

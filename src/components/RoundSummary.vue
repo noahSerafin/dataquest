@@ -5,7 +5,8 @@
     interface Props{
         hasWonRound: boolean,
         player: Player,
-        difficulty: number
+        difficulty: number,
+        reward: number
     }
     const props = defineProps<Props>()
 
@@ -43,15 +44,22 @@
                 + inheritance {{ interest }}
                 </span>
             </div>
+            <div class="reward-summary">
+                Reward: {{ reward }}
+            </div>
             <button @click="emit('proceedFromEndOfRound')">Proceed</button>
         </div>
         <div class="if-lost" v-if="!hasWonRound && player.lives > 0">
             <h3>
-                Game Over
+                Round Over
             </h3>
-            <button @click="emit('mainMenu')">Retry</button>
+            <button @click="emit('reloadLevel')">Retry</button>
         </div>
         <div class="if-lost" v-if="!hasWonRound && player.lives <= 0">
+            <h3>
+                Game Over
+            </h3>
+            <button @click="emit('mainMenu')">Main Menu</button>
 
         </div>
     </div>

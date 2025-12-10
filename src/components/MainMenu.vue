@@ -13,7 +13,7 @@
 </script>
 
 <template>
-    <h1>Welcome to Cyberspace</h1>
+    <h1>Welcome</h1>
     <h2>Choose your Operator:</h2>
     <div class="oses">
         <div class="os"

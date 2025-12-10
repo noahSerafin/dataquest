@@ -96,6 +96,7 @@ import MainMenu from "./components/MainMenu.vue";
     false
   ));
   const showMainMenu = ref(true);
+  const reward = ref<number>(0);
 
   function createNewPlayer(os: OS){
     difficulty.value = 1 //move to player??
@@ -114,6 +115,10 @@ import MainMenu from "./components/MainMenu.vue";
       false
     )
     showMainMenu.value = false;
+  }
+
+  function openMainMenu(){
+    showMainMenu.value = true;
   }
 
   function playerHasAdmin(name: string) {
@@ -449,7 +454,7 @@ import MainMenu from "./components/MainMenu.vue";
   const originalPieces = ref<InstanceType<typeof Piece>[]>([]);
   const originalSpawns = ref<Coordinate[]>([]);
 
-  const selectLevel = (newLevel: Level, difficultyMod: number) => {//load level, start round
+  const selectLevel = (newLevel: Level, difficultyMod: number, lReward: number) => {//load level, start round
     hasFinishedTurn.value = false;
     player.value.canPlace = true;
     player.value.canMove = true;
@@ -457,6 +462,7 @@ import MainMenu from "./components/MainMenu.vue";
     isFirstTurn.value = true;
     activePieces.value = [];
     level.value = newLevel;
+    reward.value = lReward;
     const newPieces = rehydratePieces(newLevel.pieces);
     activePieces.value = processSpawnPoints(newPieces , difficultyMod);
     originalPieces.value = activePieces.value.map(p => p.clone());
@@ -902,6 +908,7 @@ import MainMenu from "./components/MainMenu.vue";
     if(playerHasAdmin('Inheritance')){
       player.value.money += (noOfFives+player.value.bonusInterest)
     }
+    player.value.money += reward.value;
   }
 
   const hasWonRound = ref<boolean>(false);
@@ -1072,8 +1079,10 @@ import MainMenu from "./components/MainMenu.vue";
     :hasWonRound="hasWonRound"
     :player="player"
     :difficulty="difficulty"
+    :reward="reward"
     @proceedFromEndOfRound="handleProceed"
     @reloadLevel="reloadLevel"
+    @mainMenu="openMainMenu"
   />
   <WorldMap
     :allLevels="testLevels"

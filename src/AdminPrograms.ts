@@ -102,9 +102,9 @@ class Bubble extends Admin {
 
 }
 
-class Crystal extends Admin {//unfinished rounds
+class Crystal extends Admin {
   static name = "Crystal Ball";
-  static description = "See the next shop in advance";
+  static description = "See level structures in advance";
   static unicode = "U+1F52E";
   static color = "#4b003bff";
 
@@ -194,9 +194,9 @@ class BionicLeg extends Admin {
   }
 }
 
-class Convenience extends Admin {//unfinished rounds
+class Convenience extends Admin {//TODO test
   static name = "Convenience Store";
-  static description = "Open the shop any time";
+  static description = "Open the shop any time (still only reloads for free stock at map shops)";
   static unicode = "U+1F3EA";
   static color = "#55ff71ff";
 
@@ -533,7 +533,7 @@ class Brain extends Admin {
 
 class GoldenTicket extends Admin {//unfinished rounds
   static name = "Golden Ticket";
-  static description = "Skip a level for $5";
+  static description = "Skip a non boss level for $5 (no reward or interest earned)";
   static unicode = "U+1F3AB";
   static color = "#dfba42ff";
   constructor() {
@@ -725,7 +725,7 @@ class Cactus extends Admin {
   }
 }
 
-class Compass extends Admin {//unfinished rounds
+class Compass extends Admin {//unfinished rounds, find another reason for this admin
   static name = "Compass";
   static description = "Always show the path to the nearest shop";
   static unicode = "U+1F9ED";

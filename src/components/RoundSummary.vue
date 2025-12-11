@@ -5,7 +5,6 @@
     interface Props{
         hasWonRound: boolean,
         player: Player,
-        difficulty: number,
         reward: number
     }
     const props = defineProps<Props>()
@@ -26,7 +25,7 @@
 <template>
     <div class="round-summary">
         <div class="if-won" v-if="hasWonRound">
-            <h3 v-if="difficulty >= 6">
+            <h3 v-if="player.difficulty >= 6">
                 You win!
             </h3>
             <h3>

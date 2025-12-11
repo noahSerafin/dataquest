@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { computed } from 'vue';
+    import { computed, onMounted } from 'vue';
     import type { OS } from '../types';
     import { allOSes } from '../Operators';
 
@@ -10,12 +10,65 @@
     function returnUnicode(unicode: String){
         return  String.fromCodePoint(parseInt(unicode.replace('U+', ''), 16));
     }
+
+ 
+    onMounted(() => {
+        const el = document.querySelector('.oses');
+        if (!el) return;
+
+        let isDown = false;
+        let startX = 0;
+        let scrollLeft = 0;
+
+        const down = (e: MouseEvent | TouchEvent) => {
+            isDown = true;
+            el.classList.add("dragging");
+            const pageX =
+                e instanceof MouseEvent
+                    ? e.pageX
+                    : e.touches[0].pageX;
+
+            startX = pageX - el.offsetLeft;
+            scrollLeft = el.scrollLeft;
+        };
+
+        const leave = () => {
+            isDown = false;
+            el.classList.remove("dragging");
+        };
+
+        const up = leave;
+
+        const move = (e: MouseEvent | TouchEvent) => {
+            if (!isDown) return;
+            e.preventDefault();
+
+            const pageX =
+                e instanceof MouseEvent
+                    ? e.pageX
+                    : e.touches[0].pageX;
+
+            const x = pageX - el.offsetLeft;
+            const walk = (x - startX) * 1.5; // scroll speed factor
+            el.scrollLeft = scrollLeft - walk;
+        };
+
+        el.addEventListener("mousedown", down);
+        el.addEventListener("touchstart", down);
+
+        el.addEventListener("mouseleave", leave);
+        el.addEventListener("mouseup", up);
+        el.addEventListener("touchend", up);
+
+        el.addEventListener("mousemove", move);
+        el.addEventListener("touchmove", move);
+    });
 </script>
 
 <template>
     <h1>Welcome</h1>
     <h2>Choose your Operator:</h2>
-    <div class="oses">
+    <div class="oses" ref="oses">
         <div class="os"
         v-for="os in allOSes">
             <h3>{{ os.name }}</h3>
@@ -54,6 +107,10 @@
         display: flex;
         overflow-x: scroll;
         gap: 2rem;
+        overflow-x: auto;
+        overflow-y: hidden;
+        cursor: grab;
+        user-select: none;
     }
     .os{
         border: 1px solid white;

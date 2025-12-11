@@ -99,7 +99,7 @@ import MainMenu from "./components/MainMenu.vue";
   const reward = ref<number>(0);
 
   function createNewPlayer(os: OS){
-    difficulty.value = 1 //move to player??
+    player.value.difficulty = 1
     player.value = new Player(
       os.unicode,
       os.money,
@@ -223,6 +223,33 @@ import MainMenu from "./components/MainMenu.vue";
       }
     }
 
+    if (item.targetType === "gameState") {
+      console.log('using voucher on ', shopTarget.value?.name)
+        if(item.name === 'Hourglass'){
+          reloadLevel();
+          player.value.removeItem(item);
+        }
+        if(item.name === 'Magic Wand'){
+          //if(player placed last turn, (there is an extra player piece in active not in lastturn) find the blueprint by piece name in player.programs and renew that blueprint if it exists)
+          //then:
+          const lastIds = new Set(lastTurnPieces.value.map(p => p.id));
+          const newPiece = activePieces.value.find(p => !lastIds.has(p.id)) || null;
+          if(newPiece){
+            const bp = player.value.programs.find(
+              bp => bp.name === newPiece.name
+            );
+            if (bp) {
+              bp.isPlaced = false; // or bp.reset(), if you have a helper
+            }
+          }
+          activePieces.value = lastTurnPieces.value.map(p => p.clone());
+          player.value.removeItem(item);
+          player.value.canMove = true;
+          player.value.canPlace = true;
+          player.value.canAction = true;
+        }
+    }
+    
     console.warn("Item has unknown target type:", item.targetType);
     //selectedPiece.value =
   }
@@ -433,7 +460,6 @@ import MainMenu from "./components/MainMenu.vue";
   const pieceToPlace = ref<PieceBlueprint | null>(null);
   //world logic
   const level = ref(castled);//tiles
-  const difficulty = ref(1);
   const displayEditor = ref(false);
   const displaySummary = ref(false);
   
@@ -441,8 +467,8 @@ import MainMenu from "./components/MainMenu.vue";
   const toggleMap = () => {
     showMap.value = !showMap.value;
   }
-  const toggleSummary = () => {
-    displaySummary.value = !displaySummary.value;
+  const openSummary = (state: boolean) => {
+    displaySummary.value = state;
   }
 
   const renewBlueprints = () => {
@@ -451,6 +477,7 @@ import MainMenu from "./components/MainMenu.vue";
     });
   }
 
+  const lastTurnPieces = ref<InstanceType<typeof Piece>[]>([]);
   const originalPieces = ref<InstanceType<typeof Piece>[]>([]);
   const originalSpawns = ref<Coordinate[]>([]);
 
@@ -473,7 +500,7 @@ import MainMenu from "./components/MainMenu.vue";
   }
 
   function handleProceed(){
-    toggleSummary();
+    openSummary(false);
     if(bossAdmins.value.length > 0){
       increaseDifficulty();
     }
@@ -484,7 +511,7 @@ import MainMenu from "./components/MainMenu.vue";
     renewBlueprints();
     activePieces.value = originalPieces.value.map(p => p.clone());
     playerSpawns.value = originalSpawns.value;
-    toggleSummary();
+    openSummary(false);
   }
 
   //game loop
@@ -543,7 +570,7 @@ import MainMenu from "./components/MainMenu.vue";
         // Enemy spawn → replace with random enemy piece
         if (piece.team === 'enemy') {
           //difficulty from constants ramp
-          const { min, max } = DIFFICULTY_RARITY[difficulty.value + mod];
+          const { min, max } = DIFFICULTY_RARITY[player.value.difficulty + mod];
           const validEnemies = allPieces.filter(p =>
             p.rarity >= min && p.rarity <= max
           );
@@ -637,11 +664,14 @@ import MainMenu from "./components/MainMenu.vue";
 
   function placePieceOnBoardAt(coord: Coordinate) {
     if (!pieceToPlace.value) return
-
+    
     const bp = pieceToPlace.value
-
+    
     const PieceClass = allPieces.find(p => p.name === bp.name)
     if (!PieceClass) return
+
+    //we're definitely making a move, so store pieces
+    lastTurnPieces.value = activePieces.value.map(p => p.clone());
 
     const instance = new PieceClass(coord, 'player', removePiece, bp.id);   // now real placement!
     //add stats from blueprint
@@ -670,7 +700,6 @@ import MainMenu from "./components/MainMenu.vue";
 
     // First-turn rules
     if (isFirstTurn.value) {
-      isFirstTurn.value = false;
       player.value.canAction = false;//admin for attacking on first turn?
       // palette: allow one extra placement
       if (hasPalette) {
@@ -717,6 +746,9 @@ import MainMenu from "./components/MainMenu.vue";
   const movePiece = async (coord : Coordinate) => {
     if(!selectedPiece.value || !player.value.canMove) return;
     player.value.canPlace = false;
+    //we're definitely making a move, so store pieces
+    lastTurnPieces.value = activePieces.value.map(p => p.clone());
+
     //if (selectedPiece.value.team !== 'player') return; //charmed pieces can still move
       boardRef.value.clearHighlights();
       selectedPiece.value?.moveTo(coord);
@@ -919,13 +951,13 @@ import MainMenu from "./components/MainMenu.vue";
     if(roundWon){
       //bring up round summary
       hasWonRound.value = true;
-      toggleSummary();
+      openSummary(true);
       addPlayerInterest();
       handleApplyAdmins('onRoundEnd', '');
       //move to btn inside round summary
     } else {
       hasWonRound.value = false;
-      toggleSummary();
+      openSummary(true);
       //check admins for onion
       if(playerHasAdmin('Onion')){
         const index = player.value.admins.findIndex(a => a.name === 'Onion');
@@ -995,6 +1027,9 @@ import MainMenu from "./components/MainMenu.vue";
     applyStatusEffects('player');
     await enemyTurn();
     applyStatusEffects('enemy');
+    if(isFirstTurn){
+      isFirstTurn.value = false;
+    }
     player.value.canPlace = true;
     player.value.canMove = true;
     player.value.canAction = true;
@@ -1023,12 +1058,12 @@ import MainMenu from "./components/MainMenu.vue";
 
   const worldSeed = ref(0);
   const increaseDifficulty = () => {
-    difficulty.value += 1;
+    player.value.difficulty += 1;
     bossAdmins.value = [];
     worldSeed.value++
   }
   const decreaseDifficulty = () => {
-    difficulty.value -= 1;
+    player.value.difficulty -= 1;
   }
 /*
 */
@@ -1042,8 +1077,9 @@ import MainMenu from "./components/MainMenu.vue";
     <button class="swap-display" @mousedown="renewBlueprints()">
       Renew Blueprints
     </button>
-    <button class="shop-toggle" @mousedown="toggleShop()">
-      Toggle Shop
+    <button v-if="playerHasAdmin('Convenience Store')"
+    class="shop-toggle"
+    @mousedown="toggleShop()">
     </button>
     <button class="map-toggle" @mousedown="toggleMap()">
       Toggle Map
@@ -1069,7 +1105,7 @@ import MainMenu from "./components/MainMenu.vue";
     </div>
   </div>
   <div class="enemy-info">
-    <p><strong>Security level: </strong>{{ difficulty }}</p>
+    <p><strong>Security level: </strong>{{ player.difficulty }}</p>
     <span>
       <BossView :admins="bossAdmins"/>
     </span>
@@ -1078,7 +1114,6 @@ import MainMenu from "./components/MainMenu.vue";
   <RoundSummary v-if="displaySummary"
     :hasWonRound="hasWonRound"
     :player="player"
-    :difficulty="difficulty"
     :reward="reward"
     @proceedFromEndOfRound="handleProceed"
     @reloadLevel="reloadLevel"
@@ -1086,7 +1121,7 @@ import MainMenu from "./components/MainMenu.vue";
   />
   <WorldMap
     :allLevels="testLevels"
-    :difficulty="difficulty"
+    :player="player"
     :seed="worldSeed"
     :cssclass="mapClass"
     @select-level="selectLevel"

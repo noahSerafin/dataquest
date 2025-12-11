@@ -3,6 +3,7 @@ import { Item } from "./Items";
 import { Admin } from "./AdminPrograms";
 
 export class Player {
+    difficulty: number = 1;
     money: number
     memory: number
     adminSlots: number
@@ -139,5 +140,9 @@ export class Player {
   /** Dynamically increase/decrease memory (e.g., via upgrades or debuffs) */
   modifyMemory(delta: number): void {
     this.memory = Math.max(0, this.memory + delta);
+  }
+
+  spend(amount: number){
+    this.money -= amount;
   }
 }

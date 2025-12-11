@@ -17,7 +17,7 @@ targetType: 'blueprint' | 'piece' | 'shopItem' | 'player' | 'gameState'  | 'play
 class Fog extends Admin {//unfinished
   static name = "Fog of War";
   static description = "All tiles outside player range are obscured";//handle in app
-  static unicode = "U+2601";
+  static unicode = "U+1F301";//cloud U+2601";
   static color = "#575757ff";
   constructor() {
     super(Fog.name, Fog.description, Fog.unicode, Fog.color, 5, 9, 'playerAndGame', 'onRoundStart')
@@ -35,7 +35,7 @@ class Fog extends Admin {//unfinished
 class NorthWind extends Admin {//unfinished
   static name = "North Wind";
   static description = "All player pieces are moved down 1 space after every turn";
-  static unicode = "U+1F32C";
+  static unicode = "U+1F38F";//wind face "U+1F32C";
   static color = "#969c9cff";
   constructor() {
     super(NorthWind.name, NorthWind.description, NorthWind.unicode, NorthWind.color, 5, 9, 'all', 'onTurnEnd')

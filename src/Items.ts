@@ -439,35 +439,35 @@ export class Pinata extends Item {//untested
     }
 }
 
-export class Wand extends Item {//TODO unfinished
+export class Wand extends Item {//TODO test
   static name = "Magic Wand";
   static description = "Undo a turn";
   static unicode = " U+1FA84";
   static color = "#440975ff";
   constructor() {
-    super(Wand.name, Wand.description, Wand.unicode, Wand.color, 7, 5, 'gameState')
+    super(Wand.name, Wand.description, Wand.unicode, Wand.color, 7, 4, 'gameState')
   }
     apply(target: Piece[]) {
         //should know previous state of activeprogram's
     }
 }
 
-class Hourglass extends Item {//TODO unfinished
+class Hourglass extends Item {//TODO test
   static name = "Hourglass";
-  static description = "Retry a round";
+  static description = "Retry a node";
   static unicode = "U+231B";
   static color = "#000000ff";
   constructor() {
-   super(Hourglass.name, Hourglass.description, Hourglass.unicode, Hourglass.color, 10, 4, 'gameState')
+   super(Hourglass.name, Hourglass.description, Hourglass.unicode, Hourglass.color, 10, 5, 'gameState')
   }
-  apply(target: Player) {//game state from app??
-       //receive game state, and map
-    //reload level
+    apply(target: Player) {//game state from app??
+        //receive game state, and map
+        //reload level
     }
 
 }
 
-export const allItems = [Whetstone, Iron, Blueberry, Carrot, Lightning, Blessing, Supplement, Juice, Roids, Formula, Garlic, RedMeat, Coffee, Bandage, Soap, Voucher, Mushroom, Rations, Beans, Box, Genie, Wand, Hourglass]
+export const allItems = [Whetstone, Iron, Blueberry, Carrot, Lightning, Blessing, Supplement, Juice, Roids, Formula, Garlic, RedMeat, Coffee, Bandage, Soap, Voucher, Mushroom, Rations, Beans, Box, Genie, Pinata, Wand, Hourglass]
 
 export type ItemConstructor = new (...args: any[]) => Item<any>;
 

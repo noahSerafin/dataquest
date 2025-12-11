@@ -6,7 +6,8 @@
     import { watch } from "vue";
     import type { Company } from "../types";
     import { companies } from "../companies";
-import { arena } from "../levels";
+    import { arena } from "../levels";
+    import type { Player } from "../Player";
 
     //world graph structure
     interface WorldNode {
@@ -45,7 +46,7 @@ import { arena } from "../levels";
     }
 
     const props = defineProps<{
-        difficulty: number;
+        player: Player;
         allLevels: Level[];
         seed: number;
         cssclass: 'visible' | 'collapsed';
@@ -169,11 +170,24 @@ import { arena } from "../levels";
     }
 
     function trySelect(node: WorldNode) {
-        if (!canClick(node)) return;
+        if(!props.player.admins.some(a => a.name === 'Crystal Ball')){
+            if (!canClick(node)) return;
+        }
         selectedPreviewNode.value = node;
     }
 
-  
+    function canSkip(node: WorldNode){
+        if(props.player.admins.some(a => a.name === 'Golden Ticket') && !(node.type==='boss')){
+            if(props.player.money >= 5 || (props.player.admins.some(a => a.name === 'Golden Ticket') && props.player.money >= -15 )){
+                return true;
+            } else return false;
+        } else return false;
+    }
+    function skipNode(node: WorldNode){
+        selectedPreviewNode.value = null;
+        currentNodeId.value = node.id;
+        props.player.spend(5)
+    }
 
     function enterNode(node: WorldNode) {
         selectedPreviewNode.value = null;
@@ -265,6 +279,9 @@ import { arena } from "../levels";
         <div>
             $ {{ node.reward }}
         </div>
+        <div>
+            {{ String.fromCodePoint(parseInt("U+1F512".replace('U+', ''), 16)) }} : {{ node.difficultyMod + player.difficulty }}
+        </div>
         </div>
         {{ displayIcon(node) }}
         <div v-if="node.type==='boss'"
@@ -307,6 +324,7 @@ import { arena } from "../levels";
 
             <button @click="enterNode(selectedPreviewNode)">Enter</button>
             <button @click="selectedPreviewNode = null">Close</button>
+            <button v-if="canSkip(selectedPreviewNode)" @click="skipNode(selectedPreviewNode)">Skip $5</button>
         </div>
     </div>
   </div>

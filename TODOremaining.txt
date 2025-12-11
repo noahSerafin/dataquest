@@ -1,18 +1,12 @@
 GAME
 Defense - lose on damage but reset every turn??? - would make ai easier
 
-ITEMS 3
-- implement item functions - done except round restarters 3 - but renewround func exists
-
 PIECES 4
 active special functions 4 - done except fairy (need graveyard) 4
 visually show takeDamage with short lived red colour and shake animation, bonus: particles 4 - this next
 buff nearby
 keep track of upgrades and display on piece
-variants? 
-
-ADMIN PIECES
-round admins 5
+variants?
 
 BOSSES 5
 test damage all bosses

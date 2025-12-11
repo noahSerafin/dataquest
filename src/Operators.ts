@@ -277,6 +277,19 @@ const Temple : OS = {//lance //bug //screwdriver
     lives: 2,
     description: 'Overclocked admin slots, low money. Some unique starting programs.'
 }
+
+const Debugger : OS = {//lance //bug //screwdriver
+    name: 'Debugger',
+    unicode: 'U+1F47E',
+    money: 50,
+    memory: 10,
+    adminSlots: 6,
+    blueprints: [bug, aegis, screwdriver],
+    items: [],
+    admins: [],
+    lives: 2,
+    description: 'FOR TESTING'
+}
 // SCALES, U+2696 --- CROSSED SWORDS, U+2694
 //scales: EGYPTIAN HIEROGLYPH U038, U+1335D
 //temple - +1 admin +1 memory -1 interest
@@ -291,4 +304,4 @@ const Temple : OS = {//lance //bug //screwdriver
 
 //GREEK CAPITAL LETTER DELTA, U+394
 
-export const allOSes = [Steam, Penguin, Window, Apple, Temple];
+export const allOSes = [Debugger, Steam, Penguin, Window, Apple, Temple];

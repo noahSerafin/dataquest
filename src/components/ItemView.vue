@@ -71,6 +71,8 @@ const handleUse = () => {
     @click="handleSelect"
     :style="itemStyle"
   >
+    <p class='top-left' v-if="cssclass==='shop' && type == 'consumable'" :style="`top: -${(props.tileSize-10)/2}px`">I</p>
+    <p class='top-left' v-if="cssclass==='shop' && type == 'admin'" :style="`top: -${(props.tileSize-10)/2}px`">A</p>
     <div class="icon">{{ unicodeSymbol }}</div>
     <div v-if="props.showController" class="info" @click.stop >
       <button @click="emit('deselect')" class="close">X</button>
@@ -111,7 +113,7 @@ const handleUse = () => {
   transition: 0.15s;
 }
 .item-card {
-  display: flex;
+  display: flex; 
   flex-direction: row;
   align-items: center;
   padding: 10px;
@@ -133,9 +135,10 @@ const handleUse = () => {
 }
 
 .info {
+  z-index: 99999;
   position: absolute;
-  left: 90%;
-  top: 90%;
+  right: 99%;
+  bottom: -100%;
   border-radius: 5px;
   background-color: #494646ff;
   padding: 8px;
@@ -171,5 +174,11 @@ button{
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+.top-left{
+  font-weight: bold;
+  font-size: 12px;
+  position: absolute;
+  left: 1px;
 }
 </style>

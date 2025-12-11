@@ -12,7 +12,7 @@ export async function takeEnemyTurn(
   clearHighlights: () => void,
   tileSet: Set<string>,
   onReceiveDamage: (id: string) => void,
-  delay = 500 // ms between moves for visibility
+  delay = 200 // ms between moves for visibility
 ) {
   for (const enemy of enemyPieces) {
     //pathing for high move pieces still not really working/
@@ -25,7 +25,7 @@ export async function takeEnemyTurn(
       const target = findPlayerInRange(enemy, playerPieces);
       if (target) {
         highlightTargets(enemy);
-        await sleep(300);
+        await sleep(delay);
         if(enemy.attack > target.defence && enemy.actions > 0){
           if(enemy.targetType === 'piece'){
             enemy.special(target)
@@ -71,7 +71,7 @@ export async function takeEnemyTurn(
       }
       if (nextStep) {
         highlightMoves(enemy);
-        await sleep(300);
+        await sleep(delay);
         enemy.moveTo(nextStep);
         //checkForTrap
         const trap = activePieces.find(p =>

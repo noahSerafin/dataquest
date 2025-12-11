@@ -35,7 +35,7 @@ export abstract class Piece {
   willRetaliate: boolean = false; 
 
   specialName?: string;
-  targetType: 'piece' | 'pieceAndPlayer' | 'space' | 'pieceAndPlace' | 'group' | 'line' | 'self' | 'all' | 'trapPiece' = 'piece';
+  targetType: 'piece' | 'pieceAndPlayer' | 'space' | 'pieceAndPlace' | 'group' | 'line' | 'self' | 'all' | 'graveyard' | 'trapPiece' = 'piece';
 
   id: string
   static name : string
@@ -193,10 +193,13 @@ export abstract class Piece {
       this.range = Math.max(0, this.range - 1) * mult;
     }
     if (this.statuses.burning) {
+      if(this.tiles.length <= 1){
+        this.removeCallback?.(this);
+      }
       this.tiles.pop()
       if(mult > 1){
         this.tiles.pop()
-      } 
+      }
     }
     if (this.statuses.poisoned) {
       this.defence = Math.max(0, this.defence - 1) * mult;
@@ -320,7 +323,7 @@ class SAM extends Piece {
   }
 }
 
-class Gate extends Piece {//unfinished negative
+class Gate extends Piece {
   static name = "Gate";
   static description = "A defensive program that can target an empty space and move opposite & adjacent program's heads to that space";
   static unicode = "U+13208";//"U+26E9";
@@ -409,7 +412,7 @@ class Firewall extends Piece {
   }
 }
 
-class Pitfall extends Piece {//unfinished
+class Pitfall extends Piece {
   static name = "Pitfall";
   static description = "A trap program that freezes programs that pass over it";
   static unicode = "U+1F573";
@@ -885,7 +888,7 @@ class Watchman extends Piece {
   }
 }
 
-class Magnet extends Piece {//unfinished testing
+class Magnet extends Piece {
   static name = "Magnet";
   static description = "A program that moves other programs toward itself";
   static unicode = "U+1F9F2";
@@ -1155,7 +1158,7 @@ class Fencer extends Piece {
   //parry action deflects next attack
 }
 
-class Pawn extends Piece {//unfinished, untested?
+class Pawn extends Piece {
   static name = "Pawn";
   static description = "A slow program that can be promoted into an enemy piece";
   static unicode = "U+265F";
@@ -1181,13 +1184,12 @@ class Pawn extends Piece {//unfinished, untested?
       head,
       this.team,
       this.removeCallback,
-      this.id // reuse ID so references stay consistent
+      crypto.randomUUID()
     );
 
-    this.removeCallback?.(this);
-
-    // Add to activePieces
     activePieces.push(promoted);
+    this.removeCallback?.(this);
+    // Add to activePieces
     promoted.actions--
   }
 }
@@ -1298,7 +1300,7 @@ class Ink extends Piece {
 
 class Squid extends Piece {
   static name = "Squid";
-  static description = "A program that can creat ink decoy tiles that blind enemies";
+  static description = "A program that can creat ink decoy tiles that blinds enemies";
   static unicode = "U+1F991";
   static color = "#08004dff";
   static rarity = 2;
@@ -1338,7 +1340,7 @@ class Snail extends Piece {
   }
   async special(target: Piece):Promise<void>{
     this.tiles = [this.headPosition]
-    this.defence += 2;
+    this.addModifier({defence: 2});
     this.actions--
     //needs to reset on move //unfinished
   }
@@ -1433,8 +1435,8 @@ class Ninja extends Piece {
   }
 }
 
-class Fairy extends Piece {//unfinished
-  static name = "Fairy";
+class Fairy extends Piece {//TODO test
+  static name = "Fairy";//ANGEL?? fairy consumable item???
   static description = "A program that can ressurect the last destroyed program";
   static unicode = "U+1F9DA";
   static color = "#cc5effff";
@@ -1442,9 +1444,17 @@ class Fairy extends Piece {//unfinished
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Fairy.name, Fairy.description, Fairy.unicode, 2, 3, 1, 0, 0, Fairy.color, headPosition, [headPosition], team, Fairy.rarity, removeCallback, id)
     this.specialName='Ressurect'
-    this.targetType='all'
+    this.targetType='graveyard'
   }
-  //
+  async special({ target, activePieces, graveyard }: { target: Coordinate; activePieces: Piece[]; graveyard: Piece[]; }): Promise<void> {
+    if(graveyard.length > 0){
+      graveyard[0].headPosition = target;
+      graveyard[0].tiles = [target];
+      activePieces.push(graveyard[0])    
+      graveyard.splice(0, 1);
+    }
+    this.actions--
+  }
 }
 
 class Cupid extends Piece {
@@ -1645,6 +1655,7 @@ class Ghost extends Piece {//unfinished negative
     if(!this.statuses.exposed){
       this.statuses.hidden = true;
     }
+    //steal hopper function???
     this.actions--
   }
 }
@@ -2010,7 +2021,7 @@ export class Dolls extends Piece {//finished? needs testing, will have to be han
 }
 
 
-class UFO extends Piece {//unfinished, line target? test
+class UFO extends Piece {
   static name = "UFO";
   static description = "A program that can move enemies away from itself";//without increasing size?? headposition = 
   static unicode = "U+1F6F8";
@@ -2219,7 +2230,7 @@ class Drum extends Piece {
   }
 }
 
-export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Ink, Snail, Shark, Greatshield, Wizard, Ninja, Fairy, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, Dolls, UFO, TP, Saw];//87 +2 (web, ink)
+export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Ink, Snail, Shark, Greatshield, Wizard, Ninja, Fairy, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, Dolls, UFO, TP, Saw, Croc, Lighthouse, Torch, Camera, Bugle, Drum];//87 +2 (web, ink)
 console.log('pieces length: ', allPieces.length)
 
 ////recurve bow CANADIAN SYLLABICS CARRIER CHEE, U+1664

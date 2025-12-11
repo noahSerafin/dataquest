@@ -243,6 +243,21 @@ import MainMenu from "./components/MainMenu.vue";
             }
           }
           activePieces.value = lastTurnPieces.value.map(p => p.clone());
+          // pieces in lastTurn but NOT in activePieces
+          const diedThisTurn = lastTurnPieces.value.filter(
+            lp => !activePieces.value.some(ap => ap.id === lp.id)
+          );
+
+          diedThisTurn.forEach(dead => {
+            const idx = graveyard.value.findIndex(g => g.id === dead.id);
+            if (idx !== -1) {
+              graveyard.value.splice(idx, 1); // remove from graveyard
+            }
+          });
+          activePieces.value.forEach(piece => {
+            piece.movesRemaining = piece.moves;
+            piece.actions = 1
+          })
           player.value.removeItem(item);
           player.value.canMove = true;
           player.value.canPlace = true;
@@ -413,6 +428,7 @@ import MainMenu from "./components/MainMenu.vue";
   //round logic
   //pieceMap to track occupied spaces
   const activePieces = ref<InstanceType<typeof Piece>[]>([]);
+  const graveyard = ref<InstanceType<typeof Piece>[]>([]);
   //Record: key ID, Modifier for piece with that ID
   //stats should be applied to activePieces after select level
   const bossAdmins = ref<Admin[]>([]);
@@ -455,6 +471,7 @@ import MainMenu from "./components/MainMenu.vue";
   const selectedPiece = ref<Piece | null>(null)
   const playerSpawns = ref<Coordinate[]>([]);
   const isPlacing = ref(false);
+  const isMoving = ref(false);
   const hasFinishedTurn = ref(false);
   const isFirstTurn = ref(true);
   const pieceToPlace = ref<PieceBlueprint | null>(null);
@@ -482,12 +499,14 @@ import MainMenu from "./components/MainMenu.vue";
   const originalSpawns = ref<Coordinate[]>([]);
 
   const selectLevel = (newLevel: Level, difficultyMod: number, lReward: number) => {//load level, start round
+    renewBlueprints()//shouldnt be needed in final;
     hasFinishedTurn.value = false;
     player.value.canPlace = true;
     player.value.canMove = true;
     player.value.canAction = true;
     isFirstTurn.value = true;
     activePieces.value = [];
+    graveyard.value = [];
     level.value = newLevel;
     reward.value = lReward;
     const newPieces = rehydratePieces(newLevel.pieces);
@@ -510,7 +529,11 @@ import MainMenu from "./components/MainMenu.vue";
   function reloadLevel(){
     renewBlueprints();
     activePieces.value = originalPieces.value.map(p => p.clone());
+    graveyard.value = [];
+    lastTurnPieces.value = originalPieces.value.map(p => p.clone());
     playerSpawns.value = originalSpawns.value;
+    selectedPiece.value = null;
+    isPlacing.value = true
     openSummary(false);
   }
 
@@ -621,6 +644,7 @@ import MainMenu from "./components/MainMenu.vue";
 
   //round state functions
   function highlightPlacements(pieceBlueprint: PieceBlueprint) {
+    boardRef.value.moveHighlights = []
     if(playerHasAdmin('Backdoor')){
       const unnocupiedSpaces: Coordinate[] = [] ;
       level.value.tiles.forEach(tile => {
@@ -689,8 +713,8 @@ import MainMenu from "./components/MainMenu.vue";
 
     // Reset placement state
     pieceToPlace.value = null;
-    isPlacing.value = false;
     playerSpawns.value = newPlacementHighlights();
+    isPlacing.value = false;
     
     //applyStatModifications()
     handleApplyAdmins('onPlacement', instance.id)
@@ -729,6 +753,9 @@ import MainMenu from "./components/MainMenu.vue";
   
   //selectedPiece functions
   function handlePieceSelect(piece: Piece) {//handleselect
+    if(isPlacing.value){
+      isPlacing.value = false;
+    }
     selectedPiece.value = piece
     //highlight range
     if(piece.team === 'enemy'){
@@ -745,6 +772,7 @@ import MainMenu from "./components/MainMenu.vue";
 
   const movePiece = async (coord : Coordinate) => {
     if(!selectedPiece.value || !player.value.canMove) return;
+    isPlacing.value = false;
     player.value.canPlace = false;
     //we're definitely making a move, so store pieces
     lastTurnPieces.value = activePieces.value.map(p => p.clone());
@@ -853,24 +881,26 @@ import MainMenu from "./components/MainMenu.vue";
       }
       return;
     }
-    // --- space target ---
-    if (selectedPiece.value.targetType === 'space') {
-      await  selectedPiece.value.special({
-        target: target,
-        activePieces: activePieces.value
-      });
+    // --- space target --- target must be a space
+    if (selectedPiece.value.targetType === 'space') {//test
+      if(!targetPiece){
+        await  selectedPiece.value.special({
+          target: target,
+          activePieces: activePieces.value
+        });
+      }
       playerSpawns.value = newPlacementHighlights();
       selectedPiece.value = null;
       return;
     }
-     // --- one target but effects all ---
+     // --- one target but effects all --- target can be a piece
     if (selectedPiece.value.targetType === 'all') {
       await selectedPiece.value.special({
         target: target,
         activePieces: activePieces.value
       });
-      selectedPiece.value = null;
       playerSpawns.value = newPlacementHighlights();
+      selectedPiece.value = null;
       return;
     }
     // --- group target (AOE) ---
@@ -924,6 +954,18 @@ import MainMenu from "./components/MainMenu.vue";
       playerSpawns.value = newPlacementHighlights();
       selectedPiece.value = null;
       return;
+    };
+    if (selectedPiece.value.targetType === 'graveyard') {//test
+      if(!targetPiece){
+        await  selectedPiece.value.special({
+          target: target,
+          activePieces: activePieces.value,
+          graveyard: graveyard.value
+        });
+      }
+      playerSpawns.value = newPlacementHighlights();
+      selectedPiece.value = null;
+      return;
     }
   };
 
@@ -947,6 +989,9 @@ import MainMenu from "./components/MainMenu.vue";
   
   const endRound = (roundWon: boolean) => {
     activePieces.value = [];
+    graveyard.value = [];
+    lastTurnPieces.value = [];
+    selectedPiece.value = null;
     renewBlueprints();//move to end round?
     if(roundWon){
       //bring up round summary
@@ -1076,10 +1121,13 @@ import MainMenu from "./components/MainMenu.vue";
   </button>
     <button class="swap-display" @mousedown="renewBlueprints()">
       Renew Blueprints
-    </button>
-    <button v-if="playerHasAdmin('Convenience Store')"
+    </button><!--
+    v-if="playerHasAdmin('Convenience Store')"
+    --> 
+    <button
     class="shop-toggle"
     @mousedown="toggleShop()">
+    Toggle Shop
     </button>
     <button class="map-toggle" @mousedown="toggleMap()">
       Toggle Map
@@ -1095,6 +1143,7 @@ import MainMenu from "./components/MainMenu.vue";
     <div v-if="!hasFinishedTurn && !isPlacing">Your turn</div>
       <div v-if="isPlacing && pieceToPlace">
         <p>Placing:</p>
+        <button @click="pieceToPlace=null">Cancel</button>
       </div>
       <div v-if="isPlacing && pieceToPlace"
       class="info">
@@ -1150,6 +1199,7 @@ import MainMenu from "./components/MainMenu.vue";
   :placementHighlights="playerSpawns"
   :isFirstTurn="isFirstTurn"
   :placementMode="isPlacing"
+  :movementMode="isMoving"
   :hasFinishedTurn="hasFinishedTurn"
   :player="player"
   @placeOnBoard="placePieceOnBoardAt"

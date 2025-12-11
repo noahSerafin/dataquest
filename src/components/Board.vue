@@ -118,9 +118,69 @@ function getAvailableMoves(
   })
 }
 
+function getReachableTiles(
+  piece: Piece,
+  tileSet: Set<string>,
+  pieceMap: Map<string, Piece>
+): Array<{ x: number; y: number }> {
+
+  const maxSteps = piece.movesRemaining;
+  if (maxSteps <= 0) return [];
+
+  const start = piece.headPosition;
+  const visited = new Set<string>();
+  const reachable: Array<{ x: number; y: number }> = [];
+
+  const queue: Array<{ x: number; y: number; steps: number }> = [
+    { x: start.x, y: start.y, steps: 0 }
+  ];
+
+  const isNegative = !!piece.statuses?.negative;
+
+  while (queue.length > 0) {
+    const { x, y, steps } = queue.shift()!;
+    const key = `${x},${y}`;
+
+    if (visited.has(key)) continue;
+    visited.add(key);
+
+    // Don't include the starting tile (where the piece already is)
+    if (!(x === start.x && y === start.y)) {
+      reachable.push({ x, y });
+    }
+
+    // Stop if we've reached max steps
+    if (steps >= maxSteps) continue;
+
+    // Expand neighbors
+    const neighbors = [
+      { x: x + 1, y },
+      { x: x - 1, y },
+      { x, y: y + 1 },
+      { x, y: y - 1 },
+    ];
+
+    for (const n of neighbors) {
+      const nKey = `${n.x},${n.y}`;
+
+      // Must be a valid board tile
+      if (!tileSet.has(nKey)) continue;
+
+      // If NOT negative, cannot go through occupied tiles
+      if (!isNegative && pieceMap.has(nKey)) continue;
+
+      // Add to queue
+      queue.push({ x: n.x, y: n.y, steps: steps + 1 });
+    }
+  }
+
+  return reachable;
+}
+
 const highlightMoves = (piece: InstanceType<typeof Piece>) => {
   clearHighlights();
-  moveHighlights.value = getTilesInRange(piece.headPosition, piece.movesRemaining, tileSet.value)//not really providing possible with pieces in the way
+  moveHighlights.value = getReachableTiles(piece, tileSet.value, pieceMap.value)//actually get in range and not blocked or occupied
+
   moveButtons.value = getAvailableMoves(piece, tileSet.value, pieceMap.value);
 }
 

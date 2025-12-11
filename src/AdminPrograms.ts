@@ -102,9 +102,9 @@ class Bubble extends Admin {
 
 }
 
-class Crystal extends Admin {
+class Crystal extends Admin {//unfinished maybe change what this does
   static name = "Crystal Ball";
-  static description = "See level structures in advance";
+  static description = "See the next shop in advance";
   static unicode = "U+1F52E";
   static color = "#4b003bff";
 
@@ -248,10 +248,10 @@ class Bouquet extends Admin {
   //shop, disable for now
 }
 
-class Heartbreaker extends Admin {//unfinished status
+class Heartbreaker extends Admin {
   static name = "Heartbreaker";
   static description = "Makes your programs immune to being charmed on placement";
-  static unicode = "U+1F498";
+  static unicode = "U+1F494";//charmed symbol? "U+1F498";
   static color = "#dadadaff";
   constructor() {
     super(Heartbreaker.name, Heartbreaker.description, Heartbreaker.unicode, Heartbreaker.color, 5, 3, 'gameState', 'onPlacement')
@@ -325,9 +325,9 @@ class Notepad extends Admin {
 }
 
 // GLOBE WITH MERIDIANS, U+1F310
-class AdminMap extends Admin {//unfinished round
+class AdminMap extends Admin {
   static name = "World Map";
-  static description = "See the incoming level in advance";
+  static description = "See incoming node structures in advance";
   static unicode = "U+1F30D";
   static color = "#001cbbff";
   constructor() {
@@ -355,15 +355,14 @@ class PetriDish extends Admin {//unfinished status
   }*/
 }
 
-class Volatile extends Admin {//unfinished status
+class Volatile extends Admin {//handled in app
   static name = "Volatile";
-  static description = "Status effects are doubled, does not stack";//sell for buying price?
+  static description = "Status effects are doubled, does not stack";
   static unicode = "U+1F9EA";
   static color = "#00ff22c7";
   constructor() {
     super(Volatile.name, Volatile.description, Volatile.unicode, Volatile.color, 6, 4, 'gameState', 'onTurnEnd')
   }
-  //mod status
 }
 
 class Inheritance extends Admin {
@@ -531,7 +530,7 @@ class Brain extends Admin {
   }
 }
 
-class GoldenTicket extends Admin {//unfinished rounds
+class GoldenTicket extends Admin {
   static name = "Golden Ticket";
   static description = "Skip a non boss level for $5 (no reward or interest earned)";
   static unicode = "U+1F3AB";
@@ -539,7 +538,6 @@ class GoldenTicket extends Admin {//unfinished rounds
   constructor() {
     super(GoldenTicket.name, GoldenTicket.description, GoldenTicket.unicode, GoldenTicket.color, 5, 4, 'player', 'other');
   }
-  //intereact with map
 }
 
 class Dove extends Admin {
@@ -653,7 +651,7 @@ class Palette extends Admin {
 class Osiris extends Admin {
   static name = "Osiris";
   static description = "+1 damage all your placed programs each time a program is destroyed";
-  static unicode = "U+1314A";
+  static unicode = "U+13080";//horus: "U+1314A";
   static color = "#33073bff";
   constructor() {
     super(Osiris.name, Osiris.description, Osiris.unicode, Osiris.color, 8, 4, 'gameState', 'onPieceDestruction')
@@ -897,7 +895,9 @@ class Feather extends Admin {
     activePieces[idx].addModifier({moves: 1})
     activePieces[idx].movesRemaining += 1;
     console.log('applying:', this.name)
-    activePieces[idx].addModifier({maxSize: -1})
+    if(activePieces[idx].getStat("maxSize") < 1){
+      activePieces[idx].addModifier({maxSize: -1})
+    }
   }
 }
 

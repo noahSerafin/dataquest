@@ -96,6 +96,7 @@ function handleSelect() {
     @click="handleSelect"
     @sell="$emit('sell', props.blueprint)"
   >
+  <p class='top-left' v-if="cssclass==='shop'" :style="`top: -${(props.tileSize-10)/2}px`">P</p>
     {{ unicodeSymbol }}
   </div>
 </template>
@@ -161,5 +162,12 @@ function handleSelect() {
 }
 .move-btn:hover {
   background: rgba(0, 0, 0, 0.7);
+}
+.top-left{
+  font-weight: bold;
+  font-size: 12px;
+  position: absolute;
+  top: 1px;
+  left: 1px;
 }
 </style>

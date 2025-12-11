@@ -170,7 +170,7 @@
     }
 
     function trySelect(node: WorldNode) {
-        if(!props.player.admins.some(a => a.name === 'Crystal Ball')){
+        if(!props.player.admins.some(a => a.name === 'World Map')){
             if (!canClick(node)) return;
         }
         selectedPreviewNode.value = node;

@@ -1,11 +1,13 @@
 GAME
 Defense - lose on damage but reset every turn??? - would make ai easier
+make more levels, smaller levels (max size 9)
+//check interest is working properly
+
+ADMINS - Petri, crystal, compass, (chemistry)
 
 PIECES 4
-active special functions 4 - done except fairy (need graveyard) 4
 visually show takeDamage with short lived red colour and shake animation, bonus: particles 4 - this next
-buff nearby
-keep track of upgrades and display on piece
+keep track of upgrades and display on piece, and move/attack/spceial btn that cycles 7
 variants?
 
 BOSSES 5

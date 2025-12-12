@@ -253,6 +253,13 @@ const activeStatuses = computed((): [string, boolean][] => {
   font-weight: bold;
   line-height: 12px;
 }
+@keyframes shake {
+  0% { transform: translate(0,0); }
+  25% { transform: translate(-3px, 1px); }
+  50% { transform: translate(3px, -2px); }
+  75% { transform: translate(-2px, 2px); }
+  100% { transform: translate(0,0); }
+}
 .taking-damage-true::after{
   content: '';
   position: absolute;
@@ -262,5 +269,6 @@ const activeStatuses = computed((): [string, boolean][] => {
   opacity: 60%;
   top: 0%;
   left: 0%;
+  animation: shake 0.25s ease;
 }
 </style>

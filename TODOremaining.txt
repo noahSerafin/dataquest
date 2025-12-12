@@ -3,12 +3,10 @@ Defense - lose on damage (and reset every turn???) - would make ai easier
 make more levels, smaller levels (max size 9)
 //check interest is working properly 
 
-ADMINS - Petri, crystal, compass, (chemistry)
-
-PIECES 4
-visually show takeDamage with short lived red colour and shake animation, bonus: particles 4 - this next
-keep track of upgrades and display on piece, and move/attack/spceial btn that cycles 7
-variants?
+ADMINS - Petri - spread statuses
+crystal
+compass - show secret nodes MAP 6.5
+(chemistry)
 
 BOSSES 5
 test damage all bosses
@@ -28,9 +26,10 @@ functions:
     maybe ignore statuses if already has a status??? or dont consume an action??
 
 special attacks
+    if self use on self
     attackingSpecial bool
     use special if possible
-    !attackingSpecial use on friendly???
+    !attackingSpecial use on friendly??? or friendlySpecial bool
 
 --MORE LEVELS--
 //modify spawn in App to account for piece size 6
@@ -38,21 +37,18 @@ special attacks
 MAP 6.5
 isometric view?
 branching paths - started
-see two maps ahead?-done 
-path examples before boss(paths meeting point):
-    one level +1 difficulty, shop
-    one level +0 difficulty, one level +0 difficulty
-    one level +0 difficulty, one level +1 difficulty
-    one level +2 difficulty, shop
-multiple levels files?
-
-
+multiple levels files for difficulty tier?
+hidden nodes? randomly generated, not visible until player arrives at connecting node
 
 HYBRIDS 7
 Hybrid class accepts two pieces
 takes average of both stats, rounded up
 takes special move of first piece
 add altar to map nodes
+
+PIECES
+keep track of upgrades and display on piece, and move/attack/spceial btn that cycles 7
+variants?
 
 EDITOR 8
 Add a Spawn for a 'wall' type piece

@@ -15,6 +15,7 @@ interface Props{
   isFirstTurn: boolean
   hasFinishedTurn: boolean
   player: Player
+  showFastControls: boolean
 }
 const props = defineProps<Props>()
 
@@ -178,6 +179,7 @@ function getReachableTiles(
 }
 
 const highlightMoves = (piece: InstanceType<typeof Piece>) => {
+  console.log('moves')
   clearHighlights();
   moveHighlights.value = getReachableTiles(piece, tileSet.value, pieceMap.value)//actually get in range and not blocked or occupied
 
@@ -260,6 +262,7 @@ function checkTileIsOccupied(coord:Coordinate): Piece | undefined{
 //(damageReceiver: InstanceType<typeof Piece>) => {
 
 const highlightTargets = (piece: InstanceType<typeof Piece>) => {
+  console.log('targets')
   clearHighlights();
   if(piece.actions <= 0) return;
   inRangeHighlights.value = getTilesInRange(
@@ -269,6 +272,7 @@ const highlightTargets = (piece: InstanceType<typeof Piece>) => {
   ); 
 }
 const highlightSpecials = (piece: InstanceType<typeof Piece>) => {
+  console.log('specialtargets', piece.name)
   clearHighlights();
   if(piece.actions <= 0) return;
   if(piece.targetType === 'line'){
@@ -325,11 +329,17 @@ defineExpose({
       class="piece-layer"
       :key="piece.id"
     >
-      <PieceView :piece="piece"
+      <PieceView
+      :piece="piece"
+      :selectedPiece="selectedPiece"
       :tileSize=tileSize
       :mapTiles = props.tiles
       cssclass = "board"
+      :showFastControls = showFastControls
       @select="$emit('handlePieceSelect', piece)"
+      @highlightTargets="highlightTargets"
+      @highlightSpecials="highlightSpecials"
+      @deselect="$emit('deselect')"
       />
     </div>
     <!-- 
@@ -376,7 +386,7 @@ defineExpose({
     v-for="(tile, index) in specialHighlights"
     :key="index"
     :id="`atk-${tile.x}-${tile.y}`"
-      class="highlight-tile red"
+      class="highlight-tile yellow"
       v-on:click="$emit('specialActionAt', tile)"
       :style="{
         left: tile.x * tileSize + 'px',
@@ -388,7 +398,7 @@ defineExpose({
     <div
       v-if="props.placementMode || props.isFirstTurn" v-for="(tile, index) in props.placementHighlights"
       :key="index"
-      class="highlight-tile yellow"
+      class="highlight-tile green"
       v-on:click="handlePlaceClick(tile)"
       :style="{
         left: tile.x * tileSize + 'px',
@@ -485,9 +495,13 @@ defineExpose({
 .piece-layer.piece{
   z-index: 2;
 }
+.green{
+  background-color: rgba(21, 255, 0, 0.432);
+  z-index: 1;
+}
 .yellow{
   background-color: rgba(255, 251, 0, 0.432);
-  z-index: 1;
+  z-index: 3;
 }
 .red{
   background-color: rgba(255, 0, 0, 0.432);

@@ -120,6 +120,11 @@ import MainMenu from "./components/MainMenu.vue";
   function openMainMenu(){
     showMainMenu.value = true;
   }
+  const showFastControls = ref<boolean>(true);
+  function toggleFastControls(){
+    showFastControls.value = !showFastControls.value
+  }
+  
 
   function playerHasAdmin(name: string) {
     return player.value.admins.some(a => a.name === name);
@@ -1138,6 +1143,9 @@ import MainMenu from "./components/MainMenu.vue";
     <button class="difficulty" @mousedown="decreaseDifficulty()">
       Decrease Security
     </button>
+    <button class="difficulty" @mousedown="toggleFastControls()">
+      Fast Controls
+    </button>
   </div>
   <div class="player-helper">
     <div v-if="!hasFinishedTurn && !isPlacing">Your turn</div>
@@ -1202,6 +1210,7 @@ import MainMenu from "./components/MainMenu.vue";
   :movementMode="isMoving"
   :hasFinishedTurn="hasFinishedTurn"
   :player="player"
+  :showFastControls="showFastControls"
   @placeOnBoard="placePieceOnBoardAt"
   @handlePieceSelect="handlePieceSelect"
   @deselect="deselectPiece"

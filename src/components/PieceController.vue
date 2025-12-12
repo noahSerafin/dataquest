@@ -79,18 +79,18 @@ function toggleTooltip(key: string) {
 
     <div class="actions">
       <button
-        :disabled="!canMove || piece.moves > 0" 
-        v-if="piece.team === 'player'" @click="$emit('highlightMoves', piece)">
+        :disabled="!canMove || piece.moves <= 0" 
+        v-if="(piece.team === 'player' || (piece.team === 'enemy' && piece.statuses.charmed))" @click="$emit('highlightMoves', piece)">
         Move
       </button>
       <button
         :disabled="!canAction || piece.actions <= 0"
-        v-if="piece.team === 'player'  && piece.canAttack"
+        v-if="(piece.team === 'player' || (piece.team === 'enemy' && piece.statuses.charmed)) && piece.canAttack"
         @click="$emit('highlightTargets', piece)">
         Attack
       </button>
       <button
-        v-if="piece.specialName && piece.team === 'player'"
+        v-if="piece.specialName && (piece.team === 'player' || (piece.team === 'enemy' && piece.statuses.charmed))"
         :disabled="!canAction || piece.actions <= 0"
         @click="$emit('highlightSpecials', piece)">
         {{ piece.specialName }}

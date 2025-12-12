@@ -2,16 +2,6 @@ import type { Coordinate, Immunities, StatModifier, Statuses } from "./types"
 import { createDefaultImmunities, createDefaultStatuses } from "./types";
 import { Player } from "./Player";
 
-type PieceConstructor = {
-  new (
-    head: Coordinate,
-    team: string,
-    removeCallback?: (p: Piece) => void,
-    id?: string
-  ): Piece;
-  name: string;
-};
-
 export abstract class Piece {
   removeCallback?: (piece: Piece) => void;
 

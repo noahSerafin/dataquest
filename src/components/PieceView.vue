@@ -9,9 +9,11 @@ import { STATUS_ICONS } from "../statuses";
 // Props
 const props = defineProps<{
   piece: InstanceType<typeof Piece>
+  selectedPiece: InstanceType<typeof Piece> | null
   tileSize: number//provided by board.vue
   mapTiles?: Coordinate[] // optional when in inventory
   cssclass: string
+  showFastControls: boolean
 }>();
 
 
@@ -19,9 +21,27 @@ const props = defineProps<{
 const showController = ref(false);//todo change to selected piece
 
 //emits
-const emit = defineEmits<{ 
-  select:[piece:Piece]
+const emit = defineEmits<{
+  (e: 'select', piece: Piece): void,
+  (e: "highlightTargets", piece: Piece): void,
+  (e: "highlightSpecials", piece: Piece): void,
+  (e: "deselect"): void
 }>()
+
+const actionToEmit = ref<string>('A');
+
+function cycleAction(){
+  console.log(actionToEmit.value)
+  emit('select', props.piece)
+  if(actionToEmit.value === 'A') {
+    emit('highlightTargets', props.piece);
+    actionToEmit.value = 'S';
+  }
+  else if(actionToEmit.value === 'S') {
+    emit('highlightSpecials', props.piece);
+    actionToEmit.value = 'A';
+  }
+}
 
 //computed
 const unicodeSymbol = computed(() =>
@@ -95,13 +115,6 @@ function handleSelect() {
   if (props.piece)       emit('select', props.piece)
 }
 
-//controller------------
-const handlePieceMoveClick = () => {
-  if (props.piece) {
-   // emit('highlightMoves', props.piece)
-  }
-}
-
 const activeStatuses = computed((): [string, boolean][] => {
   // Object.entries returns (string | boolean)[], so we assert/carefully filter
   return Object.entries(props.piece.statuses)
@@ -120,6 +133,14 @@ const activeStatuses = computed((): [string, boolean][] => {
     @click="handleSelect"
   >
       {{ unicodeSymbol }}
+    <button v-if="showFastControls && selectedPiece === piece" class="deselect-btn"
+    @click.stop = "$emit('deselect')"
+    >x
+    </button>
+    <button v-if="showFastControls && selectedPiece === piece && (piece.team === 'player' || (piece.team === 'enemy' && piece.statuses.charmed))" class="action-btn"
+    @click.stop = "cycleAction"
+    >{{ actionToEmit }}
+    </button>
     <div class="status-icons">
       <span
         v-for="([key, active], idx) in activeStatuses"
@@ -210,5 +231,24 @@ const activeStatuses = computed((): [string, boolean][] => {
   height: 0.3em;
   margin-left: 0.2rem;
   top: -40%;
+}
+.action-btn, .deselect-btn{
+  position: absolute;
+  font-size: 10px;
+  padding: 2px 5px 2px 5px;
+  background-color: black;
+  border: 1px solid white;
+  color: white;
+  right: 0;
+  border-radius: 0;
+}
+.action-btn{
+  bottom: 0;
+}
+.deselect-btn{
+  top: 0;
+  color: red;
+  font-weight: bold;
+  line-height: 12px;
 }
 </style>

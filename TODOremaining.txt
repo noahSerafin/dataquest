@@ -1,7 +1,7 @@
 GAME
-Defense - lose on damage but reset every turn??? - would make ai easier
+Defense - lose on damage (and reset every turn???) - would make ai easier
 make more levels, smaller levels (max size 9)
-//check interest is working properly
+//check interest is working properly 
 
 ADMINS - Petri, crystal, compass, (chemistry)
 

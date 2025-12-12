@@ -21,8 +21,9 @@ export abstract class Piece {
     negative: false,
   };
   immunities: Immunities = createDefaultImmunities();
-  canAttack: boolean = true; 
-  willRetaliate: boolean = false; 
+  canAttack: boolean = true;
+  willRetaliate: boolean = false;
+  isTakingDamage: boolean = false;
 
   specialName?: string;
   targetType: 'piece' | 'pieceAndPlayer' | 'space' | 'pieceAndPlace' | 'group' | 'line' | 'self' | 'all' | 'graveyard' | 'trapPiece' = 'piece';
@@ -148,9 +149,14 @@ export abstract class Piece {
     this.useMove();
   }
 
-  takeDamage(damage: number) {
-    const received = Math.max(0, damage - this.getStat('defence'));
+  async takeDamage(damage: number) {
+    const received = Math.max(0, damage - this.getStat('defence'));//affect defense as well???
     const removeCount = Math.min(received, this.tiles.length); // safety
+    if(removeCount){
+      this.isTakingDamage = true
+      await new Promise(resolve => setTimeout(resolve, 250));
+      this.isTakingDamage = false
+    }
     this.tiles.splice(this.tiles.length - removeCount, removeCount);
     if (this.tiles.length === 0 && this.removeCallback) {
       this.removeCallback(this);
@@ -231,24 +237,38 @@ class Knife extends Piece {
 }
 
 class Dagger extends Piece {
-  static name = "Sword";
-  static description = "A basic attack piece";
+  static name = "Dagger";
+  static description = "A basic attack piece, has a special attack that ignores the defences of enemies";
   static unicode = "U+1F5E1";
   static color = "#37b6e9ff";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
   super(Dagger.name, Dagger.description, Dagger.unicode, 3, 2, 1, 3, 0, Dagger.color, headPosition, [headPosition], team, Dagger.rarity, removeCallback, id)
+  this.targetType = 'piece'
+    this.specialName = 'Hack'
+  }
+  async special(target: Piece): Promise<void> {
+    await target.takeDamage(this.getStat('attack') + target.getStat('defence'));//change if we change defence later
+    this.actions --
   }
 }
 
 class Arms extends Piece {
   static name = "Arms";
-  static description = "A stronger attacking piece";
+  static description = "A stronger attacking piece that can attack all pieces in range";
   static unicode = "U+2694";
   static color = "#1b84caff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
   super(Arms.name, Arms.description, Arms.unicode, 3, 2, 1, 4, 0, Arms.color, headPosition, [headPosition], team, Arms.rarity, removeCallback, id)
+    this.specialName = 'Assault';
+    this.targetType = 'group'
+  }
+  async special(targets: Piece[]):Promise<void>{
+    for (const t of targets) {
+      await t.takeDamage(this.getStat('attack')); // damages enemy pieces directly in App.vue
+    }
+    this.actions--
   }
 }
 
@@ -394,7 +414,7 @@ class Firewall extends Piece {
     this.specialName = 'Burn'
   }
   async special(target: Piece): Promise<void> {
-    target.takeDamage(this.getStat('attack'));
+    await target.takeDamage(this.getStat('attack'));
     if(!target.immunities.burnImmune){
       target.statuses.burning = true;
     }
@@ -472,7 +492,7 @@ class Lance extends Piece {
         this.moveTo(tile);
         continue;
       }
-      occupier.takeDamage(this.getStat('attack'));
+      await occupier.takeDamage(this.getStat('attack'));
       const stillOccupied = activePieces.find(p =>
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
       );
@@ -530,7 +550,7 @@ class Cannon extends Piece {
 
   async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
     for (const target of activePieces) {
-      target.takeDamage(this.getStat('attack'));
+      await target.takeDamage(this.getStat('attack'));
     }
     this.actions--
   }
@@ -585,7 +605,7 @@ class Dynamite extends Piece {
   }
   async special(targets: Piece[]):Promise<void>{
     for (const t of targets) {
-      t.takeDamage(this.getStat('attack')); // damages enemy pieces directly in App.vue
+      await t.takeDamage(this.getStat('attack')); // damages enemy pieces directly in App.vue
     }
     this.actions--
     this.removeCallback?.(this); // kill itself
@@ -609,7 +629,7 @@ class Bomb extends Piece {
   }
   async special(targets: Piece[]):Promise<void>{
     for (const t of targets) {
-      t.takeDamage(this.getStat('attack')); // damages enemy pieces directly in App.vue
+      await t.takeDamage(this.getStat('attack')); // damages enemy pieces directly in App.vue
     }
     this.actions--
     this.removeCallback?.(this); // kill itself
@@ -757,7 +777,7 @@ class Mine extends Piece {
   }
   //no active special, but a walkOver function we need to setup await handler in App.vue inside movePiece or even Piece moveTo
   async special(target: Piece): Promise<void> {
-    target.takeDamage(this.getStat('attack'))
+    await target.takeDamage(this.getStat('attack'))
     this.actions--
     this.removeCallback?.(this);
     //remove self?
@@ -872,7 +892,7 @@ class Watchman extends Piece {
     if(target.getStat('defence') > 0){
       target.defence -= 1
     } else {
-      target.takeDamage(1)
+      await target.takeDamage(1)
     }
     this.actions--
   }
@@ -1043,7 +1063,7 @@ class Nuke extends Piece {
   }
   async special(targets: Piece[]):Promise<void>{
     for (const t of targets) {
-      t.takeDamage(this.getStat('attack')); // damages enemy pieces directly in App.vue
+      await t.takeDamage(this.getStat('attack')); // damages enemy pieces directly in App.vue
     }
     this.actions--
     this.removeCallback?.(this); // kill itself
@@ -1065,7 +1085,7 @@ class Highwayman extends Piece {
   }
   async special({piece, player} : {piece: Piece, player: Player}):Promise<void>{
     if(this.getStat('attack') > piece.getStat('defence')){
-      piece.takeDamage(this.getStat('attack'))
+      await piece.takeDamage(this.getStat('attack'))
       if(piece.team === 'enemy'){
         player.money += 1;
       }
@@ -1372,7 +1392,7 @@ class Greatshield extends Piece {//testt
         this.moveTo(tile);
         continue;
       }
-      occupier.takeDamage(this.getStat('attack'));
+      await occupier.takeDamage(this.getStat('attack'));
       const stillOccupied = activePieces.find(p =>
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
       );
@@ -1547,7 +1567,7 @@ class Firebrand extends Piece {
   }
 
   async special(targetPiece: Piece):Promise<void>{
-    targetPiece.takeDamage(this.getStat('attack'));
+    await targetPiece.takeDamage(this.getStat('attack'));
     if(!targetPiece.immunities.burnImmune){
       targetPiece.statuses.burning = true;
     }
@@ -1705,7 +1725,7 @@ class Bee extends Piece {
   }
 
   async special(targetPiece: Piece):Promise<void>{
-    targetPiece.takeDamage(this.getStat('attack'));
+    await targetPiece.takeDamage(this.getStat('attack'));
     this.actions--
     this.removeCallback?.(this);
   }
@@ -1799,7 +1819,7 @@ class Jellyfish extends Piece {
   }
 
   async special(targetPiece: Piece):Promise<void>{
-    targetPiece.takeDamage(this.getStat('attack'));
+    await targetPiece.takeDamage(this.getStat('attack'));
     if(!targetPiece.immunities.slowImmune){
       targetPiece.statuses.slowed = true
     }
@@ -1877,7 +1897,7 @@ class Boomerang extends Piece {
    this.specialName = 'Throw'
   }
   async special(targetPiece: Piece):Promise<void>{
-    targetPiece.takeDamage(this.getStat('attack'));
+    await targetPiece.takeDamage(this.getStat('attack'));
     this.movesRemaining = this.getStat('moves');
     this.actions--
   }
@@ -1980,7 +2000,7 @@ class Centipede extends Piece {
     this.specialName = 'Bite'
   }
   async special(targetPiece: Piece):Promise<void>{
-    targetPiece.takeDamage(this.getStat('attack'))
+    await targetPiece.takeDamage(this.getStat('attack'))
     if(!targetPiece.immunities.poisonImmune){
       targetPiece.statuses.poisoned = true;
     }
@@ -2104,7 +2124,7 @@ class Croc extends Piece {
     this.statuses.hidden = true;
   }
   async special(target: Piece): Promise<void> {
-    target.takeDamage(this.getStat('attack'))
+    await target.takeDamage(this.getStat('attack'))
     this.statuses.hidden = false;
     this.actions--
   }
@@ -2223,14 +2243,19 @@ class Drum extends Piece {
 export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Ink, Snail, Shark, Greatshield, Wizard, Ninja, Fairy, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, Dolls, UFO, TP, Saw, Croc, Lighthouse, Torch, Camera, Bugle, Drum];//87 +2 (web, ink)
 console.log('pieces length: ', allPieces.length)
 
-////recurve bow CANADIAN SYLLABICS CARRIER CHEE, U+1664
+// WRENCH, U+1F527 prevent another program from taking any actions for a turn
 
-//megaphone U+1F4E3
+//Daemon
+//IMP, U+1F47F
 
 //PLAYGROUND SLIDE, U+1F6DD like gate but with more range? line target??
 
+////recurve bow CANADIAN SYLLABICS CARRIER CHEE, U+1664
+
 //DANCER, U+1F483 //high movement no damage
 //Pazzaz U+1F57A //starts with 2 actions
+
+//megaphone U+1F4E3
 
 // TOP HAT, U+1F3A9 spawns a random piece/or rabbit?
 // RABBIT, U+1F407 high movement 1 atk 1 maxsize

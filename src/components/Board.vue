@@ -396,7 +396,7 @@ defineExpose({
       }"
     />
     <div
-      v-if="props.placementMode || props.isFirstTurn" v-for="(tile, index) in props.placementHighlights"
+      v-if="player.canPlace && (placementMode || props.isFirstTurn)" v-for="(tile, index) in placementHighlights"
       :key="index"
       class="highlight-tile green"
       v-on:click="handlePlaceClick(tile)"

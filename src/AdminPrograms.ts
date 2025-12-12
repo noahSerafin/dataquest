@@ -1200,19 +1200,20 @@ class Ambulance extends Admin {//test
 export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, Seed, Puzzle, Roger, Bucket, Diamond, Sneakers, Candle, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Scarf, Prayer, Fountain, Spoon, Hermes, Warmth, Xray, Ambulance];//71
 console.log('admins length: ', allAdmins.length)
 
+//WHEEL, U+1F6DE
 //CHEESE WEDGE, U+1F9C0 Chedda
+//ABACUS, U+1F9EE
 //BANK, U+1F3E6 //increases sell value of held programs?
 
 //UMBRELLA WITH RAIN DROPS, U+2614 disable bosses
 
-//POLICE CARS REVOLVING LIGHT, U+1F6A8
-
 //doctor STETHOSCOPE, U+1FA7A medic, return killed pieces to hand as blueprints
 
-//X-RAY,  immune to blinding? //need more pieces that blind
-// MILKY WAY, U+1F30C
-
 //DARK SUNGLASSES, U+1F576
+
+// NAIL POLISH, U+1F485
+
+//RIBBON, U+1F380
 
 //STATUE OF LIBERTY, U+1F5FD +2 range?
 // UP-POINTING MILITARY AIRPLANE, U+1F6E6
@@ -1225,9 +1226,6 @@ console.log('admins length: ', allAdmins.length)
 //RING, U+1F48D
 
 //YIN YANG, U+262F
-
-//Daemon
-//IMP, U+1F47F
 
 // TOILET, U+1F6BD circling the drain, common admins provide +1 to all stats on placement
 

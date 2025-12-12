@@ -719,13 +719,12 @@ import MainMenu from "./components/MainMenu.vue";
     // Reset placement state
     pieceToPlace.value = null;
     playerSpawns.value = newPlacementHighlights();
-    isPlacing.value = false;
     
     //applyStatModifications()
     handleApplyAdmins('onPlacement', instance.id)
 
     const hasDove = playerHasAdmin('Dove');
-  const hasPalette = playerHasAdmin('Palette');
+    const hasPalette = playerHasAdmin('Palette');
 
     // First-turn rules
     if (isFirstTurn.value) {
@@ -748,6 +747,7 @@ import MainMenu from "./components/MainMenu.vue";
       }
     } else {
       // Not first turn -> normal behaviour
+      isPlacing.value = false;
       endTurn();
     }
   }
@@ -828,10 +828,10 @@ import MainMenu from "./components/MainMenu.vue";
     const baseDamage = selectedPiece.value.getStat('attack');
     await handleApplyAdmins('onDealDamage', selectedPiece.value.id)//attacker's id, (bug: blood tax will trigger even on no damage)
     const damage = Math.floor(baseDamage * selectedPiece.value.damageMult)//mult should be applyed inside takeDamage for special moves
-    damageReceiver.takeDamage(damage);
+    await damageReceiver.takeDamage(damage);
     selectedPiece.value.damageMult = 1;
     if(damageReceiver.willRetaliate){
-      selectedPiece.value.takeDamage(damageReceiver.getStat('attack'));
+      await selectedPiece.value.takeDamage(damageReceiver.getStat('attack'));
       if(damageReceiver.name === 'Puffer' && !selectedPiece.value.immunities.poisonImmune){
         selectedPiece.value.statuses.poisoned = true;
       }
@@ -1221,6 +1221,9 @@ import MainMenu from "./components/MainMenu.vue";
   <Leveleditor v-else @export-level="handleExport"/>
   <PlayerView v-if="!displayEditor" :player="player" @highlightPlacements="highlightPlacements" @sellBlueprint="sellBlueprint" @sellItem="sellItem" @applyItem="handleApplyItem" @sellAdmin="sellAdmin" @reorderAdmins="player.admins = $event"/>
   <button v-if="!displayEditor && !hasFinishedTurn" class="end-turn" v-on:click="endTurn()">End Turn</button>
+  <div class="graveyard">
+    <button>🪦</button>
+  </div>
 </template>
 
 <style scoped>

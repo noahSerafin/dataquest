@@ -32,6 +32,9 @@ special attacks
     use special if possible
     !attackingSpecial use on friendly???
 
+--MORE LEVELS--
+//modify spawn in App to account for piece size 6
+
 MAP 6.5
 isometric view?
 branching paths - started
@@ -43,7 +46,7 @@ path examples before boss(paths meeting point):
     one level +2 difficulty, shop
 multiple levels files?
 
---MORE LEVELS--
+
 
 HYBRIDS 7
 Hybrid class accepts two pieces

@@ -107,12 +107,12 @@ function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function attackPiece(attacker: Piece, defender: Piece) {
+async function attackPiece(attacker: Piece, defender: Piece) {
   if(attacker.actions > 0 && attacker.canAttack){//!canAttack should do special
     const damage = attacker.attack;
-    defender.takeDamage(damage);
+    await defender.takeDamage(damage);
     if(defender.willRetaliate){
-      attacker.takeDamage(defender.getStat('attack'));
+      await attacker.takeDamage(defender.getStat('attack'));
       if(defender.name === 'Puffer' && !attacker.immunities.poisonImmune){
         attacker.statuses.poisoned = true;
       }

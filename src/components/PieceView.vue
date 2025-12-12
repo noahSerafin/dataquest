@@ -35,7 +35,9 @@ function cycleAction(){
   emit('select', props.piece)
   if(actionToEmit.value === 'A') {
     emit('highlightTargets', props.piece);
-    actionToEmit.value = 'S';
+    if(props.piece.specialName) {
+      actionToEmit.value = 'S';
+    }
   }
   else if(actionToEmit.value === 'S') {
     emit('highlightSpecials', props.piece);
@@ -126,7 +128,7 @@ const activeStatuses = computed((): [string, boolean][] => {
 
 <template>
   <div
-  :class="`piece ${piece.headPosition.x}-${piece.headPosition.y} ${props.cssclass}-piece team-${props.piece.team}`"
+  :class="`piece ${piece.headPosition.x}-${piece.headPosition.y} ${cssclass}-piece team-${piece.team} taking-damage-${piece.isTakingDamage}`"
     :name="piece?.name"
     :id="piece?.id"
     :style="pieceStyle"
@@ -250,5 +252,15 @@ const activeStatuses = computed((): [string, boolean][] => {
   color: red;
   font-weight: bold;
   line-height: 12px;
+}
+.taking-damage-true::after{
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: red;
+  opacity: 60%;
+  top: 0%;
+  left: 0%;
 }
 </style>

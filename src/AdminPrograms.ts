@@ -102,7 +102,7 @@ class Bubble extends Admin {
 
 }
 
-class Crystal extends Admin {//unfinished maybe change what this does
+class Crystal extends Admin {//test
   static name = "Crystal Ball";
   static description = "See the next shop in advance";
   static unicode = "U+1F52E";
@@ -336,7 +336,7 @@ class AdminMap extends Admin {
   //player bool
 }
 
-class PetriDish extends Admin {//unfinished status
+class PetriDish extends Admin {// status test
   static name = "Petri Dish";
   static description = "Status effects can spread to adjacent enemy programs at the end of your turn";//effect all programs??
   static unicode = "U+1F9EB";
@@ -468,7 +468,7 @@ class Joker extends Admin {
 
 class Chemistry extends Admin {//unfinished statuses
   static name = "Chemistry";
-  static description = "Items effects are doubled";
+  static description = "Items that affect stats effects are doubled";
   static unicode = "U+2697";
   static color = "#4eb95cff";
   constructor() {

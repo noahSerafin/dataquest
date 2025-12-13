@@ -108,7 +108,7 @@ export class Player {
   
   }
 
-  applyItemToPieceBlueprint(payload : {item: Item, id: string}) {
+  applyItemToPieceBlueprint(payload : {item: Item, id: string}, itemMult: number) {
     //check item type
     //check target id's type
     //decide which function to use
@@ -119,11 +119,11 @@ export class Player {
 
     //if item is consumable and target type is blueprint{
     ///consumables on blueprints
-    const piece = this.programs.find(p => p.id === pieceId);//will only find id in player blueprints
-    if (!piece) return false;
+    const pieceBP = this.programs.find(p => p.id === pieceId);//will only find id in player blueprints
+    if (!pieceBP) return false;
 
     // Each item implements an apply(piece) method
-    item.apply(piece);
+    item.apply(pieceBP, itemMult);
 
     // Remove item from inventory
     this.removeItem(item);

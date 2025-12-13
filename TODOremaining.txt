@@ -6,7 +6,7 @@ make more levels, smaller levels (max size 9)
 ADMINS - Petri - spread statuses -test
 crystal - test
 money admins on interest - test
-(chemistry)
+chemistry - test
 
 BOSSES 5
 test damage all bosses

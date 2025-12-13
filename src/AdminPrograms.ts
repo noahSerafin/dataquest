@@ -345,25 +345,28 @@ class PetriDish extends Admin {// status test
     super(PetriDish.name, PetriDish.description, PetriDish.unicode, PetriDish.color, 7, 4, 'gameState', 'onTurnEnd')
   }
   //on turn end
-  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
-    for (const p of activePieces){
-      const neighbours = activePieces.some(piece =>
-        piece.team === 'enemy' &&
-        piece.tiles.some(t =>
-        Math.abs(t.x - p.headPosition.x) + Math.abs(t.y - p.headPosition.y) === 1
-        )
-      )
+  async apply({ id, activePieces }: { id: string; activePieces: Piece[] }) {
+    const players = activePieces.filter(p => p.team === 'player');
+    const enemies = activePieces.filter(p => p.team === 'enemy');
 
-      if(neighbours){
-        for (const statusKey of Object.keys(p.statuses) as StatusKey[]) {
-          if (!p.statuses[statusKey]) continue;
-          if(p.team === 'enemy' && !p.immunities[statusKey] && statusKey!== 'negative'){
-            p.statuses[statusKey] = true;
-          }
+    for (const player of players) {
+      for (const enemy of enemies) {
+        const isAdjacent = enemy.tiles.some(t =>
+          Math.abs(t.x - player.headPosition.x) +
+          Math.abs(t.y - player.headPosition.y) === 1
+        );
+
+        if (!isAdjacent) continue;
+
+        for (const statusKey of Object.keys(player.statuses) as StatusKey[]) {
+          if (statusKey === 'negative') continue;
+          if (!player.statuses[statusKey]) continue;
+          if (enemy.immunities?.[statusKey]) continue;
+
+          enemy.statuses[statusKey] = true;
         }
-
       }
-    }   
+    }
   }
 }
 
@@ -466,13 +469,13 @@ class Joker extends Admin {
   }
 }
 
-class Chemistry extends Admin {//unfinished statuses
+class Chemistry extends Admin {//test
   static name = "Chemistry";
-  static description = "Items that affect stats effects are doubled";
+  static description = "Items that affect stats effects are doubled, does not stack";
   static unicode = "U+2697";
   static color = "#4eb95cff";
   constructor() {
-    super(Chemistry.name, Chemistry.description, Chemistry.unicode, Chemistry.color, 6, 5, 'gameState', 'onTurnEnd')//on Item use
+    super(Chemistry.name, Chemistry.description, Chemistry.unicode, Chemistry.color, 6, 5, 'gameState', 'other')//on Item use
   }
   //seperate flag for this
 }

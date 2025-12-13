@@ -71,8 +71,8 @@ const handleUse = () => {
     @click="handleSelect"
     :style="itemStyle"
   >
-    <p class='top-left' v-if="cssclass==='shop' && type == 'consumable'" :style="`top: -${(props.tileSize-10)/2}px`">I</p>
-    <p class='top-left' v-if="cssclass==='shop' && type == 'admin'" :style="`top: -${(props.tileSize-10)/2}px`">A</p>
+    <p class='top-left' v-if="cssclass==='shop' && type == 'consumable'" :style="`top: -${((props.tileSize-10)/2 -24)}px`">I</p>
+    <p class='top-left' v-if="cssclass==='shop' && type == 'admin'" :style="`top: -${((props.tileSize-10)/2 -24)}px`">A</p>
     <div class="icon">{{ unicodeSymbol }}</div>
     <div v-if="props.showController" class="info" @click.stop >
       <button @click="emit('deselect')" class="close">X</button>
@@ -176,9 +176,15 @@ button:disabled {
   cursor: not-allowed;
 }
 .top-left{
+  background-color: black;
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  line-height: 12px;
   font-weight: bold;
   font-size: 12px;
   position: absolute;
-  left: 1px;
+  right: 0px;
+  margin: 0;
 }
 </style>

@@ -41,7 +41,7 @@ export abstract class Item<TTarget = any> {
 
   //method to alter a program's stats, possibly in subclasses
   //or players stats
-  abstract apply(target: TTarget): void;
+  abstract apply(target: TTarget, itemMult: number): void;
     /*
     abstract apply(
     target: Piece | Player | Item | PieceBlueprint | GameState
@@ -58,9 +58,9 @@ export class Whetstone extends Item<PieceBlueprint> {
         super(Whetstone.name, Whetstone.description, Whetstone.unicode, Whetstone.color, 3, 1, 'blueprint')
     }
     //increases a program's atk by 
-    apply(target: PieceBlueprint) {
+    apply(target: PieceBlueprint, itemMult: number) {
         console.log('target: ', target)
-        target.attack += 1;
+        target.attack += (1* itemMult);
     }
 }
 
@@ -72,9 +72,9 @@ export class Training extends Item<PieceBlueprint> {
     constructor(){
         super(Training.name, Training.description, Training.unicode, Training.color, 5, 4, 'blueprint')
     }
-    apply(target: PieceBlueprint) {
+    apply(target: PieceBlueprint, itemMult: number) {
         console.log('target: ', target)
-        target.attack += 1;
+        target.attack += (1* itemMult);
     }
 }
 
@@ -87,9 +87,9 @@ export class Iron extends Item<PieceBlueprint> {
         super(Iron.name, Iron.description, Iron.unicode, Iron.color, 3, 1, 'blueprint')      
     }
     //increases a program's def by 1
-    apply(target: PieceBlueprint) {
+    apply(target: PieceBlueprint, itemMult: number) {
         console.log('target: ', target)
-        target.defence += 1;
+        target.defence += (1* itemMult);
     }
 }
 //"U+1F356" //meat
@@ -104,9 +104,9 @@ export class Blueberry extends Item<PieceBlueprint> {
         super(Blueberry.name, Blueberry.description, Blueberry.unicode, Blueberry.color, 3, 1, 'blueprint')      
     }
     //increases a program's maxSize by 1
-    apply(target: PieceBlueprint) {
+    apply(target: PieceBlueprint, itemMult: number) {
         console.log('target: ', target)
-        target.maxSize += 1;
+        target.maxSize += (1* itemMult);
     }
 }
 
@@ -119,9 +119,9 @@ export class Carrot extends Item<PieceBlueprint> {
         super(Carrot.name, Carrot.description, Carrot.unicode, Carrot.color, 3, 1, 'blueprint')
     }
     //increases a program's range by 1
-    apply(target: PieceBlueprint) {
+    apply(target: PieceBlueprint, itemMult: number) {
         console.log('target: ', target)
-        target.range += 1;
+        target.range += (1* itemMult);
     }
 }
 
@@ -134,9 +134,9 @@ export class Lightning extends Item<PieceBlueprint> {
         super(Lightning.name, Lightning.description, Lightning.unicode, Lightning.color, 3, 1, 'blueprint')
     }
     //increases a program's moves by 1
-    apply(target: PieceBlueprint) {
+    apply(target: PieceBlueprint, itemMult: number) {
         console.log('target: ', target)
-        target.moves += 1;
+        target.moves += (1* itemMult);
     }
 }
 
@@ -148,13 +148,13 @@ export class Blessing extends Item<PieceBlueprint> {
     constructor(){
         super(Blessing.name, Blessing.description, Blessing.unicode, Blessing.color, 9, 5, 'blueprint')
     }
-    apply(target: PieceBlueprint) {
+    apply(target: PieceBlueprint, itemMult: number) {
         console.log('target: ', target)
-        target.maxSize += 1;
-        target.moves += 1;
-        target.range += 1;
-        target.attack += 1;
-        target.defence += 1;
+        target.maxSize += (1* itemMult);
+        target.moves += (1* itemMult);
+        target.range += (1* itemMult);
+        target.attack += (1* itemMult);
+        target.defence += (1* itemMult);
     }
 }
 
@@ -166,13 +166,13 @@ export class Supplement extends Item<Piece> {
     constructor(){
         super(Supplement.name, Supplement.description, Supplement.unicode, Supplement.color, 5, 5, 'piece')
     }
-    apply(target: Piece) {
-        target.maxSize += 1;
-        target.moves += 1;
-        target.movesRemaining += 1;
-        target.range += 1;
-        target.attack += 1;
-        target.defence += 1;
+    apply(target: Piece, itemMult: number) {
+        target.maxSize += (1* itemMult);
+        target.moves += (1* itemMult);
+        target.movesRemaining += (1* itemMult);
+        target.range += (1* itemMult);
+        target.attack += (1* itemMult);
+        target.defence += (1* itemMult);
     }
 }
 
@@ -184,9 +184,9 @@ export class Juice extends Item<Piece> {
     constructor(){
         super(Juice.name, Juice.description, Juice.unicode, Juice.color, 1, 2, 'piece')  
     }
-    apply(target: Piece) {
-        target.moves += 1;
-        target.movesRemaining += 1;
+    apply(target: Piece, itemMult: number) {
+        target.moves += (1* itemMult);
+        target.movesRemaining += (1* itemMult);
     }
 }
 
@@ -198,8 +198,8 @@ export class Roids extends Item<Piece> {
     constructor(){
         super(Roids.name, Roids.description, Roids.unicode, Roids.color, 1, 2, 'piece')
     }
-    apply(target: Piece) {
-        target.attack += 1;
+    apply(target: Piece, itemMult: number) {
+        target.attack += (1* itemMult);
     }
 }
 
@@ -211,8 +211,8 @@ export class Formula extends Item<Piece> {
     constructor(){
         super(Formula.name, Formula.description, Formula.unicode, Formula.color, 1, 2, 'piece')
     }
-    apply(target: Piece) {
-        target.maxSize += 1;
+    apply(target: Piece, itemMult: number) {
+        target.maxSize += (1* itemMult);
     }
 }
 
@@ -224,8 +224,8 @@ export class Garlic extends Item<Piece> {
     constructor(){
         super(Garlic.name, Garlic.description, Garlic.unicode, Garlic.color, 1, 2, 'piece')
     }
-    apply(target: Piece) {
-        target.defence += 1;
+    apply(target: Piece, itemMult: number) {
+        target.defence += (1* itemMult);
     }
 }
 
@@ -237,8 +237,8 @@ export class RedMeat extends Item<Piece> {
     constructor(){
         super(RedMeat.name, RedMeat.description, RedMeat.unicode, RedMeat.color, 1, 2, 'piece')
     }
-    apply(target: Piece) {
-        target.attack += 1;
+    apply(target: Piece, itemMult: number) {
+        target.attack += (1* itemMult);
     }
 }
 
@@ -250,8 +250,8 @@ export class Coffee extends Item<Piece> {
     constructor(){
         super(Coffee.name, Coffee.description, Coffee.unicode, Coffee.color, 1, 1, 'piece')
     }
-    apply(target: Piece) {
-        target.movesRemaining += 1;
+    apply(target: Piece, itemMult: number) {
+        target.movesRemaining += (3* itemMult);
     }
 }
 
@@ -266,7 +266,7 @@ export class Bandage extends Item<Piece> {
     }
     static harmfulStatuses = ['diseasd', 'slowed', 'blinded', 'burning', 'poisoned', 'frozen','charmed', 'confused', 'exposed']
     
-    apply(target: Piece) {
+    apply(target: Piece, itemMult: number) {
         const activeHarmful = Bandage.harmfulStatuses.filter(
             (statusName) => target.statuses[statusName]
         );
@@ -294,7 +294,7 @@ export class Soap extends Item<Piece> {
         super(Soap.name, Soap.description, Soap.unicode, Soap.color, 3, 4, 'piece')
     }
     static harmfulStatuses = ['diseasd', 'slowed', 'blinded', 'burning', 'poisoned', 'frozen','charmed', 'confused', 'exposed']
-    apply(target: Piece) {
+    apply(target: Piece, itemMult: number) {
         for (const key of Soap.harmfulStatuses) {
             target.statuses[key] = false;
         }
@@ -322,7 +322,7 @@ export class Mushroom extends Item<Piece> {
     constructor(){
         super(Mushroom.name, Mushroom.description, Mushroom.unicode, Mushroom.color, 3, 4, 'piece')
     }
-    apply(target: Piece) {
+    apply(target: Piece, itemMult: number) {
         target.movesRemaining = target.moves;
         target.actions = 1;
     }
@@ -336,7 +336,7 @@ export class Rations extends Item<Piece> {
     constructor(){
         super(Rations.name, Rations.description, Rations.unicode, Rations.color, 2, 3, 'piece')
     }
-    apply(target: Piece) {
+    apply(target: Piece, itemMult: number) {
         target.movesRemaining = target.moves;
     }
 }
@@ -349,7 +349,7 @@ export class Beans extends Item<Piece> {
     constructor(){
         super(Beans.name, Beans.description, Beans.unicode, Beans.color, 2, 3, 'piece')
     }
-    apply(target: Piece) {
+    apply(target: Piece, itemMult: number) {
         target.actions = 1;
     }
 }

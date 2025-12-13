@@ -96,7 +96,7 @@ function handleSelect() {
     @click="handleSelect"
     @sell="$emit('sell', props.blueprint)"
   >
-  <p class='top-left' v-if="cssclass==='shop'" :style="`top: -${(props.tileSize-10)/2}px`">P</p>
+  <p class='top-left' v-if="cssclass==='shop'" :style="`top: -${((props.tileSize-10)/2 - 24)}px`">P</p>
     {{ unicodeSymbol }}
   </div>
 </template>
@@ -164,10 +164,15 @@ function handleSelect() {
   background: rgba(0, 0, 0, 0.7);
 }
 .top-left{
+  background-color: black;
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  line-height: 12px;
   font-weight: bold;
   font-size: 12px;
   position: absolute;
-  top: 1px;
-  left: 1px;
+  right: 1px;
+  margin: 0;
 }
 </style>

@@ -165,12 +165,16 @@ import MainMenu from "./components/MainMenu.vue";
 
   function handleApplyItem(payload: {item: Item, id:string}) {
     const item = payload.item;
+    let itemMult = 1;
+    if(playerHasAdmin('Chemistry')){
+      itemMult = 2;
+    }
     //check it is to be applied to playerBlueprints
     if (item.targetType === "blueprint") {
       const id = payload.id;
       const blueprint = player.value.programs.find(bp => bp.id === id);
       if (!blueprint) return;
-      player.value.applyItemToPieceBlueprint(payload);
+      player.value.applyItemToPieceBlueprint(payload, itemMult);
       return;
     }
     ////if targetType === Piece
@@ -178,7 +182,7 @@ import MainMenu from "./components/MainMenu.vue";
       const id = selectedPiece.value?.id;
       const piece = activePieces.value.find(p => p.id === id);
       if (!piece) return;
-      item.apply(piece);
+      item.apply(piece, itemMult);
       player.value.removeItem(item)
       return;
     }

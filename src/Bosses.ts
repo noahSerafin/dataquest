@@ -368,7 +368,7 @@ class Izakaya extends Admin {
     }
     async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
         const idx = activePieces.findIndex(p => p.id === id);
-        if(!activePieces[idx].immunities.confuseImmune){
+        if(!activePieces[idx].immunities.confused){
             activePieces[idx].statuses.confused = true;
         }
     }
@@ -384,7 +384,7 @@ class Snowflake extends Admin {
     }
     async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
         const idx = activePieces.findIndex(p => p.id === id);
-        if(!activePieces[idx].immunities.freezeImmune){
+        if(!activePieces[idx].immunities.frozen){
             activePieces[idx].statuses.frozen = true;
         }
     }

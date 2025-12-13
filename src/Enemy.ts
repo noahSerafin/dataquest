@@ -113,7 +113,7 @@ async function attackPiece(attacker: Piece, defender: Piece) {
     await defender.takeDamage(damage);
     if(defender.willRetaliate){
       await attacker.takeDamage(defender.getStat('attack'));
-      if(defender.name === 'Puffer' && !attacker.immunities.poisonImmune){
+      if(defender.name === 'Puffer' && !attacker.immunities.poisoned){
         attacker.statuses.poisoned = true;
       }
     }

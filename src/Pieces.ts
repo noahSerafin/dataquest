@@ -1,5 +1,5 @@
 import type { Coordinate, Immunities, StatModifier, Statuses } from "./types"
-import { createDefaultImmunities, createDefaultStatuses } from "./types";
+import { createDefaultStatuses } from "./types";
 import { Player } from "./Player";
 
 export abstract class Piece {
@@ -20,7 +20,7 @@ export abstract class Piece {
     hidden: false,
     negative: false,
   };
-  immunities: Immunities = createDefaultImmunities();
+  immunities: Immunities = createDefaultStatuses();
   canAttack: boolean = true;
   willRetaliate: boolean = false;
   isTakingDamage: boolean = false;
@@ -415,7 +415,7 @@ class Firewall extends Piece {
   }
   async special(target: Piece): Promise<void> {
     await target.takeDamage(this.getStat('attack'));
-    if(!target.immunities.burnImmune){
+    if(!target.immunities.burning){
       target.statuses.burning = true;
     }
     this.actions --
@@ -434,7 +434,7 @@ class Pitfall extends Piece {
     this.statuses.negative = true;
   }
   async special(target: Piece): Promise<void> {
-    if(!target.immunities.freezeImmune){
+    if(!target.immunities.frozen){
       target.statuses.frozen = true;
     }
     this.actions--
@@ -753,7 +753,7 @@ class Trap extends Piece {
   async special(target: Piece): Promise<void> {
     target.movesRemaining = 0;
     target.statuses.frozen = true;
-    if(!target.immunities.poisonImmune){
+    if(!target.immunities.poisoned){
       target.statuses.poisoned = true
     }
     this.actions--
@@ -799,7 +799,7 @@ class Web extends Piece {
     this.statuses.negative = true;
   }
   async special(target: Piece): Promise<void> {
-    if(!target.immunities.freezeImmune){
+    if(!target.immunities.frozen){
       target.movesRemaining = 0;
       target.statuses.frozen = true;//maybe
       this.actions --
@@ -844,7 +844,7 @@ class Germ extends Piece {//up to here //TODO
     this.specialName = 'Infect'
   }
   async special(target: Piece): Promise<void> {
-    if(!target.immunities.diseaseImmune){
+    if(!target.immunities.diseased){
       target.statuses.diseased = true
       this.actions --
     }
@@ -867,7 +867,7 @@ class Vice extends Piece {
     this.specialName = 'Infect'
   }
   async special(target: Piece): Promise<void> {
-    if(!target.immunities.freezeImmune){
+    if(!target.immunities.frozen){
       target.statuses.frozen = true
       target.movesRemaining = 0
     }
@@ -1161,7 +1161,7 @@ class Fencer extends Piece {
    this.targetType = 'self'
   }
   async special(target: Piece):Promise<void>{
-    //damageImmune???
+    //damageed???
     this.willRetaliate = true; 
     this.actions--
   }
@@ -1273,12 +1273,12 @@ class Dragon extends Piece {//line?
    super(Dragon.name, Dragon.description, Dragon.unicode, 6, 2, 2, 3, 2, Dragon.color, headPosition, [headPosition], team, Dragon.rarity, removeCallback, id)
    this.specialName = 'Fire Breath';
    this.targetType = 'group'
-   this.immunities.burnImmune = true;
+   this.immunities.burning = true;
   }
 
   async special(targets: Piece[]):Promise<void>{
     for (const t of targets) {
-      if(!t.immunities.burnImmune){
+      if(!t.immunities.burning){
         //damage as well???
         t.statuses.burning = true
       }
@@ -1300,7 +1300,7 @@ class Ink extends Piece {
    this.statuses.negative = true;
   }
   async special(target: Piece): Promise<void> {
-    if(!target.immunities.blindImmune){
+    if(!target.immunities.blinded){
       target.statuses.blinded = true;
     }
     this.actions--
@@ -1325,7 +1325,7 @@ class Squid extends Piece {
       p.tiles.some(t => t.x === target.x && t.y === target.y)
     )
     if(targetPiece){
-      if(!targetPiece.immunities.blindImmune){
+      if(!targetPiece.immunities.blinded){
         targetPiece.statuses.blinded = true;
       }
     }
@@ -1480,7 +1480,7 @@ class Cupid extends Piece {
   }
 
   async special(targetPiece: Piece):Promise<void>{
-    if(!targetPiece.immunities.charmImmune){
+    if(!targetPiece.immunities.charmed){
       targetPiece.statuses.charmed = true;
     }
     this.actions--
@@ -1546,7 +1546,7 @@ class Scorpion extends Piece {
   }
 
   async special(targetPiece: Piece):Promise<void>{
-    if(!targetPiece.immunities.poisonImmune){
+    if(!targetPiece.immunities.poisoned){
       targetPiece.statuses.poisoned = true;
     }
     this.actions--
@@ -1568,7 +1568,7 @@ class Firebrand extends Piece {
 
   async special(targetPiece: Piece):Promise<void>{
     await targetPiece.takeDamage(this.getStat('attack'));
-    if(!targetPiece.immunities.burnImmune){
+    if(!targetPiece.immunities.burning){
       targetPiece.statuses.burning = true;
     }
     this.actions--
@@ -1820,7 +1820,7 @@ class Jellyfish extends Piece {
 
   async special(targetPiece: Piece):Promise<void>{
     await targetPiece.takeDamage(this.getStat('attack'));
-    if(!targetPiece.immunities.slowImmune){
+    if(!targetPiece.immunities.slowed){
       targetPiece.statuses.slowed = true
     }
     this.actions--
@@ -2001,7 +2001,7 @@ class Centipede extends Piece {
   }
   async special(targetPiece: Piece):Promise<void>{
     await targetPiece.takeDamage(this.getStat('attack'))
-    if(!targetPiece.immunities.poisonImmune){
+    if(!targetPiece.immunities.poisoned){
       targetPiece.statuses.poisoned = true;
     }
     this.actions --
@@ -2144,7 +2144,7 @@ class Lighthouse extends Piece {
   }
   async special(targets: Piece[]):Promise<void>{
     for (const t of targets) {
-      if(!t.immunities.blindImmune){
+      if(!t.immunities.blinded){
         t.statuses.blinded = true;
       }
       t.statuses.exposed = true;
@@ -2189,7 +2189,7 @@ class Camera extends Piece {
    this.targetType = 'piece'
   }
   async special(target: Piece): Promise<void> {
-    if(!target.immunities.blindImmune){
+    if(!target.immunities.blinded){
         target.statuses.blinded = true;
     }
     this.actions--

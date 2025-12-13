@@ -547,7 +547,6 @@ import MainMenu from "./components/MainMenu.vue";
     showShop.value = !showShop.value;
   }
   const openShop = () => {
-    refreshShop(true);
     showShop.value = true;
   }
   //linear: round -> shop -> map
@@ -832,7 +831,7 @@ import MainMenu from "./components/MainMenu.vue";
     selectedPiece.value.damageMult = 1;
     if(damageReceiver.willRetaliate){
       await selectedPiece.value.takeDamage(damageReceiver.getStat('attack'));
-      if(damageReceiver.name === 'Puffer' && !selectedPiece.value.immunities.poisonImmune){
+      if(damageReceiver.name === 'Puffer' && !selectedPiece.value.immunities.poisoned){
         selectedPiece.value.statuses.poisoned = true;
       }
     }
@@ -1110,10 +1109,12 @@ import MainMenu from "./components/MainMenu.vue";
   const increaseDifficulty = () => {
     player.value.difficulty += 1;
     bossAdmins.value = [];
+    refreshShop(true);
     worldSeed.value++
   }
   const decreaseDifficulty = () => {
     player.value.difficulty -= 1;
+    worldSeed.value--
   }
 /*
 */
@@ -1126,10 +1127,9 @@ import MainMenu from "./components/MainMenu.vue";
   </button>
     <button class="swap-display" @mousedown="renewBlueprints()">
       Renew Blueprints
-    </button><!--
-    v-if="playerHasAdmin('Convenience Store')"
-    --> 
+    </button>
     <button
+    v-if="playerHasAdmin('Convenience Store')"
     class="shop-toggle"
     @mousedown="toggleShop()">
     Toggle Shop

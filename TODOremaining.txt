@@ -3,9 +3,9 @@ Defense - lose on damage (and reset every turn???) - would make ai easier
 make more levels, smaller levels (max size 9)
 //check interest is working properly 
 
-ADMINS - Petri - spread statuses
-crystal
-compass - show secret nodes MAP 6.5
+ADMINS - Petri - spread statuses -test
+crystal - test
+money admins on interest - test
 (chemistry)
 
 BOSSES 5
@@ -32,13 +32,14 @@ special attacks
     !attackingSpecial use on friendly??? or friendlySpecial bool
 
 --MORE LEVELS--
-//modify spawn in App to account for piece size 6
+//modify spawn in App to account for piece size - 6
 
 MAP 6.5
 isometric view?
 branching paths - started
 multiple levels files for difficulty tier?
 hidden nodes? randomly generated, not visible until player arrives at connecting node
+ADMIN -compass - show secret nodes MAP 6.5
 
 HYBRIDS 7
 Hybrid class accepts two pieces

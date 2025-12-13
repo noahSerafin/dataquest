@@ -1,7 +1,7 @@
 import { Item } from "./Items";
 import { Piece, allPieces } from "./Pieces";
 import { Player } from "./Player";
-import type { Coordinate, StatModifier } from "./types";
+import type { Coordinate, StatModifier, StatusKey } from "./types";
 
 export type AdminTrigger =
   | 'onPlacement'
@@ -260,7 +260,7 @@ class Heartbreaker extends Admin {
   //on placement
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].immunities.charmImmune = true;
+    activePieces[idx].immunities.charmed = true;
   }
 }
 
@@ -338,21 +338,33 @@ class AdminMap extends Admin {
 
 class PetriDish extends Admin {//unfinished status
   static name = "Petri Dish";
-  static description = "Status effects can spread to adjacent enemy programs at the end of your turn";
+  static description = "Status effects can spread to adjacent enemy programs at the end of your turn";//effect all programs??
   static unicode = "U+1F9EB";
   static color = "#14532dff";
   constructor() {
     super(PetriDish.name, PetriDish.description, PetriDish.unicode, PetriDish.color, 7, 4, 'gameState', 'onTurnEnd')
   }
   //on turn end
-  /*async apply({ activePieces }: { activePieces: Piece[] }) {
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces){
-      if(p.team==='player' && p.statuses.length > 0){
-        //find enemies next to it
-        //50% chance to add 1 status from player to enemy
+      const neighbours = activePieces.some(piece =>
+        piece.team === 'enemy' &&
+        piece.tiles.some(t =>
+        Math.abs(t.x - p.headPosition.x) + Math.abs(t.y - p.headPosition.y) === 1
+        )
+      )
+
+      if(neighbours){
+        for (const statusKey of Object.keys(p.statuses) as StatusKey[]) {
+          if (!p.statuses[statusKey]) continue;
+          if(p.team === 'enemy' && !p.immunities[statusKey] && statusKey!== 'negative'){
+            p.statuses[statusKey] = true;
+          }
+        }
+
       }
-    }
-  }*/
+    }   
+  }
 }
 
 class Volatile extends Admin {//handled in app
@@ -478,8 +490,8 @@ class Aesculapius extends Admin {
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
     if(activePieces[idx].team==='player' && activePieces[idx].getStat('range') > 1){
-      activePieces[idx].immunities.poisonImmune = true
-      activePieces[idx].immunities.diseaseImmune = true
+      activePieces[idx].immunities.poisoned = true
+      activePieces[idx].immunities.diseased = true
     }
   }
 }
@@ -1049,7 +1061,7 @@ export class FireEngine extends Admin {
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].immunities.burnImmune = true
+    activePieces[idx].immunities.burning = true
   }
 }
 
@@ -1140,7 +1152,7 @@ class Hermes extends Admin {
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
     if(activePieces[idx].team==='player' && activePieces[idx].getStat('range') > 1){
-      activePieces[idx].immunities.slowImmune = true;
+      activePieces[idx].immunities.slowed = true;
     }
   }
 }
@@ -1158,7 +1170,7 @@ class Warmth extends Admin {
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
     if(activePieces[idx].team==='player' && activePieces[idx].getStat('range') > 1){
-      activePieces[idx].immunities.freezeImmune = true;
+      activePieces[idx].immunities.frozen = true;
     }
   }
 }
@@ -1173,7 +1185,7 @@ class Xray extends Admin {
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].immunities.blindImmune = true;
+    activePieces[idx].immunities.blinded = true;
   }
 }
 
@@ -1187,7 +1199,7 @@ class Ambulance extends Admin {//test
   }
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     const idx = activePieces.findIndex(p => p.id === id);
-     activePieces[idx].immunities.freezeImmune = true;
+     activePieces[idx].immunities.frozen = true;
     if(activePieces[idx].team==='player'){
     //find right bp by id
       player.programs.forEach(blueprint => {

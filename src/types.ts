@@ -78,31 +78,13 @@ export function createDefaultStatuses(): Statuses {
   };
 }
 
-export type Immunities = {
-  //negative only
-  burnImmune: boolean
-  slowImmune: boolean
-  poisonImmune: boolean
-  diseaseImmune: boolean
-  freezeImmune: boolean
-  blindImmune: boolean
-  charmImmune: boolean
-  confuseImmune: boolean
-}
+export type StatusKey = keyof Statuses;
 
-export function createDefaultImmunities() {
-  return{
-    //negative only
-    burnImmune: false,
-    slowImmune: false,
-    poisonImmune: false,
-    diseaseImmune: false,
-    freezeImmune: false,
-    blindImmune: false,
-    charmImmune: false,
-    confuseImmune: false,
-  }
-}
+
+export type Immunities = {
+  [K in StatusKey]?: boolean;
+};
+
 /*
 export const statusUnicodes: Record<keyof typeof props.piece.statuses, string> = {
   diseased: '🤮', // U+1F92E

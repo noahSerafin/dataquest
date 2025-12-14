@@ -222,11 +222,11 @@ import MainMenu from "./components/MainMenu.vue";
         const shopBp = shopBlueprints.value.find(p => p.id === id);
         const shopItem = shopItems.value.find(i => i.id === id);
         if(shopBp){
-          item.apply(shopBp)
+          item.apply(shopBp, 1)
           player.value.removeItem(item)
         }
         if(shopItem){
-          item.apply(shopItem)
+          item.apply(shopItem, 1)
           player.value.removeItem(item)
         }
       }
@@ -449,14 +449,20 @@ import MainMenu from "./components/MainMenu.vue";
     for (const admin of bossAdmins.value) {
       if(trigger === admin.triggerType){
         // sort through target types, decide what to pass
+        if(admin.targetType === 'player'){
+          await admin.apply({player: player.value})
+        }
         if(admin.targetType === 'gameState'){
           await admin.apply({id, activePieces: activePieces.value})
         }
         if(admin.targetType === 'playerAndGame'){
           await admin.apply({id, activePieces: activePieces.value, player: player.value})
         }
-        if(admin.targetType === 'player'){
-          await admin.apply({player: player.value})
+        if(admin.targetType === 'piecesAndBoard'){
+          await admin.apply({activePieces: activePieces.value, board: level.value.tiles})
+        }
+        if(admin.targetType === 'all'){
+          await admin.apply({activePieces: activePieces.value, board: level.value.tiles, player: player.value});//, graveyard: graveyard.value})
         }
       }
     };
@@ -670,16 +676,16 @@ import MainMenu from "./components/MainMenu.vue";
     isPlacing.value = true;
   }
 
-  function removePiece(piece: Piece) {
+  async function removePiece(piece: Piece) {
     if(playerHasAdmin('Hi-Vis')){
       piece.tiles = [piece.headPosition];
       const index = player.value.admins.findIndex(a => a.name === 'Hi-vis');
       if (index !== -1) player.value.admins.splice(index, 1);
     } else {
-      handleApplyAdmins('onPieceDestruction', piece.id);
+      await handleApplyAdmins('onPieceDestruction', piece.id);
       activePieces.value = activePieces.value.filter(p => p.id !== piece.id);
       //graveyard?
-      if (piece.name == 'Dolls') {//hybrids need a flag other than name
+      if (piece.name == 'Dolls') {//hybrids will need a flag other than name
         if (piece.getStat('maxSize') > 1) {
           const NewDoll = new Dolls(
             piece.headPosition,
@@ -785,16 +791,15 @@ import MainMenu from "./components/MainMenu.vue";
     //we're definitely making a move, so store pieces
     lastTurnPieces.value = activePieces.value.map(p => p.clone());
 
-    //if (selectedPiece.value.team !== 'player') return; //charmed pieces can still move
-      boardRef.value.clearHighlights();
-      selectedPiece.value?.moveTo(coord);
-      //checkForTrap
-      const trap = activePieces.value.find(p =>
-        p.targetType == 'trapPiece' && p.tiles.some(t => t.x === coord.x && t.y === coord.y)
-      );
-      if (trap) {
-        await trap.special(selectedPiece.value);
-      }
+    boardRef.value.clearHighlights();
+    selectedPiece.value?.moveTo(coord);
+    //checkForTrap
+    const trap = activePieces.value.find(p =>
+      p.targetType == 'trapPiece' && p.tiles.some(t => t.x === coord.x && t.y === coord.y)
+    );
+    if (trap) {
+      await trap.special(selectedPiece.value);
+    }
     if(selectedPiece.value.movesRemaining > 0){
       boardRef.value.highlightMoves(selectedPiece.value);
     }else {

@@ -2196,9 +2196,10 @@ class Camera extends Piece {
   }
 }
 
+/* made an item
 class Bugle extends Piece {
   static name = "Bugle";
-  static description = "A program the can gives +1 attack to all friendlies in range";
+  static description = "A program the can give +1 attack to all friendlies in range";
   static unicode = "U+1F4EF";
   static color = "#d03232ff";
    static rarity = 4;
@@ -2211,21 +2212,22 @@ class Bugle extends Piece {
   async special(targets: Piece[]):Promise<void>{
     for (const t of targets) {
      if(t.team === this. team){
-      t.addModifier({attack: 1})
+      t.addModifier({attack: 1})//temporary? or make item?
      }
     }
     this.actions--
   }
 }
+*/
 
 class Drum extends Piece {
   static name = "Drum";
-  static description = "A program the can gives +1 moves to all firendlies in range";
+  static description = "A program the can gives +1 moves remaining to all firendlies in range";
   static unicode = "U+1F941";
   static color = "#57b92eff";
    static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Drum.name, Drum.description, Drum.unicode, 1, 0, 4, 0, 0, Drum.color, headPosition, [headPosition], team, Drum.rarity, removeCallback, id)
+   super(Drum.name, Drum.description, Drum.unicode, 1, 1, 4, 0, 0, Drum.color, headPosition, [headPosition], team, Drum.rarity, removeCallback, id)
     this.specialName = 'March';
     this.targetType = 'group'
     this.canAttack = false;
@@ -2233,58 +2235,47 @@ class Drum extends Piece {
   async special(targets: Piece[]):Promise<void>{
     for (const t of targets) {
      if(t.team === this. team){
-      t.addModifier({moves: 1})
+      t.movesRemaining += 1;
      }
     }
     this.actions--
   }
 }
 
-export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Ink, Snail, Shark, Greatshield, Wizard, Ninja, Fairy, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, Dolls, UFO, TP, Saw, Croc, Lighthouse, Torch, Camera, Bugle, Drum];//87 +2 (web, ink)
+export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Ink, Snail, Shark, Greatshield, Wizard, Ninja, Fairy, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, Dolls, UFO, TP, Saw, Croc, Lighthouse, Torch, Camera, Drum];//86 +2 (web, ink)
 console.log('pieces length: ', allPieces.length)
 
-// WRENCH, U+1F527 prevent another program from taking any actions for a turn
-
-//Daemon
-//IMP, U+1F47F
-
+//Daemon//IMP, U+1F47F  smiling: U+1F608
 //PLAYGROUND SLIDE, U+1F6DD like gate but with more range? line target??
-
 ////recurve bow CANADIAN SYLLABICS CARRIER CHEE, U+1664
-
 //DANCER, U+1F483 //high movement no damage
 //Pazzaz U+1F57A //starts with 2 actions
+//ANT, U+1F41C //high movement
+//T-REX, U+1F996
+// EAGLE, U+1F985
+//FROG FACE, U+1F438 //range 3 low atk //hop ability?
+// HEDGEHOG, U+1F994 retaliates by default
+//MILITARY AIRPLANE, U+1F6E6 line target airstike similar to charge
+//HIPPOPOTAMUS, U+1F99B
+// TOP HAT, U+1F3A9 spawns a random piece/or rabbit?
+// RABBIT, U+1F407 high movement 1 atk 1 maxsize
+//JAPANESE GOBLIN, U+1F47A
+
 
 //megaphone U+1F4E3
 
-// TOP HAT, U+1F3A9 spawns a random piece/or rabbit?
-// RABBIT, U+1F407 high movement 1 atk 1 maxsize
-
-
-//ANT, U+1F41C //high movement
-
-// SMILING FACE WITH HORNS, Daemon U+1F608
-//T-REX, U+1F996
 // WATER BUFFALO, U+1F403
 
 //U+1F9C3 ice cube decreases size each round?
 // BIRD, U+1F426
-// EAGLE, U+1F985
 // LIZARD, U+1F98E
 
-//FROG FACE, U+1F438 //range 3 low atk
-
-//name desc || maxsize moves range atk def
-
-
-//JAPANESE GOBLIN, U+1F47A
-// JAPANESE OGRE, U+1F479
-
-//all +1 variants get +1 added to non 0 number stats
 
 //EXTRATERRESTRIAL ALIEN, U+1F47D
 
-//Strongarm FLEXED BICEPS, U+1F4AA
+//all +1 variants get +1 added to non 0 number stats
+
+
 /*
 class Hamsa extends Piece {
   static name = "Hamsa";

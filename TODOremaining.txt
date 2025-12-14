@@ -3,20 +3,12 @@ Defense - lose on damage (and reset every turn???) - would make ai easier
 make more levels, smaller levels (max size 9)
 //check interest is working properly 
 
-ADMINS - Petri - spread statuses -test
-crystal - test
-money admins on interest - test
-chemistry - test
-
-BOSSES 5
-test damage all bosses
-unique bosses
-boss security rank - leave status bosses for 2/3 and up
-
-STATUSES
-confused todo - 5
+ADMINS - Petri - spread statuses -test, crystal - test, chemistry - test
+money admins on interest - test, implement into ROUND SUMMARY, maybe store earned money in a temp variable, add it in the summary with awaits?
+24 off 100
 
 AI 6 nearly-done
+confused todo on enemy 5
 functions:
     pathfinding a -> b in a grid - needsreviewing, don't search for new path inside one pieces while loop
     moveTowards player - incomplete
@@ -47,7 +39,15 @@ takes average of both stats, rounded up
 takes special move of first piece
 add altar to map nodes
 
+BOSSES 7
+boss security rank - leave status bosses for 2/3 and up
+test damage all bosses
+fog
+
+ITEMS - clean up player items, add activePieces/gameState items 7
+
 PIECES
+add 14 more (100 total)
 keep track of upgrades and display on piece, and move/attack/spceial btn that cycles 7
 variants?
 

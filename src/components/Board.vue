@@ -298,6 +298,20 @@ defineExpose({
   clearHighlights
 });
 
+function resolveMove(
+  chosenMove: { x: number; y: number; direction: string },
+  allMoves: { x: number; y: number; direction: string }[]
+) {
+  // Not confused → behave normally
+  if (!props.selectedPiece?.statuses.confused || allMoves.length <= 1) {
+    emit('movePiece', chosenMove);
+  }
+
+  // Confused → random valid move
+  const randomIndex = Math.floor(Math.random() * allMoves.length);
+  emit('movePiece', allMoves[randomIndex]);
+}
+
 </script>
 
 
@@ -361,7 +375,7 @@ defineExpose({
       :key="index"
       class="highlight-tile"
       :class="['move-button', `move-button-${tile.direction}`]"
-      v-on:click="$emit('movePiece', tile)"
+      v-on:click="resolveMove(tile, moveButtons)"
       :style="{
         left: tile.x * tileSize + 'px',
         top: tile.y * tileSize + 'px',

@@ -26,7 +26,7 @@ export abstract class Admin<
     color: string,
     cost: number,
     rarity: number,
-    targetType: "blueprint" | "piece" | "shopItem" | "player" | "gameState"  | 'playerAndGame' | 'all',
+    targetType: "blueprint" | "piece" | "shopItem" | "player" | "gameState"  | 'playerAndGame' | 'piecesAndBoard' | 'all',
     triggerType: TTrigger
   ) {
     super(name, description, unicode, color, cost, rarity, targetType);
@@ -1083,13 +1083,13 @@ class Prayer extends Admin {
   }
 
 }
-class Scarf extends Admin {
-  static name = "Scarf";
+class Vitamins extends Admin {
+  static name = "Vitamin C";
   static description = "Programs get +1 defence on load";
-  static unicode = "U+1F9E3";
+  static unicode = "U+1F34A";
   static color = "#df9d22ff";
   constructor() {
-    super(Scarf.name, Scarf.description, Scarf.unicode, Scarf.color, 5, 3, 'gameState', 'onPlacement')
+    super(Vitamins.name, Vitamins.description, Vitamins.unicode, Vitamins.color, 5, 3, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
@@ -1117,7 +1117,7 @@ class Protein extends Admin {
 class Fountain extends Admin {
   static name = "Fountain of Youth";
   static description = "Programs get +2 max size on load";
-  static unicode = "U+1F52C";
+  static unicode = "U+26F2";
   static color = "#a3a3a3ff";
   constructor() {
     super(Fountain.name, Fountain.description, Fountain.unicode, Fountain.color, 6, 3, 'gameState', 'onPlacement')
@@ -1143,8 +1143,8 @@ export class Spoon extends Admin {
 }
 
 class Hermes extends Admin {
-  static name = "Hermes";
-  static description = "All placed programs are immune to being slowed or frozen";
+  static name = "Hermes Wings";
+  static description = "All placed programs are immune to being slowed";
   static unicode = "U+1FABD";//wing, icarus?
   static color = "#083546ff";
   constructor() {
@@ -1160,13 +1160,13 @@ class Hermes extends Admin {
   }
 }
 
-class Warmth extends Admin {
-  static name = "Inner Warmth";
-  static description = "All placed programs are immune to being frozen";
-  static unicode = "U+2668";
+class Scarf extends Admin {
+  static name = "Scarf";
+  static description = "All programs are immune to being frozen";
+  static unicode = "U+1F9E3";
   static color = "#f04814ff";
   constructor() {
-    super(Warmth.name, Warmth.description, Warmth.unicode, Warmth.color, 4, 2, 'gameState', 'onPlacement')//or gamestate?
+    super(Scarf.name, Scarf.description, Scarf.unicode, Scarf.color, 4, 2, 'gameState', 'onPlacement')//or gamestate?
   }
 
   //on placement
@@ -1178,23 +1178,9 @@ class Warmth extends Admin {
   }
 }
 
-class Xray extends Admin {
-  static name = "X-Ray";
-  static description = "Programs are immue to being blinded on placement";
-  static unicode = "U+1F52C";
-  static color = "#ff5555";
-  constructor() {
-    super(Xray.name, Xray.description, Xray.unicode, Xray.color, 5, 3, 'gameState', 'onPlacement')
-  }
-  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
-    const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].immunities.blinded = true;
-  }
-}
-
 class Ambulance extends Admin {//test
   static name = "Ambulance";
-  static description = "Recovers your destroyed programs, letting you reload them";
+  static description = "Recovers your destroyed programs to your inventory, letting you reload them";
   static unicode = "U+1F52C";
   static color = "#ff5555";
   constructor() {
@@ -1212,15 +1198,107 @@ class Ambulance extends Admin {//test
   }
 }
 
-export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, Seed, Puzzle, Roger, Bucket, Diamond, Sneakers, Candle, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Scarf, Prayer, Fountain, Spoon, Hermes, Warmth, Xray, Ambulance];//71
+class FireTruck extends Admin {
+  static name = "Fire Engine";
+  static description = "Your programs are immune to burning";
+  static unicode = "U+1F692";
+  static color = "#df2f22ff";
+  constructor() {
+    super(FireTruck.name, FireTruck.description, FireTruck.unicode, FireTruck.color, 5, 4, 'gameState', 'onPlacement')
+  }
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    activePieces[idx].immunities.burning = true;
+  }
+}
+
+class FakeID extends Admin {
+  static name = "Fake I.D.";
+  static description = "Your programs are immune to being exposed";
+  static unicode = "U+1FAAA";// DISGUISED FACE, U+1F978
+  static color = "#5b22dfff";
+  constructor() {
+    super(FakeID.name, FakeID.description, FakeID.unicode, FakeID.color, 5, 3, 'gameState', 'onPlacement')
+  }
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    activePieces[idx].immunities.exposed = true;
+  }
+}
+class Shades extends Admin {
+  static name = "Shades";
+  static description = "Your programs are immune to being blinded";
+  static unicode = "U+1F60E";// DISGUISED FACE, U+1F978
+  static color = "#df7d22ff";
+  constructor() {
+    super(Shades.name, Shades.description, Shades.unicode, Shades.color, 5, 3, 'gameState', 'onPlacement')
+  }
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    activePieces[idx].immunities.exposed = true;
+  }
+}
+
+class Barber extends Admin {
+  static name = '"A little off the top."';
+  static description = "Deals 1 damage to every piece at the start of a round";
+  static unicode = "U+1F488";
+  static color = "#d1d1d1ff";
+
+  constructor() {
+    super(Barber.name, Barber.description, Barber.unicode, Barber.color, 10, 2, 'gameState', 'onRoundStart')
+  }
+
+  //onRoundStart
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    for (const p of activePieces) p.takeDamage(1); //enemy pieces only?
+  }
+}
+
+class Umbrella extends Admin {
+  static name = "Umbrella";
+  static description = "Disables boss admin effects";
+  static unicode = "U+2614";
+  static color = "#0e107eff";
+  constructor() {
+    super(Umbrella.name, Umbrella.description, Umbrella.unicode, Umbrella.color, 5, 5, 'gameState', 'other')
+  }
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    console.log('applying:', this.name)
+    activePieces[idx].addModifier({defence: 1})
+  }
+}
+
+class Bank extends Admin {
+  static name = "Bank";
+  static description = "Increases sell value of items and admins by $2 every round";
+  static unicode = "U+26CF";
+  static color = "#ffa600d3";
+
+  constructor() {
+    super(Bank.name, Bank.description, Bank.unicode, Bank.color, 10, 1, 'player', 'onRoundEnd')
+  }
+
+  async apply({ player }: { player: Player }) {
+    player.items.forEach(item => {
+      item.cost += 2;
+    });
+    player.admins.forEach(admin => {
+      admin.cost += 2;
+    });
+    //progams too?
+  }
+}
+
+export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, Seed, Puzzle, Roger, Bucket, Diamond, Sneakers, Candle, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FireTruck, FakeID, Shades, Barber, Umbrella, Bank];//76
 console.log('admins length: ', allAdmins.length)
 
-//WHEEL, U+1F6DE
 //CHEESE WEDGE, U+1F9C0 Chedda
 //ABACUS, U+1F9EE
 //BANK, U+1F3E6 //increases sell value of held programs?
 
-//UMBRELLA WITH RAIN DROPS, U+2614 disable bosses
+//WHEEL, U+1F6DE
 
 //doctor STETHOSCOPE, U+1FA7A medic, return killed pieces to hand as blueprints
 

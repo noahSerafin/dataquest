@@ -57,6 +57,7 @@ export type Statuses = {
   frozen: boolean //movesRemaining = 0 // FREEZING FACE, U+1F976
   charmed: boolean //controlled by the opposite team, requires editing targeting // SMILING FACE WITH HEART-SHAPED EYES, U+1F60D
   confused: boolean //move buttons scrambled, requires editing controller // FACE WITH HEAD-BANDAGE, U+1F915
+  exposed: boolean //immune to hiding
   //positive
   hidden: boolean// not visible to opposite team, requires editing targeting  //FACE WITH FINGER COVERING CLOSED LIPS, U+1F92B
   negative: boolean// can occupy the same space as another piece, requires editing movement // DOTTED LINE FACE, U+1FAE5
@@ -72,6 +73,7 @@ export function createDefaultStatuses(): Statuses {
     frozen: false,
     charmed: false,
     confused: false,
+    exposed: false,
 
     hidden: false,
     negative: false,

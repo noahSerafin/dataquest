@@ -1,3 +1,6 @@
+//clippy - provides hints
+//PAPERCLIP, U+1F4CE
+
 /*for (const step of tutorialSteps) {
     await showStep(step);   // highlights element + shows tooltip
     await waitForContinue(); // e.g. user clicks "Next"

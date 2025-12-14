@@ -446,23 +446,25 @@ import MainMenu from "./components/MainMenu.vue";
   }
 
   async function handleApplyAdmins(trigger: AdminTrigger, id:string){//admin and target
-    for (const admin of bossAdmins.value) {
-      if(trigger === admin.triggerType){
-        // sort through target types, decide what to pass
-        if(admin.targetType === 'player'){
-          await admin.apply({player: player.value})
-        }
-        if(admin.targetType === 'gameState'){
-          await admin.apply({id, activePieces: activePieces.value})
-        }
-        if(admin.targetType === 'playerAndGame'){
-          await admin.apply({id, activePieces: activePieces.value, player: player.value})
-        }
-        if(admin.targetType === 'piecesAndBoard'){
-          await admin.apply({activePieces: activePieces.value, board: level.value.tiles})
-        }
-        if(admin.targetType === 'all'){
-          await admin.apply({activePieces: activePieces.value, board: level.value.tiles, player: player.value});//, graveyard: graveyard.value})
+    if(!playerHasAdmin('Umbrella')){
+      for (const admin of bossAdmins.value) {
+        if(trigger === admin.triggerType){
+          // sort through target types, decide what to pass
+          if(admin.targetType === 'player'){
+            await admin.apply({player: player.value})
+          }
+          if(admin.targetType === 'gameState'){
+            await admin.apply({id, activePieces: activePieces.value})
+          }
+          if(admin.targetType === 'playerAndGame'){
+            await admin.apply({id, activePieces: activePieces.value, player: player.value})
+          }
+          if(admin.targetType === 'piecesAndBoard'){
+            await admin.apply({activePieces: activePieces.value, board: level.value.tiles})
+          }
+          if(admin.targetType === 'all'){
+            await admin.apply({activePieces: activePieces.value, board: level.value.tiles, player: player.value});//, graveyard: graveyard.value})
+          }
         }
       }
     };
@@ -1026,6 +1028,12 @@ import MainMenu from "./components/MainMenu.vue";
       }else{
         alert('game over!')
       }
+    }
+    for (const admin of bossAdmins.value) {//only necessary if we keep boss admins
+      admin.onRoundEnd?.();
+    }
+    for (const admin of player.value.admins) {
+      admin.onRoundEnd?.();
     }
   }
       

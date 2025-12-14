@@ -152,7 +152,7 @@ class Factory extends Admin {
     private count: number = 0
     async apply({activePieces, board, player }: {activePieces: Piece[], board: Coordinate[], player: Player}) {
         this.count += 1;
-        if(this.count === 3){
+        if(this.count%3 === 0){
             //random piece in all pieces using player difficulty level
             const { min, max } = DIFFICULTY_RARITY[player.difficulty];
             const validEnemies = allPieces.filter(p =>
@@ -170,6 +170,9 @@ class Factory extends Admin {
             }
             this.count = 0;
         }
+    }
+    onRoundEnd() {
+        this.count = 0;
     }
 }
 
@@ -210,6 +213,9 @@ class Wrath extends Admin {
         }
         this.count +=1
     }
+    onRoundEnd() {
+        this.count = 0;
+    }
 }
 
 class Reaper extends Admin {
@@ -223,11 +229,14 @@ class Reaper extends Admin {
     private count: number = 0
     async apply({ player }: { player : Player }) {
         this.count += 1
-        if(this.count === 20){
+        if(this.count === 10){
             player.lives --
             this.count = 0;
         }
 
+    }
+    onRoundEnd() {
+        this.count = 0;
     }
 }
 
@@ -249,6 +258,9 @@ class Volcano extends Admin {
                 }
             });
         }
+    }
+    onRoundEnd() {
+        this.count = 0;
     }
 }
 /*
@@ -292,7 +304,7 @@ class Circus extends Admin {
 class Castle extends Admin {
     static name = "Castle";
     static description = "Every enemy gains +1 defence at the start of the round";
-    static unicode = "U+1F3F0";
+    static unicode = "U+1F3EF";
     static color = "#eb523eff";
     constructor() {
         super(Castle.name, Castle.description, Castle.unicode, Castle.color, 5, 1, 'gameState', 'onRoundStart')
@@ -493,7 +505,9 @@ class Bones extends Admin {
         if(EnemyClass){
             const enemyInstance = new EnemyClass(piece.headPosition, 'enemy', piece.removeCallback, crypto.randomUUID());//check later
             activePieces.push(enemyInstance);
-            //original pieces destruction happens in app
+            //original pieces destruction happens in app, but we do it here to stop the piece entering the graveyard
+            activePieces.filter(p => p.id !== piece.id);
+            //activePieces.splice(idx, 1);
         }
     }
   }

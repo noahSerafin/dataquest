@@ -42,6 +42,8 @@ export abstract class Admin<
   getModifier(): StatModifier {//remove this???
     return {}
   }
+
+  onRoundEnd?(): void | Promise<void>;
 }
 
 class Meteor extends Admin {
@@ -472,7 +474,7 @@ class Joker extends Admin {
 class Chemistry extends Admin {//test
   static name = "Chemistry";
   static description = "Items that affect stats effects are doubled, does not stack";
-  static unicode = "U+2697";
+  static unicode = "U+2697";//BENZENE RING, U+232C
   static color = "#4eb95cff";
   constructor() {
     super(Chemistry.name, Chemistry.description, Chemistry.unicode, Chemistry.color, 6, 5, 'gameState', 'other')//on Item use
@@ -768,7 +770,7 @@ class Seed extends Admin {
 class Puzzle extends Admin {
   static name = "Puzzle Piece";
   static description = "Pieces with an ally adjacent to their head gain +1 defence at the end of your turn";
-  static unicode = " U+1F9E9";
+  static unicode = "U+1F9E9";
   static color = "#ff5555";
   constructor() {
     super(Puzzle.name, Puzzle.description, Puzzle.unicode, Puzzle.color, 6, 3, 'gameState', 'onTurnEnd')
@@ -793,6 +795,35 @@ class Puzzle extends Admin {
     }
   }
 }
+/* will need a temp stat
+class Chivalry extends Admin {
+  static name = "Chivalry";
+  static description = "Pieces with an ally adjacent to their head gain +1 attack at the end of your turn";
+  static unicode = "U+1F3F0";
+  static color = "#33bcfcff";
+  constructor() {
+    super(Chivalry.name, Chivalry.description, Chivalry.unicode, Chivalry.color, 6, 3, 'gameState', 'onTurnEnd')
+  }
+  //on turn end
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    for (const p of activePieces){
+      if(p.team==='player'){
+        const neighbours = activePieces.some(piece =>
+          piece.team === 'player' &&
+          piece.tiles.some(t =>
+          Math.abs(t.x - p.headPosition.x) + Math.abs(t.y - p.headPosition.y) === 1
+          )
+        )
+
+        if(neighbours){
+         p.addModifier({defence: 1})
+        } else {
+          p.addModifier({defence: -1})
+        }  
+      } 
+    }
+  }
+}*/
 
 class Roger extends Admin {
   static name = "Jolly Roger";
@@ -1180,20 +1211,18 @@ class Scarf extends Admin {
 
 class Ambulance extends Admin {//test
   static name = "Ambulance";
-  static description = "Recovers your destroyed programs to your inventory, letting you reload them";
+  static description = "Recovers all your destroyed programs to your inventory, letting you reload them";
   static unicode = "U+1F52C";
   static color = "#ff5555";
   constructor() {
-    super(Ambulance.name, Ambulance.description, Ambulance.unicode, Ambulance.color, 5, 3, 'playerAndGame', 'onPieceDestruction')
+    super(Ambulance.name, Ambulance.description, Ambulance.unicode, Ambulance.color, 5, 4, 'playerAndGame', 'onPieceDestruction')
   }
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     const idx = activePieces.findIndex(p => p.id === id);
-     activePieces[idx].immunities.frozen = true;
+    const bpIdx = player.programs.findIndex(bp => bp.id === activePieces[idx].id )
     if(activePieces[idx].team==='player'){
-    //find right bp by id
-      player.programs.forEach(blueprint => {
-        blueprint.isPlaced = false;
-      });
+      player.programs[bpIdx].isPlaced = false;
+      activePieces.filter(p => p.id !== activePieces[idx].id);//we could splice, but this might be safer?
     }
   }
 }
@@ -1228,7 +1257,7 @@ class FakeID extends Admin {
 class Shades extends Admin {
   static name = "Shades";
   static description = "Your programs are immune to being blinded";
-  static unicode = "U+1F60E";// DISGUISED FACE, U+1F978
+  static unicode = "U+1F60E";// U+1F576
   static color = "#df7d22ff";
   constructor() {
     super(Shades.name, Shades.description, Shades.unicode, Shades.color, 5, 3, 'gameState', 'onPlacement')
@@ -1273,7 +1302,7 @@ class Umbrella extends Admin {
 class Bank extends Admin {
   static name = "Bank";
   static description = "Increases sell value of items and admins by $2 every round";
-  static unicode = "U+26CF";
+  static unicode = "U+1F3E6";
   static color = "#ffa600d3";
 
   constructor() {
@@ -1291,118 +1320,141 @@ class Bank extends Admin {
   }
 }
 
-export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, Seed, Puzzle, Roger, Bucket, Diamond, Sneakers, Candle, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FireTruck, FakeID, Shades, Barber, Umbrella, Bank];//76
+class Ballet extends Admin {
+  static name = "Twinkle Toes";
+  static description = "all your programs are hidden for the first 3 turns of a round";
+  static unicode = "U+1FA70";
+  static color = "#ebc0ffff";
+  constructor() {
+    super(Ballet.name, Ballet.description, Ballet.unicode, Ballet.color, 5, 4, 'gameState', 'onTurnEnd')
+  }
+  private count = 0;
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.count += 1;
+    activePieces.forEach(piece => {
+      if(piece.team === 'player'){
+        if(this.count <= 3){
+          piece.statuses.hidden = false;
+        } else if(!piece.statuses.exposed){
+          piece.statuses.hidden = true
+        }
+      }
+    });
+  }
+  onRoundEnd() {
+    this.count = 0;
+  }
+}
+
+class Pants extends Admin {
+  static name = "Spair Pair";
+  static description = "Your first destroyed program is moved back to your inventory";
+  static unicode = "U+1FA72";
+  static color = "#f8f8f8ff";
+  constructor() {
+    super(Pants.name, Pants.description, Pants.unicode, Pants.color, 5, 9, 'playerAndGame', 'onPieceDestruction')
+  }
+  private count = 0;
+  async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+    if(this.count === 0){
+      const idx = activePieces.findIndex(p => p.id === id);
+      const bpIdx = player.programs.findIndex(bp => bp.id === activePieces[idx].id )
+      if(activePieces[idx].team==='player'){
+        player.programs[bpIdx].isPlaced = false;
+        activePieces.filter(p => p.id !== activePieces[idx].id);//we could splice, but this might be safer?
+      }
+      this.count += 1;//must be reset at end of round;
+    }
+  }
+  onRoundEnd() {
+    this.count = 0;
+  }
+}
+
+export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, Seed, Puzzle, Roger, Bucket, Diamond, Sneakers, Candle, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FireTruck, FakeID, Shades, Barber, Umbrella, Bank, Ballet, Pants];//78
 console.log('admins length: ', allAdmins.length)
-
-//CHEESE WEDGE, U+1F9C0 Chedda
-//ABACUS, U+1F9EE
-//BANK, U+1F3E6 //increases sell value of held programs?
-
-//WHEEL, U+1F6DE
-
-//doctor STETHOSCOPE, U+1FA7A medic, return killed pieces to hand as blueprints
-
-//DARK SUNGLASSES, U+1F576
-
-// NAIL POLISH, U+1F485
-
-//RIBBON, U+1F380
-
-//STATUE OF LIBERTY, U+1F5FD +2 range?
-// UP-POINTING MILITARY AIRPLANE, U+1F6E6
-
-//ELECTRIC LIGHT BULB, U+1F4A1
-// Bright ideas, special modifier does not consume actions??
-
-// EGG, U+1F95A 
-
-//RING, U+1F48D
-
-//YIN YANG, U+262F
-
-// TOILET, U+1F6BD circling the drain, common admins provide +1 to all stats on placement
+//22
+//BLACK SPADE SUIT, U+2660 ACe up sleeve, last detroyed bp is returned
+//GREEK SMALL LETTER PI, U+3C0 + 3.14 mult
 
 // MAN DANCING, flashy U+1F57A money increases movement
+// TOILET, U+1F6BD circling the drain, common admins provide +1 to all stats on placement
+//SCHOOL SATCHEL, U+1F392 player effect
+//PEA POD, U+1FADB admin slots??
+//disco ball U+1FAA9  moves
+//WHEEL, U+1F6DE immune to slowed?
+//harvest//EAR OF RICE, U+1F33E every 4 turns, +1 max size
+//CHEESE WEDGE, U+1F9C0 Chedda
+//ABACUS, U+1F9EE
+//STATUE OF LIBERTY, U+1F5FD +2 range?
 
-//ALCHEMICAL SYMBOL FOR GOLD, U+1F71A gold comet
-
+//RIBBON, U+1F380
+//ELECTRIC LIGHT BULB, U+1F4A1
+//RING, U+1F48D
+// MONEY WITH WINGS, U+1F4B8
+//// MONEY BAG, U+1F4B0 loot at end of round
 //SYMBOL FOR SALT OF ANTIMONY, U+1F72D sceptre
+//DIRECT HIT, U+1F3AF
+//YIN YANG, U+262F
+// GAME DIE, U+1F3B2
+// PERFORMING ARTS, U+1F3AD
 
-//passive programs
+//BOXING GLOVE, U+1F94A
+// TEDDY BEAR, U+1F9F8
+//LINK SYMBOL, U+1F517
+//ALCHEMICAL SYMBOL FOR GOLD, U+1F71A gold comet
+//LEFT-POINTING MAGNIFYING GLASS, U+1F50D reveal secrets
+// PUSHPIN, U+1F4CC
+//DNA DOUBLE HELIX, U+1F9EC clone
 
-// FLOWER PLAYING CARDS, U+1F3B4
+// LEFT LUGGAGE, U+1F6C5 Key and suitcase
+//BRIEFCASE, U+1F4BC
+// COFFIN, U+26B0
+//ankh
+//EGYPTIAN HIEROGLYPH S034, U+132F9
+//EGYPTIAN HIEROGLYPH O010A, U+13262
 
-//SCHOOL SATCHEL, U+1F392
+
+//CHEQUERED FLAG, U+1F3C1
+
+// LOCK, U+1F512
+
+//FISHING POLE AND FISH, U+1F3A3
+
+// UP-POINTING MILITARY AIRPLANE, U+1F6E6
+
+// Bright idea, special modifier does not consume actions??
+
+// PLACARD, U+1FAA7
+// EGG, U+1F95A 
 
 //WILTED FLOWER, U+1F940
 
 //dartboard
-//DIRECT HIT, U+1F3AF
-
-// GAME DIE, U+1F3B2
-
-//PEA POD, U+1FADB admin slots??
-
-// PLACARD, U+1FAA7
-
-//disco  CARPENTRY SAW, U+1FA9A
 
 //FOLDING HAND FAN, U+1FAAD
 
-//// MONEY BAG, U+1F4B0
 //BANKNOTE WITH DOLLAR SIGN, U+1F4B5
-// MONEY WITH WINGS, U+1F4B8
-
-//UMBRELLA WITH RAIN DROPS, U+2614
-
-//harvest//EAR OF RICE, U+1F33E
 
 // CHESTNUT, U+1F330
 // POTTED PLANT, U+1FAB4
 
-//clippy - provides hints
-//PAPERCLIP, U+1F4CE
-
-//FISHING POLE AND FISH, U+1F3A3
-
 //8ball  BILLIARDS, U+1F3B1
-
-//LEFT-POINTING MAGNIFYING GLASS, U+1F50D
-// //reveal secrets
-
-//GREEK SMALL LETTER PI, U+3C0
-
-// PUSHPIN, U+1F4CC
-
-// PERFORMING ARTS, U+1F3AD
-
-// LOCK, U+1F512
 
 //hex SOFTWARE-FUNCTION SYMBOL, U+2394
 
-//BENZENE RING, U+232C
-
 //EXTRATERRESTRIAL ALIEN, U+1F47D
-//space invaders ALIEN MONSTER, U+1F47E
 
 // AUTOMATED TELLER MACHINE, U+1F3E7
 // SNOWFLAKE, U+2744
 //AI TRACKBALL, U+1F5B2
-// WHALE, U+1F40B
 
 // ICE CUBE, U+1F9CA
 
 //BLACK CHESS KNIGHT, U+265E
 //TURNED BLACK SHOGI PIECE, U+26CA //black shield 
 
-//BUILDING CONSTRUCTION, U+1F3D7 crane
-
 //8ball BILLIARDS, U+1F3B1
-
-//LINK SYMBOL, U+1F517
-
-//BLACK SPADE SUIT, U+2660
-
 
 //stag
 // LINEAR B IDEOGRAM B104 DEER, U+10082
@@ -1412,56 +1464,20 @@ console.log('admins length: ', allAdmins.length)
 
 //BLACK CROSS ON SHIELD, U+26E8
 
-//IDENTIFICATION CARD, U+1FAAA
-
-// RINGED PLANET, U+1FA90
-
-// RING BUOY, U+1F6DF lifeline
-
-// X-RAY, U+1FA7B
-
-//DNA DOUBLE HELIX, U+1F9EC
-
-// FEATHER, U+1FAB6
-
-//SKULL, U+1F480
-
-//CHEQUERED FLAG, U+1F3C1
 
 //interest
 //CHART WITH UPWARDS TREND AND YEN SIGN, U+1F4B9
 
-// TEDDY BEAR, U+1F9F8
-
 //WHITE-FEATHERED RIGHTWARDS ARROW, U+27B3
-
-//BRIEFCASE, U+1F4BC
-
-// COFFIN, U+26B0
-
-// HEADSTONE, U+1FAA6
 
 //FUNERAL URN, U+26B1
 
 // HIGH VOLTAGE SIGN, U+26A1
 
-// PASSPORT CONTROL, U+1F6C2
-
-// LEFT LUGGAGE, U+1F6C5 Key and suitcase
-
-// MAP SYMBOL FOR LIGHTHOUSE, U+26EF
-
-// BLACK SCISSORS, U+2702
 
 //HORSE RACING, U+1F3C7
 
 // SPARKLES, U+2728
-
-//BOXING GLOVE, U+1F94A
-
-//ankh
-//EGYPTIAN HIEROGLYPH S034, U+132F9
-//EGYPTIAN HIEROGLYPH O010A, U+13262
 
 //alien
 //EGYPTIAN HIEROGLYPH R028, U+132CF
@@ -1476,8 +1492,6 @@ console.log('admins length: ', allAdmins.length)
 //gate
 // EGYPTIAN HIEROGLYPH N024, U+13208
 
-// CROWN, U+1F451
-
 //DARK SUNGLASSES, U+1F576
 
 // FLOPPY DISK, U+1F4BE //backup
@@ -1487,8 +1501,6 @@ console.log('admins length: ', allAdmins.length)
 //EGYPTIAN HIEROGLYPH D009, U+1307F //eye on stilts
 
 //PURSE, U+1F45B
-
-//DARK SUNGLASSES, U+1F576
 
 //NO MOBILE PHONES, U+1F4F5
 
@@ -1517,11 +1529,6 @@ console.log('admins length: ', allAdmins.length)
 
 //MONEY BAG, U+1F4B0
 
-
-// LUGGAGE, U+1F9F3
-
 //ADMISSION TICKETS, U+1F39F
-
-// HIGH VOLTAGE SIGN, U+26A1
 
 //HOSPITAL, U+1F3E5

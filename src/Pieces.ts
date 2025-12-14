@@ -2249,7 +2249,6 @@ console.log('pieces length: ', allPieces.length)
 //PLAYGROUND SLIDE, U+1F6DD like gate but with more range? line target??
 ////recurve bow CANADIAN SYLLABICS CARRIER CHEE, U+1664
 //DANCER, U+1F483 //high movement no damage
-//Pazzaz U+1F57A //starts with 2 actions
 //ANT, U+1F41C //high movement
 //T-REX, U+1F996
 // EAGLE, U+1F985
@@ -2257,10 +2256,13 @@ console.log('pieces length: ', allPieces.length)
 // HEDGEHOG, U+1F994 retaliates by default
 //MILITARY AIRPLANE, U+1F6E6 line target airstike similar to charge
 //HIPPOPOTAMUS, U+1F99B
-// TOP HAT, U+1F3A9 spawns a random piece/or rabbit?
-// RABBIT, U+1F407 high movement 1 atk 1 maxsize
 //JAPANESE GOBLIN, U+1F47A
+// HIGH-HEELED SHOE, U+1F460 small and slow but high attack
+//doctor STETHOSCOPE, U+1FA7A medic, + max Size to a piece
+// TOP HAT, U+1F3A9 spawns a random piece/or rabbit?
 
+// RABBIT, U+1F407 high movement 1 atk 1 maxsize
+//Pazzaz U+1F57A //starts with 2 actions
 
 //megaphone U+1F4E3
 

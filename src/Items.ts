@@ -579,8 +579,9 @@ export class Makeover extends Item {
     
     }
 }
-
-export const allItems = [Whetstone, Iron, Blueberry, Carrot, Lightning, Blessing, Supplement, Juice, Roids, Formula, Garlic, RedMeat, Coffee, Bandage, Soap, Voucher, Mushroom, Rations, Beans, Box, Genie, Pinata, Wand, Hourglass, Spanner, Makeover]
+//PIG, U+1F416 random money?
+//update x3, hotline buoy bugle batteries pig 9
+export const allItems = [Whetstone, Iron, Blueberry, Carrot, Lightning, Blessing, Supplement, Juice, Roids, Formula, Garlic, RedMeat, Coffee, Bandage, Soap, Voucher, Mushroom, Rations, Beans, Box, Genie, Pinata, Wand, Hourglass, Spanner, Makeover]//27
 
 export type ItemConstructor = new (...args: any[]) => Item<any>;
 
@@ -589,7 +590,7 @@ export type ItemConstructor = new (...args: any[]) => Item<any>;
 //PAGE WITH CURL, U+1F4C3
 // POT OF FOOD, U+1F372
 
-//PIG, U+1F416 money?
+
 
 // / HOT PEPPER, U+1F336
 
@@ -606,8 +607,6 @@ export type ItemConstructor = new (...args: any[]) => Item<any>;
 //POSTAL HORN, U+1F4EF
 
 //djembe LONG DRUM, U+1FA98
-
-//PACKAGE, U+1F4E6
 
 //BLACK HEART SUIT, U+2665
 

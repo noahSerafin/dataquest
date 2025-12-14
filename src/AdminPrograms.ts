@@ -196,7 +196,7 @@ class BionicLeg extends Admin {
 
 class Convenience extends Admin {//TODO test
   static name = "Convenience Store";
-  static description = "Open the shop any time (still only reloads for free stock at map shops)";
+  static description = "Open the shop any time (still only reloads for free after a boss is defeated)";
   static unicode = "U+1F3EA";
   static color = "#55ff71ff";
 

@@ -5,7 +5,7 @@ make more levels, smaller levels (max size 9)
 
 ADMINS - Petri - spread statuses -test, crystal - test, chemistry - test
 money admins on interest - test, implement into ROUND SUMMARY, maybe store earned money in a temp variable, add it in the summary with awaits?
-24 off 100
+22 off 100
 
 AI 6 nearly-done
 confused todo on enemy 5

@@ -24,6 +24,8 @@ export abstract class Piece {
   canAttack: boolean = true;
   willRetaliate: boolean = false;
   isTakingDamage: boolean = false;
+  hasFriendlySpecial: boolean = false;//use in enemyAI
+  hasExposingSpecial: boolean = false;//use in enemyAI
 
   specialName?: string;
   targetType: 'piece' | 'pieceAndPlayer' | 'space' | 'pieceAndPlace' | 'group' | 'line' | 'self' | 'all' | 'graveyard' | 'trapPiece' = 'piece';
@@ -884,17 +886,22 @@ class Watchman extends Piece {
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Watchman.name, Watchman.description, Watchman.unicode, 2, 2, 3, 1, 0, Watchman.color, headPosition, [headPosition], team, Watchman.rarity, removeCallback, id)
-    this.targetType = 'piece'
+    this.targetType = 'group'
     this.specialName = 'Spot'
+    this.hasExposingSpecial = true;
   }
-  async special(target: Piece): Promise<void> {
-    target.statuses.exposed = true
-    if(target.getStat('defence') > 0){
-      target.defence -= 1
-    } else {
-      await target.takeDamage(1)
+  async special(targets: Piece[]):Promise<void>{
+    for (const target of targets) {
+      if(!target.immunities.exposed){
+        target.statuses.exposed = true;
+      }
+      if(target.getStat('defence') > 0){
+        target.defence -= 1
+      } else {
+        await target.takeDamage(1)
+      }
+      this.actions--
     }
-    this.actions--
   }
 }
 
@@ -2138,22 +2145,25 @@ class Lighthouse extends Piece {
    static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Lighthouse.name, Lighthouse.description, Lighthouse.unicode, 1, 0, 5, 0, 1, Lighthouse.color, headPosition, [headPosition], team, Lighthouse.rarity, removeCallback, id)
-    this.specialName = 'Alarm';
+    this.specialName = 'Raise Alarm';
     this.targetType = 'group'
     this.canAttack = false;
+    this.hasExposingSpecial = true;
   }
   async special(targets: Piece[]):Promise<void>{
     for (const t of targets) {
       if(!t.immunities.blinded){
         t.statuses.blinded = true;
       }
-      t.statuses.exposed = true;
+      if(!t.immunities.exposed){
+        t.statuses.exposed = true;
+      }
     }
     this.actions--
   }
 }
 
-class Torch extends Piece {
+class Torch extends Piece {//remove from enemies for now
   static name = "Torch";
   static description = "A program the can expose targets in a line";
   static unicode = "U+1F526";
@@ -2164,6 +2174,7 @@ class Torch extends Piece {
     this.specialName = 'Shine';
     this.targetType = 'line'
     this.canAttack = false;
+    this.hasExposingSpecial = true;
   }
   async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
     for (const tile of line) {
@@ -2171,7 +2182,9 @@ class Torch extends Piece {
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
       );
       if(!occupier) continue;
-      occupier.statuses.exposed = true;
+      if(!occupier.immunities.exposed){
+        occupier.statuses.exposed = true;
+      }
     }
     this.actions--
   }

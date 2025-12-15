@@ -191,6 +191,7 @@
 
     function enterNode(node: WorldNode) {
         selectedPreviewNode.value = null;
+
         currentNodeId.value = node.id;
 
         if(node.type == 'shop'){
@@ -316,14 +317,14 @@
       <h4 v-if="selectedPreviewNode.type!=='shop'">{{ selectedPreviewNode.company.name}}</h4>
       <h6>Reward: ${{ selectedPreviewNode.reward }}</h6>
 
-      <MiniMap v-if="selectedPreviewNode.level"
+      <MiniMap v-if="selectedPreviewNode && selectedPreviewNode.level"
         :level="selectedPreviewNode.level"
         :company="selectedPreviewNode.company"
       />
         <div class="btns">
 
-            <button @click="enterNode(selectedPreviewNode)">Enter</button>
-            <button @click="selectedPreviewNode = null">Close</button>
+            <button v-if="selectedPreviewNode" @click="enterNode(selectedPreviewNode)">Enter</button>
+            <button v-if="selectedPreviewNode" @click="selectedPreviewNode = null">Close</button>
             <button v-if="canSkip(selectedPreviewNode)" @click="skipNode(selectedPreviewNode)">Skip $5</button>
         </div>
     </div>

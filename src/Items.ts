@@ -527,7 +527,7 @@ export class Pinata extends Item {//untested
 export class Wand extends Item {//TODO test
   static name = "Magic Wand";
   static description = "Undo a turn";
-  static unicode = " U+1FA84";
+  static unicode = "U+1FA84";
   static color = "#440975ff";
   constructor() {
     super(Wand.name, Wand.description, Wand.unicode, Wand.color, 7, 4, 'gameState')

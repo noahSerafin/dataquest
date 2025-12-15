@@ -2,7 +2,7 @@
   import { ref, onMounted, computed} from "vue";
   import Board from './components/Board.vue';
   import Leveleditor from './components/Leveleditor.vue';
-  import { castled, testLevels } from './levels';
+  import { castled, testLevels } from './smallLevels';
   //import { castled, level1Levels } from './level1Levels';
   import { Player } from "./Player";
   import { Item, Voucher, allItems} from "./Items";
@@ -15,7 +15,8 @@
   import { Spawn, Dolls } from './Pieces';
   import { allPieces } from "./Pieces"
   import type { Coordinate, PieceBlueprint, Level, OS } from "./types";
-  import { takeEnemyTurn } from "./Enemy";
+  //import { takeEnemyTurn } from "./Enemy";
+  import { runEnemyStateMachine } from "./Enemy";
   import WorldMap from "./components/WorldMap.vue";
   import Shop from "./components/Shop.vue";
   import BossView from "./components/BossView.vue";
@@ -660,7 +661,7 @@ import MainMenu from "./components/MainMenu.vue";
 
   //round state functions
   function highlightPlacements(pieceBlueprint: PieceBlueprint) {
-    boardRef.value.moveHighlights = []
+    boardRef.value.clearHighlights();
     if(playerHasAdmin('Backdoor')){
       const unnocupiedSpaces: Coordinate[] = [] ;
       level.value.tiles.forEach(tile => {
@@ -787,6 +788,7 @@ import MainMenu from "./components/MainMenu.vue";
   }
 
   const movePiece = async (coord : Coordinate) => {
+    console.log('moving player')
     if(!selectedPiece.value || !player.value.canMove) return;
     isPlacing.value = false;
     player.value.canPlace = false;
@@ -794,7 +796,7 @@ import MainMenu from "./components/MainMenu.vue";
     lastTurnPieces.value = activePieces.value.map(p => p.clone());
 
     boardRef.value.clearHighlights();
-    selectedPiece.value?.moveTo(coord);
+    selectedPiece.value.moveTo(coord);
     //checkForTrap
     const trap = activePieces.value.find(p =>
       p.targetType == 'trapPiece' && p.tiles.some(t => t.x === coord.x && t.y === coord.y)
@@ -1043,14 +1045,10 @@ import MainMenu from "./components/MainMenu.vue";
 
   //enemy moves
   async function enemyTurn() {
-    const enemyPieces = activePieces.value.filter(p => (p.team === 'enemy' && !p.statuses.charmed));
-    const playerPieces = activePieces.value.filter(p => p.team === 'player' && !p.statuses.charmed);
 
     const tileSet = new Set(level.value.tiles.map(t => `${t.x},${t.y}`));
 
-    await takeEnemyTurn(
-      enemyPieces,//no statmodifiers?
-      playerPieces,
+    await runEnemyStateMachine(
       activePieces.value,
       removePiece, // callback to remove dead pieces
       boardRef.value.highlightMoves,
@@ -1058,10 +1056,12 @@ import MainMenu from "./components/MainMenu.vue";
       boardRef.value.clearHighlights,
       //handleSpecialActionAt,
       tileSet,
-      onReceiveDamage
+      onReceiveDamage,
+      300
     );
     checkForRoundEnd();
     // Reset enemy actions/moves after their turn if needed
+    const enemyPieces = activePieces.value.filter(p => (p.team === 'enemy' && !p.statuses.charmed));//not refs so won't update
     enemyPieces.forEach(p => {
       p.actions = 1;
       p.movesRemaining = p.moves;
@@ -1184,7 +1184,7 @@ import MainMenu from "./components/MainMenu.vue";
       <BossView :admins="bossAdmins"/>
     </span>
   </div>
-  <MainMenu v-if="showMainMenu" @createNewPlayer="createNewPlayer"/>
+  <MainMenu v-if="showMainMenu && !displayEditor" @createNewPlayer="createNewPlayer"/>
   <RoundSummary v-if="displaySummary"
     :hasWonRound="hasWonRound"
     :player="player"
@@ -1193,7 +1193,7 @@ import MainMenu from "./components/MainMenu.vue";
     @reloadLevel="reloadLevel"
     @mainMenu="openMainMenu"
   />
-  <WorldMap
+  <WorldMap v-if="!displayEditor"
     :allLevels="testLevels"
     :player="player"
     :seed="worldSeed"
@@ -1203,7 +1203,7 @@ import MainMenu from "./components/MainMenu.vue";
     @addBoss="addBossAdmin"
     @increaseDifficulty="increaseDifficulty"
   />
-  <Shop
+  <Shop v-if="!displayEditor"
     :cssclass="shopClass"
     :shopBlueprints="shopBlueprints"
     :shopItems="shopItems"

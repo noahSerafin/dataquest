@@ -68,6 +68,7 @@ export abstract class Piece {
     team: string,
     rarity: number,
     removeCallback?: (piece: Piece) => void,
+    //receiveDamageCallback?: (piece: Piece) => void,
     id?: string,
   ) {
     this.name = name
@@ -156,6 +157,7 @@ export abstract class Piece {
     const removeCount = Math.min(received, this.tiles.length); // safety
     if(removeCount){
       this.isTakingDamage = true
+      //alert cactus admin
       await new Promise(resolve => setTimeout(resolve, 250));
       this.isTakingDamage = false
     }
@@ -722,6 +724,7 @@ class Copycat extends Piece {
     super(Copycat.name, Copycat.description, Copycat.unicode, 1, 0, 1, 0, 0, Copycat.color, headPosition, [headPosition], team, Copycat.rarity, removeCallback, id)
     this.targetType = 'piece'
     this.specialName = 'Imitate'
+    //neutral special
   }
   //nerf
   async special(target: Piece): Promise<void> {
@@ -866,7 +869,7 @@ class Vice extends Piece {
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Vice.name, Vice.description, Vice.unicode, 1, 2, 1, 0, 1, Vice.color, headPosition, [headPosition], team, Vice.rarity, removeCallback, id)
     this.targetType = 'piece'
-    this.specialName = 'Infect'
+    this.specialName = 'Freeze'
   }
   async special(target: Piece): Promise<void> {
     if(!target.immunities.frozen){
@@ -892,16 +895,18 @@ class Watchman extends Piece {
   }
   async special(targets: Piece[]):Promise<void>{
     for (const target of targets) {
-      if(!target.immunities.exposed){
-        target.statuses.exposed = true;
+      if(target.team !== this.team){
+        if(!target.immunities.exposed){
+          target.statuses.exposed = true;
+        }
+        if(target.getStat('defence') > 0){
+          target.defence -= 1
+        } else {
+          await target.takeDamage(1)
+        }
       }
-      if(target.getStat('defence') > 0){
-        target.defence -= 1
-      } else {
-        await target.takeDamage(1)
-      }
-      this.actions--
     }
+    this.actions--
   }
 }
 
@@ -1080,7 +1085,7 @@ class Nuke extends Piece {
 
 class Highwayman extends Piece {
   static name = "Highwayman";
-  static description = "A program that generates money on succesfully attacking an enemy piece";
+  static description = "A program that can generate money from an enemy piece";
   static unicode = "U+1F9B9";
   static color = "#494646ff";
   static rarity = 3;
@@ -1088,12 +1093,12 @@ class Highwayman extends Piece {
    super(Highwayman.name, Highwayman.description, Highwayman.unicode, 2, 1, 1, 1, 0, Highwayman.color, headPosition, [headPosition], team, Highwayman.rarity, removeCallback, id)
    this.specialName = 'Rob';
    this.targetType = 'pieceAndPlayer'
-   this.canAttack = false;
+   //this.canAttack = false;
   }
   async special({piece, player} : {piece: Piece, player: Player}):Promise<void>{
     if(this.getStat('attack') > piece.getStat('defence')){
-      await piece.takeDamage(this.getStat('attack'))
-      if(piece.team === 'enemy'){
+      //await piece.takeDamage(this.getStat('attack'))
+      if(piece.team === 'enemy' && this.team === 'player'){
         player.money += 1;
       }
       this.actions--
@@ -1177,7 +1182,7 @@ class Fencer extends Piece {
 
 class Pawn extends Piece {
   static name = "Pawn";
-  static description = "A slow program that can be promoted into an enemy piece";
+  static description = "A slow program that can be promoted into another piece";
   static unicode = "U+265F";
   static color = "#131313ff";
   static rarity = 3;
@@ -1185,6 +1190,7 @@ class Pawn extends Piece {
    super(Pawn.name, Pawn.description, Pawn.unicode, 1, 1, 1, 1, 0, Pawn.color, headPosition, [headPosition], team, Pawn.rarity, removeCallback, id)
    this.specialName = 'Promote';
    this.targetType = 'all'
+   //neutral special
   }
   async special({ target, activePieces }: { target: Coordinate; activePieces: Piece[] }): Promise<void> {
     
@@ -1351,13 +1357,13 @@ class Snail extends Piece {
   static color = "#4d3502ff";
   static rarity = 1;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Snail.name, Snail.description, Snail.unicode, 3, 1, 1, 1, 0, Snail.color, headPosition, [headPosition], team, Snail.rarity, removeCallback, id)
+    super(Snail.name, Snail.description, Snail.unicode, 3, 1, 1, 1, 1, Snail.color, headPosition, [headPosition], team, Snail.rarity, removeCallback, id)
     this.targetType = 'self'
     this.specialName = 'Retract'
   }
   async special(target: Piece):Promise<void>{
-    this.tiles = [this.headPosition]
-    this.addModifier({defence: 2});
+    this.tiles = [this.headPosition]//use array modifier
+    //this.addModifier({defence: 2});//tempmod
     this.actions--
     //needs to reset on move //unfinished
   }
@@ -1512,7 +1518,7 @@ class Bug extends Piece {
   static color = "#04ca0eff";
   static rarity = 1;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Bug.name, Bug.description, Bug.unicode, 1, 5, 1, 2, 0, Bug.color, headPosition, [headPosition], team, Bug.rarity, removeCallback, id)
+   super(Bug.name, Bug.description, Bug.unicode, 1, 5, 1, 1, 0, Bug.color, headPosition, [headPosition], team, Bug.rarity, removeCallback, id)
   }
 }
 
@@ -1790,8 +1796,9 @@ class Extinguisher extends Piece {//item?
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Extinguisher.name, Extinguisher.description, Extinguisher.unicode, 2, 2, 2, 1, 1, Extinguisher.color, headPosition, [headPosition], team, Extinguisher.rarity, removeCallback, id)
-    this.specialName='Extinguish'
-    this.targetType='piece'
+    this.specialName='Extinguish';
+    this.targetType='piece';
+    this.hasFriendlySpecial = true;
   }
 
   async special(targetPiece: Piece):Promise<void>{
@@ -1821,8 +1828,8 @@ class Jellyfish extends Piece {
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Jellyfish.name, Jellyfish.description, Jellyfish.unicode, 2, 1, 1, 4, 0, Jellyfish.color, headPosition, [headPosition], team, Jellyfish.rarity, removeCallback, id)
-    this.specialName='Shock'
-    this.targetType='piece'
+    this.specialName='Shock';
+    this.targetType='piece';
   }
 
   async special(targetPiece: Piece):Promise<void>{
@@ -1843,8 +1850,9 @@ class Screwdriver extends Piece {
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Screwdriver.name, Screwdriver.description, Screwdriver.unicode, 1, 1, 1, 0, 0, Screwdriver.color, headPosition, [headPosition], team, Screwdriver.rarity, removeCallback, id)
-    this.specialName='Tinker'
-    this.targetType='piece'
+    this.specialName='Tinker';
+    this.targetType='piece';
+    this.hasFriendlySpecial = true;
   }
 
   async special(targetPiece: Piece):Promise<void>{
@@ -1877,8 +1885,8 @@ class Axe extends Piece {
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Axe.name, Axe.description, Axe.unicode, 4, 2, 2, 4, 0, Axe.color, headPosition, [headPosition], team, Axe.rarity, removeCallback, id)
-    this.specialName='Hack'
-    this.targetType='pieceAndPlace'
+    this.specialName='Hack';
+    this.targetType='pieceAndPlace';
   }
 
   async special({piece, target} : {piece: Piece, target: Coordinate}):Promise<void>{
@@ -1900,8 +1908,9 @@ class Boomerang extends Piece {
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Boomerang.name, Boomerang.description, Boomerang.unicode, 3, 3, 1, 2, 0, Boomerang.color, headPosition, [headPosition], team, Boomerang.rarity, removeCallback, id)
-   this.targetType = 'piece'
-   this.specialName = 'Throw'
+   this.targetType = 'piece';
+   this.specialName = 'Throw';
+   this.canAttack = false;
   }
   async special(targetPiece: Piece):Promise<void>{
     await targetPiece.takeDamage(this.getStat('attack'));
@@ -1920,6 +1929,7 @@ class Plunger extends Piece {//item remove??
    super(Plunger.name, Plunger.description, Plunger.unicode, 2, 2, 1, 1, 0, Plunger.color, headPosition, [headPosition], team, Plunger.rarity, removeCallback, id)
    this.targetType = 'piece'
    this.specialName = 'Unclog'
+   this.hasFriendlySpecial = true;
   }
   async special(targetPiece: Piece):Promise<void>{
     targetPiece.statuses.slowed = false;
@@ -1927,7 +1937,7 @@ class Plunger extends Piece {//item remove??
   }
 }
 
-export class Angel extends Piece {//not passive, same as fairy, remove??
+export class Angel extends Piece {//not passive, same as fairy, remove?? unfinished
   static name = "Angel";
   static description = "Can ressurect a destroyed program";
   static unicode = "U+1FABD";
@@ -1949,6 +1959,7 @@ export class Stopwatch extends Piece {//not passive
     super(Stopwatch.name, Stopwatch.description, Stopwatch.unicode, 4, 0, 1, 0, 0, Stopwatch.color, headPosition, [headPosition], team, Stopwatch.rarity, removeCallback, id)
     this.targetType = 'piece'
     this.specialName = 'Time Out'
+    this.hasFriendlySpecial = true;
   }
   async special(targetPiece: Piece):Promise<void>{
     targetPiece.movesRemaining = targetPiece.getStat('moves');
@@ -2026,7 +2037,7 @@ class Helicopter extends Piece {//unfinished, handle in app
   }
 }
 
-export class Dolls extends Piece {//finished? needs testing, will have to be handled in app for sure, and a custom flag for hybrids
+export class Dolls extends Piece {//finished? test, will have to be handled in app for sure, and a custom flag for hybrids
   static name = "Nesting Dolls";
   static description = "Replaced by a copy with -1 max size if destroyed"
   static unicode = " U+1FA86";
@@ -2152,11 +2163,13 @@ class Lighthouse extends Piece {
   }
   async special(targets: Piece[]):Promise<void>{
     for (const t of targets) {
-      if(!t.immunities.blinded){
-        t.statuses.blinded = true;
-      }
-      if(!t.immunities.exposed){
-        t.statuses.exposed = true;
+      if(t.team !== this.team){
+        if(!t.immunities.blinded){
+          t.statuses.blinded = true;
+        }
+        if(!t.immunities.exposed){
+          t.statuses.exposed = true;
+        }
       }
     }
     this.actions--
@@ -2165,18 +2178,19 @@ class Lighthouse extends Piece {
 
 class Torch extends Piece {//remove from enemies for now
   static name = "Torch";
-  static description = "A program the can expose targets in a line";
+  static description = "A program the can expose targets in range";
   static unicode = "U+1F526";
   static color = "#000000ff";
    static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Torch.name, Torch.description, Torch.unicode, 2, 2, 4, 1, 0, Torch.color, headPosition, [headPosition], team, Torch.rarity, removeCallback, id)
+   super(Torch.name, Torch.description, Torch.unicode, 2, 2, 3, 1, 0, Torch.color, headPosition, [headPosition], team, Torch.rarity, removeCallback, id)
     this.specialName = 'Shine';
-    this.targetType = 'line'
+    this.targetType = 'group';//'line'
     this.canAttack = false;
     this.hasExposingSpecial = true;
   }
-  async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
+  //old line version
+  /*async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
     for (const tile of line) {
       const occupier = activePieces.find(p =>
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
@@ -2184,6 +2198,16 @@ class Torch extends Piece {//remove from enemies for now
       if(!occupier) continue;
       if(!occupier.immunities.exposed){
         occupier.statuses.exposed = true;
+      }
+    }
+    this.actions--
+  }*/
+  async special(targets: Piece[]):Promise<void>{
+    for (const t of targets) {
+      if(t.team !== this.team){
+        if(!t.immunities.exposed){
+          t.statuses.exposed = true;
+        }
       }
     }
     this.actions--

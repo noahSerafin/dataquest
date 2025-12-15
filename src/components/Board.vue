@@ -179,10 +179,9 @@ function getReachableTiles(
 }
 
 const highlightMoves = (piece: InstanceType<typeof Piece>) => {
-  console.log('moves')
+  console.log('moves:')
   clearHighlights();
   moveHighlights.value = getReachableTiles(piece, tileSet.value, pieceMap.value)//actually get in range and not blocked or occupied
-
   moveButtons.value = getAvailableMoves(piece, tileSet.value, pieceMap.value);
 }
 
@@ -311,6 +310,7 @@ function resolveMove(
   const randomIndex = Math.floor(Math.random() * allMoves.length);
   emit('movePiece', allMoves[randomIndex]);
 }
+//onclick = "resolveMove(tile, moveButtons)""
 
 </script>
 
@@ -375,7 +375,7 @@ function resolveMove(
       :key="index"
       class="highlight-tile"
       :class="['move-button', `move-button-${tile.direction}`]"
-      v-on:click="resolveMove(tile, moveButtons)"
+      v-on:click="$emit('movePiece', tile);"
       :style="{
         left: tile.x * tileSize + 'px',
         top: tile.y * tileSize + 'px',

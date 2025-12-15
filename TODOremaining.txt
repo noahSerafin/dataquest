@@ -3,26 +3,6 @@ Defense - lose on damage (and reset every turn???) - would make ai easier
 make more levels, smaller levels (max size 9)
 //check interest is working properly 
 
-ADMINS - Petri - spread statuses -test, crystal - test, chemistry - test
-money admins on interest - test, implement into ROUND SUMMARY, maybe store earned money in a temp variable, add it in the summary with awaits?
-22 off 100
-
-AI 6 nearly-done
-confused todo on enemy 5
-functions:
-    pathfinding a -> b in a grid - needsreviewing, don't search for new path inside one pieces while loop
-    moveTowards player - incomplete
-
-    ignore hidden pieces when attacking/specials
-    ignore negative pieces when moving - done?
-    maybe ignore statuses if already has a status??? or dont consume an action??
-
-special attacks
-    if self use on self
-    attackingSpecial bool
-    use special if possible
-    !attackingSpecial use on friendly??? or friendlySpecial bool
-
 --MORE LEVELS--
 //modify spawn in App to account for piece size - 6
 
@@ -30,19 +10,20 @@ MAP 6.5
 isometric view?
 branching paths - started
 multiple levels files for difficulty tier?
-hidden nodes? randomly generated, not visible until player arrives at connecting node
+hidden nodes above level two and up, randomly generated, not visible until player arrives at connecting node
+level three, three branching paths
 ADMIN -compass - show secret nodes MAP 6.5
+
+BOSSES 7
+boss security rank - leave status bosses for 2/3 and up
+test damage all bosses
+fog
 
 HYBRIDS 7
 Hybrid class accepts two pieces
 takes average of both stats, rounded up
 takes special move of first piece
 add altar to map nodes
-
-BOSSES 7
-boss security rank - leave status bosses for 2/3 and up
-test damage all bosses
-fog
 
 ITEMS - clean up player items, add activePieces/gameState items 7
 
@@ -52,10 +33,19 @@ keep track of upgrades and display on piece, and move/attack/spceial btn that cy
 variants?
 
 EDITOR 8
-Add a Spawn for a 'wall' type piece
 Have logic for spawning any piece on single spawn, then only pieces with max size >= to the spawn's size
 
-companies 9 - own list of programs;
+
+ADMINS - Petri - spread statuses -test, crystal - test, chemistry - test 22 off 100
+money admins on interest - test, implement into ROUND SUMMARY, maybe store earned money in a temp variable, add it in the summary with awaits? 7
+
+AI 6 nearly-done
+handle friendlySpecials 7
+-confused todo on enemy 9
+    maybe ignore statuses if already has a status??? or dont consume an action??
+    !attackingSpecial use on friendly??? or friendlySpecial bool
+
+companies 8 - own list of programs;
 
 SHOP - 8
 - two piece/item slots

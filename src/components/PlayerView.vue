@@ -108,7 +108,7 @@
                 <p class="os">
                     {{ String.fromCodePoint(parseInt(player.osunicode.replace('U+', ''), 16)) }}
                 </p>
-                <p><strong>Money:</strong> {{ props.player.money }}</p>
+                <p style="text-align: left;"><strong>Money:</strong> {{ props.player.money }}</p>
                 <p><strong>Lives:</strong>
                     <span v-for="lives in player.lives">
                        {{ String.fromCodePoint(0x1FA77) }}
@@ -229,8 +229,9 @@
        }
     }
     .os{
-        font-size: 36px;
+        font-size: 24px;
         margin: 0;
+        text-align: left;
     }
     .inventory{
         text-align: left;
@@ -249,8 +250,10 @@
             top: 0.5rem;
             right: 0.5rem;
         }
-        h3, p{
+        h3, p, button, strong{
+            text-align: left;
             margin: 6px;
+            font-size: 14px;
         }
     }
     .admins, .inventory-relative{

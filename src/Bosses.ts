@@ -529,8 +529,8 @@ class Frog extends Admin {
     }
 }
 
-//fog //tornado tsunami
-export const allBosses = [Mirror, Factory, NorthWind, Hook, Downturn, Wrath, Reaper, Volcano, Circus, Castle, Anchor, Jack, Lock, Eclipse, Battery, Customs, Shrine, Izakaya, Snowflake, Sun, Whale, Bones, Frog]//22
+//fog //tornado tsunami // Izakaya
+export const allBosses = [Mirror, Factory, NorthWind, Hook, Downturn, Wrath, Reaper, Volcano, Circus, Castle, Anchor, Jack, Lock, Eclipse, Battery, Customs, Shrine, Snowflake, Sun, Whale, Bones, Frog]//21
 
 //ROBOT HEAD "U+1F916"
 //YIN YANG, U+262F

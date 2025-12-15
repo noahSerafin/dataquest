@@ -227,28 +227,37 @@ function findNearestPieceCoordinate(//player/ enemy
 }
 
 // Check if a player piece is in range
-function findWeakestPlayerInRange(enemy: Piece, playerPieces: Piece[]): {piece: Piece, place: Coordinate} | null {
+function findWeakestPlayerInRange(
+  enemy: Piece,
+  playerPieces: Piece[]
+): { piece: Piece; place: Coordinate } | null {
   const ex = enemy.headPosition.x;
   const ey = enemy.headPosition.y;
 
-  const candidates = playerPieces.sort(
-    (a, b) => a.getStat('defence') - b.getStat('defence')
-  );
+  const candidates: { piece: Piece; place: Coordinate }[] = [];
 
-  for (const player of candidates) {//should return the first one with low defence
-    if(!player.statuses.hidden) continue;
+  for (const player of playerPieces) {
+    if (player.statuses.hidden) continue;
+
     for (const tile of player.tiles) {
-      const dx = Math.abs(ex - tile.x);
-      const dy = Math.abs(ey - tile.y);
-      
-      console.log('player', player.name)
-      if (dx + dy <= enemy.range) {
-        return { piece: player, place: tile };
+      const dist =
+        Math.abs(ex - tile.x) + Math.abs(ey - tile.y);
+
+      if (dist <= enemy.range) {
+        candidates.push({ piece: player, place: tile });
+        break; // one tile in range is enough per piece
       }
     }
   }
 
-  return null;
+  if (candidates.length === 0) return null;
+
+  // Pick the player with the lowest defence
+  candidates.sort(
+    (a, b) => a.piece.getStat('defence') - b.piece.getStat('defence')
+  );
+
+  return candidates[0];
 }
 
 //for group targets. Check if any piece tile that is in range, return a list of pieces

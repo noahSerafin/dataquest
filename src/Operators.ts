@@ -149,7 +149,7 @@ const knife =  {
         maxSize: 1,
         moves: 5,
         range: 1,
-        attack: 2,
+        attack: 1,
         defence: 0,
         rarity: 1,
         // blueprint-only fields:

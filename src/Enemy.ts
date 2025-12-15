@@ -22,8 +22,20 @@ function decideEnemyIntent(
     if(enemy.specialName && !enemy.hasFriendlySpecial && enemy.targetType !== 'trapPiece'){//can we use an attacking special?
       //line and pieceAndplace types also need the target location
       if(enemy.targetType === 'line'){//line type pieces
-        //check place is in a line
-        return { type: 'special', target: {line: getTilesInLine(enemy, target.place), activePieces: activePieces} }
+        const options = getAllTilesInStraightLines(enemy.headPosition, enemy.getStat('range'), tileSet);//all line tiles in range
+        const optionSet = new Set(options.map(t => `${t.x},${t.y}`));
+        let newTarget: { piece: Piece; place: Coordinate } | null = null;
+        for (const player of playerPieces) {
+          if (player.statuses.hidden) continue;
+          for (const tile of player.tiles) {
+             const key = `${tile.x},${tile.y}`;
+            if (optionSet.has(key)) {
+              newTarget = { piece: player, place: tile };
+              break;
+            }
+          }
+        }
+        if (newTarget)  return { type: 'special', target: {line: getTilesInLine(enemy, newTarget.place), activePieces: activePieces} }
       }
       if(enemy.targetType == 'pieceAndPlace' ){
         return { type: 'special', target: {target: target.place, activePieces: activePieces}}
@@ -152,6 +164,7 @@ export async function runEnemyStateMachine(
     while (enemy.movesRemaining > 0 || enemy.actions > 0) {
       const intent = decideEnemyIntent(enemy, activePieces, playerPieces, tileSet);
       await executeEnemyIntent(enemy, intent, helpers);
+      await sleep(helpers.delay);
       if (intent.type === 'wait') break;
     } 
   }
@@ -442,6 +455,38 @@ function getAnySpaceInRange(
   if (candidates.length === 0) return null;
 
   return candidates[Math.floor(Math.random() * candidates.length)];
+}
+
+function getAllTilesInStraightLines(
+  center: Coordinate,
+  range: number,
+  tileSet: Set<string>
+): Coordinate[] {
+  const tiles: Coordinate[] = [];
+  const { x, y } = center;
+
+  // Four cardinal directions
+  const directions = [
+    { dx: 1, dy: 0 },   // right
+    { dx: -1, dy: 0 },  // left
+    { dx: 0, dy: 1 },   // down
+    { dx: 0, dy: -1 },  // up
+  ];
+
+  for (const { dx, dy } of directions) {
+    for (let step = 1; step <= range; step++) {
+      const tx = x + dx * step;
+      const ty = y + dy * step;
+      const key = `${tx},${ty}`;
+
+      // Stop if tile isn’t on the board
+      if (!tileSet.has(key)) break;
+
+      tiles.push({ x: tx, y: ty });
+    }
+  }
+
+  return tiles;
 }
 
 function getTilesInLine(piece: Piece, target: Coordinate) {

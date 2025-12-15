@@ -125,7 +125,6 @@
                         @dragover.prevent
                         @drop="onDrop(index)"
                         class="p-1 border rounded mb-1 flex justify-between items-center">
-
                         <ItemView 
                             :item="item"
                             type="admin"
@@ -155,6 +154,7 @@
     <div v-if="showInventory" class="inventory mt-3 border-t pt-2">
         <!-- Memory -->
         <p><strong>Memory:</strong> {{ memoryUsage }}</p>
+        <button class="top-right" @click="showInventory = !showInventory">X</button>
         <h3 class="font-semibold">Programs</h3>
         <div v-if="props.player.programs.length === 0">No programs</div>
         <ul class="inventory-relative">
@@ -201,7 +201,7 @@
 </template>
 
 <style scoped>
-    .player {
+    .player, .inventory {
         background-color: black;
         position: fixed;
         bottom: 6px;
@@ -221,22 +221,41 @@
             justify-content: space-between;
         }
     }
+    @media only screen and (max-width: 700px) {
+       .player {
+            margin: 0;
+            left: 0;
+            width: 95%;
+       }
+    }
     .os{
         font-size: 36px;
         margin: 0;
     }
     .inventory{
         text-align: left;
-        position: fixed;
-        top: 20%;
-        right: 1rem;
-        width: 15%;
         background: #222;
         color: #fff;
         padding: 1rem;
+        margin: 0;
+        display: block;
+        bottom: 0;
+        left: 0;
+        height: 26%;
+        width: 80%;
+        margin: 0;
+        .top-right{
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+        }
+        h3, p{
+            margin: 6px;
+        }
     }
     .admins, .inventory-relative{
-        padding: 0 20px 0 20px;
+        margin: 0;
+        padding: 0 12px 0 12px;
         position: relative;
         display: flex;
         gap: 5px;

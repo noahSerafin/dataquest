@@ -2,7 +2,7 @@
   import { ref, onMounted, computed} from "vue";
   import Board from './components/Board.vue';
   import Leveleditor from './components/Leveleditor.vue';
-  import { castled, testLevels } from './smallLevels';
+  import { castled, level1Levels } from './level1Levels';
   //import { castled, level1Levels } from './level1Levels';
   import { Player } from "./Player";
   import { Item, Voucher, allItems} from "./Items";
@@ -1194,7 +1194,7 @@ import MainMenu from "./components/MainMenu.vue";
     @mainMenu="openMainMenu"
   />
   <WorldMap v-if="!displayEditor"
-    :allLevels="testLevels"
+    :allLevels="level1Levels"
     :player="player"
     :seed="worldSeed"
     :cssclass="mapClass"
@@ -1275,8 +1275,10 @@ import MainMenu from "./components/MainMenu.vue";
 .end-turn{
   margin-top: 1rem;
   position: absolute;
-  left: 20%;
-  bottom: 15%;
+  right: 0;
+  bottom: 10%;
+  border: 1px solid white;
+  z-index: 9999;
 }
 .logo {
   height: 6em;

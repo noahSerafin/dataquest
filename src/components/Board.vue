@@ -449,7 +449,6 @@ function resolveMove(
   margin: auto; /* center horizontally */
   position: relative;
   top: 0;
-  left: 0;
 }
 .tile{
   background-color: gainsboro;

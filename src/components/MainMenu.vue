@@ -99,7 +99,7 @@
     .oses{
         position: absolute;
         z-index: 9999;
-        width: 50%;
+        width: 60%;
         max-width: 1280px;
         padding: 2rem;
         background-color: black;
@@ -111,6 +111,14 @@
         overflow-y: hidden;
         cursor: grab;
         user-select: none;
+        border: 1px solid white;
+        border-radius: 10px;
+    }
+    @media only screen and (max-width: 760px) {
+        .oses{
+            left: 0;
+            width: 90%;
+        }
     }
     .os{
         border: 1px solid white;

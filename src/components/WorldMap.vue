@@ -296,7 +296,7 @@
             </span>
         </div>
         </div>
-        <svg class="map-lines" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;">
+        <svg class="map-lines" style="position: absolute; inset: 0; width: 100vw; height: 100vh; pointer-events: none;">
             <line
             v-for="(conn, i) in connections"
             :key="i"
@@ -348,7 +348,14 @@
         z-index: 98;
         padding: 2rem;
         display: flex;
-        justify-content: center;
+    }
+    @media only screen and (max-width: 720px) {
+        .world-map {
+            width: 100vw;
+            height: 100vh;
+            justify-content: unset;
+            left: 0;
+        }
     }
     .node-map{
         position: relative;

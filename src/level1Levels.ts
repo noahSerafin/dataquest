@@ -1,4 +1,6 @@
-export const castled = {
+import type { Level } from "./types"
+
+export const castled: Level = {
   name: 'Castled',
   "tiles": [
     {
@@ -2499,4 +2501,4 @@ export const pachinko = {
     }
   ]
 }
-export const level1Levels = [castled, river, cave, arena, alley, ringed, gauntlet, penopticon, stream, halfcourt, tumbler, pachinko];
+export const level1Levels: Level[] = [castled, river, cave, arena, alley, ringed, gauntlet, penopticon, stream, halfcourt, tumbler, pachinko];

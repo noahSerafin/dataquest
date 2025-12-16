@@ -1876,7 +1876,6 @@ export const river = {
     }
   ]
 }
-
 export const alley = {
   name: 'The Alley',
   "tiles": [
@@ -3586,7 +3585,6 @@ export const league = {
     }
   ]
 }
-
 export const penopticon = {
   name: 'The Penopticon',
   "tiles": [

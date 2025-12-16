@@ -11,6 +11,7 @@ isometric view?
 branching paths - started
 multiple levels files for difficulty tier?
 hidden nodes above level two and up, randomly generated, not visible until player arrives at connecting node
+'skip' nodes rewarding certain programs?
 level three, three branching paths
 ADMIN -compass - show secret nodes MAP 6.5
 

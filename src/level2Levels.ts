@@ -1,3 +1,5 @@
+import type { Level } from "./types"
+
 const field = {
     name: 'The Field',
   "tiles": [
@@ -3170,4 +3172,4 @@ const network = {
     }
   ]
 }
-export const level2Levels = [field, courtyard, garden, drain, lockup, peninsula, bunker, perimeter, safehouse, beachhead, funnel, ];
+export const level2Levels: Level[] = [field, courtyard, garden, drain, lockup, peninsula, bunker, perimeter, safehouse, beachhead, funnel, network];

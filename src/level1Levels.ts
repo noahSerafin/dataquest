@@ -195,7 +195,7 @@ export const castled: Level = {
     }
   ]
 }
-export const cave = {
+const shortcave = {
   name: 'The Cave',
   "tiles": [
     {
@@ -352,6 +352,197 @@ export const cave = {
         {
           "x": 3,
           "y": 4
+        }
+      ],
+      "rarity": 1
+    }
+  ]
+}
+const cave = {
+  name: 'The Cave',
+  "tiles": [
+    {
+      "x": 0,
+      "y": 0
+    },
+    {
+      "x": 1,
+      "y": 0
+    },
+    {
+      "x": 2,
+      "y": 0
+    },
+    {
+      "x": 3,
+      "y": 0
+    },
+    {
+      "x": 4,
+      "y": 0
+    },
+    {
+      "x": 5,
+      "y": 0
+    },
+    {
+      "x": 6,
+      "y": 0
+    },
+    {
+      "x": 0,
+      "y": 1
+    },
+    {
+      "x": 1,
+      "y": 1
+    },
+    {
+      "x": 2,
+      "y": 1
+    },
+    {
+      "x": 3,
+      "y": 1
+    },
+    {
+      "x": 4,
+      "y": 1
+    },
+    {
+      "x": 5,
+      "y": 1
+    },
+    {
+      "x": 6,
+      "y": 1
+    },
+    {
+      "x": 0,
+      "y": 2
+    },
+    {
+      "x": 1,
+      "y": 2
+    },
+    {
+      "x": 2,
+      "y": 2
+    },
+    {
+      "x": 3,
+      "y": 2
+    },
+    {
+      "x": 4,
+      "y": 2
+    },
+    {
+      "x": 5,
+      "y": 2
+    },
+    {
+      "x": 6,
+      "y": 2
+    },
+    {
+      "x": 1,
+      "y": 3
+    },
+    {
+      "x": 2,
+      "y": 3
+    },
+    {
+      "x": 3,
+      "y": 3
+    },
+    {
+      "x": 4,
+      "y": 3
+    },
+    {
+      "x": 5,
+      "y": 3
+    },
+    {
+      "x": 2,
+      "y": 4
+    },
+    {
+      "x": 3,
+      "y": 4
+    },
+    {
+      "x": 4,
+      "y": 4
+    },
+    {
+      "x": 3,
+      "y": 5
+    }
+  ],
+  "pieces": [
+    {
+      "id": "2d347e20-bdbd-4e71-a604-ad98e1ca69b6",
+      "name": "Spawn",
+      "team": "enemy",
+      "headPosition": {
+        "x": 6,
+        "y": 0
+      },
+      "tiles": [
+        {
+          "x": 6,
+          "y": 0
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "372c52dc-8f04-4037-bae8-27ca5e95e8fe",
+      "name": "Spawn",
+      "team": "enemy",
+      "headPosition": {
+        "x": 3,
+        "y": 0
+      },
+      "tiles": [
+        {
+          "x": 3,
+          "y": 0
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "bd184e5c-3764-4061-91c9-aa282a862bd4",
+      "name": "Spawn",
+      "team": "enemy",
+      "headPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "tiles": [
+        {
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "5316df04-ee12-43d0-926b-cc669508f121",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 3,
+        "y": 5
+      },
+      "tiles": [
+        {
+          "x": 3,
+          "y": 5
         }
       ],
       "rarity": 1
@@ -710,7 +901,7 @@ export const river = {
     },
     {
       "id": "23a70234-46e6-4b32-8dad-a4cb1dbebb16",
-      "name": "Bow",
+      "name": "Spawn",
       "team": "enemy",
       "headPosition": {
         "x": 6,
@@ -727,7 +918,7 @@ export const river = {
     },
     {
       "id": "3d2e682a-6ecf-4ba0-96a8-76d5871107e4",
-      "name": "Bow",
+      "name": "Spawn",
       "team": "enemy",
       "headPosition": {
         "x": 0,
@@ -1470,15 +1661,31 @@ export const penopticon = {
   name: 'The Penopticon',
   "tiles": [
     {
+      "x": 1,
+      "y": 0
+    },
+    {
       "x": 2,
-      "y": 1
+      "y": 0
     },
     {
       "x": 3,
-      "y": 1
+      "y": 0
     },
     {
       "x": 4,
+      "y": 0
+    },
+    {
+      "x": 5,
+      "y": 0
+    },
+    {
+      "x": 0,
+      "y": 1
+    },
+    {
+      "x": 1,
       "y": 1
     },
     {
@@ -1490,15 +1697,11 @@ export const penopticon = {
       "y": 1
     },
     {
-      "x": 2,
+      "x": 0,
       "y": 2
     },
     {
-      "x": 3,
-      "y": 2
-    },
-    {
-      "x": 4,
+      "x": 1,
       "y": 2
     },
     {
@@ -1510,19 +1713,15 @@ export const penopticon = {
       "y": 2
     },
     {
-      "x": 7,
-      "y": 2
+      "x": 0,
+      "y": 3
     },
     {
       "x": 1,
       "y": 3
     },
     {
-      "x": 2,
-      "y": 3
-    },
-    {
-      "x": 4,
+      "x": 5,
       "y": 3
     },
     {
@@ -1530,27 +1729,19 @@ export const penopticon = {
       "y": 3
     },
     {
-      "x": 7,
-      "y": 3
+      "x": 0,
+      "y": 4
     },
     {
       "x": 1,
       "y": 4
     },
     {
-      "x": 2,
-      "y": 4
-    },
-    {
-      "x": 4,
+      "x": 5,
       "y": 4
     },
     {
       "x": 6,
-      "y": 4
-    },
-    {
-      "x": 7,
       "y": 4
     },
     {
@@ -1558,16 +1749,20 @@ export const penopticon = {
       "y": 5
     },
     {
-      "x": 6,
+      "x": 2,
       "y": 5
     },
     {
-      "x": 7,
+      "x": 3,
       "y": 5
     },
     {
-      "x": 1,
-      "y": 6
+      "x": 4,
+      "y": 5
+    },
+    {
+      "x": 5,
+      "y": 5
     },
     {
       "x": 2,
@@ -1582,146 +1777,106 @@ export const penopticon = {
       "y": 6
     },
     {
-      "x": 5,
-      "y": 6
-    },
-    {
-      "x": 6,
-      "y": 6
-    },
-    {
-      "x": 7,
-      "y": 6
-    },
-    {
-      "x": 1,
-      "y": 7
+      "x": 3,
+      "y": 1
     },
     {
       "x": 2,
-      "y": 7
+      "y": 4
     },
     {
       "x": 3,
-      "y": 7
+      "y": 4
     },
     {
       "x": 4,
-      "y": 7
-    },
-    {
-      "x": 5,
-      "y": 7
-    },
-    {
-      "x": 6,
-      "y": 7
-    },
-    {
-      "x": 7,
-      "y": 7
-    },
-    {
-      "x": 4,
-      "y": 8
-    },
-    {
-      "x": 5,
-      "y": 8
+      "y": 4
     },
     {
       "x": 3,
-      "y": 8
-    },
-    {
-      "x": 1,
       "y": 2
-    },
-    {
-      "x": 2,
-      "y": 5
     }
   ],
   "pieces": [
     {
-      "id": "ba8e2f06-2f50-4d41-8755-2c11f99fc0f7",
-      "name": "Watchman",
+      "id": "438d4bb1-3070-4705-8f17-bdc777c5deaa",
+      "name": "Spawn",
       "team": "enemy",
       "headPosition": {
-        "x": 4,
-        "y": 4
+        "x": 3,
+        "y": 1
       },
       "tiles": [
         {
-          "x": 4,
-          "y": 4
-        }
-      ],
-      "rarity": 2
-    },
-    {
-      "id": "5ea58ce2-1f45-4b43-8a88-7b3cd19fd852",
-      "name": "Shield",
-      "team": "enemy",
-      "headPosition": {
-        "x": 4,
-        "y": 3
-      },
-      "tiles": [
-        {
-          "x": 4,
-          "y": 3
+          "x": 3,
+          "y": 1
         }
       ],
       "rarity": 1
     },
     {
-      "id": "799b9e6f-eca0-490b-a853-0a513c60bf2c",
+      "id": "3eb2f35f-4a92-4d62-a856-2d3cd7449b36",
       "name": "Spawn",
       "team": "enemy",
       "headPosition": {
         "x": 6,
-        "y": 3
+        "y": 2
       },
       "tiles": [
         {
           "x": 6,
-          "y": 3
+          "y": 2
         }
       ],
       "rarity": 1
     },
     {
-      "id": "67e32eb3-07e0-4fea-ae93-0e92587ef066",
+      "id": "b339682c-2ad6-4ae6-abe2-fa2021d7a05b",
       "name": "Spawn",
       "team": "enemy",
       "headPosition": {
-        "x": 2,
-        "y": 3
+        "x": 0,
+        "y": 2
       },
       "tiles": [
         {
-          "x": 2,
-          "y": 3
+          "x": 0,
+          "y": 2
         }
       ],
       "rarity": 1
     },
     {
-      "id": "a484e65c-16af-409e-bf82-c7c5c6d6ce79",
+      "id": "162c1e55-af8a-439c-812b-fde0719f9248",
       "name": "Spawn",
       "team": "player",
       "headPosition": {
-        "x": 4,
-        "y": 8
+        "x": 3,
+        "y": 6
       },
       "tiles": [
         {
-          "x": 4,
-          "y": 8
+          "x": 3,
+          "y": 6
         }
       ],
       "rarity": 1
+    },
+    {
+      "id": "a69755be-f54e-490a-80a8-f989151fbf68",
+      "name": "Watchman",
+      "team": "enemy",
+      "headPosition": {
+        "x": 3,
+        "y": 2
+      },
+      "tiles": [
+        {
+          "x": 3,
+          "y": 2
+        }
+      ],
+      "rarity": 2
     }
   ]
 }

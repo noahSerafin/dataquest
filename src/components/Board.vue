@@ -16,6 +16,7 @@ interface Props{
   hasFinishedTurn: boolean
   player: Player
   showFastControls: boolean
+  isDraggingPlacement: boolean
 }
 const props = defineProps<Props>()
 
@@ -29,12 +30,46 @@ const emit = defineEmits<{
   (e: 'movePiece', coord: Coordinate): void
   (e: 'damagePieceAt', coord: Coordinate): void
   (e: 'specialActionAt', coord: Coordinate): void
+  (e: 'placeAt', coord: Coordinate): void
+  (e: 'hoverPlacement', coord: Coordinate): void
 }>()
   
 function handlePlaceClick(tile: Coordinate) {
   if (!props.placementMode) return
   if (!props.placementHighlights.some(h => h.x === tile.x && h.y === tile.y)) return
   emit('placeOnBoard', tile)
+}
+
+const boardEl = ref<HTMLElement | null>(null)
+  
+function mouseEventToCoord(e: MouseEvent): Coordinate | null {
+   if (!boardEl.value) return null;
+  const rect = boardEl.value.getBoundingClientRect()
+
+  const x = Math.floor((e.clientX - rect.left) / tileSize.value)
+  const y = Math.floor((e.clientY - rect.top) / tileSize.value)
+
+  if (x < 0 || y < 0) return null
+  return { x, y }
+}
+
+
+function onMouseUp(e: MouseEvent) {
+  if (!props.isDraggingPlacement) return
+
+  const coord = mouseEventToCoord(e)
+  if (!coord) return
+
+  emit("placeAt", coord)
+}
+
+function onMouseMove(e: MouseEvent) {
+  if (!props.isDraggingPlacement) return
+
+  const coord = mouseEventToCoord(e)
+  if (!coord) return
+
+  emit("hoverPlacement", coord)
 }
 
 // Make a Set for fast lookup
@@ -318,6 +353,7 @@ function resolveMove(
 <template>
   <div class="grid-container">
     <div
+      ref="boardEl"
       v-if="cols > 0 && rows > 0"
       class="grid board"
       :style="{

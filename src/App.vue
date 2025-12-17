@@ -562,8 +562,6 @@ import MainMenu from "./components/MainMenu.vue";
   const openShop = () => {
     showShop.value = true;
   }
-  //linear: round -> shop -> map
-  //split paths: round -> map -> shopIfShop -> else round
 
   const newPlacementHighlights = (): Coordinate[] => {//board should only show these if isPlacing
     const highlights: Coordinate[] = [];
@@ -621,6 +619,7 @@ import MainMenu from "./components/MainMenu.vue";
           //allPieces[Math.floor(Math.random() * allPieces.length)];//base this off rarity/difficulty later
 
           const enemyInstance = new EnemyClass(piece.headPosition, 'enemy', removePiece);
+          //add tiles here? if spawn.tiles.length <= enemy.getStat(maxsize){ enemy.tiles = spawn.tiles }
           processed.push(enemyInstance);
           continue;
         }
@@ -656,8 +655,6 @@ import MainMenu from "./components/MainMenu.vue";
     activePieces.value = processSpawnPoints(initPieces, 0); // sets placementHighlights internally
     refreshShop(true)//handle in round, or don't for crystal ball
   });
-
-
 
   //round state functions
   function highlightPlacements(pieceBlueprint: PieceBlueprint) {
@@ -764,6 +761,28 @@ import MainMenu from "./components/MainMenu.vue";
     }
   }
 
+  const isDraggingPlacement = ref(false)
+
+  function startDragPlacement(bp: PieceBlueprint) {
+    pieceToPlace.value = bp
+    isPlacing.value = true
+    isDraggingPlacement.value = true
+  }
+
+  function placeAt(coord: Coordinate) {
+    if (!playerSpawns.value.some(
+      s => s.x === coord.x && s.y === coord.y
+    )) {
+      pieceToPlace.value = null;
+      isPlacing.value = false;
+      isDraggingPlacement.value = false;
+      boardRef.value.clearHighlights();
+      return
+    }
+
+    placePieceOnBoardAt(coord);
+    isDraggingPlacement.value = false;
+  }
   //previous board functions
   //highlight functions
   const boardRef = ref();
@@ -1228,15 +1247,25 @@ import MainMenu from "./components/MainMenu.vue";
   :hasFinishedTurn="hasFinishedTurn"
   :player="player"
   :showFastControls="showFastControls"
+  :isDraggingPlacement="isDraggingPlacement"
   @placeOnBoard="placePieceOnBoardAt"
   @handlePieceSelect="handlePieceSelect"
   @deselect="deselectPiece"
   @movePiece="movePiece"
   @damagePieceAt="damagePieceAt"
   @specialActionAt="handleSpecialActionAt"
+  @mouseup="placeAt"
   />  
   <Leveleditor v-else @export-level="handleExport"/>
-  <PlayerView v-if="!displayEditor" :player="player" @highlightPlacements="highlightPlacements" @sellBlueprint="sellBlueprint" @sellItem="sellItem" @applyItem="handleApplyItem" @sellAdmin="sellAdmin" @reorderAdmins="player.admins = $event"/>
+  <PlayerView v-if="!displayEditor"
+  :player="player"
+  @highlightPlacements="highlightPlacements"
+  @sellBlueprint="sellBlueprint"
+  @sellItem="sellItem"
+  @applyItem="handleApplyItem"
+  @sellAdmin="sellAdmin"
+  @reorderAdmins="player.admins = $event"
+  @startPlaceMentDrag="startDragPlacement"/>
   <button v-if="!displayEditor && !hasFinishedTurn" class="end-turn" v-on:click="endTurn()">End Turn</button>
   <div class="graveyard">
     <button>🪦</button>

@@ -436,12 +436,15 @@ class Pitfall extends Piece {
     super(Pitfall.name, Pitfall.description, Pitfall.unicode, 6, 1, 0, 0, 0, Pitfall.color, headPosition, [headPosition], team, Pitfall.rarity, removeCallback, id)
     this.targetType = 'trapPiece';
     this.statuses.negative = true;
+    this.statuses.hidden = true;
   }
   async special(target: Piece): Promise<void> {
     if(!target.immunities.frozen){
       target.statuses.frozen = true;
     }
     this.actions--
+    this.statuses.hidden = false;
+    this.removeCallback?.(this)
   }
 }
 /*
@@ -762,6 +765,7 @@ class Trap extends Piece {
       target.statuses.poisoned = true
     }
     this.actions--
+    this.statuses.hidden = false;
     //remove until selection of negative is sorted
     this.removeCallback?.(this);
   }
@@ -784,6 +788,7 @@ class Mine extends Piece {
   async special(target: Piece): Promise<void> {
     await target.takeDamage(this.getStat('attack'))
     this.actions--
+    this.statuses.hidden = false;
     this.removeCallback?.(this);
     //remove self?
   }
@@ -808,6 +813,8 @@ class Web extends Piece {
       target.movesRemaining = 0;
       target.statuses.frozen = true;//maybe
       this.actions --
+      this.statuses.hidden = false;
+      //sleep for 200ms to show player
       //remove until selection of negative is sorted
       this.removeCallback?.(this);
     }
@@ -1317,6 +1324,7 @@ class Ink extends Piece {
       target.statuses.blinded = true;
     }
     this.actions--
+    this.statuses.hidden = false;
     this.removeCallback?.(this);
   }
 }

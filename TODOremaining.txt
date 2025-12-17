@@ -1,10 +1,10 @@
 GAME
 Defense - lose on damage (and reset every turn???) - would make ai easier
 make more levels, smaller levels (max size 9)
-//check interest is working properly 
+test interest is working properly 
+hide hidden enemies - test
 
 Drag placement ability - 1
-hide hidden enemies - 1
 
 --MORE LEVELS--
 //modify spawn in App to account for piece size - 6

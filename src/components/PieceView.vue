@@ -128,7 +128,7 @@ const activeStatuses = computed((): [string, boolean][] => {
 
 <template>
   <div
-  :class="`piece ${piece.headPosition.x}-${piece.headPosition.y} ${cssclass}-piece team-${piece.team} taking-damage-${piece.isTakingDamage}`"
+  :class="`piece ${piece.headPosition.x}-${piece.headPosition.y} ${cssclass}-piece team-${piece.team} taking-damage-${piece.isTakingDamage} hidden-${piece.statuses.hidden}`"
     :name="piece?.name"
     :id="piece?.id"
     :style="pieceStyle"
@@ -270,5 +270,8 @@ const activeStatuses = computed((): [string, boolean][] => {
   top: 0%;
   left: 0%;
   animation: shake 0.25s ease;
+}
+.team-enemy.hidden-true{
+  opacity: 0;
 }
 </style>

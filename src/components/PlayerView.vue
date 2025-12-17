@@ -15,6 +15,7 @@
     
     const emit = defineEmits<{
         (e: 'highlightPlacements', blueprint: PieceBlueprint): void;
+        (e: 'startPlacementDrag', blueprint: PieceBlueprint): void;
         (e: 'sellBlueprint', id:string):void;
         (e: 'sellItem', id:string):void;
         (e: 'applyItem', payload: {item: Item, id:string}):void;
@@ -97,6 +98,11 @@
 
         // Tell parent to update player.admins
         emit("reorderAdmins", newOrder);
+    }
+
+    function startPlacementDrag(bp: PieceBlueprint) {
+        emit("highlightPlacements", bp)
+        emit("startPlacementDrag", bp)
     }
 </script>
 
@@ -196,6 +202,7 @@
         @highlightPlacements="handlePlace"
         @sell="handleSellBlueprint"
         @close="handleClose"
+        @mousedown="startPlacementDrag(selectedPiece)"
         />
     </div>
 </template>
@@ -242,7 +249,7 @@
         display: block;
         bottom: 0;
         left: 0;
-        height: 26%;
+        height: 20%;
         width: 80%;
         margin: 0;
         .top-right{

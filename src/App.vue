@@ -763,11 +763,15 @@ import MainMenu from "./components/MainMenu.vue";
 
   const isDraggingPlacement = ref(false)
 
-  function startDragPlacement(bp: PieceBlueprint) {
+  function startPlacementDrag(bp: PieceBlueprint) {
+    console.log('dragging')
     pieceToPlace.value = bp
     isPlacing.value = true
     isDraggingPlacement.value = true
+    //debug here
   }
+
+  //mousemove func 'hoverPlacement'
 
   function placeAt(coord: Coordinate) {
     if (!playerSpawns.value.some(
@@ -1254,9 +1258,9 @@ import MainMenu from "./components/MainMenu.vue";
   @movePiece="movePiece"
   @damagePieceAt="damagePieceAt"
   @specialActionAt="handleSpecialActionAt"
-  @mouseup="placeAt"
+  @placeAt="placeAt"
   />  
-  <Leveleditor v-else @export-level="handleExport"/>
+  <Leveleditor v-if="displayEditor" @export-level="handleExport"/>
   <PlayerView v-if="!displayEditor"
   :player="player"
   @highlightPlacements="highlightPlacements"
@@ -1265,7 +1269,7 @@ import MainMenu from "./components/MainMenu.vue";
   @applyItem="handleApplyItem"
   @sellAdmin="sellAdmin"
   @reorderAdmins="player.admins = $event"
-  @startPlaceMentDrag="startDragPlacement"/>
+  @startPlacementDrag="startPlacementDrag"/>
   <button v-if="!displayEditor && !hasFinishedTurn" class="end-turn" v-on:click="endTurn()">End Turn</button>
   <div class="graveyard">
     <button>🪦</button>

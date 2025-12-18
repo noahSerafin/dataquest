@@ -67,7 +67,7 @@
 
 <template>
     <h1>Welcome</h1>
-    <h2>Choose your Operator:</h2>
+    <h2>Choose your OS:</h2>
     <div class="oses" ref="oses">
         <div class="os"
         v-for="os in allOSes">
@@ -99,7 +99,7 @@
     .oses{
         position: absolute;
         z-index: 9999;
-        width: 60%;
+        width: 60vw;
         max-width: 1280px;
         padding: 2rem;
         background-color: black;

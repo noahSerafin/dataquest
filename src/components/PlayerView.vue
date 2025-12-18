@@ -172,6 +172,7 @@
             cssclass="inventory"
             :class="'placed-'+pieceBlueprint.isPlaced"
             @select="openInventoryController"
+            @mousedown="startPlacementDrag(pieceBlueprint)"
             />
         </ul>
 
@@ -202,7 +203,6 @@
         @highlightPlacements="handlePlace"
         @sell="handleSellBlueprint"
         @close="handleClose"
-        @mousedown="startPlacementDrag(selectedPiece)"
         />
     </div>
 </template>

@@ -53,16 +53,6 @@ function mouseEventToCoord(e: MouseEvent): Coordinate | null {
   return { x, y }
 }
 
-
-function onMouseUp(e: MouseEvent) {
-  if (!props.isDraggingPlacement) return
-
-  const coord = mouseEventToCoord(e)
-  if (!coord) return
-
-  emit("placeAt", coord)
-}
-
 function onMouseMove(e: MouseEvent) {
   if (!props.isDraggingPlacement) return
 
@@ -351,7 +341,8 @@ function resolveMove(
 
 
 <template>
-  <div class="grid-container">
+  <div class="grid-container"
+    >
     <div
       ref="boardEl"
       v-if="cols > 0 && rows > 0"
@@ -449,6 +440,7 @@ function resolveMove(
       v-if="player.canPlace && (placementMode || props.isFirstTurn)" v-for="(tile, index) in placementHighlights"
       :key="index"
       class="highlight-tile green"
+      @mouseup="$emit('placeAt', tile)"
       v-on:click="handlePlaceClick(tile)"
       :style="{
         left: tile.x * tileSize + 'px',

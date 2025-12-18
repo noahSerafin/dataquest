@@ -1252,6 +1252,7 @@ import MainMenu from "./components/MainMenu.vue";
   :player="player"
   :showFastControls="showFastControls"
   :isDraggingPlacement="isDraggingPlacement"
+  :pieceToPlace="pieceToPlace"
   @placeOnBoard="placePieceOnBoardAt"
   @handlePieceSelect="handlePieceSelect"
   @deselect="deselectPiece"

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount } from "vue"
-import type { Coordinate } from "../types"
+import type { Coordinate, PieceBlueprint } from "../types"
 import PieceView from "./PieceView.vue";
 import PieceController from "./PieceController.vue";
 import { Piece } from "../Pieces"
@@ -17,6 +17,7 @@ interface Props{
   player: Player
   showFastControls: boolean
   isDraggingPlacement: boolean
+  pieceToPlace: PieceBlueprint | null
 }
 const props = defineProps<Props>()
 
@@ -40,27 +41,66 @@ function handlePlaceClick(tile: Coordinate) {
   emit('placeOnBoard', tile)
 }
 
-const boardEl = ref<HTMLElement | null>(null)
-  
-function mouseEventToCoord(e: MouseEvent): Coordinate | null {
-   if (!boardEl.value) return null;
-  const rect = boardEl.value.getBoundingClientRect()
-
-  const x = Math.floor((e.clientX - rect.left) / tileSize.value)
-  const y = Math.floor((e.clientY - rect.top) / tileSize.value)
-
-  if (x < 0 || y < 0) return null
-  return { x, y }
-}
+const mousePos = ref<{ x: number; y: number } | null>(null)
+const snapCoord = ref<Coordinate | null>(null)
 
 function onMouseMove(e: MouseEvent) {
   if (!props.isDraggingPlacement) return
 
-  const coord = mouseEventToCoord(e)
-  if (!coord) return
+  mousePos.value = {//too far to thr right? element too wide??
+    x: e.clientX,
+    y: e.clientY,
+  }
 
-  emit("hoverPlacement", coord)
+  snapCoord.value = findHoveredPlacement(e)
 }
+
+
+function findHoveredPlacement(e: MouseEvent): Coordinate | null {
+  const el = (e.target as HTMLElement)?.closest('.placement-tile')
+  if (!el) return null
+
+  const x = Number(el.dataset.x)
+  const y = Number(el.dataset.y)
+
+  return { x, y }
+}
+
+const ghostStyle = computed(() => {
+   if (!mousePos.value) return { display: 'none' }
+
+  if (snapCoord.value) {
+    return {
+      left: snapCoord.value.x * tileSize.value + 'px',
+      top: snapCoord.value.y * tileSize.value + 'px',
+      height: tileSize + 'px',//theses styles aren't making it to render
+      width: tileSize + 'px',
+      border: '1px solid outset',
+      //'background-color': props.pieceToPlace?.color
+    }
+  }
+
+  return {
+    left: mousePos.value.x + 'px',
+    top: mousePos.value.y + 'px',
+    transform: 'translate(-50%, -50%)',
+    height: tileSize + 'px',//theses styles aren't making it to render
+    width: tileSize + 'px',
+    border: '1px solid outset',
+  }
+})
+
+function onMouseUp() {
+  if (!props.isDraggingPlacement) return
+
+  if (snapCoord.value) {
+    emit('placeAt', snapCoord.value)
+  }
+
+  snapCoord.value = null
+  mousePos.value = null
+}
+
 
 // Make a Set for fast lookup
 const tileSet = computed(() => new Set(props.tiles.map(t => `${t.x},${t.y}`)))
@@ -345,6 +385,7 @@ function resolveMove(
     >
     <div
       ref="boardEl"
+      v-on:mousemove="onMouseMove"
       v-if="cols > 0 && rows > 0"
       class="grid board"
       :style="{
@@ -440,8 +481,10 @@ function resolveMove(
       v-if="player.canPlace && (placementMode || props.isFirstTurn)" v-for="(tile, index) in placementHighlights"
       :key="index"
       class="highlight-tile green"
-      @mouseup="$emit('placeAt', tile)"
+      @mouseup="onMouseUp"
       v-on:click="handlePlaceClick(tile)"
+      :data-x="tile.x"
+      :data-y="tile.y"
       :style="{
         left: tile.x * tileSize + 'px',
         top: tile.y * tileSize + 'px',
@@ -449,6 +492,13 @@ function resolveMove(
         height: tileSize + 'px',
       }"
     />
+    <div
+      v-if="pieceToPlace"
+      class="ghost-piece"
+      :style="ghostStyle"
+    >
+    {{ String.fromCodePoint(parseInt(pieceToPlace.unicode.replace("U+", ""), 16)) }}
+    </div>
     <PieceController
       v-if="selectedPiece && !hasFinishedTurn"
       :piece="selectedPiece"
@@ -547,5 +597,11 @@ function resolveMove(
 .red{
   background-color: rgba(255, 0, 0, 0.432);
   z-index: 3;
+}
+.ghost-piece {
+  position: absolute;
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 10;
 }
 </style>

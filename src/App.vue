@@ -555,6 +555,12 @@ import MainMenu from "./components/MainMenu.vue";
     openSummary(false);
   }
 
+  function retryLevel(){
+    if(player.value.lives<=1) return
+    player.value.lives --
+    reloadLevel
+  }
+
   //game loop
   const toggleShop = () => {
     showShop.value = !showShop.value;
@@ -1272,6 +1278,7 @@ import MainMenu from "./components/MainMenu.vue";
   @reorderAdmins="player.admins = $event"
   @startPlacementDrag="startPlacementDrag"/>
   <button v-if="!displayEditor && !hasFinishedTurn" class="end-turn" v-on:click="endTurn()">End Turn</button>
+  <button v-if="!displayEditor && player.lives > 1" class="end-turn" v-on:click="retryLevel()">Reload Node</button>
   <div class="graveyard">
     <button>🪦</button>
   </div>

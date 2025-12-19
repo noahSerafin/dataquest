@@ -41,43 +41,70 @@ function handlePlaceClick(tile: Coordinate) {
   emit('placeOnBoard', tile)
 }
 
-const mousePos = ref<{ x: number; y: number } | null>(null)
-const snapCoord = ref<Coordinate | null>(null)
+const boardEl = ref<HTMLDivElement | null>(null);
+const mousePos = ref<{ x: number; y: number } | null>(null);
+const snapPos = ref<{ x: number; y: number } | null>(null);
+const snapCoord = ref<Coordinate | null>(null);
 
 function onMouseMove(e: MouseEvent) {
-  if (!props.isDraggingPlacement) return
-
+  if (!props.isDraggingPlacement || !boardEl.value) return
+  const rect = boardEl.value.getBoundingClientRect()
   mousePos.value = {//too far to thr right? element too wide??
-    x: e.clientX,
-    y: e.clientY,
+    x: e.clientX - rect.left,
+    y: e.clientY - rect.top
   }
-
-  snapCoord.value = findHoveredPlacement(e)
+  // 2. snap if hovering a placement tile
+  const hovered = findHoveredPlacement(e, rect)
+  if (hovered) {
+    snapCoord.value = hovered.coord
+    snapPos.value = hovered.px
+  } else {
+    snapCoord.value = null
+    snapPos.value = null
+  }
 }
 
+function findHoveredPlacement(
+  e: MouseEvent,
+  boardRect: DOMRect
+): { coord: Coordinate; px: { x: number; y: number } } | null {
 
-function findHoveredPlacement(e: MouseEvent): Coordinate | null {
-  const el = (e.target as HTMLElement)?.closest('.placement-tile')
+  const el = document.elementFromPoint(e.clientX, e.clientY)
+    ?.closest<HTMLElement>('.placement-tile')
+
   if (!el) return null
 
   const x = Number(el.dataset.x)
   const y = Number(el.dataset.y)
 
-  return { x, y }
+  if (Number.isNaN(x) || Number.isNaN(y)) return null
+
+  // snap to CENTER of tile
+  const tileRect = el.getBoundingClientRect()
+
+  return {
+    coord: { x, y },
+    px: {
+      x: tileRect.left + 8 - boardRect.left,
+      y: tileRect.top + 8 - boardRect.top
+    }
+  }
 }
 
 const ghostStyle = computed(() => {
    if (!mousePos.value) return { display: 'none' }
 
-  if (snapCoord.value) {
+  if (snapPos.value) {
     return {
-      left: snapCoord.value.x * tileSize.value + 'px',
-      top: snapCoord.value.y * tileSize.value + 'px',
-      height: tileSize + 'px',//theses styles aren't making it to render
-      width: tileSize + 'px',
+      left: snapPos.value.x + 'px',
+      top: snapPos.value.y + 'px',
+      height: (tileSize.value - 16) + 'px',
+      width: (tileSize.value - 16) + 'px',
       border: '1px solid outset',
-      //'background-color': props.pieceToPlace?.color
-    }
+      fontSize: (tileSize.value * 0.6) + 'px',
+      lineHeight: (tileSize.value -24) + 'px',
+      backgroundColor: props.pieceToPlace?.color,
+      }
   }
 
   return {
@@ -381,11 +408,11 @@ function resolveMove(
 
 
 <template>
-  <div class="grid-container"
+  <div class="board-container"
+    v-on:mousemove="onMouseMove"
     >
     <div
       ref="boardEl"
-      v-on:mousemove="onMouseMove"
       v-if="cols > 0 && rows > 0"
       class="grid board"
       :style="{
@@ -480,7 +507,7 @@ function resolveMove(
     <div
       v-if="player.canPlace && (placementMode || props.isFirstTurn)" v-for="(tile, index) in placementHighlights"
       :key="index"
-      class="highlight-tile green"
+      class="highlight-tile green placement-tile"
       @mouseup="onMouseUp"
       v-on:click="handlePlaceClick(tile)"
       :data-x="tile.x"
@@ -519,7 +546,7 @@ function resolveMove(
 </template>
 
 <style scoped>
-.grid-container{
+.board-container{
   position: relative;
 }
 .grid {

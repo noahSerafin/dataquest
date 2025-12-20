@@ -408,7 +408,7 @@ function resolveMove(
 
 
 <template>
-  <div class="board-container"
+  <div class="container board-container"
     v-on:mousemove="onMouseMove"
     >
     <div

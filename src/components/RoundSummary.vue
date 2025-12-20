@@ -23,7 +23,7 @@
 </script>
 
 <template>
-    <div class="round-summary">
+    <div class="container round-summary">
         <div class="if-won" v-if="hasWonRound">
             <h3 v-if="player.difficulty >= 6">
                 You win!

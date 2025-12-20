@@ -466,8 +466,8 @@ class Sun extends Admin {
     }
     async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
         const idx = activePieces.findIndex(p => p.id === id);
-        if(!activePieces[idx].immunities.frozen){
-            activePieces[idx].statuses.frozen = true;
+        if(!activePieces[idx].immunities.blinded){
+            activePieces[idx].statuses.blinded = true;
         }
     }
 }
@@ -519,7 +519,7 @@ class Frog extends Admin {
     static unicode = "U+1F31E";
     static color = "#415800ff";
     constructor() {
-        super(Sun.name, Sun.description, Sun.unicode, Sun.color, 6, 5, 'gameState', 'onPlacement')
+        super(Frog.name, Frog.description, Frog.unicode, Frog.color, 6, 5, 'gameState', 'onPlacement')
     }
     async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
         const idx = activePieces.findIndex(p => p.id === id);

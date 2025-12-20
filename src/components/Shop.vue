@@ -83,7 +83,7 @@ const type = ((item: Item) => {
 </script>
 
 <template>
-  <div class="shop-container"
+  <div class="container shop-container"
     :class="props.cssclass">
     <h2>Shop</h2>
     <button

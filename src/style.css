@@ -74,6 +74,10 @@ button:focus-visible {
   #app {
     margin: 0 auto;
   }
+  .container{
+    width: 100vw;   
+    height: 80vh;
+  }
 }
 
 @media (prefers-color-scheme: light) {

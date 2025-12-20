@@ -146,7 +146,7 @@
 </script>
 
 <template>
-  <div class="world-map"
+  <div class="container world-map"
     :class="props.cssclass"
     >
     <div class="node-map">

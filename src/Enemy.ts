@@ -77,7 +77,7 @@ function decideEnemyIntent(
     }
     if(enemy.targetType === 'space'){
       const space = getAnySpaceInRange(enemy, activePieces, tileSet)
-      if(space) return {type: 'special', target: space}
+      if(space) return {type: 'special', target: {target: space, activePieces: activePieces}}
     }
   }
   

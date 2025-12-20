@@ -4,8 +4,6 @@ make more levels, smaller levels (max size 9)
 test interest is working properly 
 hide hidden enemies - test
 
-Drag placement ability - 1
-
 --MORE LEVELS--
 //modify spawn in App to account for piece size - 6
 

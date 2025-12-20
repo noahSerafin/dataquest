@@ -38,7 +38,7 @@ function rarityStyle(rarity: number) {
 }
 
 const unicodeSymbol = computed(() =>
-  props.item
+  props.item.unicode
     ? String.fromCodePoint(parseInt(props.item.unicode.replace('U+', ''), 16))
     : ''
 )
@@ -137,8 +137,8 @@ const handleUse = () => {
 .info {
   z-index: 99999;
   position: absolute;
-  right: 99%;
-  bottom: -100%;
+  left: 99%;
+  bottom: 0;
   border-radius: 5px;
   background-color: #494646ff;
   padding: 8px;

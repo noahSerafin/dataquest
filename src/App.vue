@@ -610,14 +610,22 @@ import MainMenu from "./components/MainMenu.vue";
 
     for (const piece of pieces) {
       if (piece instanceof Spawn) {
-
+          const spawnSize = piece.tiles.length;
         // Enemy spawn → replace with random enemy piece
         if (piece.team === 'enemy') {
           //difficulty from constants ramp
           const { min, max } = DIFFICULTY_RARITY[player.value.difficulty + mod];
-          const validEnemies = allPieces.filter(p =>
-            p.rarity >= min && p.rarity <= max
-          );
+
+          const validEnemies = allPieces.filter(EnemyClass => {
+            //p.rarity >= min && p.rarity <= max //old method for spawnsize 1 only
+            const temp = new EnemyClass(piece.headPosition, 'enemy', removePiece);
+
+            return (
+              temp.rarity >= min &&
+              temp.rarity <= max &&
+              temp.maxSize >= spawnSize
+            );
+          });
           const pool = validEnemies.length > 0 ? validEnemies : allPieces;
           //console.log('lengths:', min, max, allPieces.length, pool.length)
 
@@ -1167,7 +1175,7 @@ import MainMenu from "./components/MainMenu.vue";
 </script>
 
 <template>
-  <div class="controls">
+  <div class="debug-controls">
   <button class="swap-display" @mousedown="swapDisplay()">
     {{ displayEditor ? "Show Board" : "Show Editor" }}
   </button>
@@ -1276,9 +1284,10 @@ import MainMenu from "./components/MainMenu.vue";
   @applyItem="handleApplyItem"
   @sellAdmin="sellAdmin"
   @reorderAdmins="player.admins = $event"
-  @startPlacementDrag="startPlacementDrag"/>
+  @startPlacementDrag="startPlacementDrag"
+  />
   <button v-if="!displayEditor && !hasFinishedTurn" class="end-turn" v-on:click="endTurn()">End Turn</button>
-  <button v-if="!displayEditor && player.lives > 1" class="end-turn" v-on:click="retryLevel()">Reload Node</button>
+  <button v-if="!displayEditor && player.lives > 1" class="retry-btn" v-on:click="retryLevel()">Reload Node</button>
   <div class="graveyard">
     <button>🪦</button>
   </div>
@@ -1300,7 +1309,7 @@ import MainMenu from "./components/MainMenu.vue";
   display: flex;
   justify-content: center;
 }
-.controls{
+.debug-controls{
   position: absolute;
   background-color: transparent;
   color: white;
@@ -1313,13 +1322,16 @@ import MainMenu from "./components/MainMenu.vue";
   gap: 1rem;
   padding: 1rem;
 }
-.end-turn{
+.end-turn, .retry-btn{
   margin-top: 1rem;
   position: absolute;
   right: 0;
   bottom: 10%;
   border: 1px solid white;
   z-index: 9999;
+}
+.retry-btn{
+  bottom: 5%;
 }
 .logo {
   height: 6em;

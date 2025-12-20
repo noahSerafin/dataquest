@@ -66,31 +66,33 @@
 </script>
 
 <template>
-    <h1>Welcome</h1>
-    <h2>Choose your OS:</h2>
-    <div class="oses" ref="oses">
-        <div class="os"
-        v-for="os in allOSes">
-            <h3>{{ os.name }}</h3>
-            <div class="logo">
-                {{ returnUnicode(os.unicode) }}
+    <div class="container">
+        <h1>Welcome</h1>
+        <h2>Choose your OS:</h2>
+        <div class="oses" ref="oses">
+            <div class="os"
+            v-for="os in allOSes">
+                <h3>{{ os.name }}</h3>
+                <div class="logo">
+                    {{ returnUnicode(os.unicode) }}
+                </div>
+                <p>
+                    {{ os.description }}
+                </p>
+                <div class="stats">
+                    <span>M:{{os.memory }}</span>
+                    <span>A:{{os.adminSlots }}</span>
+                    <span>$:{{os.money }}</span>
+                </div>
+            <h5>Starts with:</h5>
+            <div class="bps">
+                <div class="logo" 
+                    v-for="bp in os.blueprints">
+                    {{ returnUnicode(bp.unicode) }}
+                </div>
             </div>
-            <p>
-                {{ os.description }}
-            </p>
-            <div class="stats">
-                <span>M:{{os.memory }}</span>
-                <span>A:{{os.adminSlots }}</span>
-                <span>$:{{os.money }}</span>
+            <button @click="emit('createNewPlayer', os)">Choose</button>
             </div>
-        <h5>Starts with:</h5>
-        <div class="bps">
-            <div class="logo" 
-                v-for="bp in os.blueprints">
-                {{ returnUnicode(bp.unicode) }}
-            </div>
-        </div>
-        <button @click="emit('createNewPlayer', os)">Choose</button>
         </div>
     </div>
 </template>

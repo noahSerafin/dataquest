@@ -235,21 +235,11 @@
         top: 100%;
     }
     .world-map {
-        position: absolute;
-        width: 50vw;
-        height: 55vh;
         background-color: rgb(230, 218, 181);
         z-index: 98;
-        padding: 2rem;
         display: flex;
-    }
-    @media only screen and (max-width: 720px) {
-        .world-map {
-            width: 100vw;
-            height: 100vh;
-            justify-content: unset;
-            left: 0;
-        }
+        justify-content: center;
+        align-items: center;
     }
     .node-map{
         position: relative;
@@ -313,5 +303,10 @@
         right: 100%;
         left: unset;
         width: 50px;
+    }
+    @media (max-width: 768px) {
+        .world-map{
+            justify-content: flex-start;
+        }
     }
 </style>

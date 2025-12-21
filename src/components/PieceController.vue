@@ -116,6 +116,7 @@ function toggleTooltip(key: string) {
   bottom: 1rem;
   left: 1rem;
   width: 17%;
+  min-width: 180px;
   background: #222;
   color: #fff;
   padding: 1rem;

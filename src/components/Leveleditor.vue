@@ -296,6 +296,8 @@ const boardHeight = computed(() => tileSize.value * height.value)
         Height: {{ height }}
         <input type="range" min="5" max="48" v-model.number="height" @input="fillGrid"/>
       </label>
+       <!-- Export button -->
+    <button @click="exportLevel" class="export-btn">Export Tiles</button>
   </div>
   <!-- Place Pieces -->
    <div class="droppers">
@@ -356,8 +358,6 @@ const boardHeight = computed(() => tileSize.value * height.value)
         />
       </div>
     </div>
-     <!-- Export button -->
-    <button @click="exportLevel" class="export-btn">Export Tiles</button>
   </div>
 </template>
 
@@ -365,7 +365,7 @@ const boardHeight = computed(() => tileSize.value * height.value)
 .controls{
   position: absolute;
   top: 5vh;
-  left: 0;
+  left: 20%;
   width: 100%;
 }
 .export-btn{
@@ -378,7 +378,6 @@ const boardHeight = computed(() => tileSize.value * height.value)
 .grid {
   border: 3px solid white;
   display: grid;
-  margin: auto; /* center horizontally */
   position: relative;
   top: 0;
   left: 0;
@@ -401,6 +400,7 @@ const boardHeight = computed(() => tileSize.value * height.value)
   height: 80%;
   button{
     display: block;
+    z-index: 999999;
   }
 }
 </style>

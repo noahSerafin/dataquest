@@ -68,11 +68,16 @@
     .round-summary{
         position: absolute;
         z-index: 100;
-        width: 50%;
-        height: 50%;
-        background-color: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     .interest-summary{
         margin-bottom: 2rem;
+    }
+    .if-won, .if-lost{
+        padding: 8rem;
+        background-color: black;
+        border-radius: 15px;
     }
 </style>

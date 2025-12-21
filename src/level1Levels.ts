@@ -1,7 +1,7 @@
 import type { Level } from "./types"
 
 export const castled: Level = {
-  name: 'Castled',
+  name: "Castled",
   "tiles": [
     {
       "x": 0,
@@ -24,6 +24,18 @@ export const castled: Level = {
       "y": 0
     },
     {
+      "x": 0,
+      "y": 1
+    },
+    {
+      "x": 1,
+      "y": 1
+    },
+    {
+      "x": 2,
+      "y": 1
+    },
+    {
       "x": 3,
       "y": 1
     },
@@ -90,23 +102,11 @@ export const castled: Level = {
     {
       "x": 4,
       "y": 4
-    },
-    {
-      "x": 2,
-      "y": 1
-    },
-    {
-      "x": 1,
-      "y": 1
-    },
-    {
-      "x": 0,
-      "y": 1
     }
   ],
   "pieces": [
     {
-      "id": "59749107-4733-4a13-bab4-f7e5b19df58e",
+      "id": "e6247d94-cab4-4a84-87e9-202e1f228435",
       "name": "Spawn",
       "team": "enemy",
       "headPosition": {
@@ -122,7 +122,7 @@ export const castled: Level = {
       "rarity": 1
     },
     {
-      "id": "47fa6e25-0144-4e2f-8174-b04915586867",
+      "id": "91588a2e-ada3-4dab-8e21-1f726d0947c7",
       "name": "Spawn",
       "team": "enemy",
       "headPosition": {
@@ -138,7 +138,7 @@ export const castled: Level = {
       "rarity": 1
     },
     {
-      "id": "c68e2f0f-cef7-49fb-9321-10d9ab886098",
+      "id": "c70e2d3e-10a2-4bf4-81e6-f485d83c8c2d",
       "name": "Spawn",
       "team": "enemy",
       "headPosition": {
@@ -154,8 +154,8 @@ export const castled: Level = {
       "rarity": 1
     },
     {
-      "id": "02802c9f-b242-4beb-aa41-1e0fb944e557",
-      "name": "Fence",
+      "id": "569ed97c-a19c-47e7-8135-f8685bcbef6f",
+      "name": "Spawn",
       "team": "enemy",
       "headPosition": {
         "x": 0,
@@ -175,10 +175,10 @@ export const castled: Level = {
           "y": 1
         }
       ],
-      "rarity": 2
+      "rarity": 1
     },
     {
-      "id": "6e96c0a4-942b-4d1e-a312-0cc21984cb99",
+      "id": "df49b031-55a9-4c35-9725-047fb311205d",
       "name": "Spawn",
       "team": "player",
       "headPosition": {

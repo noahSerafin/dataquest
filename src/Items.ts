@@ -581,7 +581,7 @@ export class Makeover extends Item {
 }
 //PIG, U+1F416 random money?
 //update x3, hotline buoy bugle batteries pig 9
-export const allItems = [Whetstone, Iron, Blueberry, Carrot, Lightning, Blessing, Supplement, Juice, Roids, Formula, Garlic, RedMeat, Coffee, Bandage, Soap, Voucher, Mushroom, Rations, Beans, Box, Genie, Pinata, Wand, Hourglass, Spanner, Makeover]//27
+export const allItems = [Whetstone, Iron, Blueberry, Carrot, Lightning, Blessing, Supplement, Juice, Roids, Formula, Garlic, RedMeat, Coffee, Bandage, Soap, Voucher, Mushroom, Rations, Beans, Box, Genie, Pinata, Wand, Hourglass, Spanner, Makeover, ShootingStar]//27
 
 export type ItemConstructor = new (...args: any[]) => Item<any>;
 

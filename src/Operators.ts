@@ -1,5 +1,5 @@
 import type { OS } from "./types";
-import { Voucher, Iron, Garlic, Lightning, Blueberry, RedMeat, Roids } from "./Items";
+import { Voucher, Whetstone, Iron, Garlic, Lightning, Blueberry, RedMeat, Roids } from "./Items";
 
 /*
 export function findPieceClassByName(name: string) {
@@ -183,7 +183,7 @@ const knife =  {
         range: 0,
         attack: 1,
         defence: 2,
-        rarity: 5,
+        rarity: 2,
         // blueprint-only fields:
         isPlaced: false,
         cost: 1 // or whatever cost formula you want
@@ -219,7 +219,7 @@ const Steam : OS = {//knife //shield //sling
     money: 5,
     memory: 6,
     adminSlots: 5,
-    blueprints: [knife, shield, sling],
+    blueprints: [knife, sling, shield],
     items: [new Voucher],
     admins: [],
     lives: 3,
@@ -231,8 +231,8 @@ const Penguin : OS = {//potato //shield
     money: 3,
     memory: 5,
     adminSlots: 5,
-    blueprints: [potato, aegis],
-    items: [new Iron, new Lightning],
+    blueprints: [potato, sling, aegis],
+    items: [new Whetstone, new Lightning],
     admins: [],
     lives: 2,
     description: 'A versatile all around system, though a bit barebones out of the box. Start with some upgrade items.'
@@ -244,11 +244,11 @@ const Window : OS = {//knife //shield //snail
     money: 5,
     memory: 4,
     adminSlots: 5,
-    blueprints: [snail, shield],
+    blueprints: [snail, tp, shield],
     items: [new Blueberry, new Roids],
     admins: [],
     lives: 1,
-    description: 'Limited memory, but starts with some useful programs.'
+    description: 'Limited memory, but starts with some useful programs and items to increase size.'
 
 }
 
@@ -256,23 +256,23 @@ const Apple : OS = {//TP //rat
     name: 'Apple',
     unicode: 'U+1F34F',
     money: 10,
-    memory: 4,
+    memory: 5,
     adminSlots: 4,
-    blueprints: [rat, shield],
+    blueprints: [rat, bee, shield],
     items: [new Garlic, new RedMeat],
     admins: [],
     lives: 1,
-    description: 'Limited admin functionality, but starts with excess money and some single use items.'
+    description: 'Limited admin functionality, but starts with excess money and some consumable items.'
 }
 
 const Temple : OS = {//lance //bug //screwdriver
     name: 'Temple',
     unicode: 'U+2696',
     money: 2,
-    memory: 3,
+    memory: 4,
     adminSlots: 6,
     blueprints: [bug, aegis, screwdriver],
-    items: [],
+    items: [new Iron],
     admins: [],
     lives: 2,
     description: 'Overclocked admin slots, low money. Some unique starting programs.'
@@ -304,4 +304,4 @@ const Debugger : OS = {//lance //bug //screwdriver
 
 //GREEK CAPITAL LETTER DELTA, U+394
 
-export const allOSes = [Debugger, Steam, Penguin, Window, Apple, Temple];
+export const allOSes = [Penguin, Window, Apple, Temple, Steam, Debugger ];

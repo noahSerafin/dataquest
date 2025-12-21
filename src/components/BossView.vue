@@ -13,9 +13,9 @@
 
 <template>
     <div>
-        <p><strong>Bosses:</strong></p>
-        <ul class="admins">
-            <li v-for="(item, index) in props.admins"
+        <span><strong>Bosses:</strong></span>
+        <span class="admins">
+            <span v-for="(item, index) in props.admins"
                 :key="item.id"
                 class="p-1 border rounded mb-1 flex justify-between items-center">
                 <ItemView 
@@ -26,8 +26,8 @@
                     :canBuy="false"
                     :showController="(selectedItem === item)"
                 />
-            </li>
-        </ul>
+            </span>
+        </span>
     </div>
 </template>
              

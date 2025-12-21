@@ -63,23 +63,6 @@ button:focus-visible {
   padding: 2em;
 }
 
-#app {
-  margin: 0 0 0 25%;
-  max-width: 1280px;
-  padding: 2rem;
-  padding-top: 0;
-  text-align: center;
-}
-@media only screen and (max-width: 1280px) {
-  #app {
-    margin: 0 auto;
-  }
-  .container{
-    width: 100vw;   
-    height: 80vh;
-  }
-}
-
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
@@ -91,4 +74,155 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+html, body, #app {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  color: #e5e7eb;
+  font-family: system-ui, sans-serif;
+}
+
+.app-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  color: #e5e7eb;
+}
+
+#app {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.top-hud {
+  width: 100%;
+  max-width: 1200px;
+  padding: 0px 16px;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none; /* avoids blocking board */
+  background-color: black;
+}
+.top-hud > * {
+  pointer-events: auto;
+}
+
+.stage {
+  width: min(92vw, 720px);
+  display: flex;
+  justify-content: center;
+  margin: 8px 0;
+  position: relative;
+  flex: 1;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.stage-panel {
+  position: absolute;
+  width: min(90vmin, 720px);
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  transform: translateY(120%);
+  opacity: 0;
+  pointer-events: none;
+
+  transition:
+    transform 0.45s cubic-bezier(.4,0,.2,1),
+    opacity 0.3s ease;
+}
+
+.stage-panel.active {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Tablet & down → full width */
+@media (max-width: 768px) {
+  .stage{
+    width: 100vw;
+  }
+  .stage-panel {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: unset;
+    border-radius: 0;
+  }
+}
+
+.container {
+  width: min(92vw, 720px);
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  overflow: hidden;
+}
+@media (max-width: 768px) {
+  #app{
+    padding: 0;
+    justify-content: space-between;
+  }
+  .stage {
+    margin: 0;
+  }
+  .container {
+    width: 100vw;
+    border-radius: 0;
+  }
+}
+
+.player-area {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  gap: 12px;
+  position: relative;
+  height: 12vh;
+}
+.player-actions {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 2px;
+  
+}
+.player-actions button{
+  font-size: 14px;
+  padding: 0.1rem;
+  margin: 0;
+}
+
+.end-turn {
+  padding: 10px 18px;
+  font-size: 1rem;
+  background: #2563eb;
+  color: white;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.end-turn.secondary {
+  background: #374151;
+}
+
+.inventory {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(100%, 720px);
+  background: #020617;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
+  z-index: 20;
 }

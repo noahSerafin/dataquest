@@ -85,12 +85,14 @@ const type = ((item: Item) => {
 <template>
   <div class="container shop-container"
     :class="props.cssclass">
-    <h2>Shop</h2>
-    <button
+    <div class="shop-top">
+      <h2>Shop</h2>
+      <button
       :disabled="!canReroll"
       @click="emit('refresh-shop')">
       Reroll {{ props.rerollCost }}
     </button>
+  </div>
     <div class="blueprint-row">
       Programs:
       <BlueprintView
@@ -142,17 +144,19 @@ const type = ((item: Item) => {
   background-color: black;
   border: 1px dashed white;
   position: absolute;
-  z-index: 10;
-  width: 54%;
-  height: 60%;
   transition: transform 0.3s ease;
-  top: 20%;
   z-index: 99;
+  width: 96%;
+}
+.shop-top{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 .blueprint-row, .item-row {
   display: flex;
   justify-content: space-around;
-  margin: auto; /* center horizontally */
   position: relative;
   top: 10%;
   left: 0;

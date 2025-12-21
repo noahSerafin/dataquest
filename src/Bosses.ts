@@ -395,7 +395,7 @@ class Battery extends Admin {
         }
     }
 }
-class Customs extends Admin {
+class Customs extends Admin {//remove
     static name = "Customs";
     static description = "Every player program is exposed";
     static unicode = "U+1F6C3";
@@ -492,7 +492,7 @@ class Whale extends Admin {
 class Bones extends Admin {
   static name = "Mr Bones";
   static description = "Destroyed player progams are revived as enemies";
-  static unicode = "U+1F52C";
+  static unicode = "U+1FA7B";
   static color = "#000000ff";
   constructor() {
     super(Bones.name, Bones.description, Bones.unicode, Bones.color, 5, 4, 'gameState', 'onPieceDestruction')
@@ -528,6 +528,9 @@ class Frog extends Admin {
         }
     }
 }
+
+// BLACK LARGE SQUARE, U+2B1B
+//REDACTED - all enemy programs classes are hidden with black squares
 
 //fog //tornado tsunami // Izakaya
 export const allBosses = [Mirror, Factory, NorthWind, Hook, Downturn, Wrath, Reaper, Volcano, Circus, Castle, Anchor, Jack, Lock, Eclipse, Battery, Customs, Shrine, Snowflake, Sun, Whale, Bones, Frog]//21

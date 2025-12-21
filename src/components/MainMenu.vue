@@ -98,11 +98,15 @@
 </template>
 
 <style scoped>
+    h1, h2{
+        margin: 0;
+        text-align: center;
+    }
+    h2{
+        margin: 0.2rem;
+    }
     .oses{
-        position: absolute;
         z-index: 9999;
-        width: 60vw;
-        max-width: 1280px;
         padding: 2rem;
         background-color: black;
         color: white;
@@ -127,6 +131,10 @@
         padding: 1rem;
         border-radius: 10px;
         min-width: 200px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
     }
     .logo{
         font-size: 36px;

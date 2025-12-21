@@ -41,37 +41,40 @@ defineEmits(["buy", "sell", "highlightPlacements", "close"])
 
 <template>
   <div :class="`piece-controller ${props.mode}-controller blueprint`">
-    <div class="header">
-      <span class="symbol">
-        {{ String.fromCodePoint(parseInt(piece.unicode.replace("U+", ""), 16)) }}
-      </span>
-      <span class="name">{{ piece.name }}</span>
-      <button class="close" @click="$emit('close', piece)">X</button>
+    <div class="left">
+      <div class="header">
+        <span class="symbol">
+          {{ String.fromCodePoint(parseInt(piece.unicode.replace("U+", ""), 16)) }}
+        </span>
+        <span class="name">{{ piece.name }}</span>
+        <button class="close" @click="$emit('close', piece)">X</button>
+      </div>
+      <div :style="{ color: rarityInfo.color }">
+        {{ rarityInfo.text }}
+      </div>
+      <p class="desc">{{ piece.description }}</p>
     </div>
+    <div class="right">
+      <div class="stats">
+        <p>Max Size: {{ piece.maxSize }}</p>
+        <p>Moves: {{ piece.moves }}</p>
+        <p>Range: {{ piece.range }}</p>
+        <p>Attack: {{ piece.attack }}</p>
+        <p>Defence: {{ piece.defence }}</p>
+      </div>
 
-    <p class="desc">{{ piece.description }}</p>
-    <div :style="{ color: rarityInfo.color }">
-      {{ rarityInfo.text }}
-    </div>
-    <div class="stats">
-      <p>Max Size: {{ piece.maxSize }}</p>
-      <p>Moves: {{ piece.moves }}</p>
-      <p>Range: {{ piece.range }}</p>
-      <p>Attack: {{ piece.attack }}</p>
-      <p>Defence: {{ piece.defence }}</p>
-    </div>
+      <div class="actions">
+        <template v-if="mode === 'shop'">
+          <button :disabled="!canBuy" @click="$emit('buy', piece)">
+            Buy (${{ piece.cost }})
+          </button>
+        </template>
 
-    <div class="actions">
-      <template v-if="mode === 'shop'">
-        <button :disabled="!canBuy" @click="$emit('buy', piece)">
-          Buy (${{ piece.cost }})
-        </button>
-      </template>
-
-      <template v-if="mode === 'inventory'">
-        <button :disabled="!canPlace" @click="$emit('highlightPlacements', piece)">Place</button>
-        <button @click="$emit('sell', piece)">Sell (${{ piece.rarity }})</button>
-      </template>
+        <template v-if="mode === 'inventory'" class="action-btns">
+          <button :disabled="!canPlace" @click="$emit('highlightPlacements', piece)" style="margin-right: 0.2rem;">Place</button>
+          <button @click="$emit('sell', piece)">Sell (${{ piece.rarity }})</button>
+        </template>
+      </div>
     </div>
   </div>
 </template>
@@ -98,8 +101,16 @@ defineEmits(["buy", "sell", "highlightPlacements", "close"])
   gap: 0.5rem;
 }
 .inventory-controller{
- left: unset;
- right: 1rem;
+  left: unset;
+  right: 1rem;
+}
+@media only screen and (min-width: 420px) {
+  .inventory-controller{
+    display: flex;
+    flex-direction: row;
+    width: 40%;
+    padding-right: 2.5rem;
+  }
 }
 
 .header {
@@ -130,6 +141,9 @@ button {
   border-radius: 6px;
   cursor: pointer;
   transition: background 0.2s ease;
+}
+.action-btns button{
+  width: 50%;
 }
 button:hover {
   background: #777;

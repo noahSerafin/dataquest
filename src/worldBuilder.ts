@@ -182,7 +182,7 @@ export function generateWorld(
     next: [],
     position: { x: 200, y: 0 },
     company: chooseRandomCompany(),
-    difficultyMod: difficulty,
+    difficultyMod: 0,
     reward: 5 + difficulty * 2
   };
 

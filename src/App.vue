@@ -22,14 +22,9 @@
   import BossView from "./components/BossView.vue";
   import RoundSummary from "./components/RoundSummary.vue";
   import { DIFFICULTY_RARITY } from "./constants";
-
-  //import { Map } from "./components/Map.vue";
-
-  //testing fields 
   import BlueprintView from "./components/BlueprintView.vue";
-import MainMenu from "./components/MainMenu.vue";
-
-  // Instantiate real piece objects
+  import MainMenu from "./components/MainMenu.vue";
+  import PieceController from "./components/PieceController.vue";
   
   const testSword = {
     id: "274ec329-8c17-4265-8c12-e9a28bcf0833",
@@ -96,6 +91,10 @@ import MainMenu from "./components/MainMenu.vue";
     false,
     false
   ));
+  const showInventory = ref(false);
+  function closeInventory(){
+    showInventory.value = false;
+  }
   const showMainMenu = ref(true);
   const reward = ref<number>(0);
 
@@ -116,9 +115,12 @@ import MainMenu from "./components/MainMenu.vue";
       false
     )
     showMainMenu.value = false;
+    showMap.value = true;
   }
 
   function openMainMenu(){
+    showBoard.value = false;
+    showSummary.value = false;
     showMainMenu.value = true;
   }
   const showFastControls = ref<boolean>(true);
@@ -126,7 +128,6 @@ import MainMenu from "./components/MainMenu.vue";
     showFastControls.value = !showFastControls.value
   }
   
-
   function playerHasAdmin(name: string) {
     return player.value.admins.some(a => a.name === name);
   }
@@ -432,10 +433,12 @@ import MainMenu from "./components/MainMenu.vue";
     shopTarget.value = null;
   }
   const showShop = ref(false)
-  const showMap = ref(true)
+  const showMap = ref(false)
+  const showBoard = ref(false)
   //--shop-----
 
   //round logic
+  const roundHasStarted = ref(false);
   //pieceMap to track occupied spaces
   const activePieces = ref<InstanceType<typeof Piece>[]>([]);
   const graveyard = ref<InstanceType<typeof Piece>[]>([]);
@@ -496,14 +499,14 @@ import MainMenu from "./components/MainMenu.vue";
   //world logic
   const level = ref(castled);//tiles
   const displayEditor = ref(false);
-  const displaySummary = ref(false);
+  const showSummary = ref(false);
   
   //map
   const toggleMap = () => {
     showMap.value = !showMap.value;
   }
   const openSummary = (state: boolean) => {
-    displaySummary.value = state;
+    showSummary.value = state;
   }
 
   const renewBlueprints = () => {
@@ -517,6 +520,7 @@ import MainMenu from "./components/MainMenu.vue";
   const originalSpawns = ref<Coordinate[]>([]);
 
   const selectLevel = (newLevel: Level, difficultyMod: number, lReward: number) => {//load level, start round
+    showBoard.value = true;
     renewBlueprints()//shouldnt be needed in final;
     hasFinishedTurn.value = false;
     player.value.canPlace = true;
@@ -534,6 +538,7 @@ import MainMenu from "./components/MainMenu.vue";
     boardRef.value.clearHighlights();
     handleApplyAdmins('onRoundStart', '');
     toggleMap();
+    roundHasStarted.value = true;
   }
 
   function handleProceed(){
@@ -558,7 +563,7 @@ import MainMenu from "./components/MainMenu.vue";
   function retryLevel(){
     if(player.value.lives<=1) return
     player.value.lives --
-    reloadLevel
+    reloadLevel();
   }
 
   //game loop
@@ -633,6 +638,7 @@ import MainMenu from "./components/MainMenu.vue";
           //allPieces[Math.floor(Math.random() * allPieces.length)];//base this off rarity/difficulty later
 
           const enemyInstance = new EnemyClass(piece.headPosition, 'enemy', removePiece);
+          enemyInstance.tiles = piece.tiles;
           //add tiles here? if spawn.tiles.length <= enemy.getStat(maxsize){ enemy.tiles = spawn.tiles }
           processed.push(enemyInstance);
           continue;
@@ -672,6 +678,7 @@ import MainMenu from "./components/MainMenu.vue";
 
   //round state functions
   function highlightPlacements(pieceBlueprint: PieceBlueprint) {
+    if(!roundHasStarted) return
     boardRef.value.clearHighlights();
     if(playerHasAdmin('Backdoor')){
       const unnocupiedSpaces: Coordinate[] = [] ;
@@ -1118,6 +1125,8 @@ import MainMenu from "./components/MainMenu.vue";
   }
 
   const endTurn = async () => {
+    selectedPiece.value = null;
+    closeInventory();
     hasFinishedTurn.value = true;
     player.value.canPlace = false;
     player.value.canMove = false;
@@ -1175,10 +1184,11 @@ import MainMenu from "./components/MainMenu.vue";
 </script>
 
 <template>
+  <div class="app-root">
   <div class="debug-controls">
-  <button class="swap-display" @mousedown="swapDisplay()">
-    {{ displayEditor ? "Show Board" : "Show Editor" }}
-  </button>
+    <button class="swap-display" @mousedown="swapDisplay()">
+      {{ displayEditor ? "Show Board" : "Show Editor" }}
+    </button>
     <button class="swap-display" @mousedown="renewBlueprints()">
       Renew Blueprints
     </button>
@@ -1201,95 +1211,121 @@ import MainMenu from "./components/MainMenu.vue";
       Fast Controls
     </button>
   </div>
-  <div class="player-helper">
-    <div v-if="!hasFinishedTurn && !isPlacing">Your turn</div>
+  <div class="top-hud">
+    <div class="enemy-info">
+      <p><strong>Security level: </strong>{{ player.difficulty }}</p>
+      <span>
+        <BossView :admins="bossAdmins"/>
+      </span>
+    </div>
+    <div v-if="!displayEditor && roundHasStarted" class="player-helper">
+      <div v-if="!hasFinishedTurn && !isPlacing">Your turn</div>
       <div v-if="isPlacing && pieceToPlace">
         <p>Placing:</p>
         <button @click="pieceToPlace=null">Cancel</button>
       </div>
       <div v-if="isPlacing && pieceToPlace"
-      class="info">
-      <BlueprintView :blueprint="pieceToPlace"
-      :tileSize="60"
-      :cssclass="'placing'"
-      />
+        class="info">
+        <BlueprintView :blueprint="pieceToPlace"
+        :tileSize="60"
+        :cssclass="'placing'"
+        />
+      </div>
     </div>
   </div>
-  <div class="enemy-info">
-    <p><strong>Security level: </strong>{{ player.difficulty }}</p>
-    <span>
-      <BossView :admins="bossAdmins"/>
-    </span>
+  <div class="stage">
+    <MainMenu v-if="showMainMenu && !displayEditor" @createNewPlayer="createNewPlayer" class="stage-panel" :class="{ active: showMainMenu }"/>
+    <RoundSummary v-if="showSummary" class="stage-panel" :class="{ active: showSummary }"
+      :hasWonRound="hasWonRound"
+      :player="player"
+      :reward="reward"
+      @proceedFromEndOfRound="handleProceed"
+      @reloadLevel="reloadLevel"
+      @mainMenu="openMainMenu"
+    />
+    <WorldMap v-if="!displayEditor" class="stage-panel" :class="{ active: showMap }"
+      :allLevels="level1Levels"
+      :player="player"
+      :seed="worldSeed"
+      :cssclass="mapClass"
+      @select-level="selectLevel"
+      @openShop="openShop"
+      @addBoss="addBossAdmin"
+      @increaseDifficulty="increaseDifficulty"
+    />
+    <Shop v-if="!displayEditor" class="stage-panel" :class="{ active: showShop }"
+      :cssclass="shopClass"
+      :shopBlueprints="shopBlueprints"
+      :shopItems="shopItems"
+      :rerollCost="rerollCost"
+      :target="shopTarget"
+      @refresh-shop="refreshShop(false)"
+      @buy-blueprint="buyBlueprint"
+      @buy-item="buyItem"
+      @selectTarget="selectShopTarget"
+      @clearTarget="clearShopTarget"
+      @toggleShop="toggleShop"
+      :player="player"
+    />
+    <Board ref="boardRef" v-if="!displayEditor" class="stage-panel" :class="{ active: showBoard }"
+    :tiles="level.tiles"
+    :pieces="activePieces"
+    :selectedPiece="selectedPiece"
+    :placementHighlights="playerSpawns"
+    :isFirstTurn="isFirstTurn"
+    :placementMode="isPlacing"
+    :movementMode="isMoving"
+    :hasFinishedTurn="hasFinishedTurn"
+    :player="player"
+    :showFastControls="showFastControls"
+    :isDraggingPlacement="isDraggingPlacement"
+    :pieceToPlace="pieceToPlace"
+    @placeOnBoard="placePieceOnBoardAt"
+    @handlePieceSelect="handlePieceSelect"
+    @deselect="deselectPiece"
+    @movePiece="movePiece"
+    @damagePieceAt="damagePieceAt"
+    @specialActionAt="handleSpecialActionAt"
+    @placeAt="placeAt"
+    />  
   </div>
-  <MainMenu v-if="showMainMenu && !displayEditor" @createNewPlayer="createNewPlayer"/>
-  <RoundSummary v-if="displaySummary"
-    :hasWonRound="hasWonRound"
-    :player="player"
-    :reward="reward"
-    @proceedFromEndOfRound="handleProceed"
-    @reloadLevel="reloadLevel"
-    @mainMenu="openMainMenu"
-  />
-  <WorldMap v-if="!displayEditor"
-    :allLevels="level1Levels"
-    :player="player"
-    :seed="worldSeed"
-    :cssclass="mapClass"
-    @select-level="selectLevel"
-    @openShop="openShop"
-    @addBoss="addBossAdmin"
-    @increaseDifficulty="increaseDifficulty"
-  />
-  <Shop v-if="!displayEditor"
-    :cssclass="shopClass"
-    :shopBlueprints="shopBlueprints"
-    :shopItems="shopItems"
-    :rerollCost="rerollCost"
-    :target="shopTarget"
-    @refresh-shop="refreshShop(false)"
-    @buy-blueprint="buyBlueprint"
-    @buy-item="buyItem"
-    @selectTarget="selectShopTarget"
-    @clearTarget="clearShopTarget"
-    @toggleShop="toggleShop"
-    :player="player"
-  />
-  <Board ref="boardRef" v-if="!displayEditor"
-  :tiles="level.tiles"
-  :pieces="activePieces"
-  :selectedPiece="selectedPiece"
-  :placementHighlights="playerSpawns"
-  :isFirstTurn="isFirstTurn"
-  :placementMode="isPlacing"
-  :movementMode="isMoving"
-  :hasFinishedTurn="hasFinishedTurn"
-  :player="player"
-  :showFastControls="showFastControls"
-  :isDraggingPlacement="isDraggingPlacement"
-  :pieceToPlace="pieceToPlace"
-  @placeOnBoard="placePieceOnBoardAt"
-  @handlePieceSelect="handlePieceSelect"
-  @deselect="deselectPiece"
-  @movePiece="movePiece"
-  @damagePieceAt="damagePieceAt"
-  @specialActionAt="handleSpecialActionAt"
-  @placeAt="placeAt"
-  />  
   <Leveleditor v-if="displayEditor" @export-level="handleExport"/>
-  <PlayerView v-if="!displayEditor"
-  :player="player"
-  @highlightPlacements="highlightPlacements"
-  @sellBlueprint="sellBlueprint"
-  @sellItem="sellItem"
-  @applyItem="handleApplyItem"
-  @sellAdmin="sellAdmin"
-  @reorderAdmins="player.admins = $event"
-  @startPlacementDrag="startPlacementDrag"
-  />
-  <button v-if="!displayEditor && !hasFinishedTurn" class="end-turn" v-on:click="endTurn()">End Turn</button>
-  <button v-if="!displayEditor && player.lives > 1" class="retry-btn" v-on:click="retryLevel()">Reload Node</button>
-  <div class="graveyard">
-    <button>🪦</button>
+  <div class="player-area">
+    <!-- PlayerView + End Turn / Retry -->
+    <PlayerView v-if="!displayEditor"
+    :player="player"
+    :showInventory="showInventory"
+    @highlightPlacements="highlightPlacements"
+    @sellBlueprint="sellBlueprint"
+    @sellItem="sellItem"
+    @applyItem="handleApplyItem"
+    @sellAdmin="sellAdmin"
+    @reorderAdmins="player.admins = $event"
+    @startPlacementDrag="startPlacementDrag"
+    @closeInventory="closeInventory"
+    />
+    <PieceController
+      v-if="selectedPiece && !hasFinishedTurn"
+      :piece="selectedPiece"
+      mode="action"
+      :hasFinishedTurn="hasFinishedTurn"
+      :canBuy="false"
+      :canMove="player.canMove"
+      :canAction="player.canAction"
+      @highlightMoves="boardRef.highlightMoves"
+      @highlightTargets="boardRef.highlightTargets"
+      @highlightSpecials="boardRef.highlightSpecials"
+      @close="deselectPiece"
+      />
+    <div v-if="!displayEditor" class="player-actions">
+      <button v-if="!displayEditor && roundHasStarted && !hasFinishedTurn" class="end-turn" v-on:click="endTurn()">End Turn</button>
+      <button class="mt-2 px-2 py-1 bg-blue-500 text-white rounded" @click="showInventory = !showInventory">{{showInventory ? 'Hide Inventory' : 'Inventory' }}</button>
+      <div v-if="!displayEditor && roundHasStarted" class="graveyard">
+        <button>🪦</button>
+      </div>
+      <button v-if="!displayEditor && roundHasStarted && player.lives > 1" class="retry-btn" v-on:click="retryLevel()">Retry Node</button>
+    </div>
+  </div>
   </div>
 </template>
 
@@ -1323,15 +1359,8 @@ import MainMenu from "./components/MainMenu.vue";
   padding: 1rem;
 }
 .end-turn, .retry-btn{
-  margin-top: 1rem;
-  position: absolute;
-  right: 0;
-  bottom: 10%;
   border: 1px solid white;
   z-index: 9999;
-}
-.retry-btn{
-  bottom: 5%;
 }
 .logo {
   height: 6em;

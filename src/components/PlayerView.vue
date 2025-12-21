@@ -11,6 +11,7 @@
     const props = defineProps<{
         player: Player,
         //activePieces: InstanceType<typeof Piece>[]
+        showInventory: boolean
     }>();
     
     const emit = defineEmits<{
@@ -21,6 +22,7 @@
         (e: 'applyItem', payload: {item: Item, id:string}):void;
         (e: 'sellAdmin', id:string):void;//TODO
         (e: 'reorderAdmins', admins: Admin[]):void;
+        (e: 'closeInventory'):void;
     }>();
 
     const selectedPiece = ref<PieceBlueprint | null>(null)
@@ -29,9 +31,6 @@
     function openInventoryController(piece: PieceBlueprint) {///TODO SORT OUT IMPORTS
         selectedPiece.value = piece;
     }
-
-    // Reactive toggles
-    const showInventory = ref(true);
 
     // Derived/computed properties
     const memoryUsage = computed(() => 
@@ -110,12 +109,12 @@
     <div class="player p-4 border rounded-lg bg-gray-100 shadow-md w-64">
         <div class="flex full-width">
             <!-- Money -->
-            <div>
-                <p class="os">
+            <div class="player-info">
+                <span class="os">
                     {{ String.fromCodePoint(parseInt(player.osunicode.replace('U+', ''), 16)) }}
-                </p>
-                <p style="text-align: left;"><strong>Money:</strong> {{ props.player.money }}</p>
-                <p><strong>Lives:</strong>
+                </span>
+                <span style="text-align: left;"><strong>$:</strong> {{ props.player.money }}</span>
+                <p>
                     <span v-for="lives in player.lives">
                        {{ String.fromCodePoint(0x1FA77) }}
                     </span>
@@ -146,13 +145,6 @@
                     </li>
                 </ul>
             </div>
-            <!-- Inventory Button -->
-            <button 
-            class="mt-2 px-2 py-1 bg-blue-500 text-white rounded"
-            @click="showInventory = !showInventory"
-            >
-            {{ showInventory ? 'Hide Inventory' : 'Show Inventory' }}
-        </button>
         </div>
 
     </div>
@@ -160,7 +152,7 @@
     <div v-if="showInventory" class="inventory mt-3 border-t pt-2">
         <!-- Memory -->
         <p><strong>Memory:</strong> {{ memoryUsage }}</p>
-        <button class="top-right" @click="showInventory = !showInventory">X</button>
+        <button class="top-right" @click="$emit('closeInventory')">X</button>
         <h3 class="font-semibold">Programs</h3>
         <div v-if="props.player.programs.length === 0">No programs</div>
         <ul class="inventory-relative">
@@ -210,11 +202,7 @@
 <style scoped>
     .player, .inventory {
         background-color: black;
-        position: fixed;
-        bottom: 6px;
-        left: 20%;
-        margin: auto;
-        width: 50%;
+        width: 100%;
         display: flex;
         justify-content: space-between;
         max-width: 1280px;
@@ -228,12 +216,11 @@
             justify-content: space-between;
         }
     }
-    @media only screen and (max-width: 700px) {
-       .player {
-            margin: 0;
-            left: 0;
-            width: 95%;
-       }
+    .full-width{
+        align-items: center;
+    }
+    .player-info{
+        line-height: 0.5;
     }
     .os{
         font-size: 24px;
@@ -248,10 +235,12 @@
         margin: 0;
         display: block;
         bottom: 0;
-        left: 0;
-        height: 20%;
-        width: 80%;
+        height: 200%;
+        width: 100%;
+        z-index: 99999;
         margin: 0;
+        background: rgba(0,0,0,0.85);
+        backdrop-filter: blur(4px);
         .top-right{
             position: absolute;
             top: 0.5rem;
@@ -262,6 +251,7 @@
             margin: 6px;
             font-size: 14px;
         }
+        
     }
     .admins, .inventory-relative{
         margin: 0;

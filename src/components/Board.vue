@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount } from "vue"
+import { ref, computed, onMounted, onBeforeUnmount, watch, nextTick } from "vue"
 import type { Coordinate, PieceBlueprint } from "../types"
 import PieceView from "./PieceView.vue";
-import PieceController from "./PieceController.vue";
 import { Piece } from "../Pieces"
 import { Player } from "../Player";
 
@@ -146,23 +145,58 @@ const vh = ref(window.innerHeight * 0.7)
 
 // Update on resize
 const updateSize = () => {
-  vw.value = window.innerWidth * 0.7
-  vh.value = window.innerHeight * 0.7
+  if(boardEl.value){
+    vw.value = boardEl.value?.clientWidth
+    vh.value = boardEl.value?.clientHeight
+  }
 }
 onMounted(() => window.addEventListener("resize", updateSize));
 onBeforeUnmount(() => window.removeEventListener("resize", updateSize));
 
 // Compute tile size
+/*
 const tileSize = computed(() => {
   if (cols.value === 0 || rows.value === 0) return 0
   return Math.min(vw.value / cols.value, vh.value / rows.value)
 })
+  */
+const tileSize = ref(0)
 
-// Board dimensions
-const boardWidth = computed(() => tileSize.value * cols.value)
-const boardHeight = computed(() => tileSize.value * rows.value)
+function recomputeTileSize() {
+  if (!boardEl.value) return
 
+  const rect = boardEl.value.parentElement!.getBoundingClientRect()
 
+  const maxTileWidth = rect.width / cols.value
+  const maxTileHeight = rect.height / rows.value
+
+  tileSize.value = Math.floor(Math.min(maxTileWidth, maxTileHeight))
+}
+
+let observer: ResizeObserver | null = null
+
+onMounted(() => {
+  if (!boardEl.value) return;
+
+  observer = new ResizeObserver(() => {
+    recomputeTileSize()
+  })
+
+  observer.observe(boardEl.value)
+})
+
+onBeforeUnmount(() => {
+  observer?.disconnect()
+})
+
+watch(
+  () => [rows.value, cols.value],
+  async () => {
+    await nextTick() // wait for grid DOM to update
+    recomputeTileSize()
+  },
+  { immediate: true }
+)
 
 // Fast lookup: "x,y" → piece reference
 const pieceMap = computed(() => {
@@ -416,10 +450,10 @@ function resolveMove(
       v-if="cols > 0 && rows > 0"
       class="grid board"
       :style="{
-        width: boardWidth + 'px',
-        height: boardHeight + 'px',
-        gridTemplateColumns: `repeat(${cols}, 1fr)`,
-        gridTemplateRows: `repeat(${rows}, 1fr)`,
+        width: '100%',
+        height: '100%',
+        gridTemplateColumns: `repeat(${cols}, ${tileSize}px)`,
+        gridTemplateRows: `repeat(${rows}, ${tileSize}px)`,
       }"
     >
       <template v-for="row in rows" :key="row">
@@ -459,10 +493,10 @@ function resolveMove(
       :key="index"
       class="highlight-tile"
       :style="{
-        left: tile.x * tileSize + 'px',
-        top: tile.y * tileSize + 'px',
-        width: tileSize + 'px',
-        height: tileSize + 'px',
+        left: (tile.x * tileSize) + 1 + 'px',
+        top: (tile.y * tileSize) + 1 + 'px',
+        width: (tileSize - 5) + 'px',
+        height: (tileSize - 5) + 'px',
       }"
     />
     <div
@@ -472,10 +506,10 @@ function resolveMove(
       :class="['move-button', `move-button-${tile.direction}`]"
       v-on:click="$emit('movePiece', tile);"
       :style="{
-        left: tile.x * tileSize + 'px',
-        top: tile.y * tileSize + 'px',
-        width: tileSize + 'px',
-        height: tileSize + 'px',
+        left: (tile.x * tileSize) + 1 + 'px',
+        top: (tile.y * tileSize) + 1 + 'px',
+        width: (tileSize - 5) + 'px',
+        height: (tileSize - 5) + 'px',
       }"
     />
     <div
@@ -485,10 +519,10 @@ function resolveMove(
       class="highlight-tile red"
       v-on:click="$emit('damagePieceAt', tile)"
       :style="{
-        left: tile.x * tileSize + 'px',
-        top: tile.y * tileSize + 'px',
-        width: tileSize + 'px',
-        height: tileSize + 'px',
+        left: (tile.x * tileSize) + 1 + 'px',
+        top: (tile.y * tileSize) + 1 + 'px',
+        width: (tileSize - 5) + 'px',
+        height: (tileSize - 5) + 'px',
       }"
     />
     <div
@@ -498,10 +532,10 @@ function resolveMove(
       class="highlight-tile yellow"
       v-on:click="$emit('specialActionAt', tile)"
       :style="{
-        left: tile.x * tileSize + 'px',
-        top: tile.y * tileSize + 'px',
-        width: tileSize + 'px',
-        height: tileSize + 'px',
+        left: (tile.x * tileSize) + 1 + 'px',
+        top: (tile.y * tileSize) + 1 + 'px',
+        width: (tileSize - 5) + 'px',
+        height: (tileSize - 5) + 'px',
       }"
     />
     <div
@@ -513,10 +547,10 @@ function resolveMove(
       :data-x="tile.x"
       :data-y="tile.y"
       :style="{
-        left: tile.x * tileSize + 'px',
-        top: tile.y * tileSize + 'px',
-        width: tileSize + 'px',
-        height: tileSize + 'px',
+        left: (tile.x * tileSize) + 1 + 'px',
+        top: (tile.y * tileSize) + 1 + 'px',
+        width: (tileSize - 5) + 'px',
+        height: (tileSize - 5) + 'px',
       }"
     />
     <div
@@ -526,22 +560,6 @@ function resolveMove(
     >
     {{ String.fromCodePoint(parseInt(pieceToPlace.unicode.replace("U+", ""), 16)) }}
     </div>
-    <PieceController
-      v-if="selectedPiece && !hasFinishedTurn"
-      :piece="selectedPiece"
-      mode="action"
-      :hasFinishedTurn="hasFinishedTurn"
-      :canBuy="false"
-      :canMove="player.canMove"
-      :canAction="player.canAction"
-      @highlightMoves="highlightMoves"
-      @highlightTargets="highlightTargets"
-      @highlightSpecials="highlightSpecials"
-      @close="$emit('deselect')"
-      />
-      <!--
-        @special="console.log('Special', $event)"
-      -->
     </div>
 </template>
 
@@ -551,15 +569,14 @@ function resolveMove(
 }
 .grid {
   display: grid;
-  margin: auto; /* center horizontally */
   position: relative;
   top: 0;
+  width: 100%;
 }
 .tile{
   background-color: gainsboro;
   border: 2px solid black;
-  width: 100%;
-  height: 100%;
+  aspect-ratio: 1/1;
 }
 .tile-empty{
   background-color: black;

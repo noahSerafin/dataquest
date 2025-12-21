@@ -2,6 +2,7 @@ import type { Company, Coordinate, PieceBlueprint } from "./types";
 import type { Piece } from "./Pieces";
 import { arena, level1Levels } from './level1Levels';
 import { level2Levels } from './level2Levels';
+import { level3Levels } from './level3Levels';
 import { companies } from "./companies";
 import type { Admin } from "./AdminPrograms";
 import type { Item } from "./Items";

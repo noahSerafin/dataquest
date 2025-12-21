@@ -558,6 +558,7 @@
     selectedPiece.value = null;
     isPlacing.value = true
     openSummary(false);
+    roundHasStarted.value = true;
   }
 
   function retryLevel(){
@@ -857,7 +858,7 @@
   }
 
   function checkForRoundEnd(){
-    console.log('checking for round end')
+    console.log('checking for round end: ', activePieces.value)
     const enemyPieces = activePieces.value.filter(p => p.team === 'enemy');
     const playerPiecesRemaining = activePieces.value.filter(p => p.team === 'player');
     if (enemyPieces.length === 0) {
@@ -1081,6 +1082,7 @@
     for (const admin of player.value.admins) {
       admin.onRoundEnd?.();
     }
+    roundHasStarted.value = false;
   }
       
   function onReceiveDamage (id: string) {
@@ -1181,6 +1183,7 @@
   }
 /*
 */
+const debugMode = true;
 </script>
 
 <template>
@@ -1193,7 +1196,7 @@
       Renew Blueprints
     </button>
     <button
-    v-if="playerHasAdmin('Convenience Store')"
+    v-if="playerHasAdmin('Convenience Store') || debugMode === true"
     class="shop-toggle"
     @mousedown="toggleShop()">
     Toggle Shop

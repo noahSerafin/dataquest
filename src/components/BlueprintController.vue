@@ -167,4 +167,8 @@ p{
 .desc{
   border-bottom: none;
 }
+.shop-controller{
+  bottom: unset;
+  top: 1rem;
+}
 </style>

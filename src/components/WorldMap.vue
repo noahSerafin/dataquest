@@ -4,15 +4,15 @@
     import { Admin } from "../AdminPrograms";
     import { allBosses } from "../Bosses";
     import { watch } from "vue";
-    import type { Company, Coordinate } from "../types";
     import { companies } from "../companies";
-    import { arena } from "../levels";
     import type { Player } from "../Player";
-    import { generateWorld } from "../worldBuilder";
-    import { level1Levels } from "../level1Levels";
-    import { level2Levels } from "../level2Levels";
-    import type { Level } from "../types";
     import type { WorldMap, WorldNode } from "../worldBuilder";
+    import { generateWorld } from "../worldBuilder";
+    import type { Level } from "../types";
+    import { castled, cave, level1Levels, penopticon, ringed } from "../level1Levels";
+    import { level2Levels } from "../level2Levels";
+    import { level3Levels } from "../level3Levels";
+    import { level4Levels } from "../level4Levels";
 
     const props = defineProps<{
         player: Player;
@@ -30,7 +30,11 @@
 
     const levelTiers = [
         level1Levels,
-        level2Levels
+        level2Levels,
+        level3Levels,
+        level4Levels,//add some alarm pieces
+        [castled, penopticon, cave, ringed, ...level4Levels],
+        [castled, penopticon, cave, ringed, ...level3Levels, ...level4Levels]
     ]
 
     const levelPool = computed(() => {
@@ -47,7 +51,7 @@
     const boss = ref<Admin>(new allBosses[Math.floor(Math.random() * allBosses.length)])
 
     function newBoss(){
-        //sort by difficulty rarity
+        //sort by difficulty rarity*
         //bossesAtThisDifficulty = allBosses.filter(b => b.rarity <= props.player.difficulty);
         boss.value = new allBosses[Math.floor(Math.random() * allBosses.length)]
     }

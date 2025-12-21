@@ -160,6 +160,7 @@ const type = ((item: Item) => {
   position: relative;
   top: 10%;
   left: 0;
+  width: 80%;
 }
 .item-row{
   top: 20%;

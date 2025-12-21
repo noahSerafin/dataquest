@@ -182,7 +182,7 @@ const knife =  {
         moves: 2,
         range: 0,
         attack: 1,
-        defence: 2,
+        defence: 1,
         rarity: 2,
         // blueprint-only fields:
         isPlaced: false,
@@ -234,7 +234,7 @@ const Penguin : OS = {//potato //shield
     blueprints: [potato, sling, aegis],
     items: [new Whetstone, new Lightning],
     admins: [],
-    lives: 2,
+    lives: 3,
     description: 'A versatile all around system, though a bit barebones out of the box. Start with some upgrade items.'
 }
 
@@ -247,8 +247,8 @@ const Window : OS = {//knife //shield //snail
     blueprints: [snail, tp, shield],
     items: [new Blueberry, new Roids],
     admins: [],
-    lives: 1,
-    description: 'Limited memory, but starts with some useful programs and items to increase size.'
+    lives: 2,
+    description: 'Limited memory. Starts with some slow but useful programs, and items to increase size.'
 
 }
 
@@ -261,7 +261,7 @@ const Apple : OS = {//TP //rat
     blueprints: [rat, bee, shield],
     items: [new Garlic, new RedMeat],
     admins: [],
-    lives: 1,
+    lives: 2,
     description: 'Limited admin functionality, but starts with excess money and some consumable items.'
 }
 

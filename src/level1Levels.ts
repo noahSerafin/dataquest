@@ -358,7 +358,7 @@ const shortcave = {
     }
   ]
 }
-const cave = {
+export const cave = {
   name: 'The Cave',
   "tiles": [
     {
@@ -1421,10 +1421,26 @@ export const ringed = {
   ]
 }
 export const gauntlet = {
-  name: 'The Gaunlet',
+  name: "The Gauntlet",
   "tiles": [
     {
       "x": 0,
+      "y": 0
+    },
+    {
+      "x": 1,
+      "y": 0
+    },
+    {
+      "x": 2,
+      "y": 0
+    },
+    {
+      "x": 3,
+      "y": 0
+    },
+    {
+      "x": 4,
       "y": 0
     },
     {
@@ -1432,67 +1448,23 @@ export const gauntlet = {
       "y": 1
     },
     {
-      "x": 1,
-      "y": 1
-    },
-    {
-      "x": 2,
-      "y": 1
-    },
-    {
-      "x": 3,
-      "y": 1
-    },
-    {
-      "x": 4,
-      "y": 1
-    },
-    {
-      "x": 5,
-      "y": 1
-    },
-    {
-      "x": 6,
-      "y": 1
-    },
-    {
-      "x": 7,
-      "y": 1
-    },
-    {
-      "x": 7,
+      "x": 0,
       "y": 2
     },
     {
-      "x": 0,
-      "y": 3
-    },
-    {
       "x": 1,
-      "y": 3
+      "y": 2
     },
     {
       "x": 2,
-      "y": 3
-    },
-    {
-      "x": 3,
-      "y": 3
+      "y": 2
     },
     {
       "x": 4,
-      "y": 3
+      "y": 2
     },
     {
-      "x": 5,
-      "y": 3
-    },
-    {
-      "x": 6,
-      "y": 3
-    },
-    {
-      "x": 7,
+      "x": 4,
       "y": 3
     },
     {
@@ -1500,146 +1472,77 @@ export const gauntlet = {
       "y": 4
     },
     {
-      "x": 0,
-      "y": 5
-    },
-    {
       "x": 1,
-      "y": 5
+      "y": 4
     },
     {
       "x": 2,
-      "y": 5
+      "y": 4
     },
     {
       "x": 3,
-      "y": 5
+      "y": 4
     },
     {
       "x": 4,
-      "y": 5
-    },
-    {
-      "x": 5,
-      "y": 5
-    },
-    {
-      "x": 6,
-      "y": 5
-    },
-    {
-      "x": 7,
-      "y": 5
-    },
-    {
-      "x": 7,
-      "y": 6
-    },
-    {
-      "x": 1,
-      "y": 7
-    },
-    {
-      "x": 2,
-      "y": 7
+      "y": 4
     },
     {
       "x": 3,
-      "y": 7
-    },
-    {
-      "x": 4,
-      "y": 7
-    },
-    {
-      "x": 5,
-      "y": 7
-    },
-    {
-      "x": 6,
-      "y": 7
-    },
-    {
-      "x": 7,
-      "y": 7
-    },
-    {
-      "x": 0,
-      "y": 7
+      "y": 2
     }
   ],
   "pieces": [
     {
-      "id": "5cfddc79-fbf2-412e-be46-15547ae43d5d",
+      "id": "245c918f-6b21-4139-a670-4d7a03412b73",
       "name": "Spawn",
       "team": "player",
       "headPosition": {
         "x": 0,
-        "y": 7
+        "y": 4
       },
       "tiles": [
         {
           "x": 0,
-          "y": 7
+          "y": 4
         }
       ],
-      "moves": 0,
-      "range": 0
+      "rarity": 1
     },
     {
-      "id": "d871fb84-6a75-40dc-a1a2-b99b846f7fce",
+      "id": "dff5f2dc-ab85-4eed-a3ca-53ccd42ac732",
       "name": "Spawn",
       "team": "enemy",
       "headPosition": {
-        "x": 7,
-        "y": 7
+        "x": 3,
+        "y": 2
       },
       "tiles": [
         {
-          "x": 7,
-          "y": 7
+          "x": 3,
+          "y": 2
         }
       ],
-      "moves": 0,
-      "range": 0
+      "rarity": 1
     },
     {
-      "id": "1db105e7-d7b9-4db7-9515-3295c1691d0a",
+      "id": "ee136fec-a986-4932-9deb-2d1e3b6fb1cd",
       "name": "Spawn",
       "team": "enemy",
       "headPosition": {
-        "x": 0,
-        "y": 3
+        "x": 4,
+        "y": 0
       },
       "tiles": [
         {
-          "x": 0,
-          "y": 3
+          "x": 4,
+          "y": 0
         }
       ],
-    
-      "moves": 0,
-      "range": 0
+      "rarity": 1
     },
     {
-      "id": "3e1f45bd-9099-4e53-a6ae-8507de404fa5",
-      "name": "Spawn",
-      "team": "enemy",
-      "headPosition": {
-        "x": 7,
-        "y": 1
-      },
-      "tiles": [
-        {
-          "x": 7,
-          "y": 1
-        }
-      ],
-      "moves": 0,
-      "range": 0
-    },
-    {
-      "id": "c19c58cb-6c38-4c33-9ca0-7ad26998025c",
+      "id": "765ffe87-81d4-48c6-93d9-8e7f4c434b6d",
       "name": "Spawn",
       "team": "enemy",
       "headPosition": {
@@ -1652,8 +1555,23 @@ export const gauntlet = {
           "y": 0
         }
       ],
-      "moves": 0,
-      "range": 0
+      "rarity": 1
+    },
+    {
+      "id": "fd1db38d-eb5b-443e-bfd1-ab7c6d76fd2f",
+      "name": "Spawn",
+      "team": "enemy",
+      "headPosition": {
+        "x": 0,
+        "y": 2
+      },
+      "tiles": [
+        {
+          "x": 0,
+          "y": 2
+        }
+      ],
+      "rarity": 1
     }
   ]
 }

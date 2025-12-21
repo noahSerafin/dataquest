@@ -121,7 +121,7 @@
                 </p>
             </div>
             <div>
-                <p><strong>Admins:</strong> {{ props.player.admins.length }}/{{ props.player.adminSlots }}</p>
+                <p class="admin-header"><strong>Admins:</strong> {{ props.player.admins.length }}/{{ props.player.adminSlots }}</p>
                 <ul class="admins">
                     <li v-for="(item, index) in props.player.admins"
                         :key="item.id"
@@ -204,7 +204,6 @@
         background-color: black;
         width: 100%;
         display: flex;
-        justify-content: space-between;
         max-width: 1280px;
         border: 2px solid #ccc;
         border-radius: 0.75rem;
@@ -213,8 +212,12 @@
         .flex{
             display: flex;
             width: 100%;
-            justify-content: space-between;
         }
+    }
+    .admin-header{
+        position: absolute;
+        top: -0.5rem;
+        margin-left: 0.5rem;
     }
     .full-width{
         align-items: center;
@@ -259,9 +262,11 @@
         position: relative;
         display: flex;
         gap: 5px;
+        width: 80%;
     }
     .inventory-relative{
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
+        width: 50%;
     }
 </style>

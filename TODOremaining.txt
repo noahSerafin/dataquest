@@ -4,19 +4,16 @@ make more levels, smaller levels (max size 9)
 test interest is working properly 
 hide hidden enemies - test
 
-STYLE
-float containers to have them slide on/off screen
-
 MAP 6.5
 branching paths - started
 multiple levels files for difficulty tier?
 hidden nodes above level two and up, randomly generated, not visible until player arrives at connecting node
-'skip' nodes rewarding certain programs?
-Altar nodes - sacrifice a program for more money than selling - 8
-hidden shop nodes in some hard paths
-hybrid nodes - 7
-level three, three branching paths
+'skip' nodes rewarding certain programs? - 6
+hidden shop nodes in some hard paths - 6
 ADMIN -compass - show secret nodes MAP 6.5
+hybrid nodes - 7
+level three, three branching paths, -allow some randomised crossover points?
+Altar nodes - sacrifice a program for more money than selling - 8
 
 BOSSES 7
 boss security rank - leave status bosses for 2/3 and up

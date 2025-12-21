@@ -294,7 +294,7 @@ class Aegis extends Piece {
   static color = "#06789bff";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Aegis.name, Aegis.description, Aegis.unicode, 3, 2, 0, 1, 2, Aegis.color, headPosition, [headPosition], team, Aegis.rarity, removeCallback, id)
+   super(Aegis.name, Aegis.description, Aegis.unicode, 3, 2, 0, 1, 1, Aegis.color, headPosition, [headPosition], team, Aegis.rarity, removeCallback, id)
     this.specialName = 'Parry';
     this.targetType = 'self'
   }

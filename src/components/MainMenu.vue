@@ -83,6 +83,7 @@
                     <span>M:{{os.memory }}</span>
                     <span>A:{{os.adminSlots }}</span>
                     <span>$:{{os.money }}</span>
+                    <span>{{returnUnicode("U+1FA77")}}:{{os.lives }}</span>
                 </div>
             <h5>Starts with:</h5>
             <div class="bps">

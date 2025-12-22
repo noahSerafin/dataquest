@@ -63,9 +63,16 @@ export class Player {
     return this.usedMemory < this.memory;
   }
 
+  get hasAdminSpace(): boolean {
+    return this.admins.length < this.adminSlots;
+  }
+
   addAdmin(admin: Admin, target: Player ) {
-    this.admins.push(admin)
-    admin.apply(target);
+    if(this.hasAdminSpace){
+      this.admins.push(admin)
+      //if admin.targettype === player/other
+      admin.apply(target);
+    }
   }
 
   removeAdmin(admin: Admin, target: Player ) {

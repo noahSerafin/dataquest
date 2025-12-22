@@ -516,7 +516,7 @@ class Bones extends Admin {
 class Frog extends Admin {
   static name = "Poison Swamp";
   static description = "Every player program is poisoned";
-    static unicode = "U+1F31E";
+    static unicode = "U+1F438";
     static color = "#415800ff";
     constructor() {
         super(Frog.name, Frog.description, Frog.unicode, Frog.color, 6, 5, 'gameState', 'onPlacement')

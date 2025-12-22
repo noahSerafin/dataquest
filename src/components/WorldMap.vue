@@ -70,7 +70,14 @@ import BlueprintController from "./BlueprintController.vue";
 
     function canClick(node: WorldNode): boolean {
         if (node.id === currentNodeId.value) return false;
-
+        if(props.player.admins.some(a => a.name === 'Off Roader')){
+            const current = world.value.nodes[currentNodeId.value];
+            const sameRow = node.position.y === current.position.y;
+            if (sameRow && node.type !== 'boss' && node.type !== 'start') {
+                return true;
+            }
+        }
+        
         const next = world.value.nodes[currentNodeId.value].next;
         return next.includes(node.id);
     }
@@ -132,13 +139,6 @@ import BlueprintController from "./BlueprintController.vue";
 
     const nodes = world.value.nodes;
 
-    function isNodeVisible(node: WorldNode, visited: string) {
-        //does player have compass? return true
-        if (!node.hiddenUntilVisited) return true;
-        if(visited === node.hiddenUntilVisited) return true;
-        return false;
-    }
-
     for (const node of Object.values(nodes)) {
         // Node → all its next connections
         for (const nextId of node.next) {
@@ -162,7 +162,7 @@ import BlueprintController from "./BlueprintController.vue";
 
         for (const node of Object.values(world.value.nodes)) {
             // not hidden at all
-            if (!node.hiddenUntilVisited) {
+            if (!node.hiddenUntilVisited || props.player.admins.some(a => a.name === 'Compass')) {
             visible.add(node.id);
             continue;
             }
@@ -316,6 +316,7 @@ import BlueprintController from "./BlueprintController.vue";
     <!-- Preview modal -->
     <div v-if="selectedPreviewNode" class="preview-modal">
       <h3>{{ selectedPreviewNode.type.toUpperCase() }}</h3>
+      <h6 v-if="selectedPreviewNode.type==='skip'">(Must have room)</h6>
       <h4 v-if="selectedPreviewNode.type==='boss' || selectedPreviewNode.type==='level'">{{ selectedPreviewNode.company.name}}</h4>
       <h6 v-if="selectedPreviewNode.type==='boss' || selectedPreviewNode.type==='level'">Reward: ${{ selectedPreviewNode.reward }}</h6>
       <MiniMap v-if="selectedPreviewNode && selectedPreviewNode.level"
@@ -339,7 +340,7 @@ import BlueprintController from "./BlueprintController.vue";
                 :item="selectedPreviewNode.skipReward.value"
                 :tileSize="60"
                 :canBuy="false"
-                cssclass="skipReward"
+                cssclass="shop"
                 :showController="checkTargetMatch(selectedPreviewNode.skipReward)"
                 @select="select(selectedPreviewNode.skipReward)"
                 @deselect="deselect"
@@ -351,7 +352,7 @@ import BlueprintController from "./BlueprintController.vue";
                 :item="selectedPreviewNode.skipReward.value"
                 :tileSize="60"
                 :canBuy="false"
-                cssclass="skipReward"
+                cssclass="shop"
                 :showController="checkTargetMatch(selectedPreviewNode.skipReward)"
                 @select="select(selectedPreviewNode.skipReward)"
                 @deselect="deselect"
@@ -359,7 +360,8 @@ import BlueprintController from "./BlueprintController.vue";
         </template>
         <div class="btns">
             <button
-                v-if="selectedPreviewNode?.type === 'skip' && selectedPreviewNode.skipReward"
+                v-if="selectedPreviewNode?.type === 'skip' && (selectedPreviewNode.skipReward?.kind === 'blueprint' || selectedPreviewNode.skipReward?.kind === 'item')"
+                :disabled="!player.hasMemorySpace"
                 @click="takeSkipReward(selectedPreviewNode)"
                 >
                 Accept Reward
@@ -443,13 +445,17 @@ import BlueprintController from "./BlueprintController.vue";
         background-color: #111;
         font-size: 14px;
         opacity: 1;
-        width: 300px;
+        width: 260px;
         left: 120%;
+        border: 1px solid white;
+        border-radius: 5px;
+        padding: 0.2rem;
     }
     .company-info{
         right: 100%;
         left: unset;
         width: 50px;
+        text-align: center;
     }
     @media (max-width: 768px) {
         .world-map{
@@ -465,5 +471,8 @@ import BlueprintController from "./BlueprintController.vue";
     .node.visible {
     visibility: visible;
     opacity: 1;
+    }
+    h6{
+        margin: 0.5rem;
     }
 </style>

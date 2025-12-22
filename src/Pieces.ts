@@ -345,7 +345,7 @@ class Gate extends Piece {
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Gate.name, Gate.description, Gate.unicode, 1, 1, 1, 0, 2, Gate.color, headPosition, [headPosition], team, Gate.rarity, removeCallback, id)
-   this.targetType = 'space';
+   this.targetType = 'space';//line?? how does this work with larger ranges than 1?
    this.specialName = 'Chaperone'
   }
   async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{

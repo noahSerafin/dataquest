@@ -242,7 +242,7 @@ class Bouquet extends Admin {
   static name = "Bouquet";
   static description = "Held admin program's can reappear in the shop";
   static unicode = "U+1F490";
-  static color = "#85e758ff";
+  static color = "#e758e7ff";
 
   constructor() {
     super(Bouquet.name, Bouquet.description, Bouquet.unicode, Bouquet.color, 3, 3, 'player', 'other')//shop
@@ -254,9 +254,9 @@ class Heartbreaker extends Admin {
   static name = "Heartbreaker";
   static description = "Makes your programs immune to being charmed on placement";
   static unicode = "U+1F494";//charmed symbol? "U+1F498";
-  static color = "#dadadaff";
+  static color = "#7e054fff";
   constructor() {
-    super(Heartbreaker.name, Heartbreaker.description, Heartbreaker.unicode, Heartbreaker.color, 5, 3, 'gameState', 'onPlacement')
+    super(Heartbreaker.name, Heartbreaker.description, Heartbreaker.unicode, Heartbreaker.color, 5, 1, 'gameState', 'onPlacement')
   }
 
   //on placement
@@ -268,7 +268,7 @@ class Heartbreaker extends Admin {
 
 class Hamsa extends Admin {
   static name = "Hamsa";
-  static description = "Raises program's defence by 1 on placement";
+  static description = "Raises your program's defence by 1 on placement";
   static unicode = "U+1FAAC";
   static color = "#5560ffff";
   constructor() {
@@ -316,7 +316,7 @@ class Notepad extends Admin {
   static unicode = "U+1F4DD";//"U+1F4C4";//"U+1F5C7";
   static color = "#4b4b4bff";
   constructor() {
-    super(Notepad.name, Notepad.description, Notepad.unicode, Notepad.color, 5, 3, 'player', 'other')
+    super(Notepad.name, Notepad.description, Notepad.unicode, Notepad.color, 5, 1, 'player', 'other')
   }
   async apply({ player }: { player: Player }) {
     player.memory += 1
@@ -333,7 +333,7 @@ class AdminMap extends Admin {
   static unicode = "U+1F30D";
   static color = "#001cbbff";
   constructor() {
-    super(AdminMap.name, AdminMap.description, AdminMap.unicode, AdminMap.color, 1, 2, 'player', 'other')
+    super(AdminMap.name, AdminMap.description, AdminMap.unicode, AdminMap.color, 3, 2, 'player', 'other')
   }
   //player bool
 }
@@ -406,7 +406,7 @@ class CreditCard extends Admin {
   static unicode = "U+1F4B3";
   static color = "#ff5555";
   constructor() {
-    super(CreditCard.name, CreditCard.description, CreditCard.unicode, CreditCard.color, 1, 2, 'player', 'other')//shop
+    super(CreditCard.name, CreditCard.description, CreditCard.unicode, CreditCard.color, 1, 1, 'player', 'other')//shop
   }
   //shop lower limit change
 }
@@ -483,7 +483,7 @@ class Chemistry extends Admin {//test
 }
 
 class Aesculapius extends Admin {
-  static name = "Aesculapius";
+  static name = "Aesculapius";//caduceus
   static description = "All placed programs are immune to posion and disease";
   static unicode = "U+2695";
   static color = "#084610ff";
@@ -501,13 +501,13 @@ class Aesculapius extends Admin {
   }
 }
 
-class Heart extends Admin {
+class Heart extends Admin {//change
   static name = "Heart";
   static description = "Programs all gain +1 max size on placement";
   static unicode = "U+1FAC0";
   static color = "#ff5555";
   constructor() {
-    super(Heart.name, Heart.description, Heart.unicode, Heart.color, 6, 3, 'gameState', 'onPlacement')
+    super(Heart.name, Heart.description, Heart.unicode, Heart.color, 6, 2, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
@@ -522,7 +522,7 @@ class Lungs extends Admin {
   static unicode = "U+1FAC1";
   static color = "#9e0e0eff";
   constructor() {
-    super(Lungs.name, Lungs.description, Lungs.unicode, Lungs.color, 5, 3, 'gameState', 'onPlacement')
+    super(Lungs.name, Lungs.description, Lungs.unicode, Lungs.color, 5, 2, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
@@ -553,7 +553,7 @@ class GoldenTicket extends Admin {
   static unicode = "U+1F3AB";
   static color = "#dfba42ff";
   constructor() {
-    super(GoldenTicket.name, GoldenTicket.description, GoldenTicket.unicode, GoldenTicket.color, 5, 4, 'player', 'other');
+    super(GoldenTicket.name, GoldenTicket.description, GoldenTicket.unicode, GoldenTicket.color, 5, 1, 'player', 'other');
   }
 }
 
@@ -642,14 +642,13 @@ class Communism extends Admin {
     if(player.money<=4){
       const idx = activePieces.findIndex(p => p.id === id);
       console.log('applying:', this.name)
-    activePieces[idx].addModifier({
+      activePieces[idx].addModifier({
             attack: 1,
             defence: 1,
-
             maxSize: 1,
             moves: 1,
             range: 1
-      })
+      });
     }
   }
 }
@@ -740,13 +739,24 @@ class Cactus extends Admin {
   }
 }
 
-class Compass extends Admin {//unfinished rounds, find another reason for this admin
+class Compass extends Admin {
   static name = "Compass";
-  static description = "Always show the path to the nearest shop";
+  static description = "Shows nodes that are normally hidden";
   static unicode = "U+1F9ED";
   static color = "#ff5555";
   constructor() {
     super(Compass.name, Compass.description, Compass.unicode, Compass.color, 2, 1, 'player', 'other')
+  }
+  //map edit
+}
+
+class OffRoader extends Admin {
+  static name = "Off Roader";
+  static description = "Travel to nodes on different paths to your own";
+  static unicode = "U+1F699";
+  static color = "#00791eff";
+  constructor() {
+    super(OffRoader.name, OffRoader.description, OffRoader.unicode, OffRoader.color, 2, 1, 'player', 'other')
   }
   //map edit
 }
@@ -757,17 +767,14 @@ class Seed extends Admin {
   static unicode = "U+1F331";
   static color = "#ff5555";
   constructor() {
-    super(Seed.name, Seed.description, Seed.unicode, Seed.color, 10, 1, 'player', 'other')
+    super(Seed.name, Seed.description, Seed.unicode, Seed.color, 10, 1, 'player', 'onRoundEnd')
   }
   async apply({ player }: { player: Player }) {
    player.interestCap = 10;
   }
-  remove({ player }: { player: Player }) {
-   player.interestCap = 5;
-  }
 }
 
-class Puzzle extends Admin {
+class Puzzle extends Admin {//tempmods
   static name = "Puzzle Piece";
   static description = "Pieces with an ally adjacent to their head gain +1 defence at the end of your turn";
   static unicode = "U+1F9E9";
@@ -788,9 +795,9 @@ class Puzzle extends Admin {
 
         if(neighbours){
          p.addModifier({defence: 1})
-        } else {
-          p.addModifier({defence: -1})
-        }  
+        } //else {
+          //p.addModifier({defence: -1})
+        //}  
       } 
     }
   }
@@ -858,7 +865,7 @@ class Bucket extends Admin {
 
 class Diamond extends Admin {
   static name = "Diamond";//payroll
-  static description = "Every $10 on placement increases a program's defence by 1";
+  static description = "Every $10 increases a program's defence by 1 on load";
   static unicode = "U+1F48E";
   static color = "#ff5555";
   constructor() {
@@ -901,7 +908,7 @@ class Sneakers extends Admin {//item???
   static unicode = "U+1F45F";
   static color = "#36c723ff";
   constructor() {
-    super(Sneakers.name, Sneakers.description, Sneakers.unicode, Sneakers.color, 6, 3, 'gameState', 'onPlacement')
+    super(Sneakers.name, Sneakers.description, Sneakers.unicode, Sneakers.color, 6, 1, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
@@ -1352,7 +1359,7 @@ class Pants extends Admin {
   static unicode = "U+1FA72";
   static color = "#f8f8f8ff";
   constructor() {
-    super(Pants.name, Pants.description, Pants.unicode, Pants.color, 5, 9, 'playerAndGame', 'onPieceDestruction')
+    super(Pants.name, Pants.description, Pants.unicode, Pants.color, 5, 4, 'playerAndGame', 'onPieceDestruction')
   }
   private count = 0;
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
@@ -1371,19 +1378,213 @@ class Pants extends Admin {
   }
 }
 
-export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, Seed, Puzzle, Roger, Bucket, Diamond, Sneakers, Candle, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FireTruck, FakeID, Shades, Barber, Umbrella, Bank, Ballet, Pants];//78
-console.log('admins length: ', allAdmins.length)
-//22
-//BLACK SPADE SUIT, U+2660 ACe up sleeve, last detroyed bp is returned
-//GREEK SMALL LETTER PI, U+3C0 + 3.14 mult
+class Ace extends Admin {
+  static name = "Ace up the sleeve";
+  static description = "If your last placed program is destroyed, move it back to your inventory";
+  static unicode = "U+2660";
+  static color = "#f8f8f8ff";
+  constructor() {
+    super(Ace.name, Ace.description, Ace.unicode, Ace.color, 4, 3, 'playerAndGame', 'onPieceDestruction')
+  }
 
-// MAN DANCING, flashy U+1F57A money increases movement
-// TOILET, U+1F6BD circling the drain, common admins provide +1 to all stats on placement
+  async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+    let isLastBp = true;
+    player.programs.forEach(bp => {
+      if(!bp.isPlaced) isLastBp = false;
+    });
+    if(isLastBp){
+      const idx = activePieces.findIndex(p => p.id === id);
+      const bpIdx = player.programs.findIndex(bp => bp.id === activePieces[idx].id )
+      if(activePieces[idx].team==='player'){
+        player.programs[bpIdx].isPlaced = false;
+        activePieces.filter(p => p.id !== activePieces[idx].id);//we could splice, but this might be safer?
+      }
+    }
+      
+  }
+}
+
+class Pi extends Admin {//test
+  static name = "Pi";//
+  static description = "Programs get +3.14 damage multiplyer on attacking";
+  static unicode = "U+3C0";
+  static color = "#640909ff";
+  constructor() {
+    super(Pi.name, Pi.description, Pi.unicode, Pi.color, 9, 6, 'gameState', 'onDealDamage')
+  }
+  //onDamage
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    activePieces[idx].damageMult += 3.14;
+  }
+}
+
+class Pazzaz extends Admin {
+  static name = "Pazzaz";
+  static description = "Every $10 increases your program's movement by 1 on load";
+  static unicode = "U+1F57A";
+  static color = "#ecda34d3";
+  constructor() {
+    super(Pazzaz.name, Pazzaz.description, Pazzaz.unicode, Pazzaz.color, 7, 4, 'playerAndGame', 'onPlacement')
+  }
+  async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    const noOfTens = Math.floor(player.money / 10);
+    activePieces[idx].addModifier({moves: noOfTens})
+  }
+}
+
+class Toilet extends Admin {
+  static name = "Circling the drain";
+  static description = "Common admins each provide +1 to all stats on placement";
+  static unicode = "U+1F6BD";
+  static color = "#ff5555";
+  constructor() {
+    super(Toilet.name, Toilet.description, Toilet.unicode, Toilet.color, 5, 5, 'playerAndGame', 'onPlacement')
+  }
+  async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+    let noOfCommons = 0;
+    player.admins.forEach(admin => {
+      if(admin.rarity === 1){
+        noOfCommons += 1;
+      }
+    });
+    const idx = activePieces.findIndex(p => p.id === id);
+    console.log('applying:', this.name)
+    activePieces[idx].addModifier({
+            attack: noOfCommons,
+            defence: noOfCommons,
+            maxSize: noOfCommons,
+            moves: noOfCommons,
+            range: noOfCommons
+    });
+  }
+}
+
+class Harvest extends Admin {
+  static name = "Harvest";
+  static description = "Every 4 turns, +1 max size to all your programs";
+  static unicode = "U+1F33E";
+  static color = "#ff5555";
+  constructor() {
+    super(Harvest.name, Harvest.description, Harvest.unicode, Harvest.color, 5, 2, 'gameState', 'onTurnEnd')
+  }
+  private count = 0;
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.count += 1;
+    if(this.count === 4){
+      activePieces.forEach(p => {
+        if(p.team==='player'){
+          p.addModifier({maxSize: 1})
+        }
+      });
+      this.count = 0;
+    }
+  }
+}
+
+class Bipolar extends Admin {
+  static name = "Ups and Downs";
+  static description = "Gain $1 on destroying an enemy, lose $1 on destruction of your own programs";
+  static unicode = "U+1F3AD";
+  static color = "#558bffff";
+  constructor() {
+    super(Bipolar.name, Bipolar.description, Bipolar.unicode, Bipolar.color, 5, 1, 'playerAndGame', 'onPieceDestruction')
+  }
+  async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    if(activePieces[idx].team === 'enemy'){
+      player.money += 1
+    }
+    if(activePieces[idx].team === 'player'){
+      player.money -= 1
+    }
+  }
+}
+
+class Taoism extends Admin {
+  static name = "Taoism";
+  static description = "At the end of a your turn, when the number of enemy programs equals the number of your programs in a node, +1 to all your programs' stats";
+  static unicode = "U+262F";
+  static color = "rgba(92, 92, 92, 1)ff";
+  constructor() {
+    super(Taoism.name, Taoism.description, Taoism.unicode, Taoism.color, 5, 3, 'gameState', 'onTurnEnd')
+  }
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const playerPieces: Piece[] = [];
+    const enemyPieces = [];
+    activePieces.forEach(p => {
+      if(p.team==='player'){
+        playerPieces.push(p);
+      }
+      if(p.team==='enemy'){
+        enemyPieces.push(p);
+      }
+    });
+    if(enemyPieces.length === playerPieces.length){
+
+      playerPieces.forEach(p => {
+        p.addModifier({
+            attack: 1,
+            defence: 1,
+            maxSize: 1,
+            moves: 1,
+            range: 1
+        });
+      });
+    }
+  }
+}
+
+export class Loot extends Admin {
+  static name = "Loot";
+  static description = "Earn an extra $5 at the end of a round";
+  static unicode = "U+1F4B0";
+  static color = "#ffe555ff";
+  constructor() {
+    super(Loot.name, Loot.description, Loot.unicode, Loot.color, 7, 2, 'player', 'onRoundEnd')
+  }
+  async apply({ player }: { player: Player }) {
+    player.money += 5
+  }
+}
+
+export class HedgeFund extends Admin {
+  static name = "Hedge Fund";
+  static description = "Interest cap raised to $15";
+  static unicode = "U+1F4B8";
+  static color = "#ff5555";
+  constructor() {
+    super(HedgeFund.name, HedgeFund.description, HedgeFund.unicode, HedgeFund.color, 7, 2, 'player', 'onRoundEnd')
+  }
+  async apply({ player }: { player: Player }) {
+    player.interestCap = 15;
+  }
+}
+
+export class PeaPod extends Admin {
+  static name = "Pea Pod";
+  static description = "Inreases Admin slots by 2";
+  static unicode = "U+1FADB";
+  static color = "#55ff7aff";
+  constructor() {
+    super(PeaPod.name, PeaPod.description, PeaPod.unicode, PeaPod.color, 7, 2, 'player', 'other')
+  }
+  async apply({ player }: { player: Player }) {
+    player.adminSlots += 2
+  }
+  remove({ player }: { player: Player }) {
+    player.adminSlots -= 2
+  }
+}
+
+export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, OffRoader, Seed, Puzzle, Roger, Bucket, Diamond, Sneakers, Candle, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FireTruck, FakeID, Shades, Barber, Umbrella, Bank, Ballet, Pants, Ace, Pi, Pazzaz, Toilet, Harvest, Bipolar, Taoism, Loot, HedgeFund, PeaPod];//88
+console.log('admins length: ', allAdmins.length)
+//12
+
 //SCHOOL SATCHEL, U+1F392 player effect
-//PEA POD, U+1FADB admin slots??
 //disco ball U+1FAA9  moves
 //WHEEL, U+1F6DE immune to slowed?
-//harvest//EAR OF RICE, U+1F33E every 4 turns, +1 max size
 //CHEESE WEDGE, U+1F9C0 Chedda
 //ABACUS, U+1F9EE
 //STATUE OF LIBERTY, U+1F5FD +2 range?
@@ -1391,21 +1592,18 @@ console.log('admins length: ', allAdmins.length)
 //RIBBON, U+1F380
 //ELECTRIC LIGHT BULB, U+1F4A1
 //RING, U+1F48D
-// MONEY WITH WINGS, U+1F4B8
-//// MONEY BAG, U+1F4B0 loot at end of round
-//SYMBOL FOR SALT OF ANTIMONY, U+1F72D sceptre
 //DIRECT HIT, U+1F3AF
-//YIN YANG, U+262F
 // GAME DIE, U+1F3B2
-// PERFORMING ARTS, U+1F3AD
+//DNA DOUBLE HELIX, U+1F9EC clone
 
 //BOXING GLOVE, U+1F94A
 // TEDDY BEAR, U+1F9F8
+
+//SYMBOL FOR SALT OF ANTIMONY, U+1F72D sceptre
 //LINK SYMBOL, U+1F517
 //ALCHEMICAL SYMBOL FOR GOLD, U+1F71A gold comet
 //LEFT-POINTING MAGNIFYING GLASS, U+1F50D reveal secrets
 // PUSHPIN, U+1F4CC
-//DNA DOUBLE HELIX, U+1F9EC clone
 //WAVING BLACK FLAG, U+1F3F4
 //FLAG IN HOLE, U+26F3
 

@@ -96,7 +96,7 @@ function handleSelect() {
     @click="handleSelect"
     @sell="$emit('sell', props.blueprint)"
   >
-  <p class='top-left' v-if="cssclass==='shop'" :style="`top: -${((props.tileSize-10)/2 - 24)}px`">P</p>
+  <p class='top-left' v-if="cssclass==='shop' || cssclass==='skipReward'" :style="`top: -${((props.tileSize-10)/2 - 24)}px`">P</p>
     {{ unicodeSymbol }}
   </div>
 </template>
@@ -174,5 +174,8 @@ function handleSelect() {
   position: absolute;
   right: 1px;
   margin: 0;
+}
+.skipReward-piece{
+  margin-bottom: 2rem;
 }
 </style>

@@ -56,8 +56,9 @@ function shuffle(array: PathSpec[]) {
 
 function getIndividualPath(difficulty: number): PathSpec {
   const options: PathSpec[] = [
+    { type: 'skip',  mods: [0, 1], rewards: [0, 5] },//skip path
     { type: 'level', mods: [0, 1], rewards: [3, 5] },// risky path
-    { type: 'skip',  mods: [0, 1], rewards: [0, 5] }//skip path
+    { type: 'hiddenShop',  mods: [0, 1], rewards: [3, 5] }
   ];
   if (difficulty > 1 ){
     options.push({ type: 'level',  mods: [1, 2], rewards: [4, 7] })
@@ -79,7 +80,10 @@ function getPathSpecsForDifficulty(difficulty: number): PathSpec[] {
   if (difficulty <= 2) {
     return [
       { type: 'level', mods: [0, 0], rewards: [3, 3] }, // safe path
-      getIndividualPath(difficulty)
+      //getIndividualPath(difficulty)
+      { type: 'skip',  mods: [0, 1], rewards: [0, 5] }
+      //{ type: 'hiddenShop',  mods: [1, 2], rewards: [4, 7] }
+
     ];
   }
 

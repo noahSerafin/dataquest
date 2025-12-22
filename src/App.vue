@@ -1139,8 +1139,11 @@
     });
     handleApplyAdmins('onTurnEnd', '');
     applyStatusEffects('player');
+    //enemy piece tempStats reset
     await enemyTurn();
     applyStatusEffects('enemy');
+    //player piece tempstats reset
+
     if(isFirstTurn){
       isFirstTurn.value = false;
     }

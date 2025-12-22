@@ -1,11 +1,6 @@
-import type { Company, Coordinate, PieceBlueprint } from "./types";
+import type { Company, Coordinate, PieceBlueprint, SkipReward } from "./types";
 import type { Piece } from "./Pieces";
-import { arena, level1Levels } from './level1Levels';
-import { level2Levels } from './level2Levels';
-import { level3Levels } from './level3Levels';
 import { companies } from "./companies";
-import type { Admin } from "./AdminPrograms";
-import type { Item } from "./Items";
 
 interface Level {
   name: string;
@@ -16,14 +11,16 @@ interface Level {
  //world graph structure
 export interface WorldNode {
   id: string;                // "node_1"
-  type: "start" | "level" | "skip" | "shop" | "boss";
-  skipReward?: PieceBlueprint | Admin | Item; //get shop function into helpers to create these
-  level?: Level;             // Only for type: level
+  type: "start" | "level" | "skip" | "shop" | "boss";//compiler altar
   next: string[];            // IDs of next nodes
   position: { x: number; y: number }; // For layout on screen
   company: Company;
   difficultyMod: number;
   reward: number;
+  level?: Level;             // Only for type: level
+  hiddenUntilVisited?: string; // node id that must be completed first
+  skipReward?: SkipReward; //get shop function into helpers to create these
+  resolved?: boolean;          // skip nodes only
 }
 
 export interface WorldMap {
@@ -36,12 +33,12 @@ function chooseRandomCompany(){
 }
 
 type PathSpec = {
-  type: string;
+  type: 'level'| 'skip' | 'hiddenShop';// add typed strings here
   mods: [number, number];    // difficultyMod for node 1 and node 2
   rewards: [number, number]; //add non monetary rewards? like programs/admins?
 };
 
-/*function shuffle(array: PathSpec[]) {
+function shuffle(array: PathSpec[]) {
   let currentIndex = array.length;
 
   // While there remain elements to shuffle...
@@ -58,40 +55,42 @@ type PathSpec = {
 }
 
 function getIndividualPath(difficulty: number): PathSpec {
-  let options = [{ type: 'level', mods: [0, 1], rewards: [3, 5] }];// risky path
+  const options: PathSpec[] = [
+    { type: 'level', mods: [0, 1], rewards: [3, 5] },// risky path
+    { type: 'skip',  mods: [0, 1], rewards: [0, 5] }//skip path
+  ];
   if (difficulty > 1 ){
-    options.push({ type: 'skip',  mods: [0, 1], rewards: [4, 7] })
     options.push({ type: 'level',  mods: [1, 2], rewards: [4, 7] })
+    options.push({ type: 'hiddenShop',  mods: [1, 2], rewards: [4, 7] });
   }
   if (difficulty > 2 ){
-    options.push({ type: 'skip',  mods: [1, 2], rewards: [4, 7] });
+    options.push({ type: 'skip',  mods: [0, 2], rewards: [0, 7] });
     //secret nodes (the type string) in middle of path between two nodes
-    options.push({ type: 'altar',  mods: [1, 2], rewards: [4, 7] });
-    options.push({ type: 'compiler',  mods: [1, 2], rewards: [4, 7] });
-    options.push({ type: 'shop',  mods: [1, 2], rewards: [4, 7] });
-    options.push({ type: 'skipAndAltar',  mods: [1, 2], rewards: [4, 7] });
+    //options.push({ type: 'altar',  mods: [1, 2], rewards: [4, 7] });
+    //options.push({ type: 'compiler',  mods: [1, 2], rewards: [4, 7] });
+    //options.push({ type: 'skipAndAltar',  mods: [1, 2], rewards: [4, 7] });
   }
   shuffle(options);
   return options[0];
-}*/
+}
 
 function getPathSpecsForDifficulty(difficulty: number): PathSpec[] {
   // difficulty 0 / 1
-  if (difficulty <= 1) {
+  if (difficulty <= 2) {
     return [
       { type: 'level', mods: [0, 0], rewards: [3, 3] }, // safe path
-      { type: 'level', mods: [0, 1], rewards: [3, 5] }, // risky path
+      getIndividualPath(difficulty)
     ];
   }
 
-  // difficulty 2+
- // if (difficulty >= 2) {
+  // difficulty 3+
+  //if (difficulty > 2) {
     return [
       { type: 'level', mods: [0, 0], rewards: [3, 3] },
-      { type: 'level', mods: [0, 1], rewards: [3, 5] },
-      { type: 'level', mods: [1, 2], rewards: [4, 7] }, // hard path
+      getIndividualPath(difficulty),
+      getIndividualPath(difficulty),
     ];
- // }
+  //}
 }
 
 function getPathPositions(
@@ -139,28 +138,94 @@ export function generateWorld(
     const p2 = `path_${i}_2`;
     const pos = getPathPositions(i, pathSpecs.length);
 
-    nodes[p1] = {
-      id: p1,
-      type: "level",
-      level: pick(),
-      next: [p2],
-      position: pos.node1,
-      company: chooseRandomCompany(),
-      difficultyMod: spec.mods[0],
-      reward: spec.rewards[0]
-    };
+    if (spec.type === 'skip') {
+      nodes[p1] = {
+        id: p1,
+        type: 'skip',
+        next: [p2],
+        position: pos.node1,
+        company: chooseRandomCompany(),
+        difficultyMod: spec.mods[0],
+        reward: spec.rewards[0],
+        resolved: false
+      };
 
-    nodes[p2] = {
-      id: p2,
-      type: "level",
-      level: pick(),
-      next: [shopId],
-      position: pos.node2,
-      company: chooseRandomCompany(),
-      difficultyMod: spec.mods[1],
-      reward: spec.rewards[1]
-    };
+      nodes[p2] = {
+        id: p2,
+        type: 'level',
+        level: pick(),
+        next: [shopId],
+        position: pos.node2,
+        company: chooseRandomCompany(),
+        difficultyMod: spec.mods[1],
+        reward: spec.rewards[1]
+      };
+    }
 
+    if (spec.type === 'hiddenShop') {
+      const hiddenShopId = `path_${i}_hidden_shop`;
+
+      nodes[p1] = {
+        id: p1,
+        type: 'level',
+        level: pick(),
+        next: [hiddenShopId],
+        position: pos.node1,
+        company: chooseRandomCompany(),
+        difficultyMod: spec.mods[0],
+        reward: spec.rewards[0]
+      };
+
+      nodes[hiddenShopId] = {
+        id: hiddenShopId,
+        type: 'shop',
+        next: [p2],
+        position: {
+          x: pos.node1.x,
+          y: (pos.node1.y + pos.node2.y) / 2
+        },
+        company: chooseRandomCompany(),
+        difficultyMod: 0,
+        reward: 0,
+        hiddenUntilVisited: p1
+      };
+
+      nodes[p2] = {
+        id: p2,
+        type: 'level',
+        level: pick(),
+        next: [shopId],
+        position: pos.node2,
+        company: chooseRandomCompany(),
+        difficultyMod: spec.mods[1],
+        reward: spec.rewards[1]
+      };
+    }
+    
+    if (spec.type === 'level') {
+      nodes[p1] = {
+        id: p1,
+        type: "level",
+        level: pick(),
+        next: [p2],
+        position: pos.node1,
+        company: chooseRandomCompany(),
+        difficultyMod: spec.mods[0],
+        reward: spec.rewards[0]
+      };
+
+      nodes[p2] = {
+        id: p2,
+        type: "level",
+        level: pick(),
+        next: [shopId],
+        position: pos.node2,
+        company: chooseRandomCompany(),
+        difficultyMod: spec.mods[1],
+        reward: spec.rewards[1]
+      };
+    }
+    
     nodes[startId].next.push(p1);
   });
 

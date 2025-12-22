@@ -2,17 +2,24 @@
     import { computed, ref, onMounted } from "vue";
     import MiniMap from "./MiniMap.vue";
     import { Admin } from "../AdminPrograms";
+    import { Item } from "../Items";
     import { allBosses } from "../Bosses";
     import { watch } from "vue";
-    import { companies } from "../companies";
-    import type { Player } from "../Player";
+    import { Player } from "../Player";
     import type { WorldMap, WorldNode } from "../worldBuilder";
     import { generateWorld } from "../worldBuilder";
-    import type { Level } from "../types";
+    import type { Level, PieceBlueprint, SkipReward } from "../types";
     import { castled, cave, level1Levels, penopticon, ringed } from "../level1Levels";
     import { level2Levels } from "../level2Levels";
     import { level3Levels } from "../level3Levels";
     import { level4Levels } from "../level4Levels";
+    import { allPieces } from "../Pieces";
+    import { allAdmins } from "../AdminPrograms";
+    import { makeBlueprint, pickWeightedRandom, pickWeightedRandomItem } from "../helperFunctions";
+    import { Box, Genie, Gift, Pinata } from "../Items";
+    import BlueprintView from "./BlueprintView.vue";
+    import ItemView from "./ItemView.vue";
+import BlueprintController from "./BlueprintController.vue";
 
     const props = defineProps<{
         player: Player;
@@ -45,6 +52,7 @@
     });
     
     const world = ref<WorldMap>(generateWorld(levelPool.value, props.player.difficulty));//should be called again with after boss after increase difficulty
+    assignSkipRewards(world.value);
 
     const currentNodeId = ref(world.value.startNode);
     const selectedPreviewNode = ref<WorldNode | null>(null);
@@ -105,11 +113,17 @@
     }
 
     function displayIcon(node: WorldNode) {
+         if (node.type === 'skip' && node.skipReward) {
+            return String.fromCodePoint(
+            parseInt(node.skipReward.value.unicode.replace('U+', ''), 16)
+            );
+        }
         switch (node.type) {
             case "start": return "⬤";
             case "shop": return "🛒";
             case "level": return String.fromCodePoint(parseInt(node.company.unicode.replace('U+', ''), 16));
             case "boss": return  String.fromCodePoint(parseInt(boss.value.unicode.replace('U+', ''), 16));
+            case "skip": return 
         }
     }
 
@@ -117,6 +131,13 @@
     const list: { x1: number; y1: number; x2: number; y2: number }[] = [];
 
     const nodes = world.value.nodes;
+
+    function isNodeVisible(node: WorldNode, visited: string) {
+        //does player have compass? return true
+        if (!node.hiddenUntilVisited) return true;
+        if(visited === node.hiddenUntilVisited) return true;
+        return false;
+    }
 
     for (const node of Object.values(nodes)) {
         // Node → all its next connections
@@ -136,12 +157,95 @@
     return list;
     });
 
+    const visibleNodeIds = computed(() => {
+        const visible = new Set<string>();
+
+        for (const node of Object.values(world.value.nodes)) {
+            // not hidden at all
+            if (!node.hiddenUntilVisited) {
+            visible.add(node.id);
+            continue;
+            }
+
+            // becomes visible once prerequisite is current or passed
+            if (node.hiddenUntilVisited === currentNodeId.value) {
+            visible.add(node.id);
+            }
+        }
+        return visible;
+    });
+
+    function generateSkipReward(node: WorldNode): SkipReward{
+        const roll = Math.random();
+        if (roll < 0.4) {
+            return {
+                kind: 'blueprint',
+                value: makeBlueprint(pickWeightedRandom(allPieces, props.player))
+            }
+        }
+        if (roll < 0.7) {
+            return {
+            kind: "admin",
+            value: pickWeightedRandomItem(allAdmins, props.player),
+            };
+        }
+        return {
+            kind: "item",
+            value: pickWeightedRandomItem([Box, Gift, Genie, Pinata], props.player),
+        };
+    }
+
+    function assignSkipRewards(world: WorldMap) {
+        for (const node of Object.values(world.nodes)) {
+            if (node.type === 'skip' && !node.skipReward) {
+                node.skipReward = generateSkipReward(node);
+                node.skipReward.value.cost = 0;
+            }
+        }
+    }
+
+    function takeSkipReward(node: WorldNode){//ask about this next
+        //app has buy blueprint/item functions, could use those???
+        if (!node.skipReward) return;
+        switch (node.skipReward.kind) {
+            case "blueprint":
+            props.player.addProgram(node.skipReward.value); //player functions return false if there is not enough inventory space, could use these to prevent proceeding?
+            break;
+
+            case "admin":
+            props.player.addAdmin(node.skipReward.value, props.player);
+            break;
+
+            case "item":
+            props.player.addItem(node.skipReward.value);
+            break;
+        }
+        if(selectedPreviewNode.value?.next){
+            currentNodeId.value = selectedPreviewNode.value.next[0]
+            selectedPreviewNode.value = null;
+        }
+    }
+
+    const skipTarget = ref<PieceBlueprint | Item | null>(null);
+    function checkTargetMatch(target: SkipReward){
+        if(target.value === skipTarget.value){
+            return true;
+        }
+        return false;
+    }
+    function select(target: SkipReward){
+        skipTarget.value = target.value;
+    }
+    function deselect(){
+        skipTarget.value = null;
+    }
+
     watch(
         () => props.seed,
         () => {
             // rebuild world graph
             world.value = generateWorld(levelPool.value, props.player.difficulty);
-            // reset node position
+            assignSkipRewards(world.value);
             currentNodeId.value = world.value.startNode;
             // generate new boss
             newBoss();
@@ -158,31 +262,31 @@
         <div
             v-for="node in worldNodes"
             :key="node.id"
-            class="node"
+            class="node "
             :class="{
                 clickable: canClick(node),
-                current: node.id === currentNodeId
+                current: node.id === currentNodeId,
+                hidden: !visibleNodeIds.has(node.id),
+                visible: visibleNodeIds.has(node.id),
             }"
-        :style="{
-            left: node.position.x + 'px',
-            top: node.position.y + 'px'
+            :style="{
+                left: node.position.x + 'px',
+                top: node.position.y + 'px'
             }"
-        @click="trySelect(node)"
+            @click="trySelect(node)"
         >
-        <div v-if="node.type!=='shop'"
-        class="company-info"
-        >
-        <div>
-            {{ node.company.abbr }}
+        <div v-if="node.type=='level' "class="company-info">
+            <div>
+                {{ node.company.abbr }}
+            </div>
+            <div>
+                $ {{ node.reward }}
+            </div>
+            <div>
+                {{ String.fromCodePoint(parseInt("U+1F512".replace('U+', ''), 16)) }} : {{ node.difficultyMod + player.difficulty }}
+            </div>
         </div>
-        <div>
-            $ {{ node.reward }}
-        </div>
-        <div>
-            {{ String.fromCodePoint(parseInt("U+1F512".replace('U+', ''), 16)) }} : {{ node.difficultyMod + player.difficulty }}
-        </div>
-        </div>
-        {{ displayIcon(node) }}
+            {{ displayIcon(node) }}
         <div v-if="node.type==='boss'"
         class="boss-info"
         >
@@ -212,16 +316,55 @@
     <!-- Preview modal -->
     <div v-if="selectedPreviewNode" class="preview-modal">
       <h3>{{ selectedPreviewNode.type.toUpperCase() }}</h3>
-      <h4 v-if="selectedPreviewNode.type!=='shop'">{{ selectedPreviewNode.company.name}}</h4>
-      <h6>Reward: ${{ selectedPreviewNode.reward }}</h6>
-
+      <h4 v-if="selectedPreviewNode.type==='boss' || selectedPreviewNode.type==='level'">{{ selectedPreviewNode.company.name}}</h4>
+      <h6 v-if="selectedPreviewNode.type==='boss' || selectedPreviewNode.type==='level'">Reward: ${{ selectedPreviewNode.reward }}</h6>
       <MiniMap v-if="selectedPreviewNode && selectedPreviewNode.level"
         :level="selectedPreviewNode.level"
         :company="selectedPreviewNode.company"
-      />
-        <div class="btns">
+        />
+        <template v-if="selectedPreviewNode?.type === 'skip'">
+            <BlueprintView
+                v-if="selectedPreviewNode.skipReward?.kind === 'blueprint'"
+                :blueprint="selectedPreviewNode.skipReward.value"
+                :tileSize="60"
+                cssclass="skipReward"
+                @select="select(selectedPreviewNode.skipReward)"
+                @deselect="deselect"
+            />
+            <!--<BlueprintController v-if="selectedPreviewNode.skipReward?.kind === 'blueprint'/>-->
 
-            <button v-if="selectedPreviewNode" @click="enterNode(selectedPreviewNode)">Enter</button>
+            <ItemView
+                v-if="selectedPreviewNode.skipReward?.kind === 'admin'"
+                type = "admin"
+                :item="selectedPreviewNode.skipReward.value"
+                :tileSize="60"
+                :canBuy="false"
+                cssclass="skipReward"
+                :showController="checkTargetMatch(selectedPreviewNode.skipReward)"
+                @select="select(selectedPreviewNode.skipReward)"
+                @deselect="deselect"
+            />
+
+            <ItemView
+                v-if="selectedPreviewNode.skipReward?.kind === 'item'"
+                type = "consumable"
+                :item="selectedPreviewNode.skipReward.value"
+                :tileSize="60"
+                :canBuy="false"
+                cssclass="skipReward"
+                :showController="checkTargetMatch(selectedPreviewNode.skipReward)"
+                @select="select(selectedPreviewNode.skipReward)"
+                @deselect="deselect"
+            />
+        </template>
+        <div class="btns">
+            <button
+                v-if="selectedPreviewNode?.type === 'skip' && selectedPreviewNode.skipReward"
+                @click="takeSkipReward(selectedPreviewNode)"
+                >
+                Accept Reward
+            </button>
+            <button v-if="selectedPreviewNode && selectedPreviewNode?.type !== 'skip'" @click="enterNode(selectedPreviewNode)">Enter</button>
             <button v-if="selectedPreviewNode" @click="selectedPreviewNode = null">Close</button>
             <button v-if="canSkip(selectedPreviewNode)" @click="skipNode(selectedPreviewNode)">Skip $5</button>
         </div>
@@ -312,5 +455,15 @@
         .world-map{
             justify-content: flex-start;
         }
+    }
+    .node.hidden {
+    visibility: hidden;
+    pointer-events: none;
+    opacity: 0;
+    }
+
+    .node.visible {
+    visibility: visible;
+    opacity: 1;
     }
 </style>

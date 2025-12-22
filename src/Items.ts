@@ -494,7 +494,7 @@ export class Gift extends Item<Player> {
     }
 }
 
-class Genie extends Item<Player> {
+export class Genie extends Item<Player> {
   static name = "Genie";
   static description = "Gifts 3 random programs (must have room)";
   static unicode = "U+1F9DE";

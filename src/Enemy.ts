@@ -105,7 +105,9 @@ async function executeEnemyIntent(
   console.log('enemyPiece: ', enemy.name, ' executing: ', intent.type)
   switch (intent.type) {
     case 'special':
-      helpers.highlightTargets(enemy);
+      if(!enemy.statuses.hidden){
+        helpers.highlightTargets(enemy);
+      }
       await sleep(helpers.delay);
       await enemy.special(intent.target);
       //helpers.onReceiveDamage(intent.target.id);
@@ -123,7 +125,9 @@ async function executeEnemyIntent(
     case 'move':
       for (const step of intent.path.slice(1)) {//make sure a path is found once, and then stick to it
         if (!enemy.movesRemaining) break;
-        helpers.highlightMoves(enemy);
+        if(!enemy.statuses.hidden){
+          helpers.highlightMoves(enemy);
+        }
         await sleep(helpers.delay);
         enemy.moveTo(step);//cant move here if its occupied
         helpers.clearHighlights();
@@ -132,7 +136,9 @@ async function executeEnemyIntent(
 
     case 'wander':
       while (enemy.movesRemaining > 0) {
-        helpers.highlightMoves(enemy);
+        if(!enemy.statuses.hidden){
+          helpers.highlightMoves(enemy);
+        }
         enemy.moveTo(intent.space)
         helpers.clearHighlights();
         break;

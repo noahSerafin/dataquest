@@ -191,7 +191,7 @@
     
     if (item.targetType === "player") {
       if(item.name === 'Gift Box' && player.value.memory >= player.value.usedMemory){
-        player.value.programs.push(pickWeightedRandom(allPieces));
+        player.value.programs.push(makeBlueprint(pickWeightedRandom(allPieces)));
         player.value.removeItem(item);
       }
       if(item.name === 'Mystery Box' && player.value.memory >= player.value.usedMemory){
@@ -415,7 +415,7 @@
 
   function buyBlueprint(bp: PieceBlueprint) {
     shopBlueprints.value = shopBlueprints.value.filter(b => b.id !== bp.id);
-    player.value.money -= (bp.rarity * 2 -1);
+    player.value.money -= bp.cost;
     player.value.programs.push(bp);
     shopTarget.value = null;
   }

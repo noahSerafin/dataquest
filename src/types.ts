@@ -106,3 +106,8 @@ export type Company = {
   abbr: string,
   unicode: string
 }
+
+export type SkipReward =
+  | { kind: "blueprint"; value: PieceBlueprint }
+  | { kind: "admin"; value: Admin }
+  | { kind: "item"; value: Item };

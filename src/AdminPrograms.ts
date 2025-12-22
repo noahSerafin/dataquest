@@ -1301,7 +1301,7 @@ class Umbrella extends Admin {
 
 class Bank extends Admin {
   static name = "Bank";
-  static description = "Increases sell value of items and admins by $2 every round";
+  static description = "Increases sell value of held items and admins by $2 every round";
   static unicode = "U+1F3E6";
   static color = "#ffa600d3";
 

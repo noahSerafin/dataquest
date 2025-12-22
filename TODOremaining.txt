@@ -16,7 +16,6 @@ level three, three branching paths, -allow some randomised crossover points?
 Altar nodes - sacrifice a program for more money than selling - 8
 
 BOSSES 7
-boss security rank - leave status bosses for 2/3 and up
 test damage all bosses
 fix confusion
 fog

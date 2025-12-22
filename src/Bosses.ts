@@ -22,6 +22,7 @@ class Fog extends Admin {//unfinished
   static description = "All tiles outside player range are obscured";//handle in app
   static unicode = "U+1F301";//cloud U+2601";
   static color = "#575757ff";
+  static rarity = 3;
   constructor() {
     super(Fog.name, Fog.description, Fog.unicode, Fog.color, 5, 3, 'playerAndGame', 'onRoundStart')
   }
@@ -36,6 +37,7 @@ class Fog extends Admin {//unfinished
 }
 
 class NorthWind extends Admin {
+    static rarity = 1;
   static name = "North Wind";
   static description = "All player pieces are moved down 1 space after every turn";
   static unicode = "U+1F38F";//U+1F4A8 dash cloud//wind face "U+1F32C";
@@ -69,6 +71,7 @@ class NorthWind extends Admin {
 }
 
 class Hook extends Admin {
+    static rarity = 2;
   static name = "Hook";
   static description = "All player pieces are moved up 1 space after every turn";
   static unicode = "U+1FA9D";
@@ -101,6 +104,7 @@ class Hook extends Admin {
 }
 
 class Mirror extends Admin {
+    static rarity = 2;
   static name = "Mirror";
   static description = "Enemy Programs are chosen from blueprints in your inventory";
   static unicode = "U+1FA9E";
@@ -129,6 +133,7 @@ class Mirror extends Admin {
 }
 
 class Downturn extends Admin {
+    static rarity = 2;
   static name = "Downturn";
   static description = "Lose $1 after every turn";
   static unicode = "U+1F4C9";
@@ -142,6 +147,7 @@ class Downturn extends Admin {
 }
 
 class Factory extends Admin {
+    static rarity = 4;
   static name = "Factory";
   static description = "The enemy places a new piece every 3 turns";
   static unicode = "U+1F3ED";
@@ -194,6 +200,7 @@ class Wrath extends Admin {
   static description = "A random player piece loses a tile each turn after the first";
   static unicode = "U+1F329";
   static color = "#790a0aff";
+  static rarity = 5;
   constructor() {
     super(Wrath.name, Wrath.description, Wrath.unicode, Wrath.color, 5, 2, 'gameState', 'onTurnEnd')
   }
@@ -223,6 +230,7 @@ class Reaper extends Admin {
   static description = "Takes a life every 10 turns";
   static unicode = "U+1F480";
   static color = "#790a0aff";
+  static rarity = 6;
   constructor() {
     super(Reaper.name, Reaper.description, Reaper.unicode, Reaper.color, 5, 5, 'player', 'onTurnEnd')
   }
@@ -245,6 +253,7 @@ class Volcano extends Admin {
   static description = "After 5 turns, burning is applied to every player program";//coundown to round loss??
   static unicode = "U+1F30B";
   static color = "#790a0aff";
+  static rarity = 5;
   constructor() {
     super(Volcano.name, Volcano.description, Volcano.unicode, Volcano.color, 5, 9, 'gameState', 'onTurnEnd')
   }
@@ -289,6 +298,7 @@ class Circus extends Admin {
     static description = "Every enemy gains +1 moves at the start of the round";
     static unicode = "U+1F3AA";
     static color = "#eb3ec0ff";
+    static rarity = 4;
     constructor() {
         super(Circus.name, Circus.description, Circus.unicode, Circus.color, 5, 1, 'gameState', 'onRoundStart')
     }
@@ -306,6 +316,7 @@ class Castle extends Admin {
     static description = "Every enemy gains +1 defence at the start of the round";
     static unicode = "U+1F3EF";
     static color = "#eb523eff";
+    static rarity = 5;
     constructor() {
         super(Castle.name, Castle.description, Castle.unicode, Castle.color, 5, 1, 'gameState', 'onRoundStart')
     }
@@ -323,6 +334,7 @@ class Anchor extends Admin {
     static description = "Every player program loses -1 moves";
     static unicode = "U+2693";
     static color = "#0a063fff";
+    static rarity = 5;
     constructor() {
         super(Anchor.name, Anchor.description, Anchor.unicode, Anchor.color, 5, 1, 'gameState', 'onPlacement')
     }
@@ -337,6 +349,7 @@ class Jack extends Admin {
     static description = "Every enemy gains +1 range at the start of the round";
     static unicode = "U+1F383";
     static color = "#000000ff";
+    static rarity = 5;
     constructor() {
         super(Jack.name, Jack.description, Jack.unicode, Jack.color, 5, 1, 'gameState', 'onRoundStart')
     }
@@ -354,6 +367,7 @@ class Lock extends Admin {
     static description = "Every enemy gains +2 defence at the start of the round";
     static unicode = "U+1F512";
     static color = "#ad1400ff";
+    static rarity = 6;
     constructor() {
         super(Lock.name, Lock.description, Lock.unicode, Lock.color, 6, 3, 'gameState', 'onRoundStart')
     }
@@ -371,6 +385,7 @@ class Eclipse extends Admin {
     static description = "Every player program loses -1 range";
     static unicode = "U+1F31A";
     static color = "#000000ff";
+    static rarity = 5;
     constructor() {
         super(Eclipse.name, Eclipse.description, Eclipse.unicode, Eclipse.color, 1, 9, 'gameState', 'onPlacement')
     }
@@ -385,6 +400,7 @@ class Battery extends Admin {
     static description = "Every player program loses -1 max size";
     static unicode = "U+1FAAB";
     static color = "#ca220bff";
+    static rarity = 1;
     constructor() {
         super(Battery.name, Battery.description, Battery.unicode, Battery.color, 3, 1, 'gameState', 'onPlacement')
     }
@@ -400,6 +416,7 @@ class Customs extends Admin {//remove
     static description = "Every player program is exposed";
     static unicode = "U+1F6C3";
     static color = "#127a3eff";
+    static rarity = 3;
     constructor() {
         super(Customs.name, Customs.description, Customs.unicode, Customs.color, 3, 3, 'gameState', 'onPlacement')
     }
@@ -416,6 +433,7 @@ class Shrine extends Admin {
     static description = "Every player program loses -1 attack";
     static unicode = "U+26E9";
     static color = "#7a1217ff";
+    static rarity = 2;
     constructor() {
         super(Shrine.name, Shrine.description, Shrine.unicode, Shrine.color, 4, 2, 'gameState', 'onPlacement')
     }
@@ -429,6 +447,7 @@ class Izakaya extends Admin {
     static description = "Every player program is confused";
     static unicode = "U+1F3EE";
     static color = "#dbb60dff";
+    static rarity = 3;
     constructor() {
         super(Izakaya.name, Izakaya.description, Izakaya.unicode, Izakaya.color, 6, 3, 'gameState', 'onPlacement')
     }
@@ -445,6 +464,7 @@ class Snowflake extends Admin {
     static description = "Every player program is frozen";
     static unicode = "U+2744";
     static color = "#0d9adbff";
+    static rarity = 5;
     constructor() {
         super(Snowflake.name, Snowflake.description, Snowflake.unicode, Snowflake.color, 6, 5, 'gameState', 'onPlacement')
     }
@@ -461,6 +481,7 @@ class Sun extends Admin {
     static description = "Every player program is blinded";
     static unicode = "U+1F31E";
     static color = "#f0fd33ff";
+    static rarity = 5;
     constructor() {
         super(Sun.name, Sun.description, Sun.unicode, Sun.color, 6, 5, 'gameState', 'onPlacement')
     }
@@ -477,6 +498,7 @@ class Whale extends Admin {
     static description = "Every enemy gains +2 max size at the start of the round";
     static unicode = "U+1F433";
     static color = "#ad1400ff";
+    static rarity = 2;
     constructor() {
         super(Whale.name, Whale.description, Whale.unicode, Whale.color, 3, 2, 'gameState', 'onRoundStart')
     }
@@ -494,6 +516,7 @@ class Bones extends Admin {
   static description = "Destroyed player progams are revived as enemies";
   static unicode = "U+1FA7B";
   static color = "#000000ff";
+  static rarity = 4;
   constructor() {
     super(Bones.name, Bones.description, Bones.unicode, Bones.color, 5, 4, 'gameState', 'onPieceDestruction')
   }
@@ -518,6 +541,7 @@ class Frog extends Admin {
   static description = "Every player program is poisoned";
     static unicode = "U+1F438";
     static color = "#415800ff";
+    static rarity = 5;
     constructor() {
         super(Frog.name, Frog.description, Frog.unicode, Frog.color, 6, 5, 'gameState', 'onPlacement')
     }

@@ -6,6 +6,7 @@ export abstract class Piece {
   removeCallback?: (piece: Piece) => void;
 
   //protected ??
+  tempStatModifiers: StatModifier = {};
   statModifiers: StatModifier = {};//why is this breaking activePieces/enemypieces
   statuses: Record<string, boolean> = {
     diseased: false,
@@ -108,6 +109,17 @@ export abstract class Piece {
     });
   }
 
+  addTempModifier(mod: StatModifier) {
+    Object.entries(mod).forEach(([key, val]) => {
+      this.tempStatModifiers[key as keyof StatModifier] =
+        (this.tempStatModifiers[key as keyof StatModifier] ?? 0) + val;
+    });
+  }
+
+  resetTempModifiers() {
+  this.tempStatModifiers = {};
+}
+
   // --- Accessors for base / modifiers / total ---
   getBaseStat(stat: keyof StatModifier) {
     return this[stat] as number; // base value from constructor
@@ -117,8 +129,12 @@ export abstract class Piece {
     return this.statModifiers[stat] ?? 0;
   }
 
+  getTempModifier(stat: keyof StatModifier) {
+    return this.tempStatModifiers[stat] ?? 0;
+  }
+
   getStat(stat: keyof StatModifier) {
-    return this.getBaseStat(stat) + this.getModifier(stat);
+    return this.getBaseStat(stat) + this.getModifier(stat) + this.getTempModifier(stat);
   }
   //----------------
 
@@ -1360,7 +1376,7 @@ class Squid extends Piece {
 
 class Snail extends Piece {
   static name = "Snail";
-  static description = "A slow program that can retract itself to boost its defence";
+  static description = "A slow program that can retract itself to boost it's defence temporarily until your next turn";
   static unicode = "U+1F40C";
   static color = "#4d3502ff";
   static rarity = 1;
@@ -1371,7 +1387,7 @@ class Snail extends Piece {
   }
   async special(target: Piece):Promise<void>{
     this.tiles = [this.headPosition]//use array modifier
-    //this.addModifier({defence: 2});//tempmod
+    this.addTempModifier({defence: 1});//tempmod
     this.actions--
     //needs to reset on move //unfinished
   }

@@ -14,6 +14,7 @@ export class Player {
     lives: number
     interestCap: number
     bonusInterest: number
+    bonusReward: number
     hasTrolley: boolean
     hasToolbox: boolean
     canPlace: boolean = true;
@@ -32,6 +33,7 @@ export class Player {
         lives: number,
         interestCap: number,
         bonusInterest: number,
+        bonusReward: number,
         hasTrolley: boolean,
         hasToolbox: boolean,
         //adminModifiers: Record<string, StatModifier> = {}
@@ -46,6 +48,7 @@ export class Player {
         this.lives = lives;
         this.interestCap = interestCap;
         this.bonusInterest = bonusInterest;
+        this.bonusReward = bonusReward;
         this.hasTrolley = hasTrolley;
         this.hasToolbox = hasToolbox;
         //this.adminModifiers = adminModifiers;

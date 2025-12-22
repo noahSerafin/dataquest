@@ -88,6 +88,7 @@
     2,
     5,
     0,
+    0,
     false,
     false
   ));
@@ -109,7 +110,8 @@
       os.blueprints,
       os.admins,
       os.lives,
-      10,
+      5,
+      0,
       0,
       false,
       false
@@ -1136,14 +1138,20 @@
     activePieces.value.forEach(piece => {
       piece.resetMoves();
       piece.actions = 1;
+      if(piece.team === 'enemy'){
+        piece.resetTempModifiers();
+      }
     });
     handleApplyAdmins('onTurnEnd', '');
     applyStatusEffects('player');
-    //enemy piece tempStats reset
     await enemyTurn();
     applyStatusEffects('enemy');
     //player piece tempstats reset
-
+    activePieces.value.forEach(piece => {
+      if(piece.team === 'player'){
+        piece.resetTempModifiers();
+      }
+    })
     if(isFirstTurn){
       isFirstTurn.value = false;
     }

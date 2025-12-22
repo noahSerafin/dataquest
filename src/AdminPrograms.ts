@@ -774,9 +774,9 @@ class Seed extends Admin {
   }
 }
 
-class Puzzle extends Admin {//tempmods
+class Puzzle extends Admin {
   static name = "Puzzle Piece";
-  static description = "Pieces with an ally adjacent to their head gain +1 defence at the end of your turn";
+  static description = "Pieces with an ally adjacent to their head temporarily +1 defence until the start of your next turn";
   static unicode = "U+1F9E9";
   static color = "#ff5555";
   constructor() {
@@ -794,7 +794,7 @@ class Puzzle extends Admin {//tempmods
         )
 
         if(neighbours){
-         p.addModifier({defence: 1})
+         p.addTempModifier({defence: 1})
         } //else {
           //p.addModifier({defence: -1})
         //}  
@@ -802,14 +802,14 @@ class Puzzle extends Admin {//tempmods
     }
   }
 }
-/* will need a temp stat
+
 class Chivalry extends Admin {
   static name = "Chivalry";
   static description = "Pieces with an ally adjacent to their head gain +1 attack at the end of your turn";
   static unicode = "U+1F3F0";
   static color = "#33bcfcff";
   constructor() {
-    super(Chivalry.name, Chivalry.description, Chivalry.unicode, Chivalry.color, 6, 3, 'gameState', 'onTurnEnd')
+    super(Chivalry.name, Chivalry.description, Chivalry.unicode, Chivalry.color, 6, 5, 'gameState', 'onTurnEnd')
   }
   //on turn end
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
@@ -818,19 +818,17 @@ class Chivalry extends Admin {
         const neighbours = activePieces.some(piece =>
           piece.team === 'player' &&
           piece.tiles.some(t =>
-          Math.abs(t.x - p.headPosition.x) + Math.abs(t.y - p.headPosition.y) === 1
+            Math.abs(t.x - p.headPosition.x) + Math.abs(t.y - p.headPosition.y) === 1
           )
         )
 
         if(neighbours){
-         p.addModifier({defence: 1})
-        } else {
-          p.addModifier({defence: -1})
-        }  
+         p.addModifier({attack: 1})
+        } 
       } 
     }
   }
-}*/
+}
 
 class Roger extends Admin {
   static name = "Jolly Roger";
@@ -1508,7 +1506,7 @@ class Taoism extends Admin {
   static unicode = "U+262F";
   static color = "rgba(92, 92, 92, 1)ff";
   constructor() {
-    super(Taoism.name, Taoism.description, Taoism.unicode, Taoism.color, 5, 3, 'gameState', 'onTurnEnd')
+    super(Taoism.name, Taoism.description, Taoism.unicode, Taoism.color, 5, 6, 'gameState', 'onTurnEnd')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const playerPieces: Piece[] = [];
@@ -1536,39 +1534,42 @@ class Taoism extends Admin {
   }
 }
 
-export class Loot extends Admin {
+class Loot extends Admin {
   static name = "Loot";
   static description = "Earn an extra $5 at the end of a round";
   static unicode = "U+1F4B0";
   static color = "#ffe555ff";
   constructor() {
-    super(Loot.name, Loot.description, Loot.unicode, Loot.color, 7, 2, 'player', 'onRoundEnd')
+    super(Loot.name, Loot.description, Loot.unicode, Loot.color, 7, 2, 'player', 'other')
   }
   async apply({ player }: { player: Player }) {
-    player.money += 5
+    player.bonusReward += 5;
+  }
+  remove({ player }: { player: Player }) {
+    player.bonusReward -= 5;
   }
 }
 
-export class HedgeFund extends Admin {
+class HedgeFund extends Admin {
   static name = "Hedge Fund";
   static description = "Interest cap raised to $15";
   static unicode = "U+1F4B8";
   static color = "#ff5555";
   constructor() {
-    super(HedgeFund.name, HedgeFund.description, HedgeFund.unicode, HedgeFund.color, 7, 2, 'player', 'onRoundEnd')
+    super(HedgeFund.name, HedgeFund.description, HedgeFund.unicode, HedgeFund.color, 7, 3, 'player', 'onRoundEnd')
   }
   async apply({ player }: { player: Player }) {
     player.interestCap = 15;
   }
 }
 
-export class PeaPod extends Admin {
+class PeaPod extends Admin {
   static name = "Pea Pod";
   static description = "Inreases Admin slots by 2";
   static unicode = "U+1FADB";
   static color = "#55ff7aff";
   constructor() {
-    super(PeaPod.name, PeaPod.description, PeaPod.unicode, PeaPod.color, 7, 2, 'player', 'other')
+    super(PeaPod.name, PeaPod.description, PeaPod.unicode, PeaPod.color, 7, 4, 'player', 'other')
   }
   async apply({ player }: { player: Player }) {
     player.adminSlots += 2
@@ -1578,26 +1579,71 @@ export class PeaPod extends Admin {
   }
 }
 
-export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, OffRoader, Seed, Puzzle, Roger, Bucket, Diamond, Sneakers, Candle, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FireTruck, FakeID, Shades, Barber, Umbrella, Bank, Ballet, Pants, Ace, Pi, Pazzaz, Toilet, Harvest, Bipolar, Taoism, Loot, HedgeFund, PeaPod];//88
-console.log('admins length: ', allAdmins.length)
-//12
+class Liberty extends Admin {
+  static name = "Liberty";
+  static description = "Programs gain +1 range and +1 movement on load"
+  static unicode = "U+1F5FD";
+  static color = "#72deecff";
+  constructor() {
+    super(Liberty.name, Liberty.description, Liberty.unicode, Liberty.color, 6, 4, 'gameState', 'onPlacement')
+  }
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    activePieces[idx].addModifier({range: 1, moves: 1})
+  }
+}
 
-//SCHOOL SATCHEL, U+1F392 player effect
+class Punching extends Admin {
+  static name = "Punching";
+  static description = "+1 security level, +5 reward from nodes";
+  static unicode = "U+1F94A";
+  static color = "#420e0eff";
+  constructor() {
+    super(Punching.name, Punching.description, Punching.unicode, Punching.color, 5, 1, 'player', 'other')
+  }
+  async apply({ player }: { player: Player }) {
+    player.difficulty += 1
+    player.bonusReward += 5;
+  }
+  remove({ player }: { player: Player }) {
+    player.difficulty -= 1
+    player.bonusReward -= 5;
+  }
+}
+
+class Teddy extends Admin {
+  static name = "Playtime";
+  static description = "-1 security level";
+  static unicode = "U+1F9F8";
+  static color = "#7c5a33ff";
+  constructor() {
+    super(Teddy.name, Teddy.description, Teddy.unicode, Teddy.color, 7, 2, 'player', 'other')
+  }
+  async apply({ player }: { player: Player }) {
+    player.difficulty -= 1;
+  }
+  remove({ player }: { player: Player }) {
+    player.difficulty -= 1;
+  }
+}
+
+export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, OffRoader, Seed, Puzzle, Chivalry, Roger, Bucket, Diamond, Sneakers, Candle, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FireTruck, FakeID, Shades, Barber, Umbrella, Bank, Ballet, Pants, Ace, Pi, Pazzaz, Toilet, Harvest, Bipolar, Taoism, Loot, HedgeFund, PeaPod, Liberty, Punching, Teddy];//92
+console.log('admins length: ', allAdmins.length)
+//8
+
 //disco ball U+1FAA9  moves
+//SCHOOL SATCHEL, U+1F392 player effect
 //WHEEL, U+1F6DE immune to slowed?
+//DNA DOUBLE HELIX, U+1F9EC gene splicing/ create a hybrid on placement
 //CHEESE WEDGE, U+1F9C0 Chedda
-//ABACUS, U+1F9EE
-//STATUE OF LIBERTY, U+1F5FD +2 range?
 
 //RIBBON, U+1F380
 //ELECTRIC LIGHT BULB, U+1F4A1
 //RING, U+1F48D
 //DIRECT HIT, U+1F3AF
 // GAME DIE, U+1F3B2
-//DNA DOUBLE HELIX, U+1F9EC clone
 
-//BOXING GLOVE, U+1F94A
-// TEDDY BEAR, U+1F9F8
+//ABACUS, U+1F9EE
 
 //SYMBOL FOR SALT OF ANTIMONY, U+1F72D sceptre
 //LINK SYMBOL, U+1F517

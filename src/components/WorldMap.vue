@@ -58,11 +58,14 @@ import BlueprintController from "./BlueprintController.vue";
     const selectedPreviewNode = ref<WorldNode | null>(null);
     const boss = ref<Admin>(new allBosses[Math.floor(Math.random() * allBosses.length)])
 
-    function newBoss(){
-        //sort by difficulty rarity*
-        //bossesAtThisDifficulty = allBosses.filter(b => b.rarity <= props.player.difficulty);
-        boss.value = new allBosses[Math.floor(Math.random() * allBosses.length)]
+    function newBoss() {
+        const bossPool = allBosses.filter(
+            boss => boss.rarity <= props.player.difficulty
+        );
+        const pool = bossPool.length > 0 ? bossPool : allBosses;
+        boss.value = new pool[Math.floor(Math.random() * pool.length)]; 
     }
+
 
     const worldNodes = computed(() =>
         Object.values(world.value.nodes)
@@ -115,7 +118,7 @@ import BlueprintController from "./BlueprintController.vue";
         }
         if (node.level) {
             console.log(node.level)
-            emit("select-level", node.level, node.difficultyMod, node.reward);
+            emit("select-level", node.level, node.difficultyMod, (node.reward + props.player.bonusReward));
         }
     }
 

@@ -555,9 +555,9 @@ export class Spanner extends Item {
     static name: "Spanner";
     static description: "Prevent a program from moving or taking action for one turn";
     static unicode: "U+1F527";
-    static color = "#ffb20dff";
+    static color = "#5a0505ff";
     constructor(){
-        super(Spanner.name, Spanner.description, Spanner.unicode, Spanner.color, 2, 3, 'piece')
+        super(Spanner.name, Spanner.description, Spanner.unicode, Spanner.color, 2, 3, 'gameState')
         //name desc utf || maxsize moves range atk def
     }
     apply(target: Piece, itemMult: number) {
@@ -566,17 +566,17 @@ export class Spanner extends Item {
     }
 }
 
-export class Makeover extends Item {
+class Makeover extends Item {
     static name: "Makeover";
     static description: "Remove exposed from a program";
     static unicode: "U+1F485";
-    static color = "#ffb20dff";
+    static color = "#c70dffff";
     constructor(){
-        super(Makeover.name, Makeover.description, Makeover.unicode, Makeover.color, 2, 3, 'piece')
+        super(Makeover.name, Makeover.description, Makeover.unicode, Makeover.color, 2, 3, 'gameState')
         //name desc utf || maxsize moves range atk def
     }
     apply(target: Piece, itemMult: number) {
-    
+        target.statuses.exposed = false;
     }
 }
 //PIG, U+1F416 random money?

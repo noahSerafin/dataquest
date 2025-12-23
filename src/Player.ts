@@ -73,8 +73,9 @@ export class Player {
   addAdmin(admin: Admin, target: Player ) {
     if(this.hasAdminSpace){
       this.admins.push(admin)
-      //if admin.targettype === player/other
-      admin.apply(target);
+      if(admin.targetType === 'player' && admin.triggerType === 'other'){
+        admin.apply(target);
+      }
     }
   }
 
@@ -82,7 +83,9 @@ export class Player {
     this.admins = this.admins.filter(a => a.id !== admin.id)
     const i = this.admins.indexOf(admin);
     if (i !== -1) this.admins.splice(i, 1);
-    admin.remove(target);
+    if(admin.targetType === 'player' && admin.triggerType === 'other'){
+      admin.remove(target);
+    }
   }
 
   /** Add an item if there's enough memory */

@@ -23,6 +23,7 @@
         (e: 'sellAdmin', id:string):void;//TODO
         (e: 'reorderAdmins', admins: Admin[]):void;
         (e: 'closeInventory'):void;
+        (e: 'openInventory'):void;
     }>();
 
     const selectedPiece = ref<PieceBlueprint | null>(null)
@@ -120,10 +121,14 @@
                     </span>
                 </p>
             </div>
-            <div>
-                <p class="admin-header"><strong>Admins:</strong> {{ props.player.admins.length }}/{{ props.player.adminSlots }}</p>
+            <div class="admin-middle-container">
+                <div class="admin-header flex">
+                    <span class=""><strong>Admins:</strong> {{ props.player.admins.length }}/{{ props.player.adminSlots }}</span>
+                    <span class=""><strong>Memory:</strong> {{ props.player.usedMemory }}/{{ props.player.memory }}</span>
+                </div>
                 <ul class="admins">
                     <li v-for="(item, index) in props.player.admins"
+                        :class="{ 'z-top': selectedItem === item }"
                         :key="item.id"
                         draggable="true"
                         @dragstart="onDragStart(index)"
@@ -145,35 +150,40 @@
                     </li>
                 </ul>
             </div>
+            <button class="mt-2 px-2 py-1 bg-blue-500 text-white rounded" @click="$emit('openInventory')">{{showInventory ? 'Hide Inventory' : 'Inventory' }}</button>
         </div>
 
     </div>
     <!-- Inventory Popup -->
+    <Teleport to="#overlay-root">
     <div v-if="showInventory" class="inventory mt-3 border-t pt-2">
         <!-- Memory -->
-        <p><strong>Memory:</strong> {{ memoryUsage }}</p>
-        <button class="top-right" @click="$emit('closeInventory')">X</button>
-        <h3 class="font-semibold">Programs</h3>
-        <div v-if="props.player.programs.length === 0">No programs</div>
-        <ul class="inventory-relative">
-            <BlueprintView
-            v-for="pieceBlueprint in player.programs"
-            :key="pieceBlueprint.id"
-            :blueprint="pieceBlueprint"
-            :tileSize="60"
-            cssclass="inventory"
-            :class="'placed-'+pieceBlueprint.isPlaced"
-            @select="openInventoryController"
-            @mousedown="startPlacementDrag(pieceBlueprint)"
-            />
-        </ul>
-
-        <h3 class="font-semibold mt-2">Items</h3>
-        <div v-if="props.player.items.length === 0">No items</div>
-        <ul class="inventory-relative">
-            <ItemView 
+        <div class="inventory-head">
+            <p><strong>Memory:</strong> {{ memoryUsage }}</p>
+            <button class="top-right" @click="$emit('closeInventory')">X</button>
+        </div>
+        <div class="inventory-body">
+            <h3 class="font-semibold">Programs</h3>
+            <div v-if="props.player.programs.length === 0">No programs</div>
+            <ul class="inventory-relative">
+                <BlueprintView
+                v-for="pieceBlueprint in player.programs"
+                :key="pieceBlueprint.id"
+                :blueprint="pieceBlueprint"
+                :tileSize="60"
+                cssclass="inventory"
+                :class="'placed-'+pieceBlueprint.isPlaced"
+                @select="openInventoryController"
+                @mousedown="startPlacementDrag(pieceBlueprint)"
+                />
+            </ul>
+            <h3 class="font-semibold mt-2">Items</h3>
+            <div v-if="props.player.items.length === 0">No items</div>
+            <ul class="inventory-relative">
+                <ItemView 
                 v-for="item in props.player.items"
                 class="p-1 border rounded mb-1 flex justify-between items-center"
+                :class="{ 'z-top': selectedItem === item }" 
                 :item="item"
                 type="consumable"
                 cssclass="inventory"
@@ -184,8 +194,9 @@
                 @use="onUseItem"
                 @select="selectItem"
                 @deselect="deselectItem"
-            />
-        </ul>
+                />
+            </ul>
+        </div>
         <BlueprintController
         v-if="selectedPiece"
         :piece="selectedPiece"
@@ -197,6 +208,7 @@
         @close="handleClose"
         />
     </div>
+    </Teleport>
 </template>
 
 <style scoped>
@@ -216,14 +228,17 @@
     }
     .admin-header{
         position: absolute;
-        top: -0.5rem;
+        top: 0.5rem;
         margin-left: 0.5rem;
+        span{
+            margin-right: 0.5rem;
+        }
     }
     .full-width{
         align-items: center;
     }
     .player-info{
-        line-height: 0.5;
+        line-height: 1.2;
     }
     .os{
         font-size: 24px;
@@ -238,14 +253,14 @@
         margin: 0;
         display: block;
         bottom: 0;
-        height: 200%;
+        height: 100%;
         width: 100%;
         z-index: 99999;
         margin: 0;
         background: rgba(0,0,0,0.85);
         backdrop-filter: blur(4px);
         .top-right{
-            position: absolute;
+            position: fixed;
             top: 0.5rem;
             right: 0.5rem;
         }
@@ -255,6 +270,18 @@
             font-size: 14px;
         }
         
+    }
+    .inventory-head{
+        background-color: transparent;
+        p{
+            background-color: transparent;
+            margin: 0;
+        }
+    }
+    .inventory-body{
+        overflow-y: scroll;
+        height: 80%;
+        z-index: 2;
     }
     .admins, .inventory-relative{
         margin: 0;
@@ -268,5 +295,15 @@
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;
         width: 50%;
+    }
+    .z-top {
+        position: relative;
+        z-index: 1000;
+    }
+    .admin-middle-container{
+        width: 70%;
+    }
+    .float-inventory{
+        
     }
 </style>

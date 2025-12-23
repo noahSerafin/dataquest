@@ -54,7 +54,7 @@ class NorthWind extends Admin {
             }
         });
         playerPieces.forEach(piece => {
-            const spaceToCheck  = {x: piece.headPosition.x, y: piece.headPosition.y-1}
+            const spaceToCheck  = {x: piece.headPosition.x, y: piece.headPosition.y+1}
             //check space is unnocupied and on board
             const isOccupied = activePieces.some(p =>
                 p.tiles.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)
@@ -88,7 +88,7 @@ class Hook extends Admin {
             }
         });
         playerPieces.forEach(piece => {
-            const spaceToCheck  = {x: piece.headPosition.x, y: piece.headPosition.y+1}
+            const spaceToCheck  = {x: piece.headPosition.x, y: piece.headPosition.y-1}
             //check space is unnocupied and on board
             const isOccupied = activePieces.some(p =>
                 p.tiles.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)
@@ -147,9 +147,9 @@ class Downturn extends Admin {
 }
 
 class Factory extends Admin {
-    static rarity = 4;
+    static rarity = 3;
   static name = "Factory";
-  static description = "The enemy places a new piece every 3 turns";
+  static description = "Places a new enemy piece every 3 turns";
   static unicode = "U+1F3ED";
   static color = "#790a0aff";
   constructor() {
@@ -172,6 +172,8 @@ class Factory extends Admin {
 
             if(space){
                 const enemyInstance = new EnemyClass(space, 'enemy', activePieces[0].removeCallback, crypto.randomUUID());//check later
+                enemyInstance.movesRemaining = 0;
+                enemyInstance.actions = 0;
                 activePieces.push(enemyInstance);
             }
             this.count = 0;
@@ -552,12 +554,29 @@ class Frog extends Admin {
         }
     }
 }
+class Coral extends Admin {
+  static name = "Deep Water";
+  static description = "Every player program is slowed";
+    static unicode = "U+1FAB8";
+    static color = "#415800ff";
+    static rarity = 4;
+    constructor() {
+        super(Coral.name, Coral.description, Coral.unicode, Coral.color, 6, 5, 'gameState', 'onPlacement')
+    }
+    async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+        const idx = activePieces.findIndex(p => p.id === id);
+        if(!activePieces[idx].immunities.slowed){
+            activePieces[idx].statuses.slowed = true;
+        }
+    }
+}
 
 // BLACK LARGE SQUARE, U+2B1B
 //REDACTED - all enemy programs classes are hidden with black squares
 
-//fog //tornado tsunami // Izakaya
-export const allBosses = [Mirror, Factory, NorthWind, Hook, Downturn, Wrath, Reaper, Volcano, Circus, Castle, Anchor, Jack, Lock, Eclipse, Battery, Customs, Shrine, Snowflake, Sun, Whale, Bones, Frog]//21
+//fog //square //tornado tsunami
+export const allBosses = [Mirror, Factory, NorthWind, Hook, Downturn, Wrath, Reaper, Volcano, Circus, Castle, Anchor, Jack, Lock, Eclipse, Battery, Customs, Shrine, Snowflake, Sun, Whale, Bones, Frog, Coral, Izakaya]//22
+//3
 
 //ROBOT HEAD "U+1F916"
 //YIN YANG, U+262F

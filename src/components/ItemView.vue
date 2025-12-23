@@ -67,39 +67,40 @@ const handleUse = () => {
   <div
     :id="item.id"
     class="item"
-    :class="`item-${cssclass}`"
+    :class="`item-${cssclass} item-${type}`"
     @click="handleSelect"
     :style="itemStyle"
   >
     <p class='top-left' v-if="cssclass==='shop' && type == 'consumable'" :style="`top: -${((props.tileSize-10)/2 -24)}px`">I</p>
     <p class='top-left' v-if="cssclass==='shop' && type == 'admin'" :style="`top: -${((props.tileSize-10)/2 -24)}px`">A</p>
     <div class="icon">{{ unicodeSymbol }}</div>
-    <div v-if="props.showController" class="info" @click.stop >
-      <button @click="emit('deselect')" class="close">X</button>
-      <div class="name">{{ item.name }}</div>
-      <div v-if="(cssclass == 'shop')" class="type">- {{ type }} -</div>
-      <div class="rarity" :style="{ color: rarityStyle(item.rarity).color }">
-        {{ rarityStyle(item.rarity).label }}
+    <!--<Teleport to="body">-->
+      <div v-if="props.showController" class="info" @click.stop >
+        <button @click="emit('deselect')" class="close">X</button>
+        <div class="name">{{ item.name }}</div>
+        <div v-if="(cssclass == 'shop')" class="type">- {{ type }} -</div>
+        <div class="rarity" :style="{ color: rarityStyle(item.rarity).color }">
+          {{ rarityStyle(item.rarity).label }}
+        </div>
+        <div class="desc">{{ item.description }}</div>
+        <div class="flex">
+          <button v-if="(cssclass == 'shop')"
+            @click="$emit('buy', item)"
+            :disabled="!canBuy"
+            >
+            Buy ${{ item.cost }}
+          </button>
+            <button v-if="(cssclass == 'inventory' && type == 'consumable')"  @click="handleUse">
+              Use
+            </button>
+            <button v-if="(cssclass == 'inventory')"
+            @click="$emit('sell', item)"
+            >
+            Sell ${{ Math.round(item.cost / 2) }}
+          </button>
+        </div>
       </div>
-      <div class="desc">{{ item.description }}</div>
-      
-      <button v-if="(cssclass == 'shop')"
-      @click="$emit('buy', item)"
-      :disabled="!canBuy"
-      >
-        Buy ${{ item.cost }}
-      </button>
-      <button v-if="(cssclass == 'inventory' && type == 'consumable')"  @click="handleUse">
-        Use
-      </button>
-      <button v-if="(cssclass == 'inventory')"
-      @click="$emit('sell', item)"
-      >
-        Sell ${{ Math.round(item.cost / 2) }}
-      </button>
-
-    
-    </div>
+    <!--</Teleport>-->
   </div>
 </template>
 
@@ -186,5 +187,11 @@ button:disabled {
   position: absolute;
   right: 0px;
   margin: 0;
+}
+.inventory-item{
+  .info{
+    position: fixed;
+    z-index: 9999;
+  }
 }
 </style>

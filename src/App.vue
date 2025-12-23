@@ -96,6 +96,9 @@
   function closeInventory(){
     showInventory.value = false;
   }
+  function toggleInventory(){
+    showInventory.value = !showInventory.value;
+  }
   const showMainMenu = ref(true);
   const reward = ref<number>(0);
 
@@ -161,7 +164,7 @@
     if (idx === -1) return;
     const admin = player.value.admins[idx];
     if(admin.triggerType === 'other'){
-      admin.remove(player.value);
+      admin.remove({player: player.value});
     }
     player.value.admins.splice(idx, 1);
     player.value.money += Math.round(admin.cost / 2);
@@ -849,7 +852,7 @@
     const trap = activePieces.value.find(p =>
       p.targetType == 'trapPiece' && p.tiles.some(t => t.x === coord.x && t.y === coord.y)
     );
-    if (trap) {
+    if (trap && trap.id !== selectedPiece.value.id) {
       await trap.special(selectedPiece.value);
       removePiece(trap);//shouldn't really be necessary
     }
@@ -878,6 +881,7 @@
 
   const damagePieceAt = async (coord:Coordinate) => {
     if (!selectedPiece.value) return
+    if((selectedPiece.value.team === 'enemy' && !selectedPiece.value.statuses.charmed) || (selectedPiece.value.team === 'player' && selectedPiece.value.statuses.charmed)) return
     player.value.canPlace = false;
     //if (selectedPiece.value.team !== 'player') return //damaging your own pieces is actually useful sometimes
     const damageReceiver = activePieces.value.find(piece =>
@@ -910,6 +914,7 @@
   const handleSpecialActionAt = async (target: Coordinate) => {
     //the enemy should also be able to use special moves, handle in enemy?
     if(!selectedPiece.value || selectedPiece.value.actions <= 0) return
+    if((selectedPiece.value.team === 'enemy' && !selectedPiece.value.statuses.charmed) || selectedPiece.value.team === 'player' && selectedPiece.value.statuses.charmed) return
     boardRef.value.clearHighlights();
     // find piece at targeted coordinate
     const targetPiece = activePieces.value.find(piece =>
@@ -975,7 +980,7 @@
       const thisRange = selectedPiece.value.getStat('range');
       const inRange = activePieces.value.filter(p => 
         p.tiles.some(tile => 
-          Math.abs(tile.x - target.x) + Math.abs(tile.y - target.y) <= thisRange
+          Math.abs(tile.x - target.x) + Math.abs(tile.y - target.y) <= thisRange//check
         )
       );
       await selectedPiece.value.special(inRange);
@@ -1132,6 +1137,7 @@
 
   const endTurn = async () => {
     selectedPiece.value = null;
+    pieceToPlace.value = null;
     closeInventory();
     hasFinishedTurn.value = true;
     player.value.canPlace = false;
@@ -1238,7 +1244,7 @@ const debugMode = true;
       </span>
     </div>
     <div v-if="!displayEditor && roundHasStarted" class="player-helper">
-      <div v-if="!hasFinishedTurn && !isPlacing">Your turn</div>
+      <div v-if="!hasFinishedTurn && !isPlacing" class="turn-info">Your turn</div>
       <div v-if="isPlacing && pieceToPlace">
         <p>Placing:</p>
         <button @click="pieceToPlace=null">Cancel</button>
@@ -1321,7 +1327,8 @@ const debugMode = true;
     @sellAdmin="sellAdmin"
     @reorderAdmins="player.admins = $event"
     @startPlacementDrag="startPlacementDrag"
-    @closeInventory="closeInventory"
+    @closeInventory="toggleInventory"
+    @openInventory="toggleInventory"
     />
     <PieceController
       v-if="selectedPiece && !hasFinishedTurn"
@@ -1338,11 +1345,11 @@ const debugMode = true;
       />
     <div v-if="!displayEditor" class="player-actions">
       <button v-if="(!displayEditor && roundHasStarted && !hasFinishedTurn) || debugMode" class="end-turn" v-on:click="endTurn()">End Turn</button>
-      <button class="mt-2 px-2 py-1 bg-blue-500 text-white rounded" @click="showInventory = !showInventory">{{showInventory ? 'Hide Inventory' : 'Inventory' }}</button>
+      <!--<button class="mt-2 px-2 py-1 bg-blue-500 text-white rounded" @click="showInventory = !showInventory">{{showInventory ? 'Hide Inventory' : 'Inventory' }}</button>-->
       <div v-if="!displayEditor && roundHasStarted" class="graveyard">
         <button>🪦</button>
       </div>
-      <button v-if="!displayEditor && roundHasStarted && player.lives > 1" class="retry-btn" v-on:click="retryLevel()">Retry Node</button>
+      <button v-if="!displayEditor && roundHasStarted && player.lives > 1" class="retry-btn" v-on:click="retryLevel()">Retry</button>
     </div>
   </div>
   </div>
@@ -1353,6 +1360,10 @@ const debugMode = true;
   position: absolute;
   top: 10px;
   right: 10px;
+}
+.turn-info{
+  font-weight: bold;
+  color: red;
 }
 .enemy-info{
   display: flex;

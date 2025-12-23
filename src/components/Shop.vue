@@ -107,7 +107,7 @@ const type = ((item: Item) => {
       />
     </div>
     <div class="item-row">
-      Items:
+      Items/Admins:
       <ItemView 
         v-for="item in props.shopItems"
         :item="item"
@@ -145,7 +145,7 @@ const type = ((item: Item) => {
   border: 1px dashed white;
   position: absolute;
   transition: transform 0.3s ease;
-  z-index: 99;
+  z-index: 9;
   width: 96%;
 }
 .shop-top{

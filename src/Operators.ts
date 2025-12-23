@@ -234,7 +234,7 @@ const Penguin : OS = {//potato //shield
     blueprints: [potato, sling, aegis],
     items: [new Whetstone, new Lightning],
     admins: [],
-    lives: 3,
+    lives: 4,
     description: 'A versatile all around system, though a bit barebones out of the box. Start with some upgrade items.'
 }
 
@@ -248,7 +248,7 @@ const Window : OS = {//knife //shield //snail
     items: [new Blueberry, new Roids],
     admins: [],
     lives: 2,
-    description: 'Limited memory. Starts with some slow but useful programs, and items to increase size.'
+    description: 'Limited memory. Starts with some slow but useful programs and items to increase size.'
 
 }
 
@@ -262,7 +262,7 @@ const Apple : OS = {//TP //rat
     items: [new Garlic, new RedMeat],
     admins: [],
     lives: 3,
-    description: 'Limited admin functionality, but starts with excess money and some consumable items.'
+    description: 'Limited admin functionality, but start with excess money and some consumable items.'
 }
 
 const Temple : OS = {//lance //bug //screwdriver
@@ -304,4 +304,4 @@ const Debugger : OS = {//lance //bug //screwdriver
 
 //GREEK CAPITAL LETTER DELTA, U+394
 
-export const allOSes = [Penguin, Window, Apple, Temple, Steam, Debugger ];
+export const allOSes = [Steam, Penguin, Window, Apple, Temple, Debugger ];

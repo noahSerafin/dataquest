@@ -429,14 +429,15 @@ function resolveMove(
 ) {
   // Not confused → behave normally
   if (!props.selectedPiece?.statuses.confused || allMoves.length <= 1) {
-    emit('movePiece', chosenMove);
+    emit('movePiece', {x: chosenMove.x, y: chosenMove.y});
+  } else { 
+    // Confused → random valid move
+    const randomIndex = Math.floor(Math.random() * allMoves.length);
+    emit('movePiece', {x: allMoves[randomIndex].x, y: allMoves[randomIndex].y});
   }
-
-  // Confused → random valid move
-  const randomIndex = Math.floor(Math.random() * allMoves.length);
-  emit('movePiece', allMoves[randomIndex]);
 }
 //onclick = "resolveMove(tile, moveButtons)""
+//v-on:click="$emit('movePiece', tile);"
 
 </script>
 
@@ -505,7 +506,7 @@ function resolveMove(
       :key="index"
       class="highlight-tile"
       :class="['move-button', `move-button-${tile.direction}`]"
-      v-on:click="$emit('movePiece', tile);"
+      v-on:click="resolveMove(tile, moveButtons);"
       :style="{
         left: (tile.x * tileSize) + 1 + 'px',
         top: (tile.y * tileSize) + 1 + 'px',

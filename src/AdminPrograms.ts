@@ -1167,8 +1167,8 @@ class Fountain extends Admin {
 
 export class Spoon extends Admin {
   static name =  "Silver Spoon";
-  static description = "Gain $5 at the start of every round";
-  static unicode = "U+1F69B";
+  static description = "Gain $4 at the start of every round";
+  static unicode = "U+1F944";
   static color = "#c9a91dff";
   constructor() {
     super (Spoon.name, Spoon.description, Spoon.unicode, Spoon.color, 10, 4, 'player', 'onRoundStart')

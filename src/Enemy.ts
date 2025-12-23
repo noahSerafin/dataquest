@@ -2,7 +2,7 @@ import type { Piece } from "./Pieces";
 import type { Coordinate } from "./types";
 type EnemyIntent =
   | { type: 'attack'; target: Piece }
-  | { type: 'special'; target: Piece | Coordinate | Piece[] | {line: Coordinate[], activePieces: Piece[]} | { target: Coordinate, activePieces: Piece[] } | null }
+  | { type: 'special'; target: Piece | Coordinate | Piece[] | {piece: Piece, target: Coordinate} | {line: Coordinate[], activePieces: Piece[]} | { target: Coordinate, activePieces: Piece[] } | null }
   | { type: 'move'; path: Coordinate[] }
   | { type: 'wander'; space: Coordinate }
   | { type: 'wait' };
@@ -38,7 +38,7 @@ function decideEnemyIntent(
         if (newTarget)  return { type: 'special', target: {line: getTilesInLine(enemy, newTarget.place), activePieces: activePieces} }
       }
       if(enemy.targetType == 'pieceAndPlace' ){
-        return { type: 'special', target: {target: target.place, activePieces: activePieces}}
+        return { type: 'special', target: {piece: target.piece, target: target.place}}
       }
       if(enemy.targetType === 'piece'){ ///can execute a special
         return { type: 'special', target: target.piece };

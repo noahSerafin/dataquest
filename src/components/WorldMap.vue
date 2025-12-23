@@ -56,16 +56,21 @@ import BlueprintController from "./BlueprintController.vue";
 
     const currentNodeId = ref(world.value.startNode);
     const selectedPreviewNode = ref<WorldNode | null>(null);
-    const boss = ref<Admin>(new allBosses[Math.floor(Math.random() * allBosses.length)])
+    const boss = ref<Admin>(returnNewBoss());
 
-    function newBoss() {
+    function returnNewBoss() {
         const bossPool = allBosses.filter(
             boss => boss.rarity <= props.player.difficulty
         );
         const pool = bossPool.length > 0 ? bossPool : allBosses;
-        boss.value = new pool[Math.floor(Math.random() * pool.length)]; 
+        console.log('allbosses', allBosses.length)
+        console.log('pool', pool.length)
+        return new pool[Math.floor(Math.random() * pool.length)]; 
     }
+    function newBoss() {
+        boss.value = returnNewBoss();
 
+    }
 
     const worldNodes = computed(() =>
         Object.values(world.value.nodes)
@@ -123,7 +128,10 @@ import BlueprintController from "./BlueprintController.vue";
     }
 
     function displayIcon(node: WorldNode) {
-         if (node.type === 'skip' && node.skipReward) {
+        if(node.id === currentNodeId.value){
+            return String.fromCodePoint(parseInt(props.player.osunicode.replace('U+', ''), 16));
+        }
+        if (node.type === 'skip' && node.skipReward) {
             return String.fromCodePoint(
             parseInt(node.skipReward.value.unicode.replace('U+', ''), 16)
             );
@@ -245,6 +253,7 @@ import BlueprintController from "./BlueprintController.vue";
         () => props.seed,
         () => {
             // rebuild world graph
+            console.log('building map')
             world.value = generateWorld(levelPool.value, props.player.difficulty);
             assignSkipRewards(world.value);
             currentNodeId.value = world.value.startNode;
@@ -276,7 +285,7 @@ import BlueprintController from "./BlueprintController.vue";
             }"
             @click="trySelect(node)"
         >
-        <div v-if="node.type=='level' "class="company-info">
+        <div v-if="node.type=='boss' || node.type=='level' && node.id !== currentNodeId  && node.id !=='start'" class="company-info">
             <div>
                 {{ node.company.abbr }}
             </div>
@@ -333,7 +342,14 @@ import BlueprintController from "./BlueprintController.vue";
                 @select="select(selectedPreviewNode.skipReward)"
                 @deselect="deselect"
             />
-            <!--<BlueprintController v-if="selectedPreviewNode.skipReward?.kind === 'blueprint'/>-->
+            <BlueprintController
+                v-if="selectedPreviewNode.skipReward?.kind === 'blueprint'"
+                :piece="selectedPreviewNode.skipReward.value"
+                mode="shop"
+                :canBuy= "false"
+                @select="select(selectedPreviewNode.skipReward)"
+                @close="deselect"
+            />
 
             <ItemView
                 v-if="selectedPreviewNode.skipReward?.kind === 'admin'"
@@ -374,7 +390,11 @@ import BlueprintController from "./BlueprintController.vue";
                 >
                 Accept Reward
             </button>
-            <button v-if="selectedPreviewNode && selectedPreviewNode?.type !== 'skip'" @click="enterNode(selectedPreviewNode)">Enter</button>
+            <button 
+            v-if="selectedPreviewNode && selectedPreviewNode?.type !== 'skip'"
+            :disabled="!canClick(selectedPreviewNode)"
+            @click="enterNode(selectedPreviewNode)"
+            >Enter</button>
             <button v-if="selectedPreviewNode" @click="selectedPreviewNode = null">Close</button>
             <button v-if="canSkip(selectedPreviewNode)" @click="skipNode(selectedPreviewNode)">Skip $5</button>
         </div>
@@ -393,7 +413,7 @@ import BlueprintController from "./BlueprintController.vue";
     }
     .world-map {
         background-color: rgb(230, 218, 181);
-        z-index: 98;
+        z-index: 3;
         display: flex;
         justify-content: center;
         align-items: center;

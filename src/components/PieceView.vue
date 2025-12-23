@@ -28,7 +28,7 @@ const emit = defineEmits<{
   (e: "deselect"): void
 }>()
 
-const actionToEmit = ref<string>('A');
+const actionToEmit = ref<string>(props.piece.canAttack? 'A' : 'S');
 
 function cycleAction(){
   console.log(actionToEmit.value)
@@ -41,7 +41,9 @@ function cycleAction(){
   }
   else if(actionToEmit.value === 'S') {
     emit('highlightSpecials', props.piece);
-    actionToEmit.value = 'A';
+    if(props.piece.canAttack){
+      actionToEmit.value = 'A';
+    }
   }
 }
 
@@ -139,7 +141,7 @@ const activeStatuses = computed((): [string, boolean][] => {
     @click.stop = "$emit('deselect')"
     >x
     </button>
-    <button v-if="showFastControls && selectedPiece === piece && (piece.team === 'player' || (piece.team === 'enemy' && piece.statuses.charmed))" class="action-btn"
+    <button v-if="showFastControls && selectedPiece === piece && ((piece.team === 'player' && !piece.statuses.charmed) || (piece.team === 'enemy' && piece.statuses.charmed))" class="action-btn"
     @click.stop = "cycleAction"
     >{{ actionToEmit }}
     </button>
@@ -157,7 +159,7 @@ const activeStatuses = computed((): [string, boolean][] => {
   <div
     v-for="(tile, index) in bodyTiles"
     :key="index"
-    :class="`piece-tile ${tile.x}-${tile.y} ${getDirectionClass(tile, index+1)} team-${props.piece.team}`"
+    :class="`piece-tile ${tile.x}-${tile.y} ${getDirectionClass(tile, index+1)} team-${props.piece.team} hidden-${piece.statuses.hidden}`"
     :style="{
       ...pieceStyle,
       ...getTileStyle(tile),

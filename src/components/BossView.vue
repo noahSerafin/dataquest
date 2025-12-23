@@ -9,15 +9,24 @@
     }>();
 
     const selectedItem = ref<Item | null>(null)
+    function selectItem(item: Item){
+        selectedItem.value = item;
+        return;
+    }
+    function deselectItem(){
+        selectedItem.value = null;
+        return;
+    }
 </script>
-
 <template>
     <div>
         <span><strong>Bosses:</strong></span>
         <span class="admins">
             <span v-for="(item, index) in props.admins"
                 :key="item.id"
-                class="p-1 border rounded mb-1 flex justify-between items-center">
+                class="p-1 border rounded mb-1 flex justify-between items-center"
+                :class="{ 'z-top': selectedItem === item }" 
+                >
                 <ItemView 
                     :item="item"
                     type="admin"
@@ -25,9 +34,18 @@
                     :tileSize="60"
                     :canBuy="false"
                     :showController="(selectedItem === item)"
+                    @select="selectItem"
+                    @deselect="deselectItem"
                 />
             </span>
         </span>
     </div>
 </template>
+
+<style scoped>
+    .z-top {
+        position: relative;
+        z-index: 1000;
+    }
+</style>
              

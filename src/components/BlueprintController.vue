@@ -108,7 +108,7 @@ defineEmits(["buy", "sell", "highlightPlacements", "close"])
   .inventory-controller{
     display: flex;
     flex-direction: row;
-    width: 40%;
+    width: 66%;
     padding-right: 2.5rem;
   }
 }

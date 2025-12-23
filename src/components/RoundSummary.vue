@@ -32,19 +32,19 @@
                 Node complete
             </h3>
             <div class="interest-summary">
-                Total interest earned: {{ interest }}
+                Total interest earned: ${{ interest }}
                 <span class="bonus"
                  v-if="player.bonusInterest > 0">
-                    + bonus {{ player.bonusInterest }}
+                    + bonus ${{ player.bonusInterest }}
                 </span>
                 <span class="inheritance"
                     v-if="player.admins.some(a => a.name === 'inheritance')"
                 >
-                + inheritance {{ interest }}
+                + inheritance ${{ interest }}
                 </span>
             </div>
             <div class="reward-summary">
-                Reward: {{ reward }}
+                Reward: ${{ reward }}
             </div>
             <button @click="emit('proceedFromEndOfRound')">Proceed</button>
         </div>

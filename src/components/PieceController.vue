@@ -80,17 +80,17 @@ function toggleTooltip(key: string) {
     <div class="actions">
       <button
         :disabled="!canMove || piece.moves <= 0" 
-        v-if="(piece.team === 'player' || (piece.team === 'enemy' && piece.statuses.charmed))" @click="$emit('highlightMoves', piece)">
+        v-if="((piece.team === 'player' && !piece.statuses.charmed) || (piece.team === 'enemy' && piece.statuses.charmed))" @click="$emit('highlightMoves', piece)">
         Move
       </button>
       <button
         :disabled="!canAction || piece.actions <= 0"
-        v-if="(piece.team === 'player' || (piece.team === 'enemy' && piece.statuses.charmed)) && piece.canAttack"
+        v-if="((piece.team === 'player' && !piece.statuses.charmed) || (piece.team === 'enemy' && piece.statuses.charmed)) && piece.canAttack"
         @click="$emit('highlightTargets', piece)">
         Attack
       </button>
       <button
-        v-if="piece.specialName && (piece.team === 'player' || (piece.team === 'enemy' && piece.statuses.charmed))"
+        v-if="piece.specialName && ((piece.team === 'player' && !piece.statuses.charmed) || (piece.team === 'enemy' && piece.statuses.charmed))"
         :disabled="!canAction || piece.actions <= 0"
         @click="$emit('highlightSpecials', piece)">
         {{ piece.specialName }}
@@ -208,5 +208,8 @@ p{
 }
 .tooltip-popup{
   font-size: 0.5em;
+}
+#overlay-root.piece-controller{
+  width: 100%;
 }
 </style>

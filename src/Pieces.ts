@@ -2315,8 +2315,10 @@ class Drum extends Piece {
 export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Ink, Snail, Shark, Greatshield, Wizard, Ninja, Fairy, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, Dolls, UFO, TP, Saw, Croc, Lighthouse, Torch, Camera, Drum];//86 +2 (web, ink)
 console.log('pieces length: ', allPieces.length)
 
+// YO-YO, U+1FA80
 //Daemon//IMP, U+1F47F  smiling: U+1F608
 //PLAYGROUND SLIDE, U+1F6DD like gate but with more range? line target??
+// KITE, U+1FA81
 ////recurve bow CANADIAN SYLLABICS CARRIER CHEE, U+1664
 //DANCER, U+1F483 //high movement no damage
 //ANT, U+1F41C //high movement

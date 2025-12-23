@@ -1659,6 +1659,10 @@ console.log('admins length: ', allAdmins.length)
 //DIRECT HIT, U+1F3AF
 // GAME DIE, U+1F3B2
 
+//LADDER, U+1FA9C
+// KNOT, U+1FAA2
+//TENT, U+26FA
+
 //ABACUS, U+1F9EE
 
 //FERRIS WHEEL, U+1F3A1

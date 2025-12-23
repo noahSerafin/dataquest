@@ -29,6 +29,7 @@ export abstract class Piece {
   hasExposingSpecial: boolean = false;//use in enemyAI
 
   specialName?: string;
+  extraUnicode?: string;
   targetType: 'piece' | 'pieceAndPlayer' | 'space' | 'pieceAndPlace' | 'group' | 'line' | 'self' | 'all' | 'graveyard' | 'trapPiece' = 'piece';
 
   id: string

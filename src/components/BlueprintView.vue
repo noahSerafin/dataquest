@@ -30,6 +30,11 @@ const unicodeSymbol = computed(() =>
     ? String.fromCodePoint(parseInt(props.blueprint.unicode.replace('U+', ''), 16))
     : ''
 )
+const ExtraUnicodeSymbol = computed(() =>
+  props.blueprint.extraUnicode
+    ? String.fromCodePoint(parseInt(props.blueprint.extraUnicode.replace('U+', ''), 16))
+    : ''
+)
 
 // --- reactive properties derived from the piece instance ---
 function showRarity(rarity: number) {
@@ -97,7 +102,7 @@ function handleSelect() {
     @sell="$emit('sell', props.blueprint)"
   >
   <p class='top-left' v-if="cssclass==='shop' || cssclass==='skipReward'" :style="`top: -${((props.tileSize-10)/2 - 24)}px`">P</p>
-    {{ unicodeSymbol }}
+    {{ unicodeSymbol }}<span v-if="blueprint.extraUnicode">{{ ExtraUnicodeSymbol }}</span>
   </div>
 </template>
 

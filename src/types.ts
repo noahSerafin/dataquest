@@ -17,7 +17,14 @@ export type PieceBlueprint = {
   color: string
   isPlaced: boolean
   cost: number
+  extraUnicode?: string;
 }
+
+export type HybridBlueprint = PieceBlueprint & {
+  kind: 'hybrid';
+  baseA: PieceBlueprint;
+  baseB: PieceBlueprint;
+};
 
 export type OS = {
   name: string

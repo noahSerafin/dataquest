@@ -53,6 +53,11 @@ const unicodeSymbol = computed(() =>
     ? String.fromCodePoint(parseInt(props.piece.unicode.replace('U+', ''), 16))
     : ''
 )
+const ExtraUnicodeSymbol = computed(() =>
+  props.piece.extraUnicode
+    ? String.fromCodePoint(parseInt(props.piece.extraUnicode.replace('U+', ''), 16))
+    : ''
+)
 
 // --- reactive properties derived from the piece instance ---
 
@@ -136,7 +141,7 @@ const activeStatuses = computed((): [string, boolean][] => {
     :style="pieceStyle"
     @click="handleSelect"
   >
-      {{ unicodeSymbol }}
+      {{ unicodeSymbol }}<span v-if="piece.extraUnicode">{{ ExtraUnicodeSymbol }}</span>
     <button v-if="showFastControls && selectedPiece === piece" class="deselect-btn"
     @click.stop = "$emit('deselect')"
     >x

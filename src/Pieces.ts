@@ -550,7 +550,8 @@ class Trojan extends Piece {
     newTrojan.attack = this.attack
     newTrojan.defence = this.defence
     newTrojan.statModifiers = this.statModifiers
-    newTrojan.movesRemaining = 0
+    newTrojan.movesRemaining = 0;
+    newTrojan.actions = 0;
     activePieces.push(newTrojan);
     this.actions --
   }

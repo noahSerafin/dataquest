@@ -1138,7 +1138,7 @@
   const endTurn = async () => {
     selectedPiece.value = null;
     pieceToPlace.value = null;
-    closeInventory();
+    //closeInventory();
     hasFinishedTurn.value = true;
     player.value.canPlace = false;
     player.value.canMove = false;

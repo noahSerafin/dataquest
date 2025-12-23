@@ -261,7 +261,7 @@ const Apple : OS = {//TP //rat
     blueprints: [rat, bee, shield],
     items: [new Garlic, new RedMeat],
     admins: [],
-    lives: 2,
+    lives: 3,
     description: 'Limited admin functionality, but starts with excess money and some consumable items.'
 }
 

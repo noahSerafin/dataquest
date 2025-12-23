@@ -274,4 +274,9 @@ const activeStatuses = computed((): [string, boolean][] => {
 .team-enemy.hidden-true{
   opacity: 0;
 }
+.editor{
+  .team-enemy.hidden-true{
+     opacity: 1;
+  }
+}
 </style>

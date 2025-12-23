@@ -4,6 +4,18 @@ make more levels, smaller levels (max size 9)
 test interest is working properly 
 hide hidden enemies - test
 
+SAVE GAME STATE for bugs 6
+
+BUGS
+snail - not reseting
+chivalry adding every turn, will puzzle do the same?
+web/ink not dissapearing - inconclusive
+-visual:
+no skipNode controller
+admin popup z-index too low
+player inventory infront of board
+inventory needs 5 columns at least
+
 MAP 6.5
 branching paths - started
 multiple levels files for difficulty tier?
@@ -25,8 +37,6 @@ Hybrid class accepts two pieces
 takes average of both stats, rounded up
 takes special move of first piece
 add altar to map nodes
-
-TEMPMODS - puzzle, chivalry, snail etc.
 
 ITEMS - clean up player items, add activePieces/gameState items 7
 

@@ -501,6 +501,7 @@ function resolveMove(
     />
     <div
       v-for="(tile, index) in moveButtons"
+      v-if="(selectedPiece?.team === 'player' && !selectedPiece?.statuses.charmed) || (selectedPiece?.statuses.charmed && selectedPiece?.team === 'enemy')"
       :key="index"
       class="highlight-tile"
       :class="['move-button', `move-button-${tile.direction}`]"

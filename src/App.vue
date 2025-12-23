@@ -521,7 +521,8 @@
   const originalPieces = ref<InstanceType<typeof Piece>[]>([]);
   const originalSpawns = ref<Coordinate[]>([]);
 
-  const selectLevel = (newLevel: Level, difficultyMod: number, lReward: number) => {//load level, start round
+  const selectLevel = (newLevel: Level, difficultyMod: number, lReward: number) => {//load level, start 
+    pieceToPlace.value = null;
     showBoard.value = true;
     renewBlueprints()//shouldnt be needed in final;
     hasFinishedTurn.value = false;
@@ -850,6 +851,7 @@
     );
     if (trap) {
       await trap.special(selectedPiece.value);
+      removePiece(trap);//shouldn't really be necessary
     }
     if(selectedPiece.value.movesRemaining > 0){
       boardRef.value.highlightMoves(selectedPiece.value);
@@ -882,7 +884,7 @@
       piece.tiles.some(t => t.x === coord.x && t.y === coord.y)
     );
     //console.log('receiver: ', damageReceiver?.name)
-    if (!damageReceiver || damageReceiver.team === selectedPiece.value.team) return;
+    if (!damageReceiver || (damageReceiver.team === selectedPiece.value.team && !selectedPiece.value.statuses.charmed)) return;
     //console.log("Damage call:", coord, damage)
     const baseDamage = selectedPiece.value.getStat('attack');
     await handleApplyAdmins('onDealDamage', selectedPiece.value.id)//attacker's id, (bug: blood tax will trigger even on no damage)
@@ -1215,6 +1217,9 @@ const debugMode = true;
     <button class="map-toggle" @mousedown="toggleMap()">
       Toggle Map
     </button>
+     <button class="board-toggle" @mousedown="showBoard = true">
+      Toggle Board
+    </button>
     <button class="difficulty" @mousedown="increaseDifficulty()">
       Increase Security
     </button>
@@ -1332,7 +1337,7 @@ const debugMode = true;
       @close="deselectPiece"
       />
     <div v-if="!displayEditor" class="player-actions">
-      <button v-if="!displayEditor && roundHasStarted && !hasFinishedTurn" class="end-turn" v-on:click="endTurn()">End Turn</button>
+      <button v-if="(!displayEditor && roundHasStarted && !hasFinishedTurn) || debugMode" class="end-turn" v-on:click="endTurn()">End Turn</button>
       <button class="mt-2 px-2 py-1 bg-blue-500 text-white rounded" @click="showInventory = !showInventory">{{showInventory ? 'Hide Inventory' : 'Inventory' }}</button>
       <div v-if="!displayEditor && roundHasStarted" class="graveyard">
         <button>🪦</button>

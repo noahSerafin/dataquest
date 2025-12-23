@@ -202,7 +202,7 @@ import BlueprintController from "./BlueprintController.vue";
         for (const node of Object.values(world.nodes)) {
             if (node.type === 'skip' && !node.skipReward) {
                 node.skipReward = generateSkipReward(node);
-                node.skipReward.value.cost = 0;
+                //node.skipReward.value.cost = 0;
             }
         }
     }
@@ -223,10 +223,8 @@ import BlueprintController from "./BlueprintController.vue";
             props.player.addItem(node.skipReward.value);
             break;
         }
-        if(selectedPreviewNode.value?.next){
-            currentNodeId.value = selectedPreviewNode.value.next[0]
-            selectedPreviewNode.value = null;
-        }
+        currentNodeId.value = node.id
+        selectedPreviewNode.value = null;
     }
 
     const skipTarget = ref<PieceBlueprint | Item | null>(null);
@@ -365,6 +363,13 @@ import BlueprintController from "./BlueprintController.vue";
             <button
                 v-if="selectedPreviewNode?.type === 'skip' && (selectedPreviewNode.skipReward?.kind === 'blueprint' || selectedPreviewNode.skipReward?.kind === 'item')"
                 :disabled="!player.hasMemorySpace"
+                @click="takeSkipReward(selectedPreviewNode)"
+                >
+                Accept Reward
+            </button>
+            <button
+                v-if="selectedPreviewNode?.type === 'skip' && (selectedPreviewNode.skipReward?.kind === 'admin')"
+                :disabled="!player.hasAdminSpace"
                 @click="takeSkipReward(selectedPreviewNode)"
                 >
                 Accept Reward

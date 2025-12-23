@@ -847,7 +847,7 @@ class Spider extends Piece {
   //U+1F577 U+FE0F spider trail is trap
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Spider.name, Spider.description, Spider.unicode, 6, 3, 1, 3, 0, Spider.color, headPosition, [headPosition], team, Spider.rarity, removeCallback, id)
+   super(Spider.name, Spider.description, Spider.unicode, 2, 3, 1, 3, 0, Spider.color, headPosition, [headPosition], team, Spider.rarity, removeCallback, id)
     this.specialName = 'Weave';
     this.targetType = 'space'
   }
@@ -856,7 +856,6 @@ class Spider extends Piece {
     activePieces.push(newWeb)
     this.actions --
   }
-  //spawn a web default cloaked and passable
 }
 
 //	U+1F9A0 microbe
@@ -1341,6 +1340,7 @@ class Ink extends Piece {
     }
     this.actions--
     this.statuses.hidden = false;
+    //sleep 300?
     this.removeCallback?.(this);
   }
 }

@@ -49,7 +49,7 @@ export abstract class Admin<
 class Meteor extends Admin {
   static name = "Meteor Shower";
   static description = "Deals 3 damage to every piece at the start of a round";
-  static unicode = "☄️";
+  static unicode = "U+2604";
   static color = "#000000ff";
 
   constructor() {
@@ -532,7 +532,7 @@ class Lungs extends Admin {
   }
 }
 
-class Brain extends Admin {
+class Brain extends Admin {//unfinished, actionsHandler in Piececontroller playing up, or canAttack bool being set false somewhere?
   static name = "Brain";
   static description = "placed programs all have +1 actions on placement";
   static unicode = "U+1F9E0";
@@ -1046,7 +1046,7 @@ export class Broom extends Admin {
   static unicode = "U+1F9F9";
   static color = "#c7b07eff";
   constructor() {
-    super(Broom.name, Broom.description, Broom.unicode, Broom.color, 10, 5, 'gameState', 'onTurnEnd')
+    super(Broom.name, Broom.description, Broom.unicode, Broom.color, 10, 4, 'gameState', 'onTurnEnd')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (let index = 0; index < activePieces.length; index++) {
@@ -1115,7 +1115,7 @@ class Prayer extends Admin {
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
     console.log('applying:', this.name)
-    activePieces[idx].addModifier({defence: 1})
+    activePieces[idx].addModifier({defence: 2})
   }
 
 }
@@ -1217,7 +1217,7 @@ class Scarf extends Admin {
 class Ambulance extends Admin {//test
   static name = "Ambulance";
   static description = "Recovers all your destroyed programs to your inventory, letting you reload them";
-  static unicode = "U+1F52C";
+  static unicode = "U+1F691";
   static color = "#ff5555";
   constructor() {
     super(Ambulance.name, Ambulance.description, Ambulance.unicode, Ambulance.color, 5, 4, 'playerAndGame', 'onPieceDestruction')
@@ -1280,7 +1280,7 @@ class Barber extends Admin {
   static color = "#d1d1d1ff";
 
   constructor() {
-    super(Barber.name, Barber.description, Barber.unicode, Barber.color, 10, 2, 'gameState', 'onRoundStart')
+    super(Barber.name, Barber.description, Barber.unicode, Barber.color, 10, 5, 'gameState', 'onRoundStart')
   }
 
   //onRoundStart
@@ -1627,9 +1627,25 @@ class Teddy extends Admin {
   }
 }
 
-export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, Brain, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, OffRoader, Seed, Puzzle, Chivalry, Roger, Bucket, Diamond, Sneakers, Candle, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FireTruck, FakeID, Shades, Barber, Umbrella, Bank, Ballet, Pants, Ace, Pi, Pazzaz, Toilet, Harvest, Bipolar, Taoism, Loot, HedgeFund, PeaPod, Liberty, Punching, Teddy];//92
+class Abacus extends Admin {
+  static name = "Abacus";
+  static description = "gain 3/(security levels) in $ at the end of a round (rounded down)";
+  static unicode = "U+1F9EE";
+  static color = "#a39755ff";
+  constructor() {
+    super(Abacus.name, Abacus.description, Abacus.unicode, Abacus.color, 7, 2, 'player', 'onRoundEnd')
+  }
+  async apply({ player }: { player: Player }) {
+    const amount = Math.floor(3/player.difficulty)
+    player.money += amount;
+  }
+
+}
+
+
+export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, OffRoader, Seed, Puzzle, Chivalry, Roger, Bucket, Diamond, Sneakers, Candle, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FireTruck, FakeID, Shades, Barber, Umbrella, Bank, Ballet, Pants, Ace, Pi, Pazzaz, Toilet, Harvest, Bipolar, Taoism, Loot, HedgeFund, PeaPod, Liberty, Punching, Teddy, Abacus];//92 //brain
 console.log('admins length: ', allAdmins.length)
-//8
+//7/8
 
 //disco ball U+1FAA9  moves
 //SCHOOL SATCHEL, U+1F392 player effect
@@ -1644,6 +1660,8 @@ console.log('admins length: ', allAdmins.length)
 // GAME DIE, U+1F3B2
 
 //ABACUS, U+1F9EE
+
+//FERRIS WHEEL, U+1F3A1
 
 //SYMBOL FOR SALT OF ANTIMONY, U+1F72D sceptre
 //LINK SYMBOL, U+1F517

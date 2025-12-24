@@ -20,11 +20,12 @@ export type PieceBlueprint = {
   extraUnicode?: string;
 }
 
-export type HybridBlueprint = PieceBlueprint & {
-  kind: 'hybrid';
-  baseA: PieceBlueprint;
-  baseB: PieceBlueprint;
-};
+export interface HybridBlueprint extends PieceBlueprint {
+  kind: 'hybrid'
+  primary: PieceBlueprint
+  secondary: PieceBlueprint
+  extraUnicode: string
+}
 
 export type OS = {
   name: string

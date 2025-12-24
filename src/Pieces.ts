@@ -2316,6 +2316,7 @@ export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, G
 console.log('pieces length: ', allPieces.length)
 
 //Daemon//IMP, U+1F47F  smiling: U+1F608
+//WOLF FACE, U+1F43A expose?
 //PLAYGROUND SLIDE, U+1F6DD like gate but with more range? line target??
 ////recurve bow CANADIAN SYLLABICS CARRIER CHEE, U+1664
 //DANCER, U+1F483 //high movement no damage

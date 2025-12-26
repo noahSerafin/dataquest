@@ -1,125 +1,278 @@
 <script setup lang="ts">
-    import { Piece, allPieces } from '../Pieces';
-    import type { PieceBlueprint, HybridBlueprint, Coordinate } from '../types';
-    import { makeBlueprint } from '../helperFunctions';
+    import { ref } from 'vue';
+    import type { PieceBlueprint } from '../types';
+    import { Player } from '../Player';
+    import BlueprintView from './BlueprintView.vue';
+    import BlueprintController from './BlueprintController.vue';
 
-    class HybridPiece extends Piece {//might not need this
-        private primaryImpl: Piece;
+    const props = defineProps<{
+        player: Player;
+        pieceToPlace: PieceBlueprint | null;
+        isDraggingPlacement: boolean
+    }>();
 
-        extraUnicode?: string;
+    const emit = defineEmits<{
+        (e: "openCompiler"): void;
+        (e: "close"): void;
+        (e: "toggleCompiler"): void;
+        (e: "clear-drag"): void;
+    }>();
 
-        constructor(
-            primary: Piece,
-            secondary: PieceBlueprint,
-            removeCallback?: (p: Piece) => void,
-            id?: string
-        ) {
-            const stats = makeHybridStats(makeBlueprint(primary), secondary);
+    function removePrimary() {
+        if (!primaryBP.value) return
+        primaryBP.value.isPlaced = false
+        primaryBP.value = null
+        resultBP.value = null
+    }
 
-            super(
-            `${primary.name}/${secondary.name}`,
-            primary.description,
-            primary.unicode,
-            stats.moves,
-            stats.attack,
-            stats.defence,
-            stats.actions,
-            stats.range,
-            primary.color,
-            primary.headPosition,
-            [primary.headPosition],
-            primary.team,
-            Math.floor((primary.rarity + secondary.rarity) / 2),
-            removeCallback,
-            id
-            );
+    function removeSecondary() {
+        if (!secondaryBP.value) return
+        secondaryBP.value.isPlaced = false
+        secondaryBP.value = null
+        resultBP.value = null
+    }
 
-            this.extraUnicode = secondary.unicode;
+    const primaryBP = ref<PieceBlueprint | null>(null)
+    const secondaryBP = ref<PieceBlueprint | null>(null)
+    const resultBP = ref<PieceBlueprint | null>(null)
+    const selectedBP = ref<PieceBlueprint | null>(null)
 
-            // 🔑 Store behavior source
-            this.primaryImpl = primary;
+    function makeHybridName(primaryName: string, secondaryName: string): string {
+        // Primary → first word
+        const primaryWord = primaryName.trim().split(/\s+/)[0];
 
-            // Copy behavior metadata
-            this.targetType = primary.targetType;
-            this.specialName = primary.specialName;
-        }
+        // Secondary → last word OR last 3 letters
+        const secondaryParts = secondaryName.trim().split(/\s+/);
 
-        async special(payload: any) {
-            // Delegate, but bind `this` to hybrid
-            return this.primaryImpl.special.call(this, payload);
+        let secondaryPart: string;
+
+        if (secondaryParts.length > 1) {
+            // Multi-word → last word
+            secondaryPart = secondaryParts[secondaryParts.length - 1];
+            return `${primaryWord} ${secondaryPart}`;
+        } else {
+            // Single word → last 3 letters (or whole word if shorter)
+            const word = secondaryParts[0];
+            secondaryPart = word.slice(-4);
+             return `${primaryWord}${secondaryPart}`;
         }
     }
 
-    export function createHybridBlueprint(//stats aren't static, so we could change the primary values using one of the below function
+    function createHybridBlueprint(
         primary: PieceBlueprint,
         secondary: PieceBlueprint
-        ): HybridBlueprint {
+        ): PieceBlueprint {
         return {
             id: crypto.randomUUID(),
-            name: `${primary.name}/${secondary.name}`,
+            name: primary.name,//for finding the base class with special move
             description: 'A Hybrid, primary feature: '+primary.description,
             unicode: primary.unicode,
-            extraUnicode: secondary.unicode,
             // averaged stats (rounded down)
-            maxSize: Math.floor((primary.maxSize + secondary.maxSize) / 2),
-            moves: Math.floor((primary.moves + secondary.moves) / 2),
-            range: Math.floor((primary.range + secondary.range) / 2),
-            attack: Math.floor((primary.attack + secondary.attack) / 2),
-            defence: Math.floor((primary.defence + secondary.defence) / 2),
+            maxSize: Math.ceil((primary.maxSize + secondary.maxSize) / 2),
+            moves: Math.ceil((primary.moves + secondary.moves) / 2),
+            range: Math.ceil((primary.range + secondary.range) / 2),
+            attack: Math.ceil((primary.attack + secondary.attack) / 2),
+            defence: Math.ceil((primary.defence + secondary.defence) / 2),
             rarity: Math.max(primary.rarity, secondary.rarity),
             color: primary.color,
             isPlaced: false,
             cost: primary.cost + secondary.cost,
-            kind: 'hybrid',
-            primary: primary,
-            secondary: secondary
+            hybridName: makeHybridName(primary.name, secondary.name),
+            extraUnicode: secondary.unicode
         }
     };
 
-    function applyBlueprintStats(piece: Piece, bp: PieceBlueprint) {
-        piece.maxSize = Math.floor((piece.maxSize + bp.maxSize) / 2),
-        piece.attack =  Math.floor((piece.attack + bp.attack) / 2),
-        piece.defence = Math.floor((piece.defence + bp.defence) / 2),
-        piece.range = Math.floor((piece.range + bp.range) / 2),
-        piece.moves = Math.floor((piece.moves + bp.moves) / 2),
-        piece.rarity = bp.rarity
+    function compile() {
+        if (!primaryBP.value || !secondaryBP.value) return
+
+        resultBP.value = createHybridBlueprint(
+            primaryBP.value,
+            secondaryBP.value
+        )
     }
 
-    function applyHybridMetadata(piece: Piece, bp: HybridBlueprint) {
-        piece.name = bp.name
-        piece.unicode = bp.primary.unicode
-        piece.extraUnicode = bp.secondary.unicode
+    function collectHybrid() {
+        if (!resultBP.value || !primaryBP.value || !secondaryBP.value) return
 
-        //piece.isHybrid = true
-        //piece.secondarySource = bp.secondary.name
+        // Remove originals
+        props.player.removeProgram(primaryBP.value);
+        props.player.removeProgram(secondaryBP.value);
+
+        // Add hybrid
+        props.player.addProgram(resultBP.value);
+
+        // Clean up local state
+        primaryBP.value = null
+        secondaryBP.value = null
+        resultBP.value = null
+
+        emit('close')
     }
 
-    export function instantiateHybridFromBlueprint(//this goes in app
-        bp: HybridBlueprint,
-        coord: Coordinate,
-        team: string,
-        removeCallback: (p: Piece) => void
-    ): Piece {
-        // Step 1: always instantiate PRIMARY class
-        const primaryName =
-            bp.kind === 'hybrid' ? bp.primary.name : bp.name
+    function cancel() {
+        if (primaryBP.value) primaryBP.value.isPlaced = false
+        if (secondaryBP.value) secondaryBP.value.isPlaced = false
 
-        const PieceClass = allPieces.find(p => p.name === primaryName)
-        if (!PieceClass) {
-            throw new Error(`Unknown piece: ${primaryName}`)
-        }
+        primaryBP.value = null
+        secondaryBP.value = null
+        resultBP.value = null
 
-        const piece = new PieceClass(coord, team, removeCallback, bp.id)
-
-        // Step 2: apply blueprint stats (normal OR hybrid)
-        applyBlueprintStats(piece, bp)
-
-        // Step 3: hybrid-specific augmentation
-        if (bp.kind === 'hybrid') {
-            applyHybridMetadata(piece, bp)
-        }
-
-        return piece//modified piece with new stats
+        emit('close')//seperate for primary/secondary
     }
 
+    function skip(){
+        emit('close')
+    }
+    function select(bp: PieceBlueprint){
+        selectedBP.value = bp
+    }
+    function deselect(){
+        selectedBP.value = null;
+    }
+
+    function tryAssignPrimary() {
+        if (!props.isDraggingPlacement) return
+        if (!props.pieceToPlace) return
+        //if (primaryBP.value) return
+
+        primaryBP.value = props.pieceToPlace
+        primaryBP.value.isPlaced = true
+
+        emit('clear-drag')
+    }
+
+    function tryAssignSecondary() {
+        if (!props.isDraggingPlacement) return
+        if (!props.pieceToPlace) return
+        //if (secondaryBP.value) return
+
+        secondaryBP.value = props.pieceToPlace
+        secondaryBP.value.isPlaced = true
+
+        emit('clear-drag')
+    }
+
+//NOT VISIBLE
 </script>
+
+<template>
+  <div class="container hybrid-compiler">
+
+    <!-- Slots -->
+    <div class="slots">
+        <div class="slot-container">
+            <h4>Primary</h4>
+            <!--<span>(keep special move)</span>-->
+            <div
+            label="Primary"
+            class="slot primary"
+            @mouseup="tryAssignPrimary"
+            :bp="primaryBP"
+            @remove="removePrimary"
+            >
+            <BlueprintView
+            v-if="primaryBP"
+            :key="primaryBP.id"
+            :blueprint="primaryBP"
+            :tileSize="60"
+            cssclass="inventory"
+            :class="'placed-'+primaryBP.isPlaced"
+            @select="select(primaryBP)"
+            />
+            </div>
+        </div>
+        <div class="slot-container">
+            <h4>Secondary</h4>
+            <div
+            label="Secondary"
+            class="slot secondary"
+            @mouseup="tryAssignSecondary"
+            :bp="secondaryBP"
+            @remove="removeSecondary"
+            >
+            <BlueprintView
+                v-if="secondaryBP"
+                :key="secondaryBP.id"
+                :blueprint="secondaryBP"
+                :tileSize="60"
+                cssclass="inventory"
+                :class="'placed-'+secondaryBP.isPlaced"
+                @select="select(secondaryBP)"
+            />
+            </div>
+        </div>
+    </div>
+
+    <!-- Compile -->
+    <button
+      :disabled="!primaryBP || !secondaryBP"
+      @click="compile"
+    >
+      Compile
+    </button>
+
+    <!-- Result preview -->
+    <BlueprintView
+        v-if="resultBP"
+        :key="resultBP.id"
+        :blueprint="resultBP"
+        :tileSize="60"
+        cssclass="inventory"
+        :class="'placed-'+resultBP.isPlaced"
+        @select="select(resultBP)"
+    />
+    <BlueprintController
+        v-if="selectedBP"
+        :piece="selectedBP"
+        mode="shop"
+        :canBuy="false"
+        :canPlace="false"
+        @close="deselect"
+    />
+
+    <button
+      v-if="resultBP"
+      @click="collectHybrid"
+    >
+      Collect
+    </button>
+    <div class="btns">
+        <button @click="cancel">Cancel</button>
+        <button @click="skip">Skip</button>
+    </div>
+
+  </div>
+</template>
+<style scoped>
+.hybrid-compiler{
+    z-index: 3;
+    width: 99%;
+    height: 96%;
+    background-color: black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    border: 1px solid white;
+    border-radius: 8px;
+}
+.slots{
+    display: flex;
+    justify-content: space-between;
+    gap: 6rem;
+}
+.slot{
+    height: 80px;
+    width: 80px;
+    border: 1px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.btns{
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+}
+</style>

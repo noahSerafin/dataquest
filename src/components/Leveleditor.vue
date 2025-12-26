@@ -362,11 +362,15 @@ const boardHeight = computed(() => tileSize.value * height.value)
 </template>
 
 <style scoped>
-.controls{
-  position: absolute;
-  top: 5vh;
-  left: 20%;
-  width: 100%;
+  .editor{
+    z-index: 99999;
+  }
+  .controls{
+    position: fixed;
+    z-index: 99999;
+    top: 5vh;
+    left: 20%;
+    width: 100%;
 }
 .export-btn{
   position: absolute;
@@ -393,7 +397,7 @@ const boardHeight = computed(() => tileSize.value * height.value)
   background-color: #202020;
 }
 .droppers{
-  position: absolute;
+  position: fixed;
   right: 5%;
   top: 10%;
   overflow-y: scroll;

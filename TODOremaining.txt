@@ -9,9 +9,10 @@ SAVE GAME STATE for bugs 6
 -more tiles on starting programs in levels three and up 5
 
 BUGS 6
+retry button broken
 snail - not reseting
 chivalry adding every turn, will puzzle do the same?
-web/ink not dissapearing - inconclusive
+web/ink not disappearing - inconclusive
 -visual: 5
 -visualise traps
 -skipNode controller
@@ -20,22 +21,13 @@ color code stats, and status
 status tooltips
 
 MAP 6.5
-branching paths - started
-multiple levels files for difficulty tier - nearly done
-hybrid nodes - 7
 allow some randomised crossover points?
 Altar nodes - sacrifice a program for more money than selling - 8
 
 BOSSES 7
 test damage all bosses
-fix confusion
 fog
-
-HYBRIDS 7
-Hybrid class accepts two pieces
-takes average of both stats, rounded up
-takes special move of first piece
-add altar to map nodes
+redacted
 
 ITEMS - clean up player items, add activePieces/gameState items 7
 
@@ -46,7 +38,6 @@ variants?
 
 EDITOR 8
 Have logic for spawning any piece on single spawn, then only pieces with max size >= to the spawn's size
-
 
 ADMINS - Petri - spread statuses -test, crystal - test, chemistry - test 22 off 100
 money admins on interest - test, implement into ROUND SUMMARY, maybe store earned money in a temp variable, add it in the summary with awaits? 7
@@ -66,7 +57,6 @@ vouchers?
 
 PLAYER 8
 rarity = value ?+=no. of upgrades used on a piece? 6 but test
-
 
 COOKIES - game progress permanence 9
 COLLECTION 9

@@ -135,13 +135,13 @@ const activeStatuses = computed((): [string, boolean][] => {
 
 <template>
   <div
-  :class="`piece ${piece.headPosition.x}-${piece.headPosition.y} ${cssclass}-piece team-${piece.team} taking-damage-${piece.isTakingDamage} hidden-${piece.statuses.hidden}`"
+  :class="`piece ${piece.headPosition.x}-${piece.headPosition.y} ${cssclass}-piece ${props.piece.extraUnicode ? 'hybrid' : ''} team-${piece.team} taking-damage-${piece.isTakingDamage} hidden-${piece.statuses.hidden}`"
     :name="piece?.name"
     :id="piece?.id"
     :style="pieceStyle"
     @click="handleSelect"
   >
-      {{ unicodeSymbol }}<span v-if="piece.extraUnicode">{{ ExtraUnicodeSymbol }}</span>
+      <span v-if="piece.extraUnicode" class="extra-unicode">{{ ExtraUnicodeSymbol }}</span><span class="primary-unicode">{{ unicodeSymbol }}</span>
     <button v-if="showFastControls && selectedPiece === piece" class="deselect-btn"
     @click.stop = "$emit('deselect')"
     >x
@@ -285,5 +285,16 @@ const activeStatuses = computed((): [string, boolean][] => {
   .team-enemy.hidden-true{
      opacity: 1;
   }
+}
+.hybrid .primary-unicode{
+  position: absolute;
+  left: 5%;
+  z-index: 1;
+}
+.hybrid .extra-unicode{
+  position: absolute;
+  left: 10%;
+  top: 5%;
+  z-index: 0;
 }
 </style>

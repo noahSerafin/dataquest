@@ -46,7 +46,7 @@ defineEmits(["buy", "sell", "highlightPlacements", "close"])
         <span class="symbol">
           {{ String.fromCodePoint(parseInt(piece.unicode.replace("U+", ""), 16)) }}
         </span>
-        <span class="name">{{ piece.name }}</span>
+        <span class="name">{{ piece.hybridName ? piece.hybridName : piece.name }}</span>
         <button class="close" @click="$emit('close', piece)">X</button>
       </div>
       <div :style="{ color: rarityInfo.color }">

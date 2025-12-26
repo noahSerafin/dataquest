@@ -17,14 +17,14 @@ export type PieceBlueprint = {
   color: string
   isPlaced: boolean
   cost: number
-  extraUnicode?: string;
+  hybridName?: string
+  extraUnicode?: string
 }
 
 export interface HybridBlueprint extends PieceBlueprint {
   kind: 'hybrid'
   primary: PieceBlueprint
   secondary: PieceBlueprint
-  extraUnicode: string
 }
 
 export type OS = {

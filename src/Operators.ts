@@ -235,7 +235,7 @@ const Penguin : OS = {//potato //shield
     items: [new Whetstone, new Lightning],
     admins: [],
     lives: 4,
-    description: 'A versatile all around system, though a bit barebones out of the box. Start with some upgrade items.'
+    description: 'A versatile system with extra lives. Start with some upgrade items.'
 }
 
 const Window : OS = {//knife //shield //snail
@@ -244,11 +244,11 @@ const Window : OS = {//knife //shield //snail
     money: 5,
     memory: 4,
     adminSlots: 5,
-    blueprints: [snail, tp, shield],
+    blueprints: [knife, tp, shield],
     items: [new Blueberry, new Roids],
     admins: [],
     lives: 2,
-    description: 'Limited memory. Starts with some slow but useful programs and items to increase size.'
+    description: 'Limited memory. Starts with some basic programs and items to increase size.'
 
 }
 
@@ -284,10 +284,10 @@ const Debugger : OS = {//lance //bug //screwdriver
     money: 50,
     memory: 10,
     adminSlots: 6,
-    blueprints: [bug, aegis, screwdriver],
+    blueprints: [bug, aegis, knife, screwdriver],
     items: [],
     admins: [],
-    lives: 2,
+    lives: 9,
     description: 'FOR TESTING'
 }
 // SCALES, U+2696 --- CROSSED SWORDS, U+2694

@@ -62,13 +62,17 @@ function showRarity(rarity: number) {
   }
 }
 
+function getFontsize() : string {
+  return props.blueprint.hybridName ?  props.tileSize * 0.4 + 'px' : props.tileSize * 0.6 + 'px'
+}
+
 const pieceStyle = computed(() => {
   if (!props.blueprint) return {}
   let styles = {
     position: 'relative',
     width: props.tileSize-16 + 'px',
     height: props.tileSize-16 + 'px',
-    fontSize: props.tileSize * 0.6 + 'px',
+    fontSize: getFontsize(),
     lineHeight: props.tileSize -24 + 'px',
     backgroundColor: props.blueprint.color,
     '--piece-color': props.blueprint.color,
@@ -94,7 +98,7 @@ function handleSelect() {
 
 <template>
   <div
-  :class="`blueprint ${props.cssclass}-piece`"
+  :class="`blueprint ${props.cssclass}-piece ${props.blueprint.hybridName ? 'hybrid' : ''}`"
     :name="props.blueprint?.name"
     :id="props.blueprint?.id"
     :style="pieceStyle"
@@ -102,7 +106,7 @@ function handleSelect() {
     @sell="$emit('sell', props.blueprint)"
   >
   <p class='top-left' v-if="cssclass==='shop' || cssclass==='skipReward'" :style="`top: -${((props.tileSize-10)/2 - 24)}px`">P</p>
-    {{ unicodeSymbol }}<span v-if="blueprint.extraUnicode">{{ ExtraUnicodeSymbol }}</span>
+    <span v-if="blueprint.extraUnicode" class="extra-unicode">{{ ExtraUnicodeSymbol }}</span><span class="primary-unicode">{{ unicodeSymbol }}</span>
   </div>
 </template>
 
@@ -182,5 +186,16 @@ function handleSelect() {
 }
 .skipReward-piece{
   margin-bottom: 2rem;
+}
+.hybrid .primary-unicode{
+  position: absolute;
+  left: 5%;
+  z-index: 1;
+}
+.hybrid .extra-unicode{
+    position: absolute;
+    left: 20%;
+    top: 10%;
+    z-index: 0;
 }
 </style>

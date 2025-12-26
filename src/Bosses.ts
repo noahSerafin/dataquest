@@ -499,7 +499,7 @@ class Whale extends Admin {
     static name = "Whale";
     static description = "Every enemy gains +2 max size at the start of the round";
     static unicode = "U+1F433";
-    static color = "#ad1400ff";
+    static color = "#060143ff";
     static rarity = 2;
     constructor() {
         super(Whale.name, Whale.description, Whale.unicode, Whale.color, 3, 2, 'gameState', 'onRoundStart')
@@ -508,6 +508,48 @@ class Whale extends Admin {
         activePieces.forEach(piece => {
             if(piece.team === 'enemy'){
                piece.addModifier({ maxSize: 2 })
+            }
+        });
+    }
+}
+
+class Razor extends Admin {
+    static name = "Razor Sharp";
+    static description = "Every enemy gains +1 attack at the start of the round";
+    static unicode = "U+1F433";
+    static color = "#c7200aff";
+    static rarity = 3;
+    constructor() {
+        super(Razor.name, Razor.description, Razor.unicode, Razor.color, 3, 3, 'gameState', 'onRoundStart')
+    }
+    async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+        activePieces.forEach(piece => {
+            if(piece.team === 'enemy'){
+               piece.addModifier({ maxSize: 2 })
+            }
+        });
+    }
+}
+
+class Omega extends Admin {
+    static name = "Omega";
+    static description = "Every enemy gains +1 to all stats";
+    static unicode = "U+1F433";
+    static color = "#000000ff";
+    static rarity = 6;
+    constructor() {
+        super(Omega.name, Omega.description, Omega.unicode, Omega.color, 3, 6, 'gameState', 'onRoundStart')
+    }
+    async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+        activePieces.forEach(piece => {
+            if(piece.team === 'enemy'){
+               piece.addModifier({ 
+                maxSize: 1,
+                moves: 1,
+                range: 1,
+                attack: 1,
+                defence: 1
+                })
             }
         });
     }
@@ -575,7 +617,7 @@ class Coral extends Admin {
 //REDACTED - all enemy programs classes are hidden with black squares
 
 //fog //square //tornado tsunami
-export const allBosses = [Mirror, Factory, NorthWind, Hook, Downturn, Wrath, Reaper, Volcano, Circus, Castle, Anchor, Jack, Lock, Eclipse, Battery, Customs, Shrine, Snowflake, Sun, Whale, Bones, Frog, Coral, Izakaya]//22
+export const allBosses = [Mirror, Factory, NorthWind, Hook, Downturn, Wrath, Reaper, Volcano, Circus, Castle, Anchor, Jack, Lock, Eclipse, Battery, Customs, Shrine, Snowflake, Sun, Whale, Bones, Frog, Coral, Izakaya, Razor, Omega]//22
 //3
 
 //ROBOT HEAD "U+1F916"

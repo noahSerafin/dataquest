@@ -1,4 +1,4 @@
-import type { Coordinate, Immunities, StatModifier, Statuses } from "./types"
+import type { Coordinate, Immunities, StatModifier } from "./types"
 import { createDefaultStatuses } from "./types";
 import { Player } from "./Player";
 
@@ -1642,7 +1642,7 @@ class Gman extends Piece {
   static color = "#000000ff";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Gman.name, Gman.description, Gman.unicode, 8, 4, 3, 4, 1, Gman.color, headPosition, [headPosition], team, Gman.rarity, removeCallback, id)
+   super(Gman.name, Gman.description, Gman.unicode, 6, 4, 3, 4, 1, Gman.color, headPosition, [headPosition], team, Gman.rarity, removeCallback, id)
    this.targetType = 'piece'
    this.specialName = 'Stun'
   }
@@ -1744,19 +1744,19 @@ class LadyBeetle extends Piece {
 
 class Yarn extends Piece {
   static name = "Yarn";
-  static description = "A large program that can reduce its size at will";
+  static description = "A very fast and large program";
   static unicode = "U+1F9F6";
   static color = "#560dffff";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Yarn.name, Yarn.description, Yarn.unicode, 6, 2, 1, 1, 0, Yarn.color, headPosition, [headPosition], team, Yarn.rarity, removeCallback, id)
-   this.targetType = 'self'
-   this.specialName = 'Reel in'
+   super(Yarn.name, Yarn.description, Yarn.unicode, 6, 5, 1, 1, 0, Yarn.color, headPosition, [headPosition], team, Yarn.rarity, removeCallback, id)
+   //this.targetType = 'self'
+   //this.specialName = 'Reel in'
   }
-  async special(target: Piece):Promise<void>{
+  /*async special(target: Piece):Promise<void>{
     this.tiles = [this.headPosition]
     this.actions--
-  }
+  }*/
 }
 
 class Bee extends Piece {
@@ -1784,7 +1784,7 @@ class Honeypot extends Piece {
   static description = "A program that can summon Bees";
   static unicode = "U+1F36F";
   static color = "#ffb20dff";
-  static rarity = 4;
+  static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Honeypot.name, Honeypot.description, Honeypot.unicode, 1, 0, 1, 0, 0, Honeypot.color, headPosition, [headPosition], team, Honeypot.rarity, removeCallback, id)
     this.specialName='Summon Bee'
@@ -1830,7 +1830,7 @@ class Extinguisher extends Piece {//item?
   static color = "#e7aa92ff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Extinguisher.name, Extinguisher.description, Extinguisher.unicode, 2, 2, 2, 1, 1, Extinguisher.color, headPosition, [headPosition], team, Extinguisher.rarity, removeCallback, id)
+    super(Extinguisher.name, Extinguisher.description, Extinguisher.unicode, 2, 2, 2, 2, 1, Extinguisher.color, headPosition, [headPosition], team, Extinguisher.rarity, removeCallback, id)
     this.specialName='Extinguish';
     this.targetType='piece';
     this.hasFriendlySpecial = true;
@@ -1937,7 +1937,7 @@ class Axe extends Piece {
 
 class Boomerang extends Piece {
   static name = "Boomerang";
-  static description = "A mobile program that on throw damages a target and resets its own moves remaining";
+  static description = "A mobile program that can attack a target and reset it's own moves remaining";
   static unicode = "U+1FA83";
   static color = "#ffcf4bff";
   static rarity = 3;
@@ -2048,7 +2048,7 @@ class Centipede extends Piece {
   static color = "#3b2108ff";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Centipede.name, Centipede.description, Centipede.unicode, 8, 2, 1, 4, 2, Centipede.color, headPosition, [headPosition], team, Centipede.rarity, removeCallback, id)
+    super(Centipede.name, Centipede.description, Centipede.unicode, 7, 2, 1, 4, 2, Centipede.color, headPosition, [headPosition], team, Centipede.rarity, removeCallback, id)
     this.targetType = 'piece'
     this.specialName = 'Bite'
   }
@@ -2068,7 +2068,7 @@ class Helicopter extends Piece {//unfinished, handle in app
   static color = "#0d9effff";
   static rarity = 6;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Helicopter.name, Helicopter.description, Helicopter.unicode, 2, 2, 2, 1, 2, Helicopter.color, headPosition, [headPosition], team, Helicopter.rarity, removeCallback, id)
+   super(Helicopter.name, Helicopter.description, Helicopter.unicode, 2, 2, 2, 4, 2, Helicopter.color, headPosition, [headPosition], team, Helicopter.rarity, removeCallback, id)
   }
 }
 
@@ -2314,50 +2314,112 @@ class Drum extends Piece {
   }
 }
 
-export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Ink, Snail, Shark, Greatshield, Wizard, Ninja, Fairy, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, Dolls, UFO, TP, Saw, Croc, Lighthouse, Torch, Camera, Drum];//86 +2 (web, ink)
-console.log('pieces length: ', allPieces.length)
+class Shrike extends Piece {
+  static name = "Shrike";
+  static description = "A fast high level program that can freeze and damage enemies";
+  static unicode = "U+1F426";
+  static color = "#bebebeff";
+  static rarity = 4;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Shrike.name, Shrike.description, Shrike.unicode, 2, 5, 1, 1, 1, Shrike.color, headPosition, [headPosition], team, Shrike.rarity, removeCallback, id)
+   this.targetType = 'piece'
+   this.specialName = 'Pierce'
+  }
+  async special(targetPiece: Piece):Promise<void>{
+    targetPiece.statuses.frozen = true;
+    this.actions--
+  }
+}
 
-// BIRD, U+1F426
-// BEAR FACE, U+1F43B
+class Eagle extends Piece {
+  static name = "Eagle";
+  static description = "A fast program with a high attack";
+  static unicode = "U+1F985";
+  static color = "#0dbaffff";
+  static rarity = 4;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Eagle.name, Eagle.description, Eagle.unicode, 2, 6, 1, 3, 0, Eagle.color, headPosition, [headPosition], team, Eagle.rarity, removeCallback, id)
+  }
+}
+
+class Recurve extends Piece {
+  static name = "Recurve Bow";
+  static description = "A Longer Ranged program";
+  static unicode = "U+1664";
+  static color = "#06640fff";
+  static rarity = 4;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Recurve.name, Recurve.description, Recurve.unicode, 3, 3, 4, 3, 0, Recurve.color, headPosition, [headPosition], team, Recurve.rarity, removeCallback, id)
+  }
+}
+
+class Daemon extends Piece {
+  static name = "Daemon";
+  static description = "A program that can apply slow to other programs";
+  static unicode = "U+1F47F";//smiling: U+1F608
+  static color = "#4e105eff";
+  static rarity = 3;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Daemon.name, Daemon.description, Daemon.unicode, 4, 3, 2, 3, 1, Daemon.color, headPosition, [headPosition], team, Daemon.rarity, removeCallback, id)
+  }
+}
+
+class Rex extends Piece {
+  static name = "T-Rex";
+  static description = "A large program with high attack";
+  static unicode = "U+1F996";
+  static color = "#1e4419ff";
+  static rarity = 4;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Rex.name, Rex.description, Rex.unicode, 5, 2, 1, 5, 1, Rex.color, headPosition, [headPosition], team, Rex.rarity, removeCallback, id)
+  }
+}
+
+class Hedgehog extends Piece {
+  static name = "Hedgehog";
+  static description = "A program that always retaliates when attacked";
+  static unicode = "U+1F994";
+  static color = "#504020ff";
+  static rarity = 3;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Hedgehog.name, Hedgehog.description, Hedgehog.unicode, 3, 0, 1, 0, 0, Hedgehog.color, headPosition, [headPosition], team, Hedgehog.rarity, removeCallback, id)
+   this.willRetaliate = true;
+  }
+}
+
+export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Ink, Snail, Shark, Greatshield, Wizard, Ninja, Fairy, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, Dolls, UFO, TP, Saw, Croc, Lighthouse, Torch, Camera, Drum, Shrike, Eagle, Recurve, Daemon, Rex, Hedgehog];//100 +2 (web, ink)
+//console.log('pieces length: ', allPieces.length)
+
+//doctor STETHOSCOPE, U+1FA7A medic, + max Size to a piece
+// HIGH-HEELED SHOE, U+1F460 small and slow but high attack
+//MILITARY AIRPLANE, U+1F6E6 line target airstike similar to charge
+//ANT, U+1F41C //high movement
+//LIZARD, U+1F98E - regenerate?
+//HIPPOPOTAMUS, U+1F99B
+//YO-YO, U+1FA80
+//BEAR FACE, U+1F43B
 //TIGER, U+1F405
-// YO-YO, U+1FA80
-//Daemon//IMP, U+1F47F  smiling: U+1F608
 //WOLF FACE, U+1F43A expose?
 //LION FACE, U+1F981
 //PLAYGROUND SLIDE, U+1F6DD like gate but with more range? line target??
-// KITE, U+1FA81
-////recurve bow CANADIAN SYLLABICS CARRIER CHEE, U+1664
-//DANCER, U+1F483 //high movement no damage
-//ANT, U+1F41C //high movement
-//T-REX, U+1F996
-// EAGLE, U+1F985
-//FROG FACE, U+1F438 //range 3 low atk //hop ability?
-// HEDGEHOG, U+1F994 retaliates by default
-//MILITARY AIRPLANE, U+1F6E6 line target airstike similar to charge
-//HIPPOPOTAMUS, U+1F99B
 //JAPANESE GOBLIN, U+1F47A
-// HIGH-HEELED SHOE, U+1F460 small and slow but high attack
-//doctor STETHOSCOPE, U+1FA7A medic, + max Size to a piece
+// KITE, U+1FA81
+//DANCER, U+1F483 //high movement no damage
+//FROG FACE, U+1F438 //range 3 low atk //hop ability?
 // TOP HAT, U+1F3A9 spawns a random piece/or rabbit?
 //ORANGUTAN, U+1F9A7
 //GORILLA, U+1F98D
 
-// RABBIT, U+1F407 high movement 1 atk 1 maxsize
-//Pazzaz U+1F57A //starts with 2 actions
+//RABBIT, U+1F407 high movement 1 atk 1 maxsize
+//EXTRATERRESTRIAL ALIEN, U+1F47D
 
 //megaphone U+1F4E3
 
-// WATER BUFFALO, U+1F403
+//WATER BUFFALO, U+1F403
 
 //U+1F9C3 ice cube decreases size each round?
 
-// LIZARD, U+1F98E
-
-
-//EXTRATERRESTRIAL ALIEN, U+1F47D
-
 //all +1 variants get +1 added to non 0 number stats
-
 
 /*
 class Hamsa extends Piece {

@@ -518,6 +518,20 @@
   }
 
   const renewBlueprints = () => {
+    if(player.value.hasAdmin('Ring')){
+      activePieces.value.forEach(piece => {
+        const id = piece.id;
+        player.value.programs.forEach(blueprint => {
+          if(blueprint.id === id){
+            blueprint.maxSize += (piece.maxSize);
+            blueprint.moves += (piece.moves);
+            blueprint.range += (piece.range);
+            blueprint.attack += (piece.attack);
+            blueprint.defence += (piece.defence);
+          }
+        });
+      });
+    }
     player.value.programs.forEach(blueprint => {
       blueprint.isPlaced = false;
     });
@@ -1183,7 +1197,7 @@
     applyStatusEffects('enemy');
     //player piece tempstats reset
     activePieces.value.forEach(piece => {
-      if(piece.team === 'player'){
+      if(piece.team === 'player' ){
         piece.resetTempModifiers();
       }
     })

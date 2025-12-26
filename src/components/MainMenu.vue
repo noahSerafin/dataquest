@@ -120,6 +120,7 @@
         user-select: none;
         border: 1px solid white;
         border-radius: 10px;
+        width: 90%;
     }
     @media only screen and (max-width: 760px) {
         .oses{

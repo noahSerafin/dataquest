@@ -62,10 +62,30 @@
         primary: PieceBlueprint,
         secondary: PieceBlueprint
         ): PieceBlueprint {
+        if(props.player.hasAdmin('ribbon')){
+            return {
+                id: crypto.randomUUID(),
+                name: primary.name,//for finding the base class with special move
+                description: 'A boosted hybrid, primary feature: '+primary.description,
+                unicode: primary.unicode,
+                // averaged stats (rounded down)
+                maxSize: Math.ceil(primary.maxSize + secondary.maxSize),
+                moves: Math.ceil(primary.moves + secondary.moves),
+                range: Math.ceil(primary.range + secondary.range),
+                attack: Math.ceil(primary.attack + secondary.attack),
+                defence: Math.ceil(primary.defence + secondary.defence),
+                rarity: Math.max(primary.rarity, secondary.rarity),
+                color: primary.color,
+                isPlaced: false,
+                cost: primary.cost + secondary.cost,
+                hybridName: makeHybridName(primary.name, secondary.name),
+                extraUnicode: secondary.unicode
+            }
+        }
         return {
             id: crypto.randomUUID(),
             name: primary.name,//for finding the base class with special move
-            description: 'A Hybrid, primary feature: '+primary.description,
+            description: 'A hybrid, primary feature: '+primary.description,
             unicode: primary.unicode,
             // averaged stats (rounded down)
             maxSize: Math.ceil((primary.maxSize + secondary.maxSize) / 2),

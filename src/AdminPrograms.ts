@@ -64,7 +64,7 @@ class Meteor extends Admin {
 
 class Miner extends Admin {
   static name = "Miner";
-  static description = "Collect $2 every round";
+  static description = "Collect $2  at the end of every round";
   static unicode = "U+26CF";
   static color = "#ffa600d3";
 
@@ -1096,7 +1096,7 @@ export class Artic extends Admin {
 
 export class FireEngine extends Admin {
   static name = "Fire Engine";
-  static description = "Programs become immune to burning on placment";
+  static description = "Programs become immune to burning on placement";
   static unicode = "U+1F692";
   static color = "#cc1515ff";
   constructor() {
@@ -1331,7 +1331,7 @@ class Bank extends Admin {
 
 class Ballet extends Admin {
   static name = "Twinkle Toes";
-  static description = "all your programs are hidden for the first 3 turns of a round, (unfinished)";
+  static description = "all your programs are hidden for the first 3 turns of a round, (untested)";
   static unicode = "U+1FA70";
   static color = "#ebc0ffff";
   constructor() {
@@ -1380,7 +1380,7 @@ class Pants extends Admin {
   }
 }
 
-class Ace extends Admin {
+class Ace extends Admin {//test
   static name = "Ace up the sleeve";
   static description = "If your last placed program is destroyed, move it back to your inventory";
   static unicode = "U+2660";
@@ -1489,7 +1489,7 @@ class Bipolar extends Admin {
   static name = "Ups and Downs";
   static description = "Gain $1 on destroying an enemy, lose $5 on destruction of your own programs";
   static unicode = "U+1F3AD";
-  static color = "#8eff55ff";
+  static color = "#dbd58dff";
   constructor() {
     super(Bipolar.name, Bipolar.description, Bipolar.unicode, Bipolar.color, 5, 1, 'playerAndGame', 'onPieceDestruction')
   }
@@ -1506,7 +1506,7 @@ class Bipolar extends Admin {
 
 class Taoism extends Admin {
   static name = "Taoism";
-  static description = "At the end of a your turn, when the number of enemy programs equals the number of your programs in a node, +1 to all your programs' stats";
+  static description = "At the end of your turn, when the number of enemy programs equals the number of your programs in a node, +1 to all your programs' stats";
   static unicode = "U+262F";
   static color = "rgba(92, 92, 92, 1)ff";
   constructor() {
@@ -1637,7 +1637,7 @@ class Teddy extends Admin {
 
 class Abacus extends Admin {
   static name = "Abacus";
-  static description = "gain 3/(security levels) in $ at the end of a round (rounded down)";
+  static description = "gain 3/security in $ at the end of a round (rounded down)";
   static unicode = "U+1F9EE";
   static color = "#a39755ff";
   constructor() {
@@ -1647,32 +1647,114 @@ class Abacus extends Admin {
     const amount = Math.floor(3/player.difficulty)
     player.money += amount;
   }
-
 }
 
+class DNA extends Admin {
+  static name = "Gene Splicing";
+  static description = "Open the hybrid compiler at any time";
+  static unicode = "U+1F9EC";
+  static color = "#ff55b5ff";
+  constructor() {
+    super(DNA.name, DNA.description, DNA.unicode, DNA.color, 5, 3, 'gameState', 'other')
+  }
+}
 
-export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, OffRoader, Seed, Puzzle, Chivalry, Roger, Bucket, Diamond, Sneakers, Candle, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FireTruck, FakeID, Shades, Barber, Umbrella, Bank, Ballet, Pants, Ace, Pi, Pazzaz, Toilet, Harvest, Bipolar, Taoism, Loot, HedgeFund, PeaPod, Liberty, Punching, Teddy, Abacus];//92 //brain
-console.log('admins length: ', allAdmins.length)
-//7/8
+class Cheese extends Admin {
+  static name = "Chedda";
+  static description = "+$1 at the end of a round";
+  static unicode = "U+1F52C";
+  static color = "#f3dc2fff";
+  constructor() {
+    super(Cheese.name, Cheese.description, Cheese.unicode, Cheese.color, 7, 2, 'player', 'onRoundEnd')
+  }
+  async apply({ player }: { player: Player }) {
+    player.money += 1;
+  }
+}
 
-//disco ball U+1FAA9  moves
-//SCHOOL SATCHEL, U+1F392 player effect
-//WHEEL, U+1F6DE immune to slowed?
-//DNA DOUBLE HELIX, U+1F9EC gene splicing/ create a hybrid on placement
-//CHEESE WEDGE, U+1F9C0 Chedda
+class AirSupport extends Admin {
+  static name = "Air Support";
+  static description = "1 damage to all enemy programs on the board every time you place a new program";
+  static unicode = "U+1F6E6";
+  static color = "#190247ff";
+  constructor() {
+    super(AirSupport.name, AirSupport.description, AirSupport.unicode, AirSupport.color, 10, 3, 'gameState', 'onPlacement')
+  }
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    activePieces.forEach(piece => {
+      if(piece.team === 'enemy'){
+        piece.takeDamage(1);
+      }
+    });
+  }
+}
 
-//RIBBON, U+1F380
+class DartBoard extends Admin {//test
+  static name = "Bullseye";//
+  static description = "Programs get +1 damage multiplyer on attacking";
+  static unicode = "U+1F3AF";
+  static color = "#d52020ff";
+  constructor() {
+    super(DartBoard.name, DartBoard.description, DartBoard.unicode, DartBoard.color, 10, 4, 'gameState', 'onDealDamage')
+  }
+  //onDamage
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    activePieces[idx].damageMult += 0.314;
+  }
+}
+
+class Dice extends Admin {
+  static name = "High Roller";
+  static description = "Reroll skip rewards";
+  static unicode = "U+1F3B2";
+  static color = "#369a1aff";
+  constructor() {
+    super(Dice.name, Dice.description, Dice.unicode, Dice.color, 5, 3, 'gameState', 'other')
+  }
+}
+
+class Ladder extends Admin {
+  static name = "Leg Up";
+  static description = "Skip one non boss node for free each security level";
+  static unicode = "U+1FA9C";
+  static color = "#cacacaff";
+  constructor() {
+    super(Ladder.name, Ladder.description, Ladder.unicode, Ladder.color, 5, 3, 'gameState', 'other')
+  }
+}
+
+class Ribbon extends Admin {
+  static name = "Ribbon";
+  static description = "Hybrids take cumulative rather than average stats";
+  static unicode = "U+1F380";
+  static color = "#8f098dff";
+  constructor() {
+    super(Ribbon.name, Ribbon.description, Ribbon.unicode, Ribbon.color, 8, 6, 'gameState', 'other')
+  }
+}
+
+class Ring extends Admin {
+  static name = "Ring";
+  static description = "Stat changed inside a node persist across rounds";
+  static unicode = "U+1F48D";
+  static color = "#ece942ff";
+  constructor() {
+    super(Ring.name, Ring.description, Ring.unicode, Ring.color, 15, 6, 'gameState', 'other')
+  }
+}
+
+export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, OffRoader, Seed, Puzzle, Chivalry, Roger, Bucket, Diamond, Sneakers, Candle, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FireTruck, FakeID, Shades, Barber, Umbrella, Bank, Ballet, Pants, Ace, Pi, Pazzaz, Toilet, Harvest, Bipolar, Taoism, Loot, HedgeFund, PeaPod, Liberty, Punching, Teddy, Abacus, DNA, Cheese, AirSupport, DartBoard, Dice, Ladder, Ribbon, Ring];
+//console.log('admins length: ', allAdmins.length)
+//2
+
+//disco ball U+1FAA9
+//SCHOOL SATCHEL, U+1F392
+//WHEEL, U+1F6DE
 //ELECTRIC LIGHT BULB, U+1F4A1
-//RING, U+1F48D
-//DIRECT HIT, U+1F3AF
-// GAME DIE, U+1F3B2
-
 //LADDER, U+1FA9C
-// KNOT, U+1FAA2
+//KNOT, U+1FAA2
 //TENT, U+26FA
-
-//ABACUS, U+1F9EE
-
 //FERRIS WHEEL, U+1F3A1
 
 //SYMBOL FOR SALT OF ANTIMONY, U+1F72D sceptre
@@ -1691,14 +1773,11 @@ console.log('admins length: ', allAdmins.length)
 // COFFIN, U+26B0
 //CLOSED MAILBOX WITH RAISED FLAG, U+1F4EB
 
-
 //CHEQUERED FLAG, U+1F3C1
 
 // LOCK, U+1F512
 
 //FISHING POLE AND FISH, U+1F3A3
-
-// UP-POINTING MILITARY AIRPLANE, U+1F6E6
 
 // Bright idea, special modifier does not consume actions??
 
@@ -1741,7 +1820,6 @@ console.log('admins length: ', allAdmins.length)
 
 //BLACK CROSS ON SHIELD, U+26E8
 
-
 //interest
 //CHART WITH UPWARDS TREND AND YEN SIGN, U+1F4B9
 
@@ -1750,7 +1828,6 @@ console.log('admins length: ', allAdmins.length)
 //FUNERAL URN, U+26B1
 
 // HIGH VOLTAGE SIGN, U+26A1
-
 
 //HORSE RACING, U+1F3C7
 

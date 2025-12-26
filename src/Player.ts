@@ -1,4 +1,4 @@
-import type { Coordinate, PieceBlueprint, StatModifier } from "./types";
+import type { PieceBlueprint } from "./types";
 import { Item } from "./Items";
 import { Admin } from "./AdminPrograms";
 

@@ -9,7 +9,7 @@
     import type { WorldMap, WorldNode } from "../worldBuilder";
     import { generateWorld } from "../worldBuilder";
     import type { Level, PieceBlueprint, SkipReward } from "../types";
-    import { castled, cave, level1Levels, penopticon, ringed } from "../level1Levels";
+    import { level1Levels, castled, cave, penopticon, ringed } from "../level1Levels";
     import { level2Levels } from "../level2Levels";
     import { level3Levels } from "../level3Levels";
     import { level4Levels } from "../level4Levels";
@@ -80,7 +80,7 @@ import { level6Levels } from "../level6Levels";
 
     function canClick(node: WorldNode): boolean {
         if (node.id === currentNodeId.value) return false;
-        if(props.player.admins.some(a => a.name === 'Off Roader')){
+        if(props.player.hasAdmin('Off Roader')){
             const current = world.value.nodes[currentNodeId.value];
             const sameRow = node.position.y === current.position.y;
             if (sameRow && node.type !== 'boss' && node.type !== 'start') {
@@ -93,15 +93,18 @@ import { level6Levels } from "../level6Levels";
     }
 
     function trySelect(node: WorldNode) {
-        if(!props.player.admins.some(a => a.name === 'World Map') && node.type !== 'shop' || (!props.player.admins.some(a => a.name === 'Crystal Ball') && node.type === 'shop')){
+        if(!props.player.hasAdmin('World Map') && node.type !== 'shop' || (!props.player.hasAdmin('Crystal Ball') && node.type === 'shop')){
             if (!canClick(node)) return;
         }
         selectedPreviewNode.value = node;
     }
 
     function canSkip(node: WorldNode){
-        if(props.player.admins.some(a => a.name === 'Golden Ticket') && !(node.type==='boss')){
-            if(props.player.money >= 5 || (props.player.admins.some(a => a.name === 'Golden Ticket') && props.player.money >= -15 )){
+        if(props.player.hasAdmin('Ladder') && !(node.type==='boss')){
+            return true;
+        }
+        if(props.player.hasAdmin('Golden Ticket') && !(node.type==='boss')){
+            if(props.player.money >= 5 || (props.player.hasAdmin('Golden Ticket') && props.player.money >= -15 )){
                 return true;
             } else return false;
         } else return false;
@@ -144,7 +147,7 @@ import { level6Levels } from "../level6Levels";
         switch (node.type) {
             case "start": return "⬤";
             case "shop": return "🛒";
-            case "compiler": return String.fromCodePoint(parseInt("U+1F9EC".replace('U+', ''), 16));
+            case "hybrid compiler": return String.fromCodePoint(parseInt("U+1F9EC".replace('U+', ''), 16));
             case "level": return String.fromCodePoint(parseInt(node.company.unicode.replace('U+', ''), 16));
             case "boss": return  String.fromCodePoint(parseInt(boss.value.unicode.replace('U+', ''), 16));
             case "skip": return 
@@ -179,7 +182,7 @@ import { level6Levels } from "../level6Levels";
 
         for (const node of Object.values(world.value.nodes)) {
             // not hidden at all
-            if (!node.hiddenUntilVisited || props.player.admins.some(a => a.name === 'Compass')) {
+            if (!node.hiddenUntilVisited || props.player.hasAdmin('Compass')) {
             visible.add(node.id);
             continue;
             }
@@ -192,7 +195,7 @@ import { level6Levels } from "../level6Levels";
         return visible;
     });
 
-    function generateSkipReward(node: WorldNode): SkipReward{
+    function generateSkipReward(): SkipReward{
         const roll = Math.random();
         if (roll < 0.4) {
             return {
@@ -215,10 +218,15 @@ import { level6Levels } from "../level6Levels";
     function assignSkipRewards(world: WorldMap) {
         for (const node of Object.values(world.nodes)) {
             if (node.type === 'skip' && !node.skipReward) {
-                node.skipReward = generateSkipReward(node);
+                node.skipReward = generateSkipReward();
                 //node.skipReward.value.cost = 0;
             }
         }
+    }
+
+    const canReroll = ref<boolean>(true);
+    function rerollSkipReward(node: WorldNode){
+        node.skipReward = generateSkipReward();
     }
 
     function takeSkipReward(node: WorldNode){//ask about this next
@@ -239,6 +247,7 @@ import { level6Levels } from "../level6Levels";
         }
         currentNodeId.value = node.id
         selectedPreviewNode.value = null;
+        canReroll.value = false;
     }
 
     const skipTarget = ref<PieceBlueprint | Item | null>(null);
@@ -396,6 +405,13 @@ import { level6Levels } from "../level6Levels";
                 @click="takeSkipReward(selectedPreviewNode)"
                 >
                 Accept Reward
+            </button>
+            <button
+                v-if="selectedPreviewNode?.type === 'skip' && player.hasAdmin('High Roller')"
+                :disabled="!canReroll"
+                @click="rerollSkipReward(selectedPreviewNode)"
+                >
+                Reroll
             </button>
             <button 
             v-if="selectedPreviewNode && selectedPreviewNode?.type !== 'skip'"

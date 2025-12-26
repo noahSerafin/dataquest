@@ -379,87 +379,6 @@ export class ShootingStar extends Item {
     }
 }
 
-//RING BUOY, U+1F6DF restore the last edstroyed program to hand /target a space? or give piece a wontDie bool?
-
-//target all Activeprogram's
-//megaphone U+1F4E3
-//Bugle, U+1F4EF, "+1 attack for all placed programs"
-/*
-export class Bugle extends Item {
-    static name: "Bugle";
-    static description: "";
-    static unicode: "";
-    static color = "#ffb20dff";
-    constructor(){
-        super(Bugle.name, Bugle.description, Bugle.unicode, Bugle.color, 2, 3, 'allPeices')gameState
-        //name desc utf || maxsize moves range atk def
-    }
-    apply(activePieces: Piece[], itemMult: number) {
-    
-    }
-}
-
-//hotline, U+1F4DE
-//load a random friendly program into the level
-export class Hotline extends Item {
-    static name: "Hotline";
-    static description: "";
-    static unicode: "";
-    static color = "#ffb20dff";
-    constructor(){
-        super(Hotline.name, Hotline.description, Hotline.unicode, Hotline.color, 2, 3, 'gameState')
-        //name desc utf || maxsize moves range atk def
-    }
-    apply(target: Piece, itemMult: number) {
-    
-    }
-}
-
-//BATTERY, Fresh Batteries U+1F50B
-//renew all placed programs moves
-
-
-//target player
-export class Update2 extends Item {
-    static name: "Update 2.0";
-    static description: "+2 memory";
-    static unicode: "U+1F4BF";
-    static color = "#797979ff";
-    constructor(){
-        super(Update2.name, Update2.description, Update2.unicode, Update2.color, 4, 3, 'player')
-        //name desc utf || maxsize moves range atk def
-    }
-    apply(player: Player) {
-        player.memory += 2;
-    }
-}
-export class Floppy extends Item {
-    static name: "Update";
-    static description: "+1 memory";
-    static unicode: "U+1F4BE";
-    static color = "#437feeff";
-    constructor(){
-        super(Floppy.name, Floppy.description, Floppy.unicode, Floppy.color, 3, 1, 'player')
-        //name desc utf || maxsize moves range atk def
-    }
-    apply(player: Player) {
-        player.memory += 2;
-    }
-}
-export class Update3 extends Item {
-    static name: "Update 3.0";
-    static description: "+1 admin slot";
-    static unicode: "U+1F4C0"; // MINIDISC, U+1F4BD
-    static color = "#000000ff";
-    constructor(){
-        super(Update3.name, Update3.description, Update3.unicode, Update3.color, 5, 5, 'player')
-        //name desc utf || maxsize moves range atk def
-    }
-    apply(player: Player) {
-        player.adminSlots += 1;
-    }
-} */
-
 //move randomgen functions to helper file, import asnd use them them here
 export class Box extends Item<Player> {
     static name = "Mystery Box";
@@ -524,6 +443,36 @@ export class Pinata extends Item {//untested
     }
 }
 
+export class Spanner extends Item {
+    static name: "Spanner";
+    static description: "Prevent a program from moving or taking action for one turn";
+    static unicode: "U+1F527";
+    static color = "#5a0505ff";
+    constructor(){
+        super(Spanner.name, Spanner.description, Spanner.unicode, Spanner.color, 2, 3, 'piece')
+        //name desc utf || maxsize moves range atk def
+    }
+    apply(target: Piece, itemMult: number) {
+        target.movesRemaining = 0;
+        target.actions = 0;
+    }
+}
+
+class Makeover extends Item {
+    static name: "Makeover";
+    static description: "Remove exposed from a program";
+    static unicode: "U+1F485";
+    static color = "#c70dffff";
+    constructor(){
+        super(Makeover.name, Makeover.description, Makeover.unicode, Makeover.color, 2, 3, 'piece')
+        //name desc utf || maxsize moves range atk def
+    }
+    apply(target: Piece, itemMult: number) {
+        target.statuses.exposed = false;
+    }
+}
+
+//gameState
 export class Wand extends Item {//TODO test
   static name = "Magic Wand";
   static description = "Undo a turn";
@@ -539,7 +488,7 @@ export class Wand extends Item {//TODO test
 
 class Hourglass extends Item {//TODO test
   static name = "Hourglass";
-  static description = "Retry a node";
+  static description = "Retry a node without losing a life";
   static unicode = "U+231B";
   static color = "#000000ff";
   constructor() {
@@ -551,46 +500,107 @@ class Hourglass extends Item {//TODO test
     }
 }
 
-export class Spanner extends Item {
-    static name: "Spanner";
-    static description: "Prevent a program from moving or taking action for one turn";
-    static unicode: "U+1F527";
-    static color = "#5a0505ff";
+//affect all programs
+/*
+////KEY, U+1F511 keygen item
+
+export class Bugle extends Item {
+    static name: "Bugle";
+    static description: "";
+    static unicode: "U+1F4EF";
+    static color = "#ffb20dff";
     constructor(){
-        super(Spanner.name, Spanner.description, Spanner.unicode, Spanner.color, 2, 3, 'gameState')
+        super(Bugle.name, Bugle.description, Bugle.unicode, Bugle.color, 2, 3, 'allPeices')gameState
         //name desc utf || maxsize moves range atk def
     }
-    apply(target: Piece, itemMult: number) {
-        target.movesRemaining = 0;
-        target.actions = 0;
+    apply(activePieces: Piece[], itemMult: number) {
+    
     }
 }
 
-class Makeover extends Item {
-    static name: "Makeover";
-    static description: "Remove exposed from a program";
-    static unicode: "U+1F485";
-    static color = "#c70dffff";
+//hotline, U+1F4DE
+//load a random friendly program into the level
+export class Hotline extends Item {
+    static name: "Hotline";
+    static description: "load a random friendly program into the level";
+    static unicode: "";
+    static color = "#ffb20dff";
     constructor(){
-        super(Makeover.name, Makeover.description, Makeover.unicode, Makeover.color, 2, 3, 'gameState')
+        super(Hotline.name, Hotline.description, Hotline.unicode, Hotline.color, 2, 3, 'gameState')
         //name desc utf || maxsize moves range atk def
     }
     apply(target: Piece, itemMult: number) {
-        target.statuses.exposed = false;
+    
     }
 }
+
+//BATTERY, Fresh Batteries U+1F50B
+//renew all placed programs moves
+*/
+
+//CHEERING MEGAPHONE, U+1F4E3 Pep Talk
+//RING BUOY, U+1F6DF restore the last edstroyed program to hand /target a space? or give piece a wontDie bool?
+
+//target all Activeprogram's
+//megaphone U+1F4E3
+//Bugle, U+1F4EF, "+1 attack for all placed programs"
+
+///////////////////////////////////////////////////////////////////////////////////
+/*
+
+//target player
+export class Update2 extends Item {
+    static name: "Update 2.0";
+    static description: "+2 memory";
+    static unicode: "U+1F4BF";
+    static color = "#797979ff";
+    constructor(){
+        super(Update2.name, Update2.description, Update2.unicode, Update2.color, 4, 3, 'player')
+        //name desc utf || maxsize moves range atk def
+    }
+    apply(player: Player) {
+        player.memory += 2;
+    }
+}
+export class Floppy extends Item {
+    static name: "Update";
+    static description: "+1 memory";
+    static unicode: "U+1F4BE";
+    static color = "#437feeff";
+    constructor(){
+        super(Floppy.name, Floppy.description, Floppy.unicode, Floppy.color, 3, 1, 'player')
+        //name desc utf || maxsize moves range atk def
+    }
+    apply(player: Player) {
+        player.memory += 2;
+    }
+}
+export class Update3 extends Item {
+    static name: "Update 3.0";
+    static description: "+1 admin slot";
+    static unicode: "U+1F4C0"; // MINIDISC, U+1F4BD
+    static color = "#000000ff";
+    constructor(){
+        super(Update3.name, Update3.description, Update3.unicode, Update3.color, 5, 5, 'player')
+        //name desc utf || maxsize moves range atk def
+    }
+    apply(player: Player) {
+        player.adminSlots += 1;
+    }
+} */
+
 //PIG, U+1F416 random money?
 //update x3, hotline buoy bugle batteries pig 9
 export const allItems = [Whetstone, Iron, Blueberry, Carrot, Lightning, Blessing, Supplement, Juice, Roids, Formula, Garlic, RedMeat, Coffee, Bandage, Soap, Voucher, Mushroom, Rations, Beans, Box, Genie, Pinata, Wand, Hourglass, Spanner, Makeover, ShootingStar]//27
 
 export type ItemConstructor = new (...args: any[]) => Item<any>;
 
+console.log('all items: ', allItems.length);
+
 // /SCROLL, U+1F4DC
 
 //PAGE WITH CURL, U+1F4C3
 // POT OF FOOD, U+1F372
-
-
 
 // / HOT PEPPER, U+1F336
 

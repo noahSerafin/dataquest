@@ -56,11 +56,11 @@ defineEmits(["buy", "sell", "highlightPlacements", "close"])
     </div>
     <div class="right">
       <div class="stats">
-        <p>Max Size: {{ piece.maxSize }}</p>
-        <p>Moves: {{ piece.moves }}</p>
-        <p>Range: {{ piece.range }}</p>
-        <p>Attack: {{ piece.attack }}</p>
-        <p>Defence: {{ piece.defence }}</p>
+        <p class="text-green">Max Size: {{ piece.maxSize }}</p>
+        <p class="text-blue">Moves: {{ piece.moves }}</p>
+        <p class="text-orange">Range: {{ piece.range }}</p>
+        <p class="text-red">Attack: {{ piece.attack }}</p>
+        <p class="text-cyan">Defence: {{ piece.defence }}</p>
       </div>
 
       <div class="actions">

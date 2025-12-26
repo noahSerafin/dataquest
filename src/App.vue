@@ -1243,16 +1243,16 @@
   }
 /*
 */
-const debugMode = true;
+const debugMode = ref<boolean>(false);
 </script>
 
 <template>
   <div class="app-root">
   <div class="debug-controls">
-    <button class="swap-display" @mousedown="swapDisplay()">
+    <button v-if="debugMode === true" class="swap-display" @mousedown="swapDisplay()">
       {{ displayEditor ? "Show Board" : "Show Editor" }}
     </button>
-    <button class="swap-display" @mousedown="renewBlueprints()">
+    <button v-if="debugMode === true" class="swap-display" @mousedown="renewBlueprints()">
       Renew Blueprints
     </button>
     <button
@@ -1261,16 +1261,25 @@ const debugMode = true;
     @mousedown="toggleShop()">
     Toggle Shop
     </button>
-    <button class="map-toggle" @mousedown="toggleMap()">
+    <button
+    v-if="player.hasAdmin('Gene Splicing') || debugMode === true"
+    class="compiler-toggle"
+    @mousedown="toggleCompiler()">
+    Toggle Compiler
+    </button>
+    <button v-if="debugMode === true" class="map-toggle" @mousedown="toggleMap()">
       Toggle Map
     </button>
-     <button class="board-toggle" @mousedown="showBoard = true">
+     <button
+     v-if="debugMode === true" class="board-toggle" @mousedown="showBoard = true">
       Toggle Board
     </button>
-    <button class="difficulty" @mousedown="increaseDifficulty()">
+    <button
+    v-if="debugMode === true" class="difficulty" @mousedown="increaseDifficulty()">
       Increase Security
     </button>
-    <button class="difficulty" @mousedown="decreaseDifficulty()">
+    <button
+    v-if="debugMode === true" class="difficulty" @mousedown="decreaseDifficulty()">
       Decrease Security
     </button>
     <button class="difficulty" @mousedown="toggleFastControls()">

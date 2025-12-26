@@ -114,7 +114,7 @@
                 <span class="os">
                     {{ String.fromCodePoint(parseInt(player.osunicode.replace('U+', ''), 16)) }}
                 </span>
-                <span style="text-align: left;"><strong>$:</strong> {{ props.player.money }}</span>
+                <span style="text-align: left;"><strong class="text-yellow">$:</strong> {{ props.player.money }}</span>
                 <p>
                     <span v-for="lives in player.lives">
                        {{ String.fromCodePoint(0x1FA77) }}
@@ -150,7 +150,7 @@
                     </li>
                 </ul>
             </div>
-            <button class="mt-2 px-2 py-1 bg-blue-500 text-white rounded" @click="$emit('openInventory')">{{showInventory ? 'Hide Inventory' : 'Inventory' }}</button>
+            <button class="inv-btn mt-2 px-2 py-1 bg-blue-500 text-white rounded" @click="$emit('openInventory')">{{showInventory ? 'Hide Inventory' : 'Inventory' }}</button>
         </div>
 
     </div>
@@ -238,6 +238,7 @@
         align-items: center;
     }
     .player-info{
+        width: 15%;
         line-height: 1.2;
     }
     .os{
@@ -289,7 +290,6 @@
         position: relative;
         display: flex;
         gap: 5px;
-        width: 80%;
     }
     .admins{
         justify-content: flex-start;
@@ -299,12 +299,15 @@
         grid-template-columns: 1fr 1fr 1fr 1fr;
         width: 50%;
     }
+    .inv-btn{
+        width: 15%;
+    }
     .z-top {
         position: relative;
         z-index: 1000;
     }
     .admin-middle-container{
-        width: 70%;
+        width: 80%;
     }
     .float-inventory{
         

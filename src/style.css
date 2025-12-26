@@ -237,3 +237,21 @@ html, body, #app {
 #overlay-root.piece-controller{
   width: 100%;
 }
+.text-yellow{
+  color: #ebeb1b;;
+}
+.text-blue{
+  color: #1b4ceb;;
+}
+.text-red{
+  color: #b80000;;
+}
+.text-green{
+  color: #1fc50c;;
+}
+.text-cyan{
+  color: #1bc1eb;;
+}
+.text-orange{
+  color: #dd770a;;
+}

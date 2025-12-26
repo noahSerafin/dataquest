@@ -76,11 +76,11 @@ export class Player {
     return this.admins.length < this.adminSlots;
   }
 
-  addAdmin(admin: Admin, target: Player ) {
+  addAdmin(admin: Admin) {
     if(this.hasAdminSpace){
       this.admins.push(admin)
       if(admin.targetType === 'player' && admin.triggerType === 'other'){
-        admin.apply(target);
+        admin.apply(this);
       }
     }
   }

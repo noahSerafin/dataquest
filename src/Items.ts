@@ -1,6 +1,8 @@
 import type { PieceBlueprint } from "./types"
-import type { Piece } from "./Pieces"
+import { allPieces, type Piece } from "./Pieces"
 import type { Player } from "./Player"
+//import { getRandomUnoccupiedTile, pickWeightedRandom, makeBlueprint } from "./helperFunctions"
+import type { Coordinate } from "./types"
 
 export abstract class Item<TTarget = any> {
   id: string
@@ -65,9 +67,9 @@ export class Whetstone extends Item<PieceBlueprint> {
 }
 
 export class Training extends Item<PieceBlueprint> {
-    static name: "Training";
-    static description: "increases a program's attack by 2";
-    static unicode: "U+1F3CB";
+    static name = "Training";
+    static description = "increases a program's attack by 2";
+    static unicode = "U+1F3CB";
     static color = "#ff5656ff";
     constructor(){
         super(Training.name, Training.description, Training.unicode, Training.color, 5, 4, 'blueprint')
@@ -264,7 +266,7 @@ export class Bandage extends Item<Piece> {
     constructor(){
         super(Bandage.name, Bandage.description, Bandage.unicode, Bandage.color, 1, 2, 'piece')
     }
-    static harmfulStatuses = ['diseasd', 'slowed', 'blinded', 'burning', 'poisoned', 'frozen','charmed', 'confused', 'exposed']
+    static harmfulStatuses = ['diseased', 'slowed', 'blinded', 'burning', 'poisoned', 'frozen', 'charmed', 'confused', 'exposed']
     
     apply(target: Piece, itemMult: number) {
         const activeHarmful = Bandage.harmfulStatuses.filter(
@@ -354,10 +356,10 @@ export class Beans extends Item<Piece> {
     }
 }
 
-export class ShootingStar extends Item {
-    static name: "Shooting Star";
-    static description: "Make a placed prgoram immune to all harmful statuses";
-    static unicode: "U+1F320";
+export class ShootingStar extends Item<Piece> {
+    static name = "Shooting Star";
+    static description = "Make a placed prgoram immune to all harmful statuses";
+    static unicode = "U+1F320";
     static color = "#1e023dff";
     constructor(){
         super(ShootingStar.name, ShootingStar.description, ShootingStar.unicode, ShootingStar.color, 2, 3, 'piece')
@@ -380,25 +382,6 @@ export class ShootingStar extends Item {
 }
 
 //move randomgen functions to helper file, import asnd use them them here
-export class Box extends Item<Player> {
-    static name = "Mystery Box";
-    static description = "Grants a random consumable item";
-    static unicode = "U+1F4E6";
-    static color = "#926439ff";
-    constructor(){
-        super(Box.name, Box.description, Box.unicode, Box.color, 3, 3, 'player')
-    }
-    apply(target: Player) {
-        //check there is room (- this item)
-        //if(target.memory > target.programs.length + (target.items.length-1)){
-           // randomItem = //makerandomItem from allItems
-
-           // target.items.push(randomItem)
-       // }
-    }
-}
-
-//WRAPPED PRESENT, U+1F381
 export class Gift extends Item<Player> {
     static name = "Gift Box";
     static description = "Grants a random program (must have room)";
@@ -407,10 +390,11 @@ export class Gift extends Item<Player> {
     constructor(){
         super(Gift.name, Gift.description, Gift.unicode, Gift.color, 3, 3, 'player')
     }
-    apply(target: Player) {
-           // target.programs.push(random)
-       // }
+    apply(player: Player, itemMult: number) {
     }
+    //apply(player: Player, itemMult: number) {
+      //  player.addProgram(makeBlueprint(pickWeightedRandom(allPieces, player)));
+    //}
 }
 
 export class Genie extends Item<Player> {
@@ -421,32 +405,43 @@ export class Genie extends Item<Player> {
   constructor() {
    super(Genie.name, Genie.description, Genie.unicode, Genie.color, 5, 3, 'player')
   }
-    apply(target: Player) {
-        //bring up list of programs from collection, allow 3 to be selected
-        //target.programs.push()
-    }
-  //create any program, keep track of uses
-  //after 3 destroy genie
+  apply(player: Player, itemMult: number) {
+  }
+    /*apply(player: Player, itemMult: number) {
+        player.addProgram(makeBlueprint(pickWeightedRandom(allPieces, player)));
+        player.addProgram(makeBlueprint(pickWeightedRandom(allPieces, player)));
+        player.addProgram(makeBlueprint(pickWeightedRandom(allPieces, player)));
+    }*/
 }
 
-export class Pinata extends Item {//untested
-    static name: "Pinata";
-    static description: "Grants a random admin program (must have room)";
-    static unicode: "U+1FA85";
-    static color = "#e30dffff";
+export class Box extends Item<Player> {
+    static name = "Mystery Box";
+    static description = "Grants a random consumable item";
+    static unicode = "U+1F4E6";
+    static color = "#926439ff";
     constructor(){
-        super(Pinata.name, Pinata.description, Pinata.unicode, Pinata.color, 3, 3, 'player')
-        //name desc utf || maxsize moves range atk def
+        super(Box.name, Box.description, Box.unicode, Box.color, 3, 3, 'player')
     }
-    apply(target: Player): void {
-        //handled in App for now
+    apply(player: Player, itemMult: number) {
     }
 }
 
-export class Spanner extends Item {
-    static name: "Spanner";
-    static description: "Prevent a program from moving or taking action for one turn";
-    static unicode: "U+1F527";
+export class Pinata extends Item<Player> {//untested
+    static name = "Pinata";
+    static description = "Grants a random admin program (must have room)";
+    static unicode = "U+1FA85";
+    static color = "#e30dffff";
+    constructor() {
+        super(Pinata.name, Pinata.description, Pinata.unicode, Pinata.color, 3, 3, 'player')
+    }
+    apply(player: Player, itemMult: number) {
+    }
+}
+
+export class Spanner extends Item<Piece> {
+    static name = "Spanner";
+    static description = "Prevent a program from moving or taking action for one turn";
+    static unicode = "U+1F527";
     static color = "#5a0505ff";
     constructor(){
         super(Spanner.name, Spanner.description, Spanner.unicode, Spanner.color, 2, 3, 'piece')
@@ -458,10 +453,10 @@ export class Spanner extends Item {
     }
 }
 
-class Makeover extends Item {
-    static name: "Makeover";
-    static description: "Remove exposed from a program";
-    static unicode: "U+1F485";
+class Makeover extends Item<Piece> {
+    static name = "Makeover";
+    static description = "Remove exposed from a program";
+    static unicode = "U+1F485";
     static color = "#c70dffff";
     constructor(){
         super(Makeover.name, Makeover.description, Makeover.unicode, Makeover.color, 2, 3, 'piece')
@@ -473,7 +468,7 @@ class Makeover extends Item {
 }
 
 //gameState
-export class Wand extends Item {//TODO test
+export class Wand extends Item<Piece[]> {//TODO test
   static name = "Magic Wand";
   static description = "Undo a turn";
   static unicode = "U+1FA84";
@@ -486,7 +481,7 @@ export class Wand extends Item {//TODO test
     }
 }
 
-class Hourglass extends Item {//TODO test
+class Hourglass extends Item<Piece[]> {//TODO test
   static name = "Hourglass";
   static description = "Retry a node without losing a life";
   static unicode = "U+231B";
@@ -494,51 +489,110 @@ class Hourglass extends Item {//TODO test
   constructor() {
    super(Hourglass.name, Hourglass.description, Hourglass.unicode, Hourglass.color, 10, 5, 'gameState')
   }
-    apply(target: Player) {//game state from app??
+    apply(target: Piece[]) {//game state from app??
         //receive game state, and map
         //reload level
     }
 }
 
 //affect all programs
-/*
 ////KEY, U+1F511 keygen item
+class Keygen extends Item<Piece[]> {//TODO test
+  static name = "Keygen";
+  static description = "Lower the defence of all enemy programs in a node";
+  static unicode = "U+1F511";
+  static color = "#89315aff";
+  constructor() {
+   super(Keygen.name, Keygen.description, Keygen.unicode, Keygen.color, 3, 2, 'gameState')
+  }
+    apply(activePieces: Piece[], itemMult: number) {//game state from app??
+        activePieces.forEach(piece => {
+            if(piece.team === 'enemy' && piece.getStat('defence') > 0){
+                piece.addModifier({defence: -itemMult})//test
+            }
+        })
+        //receive game state, and map
+        //reload level
+    }
+}
 
-export class Bugle extends Item {
-    static name: "Bugle";
-    static description: "";
-    static unicode: "U+1F4EF";
+class Bugle extends Item<Piece[]> {
+    static name = "Bugle";
+    static description = "all placed player programs gain +1 attack";
+    static unicode = "U+1F4EF";
     static color = "#ffb20dff";
     constructor(){
-        super(Bugle.name, Bugle.description, Bugle.unicode, Bugle.color, 2, 3, 'allPeices')gameState
+        super(Bugle.name, Bugle.description, Bugle.unicode, Bugle.color, 3, 3, 'gameState');
         //name desc utf || maxsize moves range atk def
     }
     apply(activePieces: Piece[], itemMult: number) {
-    
+         activePieces.forEach(piece => {
+            if(piece.team === 'player'){
+                piece.addModifier({attack: itemMult})//test
+            }
+        })
     }
 }
 
-//hotline, U+1F4DE
-//load a random friendly program into the level
-export class Hotline extends Item {
-    static name: "Hotline";
-    static description: "load a random friendly program into the level";
-    static unicode: "";
-    static color = "#ffb20dff";
+class Megaphone extends Item<Piece[]> {
+    static name = "Pep Talk";
+    static description = "all placed player programs gain +1 moves";
+    static unicode = "U+1F4E3";
+    static color = "#0d86ffff";
     constructor(){
-        super(Hotline.name, Hotline.description, Hotline.unicode, Hotline.color, 2, 3, 'gameState')
+        super(Megaphone.name, Megaphone.description, Megaphone.unicode, Megaphone.color, 3, 3, 'gameState');
         //name desc utf || maxsize moves range atk def
     }
-    apply(target: Piece, itemMult: number) {
-    
+    apply(activePieces: Piece[], itemMult: number) {
+         activePieces.forEach(piece => {
+            if(piece.team === 'player'){
+                piece.addModifier({attack: itemMult})//test
+            }
+        })
     }
 }
 
-//BATTERY, Fresh Batteries U+1F50B
-//renew all placed programs moves
+class Battery extends Item<Piece[]> {
+    static name = "Fresh Batteries";
+    static description = "all placed player programs replenish their moves remaining";
+    static unicode = " U+1F50B";
+    static color = "#0dff35ff";
+    constructor(){
+        super(Battery.name, Battery.description, Battery.unicode, Battery.color, 1, 1, 'gameState');
+        //name desc utf || maxsize moves range atk def
+    }
+    apply(activePieces: Piece[], itemMult: number) {
+         activePieces.forEach(piece => {
+            if(piece.team === 'player'){
+                piece.movesRemaining = piece.getStat('moves');
+            }
+        })
+    }
+}
+
+/*
+export class Hotline extends Item {
+    static name = "Hotline";
+    static description = "load a random friendly program into a node at a random position";
+    static unicode = "U+1F4DE";
+    static color = "#ffb20dff";
+    constructor(){
+        super(Hotline.name, Hotline.description, Hotline.unicode, Hotline.color, 2, 1, 'piecesAndBoard')
+        //name desc utf || maxsize moves range atk def
+    }
+    apply({activePieces, board }: {activePieces: Piece[], board: Coordinate[] }) {
+        const space = getRandomUnoccupiedTile(board, activePieces);
+        if(space){
+            const PieceClass = allPieces[Math.floor(Math.random() * allPieces.length)]//true random without player
+            const instance = new PieceClass(space, 'piece', activePieces[0].removeCallback, crypto.randomUUID());
+            instance.movesRemaining = 0;
+            instance.actions = 0;
+            activePieces.push(instance);
+        }
+    }
+}
 */
 
-//CHEERING MEGAPHONE, U+1F4E3 Pep Talk
 //RING BUOY, U+1F6DF restore the last edstroyed program to hand /target a space? or give piece a wontDie bool?
 
 //target all Activeprogram's
@@ -550,9 +604,9 @@ export class Hotline extends Item {
 
 //target player
 export class Update2 extends Item {
-    static name: "Update 2.0";
-    static description: "+2 memory";
-    static unicode: "U+1F4BF";
+    static name = "Update 2.0";
+    static description = "+2 memory";
+    static unicode = "U+1F4BF";
     static color = "#797979ff";
     constructor(){
         super(Update2.name, Update2.description, Update2.unicode, Update2.color, 4, 3, 'player')
@@ -563,9 +617,9 @@ export class Update2 extends Item {
     }
 }
 export class Floppy extends Item {
-    static name: "Update";
-    static description: "+1 memory";
-    static unicode: "U+1F4BE";
+    static name = "Update";
+    static description = "+1 memory";
+    static unicode = "U+1F4BE";
     static color = "#437feeff";
     constructor(){
         super(Floppy.name, Floppy.description, Floppy.unicode, Floppy.color, 3, 1, 'player')
@@ -576,9 +630,9 @@ export class Floppy extends Item {
     }
 }
 export class Update3 extends Item {
-    static name: "Update 3.0";
-    static description: "+1 admin slot";
-    static unicode: "U+1F4C0"; // MINIDISC, U+1F4BD
+    static name = "Update 3.0";
+    static description = "+1 admin slot";
+    static unicode = "U+1F4C0"; // MINIDISC, U+1F4BD
     static color = "#000000ff";
     constructor(){
         super(Update3.name, Update3.description, Update3.unicode, Update3.color, 5, 5, 'player')
@@ -591,7 +645,7 @@ export class Update3 extends Item {
 
 //PIG, U+1F416 random money?
 //update x3, hotline buoy bugle batteries pig 9
-export const allItems = [Whetstone, Iron, Blueberry, Carrot, Lightning, Blessing, Supplement, Juice, Roids, Formula, Garlic, RedMeat, Coffee, Bandage, Soap, Voucher, Mushroom, Rations, Beans, Box, Genie, Pinata, Wand, Hourglass, Spanner, Makeover, ShootingStar]//27
+export const allItems = [Whetstone, Iron, Blueberry, Carrot, Lightning, Blessing, Supplement, Juice, Roids, Formula, Garlic, RedMeat, Coffee, Bandage, Soap, Voucher, Mushroom, Rations, Beans, Box, Genie, Pinata, Wand, Hourglass, Spanner, Makeover, ShootingStar, Keygen, Bugle, Megaphone, Battery]//31
 
 export type ItemConstructor = new (...args: any[]) => Item<any>;
 

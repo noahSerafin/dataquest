@@ -5,8 +5,7 @@ test interest is working properly
 hide hidden enemies - test
 
 ROUNDSUMMARY
-cash out button, move interest/reward functions here.
-player.reward to keep track??
+summary of each money based admin
 
 AI 6 nearly-done
 handle friendlySpecials 7
@@ -18,9 +17,6 @@ BOSSES 7
 test damage all bosses
 fog
 redacted
-
-SAVE GAME STATE for bugs 7.5
--more tiles on starting programs in levels three and up 5
 
 BUGS 6
 retry button broken
@@ -34,11 +30,14 @@ inventory needs 5 columns at least...
 color code stats, and status
 status tooltips
 
+ITEMS - clean up player items, add activePieces/gameState items 7
+
+SAVE GAME STATE for bugs 7.5
+-more tiles on starting programs in levels three and up 5
+
 MAP
 allow some randomised crossover points?
 Altar nodes - sacrifice a program for more money than selling - 8
-
-ITEMS - clean up player items, add activePieces/gameState items 7
 
 PIECES
 add 14 more (100 total)
@@ -60,3 +59,7 @@ rarity = value ?+=no. of upgrades used on a piece? 6 but test
 
 COOKIES - game progress permanence 9
 COLLECTION 9
+
+CLEANUP
+move refresh shop to shop
+move random items to items

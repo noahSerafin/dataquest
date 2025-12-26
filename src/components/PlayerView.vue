@@ -180,21 +180,24 @@
             <h3 class="font-semibold mt-2">Items</h3>
             <div v-if="props.player.items.length === 0">No items</div>
             <ul class="inventory-relative">
-                <ItemView 
+                <li
                 v-for="item in props.player.items"
                 class="p-1 border rounded mb-1 flex justify-between items-center"
-                :class="{ 'z-top': selectedItem === item }" 
-                :item="item"
-                type="consumable"
-                cssclass="inventory"
-                :tileSize="60"
-                :canBuy= "false"
-                :showController="(selectedItem === item)"
-                @sell="$emit('sellItem', item.id)"
-                @use="onUseItem"
-                @select="selectItem"
-                @deselect="deselectItem"
-                />
+                :class="{ 'z-top': selectedItem === item }"
+                >
+                    <ItemView 
+                    :item="item"
+                    type="consumable"
+                    cssclass="inventory"
+                    :tileSize="60"
+                    :canBuy= "false"
+                    :showController="(selectedItem === item)"
+                    @sell="$emit('sellItem', item.id)"
+                    @use="onUseItem"
+                    @select="selectItem"
+                    @deselect="deselectItem"
+                    />
+                </li>
             </ul>
         </div>
         <BlueprintController

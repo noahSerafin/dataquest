@@ -1,5 +1,5 @@
 import type { OS } from "./types";
-import { Voucher, Whetstone, Iron, Garlic, Lightning, Blueberry, RedMeat, Roids } from "./Items";
+import { Voucher, Whetstone, Iron, Garlic, Lightning, Blueberry, RedMeat, Roids, Genie, Box, Gift, Pinata } from "./Items";
 
 /*
 export function findPieceClassByName(name: string) {
@@ -285,7 +285,7 @@ const Debugger : OS = {//lance //bug //screwdriver
     memory: 10,
     adminSlots: 6,
     blueprints: [bug, aegis, knife, screwdriver],
-    items: [],
+    items: [new Genie, new Box, new Pinata, new Gift ],
     admins: [],
     lives: 9,
     description: 'FOR TESTING'

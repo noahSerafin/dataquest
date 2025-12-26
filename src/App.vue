@@ -1,9 +1,8 @@
 <script setup lang="ts">
-  import { ref, onMounted, computed} from "vue";
+  import { ref, onMounted, computed, watch } from "vue";
   import Board from './components/Board.vue';
   import Leveleditor from './components/Leveleditor.vue';
   import { castled, level1Levels } from './level1Levels';
-  //import { castled, level1Levels } from './level1Levels';
   import { Player } from "./Player";
   import { Item, Voucher, allItems} from "./Items";
   import type { ItemConstructor } from "./Items";
@@ -14,10 +13,10 @@
   import type { Piece } from "./Pieces"
   import { Spawn, Dolls } from './Pieces';
   import { allPieces } from "./Pieces"
-  import type { Coordinate, PieceBlueprint, HybridBlueprint, Level, OS } from "./types";
-  //import { takeEnemyTurn } from "./Enemy";
+  import type { Coordinate, PieceBlueprint, Level, OS } from "./types";
   import { runEnemyStateMachine } from "./Enemy";
   import WorldMap from "./components/WorldMap.vue";
+  import { pickWeightedRandom, pickWeightedRandomItem } from "./helperFunctions";
   import Shop from "./components/Shop.vue";
   import BossView from "./components/BossView.vue";
   import RoundSummary from "./components/RoundSummary.vue";
@@ -197,26 +196,31 @@
     }
     
     if (item.targetType === "player") {
-      if(item.name === 'Gift Box' && player.value.memory >= player.value.usedMemory){
-        player.value.programs.push(makeBlueprint(pickWeightedRandom(allPieces)));
+      //some these items cannot be passed allItems/ Alladmins because they are declared in /Items.ts first
+      if(item.name === 'Gift Box' && player.value.hasMemorySpace){
+        player.value.programs.push(makeBlueprint(pickWeightedRandom(allPieces, player.value)));
         player.value.removeItem(item);
       }
-      if(item.name === 'Mystery Box' && player.value.memory >= player.value.usedMemory){
-        player.value.items.push(pickWeightedRandomItem(allItems))
-        player.value.removeItem(item)
-      }
-      if(item.name === 'Pinata' && player.value.adminSlots > player.value.admins.length){
-        player.value.admins.push(pickWeightedRandomItem(allAdmins))
-        player.value.removeItem(item)
-      }
-      if(item.name === 'Genie' && player.value.memory - 2 >= player.value.usedMemory){
+      if(item.name === 'Genie' && player.value.hasMemorySpace){
         const classes = [
-          pickWeightedRandom(allPieces),
-          pickWeightedRandom(allPieces),
-          pickWeightedRandom(allPieces),
+          pickWeightedRandom(allPieces, player.value),
+          pickWeightedRandom(allPieces, player.value),
+          pickWeightedRandom(allPieces, player.value),
         ];
         const bps = classes.map(c => makeBlueprint(c));
         player.value.programs.push(...bps);
+        player.value.removeItem(item)
+      }
+      if(item.name === 'Mystery Box' && player.value.hasMemorySpace){
+        player.value.items.push(pickWeightedRandomItem(allItems, player.value))
+        player.value.removeItem(item)
+      }
+      if(item.name === 'Pinata' && player.value.hasAdminSpace){
+        player.value.admins.push(pickWeightedRandomItem(allAdmins, player.value))
+        player.value.removeItem(item)
+      }
+      if(!(item.name === 'Gift Box' || item.name === 'Genie' || item.name === 'Mystery Box' || item.name === 'Pinata')) {
+        item.apply(player, itemMult)
         player.value.removeItem(item)
       }
     }
@@ -243,11 +247,11 @@
 
     if (item.targetType === "gameState") {
       console.log('using voucher on ', shopTarget.value?.name)
-        if(item.name === 'Hourglass'){
+      if(item.name === 'Hourglass'){
           reloadLevel();
           player.value.removeItem(item);
-        }
-        if(item.name === 'Magic Wand'){
+      }
+      if(item.name === 'Magic Wand'){
           //if(player placed last turn, (there is an extra player piece in active not in lastturn) find the blueprint by piece name in player.programs and renew that blueprint if it exists)
           //then:
           const lastIds = new Set(lastTurnPieces.value.map(p => p.id));
@@ -280,8 +284,13 @@
           player.value.canMove = true;
           player.value.canPlace = true;
           player.value.canAction = true;
-        }
+      }
+      item.apply(activePieces, itemMult);
     }
+
+    /*if(item.targetType === 'piecesAndBoard'){
+      item.apply(activePieces, level.value.tiles);//{activePieces, board }: {activePieces: Piece[], board: Coordinate[] }
+    }*/
     
     console.warn("Item has unknown target type:", item.targetType);
     //selectedPiece.value =
@@ -316,56 +325,7 @@
       color: PieceClass.color,
       isPlaced: false,
       cost: temp.rarity*2-1                     
-      };
-  }
-  
-  function pickWeightedRandom(PieceClasses: any[]) {//clover edit
-    const weighted: any[] = [];
-
-    //stacking
-    const cloverCount = player.value.admins.filter(a => a.name === 'Clover').length;
-    const cloverMultiplier = 1 + cloverCount * 0.3; // each clover +30%
-
-    for (const PieceClass of PieceClasses) {
-      const temp = new PieceClass({ x: -1, y: -1 }, "player"); 
-      let weight = 7 - temp.rarity;
-      weight = Math.max(1, Math.floor(weight * cloverMultiplier));
-
-      for (let i = 0; i < weight; i++) {
-        weighted.push(PieceClass);
-      }
-    }
-
-    const idx = Math.floor(Math.random() * weighted.length);
-    return weighted[idx];
-  }
-
-  function pickWeightedRandomItem(itemClasses: any[]) {//move to items.ts?
-    const weighted: any[] = [];
-
-    //non stacking
-    //const hasClover = player.value.hasAdmin('Lucky Clover');
-    //const cloverMultiplier = hasClover ? 1.5 : 1;
-
-    //stacking
-    const cloverCount = player.value.admins.filter(a => a.name === 'Clover').length;
-    const cloverMultiplier = 1 + cloverCount * 0.3; // each clover +30%
-
-    for (const itemClass of itemClasses) {
-      const rarity = itemClass.rarity ?? 1;   // fallback default
-      let weight = 7 - rarity;
-      weight = Math.max(1, Math.floor(weight * cloverMultiplier));
-
-      for (let i = 0; i < weight; i++) {
-        weighted.push(itemClass);
-      }
-    }
-
-    const idx = Math.floor(Math.random() * weighted.length);
-    //console.log('idx: ', weighted[idx])
-    const PickedClass = weighted[idx];
-
-    return new PickedClass();  // RETURN INSTANCE
+    };
   }
 
   const shopBlueprints = ref<PieceBlueprint[]>([]);
@@ -390,9 +350,9 @@
     }
 
     const classes = [
-      pickWeightedRandom(allPieces),
-      pickWeightedRandom(allPieces),
-      pickWeightedRandom(allPieces),
+      pickWeightedRandom(allPieces, player.value),
+      pickWeightedRandom(allPieces, player.value),
+      pickWeightedRandom(allPieces, player.value),
     ];
     shopBlueprints.value = classes.map(c => makeBlueprint(c));
 
@@ -406,15 +366,15 @@
     }
     const allItemsAndAdmins: ItemConstructor[] = [...allItems, ...availableAdmins];
     shopItems.value = [
-      pickWeightedRandomItem(allItemsAndAdmins),
-      pickWeightedRandomItem(allItemsAndAdmins),
-      pickWeightedRandomItem(allItemsAndAdmins),
+      pickWeightedRandomItem(allItemsAndAdmins, player.value),
+      pickWeightedRandomItem(allItemsAndAdmins, player.value),
+      pickWeightedRandomItem(allItemsAndAdmins, player.value),
     ];
     if(player.value.hasAdmin('Department Store')){
-      const extraP = pickWeightedRandom(allPieces);
+      const extraP = pickWeightedRandom(allPieces, player.value);
       shopBlueprints.value.push(makeBlueprint(extraP));
-      const extraI = pickWeightedRandomItem(allItems);
-      const extraA = pickWeightedRandomItem(availableAdmins);
+      const extraI = pickWeightedRandomItem(allItems, player.value);
+      const extraA = pickWeightedRandomItem(availableAdmins, player.value);
       shopItems.value.push(extraI, extraA);
     }
     //if triggered by player
@@ -1177,10 +1137,10 @@
   }
 
   const endTurn = async () => {
+    hasFinishedTurn.value = true;
     selectedPiece.value = null;
     pieceToPlace.value = null;
     //closeInventory();
-    hasFinishedTurn.value = true;
     player.value.canPlace = false;
     player.value.canMove = false;
     player.value.canAction = false;
@@ -1241,9 +1201,37 @@
     player.value.difficulty -= 1;
     worldSeed.value--
   }
-/*
-*/
-const debugMode = ref<boolean>(false);
+
+  function onKeydown(e: KeyboardEvent) {
+    // ignore typing in inputs
+    const tag = (e.target as HTMLElement)?.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+
+    switch (e.code) {
+      case 'Space':
+        e.preventDefault(); // stop page scroll
+        endTurn();
+        break;
+
+      case 'A':
+        boardRef.value.highlightTargets;
+        break;
+
+      case 'S':
+        boardRef.value.highlightSpecials;
+        break;
+    }
+  }
+
+  watch(hasFinishedTurn, () => {
+    if (!hasFinishedTurn) {
+      window.addEventListener('keydown', onKeydown);
+    } else {
+      window.removeEventListener('keydown', onKeydown);
+    }
+  }, { immediate: true });
+
+  const debugMode = ref<boolean>(false);
 </script>
 
 <template>

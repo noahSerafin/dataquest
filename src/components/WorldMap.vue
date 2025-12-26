@@ -13,6 +13,7 @@
     import { level2Levels } from "../level2Levels";
     import { level3Levels } from "../level3Levels";
     import { level4Levels } from "../level4Levels";
+    import { level5Levels } from "../level5Levels";
     import { allPieces } from "../Pieces";
     import { allAdmins } from "../AdminPrograms";
     import { makeBlueprint, pickWeightedRandom, pickWeightedRandomItem } from "../helperFunctions";
@@ -20,6 +21,7 @@
     import BlueprintView from "./BlueprintView.vue";
     import ItemView from "./ItemView.vue";
 import BlueprintController from "./BlueprintController.vue";
+import { level6Levels } from "../level6Levels";
 
     const props = defineProps<{
         player: Player;
@@ -31,6 +33,7 @@ import BlueprintController from "./BlueprintController.vue";
     const emit = defineEmits<{
         (e: "select-level", level: Level, difficultyMod: number, reward: number): void;
         (e: "openShop"): void;
+        (e: "openCompiler"): void;
         (e: "addBoss", admin: Admin): void;
         (e: "increaseDifficulty"): void;
     }>();
@@ -40,8 +43,8 @@ import BlueprintController from "./BlueprintController.vue";
         level2Levels,
         level3Levels,
         level4Levels,//add some alarm pieces
-        [castled, penopticon, cave, ringed, ...level4Levels],
-        [castled, penopticon, cave, ringed, ...level3Levels, ...level4Levels]
+        level5Levels,
+        level6Levels
     ]
 
     const levelPool = computed(() => {
@@ -69,7 +72,6 @@ import BlueprintController from "./BlueprintController.vue";
     }
     function newBoss() {
         boss.value = returnNewBoss();
-
     }
 
     const worldNodes = computed(() =>
@@ -115,8 +117,11 @@ import BlueprintController from "./BlueprintController.vue";
 
         currentNodeId.value = node.id;
 
-        if(node.type == 'shop'){
+        if(node.type === 'shop'){
             emit('openShop')
+        }
+        if(node.type === 'hybrid compiler'){
+            emit('openCompiler')
         }
         if(node.type === 'boss'){
             emit("addBoss", boss.value);
@@ -139,6 +144,7 @@ import BlueprintController from "./BlueprintController.vue";
         switch (node.type) {
             case "start": return "⬤";
             case "shop": return "🛒";
+            case "compiler": return String.fromCodePoint(parseInt("U+1F9EC".replace('U+', ''), 16));
             case "level": return String.fromCodePoint(parseInt(node.company.unicode.replace('U+', ''), 16));
             case "boss": return  String.fromCodePoint(parseInt(boss.value.unicode.replace('U+', ''), 16));
             case "skip": return 
@@ -326,6 +332,7 @@ import BlueprintController from "./BlueprintController.vue";
     <!-- Preview modal -->
     <div v-if="selectedPreviewNode" class="preview-modal">
       <h3>{{ selectedPreviewNode.type.toUpperCase() }}</h3>
+      <h6 v-if="selectedPreviewNode.type==='hybrid compiler'">Combine two programs stats into one (rounded up). Keep the primary's special move.</h6>
       <h6 v-if="selectedPreviewNode.type==='skip'">(Must have room)</h6>
       <h4 v-if="selectedPreviewNode.type==='boss' || selectedPreviewNode.type==='level'">{{ selectedPreviewNode.company.name}}</h4>
       <h6 v-if="selectedPreviewNode.type==='boss' || selectedPreviewNode.type==='level'">Reward: ${{ selectedPreviewNode.reward }}</h6>

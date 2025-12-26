@@ -29,6 +29,7 @@ export abstract class Piece {
   hasExposingSpecial: boolean = false;//use in enemyAI
 
   specialName?: string;
+  extraUnicode?: string;
   targetType: 'piece' | 'pieceAndPlayer' | 'space' | 'pieceAndPlace' | 'group' | 'line' | 'self' | 'all' | 'graveyard' | 'trapPiece' = 'piece';
 
   id: string
@@ -2317,6 +2318,7 @@ console.log('pieces length: ', allPieces.length)
 
 // YO-YO, U+1FA80
 //Daemon//IMP, U+1F47F  smiling: U+1F608
+//WOLF FACE, U+1F43A expose?
 //PLAYGROUND SLIDE, U+1F6DD like gate but with more range? line target??
 // KITE, U+1FA81
 ////recurve bow CANADIAN SYLLABICS CARRIER CHEE, U+1664

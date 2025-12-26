@@ -14,7 +14,7 @@
   import type { Piece } from "./Pieces"
   import { Spawn, Dolls } from './Pieces';
   import { allPieces } from "./Pieces"
-  import type { Coordinate, PieceBlueprint, Level, OS } from "./types";
+  import type { Coordinate, PieceBlueprint, HybridBlueprint, Level, OS } from "./types";
   //import { takeEnemyTurn } from "./Enemy";
   import { runEnemyStateMachine } from "./Enemy";
   import WorldMap from "./components/WorldMap.vue";
@@ -25,6 +25,7 @@
   import BlueprintView from "./components/BlueprintView.vue";
   import MainMenu from "./components/MainMenu.vue";
   import PieceController from "./components/PieceController.vue";
+  import HybridCompiler from "./components/HybridCompiler.vue";
   
   const testSword = {
     id: "274ec329-8c17-4265-8c12-e9a28bcf0833",
@@ -60,7 +61,7 @@
     id: "274ec329-8c17-4265-8c12-e9a28bcf0112",
     name: "Lance",
     description: "A test piece",
-    unicode: "U+1F94",
+    unicode: "U+1F3A0",
     maxSize: 3,
     moves: 2,
     range: 3,
@@ -69,7 +70,9 @@
     rarity: 1,
     color: "#2fc5ebff",
     isPlaced: false,
-    cost: 1
+    cost: 1,
+    hybridName: 'LanceHog',
+    extraUnicode: 'U+1F994'
   }
   const testVoucher = new Voucher();
 
@@ -438,6 +441,7 @@
     shopTarget.value = null;
   }
   const showShop = ref(false)
+  const showCompiler = ref(false)
   const showMap = ref(false)
   const showBoard = ref(false)
   //--shop-----
@@ -579,6 +583,12 @@
   }
   const openShop = () => {
     showShop.value = true;
+  }
+  const toggleCompiler = () => {
+    showCompiler.value = !showCompiler.value;
+  }
+  const openCompiler = () => {
+    showCompiler.value = true;
   }
 
   const newPlacementHighlights = (): Coordinate[] => {//board should only show these if isPlacing
@@ -728,27 +738,55 @@
     }
   }
 
+  function instantiatePieceFromBlueprint(//this goes in app
+        bp: PieceBlueprint,
+        coord: Coordinate,
+        team: string,
+        removeCallback: (p: Piece) => void
+    ): Piece {
+      
+      /*const primaryName =
+      bp.hybridName ? bp.hybridName : bp.name*/
+      
+      // Step 1: always instantiate PRIMARY class
+      const PieceClass = allPieces.find(p => p.name === bp.name)
+      if (!PieceClass) {
+        throw new Error(`Unknown piece: ${bp.name}`)
+      }
+
+      const piece = new PieceClass(coord, team, removeCallback, bp.id)
+
+      piece.maxSize = bp.maxSize
+      piece.moves = bp.moves
+      piece.range = bp.range
+      piece.attack = bp.attack
+      piece.defence = bp.defence
+
+
+      // Step 3: hybrid-specific augmentation
+      if (bp.hybridName) {
+        piece.name = bp.hybridName ? bp.hybridName : 'Unknown Hybrid'
+        piece.description = bp.description;
+        //piece.unicode = bp.unicode //should already be the case
+        piece.extraUnicode = bp.extraUnicode
+      }
+
+    return piece//modified piece with new stats
+  }
+
   function placePieceOnBoardAt(coord: Coordinate) {
     if (!pieceToPlace.value) return
     
     const bp = pieceToPlace.value
     
-    const PieceClass = allPieces.find(p => p.name === bp.name)
-    if (!PieceClass) return
+    const PieceInstance = instantiatePieceFromBlueprint(bp, coord, 'player', removePiece)
+    if (!PieceInstance) return
 
     //we're definitely making a move, so store pieces
     lastTurnPieces.value = activePieces.value.map(p => p.clone());
 
-    const instance = new PieceClass(coord, 'player', removePiece, bp.id);   // now real placement!
-    //add stats from blueprint
-    instance.maxSize = bp.maxSize
-    instance.moves = bp.moves
-    instance.range = bp.range
-    instance.attack = bp.attack
-    instance.defence = bp.defence
-
     //pass admin modifiers to the piece
-    activePieces.value.push(instance)
+    activePieces.value.push(PieceInstance);
 
     // Mark blueprint as placed so it greys in inventory
     bp.isPlaced = true
@@ -758,7 +796,7 @@
     playerSpawns.value = newPlacementHighlights();
     
     //applyStatModifications()
-    handleApplyAdmins('onPlacement', instance.id)
+    handleApplyAdmins('onPlacement', PieceInstance.id)
 
     const hasDove = playerHasAdmin('Dove');
     const hasPalette = playerHasAdmin('Palette');
@@ -813,6 +851,12 @@
     }
 
     placePieceOnBoardAt(coord);
+    isDraggingPlacement.value = false;
+  }
+
+  function clearDrag(){//TODO reuse in board when we click normally
+    pieceToPlace.value = null;
+    isPlacing.value = false;
     isDraggingPlacement.value = false;
   }
   //previous board functions
@@ -1275,6 +1319,7 @@ const debugMode = true;
       :cssclass="mapClass"
       @select-level="selectLevel"
       @openShop="openShop"
+      @openCompiler="openCompiler"
       @addBoss="addBossAdmin"
       @increaseDifficulty="increaseDifficulty"
     />
@@ -1291,6 +1336,15 @@ const debugMode = true;
       @clearTarget="clearShopTarget"
       @toggleShop="toggleShop"
       :player="player"
+    />
+    <HybridCompiler v-if="!displayEditor" class="stage-panel" :class="{ active: showCompiler }"
+      :player="player"
+      :pieceToPlace="pieceToPlace"
+      :isDraggingPlacement="isDraggingPlacement"
+      @openCompiler="openCompiler"
+      @toggleCompiler="toggleCompiler"
+      @clear-drag="clearDrag"
+      @close="toggleCompiler"
     />
     <Board ref="boardRef" v-if="!displayEditor" class="stage-panel" :class="{ active: showBoard }"
     :tiles="level.tiles"

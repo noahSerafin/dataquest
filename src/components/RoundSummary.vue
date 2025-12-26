@@ -3,8 +3,7 @@
 
     interface Props{
         hasWonRound: boolean,
-        player: Player,
-        reward: number
+        player: Player
     }
     const props = defineProps<Props>()
 
@@ -17,9 +16,9 @@
     props.player.calcInterest(); //await?? for html
 
     function collectAndProceed(){
-        props.player.collectMoney;
+        props.player.collectMoney();
         emit('proceedFromEndOfRound');
-        props.player.resetInterestAndReward;
+        props.player.resetInterestAndReward();
     }
 </script>
 
@@ -45,7 +44,7 @@
                 </span>
             </div>
             <div class="reward-summary">
-                Reward: ${{ reward }}
+                Reward: ${{ player.nextReward }}
             </div>
             <button @click="collectAndProceed">Collect and proceed</button>
         </div>

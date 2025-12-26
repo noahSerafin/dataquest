@@ -1401,7 +1401,8 @@ class Snail extends Piece {
   async special(target: Piece):Promise<void>{
     if(this.tiles.length > 1){
       this.tiles = [this.headPosition]//use array modifier
-      this.addTempModifier({defence: 1});//tempmod
+      this.addTempModifier({defence: 1});//double it's defense/ or +1?
+      this.movesRemaining = 0;
     }
     this.actions--
   }
@@ -2316,9 +2317,13 @@ class Drum extends Piece {
 export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Ink, Snail, Shark, Greatshield, Wizard, Ninja, Fairy, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, Dolls, UFO, TP, Saw, Croc, Lighthouse, Torch, Camera, Drum];//86 +2 (web, ink)
 console.log('pieces length: ', allPieces.length)
 
+// BIRD, U+1F426
+// BEAR FACE, U+1F43B
+//TIGER, U+1F405
 // YO-YO, U+1FA80
 //Daemon//IMP, U+1F47F  smiling: U+1F608
 //WOLF FACE, U+1F43A expose?
+//LION FACE, U+1F981
 //PLAYGROUND SLIDE, U+1F6DD like gate but with more range? line target??
 // KITE, U+1FA81
 ////recurve bow CANADIAN SYLLABICS CARRIER CHEE, U+1664
@@ -2334,6 +2339,8 @@ console.log('pieces length: ', allPieces.length)
 // HIGH-HEELED SHOE, U+1F460 small and slow but high attack
 //doctor STETHOSCOPE, U+1FA7A medic, + max Size to a piece
 // TOP HAT, U+1F3A9 spawns a random piece/or rabbit?
+//ORANGUTAN, U+1F9A7
+//GORILLA, U+1F98D
 
 // RABBIT, U+1F407 high movement 1 atk 1 maxsize
 //Pazzaz U+1F57A //starts with 2 actions
@@ -2343,7 +2350,7 @@ console.log('pieces length: ', allPieces.length)
 // WATER BUFFALO, U+1F403
 
 //U+1F9C3 ice cube decreases size each round?
-// BIRD, U+1F426
+
 // LIZARD, U+1F98E
 
 

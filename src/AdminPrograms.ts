@@ -670,7 +670,7 @@ class Osiris extends Admin {
   static unicode = "U+13080";//horus: "U+1314A";
   static color = "#33073bff";
   constructor() {
-    super(Osiris.name, Osiris.description, Osiris.unicode, Osiris.color, 8, 4, 'gameState', 'onPieceDestruction')
+    super(Osiris.name, Osiris.description, Osiris.unicode, Osiris.color, 8, 5, 'gameState', 'onPieceDestruction')
   }
   //on receive damage //on piece destrcution
   async apply({id, activePieces }: {id: string, activePieces: Piece[] }) {
@@ -1331,7 +1331,7 @@ class Bank extends Admin {
 
 class Ballet extends Admin {
   static name = "Twinkle Toes";
-  static description = "all your programs are hidden for the first 3 turns of a round";
+  static description = "all your programs are hidden for the first 3 turns of a round, (unfinished)";
   static unicode = "U+1FA70";
   static color = "#ebc0ffff";
   constructor() {
@@ -1342,10 +1342,10 @@ class Ballet extends Admin {
     this.count += 1;
     activePieces.forEach(piece => {
       if(piece.team === 'player'){
-        if(this.count <= 3){
-          piece.statuses.hidden = false;
-        } else if(!piece.statuses.exposed){
+        if(this.count <= 3 && !piece.statuses.exposed){
           piece.statuses.hidden = true
+        } else {
+          piece.statuses.hidden = false;
         }
       }
     });
@@ -1357,7 +1357,7 @@ class Ballet extends Admin {
 
 class Pants extends Admin {
   static name = "Spair Pair";
-  static description = "Your first destroyed program is moved back to your inventory";
+  static description = "Your first destroyed program is moved back to your inventory (testing)";
   static unicode = "U+1FA72";
   static color = "#f8f8f8ff";
   constructor() {
@@ -1367,7 +1367,7 @@ class Pants extends Admin {
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     if(this.count === 0){
       const idx = activePieces.findIndex(p => p.id === id);
-      const bpIdx = player.programs.findIndex(bp => bp.id === activePieces[idx].id )
+      const bpIdx = player.programs.findIndex(bp => bp.id === id )
       if(activePieces[idx].team==='player'){
         player.programs[bpIdx].isPlaced = false;
         activePieces.filter(p => p.id !== activePieces[idx].id);//we could splice, but this might be safer?
@@ -1440,7 +1440,7 @@ class Toilet extends Admin {
   static name = "Circling the drain";
   static description = "Common admins each provide +1 to all stats on placement";
   static unicode = "U+1F6BD";
-  static color = "#ff5555";
+  static color = "#557affff";
   constructor() {
     super(Toilet.name, Toilet.description, Toilet.unicode, Toilet.color, 5, 5, 'playerAndGame', 'onPlacement')
   }
@@ -1487,9 +1487,9 @@ class Harvest extends Admin {
 
 class Bipolar extends Admin {
   static name = "Ups and Downs";
-  static description = "Gain $1 on destroying an enemy, lose $1 on destruction of your own programs";
+  static description = "Gain $1 on destroying an enemy, lose $5 on destruction of your own programs";
   static unicode = "U+1F3AD";
-  static color = "#558bffff";
+  static color = "#8eff55ff";
   constructor() {
     super(Bipolar.name, Bipolar.description, Bipolar.unicode, Bipolar.color, 5, 1, 'playerAndGame', 'onPieceDestruction')
   }

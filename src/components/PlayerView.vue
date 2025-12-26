@@ -291,6 +291,9 @@
         gap: 5px;
         width: 80%;
     }
+    .admins{
+        justify-content: flex-start;
+    }
     .inventory-relative{
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr;

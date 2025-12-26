@@ -173,6 +173,10 @@ export const castled: Level = {
         {
           "x": 2,
           "y": 1
+        },
+        {
+          "x": 3,
+          "y": 1
         }
       ],
       "rarity": 1

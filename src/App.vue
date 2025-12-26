@@ -105,7 +105,6 @@
     showInventory.value = !showInventory.value;
   }
   const showMainMenu = ref(true);
-  const reward = ref<number>(0);
 
   function createNewPlayer(os: OS){
     player.value.difficulty = 1
@@ -138,10 +137,6 @@
   const showFastControls = ref<boolean>(true);
   function toggleFastControls(){
     showFastControls.value = !showFastControls.value
-  }
-  
-  function playerHasAdmin(name: string) {
-    return player.value.admins.some(a => a.name === name);
   }
 
   function sellBlueprint(pieceId: string) {
@@ -180,7 +175,7 @@
   function handleApplyItem(payload: {item: Item, id:string}) {
     const item = payload.item;
     let itemMult = 1;
-    if(playerHasAdmin('Chemistry')){
+    if(player.value.hasAdmin('Chemistry')){
       itemMult = 2;
     }
     //check it is to be applied to playerBlueprints
@@ -349,7 +344,7 @@
     const weighted: any[] = [];
 
     //non stacking
-    //const hasClover = playerHasAdmin('Lucky Clover');
+    //const hasClover = player.value.hasAdmin('Lucky Clover');
     //const cloverMultiplier = hasClover ? 1.5 : 1;
 
     //stacking
@@ -389,7 +384,7 @@
       currentFib.value = nextFib;
 
       rerollCost.value += currentFib.value;
-      if(playerHasAdmin('Slots')){
+      if(player.value.hasAdmin('Slots')){
         rerollCost.value-=2;
       }
     }
@@ -403,7 +398,7 @@
 
     //no reappearing admins
     let availableAdmins = allAdmins;
-    if(playerHasAdmin('Bouquet')){
+    if(player.value.hasAdmin('Bouquet')){
       const ownedAdmins = new Set(player.value.admins.map(a => a.name));
       availableAdmins = allAdmins.filter(
         AdminClass => !ownedAdmins.has(AdminClass.name) // or .name
@@ -415,7 +410,7 @@
       pickWeightedRandomItem(allItemsAndAdmins),
       pickWeightedRandomItem(allItemsAndAdmins),
     ];
-    if(playerHasAdmin('Department Store')){
+    if(player.value.hasAdmin('Department Store')){
       const extraP = pickWeightedRandom(allPieces);
       shopBlueprints.value.push(makeBlueprint(extraP));
       const extraI = pickWeightedRandomItem(allItems);
@@ -463,7 +458,7 @@
   }
 
   async function handleApplyAdmins(trigger: AdminTrigger, id:string){//admin and target
-    if(!playerHasAdmin('Umbrella')){
+    if(!player.value.hasAdmin('Umbrella')){
       for (const admin of bossAdmins.value) {
         if(trigger === admin.triggerType){
           // sort through target types, decide what to pass
@@ -544,7 +539,7 @@
     activePieces.value = [];
     graveyard.value = [];
     level.value = newLevel;
-    reward.value = lReward;
+    player.value.nextReward = lReward;
     const newPieces = rehydratePieces(newLevel.pieces);
     activePieces.value = processSpawnPoints(newPieces , difficultyMod);
     originalPieces.value = activePieces.value.map(p => p.clone());
@@ -644,13 +639,14 @@
 
           const validEnemies = allPieces.filter(EnemyClass => {
             //p.rarity >= min && p.rarity <= max //old method for spawnsize 1 only
-            const temp = new EnemyClass(piece.headPosition, 'enemy', removePiece);
-
-            return (
-              temp.rarity >= min &&
-              temp.rarity <= max &&
-              temp.maxSize >= spawnSize
-            );
+            if(EnemyClass.name !== "Nuke"){// remove nukes
+              const temp = new EnemyClass(piece.headPosition, 'enemy', removePiece);
+              return (
+                temp.rarity >= min &&
+                temp.rarity <= max &&
+                temp.maxSize >= spawnSize
+              );
+            }
           });
           const pool = validEnemies.length > 0 ? validEnemies : allPieces;
           //console.log('lengths:', min, max, allPieces.length, pool.length)
@@ -701,7 +697,7 @@
   function highlightPlacements(pieceBlueprint: PieceBlueprint) {
     if(!roundHasStarted) return
     boardRef.value.clearHighlights();
-    if(playerHasAdmin('Backdoor')){
+    if(player.value.hasAdmin('Backdoor')){
       const unnocupiedSpaces: Coordinate[] = [] ;
       level.value.tiles.forEach(tile => {
         const isOccupied = activePieces.value.some(p =>
@@ -719,7 +715,7 @@
   }
 
   async function removePiece(piece: Piece) {
-    if(playerHasAdmin('Hi-Vis')){
+    if(player.value.hasAdmin('Hi-Vis')){
       piece.tiles = [piece.headPosition];
       const index = player.value.admins.findIndex(a => a.name === 'Hi-vis');
       if (index !== -1) player.value.admins.splice(index, 1);
@@ -802,8 +798,8 @@
     //applyStatModifications()
     handleApplyAdmins('onPlacement', PieceInstance.id)
 
-    const hasDove = playerHasAdmin('Dove');
-    const hasPalette = playerHasAdmin('Palette');
+    const hasDove = player.value.hasAdmin('Dove');
+    const hasPalette = player.value.hasAdmin('Palette');
 
     // First-turn rules
     if (isFirstTurn.value) {
@@ -1106,7 +1102,7 @@
       hasWonRound.value = false;
       openSummary(true);
       //check admins for onion
-      if(playerHasAdmin('Onion')){
+      if(player.value.hasAdmin('Onion')){
         const index = player.value.admins.findIndex(a => a.name === 'Onion');
         if (index !== -1) player.value.admins.splice(index, 1);
       }
@@ -1160,7 +1156,7 @@
     activePieces.value.forEach(piece => {
       //petri dish, spread statuses here
       if(piece.team === team){
-        const mult = playerHasAdmin('Volatile') ? 2 : 1
+        const mult = player.value.hasAdmin('Volatile') ? 2 : 1
         piece.applyStatusEffects(mult);
       }
     });
@@ -1246,7 +1242,7 @@ const debugMode = true;
       Renew Blueprints
     </button>
     <button
-    v-if="playerHasAdmin('Convenience Store') || debugMode === true"
+    v-if="player.hasAdmin('Convenience Store') || debugMode === true"
     class="shop-toggle"
     @mousedown="toggleShop()">
     Toggle Shop
@@ -1294,7 +1290,6 @@ const debugMode = true;
     <RoundSummary v-if="showSummary" class="stage-panel" :class="{ active: showSummary }"
       :hasWonRound="hasWonRound"
       :player="player"
-      :reward="reward"
       @proceedFromEndOfRound="handleProceed"
       @reloadLevel="reloadLevel"
       @mainMenu="openMainMenu"

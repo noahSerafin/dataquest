@@ -1404,7 +1404,7 @@ class Ace extends Admin {
 
 class Pi extends Admin {//test
   static name = "Pi";//
-  static description = "Programs get +3.14 damage multiplyer on attacking";
+  static description = "Programs get +0.314 damage multiplyer on attacking";
   static unicode = "U+3C0";
   static color = "#640909ff";
   constructor() {
@@ -1413,7 +1413,7 @@ class Pi extends Admin {//test
   //onDamage
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].damageMult += 3.14;
+    activePieces[idx].damageMult += 0.314;
   }
 }
 

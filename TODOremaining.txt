@@ -4,8 +4,22 @@ make more levels, smaller levels (max size 9)
 test interest is working properly 
 hide hidden enemies - test
 
+ROUNDSUMMARY
+cash out button, move interest/reward functions here.
+player.reward to keep track??
 
-SAVE GAME STATE for bugs 6
+AI 6 nearly-done
+handle friendlySpecials 7
+-confused todo on enemy 9
+    maybe ignore statuses if already has a status??? or dont consume an action??
+    !attackingSpecial use on friendly??? or friendlySpecial bool
+
+BOSSES 7
+test damage all bosses
+fog
+redacted
+
+SAVE GAME STATE for bugs 7.5
 -more tiles on starting programs in levels three and up 5
 
 BUGS 6
@@ -20,14 +34,9 @@ inventory needs 5 columns at least...
 color code stats, and status
 status tooltips
 
-MAP 6.5
+MAP
 allow some randomised crossover points?
 Altar nodes - sacrifice a program for more money than selling - 8
-
-BOSSES 7
-test damage all bosses
-fog
-redacted
 
 ITEMS - clean up player items, add activePieces/gameState items 7
 
@@ -36,17 +45,8 @@ add 14 more (100 total)
 keep track of upgrades and display on piece, and move/attack/spceial btn that cycles 7
 variants?
 
-EDITOR 8
-Have logic for spawning any piece on single spawn, then only pieces with max size >= to the spawn's size
-
 ADMINS - Petri - spread statuses -test, crystal - test, chemistry - test 22 off 100
 money admins on interest - test, implement into ROUND SUMMARY, maybe store earned money in a temp variable, add it in the summary with awaits? 7
-
-AI 6 nearly-done
-handle friendlySpecials 7
--confused todo on enemy 9
-    maybe ignore statuses if already has a status??? or dont consume an action??
-    !attackingSpecial use on friendly??? or friendlySpecial bool
 
 companies 8 - own list of programs;
 

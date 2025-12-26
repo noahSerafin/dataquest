@@ -92,8 +92,10 @@
     5,
     0,
     0,
+    0,
+    0,
     false,
-    false
+    false,
   ));
   const showInventory = ref(false);
   function closeInventory(){
@@ -117,6 +119,8 @@
       os.admins,
       os.lives,
       5,
+      0,
+      0,
       0,
       0,
       false,
@@ -1084,22 +1088,6 @@
     }
   };
 
-  const addPlayerInterest = () => {
-    const baseMoney = Math.max(0, player.value.money);   // ← prevents negative interest
-    const noOfFives = Math.floor(baseMoney / 5);
-    if(noOfFives > player.value.interestCap){
-      player.value.money += player.value.interestCap;
-    } else {
-      player.value.money += noOfFives;
-    }
-    //bubble
-    player.value.money += player.value.bonusInterest;
-    if(playerHasAdmin('Inheritance')){
-      player.value.money += (noOfFives+player.value.bonusInterest)
-    }
-    player.value.money += reward.value;
-  }
-
   const hasWonRound = ref<boolean>(false);
   
   const endRound = (roundWon: boolean) => {
@@ -1111,9 +1099,8 @@
     if(roundWon){
       //bring up round summary
       hasWonRound.value = true;
-      openSummary(true);
-      addPlayerInterest();
       handleApplyAdmins('onRoundEnd', '');
+      openSummary(true);
       //move to btn inside round summary
     } else {
       hasWonRound.value = false;

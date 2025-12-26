@@ -1,5 +1,4 @@
 <script setup lang="ts">
-    import { computed } from 'vue';
     import { Player } from '../Player';
 
     interface Props{
@@ -15,11 +14,13 @@
         (e: 'mainMenu'): void;
     }>();
    
-    
-    const interest = computed(() =>
-        Math.floor((Math.max(0, props.player.money))/5)   // ← prevents negative interest
-    )
+    props.player.calcInterest(); //await?? for html
 
+    function collectAndProceed(){
+        props.player.collectMoney;
+        emit('proceedFromEndOfRound');
+        props.player.resetInterestAndReward;
+    }
 </script>
 
 <template>
@@ -32,7 +33,7 @@
                 Node complete
             </h3>
             <div class="interest-summary">
-                Total interest earned: ${{ interest }}
+                Total interest earned: ${{ player.nextInterest }}
                 <span class="bonus"
                  v-if="player.bonusInterest > 0">
                     + bonus ${{ player.bonusInterest }}
@@ -40,13 +41,13 @@
                 <span class="inheritance"
                     v-if="player.admins.some(a => a.name === 'inheritance')"
                 >
-                + inheritance ${{ interest }}
+                + inheritance ${{ player.nextInterest }}
                 </span>
             </div>
             <div class="reward-summary">
                 Reward: ${{ reward }}
             </div>
-            <button @click="emit('proceedFromEndOfRound')">Proceed</button>
+            <button @click="collectAndProceed">Collect and proceed</button>
         </div>
         <div class="if-lost" v-if="!hasWonRound && player.lives > 0">
             <h3>

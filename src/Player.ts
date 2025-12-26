@@ -20,7 +20,9 @@ export class Player {
     canPlace: boolean = true;
     canMove: boolean = true;
     canAction: boolean = true;
-    osunicode: string
+    osunicode: string;
+    nextInterest: number
+    nextReward: number
     //adminModifiers: Record<string, StatModifier>
     constructor(
         osunicode = '',
@@ -34,6 +36,8 @@ export class Player {
         interestCap: number,
         bonusInterest: number,
         bonusReward: number,
+        nextInterest: number,
+        nextReward: number,
         hasTrolley: boolean,
         hasToolbox: boolean,
         //adminModifiers: Record<string, StatModifier> = {}
@@ -49,6 +53,8 @@ export class Player {
         this.interestCap = interestCap;
         this.bonusInterest = bonusInterest;
         this.bonusReward = bonusReward;
+        this.nextInterest = nextInterest;
+        this.nextReward = nextReward;
         this.hasTrolley = hasTrolley;
         this.hasToolbox = hasToolbox;
         //this.adminModifiers = adminModifiers;
@@ -157,5 +163,34 @@ export class Player {
 
   spend(amount: number){
     this.money -= amount;
+  }
+
+  hasAdmin(name: string){
+    return this.admins.some(a => a.name === name);
+  }
+
+  calcInterest(){
+    const baseMoney = Math.max(0, this.money);   // ← prevents negative interest
+    const noOfFives = Math.floor(baseMoney / 5);
+    if(noOfFives > this.interestCap){
+      this.nextInterest += this.interestCap;
+    } else {
+      this.nextInterest += noOfFives;
+    }
+    //bubble
+    this.nextInterest += this.bonusInterest;
+    if(this.hasAdmin('Inheritance')){
+      this.nextInterest = (this.nextInterest * 2)
+    }
+    this.nextReward += this.bonusReward;
+  }
+
+  collectMoney(){
+    this.money += this.nextInterest + this. nextReward;
+  }
+
+  resetInterestAndReward(){
+    this.nextInterest = 0;
+    this.nextReward = 0;
   }
 }

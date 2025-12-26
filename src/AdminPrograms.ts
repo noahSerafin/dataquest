@@ -767,10 +767,14 @@ class Seed extends Admin {
   static unicode = "U+1F331";
   static color = "#ff5555";
   constructor() {
-    super(Seed.name, Seed.description, Seed.unicode, Seed.color, 10, 1, 'player', 'onRoundEnd')
+    super(Seed.name, Seed.description, Seed.unicode, Seed.color, 10, 1, 'player', 'other')
   }
   async apply({ player }: { player: Player }) {
    player.interestCap = 10;
+  }
+  remove({ player }: { player: Player }) {
+    //if player does not have hedge fund
+   player.interestCap = 5;
   }
 }
 
@@ -1560,6 +1564,10 @@ class HedgeFund extends Admin {
   }
   async apply({ player }: { player: Player }) {
     player.interestCap = 15;
+  }
+  remove({ player }: { player: Player }) {
+    //if player does not have seed
+   player.interestCap = 5;
   }
 }
 

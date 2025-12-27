@@ -13,6 +13,7 @@ Once entering a node, you will be able to see what enemy programs you are up aga
 Start by placing a program on the board, either by dragging into the green spawn point or using the place button then clicking on the spawn.
 Be aware you won't be able to move your program until after the enemy's turn, so make sure you're not going to be destoyed straight away.
 On each turn, you may either place a new program next to one of your own, or move your already placed programs.
+If you clear the board but the round doesn't finish, there's probably still a 'hidden' enemy piece in play.
 
 SHOP
 At the shop, you can buy new programs (P), new Admin prgrams (A), or consumable items (I)

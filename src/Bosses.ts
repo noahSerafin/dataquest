@@ -55,12 +55,12 @@ class NorthWind extends Admin {
         playerPieces.forEach(piece => {
             const spaceToCheck  = {x: piece.headPosition.x, y: piece.headPosition.y+1}
             //check space is unnocupied and on board
-            const isUnnocupiedAndOnBoard = activePieces.some(p =>
-                !(p.tiles.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)) &&
-                board.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)
+            const isOccupied = activePieces.some(p =>
+                p.tiles.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)
             );
+            const isOnBoard = board.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)
             //if(!isOccupied && isOnBoard){
-            if(isUnnocupiedAndOnBoard){
+            if(!isOccupied && isOnBoard){
                 piece.moveTo(spaceToCheck);
             }
         })
@@ -88,11 +88,11 @@ class Hook extends Admin {
         playerPieces.forEach(piece => {
             const spaceToCheck  = {x: piece.headPosition.x, y: piece.headPosition.y-1}
             //check space is unnocupied and on board
-            const isUnnocupiedAndOnBoard = activePieces.some(p =>
-                (!p.tiles.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)) &&
-                board.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)
+            const isOccupied = activePieces.some(p =>
+                p.tiles.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)
             );
-            if(isUnnocupiedAndOnBoard){
+            const isOnBoard = board.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)
+            if(!isOccupied && isOnBoard){
                 piece.moveTo(spaceToCheck);
             }
         })

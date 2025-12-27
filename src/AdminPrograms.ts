@@ -1379,7 +1379,7 @@ class Pants extends Admin {
 
 class Ace extends Admin {//test
   static name = "Ace up the sleeve";
-  static description = "If your last placed program is destroyed, move it back to your inventory";
+  static description = "If your last placed program is destroyed, move it back to your inventory (untested)";
   static unicode = "U+2660";
   static color = "#f8f8f8ff";
   constructor() {
@@ -1656,7 +1656,7 @@ class DNA extends Admin {
 class Cheese extends Admin {
   static name = "Chedda";
   static description = "+$1 at the end of a round";
-  static unicode = "U+1F52C";
+  static unicode = "U+1F9C0";
   static color = "#f3dc2fff";
   constructor() {
     super(Cheese.name, Cheese.description, Cheese.unicode, Cheese.color, 3, 1, 'player', 'onRoundEnd')

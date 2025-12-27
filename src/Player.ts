@@ -187,11 +187,13 @@ export class Player {
 
   collectMoney(){
     console.log(this.nextInterest, this.nextReward)
-    this.money += this.nextInterest + this.nextReward;
+    this.money += this.nextInterest + this.bonusInterest + this.nextReward + this.bonusReward;
   }
 
   resetInterestAndReward(){
     this.nextInterest = 0;
     this.nextReward = 0;
+    this.bonusInterest = 0;
+    this.bonusReward = 0;
   }
 }

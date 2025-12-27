@@ -64,31 +64,31 @@ class Meteor extends Admin {
 
 class Miner extends Admin {
   static name = "Miner";
-  static description = "Collect $2  at the end of every round";
+  static description = "Collect $2 at the end of every round";
   static unicode = "U+26CF";
   static color = "#ffa600d3";
 
   constructor() {
-    super(Miner.name, Miner.description, Miner.unicode, Miner.color, 10, 1, 'player', 'onRoundEnd')
+    super(Miner.name, Miner.description, Miner.unicode, Miner.color, 5, 1, 'player', 'onRoundEnd')
   }
 
   //noRoundend
   async apply({ player }: { player: Player }) {
-    player.money += 2
+    player.bonusReward += 2
   }
   //
 }
 
 class Bubble extends Admin {
   static name = "Bubble";
-  static description = "Increases interest by 1 every round, 10% chance to pop and reset, also reducing money to 0";
+  static description = "Gain +$1 bonus interest every round, 10% chance to pop and reset, also reducing money to 0";
   static unicode = "U+1FAE7";
   static color = "#0400daff";
 
   constructor() {
-    super(Bubble.name, Bubble.description, Bubble.unicode, Bubble.color, 10, 2, 'player', 'onRoundEnd')
+    super(Bubble.name, Bubble.description, Bubble.unicode, Bubble.color, 5, 2, 'player', 'onRoundEnd')
   }
-
+  private count = 1;
   //at end of round
   async apply({ player }: { player: Player }) {
     //calc 10% chance for pop
@@ -97,7 +97,8 @@ class Bubble extends Admin {
       player.money = 0
       player.bonusInterest = 0
     }else{
-      player.bonusInterest += 1
+      player.bonusInterest += this.count;
+      this.count ++
     }
 
   }
@@ -384,20 +385,15 @@ class Volatile extends Admin {//handled in app
 
 class Inheritance extends Admin {
   static name = "Inheritance";
-  static description = "Earn double your interest after winning a round, does not stack with itself";
+  static description = "Earn double your interest after winning a round, does not stack";
   static unicode = "U+1F911";
   static color = "#ffc955ff";
   constructor() {
-    super(Inheritance.name, Inheritance.description, Inheritance.unicode, Inheritance.color, 10, 5, 'player', 'other')//onroundend, but we handle outside
+    super(Inheritance.name, Inheritance.description, Inheritance.unicode, Inheritance.color, 10, 5, 'player', 'onRoundEnd')//onroundend, but we handle outside
   }
-  /*
   async apply({ player }: { player: Player }) {
-    player.bonusInterest = player.interest * 2
+    player.bonusReward += ((player.nextInterest + player.bonusInterest) * 2)
   }
-  remove({ player }: { player: Player }) {
-    player.interest = player.interest / 2
-  }
-    */
 }
 
 class CreditCard extends Admin {
@@ -580,7 +576,7 @@ class Stonks extends Admin {
   //on end of round
   async apply({ player }: { player: Player }) {
     const noOfFives = Math.floor(player.money / 5) //round down
-    player.money += noOfFives
+    player.bonusInterest += noOfFives//reset after round
   }
 
 }
@@ -720,7 +716,7 @@ class Crown extends Admin {
   }
   //on round end
   async apply({ player }: { player: Player }) {
-   player.money += 5;
+   player.bonusReward += 5;
   }
 }
 
@@ -763,18 +759,17 @@ class OffRoader extends Admin {
 
 class Seed extends Admin {
   static name = "Seed";
-  static description = "Raises maximum interest to $10";
+  static description = "Raises maximum interest by $5";
   static unicode = "U+1F331";
   static color = "#ff5555";
   constructor() {
     super(Seed.name, Seed.description, Seed.unicode, Seed.color, 10, 1, 'player', 'other')
   }
   async apply({ player }: { player: Player }) {
-   player.interestCap = 10;
+   player.interestCap += 5;
   }
   remove({ player }: { player: Player }) {
-    //if player does not have hedge fund
-   player.interestCap = 5;
+   player.interestCap -= 5;
   }
 }
 
@@ -1178,7 +1173,7 @@ export class Spoon extends Admin {
     super (Spoon.name, Spoon.description, Spoon.unicode, Spoon.color, 10, 4, 'player', 'onRoundStart')
   }
   async apply({ player }: { player: Player }) {
-    player.money += 5
+    player.money += 4
   }
 }
 
@@ -1540,34 +1535,31 @@ class Taoism extends Admin {
 
 class Loot extends Admin {
   static name = "Loot";
-  static description = "Earn an extra $5 at the end of a round";
+  static description = "Earn an extra $4 at the end of a round";
   static unicode = "U+1F4B0";
   static color = "#ffe555ff";
   constructor() {
-    super(Loot.name, Loot.description, Loot.unicode, Loot.color, 7, 2, 'player', 'other')
+    super(Loot.name, Loot.description, Loot.unicode, Loot.color, 7, 2, 'player', 'onRoundEnd')
   }
   async apply({ player }: { player: Player }) {
-    player.bonusReward += 5;
-  }
-  remove({ player }: { player: Player }) {
-    player.bonusReward -= 5;
+    player.bonusReward += 4;
   }
 }
 
 class HedgeFund extends Admin {
   static name = "Hedge Fund";
-  static description = "Interest cap raised to $15";
+  static description = "Raises interest cap $10";
   static unicode = "U+1F4B8";
   static color = "#ff5555";
   constructor() {
-    super(HedgeFund.name, HedgeFund.description, HedgeFund.unicode, HedgeFund.color, 7, 3, 'player', 'onRoundEnd')
+    super(HedgeFund.name, HedgeFund.description, HedgeFund.unicode, HedgeFund.color, 10, 3, 'player', 'other')
   }
   async apply({ player }: { player: Player }) {
-    player.interestCap = 15;
+    player.interestCap += 10;
   }
   remove({ player }: { player: Player }) {
     //if player does not have seed
-   player.interestCap = 5;
+   player.interestCap -= 10;
   }
 }
 
@@ -1641,11 +1633,11 @@ class Abacus extends Admin {
   static unicode = "U+1F9EE";
   static color = "#a39755ff";
   constructor() {
-    super(Abacus.name, Abacus.description, Abacus.unicode, Abacus.color, 7, 2, 'player', 'onRoundEnd')
+    super(Abacus.name, Abacus.description, Abacus.unicode, Abacus.color, 5, 2, 'player', 'onRoundEnd')
   }
   async apply({ player }: { player: Player }) {
     const amount = Math.floor(3/player.difficulty)
-    player.money += amount;
+    player.bonusReward += amount;
   }
 }
 
@@ -1665,10 +1657,10 @@ class Cheese extends Admin {
   static unicode = "U+1F52C";
   static color = "#f3dc2fff";
   constructor() {
-    super(Cheese.name, Cheese.description, Cheese.unicode, Cheese.color, 7, 2, 'player', 'onRoundEnd')
+    super(Cheese.name, Cheese.description, Cheese.unicode, Cheese.color, 3, 1, 'player', 'onRoundEnd')
   }
   async apply({ player }: { player: Player }) {
-    player.money += 1;
+    player.bonusReward += 1;
   }
 }
 

@@ -20,6 +20,8 @@
         emit('proceedFromEndOfRound');
         props.player.resetInterestAndReward();
     }
+
+    //duplicate admins later??
 </script>
 
 <template>
@@ -32,19 +34,22 @@
                 Node complete
             </h3>
             <div class="interest-summary">
-                Total interest earned: ${{ player.nextInterest }}
+                Interest earned: ${{ player.nextInterest }}
                 <span class="bonus"
                  v-if="player.bonusInterest > 0">
-                    + bonus ${{ player.bonusInterest }}
+                    + Bonus interest ${{ player.bonusInterest }}
                 </span>
-                <span class="inheritance"
-                    v-if="player.admins.some(a => a.name === 'inheritance')"
-                >
-                + inheritance ${{ player.nextInterest }}
+                <span class="inheritance" v-if="player.hasAdmin('inheritance')">
+                + Inheritance ${{ (player.nextInterest + player.bonusInterest) * 2 }}
                 </span>
             </div>
             <div class="reward-summary">
                 Reward: ${{ player.nextReward }}
+                <span v-if="player.hasAdmin('Chedda')">+ Chedda $1</span>
+                <span v-if="player.hasAdmin('Miner')">+ Miner $2</span>
+                <span v-if="player.hasAdmin('Abacus')">+ Abacus ${{ Math.floor(3/player.difficulty) }}</span>
+                <span v-if="player.hasAdmin('Loot')">+ Loot $4</span>
+                <span v-if="player.hasAdmin('Tithe')">+ Tithe $5</span>
             </div>
             <button @click="collectAndProceed">Collect and proceed</button>
         </div>

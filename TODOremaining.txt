@@ -16,9 +16,8 @@ fog
 redacted
 
 BUGS 6
-retry button broken
-snail - not reseting
-chivalry adding every turn, will puzzle do the same?
+retry button broken 5
+chivalry adding every turn, will puzzle do the same? 5
 web/ink not disappearing - inconclusive
 -visual: 5
 -visualise traps

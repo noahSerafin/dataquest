@@ -647,7 +647,7 @@ class Bomb extends Piece {
   static description = "Can be sacrificed to inflict high damage over a wide area";
   static unicode = "U+1F4A3";
   static color = "#2c2c2cff";
-  static rarity = 3;
+  static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Bomb.name, Bomb.description, Bomb.unicode, 1, 2, 4, 10, 1, Bomb.color, headPosition, [headPosition], team, Bomb.rarity, removeCallback, id)
     this.specialName = 'Boom';
@@ -1099,7 +1099,7 @@ class Nuke extends Piece {
   static description = "A slow and fragile program that destroys itself and damages all pieces in range";
   static unicode = "U+2622";
   static color = "#ff0000ff";
-  static rarity = 5;
+  static rarity = 6;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Nuke.name, Nuke.description, Nuke.unicode, 1, 1, 4, 25, 0, Nuke.color, headPosition, [headPosition], team, Nuke.rarity, removeCallback, id)
    this.specialName = 'Boom';
@@ -2384,7 +2384,7 @@ class Hedgehog extends Piece {
   static color = "#504020ff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Hedgehog.name, Hedgehog.description, Hedgehog.unicode, 3, 0, 1, 0, 0, Hedgehog.color, headPosition, [headPosition], team, Hedgehog.rarity, removeCallback, id)
+   super(Hedgehog.name, Hedgehog.description, Hedgehog.unicode, 3, 2, 1, 1, 1, Hedgehog.color, headPosition, [headPosition], team, Hedgehog.rarity, removeCallback, id)
    this.willRetaliate = true;
   }
 }

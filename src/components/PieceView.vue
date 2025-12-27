@@ -250,6 +250,7 @@ const activeStatuses = computed((): [string, boolean][] => {
   color: white;
   right: 0;
   border-radius: 0;
+  z-index: 2;
 }
 .action-btn{
   bottom: 0;

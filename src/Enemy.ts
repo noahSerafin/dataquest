@@ -37,7 +37,7 @@ function decideEnemyIntent(
         }
         if (newTarget)  return { type: 'special', target: {line: getTilesInLine(enemy, newTarget.place), activePieces: activePieces} }
       }
-      if(enemy.targetType == 'pieceAndPlace' ){
+      if(enemy.targetType == 'pieceAndPlace' && target.piece.headPosition !== target.place){
         return { type: 'special', target: {piece: target.piece, target: target.place}}
       }
       if(enemy.targetType === 'piece'){ ///can execute a special

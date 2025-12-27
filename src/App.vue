@@ -1062,7 +1062,6 @@
   const hasWonRound = ref<boolean>(false);
   
   const endRound = (roundWon: boolean) => {
-    activePieces.value = [];
     graveyard.value = [];
     lastTurnPieces.value = [];
     selectedPiece.value = null;
@@ -1071,10 +1070,12 @@
       //bring up round summary
       hasWonRound.value = true;
       handleApplyAdmins('onRoundEnd', '');
+      activePieces.value = [];//for needle
       openSummary(true);
       //move to btn inside round summary
     } else {
       hasWonRound.value = false;
+      activePieces.value = [];
       openSummary(true);
       //check admins for onion
       if(player.value.hasAdmin('Onion')){
@@ -1090,9 +1091,9 @@
     for (const admin of bossAdmins.value) {//only necessary if we keep boss admins
       admin.onRoundEnd?.();
     }
-    for (const admin of player.value.admins) {
+    /*for (const admin of player.value.admins) {
       admin.onRoundEnd?.();
-    }
+    }*/
     roundHasStarted.value = false;
   }
       

@@ -409,7 +409,7 @@ class CreditCard extends Admin {
 
 class Needle extends Admin {//try it out test
   static name = "Needle";
-  static description = "Winning a round with one program placed boosts all it's stats by one permanently";
+  static description = "Winning a round with one program placed boosts all it's stats by one permanently (testing)";
   static unicode = "U+1FAA1";
   static color = "#b448a6ff";
   constructor() {

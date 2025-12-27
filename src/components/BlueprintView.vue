@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { ref, computed } from "vue";
 import type { Coordinate, PieceBlueprint } from "../types";
-import { Piece } from "../Pieces";
 
 //construction-------------
 
@@ -81,10 +80,10 @@ const pieceStyle = computed(() => {
   return styles;
 })
 
-const getTileStyle = (tile: Coordinate) => ({
+/*const getTileStyle = (tile: Coordinate) => ({
   left: tile.x * props.tileSize+6 + "px",
   top: tile.y * props.tileSize+6 + "px",
-})
+})*/
 
 function handleSelect() {
   if(props.cssclass == 'placing') return

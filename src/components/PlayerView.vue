@@ -62,10 +62,6 @@
         }
     }
 
-    function onUseAdmin(admin: Admin) {//admin: Admin ???
-        //emit("applyAdmin", admin: Admin);
-    }
-
     function handleClose() {
         selectedPiece.value = null
         return;
@@ -116,7 +112,7 @@
                 </span>
                 <span style="text-align: left;"><strong class="text-yellow">$:</strong> {{ props.player.money }}</span>
                 <p>
-                    <span v-for="lives in player.lives">
+                    <span v-for="_ in player.lives">
                        {{ String.fromCodePoint(0x1FA77) }}
                     </span>
                 </p>
@@ -143,7 +139,6 @@
                             :canBuy="false"
                             :showController="(selectedItem === item)"
                             @sell="$emit('sellAdmin', item.id)"
-                            @triggerAdmin="onUseAdmin"
                             @select="selectItem"
                             @deselect="deselectItem"
                         />

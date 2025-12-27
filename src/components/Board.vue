@@ -380,9 +380,9 @@ function getTilesInStraightLine(
   return tiles;
 }
 
-function checkTileIsOccupied(coord:Coordinate): Piece | undefined{
+/*function checkTileIsOccupied(coord:Coordinate): Piece | undefined{
   return pieceMap.value.get(`${coord.x},${coord.y}`);
-}
+}*/
 
 //(damageReceiver: InstanceType<typeof Piece>) => {
 

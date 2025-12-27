@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount, watch, reactive } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import type { Coordinate } from "../types";
 import PieceView from "./PieceView.vue";
 import type { Piece } from "../Pieces";
@@ -353,8 +353,10 @@ const boardHeight = computed(() => tileSize.value * height.value)
         <PieceView
           cssclass="editor"
           :piece="piece"
+          :selectedPiece="null"
           :tileSize="tileSize"
           :mapTiles="tileMap"
+          :showFastControls="false"
         />
       </div>
     </div>

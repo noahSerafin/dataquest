@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
-import type { Coordinate, PieceBlueprint } from "../types";
+import { ref, computed } from "vue";
+import type { Coordinate } from "../types";
 import { Piece } from "../Pieces";
 import { STATUS_ICONS } from "../statuses";
 
@@ -152,7 +152,7 @@ const activeStatuses = computed((): [string, boolean][] => {
     </button>
     <div class="status-icons">
       <span
-        v-for="([key, active], idx) in activeStatuses"
+        v-for="([key]) in activeStatuses"
         :key="key"
         class="status-icon"
         title="key"          

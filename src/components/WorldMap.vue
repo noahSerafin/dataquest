@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { computed, ref, onMounted } from "vue";
+    import { computed, ref } from "vue";
     import MiniMap from "./MiniMap.vue";
     import { Admin } from "../AdminPrograms";
     import { Item } from "../Items";
@@ -9,7 +9,7 @@
     import type { WorldMap, WorldNode } from "../worldBuilder";
     import { generateWorld } from "../worldBuilder";
     import type { Level, PieceBlueprint, SkipReward } from "../types";
-    import { level1Levels, castled, cave, penopticon, ringed } from "../level1Levels";
+    import { level1Levels } from "../level1Levels";
     import { level2Levels } from "../level2Levels";
     import { level3Levels } from "../level3Levels";
     import { level4Levels } from "../level4Levels";
@@ -238,7 +238,7 @@ import { level6Levels } from "../level6Levels";
             break;
 
             case "admin":
-            props.player.addAdmin(node.skipReward.value, props.player);
+            props.player.addAdmin(node.skipReward.value);
             break;
 
             case "item":

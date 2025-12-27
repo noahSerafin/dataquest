@@ -4,9 +4,6 @@ make more levels, smaller levels (max size 9)
 test interest is working properly 
 hide hidden enemies - test
 
-ROUNDSUMMARY
-summary of each money based admin
-
 AI 6 nearly-done
 handle friendlySpecials 7
 -confused todo on enemy 9
@@ -40,11 +37,11 @@ allow some randomised crossover points?
 Altar nodes - sacrifice a program for more money than selling - 8
 
 PIECES
-add 14 more (100 total)
+Fairy - graveyard interaction 8
 keep track of upgrades and display on piece, and move/attack/spceial btn that cycles 7
 variants?
 
-ADMINS - Petri - spread statuses -test, crystal - test, chemistry - test 22 off 100
+ADMINS - Onion Icon - Petri - spread statuses -test, crystal - test, chemistry - test 22 off 100
 money admins on interest - test, implement into ROUND SUMMARY, maybe store earned money in a temp variable, add it in the summary with awaits? 7
 
 companies 8 - own list of programs;

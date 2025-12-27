@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { computed } from "vue";
 import { Item } from "../Items"; // adjust path
-import type { Player } from "../Player";
 
 const props = defineProps<{
   item: InstanceType<typeof Item>;

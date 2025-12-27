@@ -6,6 +6,7 @@
     await waitForContinue(); // e.g. user clicks "Next"
 }*/
 
+/*
 export function highlightElement(el: HTMLElement) {
   el.classList.add("tutorial-highlight");
 }
@@ -92,7 +93,6 @@ export async function runTutorial() {
   padding: 8px 14px;
 }
 
-*/
 
 
 export interface TutorialStep {
@@ -101,3 +101,4 @@ export interface TutorialStep {
   offsetX?: number;   // positioning offset
   offsetY?: number;
 }
+*/

@@ -97,9 +97,9 @@
     false,
   ));
   const showInventory = ref(false);
-  function closeInventory(){
-    showInventory.value = false;
-  }
+  //function closeInventory(){
+    //showInventory.value = false;
+  //}
   function toggleInventory(){
     showInventory.value = !showInventory.value;
   }
@@ -790,6 +790,7 @@
       } else {
         player.value.canMove = false;
       }
+      isFirstTurn.value = false; //must set to false after to avoid a loop
       // If neither admin, end immediately
       if (!hasDove && !hasPalette) {
         endTurn();
@@ -1106,7 +1107,7 @@
 
     await runEnemyStateMachine(
       activePieces.value,
-      removePiece, // callback to remove dead pieces
+      //removePiece, // callback to remove dead pieces
       boardRef.value.highlightMoves,
       boardRef.value.highlightTargets,
       boardRef.value.clearHighlights,

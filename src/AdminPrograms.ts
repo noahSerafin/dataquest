@@ -33,10 +33,10 @@ export abstract class Admin<
     this.triggerType = triggerType;
   }
 
-  async apply(target: any):Promise<void>{
+  async apply(_target: any):Promise<void>{
     //do not destroy the admin
   }
-  remove(target: any):void{
+  remove(_target: any):void{
 
   }
   getModifier(): StatModifier {//remove this???
@@ -57,8 +57,8 @@ class Meteor extends Admin {
   }
 
   //onRoundStart
-  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
-    for (const p of activePieces) p.takeDamage(3); //enemy pieces only?
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    for (const p of activePieces) p.takeDamage(3);
   }
 }
 
@@ -230,7 +230,7 @@ class Eye extends Admin {//test try
     super(Eye.name, Eye.description, Eye.unicode, Eye.color, 8, 4, 'gameState', 'onRoundStart')
   }
   
-  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces){
       if(p.team==='enemy'){
         p.addModifier({defence: -1})//enemy pieces only?
@@ -348,7 +348,7 @@ class PetriDish extends Admin {// status test
     super(PetriDish.name, PetriDish.description, PetriDish.unicode, PetriDish.color, 7, 4, 'gameState', 'onTurnEnd')
   }
   //on turn end
-  async apply({ id, activePieces }: { id: string; activePieces: Piece[] }) {
+  async apply({ id: _id, activePieces }: { id: string; activePieces: Piece[] }) {
     const players = activePieces.filter(p => p.team === 'player');
     const enemies = activePieces.filter(p => p.team === 'enemy');
 
@@ -415,7 +415,7 @@ class Needle extends Admin {//try it out test
   constructor() {
     super(Needle.name, Needle.description, Needle.unicode, Needle.color, 10, 5, 'playerAndGame', 'onRoundEnd')//6 and player?
   }
-  async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+  async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     for (const p of activePieces){
       const playerPieces = [];
       if(p.team==='player'){
@@ -528,6 +528,7 @@ class Lungs extends Admin {
   }
 }
 
+/*
 class Brain extends Admin {//unfinished, actionsHandler in Piececontroller playing up, or canAttack bool being set false somewhere?
   static name = "Brain";
   static description = "placed programs all have +1 actions on placement";
@@ -542,6 +543,7 @@ class Brain extends Admin {//unfinished, actionsHandler in Piececontroller playi
     activePieces[idx].addModifier({actions: 1})
   }
 }
+*/
 
 class GoldenTicket extends Admin {
   static name = "Golden Ticket";
@@ -669,7 +671,7 @@ class Osiris extends Admin {
     super(Osiris.name, Osiris.description, Osiris.unicode, Osiris.color, 8, 5, 'gameState', 'onPieceDestruction')
   }
   //on receive damage //on piece destrcution
-  async apply({id, activePieces }: {id: string, activePieces: Piece[] }) {
+  async apply({ id: _id, activePieces }: {id: string, activePieces: Piece[] }) {
     for (const p of activePieces){
       if(p.team==='player'){
         p.addModifier({attack: 1})
@@ -775,20 +777,20 @@ class Seed extends Admin {
 
 class Puzzle extends Admin {
   static name = "Puzzle Piece";
-  static description = "Pieces with an ally adjacent to their head temporarily +1 defence until the start of your next turn";
+  static description = "Pieces with an ally adjacent to their head temporarily +1 defence until the start of your next turn (unfinished)";
   static unicode = "U+1F9E9";
   static color = "#ff5555";
   constructor() {
     super(Puzzle.name, Puzzle.description, Puzzle.unicode, Puzzle.color, 6, 3, 'gameState', 'onTurnEnd')
   }
   //on turn end
-  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces){
       if(p.team==='player'){
         const neighbours = activePieces.some(piece =>
           piece.team === 'player' &&
           piece.tiles.some(t =>
-          Math.abs(t.x - p.headPosition.x) + Math.abs(t.y - p.headPosition.y) === 1
+            Math.abs(t.x - p.headPosition.x) + Math.abs(t.y - p.headPosition.y) === 1 //returning true for any tile
           )
         )
 
@@ -804,14 +806,14 @@ class Puzzle extends Admin {
 
 class Chivalry extends Admin {
   static name = "Chivalry";
-  static description = "Pieces with an ally adjacent to their head gain +1 attack at the end of your turn";
+  static description = "Pieces with an ally adjacent to their head gain +1 attack at the end of your turn (unfinished: OP)";
   static unicode = "U+1F3F0";
   static color = "#33bcfcff";
   constructor() {
     super(Chivalry.name, Chivalry.description, Chivalry.unicode, Chivalry.color, 6, 5, 'gameState', 'onTurnEnd')
   }
   //on turn end
-  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces){
       if(p.team==='player'){
         const neighbours = activePieces.some(piece =>
@@ -868,7 +870,7 @@ class Diamond extends Admin {
   constructor() {
     super(Diamond.name, Diamond.description, Diamond.unicode, Diamond.color, 8, 5, 'playerAndGame', 'onPlacement')
   }
-  async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+  async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     for (const p of activePieces){
       if(p.team==='player'){
         //from the headposition, look for adjacent player tiles
@@ -960,7 +962,7 @@ class Copier extends Admin {
     super(Copier.name, Copier.description, Copier.unicode, Copier.color, 9, 5, 'gameState', 'onPlacement')
   }
   //on placement, handle in App
-    async apply({ id, activePieces }: { id: string, activePieces: Piece[]}) {
+    async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[]}) {
     //const idx = activePieces.findIndex(p => p.id === id);
     const playerPieces : Piece[] = [];
     for (const p of activePieces){
@@ -1047,7 +1049,7 @@ export class Broom extends Admin {
   constructor() {
     super(Broom.name, Broom.description, Broom.unicode, Broom.color, 10, 4, 'gameState', 'onTurnEnd')
   }
-  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (let index = 0; index < activePieces.length; index++) {
       const p = activePieces[index];
       if(p.team==='enemy' && p.tiles.length === 1 && p.getStat('defence') === 0){
@@ -1283,7 +1285,7 @@ class Barber extends Admin {
   }
 
   //onRoundStart
-  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces) p.takeDamage(1); //enemy pieces only?
   }
 }
@@ -1333,7 +1335,7 @@ class Ballet extends Admin {
     super(Ballet.name, Ballet.description, Ballet.unicode, Ballet.color, 5, 4, 'gameState', 'onTurnEnd')
   }
   private count = 0;
-  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     this.count += 1;
     activePieces.forEach(piece => {
       if(piece.team === 'player'){
@@ -1467,7 +1469,7 @@ class Harvest extends Admin {
     super(Harvest.name, Harvest.description, Harvest.unicode, Harvest.color, 5, 2, 'gameState', 'onTurnEnd')
   }
   private count = 0;
-  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     this.count += 1;
     if(this.count === 4){
       activePieces.forEach(p => {
@@ -1507,7 +1509,7 @@ class Taoism extends Admin {
   constructor() {
     super(Taoism.name, Taoism.description, Taoism.unicode, Taoism.color, 5, 6, 'gameState', 'onTurnEnd')
   }
-  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     const playerPieces: Piece[] = [];
     const enemyPieces = [];
     activePieces.forEach(p => {
@@ -1672,7 +1674,7 @@ class AirSupport extends Admin {
   constructor() {
     super(AirSupport.name, AirSupport.description, AirSupport.unicode, AirSupport.color, 10, 3, 'gameState', 'onPlacement')
   }
-  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     activePieces.forEach(piece => {
       if(piece.team === 'enemy'){
         piece.takeDamage(1);

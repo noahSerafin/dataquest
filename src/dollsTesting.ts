@@ -1,6 +1,6 @@
+/*
 import { Piece } from "./Pieces";
 import type { Coordinate } from "./types";
-
 class Dolls extends Piece {
   static name = "Nesting Dolls";
   static description = "Replaced by a copy with -1 max size if destroyed";
@@ -56,4 +56,4 @@ class Dolls extends Piece {
       id
     );
   }
-}
+}*/

@@ -1,8 +1,7 @@
 import { Admin } from "./AdminPrograms";
-import Board from "./components/Board.vue";
 import { Piece, allPieces } from "./Pieces";
 import { Player } from "./Player";
-import type { Coordinate, PieceBlueprint, StatModifier } from "./types";
+import type { Coordinate } from "./types";
 import { DIFFICULTY_RARITY } from "./constants";
 import { getRandomUnoccupiedTile } from "./helperFunctions";
 /*
@@ -15,26 +14,26 @@ targetType: 'blueprint' | 'piece' | 'shopItem' | 'player' | 'gameState'  | 'play
   | 'onReceiveDamage'
   | 'onPieceDestruction'
   | 'other';
+  
+  class Fog extends Admin {//unfinished
+    static name = "Fog of War";
+    static description = "All tiles outside player range are obscured";//handle in app
+    static unicode = "U+1F301";//cloud U+2601";
+    static color = "#575757ff";
+    static rarity = 3;
+    constructor() {
+        super(Fog.name, Fog.description, Fog.unicode, Fog.color, 5, 3, 'playerAndGame', 'onRoundStart')
+    }
+    
+    async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+            
+        const idx = activePieces.findIndex(p => p.id === id);
+        console.log('applying:', this.name)
+        activePieces[idx].addModifier({moves: 2})
+        activePieces[idx].movesRemaining += 2;
+    }
+    }
 */
-
-class Fog extends Admin {//unfinished
-  static name = "Fog of War";
-  static description = "All tiles outside player range are obscured";//handle in app
-  static unicode = "U+1F301";//cloud U+2601";
-  static color = "#575757ff";
-  static rarity = 3;
-  constructor() {
-    super(Fog.name, Fog.description, Fog.unicode, Fog.color, 5, 3, 'playerAndGame', 'onRoundStart')
-  }
-
-   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
-
-    const idx = activePieces.findIndex(p => p.id === id);
-    console.log('applying:', this.name)
-    activePieces[idx].addModifier({moves: 2})
-    activePieces[idx].movesRemaining += 2;
-  }
-}
 
 class NorthWind extends Admin {
     static rarity = 1;
@@ -56,13 +55,12 @@ class NorthWind extends Admin {
         playerPieces.forEach(piece => {
             const spaceToCheck  = {x: piece.headPosition.x, y: piece.headPosition.y+1}
             //check space is unnocupied and on board
-            const isOccupied = activePieces.some(p =>
-                p.tiles.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)
-            );
-             const isOnBoard = activePieces.some(p =>
+            const isUnnocupiedAndOnBoard = activePieces.some(p =>
+                !(p.tiles.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)) &&
                 board.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)
             );
-            if(!isOccupied && isOnBoard){
+            //if(!isOccupied && isOnBoard){
+            if(isUnnocupiedAndOnBoard){
                 piece.moveTo(spaceToCheck);
             }
         })
@@ -90,13 +88,11 @@ class Hook extends Admin {
         playerPieces.forEach(piece => {
             const spaceToCheck  = {x: piece.headPosition.x, y: piece.headPosition.y-1}
             //check space is unnocupied and on board
-            const isOccupied = activePieces.some(p =>
-                p.tiles.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)
-            );
-             const isOnBoard = activePieces.some(p =>
+            const isUnnocupiedAndOnBoard = activePieces.some(p =>
+                (!p.tiles.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)) &&
                 board.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)
             );
-            if(!isOccupied && isOnBoard){
+            if(isUnnocupiedAndOnBoard){
                 piece.moveTo(spaceToCheck);
             }
         })
@@ -113,7 +109,7 @@ class Mirror extends Admin {
     super(Mirror.name, Mirror.description, Mirror.unicode, Mirror.color, 5, 4, 'playerAndGame', 'onRoundStart')
   }
 
-    async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+    async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
         const enemyPieces: Piece[] = []
         activePieces.forEach(piece => {
         if(piece.team === 'enemy'){
@@ -207,7 +203,7 @@ class Wrath extends Admin {
     super(Wrath.name, Wrath.description, Wrath.unicode, Wrath.color, 5, 2, 'gameState', 'onTurnEnd')
   }
     private count: number = 0
-    async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
         if(this.count >= 1){
             const playerPieces: Piece[] = []
             activePieces.forEach(piece => {
@@ -260,7 +256,7 @@ class Volcano extends Admin {
     super(Volcano.name, Volcano.description, Volcano.unicode, Volcano.color, 5, 9, 'gameState', 'onTurnEnd')
   }
     private count: number = 0
-    async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
         this.count += 1
         if(this.count === 5){
             activePieces.forEach(piece => {
@@ -304,7 +300,7 @@ class Circus extends Admin {
     constructor() {
         super(Circus.name, Circus.description, Circus.unicode, Circus.color, 5, 1, 'gameState', 'onRoundStart')
     }
-    async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
         activePieces.forEach(piece => {
             if(piece.team === 'enemy'){
                piece.addModifier({ moves: 1 })
@@ -322,7 +318,7 @@ class Castle extends Admin {
     constructor() {
         super(Castle.name, Castle.description, Castle.unicode, Castle.color, 5, 1, 'gameState', 'onRoundStart')
     }
-    async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
         activePieces.forEach(piece => {
             if(piece.team === 'enemy'){
                piece.addModifier({ defence: 1 })
@@ -355,7 +351,7 @@ class Jack extends Admin {
     constructor() {
         super(Jack.name, Jack.description, Jack.unicode, Jack.color, 5, 1, 'gameState', 'onRoundStart')
     }
-    async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
         activePieces.forEach(piece => {
             if(piece.team === 'enemy'){
                piece.addModifier({ range: 1 })
@@ -373,7 +369,7 @@ class Lock extends Admin {
     constructor() {
         super(Lock.name, Lock.description, Lock.unicode, Lock.color, 6, 3, 'gameState', 'onRoundStart')
     }
-    async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
         activePieces.forEach(piece => {
             if(piece.team === 'enemy'){
                piece.addModifier({ defence: 2 })
@@ -504,7 +500,7 @@ class Whale extends Admin {
     constructor() {
         super(Whale.name, Whale.description, Whale.unicode, Whale.color, 3, 2, 'gameState', 'onRoundStart')
     }
-    async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
         activePieces.forEach(piece => {
             if(piece.team === 'enemy'){
                piece.addModifier({ maxSize: 2 })
@@ -522,7 +518,7 @@ class Razor extends Admin {
     constructor() {
         super(Razor.name, Razor.description, Razor.unicode, Razor.color, 3, 3, 'gameState', 'onRoundStart')
     }
-    async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
         activePieces.forEach(piece => {
             if(piece.team === 'enemy'){
                piece.addModifier({ maxSize: 2 })
@@ -540,7 +536,7 @@ class Omega extends Admin {
     constructor() {
         super(Omega.name, Omega.description, Omega.unicode, Omega.color, 3, 6, 'gameState', 'onRoundStart')
     }
-    async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
         activePieces.forEach(piece => {
             if(piece.team === 'enemy'){
                piece.addModifier({ 

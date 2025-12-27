@@ -1,8 +1,6 @@
 import type { PieceBlueprint } from "./types"
-import { allPieces, type Piece } from "./Pieces"
+import { type Piece } from "./Pieces"
 import type { Player } from "./Player"
-//import { getRandomUnoccupiedTile, pickWeightedRandom, makeBlueprint } from "./helperFunctions"
-import type { Coordinate } from "./types"
 
 export abstract class Item<TTarget = any> {
   id: string
@@ -268,7 +266,7 @@ export class Bandage extends Item<Piece> {
     }
     static harmfulStatuses = ['diseased', 'slowed', 'blinded', 'burning', 'poisoned', 'frozen', 'charmed', 'confused', 'exposed']
     
-    apply(target: Piece, itemMult: number) {
+    apply(target: Piece, _itemMult: number) {
         const activeHarmful = Bandage.harmfulStatuses.filter(
             (statusName) => target.statuses[statusName]
         );
@@ -296,7 +294,7 @@ export class Soap extends Item<Piece> {
         super(Soap.name, Soap.description, Soap.unicode, Soap.color, 3, 4, 'piece')
     }
     static harmfulStatuses = ['diseasd', 'slowed', 'blinded', 'burning', 'poisoned', 'frozen','charmed', 'confused', 'exposed']
-    apply(target: Piece, itemMult: number) {
+    apply(target: Piece, _itemMult: number) {
         for (const key of Soap.harmfulStatuses) {
             target.statuses[key] = false;
         }
@@ -324,7 +322,7 @@ export class Mushroom extends Item<Piece> {
     constructor(){
         super(Mushroom.name, Mushroom.description, Mushroom.unicode, Mushroom.color, 3, 4, 'piece')
     }
-    apply(target: Piece, itemMult: number) {
+    apply(target: Piece, _itemMult: number) {
         target.movesRemaining = target.moves;
         target.actions = 1;
     }
@@ -338,7 +336,7 @@ export class Rations extends Item<Piece> {
     constructor(){
         super(Rations.name, Rations.description, Rations.unicode, Rations.color, 2, 3, 'piece')
     }
-    apply(target: Piece, itemMult: number) {
+    apply(target: Piece, _itemMult: number) {
         target.movesRemaining = target.moves;
     }
 }
@@ -351,7 +349,7 @@ export class Beans extends Item<Piece> {
     constructor(){
         super(Beans.name, Beans.description, Beans.unicode, Beans.color, 2, 3, 'piece')
     }
-    apply(target: Piece, itemMult: number) {
+    apply(target: Piece, _itemMult: number) {
         target.actions = 1;
     }
 }
@@ -364,7 +362,7 @@ export class ShootingStar extends Item<Piece> {
     constructor(){
         super(ShootingStar.name, ShootingStar.description, ShootingStar.unicode, ShootingStar.color, 2, 3, 'piece')
     }
-    apply(target: Piece, itemMult: number) {
+    apply(target: Piece, _itemMult: number) {
         target.immunities = {
             diseased: true,
             slowed: true,
@@ -390,7 +388,7 @@ export class Gift extends Item<Player> {
     constructor(){
         super(Gift.name, Gift.description, Gift.unicode, Gift.color, 3, 3, 'player')
     }
-    apply(player: Player, itemMult: number) {
+    apply(_player: Player, _itemMult: number) {
     }
     //apply(player: Player, itemMult: number) {
       //  player.addProgram(makeBlueprint(pickWeightedRandom(allPieces, player)));
@@ -405,7 +403,7 @@ export class Genie extends Item<Player> {
   constructor() {
    super(Genie.name, Genie.description, Genie.unicode, Genie.color, 5, 3, 'player')
   }
-  apply(player: Player, itemMult: number) {
+  apply(_player: Player, _itemMult: number) {
   }
     /*apply(player: Player, itemMult: number) {
         player.addProgram(makeBlueprint(pickWeightedRandom(allPieces, player)));
@@ -422,7 +420,7 @@ export class Box extends Item<Player> {
     constructor(){
         super(Box.name, Box.description, Box.unicode, Box.color, 3, 3, 'player')
     }
-    apply(player: Player, itemMult: number) {
+    apply(_player: Player, _itemMult: number) {
     }
 }
 
@@ -434,7 +432,7 @@ export class Pinata extends Item<Player> {//untested
     constructor() {
         super(Pinata.name, Pinata.description, Pinata.unicode, Pinata.color, 3, 3, 'player')
     }
-    apply(player: Player, itemMult: number) {
+    apply(_player: Player, _itemMult: number) {
     }
 }
 
@@ -447,7 +445,7 @@ export class Spanner extends Item<Piece> {
         super(Spanner.name, Spanner.description, Spanner.unicode, Spanner.color, 2, 3, 'piece')
         //name desc utf || maxsize moves range atk def
     }
-    apply(target: Piece, itemMult: number) {
+    apply(target: Piece, _itemMult: number) {
         target.movesRemaining = 0;
         target.actions = 0;
     }
@@ -462,7 +460,7 @@ class Makeover extends Item<Piece> {
         super(Makeover.name, Makeover.description, Makeover.unicode, Makeover.color, 2, 3, 'piece')
         //name desc utf || maxsize moves range atk def
     }
-    apply(target: Piece, itemMult: number) {
+    apply(target: Piece, _itemMult: number) {
         target.statuses.exposed = false;
     }
 }
@@ -476,7 +474,7 @@ export class Wand extends Item<Piece[]> {//TODO test
   constructor() {
     super(Wand.name, Wand.description, Wand.unicode, Wand.color, 7, 4, 'gameState')
   }
-    apply(target: Piece[]) {
+    apply(_target: Piece[]) {
         //should know previous state of activeprogram's
     }
 }
@@ -489,7 +487,7 @@ class Hourglass extends Item<Piece[]> {//TODO test
   constructor() {
    super(Hourglass.name, Hourglass.description, Hourglass.unicode, Hourglass.color, 10, 5, 'gameState')
   }
-    apply(target: Piece[]) {//game state from app??
+    apply(_target: Piece[]) {//game state from app??
         //receive game state, and map
         //reload level
     }
@@ -561,7 +559,7 @@ class Battery extends Item<Piece[]> {
         super(Battery.name, Battery.description, Battery.unicode, Battery.color, 1, 1, 'gameState');
         //name desc utf || maxsize moves range atk def
     }
-    apply(activePieces: Piece[], itemMult: number) {
+    apply(activePieces: Piece[], _itemMult: number) {
          activePieces.forEach(piece => {
             if(piece.team === 'player'){
                 piece.movesRemaining = piece.getStat('moves');

@@ -49,7 +49,7 @@ function toggleTooltip(key: string) {
 
     <div class="controller-status-list">
       <span
-        v-for="([key, active], idx) in activeStatuses"
+        v-for="([key]) in activeStatuses"
         :key="key"
         class="status-icon"
         title="key"  

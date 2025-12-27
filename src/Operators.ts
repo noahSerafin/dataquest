@@ -1,5 +1,5 @@
 import type { OS } from "./types";
-import { Voucher, Whetstone, Iron, Garlic, Lightning, Blueberry, RedMeat, Roids, Genie, Box, Gift, Pinata } from "./Items";
+import { Voucher, Whetstone, Iron, Garlic, Lightning, RedMeat, Genie, Box, Gift, Pinata } from "./Items";
 
 /*
 export function findPieceClassByName(name: string) {
@@ -244,11 +244,11 @@ const Window : OS = {//knife //shield //snail
     money: 5,
     memory: 4,
     adminSlots: 5,
-    blueprints: [knife, tp, shield],
-    items: [new Blueberry, new Roids],
+    blueprints: [knife, snail, tp, shield],
+    items: [],
     admins: [],
     lives: 2,
-    description: 'Limited memory. Starts with some basic programs and items to increase size.'
+    description: 'Limited memory. Starts with some basic programs'
 
 }
 

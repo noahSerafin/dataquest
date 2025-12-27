@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { computed, onMounted } from 'vue';
+    import { onMounted } from 'vue';
     import type { OS } from '../types';
     import { allOSes } from '../Operators';
 
@@ -13,7 +13,7 @@
 
  
     onMounted(() => {
-        const el = document.querySelector('.oses');
+        const el = document.querySelector('.oses') as HTMLElement | null;
         if (!el) return;
 
         let isDown = false;

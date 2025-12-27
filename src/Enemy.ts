@@ -148,7 +148,7 @@ async function executeEnemyIntent(
 
 export async function runEnemyStateMachine(
   activePieces: Piece[],
-  removePieceCallback: (piece: Piece) => void,
+  //removePieceCallback: (piece: Piece) => void,
   highlightMoves: (piece: Piece) => void,
   highlightTargets: (piece: Piece) => void,
   clearHighlights: () => void,
@@ -356,7 +356,7 @@ function findShortestPath(
 
   return null; // No path found
 }
-
+/*
 function getNextStepTowards(
   start: Coordinate,
   end: Coordinate,
@@ -394,7 +394,7 @@ function getNextStepTowards(
 
   return validMoves[0];
 }
-
+*/
 function getAdjacentEmptySpace(
   coord: Coordinate,
   activePieces: Piece[],

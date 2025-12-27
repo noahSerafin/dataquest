@@ -1,4 +1,4 @@
-import type { Company, Coordinate, PieceBlueprint, SkipReward } from "./types";
+import type { Company, Coordinate, SkipReward } from "./types";
 import type { Piece } from "./Pieces";
 import { companies } from "./companies";
 

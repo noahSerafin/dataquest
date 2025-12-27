@@ -187,8 +187,8 @@ export abstract class Piece {
   hasActions(){
     return this.actions > 0;
   }
-  async special(target: any):Promise<void>{
-    //do not destroy the admin
+  async special(_target: any):Promise<void>{
+    
   }
 
   //cloaked
@@ -315,7 +315,7 @@ class Aegis extends Piece {
     this.specialName = 'Parry';
     this.targetType = 'self'
   }
-  async special(target: Piece):Promise<void>{
+  async special(_target: Piece):Promise<void>{
     this.willRetaliate = true;
     this.actions--
   }
@@ -1087,7 +1087,7 @@ class Puffer extends Piece {
    this.specialName = 'Puffup';
    this.targetType = 'self'
   }
-  async special(target: Piece):Promise<void>{
+  async special(_target: Piece):Promise<void>{
     this.willRetaliate = true;
     this.actions--
   }
@@ -1175,7 +1175,7 @@ class Snowman extends Piece {
     this.targetType = 'space'
     //this.canMove = false;
   }
-  async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
+  async special({target, activePieces: _activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
     if(this.movesRemaining > 0){
       this.moveTo(target);
       this.maxSize+=1;
@@ -1207,7 +1207,7 @@ class Fencer extends Piece {
    this.specialName = 'Riposte';
    this.targetType = 'self'
   }
-  async special(target: Piece):Promise<void>{
+  async special(_target: Piece):Promise<void>{
     //damageed???
     this.willRetaliate = true; 
     this.actions--
@@ -1398,7 +1398,7 @@ class Snail extends Piece {
     this.targetType = 'self'
     this.specialName = 'Retract'
   }
-  async special(target: Piece):Promise<void>{
+  async special(_target: Piece):Promise<void>{
     if(this.tiles.length > 1){
       this.tiles = [this.headPosition]//use array modifier
       this.addTempModifier({defence: 1});//double it's defense/ or +1?
@@ -1467,7 +1467,7 @@ class Wizard extends Piece {
     this.specialName='Teleport'
     this.targetType='space'
   }
-  async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
+  async special({target, activePieces: _activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
     this.moveTo(target)
     this.actions--
   }
@@ -1485,7 +1485,7 @@ class Ninja extends Piece {
     this.specialName='Hide'
     this.targetType='self'
   }
-  async special(target: Piece):Promise<void>{
+  async special(_target: Piece):Promise<void>{
     if(!this.statuses.exposed){
       this.statuses.hidden = true;
     }
@@ -1493,9 +1493,10 @@ class Ninja extends Piece {
   }
 }
 
+/*
 class Fairy extends Piece {//TODO test unfinished
   static name = "Fairy";//ANGEL?? fairy consumable item???
-  static description = "A program that can ressurect the last destroyed program";
+  static description = "A program that can ressurect the last destroyed program (unfinshed)";
   static unicode = "U+1F9DA";
   static color = "#cc5effff";
   static rarity = 5;
@@ -1513,7 +1514,7 @@ class Fairy extends Piece {//TODO test unfinished
     }
     this.actions--
   }
-}
+}*/
 
 class Cupid extends Piece {
   static name = "Cupid";
@@ -1709,7 +1710,7 @@ class Ghost extends Piece {//unfinished negative
     this.specialName='Disappear'
     this.targetType='self'
   }
-  async special(target: Piece):Promise<void>{
+  async special(_target: Piece):Promise<void>{
     if(!this.statuses.exposed){
       this.statuses.hidden = true;
     }
@@ -1972,6 +1973,7 @@ class Plunger extends Piece {//item remove??
   }
 }
 
+/*
 class Angel extends Piece {//not passive, same as fairy, remove?? unfinished
   static name = "Angel";
   static description = "Can ressurect a destroyed program";
@@ -1982,7 +1984,7 @@ class Angel extends Piece {//not passive, same as fairy, remove?? unfinished
    super(Angel.name, Angel.description, Angel.unicode, 4, 0, 1, 0, 0, Angel.color, headPosition, [headPosition], team, Angel.rarity, removeCallback, id)
   }
   //access graveyard
-}
+}*/
 
 export class Stopwatch extends Piece {//not passive
   static name = "Stopwatch";
@@ -2387,7 +2389,8 @@ class Hedgehog extends Piece {
   }
 }
 
-export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Ink, Snail, Shark, Greatshield, Wizard, Ninja, Fairy, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, Dolls, UFO, TP, Saw, Croc, Lighthouse, Torch, Camera, Drum, Shrike, Eagle, Recurve, Daemon, Rex, Hedgehog];//100 +2 (web, ink)
+//99 fairy
+export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Ink, Snail, Shark, Greatshield, Wizard, Ninja, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, Dolls, UFO, TP, Saw, Croc, Lighthouse, Torch, Camera, Drum, Shrike, Eagle, Recurve, Daemon, Rex, Hedgehog];//100 +2 (web, ink)
 //console.log('pieces length: ', allPieces.length)
 
 //doctor STETHOSCOPE, U+1FA7A medic, + max Size to a piece

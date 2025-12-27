@@ -22,7 +22,7 @@
     <div>
         <span><strong>Bosses:</strong></span>
         <span class="admins">
-            <span v-for="(item, index) in props.admins"
+            <span v-for="(item) in props.admins"
                 :key="item.id"
                 class="p-1 border rounded mb-1 flex justify-between items-center"
                 :class="{ 'z-top': selectedItem === item }" 

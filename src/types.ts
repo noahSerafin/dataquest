@@ -71,6 +71,7 @@ export type Statuses = {
   negative: boolean// can occupy the same space as another piece, requires editing movement // DOTTED LINE FACE, U+1FAE5
 }
 
+//move to statuses
 export function createDefaultStatuses(): Statuses {
   return {
     diseased: false,

@@ -11,6 +11,7 @@ function decideEnemyIntent(
   enemy: Piece,
   activePieces: Piece[],
   playerPieces: Piece[],
+  enemyPieces: Piece[],
   tileSet: Set<string>
 ): EnemyIntent {
   //first look for a player to attack or use special on
@@ -55,23 +56,23 @@ function decideEnemyIntent(
     }
   }
   //no immediate attackable target, expose if possible
-  if(enemy.actions > 0 && enemy.hasExposingSpecial){
+  if(enemy.actions > 0 && enemy.hasExposingSpecial && enemy.targetType === 'group'){//and group
     return {type: 'special', target: (findAnyPiecesInRange(enemy, activePieces))}
   }
-  //otherwise we look for a target
+  //otherwise we look for another target
   let nearest = (enemy.specialName && !enemy.hasFriendlySpecial && enemy.targetType !== 'trapPiece') ? findNearestPieceCoordinate(enemy, playerPieces) : findNearestAttackableCoordinate(enemy, playerPieces);
 
-  if (!target && nearest && enemy.movesRemaining > 0) {//
-    console.log('found player to move towards at: ', nearest);
-    console.log('path: ', findShortestPath(enemy.headPosition, nearest, tileSet, activePieces))
+  if (!target && nearest && enemy.movesRemaining > 0 && !enemy.statuses.frozen) {//
+    //console.log('found player to move towards at: ', nearest);
+    //console.log('path: ', findShortestPath(enemy.headPosition, nearest, tileSet, activePieces))
     const path = findShortestPath(enemy.headPosition, nearest, tileSet, activePieces);//don't put this inside a loop
     if (path && path.length > 1) {//should really never get to path.length = 1, why is there no target if we are next to the goal of path?
       console.log('found a path to the player')
       return { type: 'move', path };//move toward a target
     }
   }
-  
-  if(enemy.actions > 0){//still have an action?
+
+  if(enemy.actions > 0){//still have an action? 
     if(enemy.targetType === 'self'){
       return {type: 'special', target: enemy}
     }
@@ -79,10 +80,21 @@ function decideEnemyIntent(
       const space = getAnySpaceInRange(enemy, activePieces, tileSet)
       if(space) return {type: 'special', target: {target: space, activePieces: activePieces}}
     }
+    if(enemy.hasFriendlySpecial){
+      if(enemy.targetType === 'group'){
+        return {type: 'special', target: (findAnyPiecesInRange(enemy, enemyPieces))}
+      }
+      if(enemy.targetType === 'piece'){
+        let ally = findWeakestPlayerInRange(enemy, enemyPieces)?.piece
+        if(ally){
+          return {type: 'special', target: ally};
+        }
+      }
+    }
   }
   
   //no targets, or no actions left
-  if(enemy.tiles.length < enemy.maxSize && enemy.movesRemaining > 0){
+  if(enemy.tiles.length < enemy.maxSize && enemy.movesRemaining > 0 && !enemy.statuses.frozen){
     //move somewhere free to reach max size
     const space = getAdjacentEmptySpace(enemy.headPosition, activePieces, tileSet)
     if(space) return { type: 'wander', space: space };
@@ -124,7 +136,7 @@ async function executeEnemyIntent(
 
     case 'move':
       for (const step of intent.path.slice(1)) {//make sure a path is found once, and then stick to it
-        if (!enemy.movesRemaining) break;
+        if (!enemy.movesRemaining || enemy.statuses.frozen) break;
         if(!enemy.statuses.hidden){
           helpers.highlightMoves(enemy);
         }
@@ -135,7 +147,7 @@ async function executeEnemyIntent(
       break;
 
     case 'wander':
-      while (enemy.movesRemaining > 0) {
+      while (enemy.movesRemaining > 0 && !enemy.statuses.frozen) {
         if(!enemy.statuses.hidden){
           helpers.highlightMoves(enemy);
         }
@@ -168,7 +180,7 @@ export async function runEnemyStateMachine(
   }
   for (const enemy of enemyPieces) {
     while (enemy.movesRemaining > 0 || enemy.actions > 0) {
-      const intent = decideEnemyIntent(enemy, activePieces, playerPieces, tileSet);
+      const intent = decideEnemyIntent(enemy, activePieces, playerPieces, enemyPieces, tileSet);
       await executeEnemyIntent(enemy, intent, helpers);
       await sleep(helpers.delay);
       if (intent.type === 'wait') break;
@@ -283,18 +295,22 @@ function findWeakestPlayerInRange(
 function findAnyPiecesInRange(enemy: Piece, pieces: Piece[]): Piece[] | null {
   const ex = enemy.headPosition.x;
   const ey = enemy.headPosition.y;
-  const piecesInRange: Piece[] = [];
+
+  const piecesInRange = new Set<Piece>();
+
   for (const p of pieces) {
     for (const tile of p.tiles) {
       const dx = Math.abs(ex - tile.x);
       const dy = Math.abs(ey - tile.y);
 
-      if (dx + dy <= enemy.range){// && !player.statuses.hidden) { //we use this for targetType group pieces so we also need hidden players
-        piecesInRange.push(p);//{ player, tile };
+      if (dx + dy <= enemy.range) {
+        piecesInRange.add(p);
+        break; // important: stop checking this piece once found
       }
     }
   }
-  return piecesInRange.length > 0 ? piecesInRange : null;
+
+  return piecesInRange.size > 0 ? [...piecesInRange] : null;
 }
 
 // Move one tile toward the target using simple orthogonal movement

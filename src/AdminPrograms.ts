@@ -241,7 +241,7 @@ class Eye extends Admin {//test try
 
 class Bouquet extends Admin {
   static name = "Bouquet";
-  static description = "Held admin program's can reappear in the shop";
+  static description = "Held admin programs can reappear in the shop";
   static unicode = "U+1F490";
   static color = "#e758e7ff";
 
@@ -269,7 +269,7 @@ class Heartbreaker extends Admin {
 
 class Hamsa extends Admin {
   static name = "Hamsa";
-  static description = "Raises your program's defence by 1 on placement";
+  static description = "Your program's get +3 defence on placement";
   static unicode = "U+1FAAC";
   static color = "#5560ffff";
   constructor() {
@@ -777,7 +777,7 @@ class Seed extends Admin {
 
 class Puzzle extends Admin {
   static name = "Puzzle Piece";
-  static description = "Pieces with an ally adjacent to their head temporarily +1 defence until the start of your next turn (unfinished)";
+  static description = "Pieces with an ally adjacent to their head temporarily +1 defence until the start of your next turn";
   static unicode = "U+1F9E9";
   static color = "#ff5555";
   constructor() {
@@ -786,19 +786,15 @@ class Puzzle extends Admin {
   //on turn end
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces){
-      if(p.team==='player'){
-        const neighbours = activePieces.some(piece =>
-          piece.team === 'player' &&
-          piece.tiles.some(t =>
-            Math.abs(t.x - p.headPosition.x) + Math.abs(t.y - p.headPosition.y) === 1 //returning true for any tile
-          )
-        )
-
-        if(neighbours){
-         p.addTempModifier({defence: 1})
-        } //else {
-          //p.addModifier({defence: -1})
-        //}  
+      if (p.team !== 'player') continue
+      const hasAdjacentAlly = activePieces.some(other =>
+        other !== p &&
+        other.team === 'player' &&
+        Math.abs(other.headPosition.x - p.headPosition.x) +
+        Math.abs(other.headPosition.y - p.headPosition.y) === 1
+      )
+      if (hasAdjacentAlly) {
+        p.addTempModifier({ defence: 1 })
       } 
     }
   }
@@ -806,26 +802,24 @@ class Puzzle extends Admin {
 
 class Chivalry extends Admin {
   static name = "Chivalry";
-  static description = "Pieces with an ally adjacent to their head gain +1 attack at the end of your turn (unfinished: OP)";
+  static description = "Pieces with an ally adjacent to their head gain +1 attack at the end of your turn";
   static unicode = "U+1F3F0";
   static color = "#33bcfcff";
   constructor() {
-    super(Chivalry.name, Chivalry.description, Chivalry.unicode, Chivalry.color, 6, 5, 'gameState', 'onTurnEnd')
+    super(Chivalry.name, Chivalry.description, Chivalry.unicode, Chivalry.color, 7, 5, 'gameState', 'onTurnEnd')
   }
   //on turn end
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces){
-      if(p.team==='player'){
-        const neighbours = activePieces.some(piece =>
-          piece.team === 'player' &&
-          piece.tiles.some(t =>
-            Math.abs(t.x - p.headPosition.x) + Math.abs(t.y - p.headPosition.y) === 1
-          )
-        )
-
-        if(neighbours){
-         p.addModifier({attack: 1})
-        } 
+      if (p.team !== 'player') continue
+      const hasAdjacentAlly = activePieces.some(other =>
+        other !== p &&
+        other.team === 'player' &&
+        Math.abs(other.headPosition.x - p.headPosition.x) +
+        Math.abs(other.headPosition.y - p.headPosition.y) === 1
+      )
+      if (hasAdjacentAlly) {
+        p.addModifier({ attack: 1 })
       } 
     }
   }

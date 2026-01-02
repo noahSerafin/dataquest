@@ -201,7 +201,7 @@ export abstract class Piece {
 
   applyStatusEffects(mult: number) {
     if (this.statuses.diseased) {
-      this.maxSize = Math.max(0, this.maxSize - 1) * mult;
+      this.maxSize = Math.max(1, this.maxSize - 1) * mult;
     }
     if (this.statuses.slowed) {
       this.moves = Math.max(0, this.moves - 1) * mult;
@@ -226,12 +226,36 @@ export abstract class Piece {
     }
   }
 
-  clone() {
-    return new (this.constructor as any)(
-      this.headPosition ? { ...this.headPosition } : null,
+  clone(): Piece {
+    const Cls = this.constructor as new (
+      head: Coordinate,
+      team: string,
+      removeCallback?: (p: Piece) => void,
+      id?: string
+    ) => Piece;
+
+    const copy = new Cls(
+      { ...this.headPosition },
       this.team,
       this.removeCallback,
-    ) // optional if you add a helper
+      crypto.randomUUID()
+    );
+
+    // ---- copy tiles (deep copy)
+    copy.tiles = this.tiles.map(t => ({ ...t }));
+
+    // ---- copy stats
+    copy.maxSize = this.maxSize;
+    copy.moves = this.moves;
+    copy.range = this.range;
+    copy.attack = this.attack;
+    copy.defence = this.defence;
+
+    // ---- copy runtime state
+    copy.actions = this.actions;
+    copy.movesRemaining = this.movesRemaining;
+
+    return copy;
   }
 }
 
@@ -276,7 +300,7 @@ class Dagger extends Piece {
 
 class Arms extends Piece {
   static name = "Arms";
-  static description = "A stronger attacking piece that can attack all pieces in range";
+  static description = "A stronger attacking piece that can attack all enemies in range";
   static unicode = "U+2694";
   static color = "#1b84caff";
   static rarity = 3;
@@ -287,7 +311,9 @@ class Arms extends Piece {
   }
   async special(targets: Piece[]):Promise<void>{
     for (const t of targets) {
-      await t.takeDamage(this.getStat('attack')); // damages enemy pieces directly in App.vue
+      if(t.team != this.team){
+        await t.takeDamage(this.getStat('attack')); // damages enemy pieces directly in App.vue
+      }
     }
     this.actions--
   }
@@ -1268,7 +1294,7 @@ class Flute extends Piece {//not working
   static description = "A program that can summon rats";
   static unicode = "U+1FA88";
   static color = "#6ea1caff";
-  static rarity = 4;
+  static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Flute.name, Flute.description, Flute.unicode, 1, 0, 1, 0, 0, Flute.color, headPosition, [headPosition], team, Flute.rarity, removeCallback, id)
    this.specialName='Summon'
@@ -2328,7 +2354,10 @@ class Shrike extends Piece {
    this.specialName = 'Pierce'
   }
   async special(targetPiece: Piece):Promise<void>{
-    targetPiece.statuses.frozen = true;
+    if(!targetPiece.immunities.frozen){
+      targetPiece.statuses.frozen = true;
+      targetPiece.takeDamage(this.getStat('attack'))
+    }
     this.actions--
   }
 }

@@ -455,7 +455,7 @@ class Makeover extends Item<Piece> {
     static name = "Makeover";
     static description = "Remove exposed from a program";
     static unicode = "U+1F485";
-    static color = "#c70dffff";
+    static color = "#f18fedff";
     constructor(){
         super(Makeover.name, Makeover.description, Makeover.unicode, Makeover.color, 2, 3, 'piece')
         //name desc utf || maxsize moves range atk def

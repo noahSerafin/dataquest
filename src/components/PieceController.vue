@@ -23,6 +23,14 @@ const activeStatuses = computed((): [string, boolean][] => {
     .filter(([, active]) => active);
 });
 
+const activeImmunities = computed((): [string, boolean][] => {
+  // Object.entries returns (string | boolean)[], so we assert/carefully filter
+  return Object.entries(props.piece.immunities)
+    .map(([k, v]) => [k, Boolean(v)] as [string, boolean]) // normalize to boolean
+    .filter(([, active]) => active);
+});
+
+
 const openTooltip = ref<string|null>(null);
 function toggleTooltip(key: string) {
   // If clicking the already-open one, close it
@@ -61,7 +69,7 @@ function toggleTooltip(key: string) {
           v-if="openTooltip === key"
           class="tooltip-popup"
         >
-          <strong>{{ key }}:</strong>{{ STATUS_INFO[key] }}
+          <strong>{{ key }}:</strong> {{ STATUS_INFO[key] }}
         </div>
       </span>
     </div>
@@ -75,6 +83,16 @@ function toggleTooltip(key: string) {
       <p class="text-red">Attack: {{ piece.getStat('attack') }}</p>
       <p class="text-cyan">Defence: {{ piece.getStat('defence') }}</p>
       <p class="text-yellow">Actions: {{ piece.getStat('actions') }}</p>
+      <p v-if="activeImmunities.length > 0">Immune to:
+        <span
+        v-for="([key]) in activeImmunities"
+        :key="key"
+        class="status-icon"
+        title="key"  
+        @click="toggleTooltip(key)"        
+        >{{ STATUS_ICONS[key] ?? '?' }}
+        </span>
+      </p>
     </div>
 
     <div class="actions">

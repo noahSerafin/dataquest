@@ -517,10 +517,10 @@
     const newPieces = rehydratePieces(newLevel.pieces);
     activePieces.value = processSpawnPoints(newPieces , difficultyMod);
     originalPieces.value = activePieces.value.map(p => p.clone());
-    originalSpawns.value = playerSpawns.value;
+    originalSpawns.value = playerSpawns.value;// this doesn't always work???
     boardRef.value.clearHighlights();
     handleApplyAdmins('onRoundStart', '');
-    toggleMap();
+    showMap.value = false;
     roundHasStarted.value = true;
   }
 
@@ -529,7 +529,7 @@
     if(bossAdmins.value.length > 0){
       increaseDifficulty();
     }
-    toggleMap();
+    showMap.value = true;
   }
 
   function reloadLevel(){
@@ -542,6 +542,7 @@
     isPlacing.value = true
     openSummary(false);
     roundHasStarted.value = true;
+    isFirstTurn.value = true;
   }
 
   function retryLevel(){
@@ -1146,19 +1147,25 @@
     player.value.canPlace = false;
     player.value.canMove = false;
     player.value.canAction = false;
+    applyStatusEffects('player');
     activePieces.value.forEach(piece => {
-      piece.resetMoves();
-      piece.actions = 1;
+      if(piece.team === 'player' ){
+        piece.resetMoves();
+        piece.actions = 1;
+      }
       if(piece.team === 'enemy'){
         piece.resetTempModifiers();
       }
     });
     handleApplyAdmins('onTurnEnd', '');
-    applyStatusEffects('player');
     await enemyTurn();
     applyStatusEffects('enemy');
     //player piece tempstats reset
     activePieces.value.forEach(piece => {
+      if(piece.team === 'enemy' ){
+        piece.resetMoves();
+        piece.actions = 1;
+      }
       if(piece.team === 'player' ){
         piece.resetTempModifiers();
       }
@@ -1187,7 +1194,6 @@
   const shopClass = computed(() => 
     showShop.value ? 'visible' : 'collapsed'
   )
-
   const mapClass = computed(() => 
     showMap.value ? 'visible' : 'collapsed'
   )

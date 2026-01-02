@@ -5,17 +5,20 @@ test interest is working properly
 hide hidden enemies - test
 
 AI 6 nearly-done
+non-friendly specials not targeting players with high defence
 handle friendlySpecials 7
 -confused todo on enemy 9
     maybe ignore statuses if already has a status??? or dont consume an action??
     !attackingSpecial use on friendly??? or friendlySpecial bool
 
 BOSSES 7
+EDIT SPAWN FUNCTION FOR MIRROR
 test damage all bosses
 fog
 redacted
 
 BUGS 6
+Spanner not working
 retry button broken 5
 chivalry adding every turn, will puzzle do the same? 5
 web/ink not disappearing - inconclusive

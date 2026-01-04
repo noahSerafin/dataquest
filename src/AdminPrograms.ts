@@ -786,29 +786,17 @@ class Puzzle extends Admin {
   //on turn end
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces){
-      if (p.team !== 'player') continue
-<<<<<<< HEAD
-=======
-
->>>>>>> buildCleanupHome
+      if (p.team !== 'player') continue;
       const hasAdjacentAlly = activePieces.some(other =>
         other !== p &&
         other.team === 'player' &&
         Math.abs(other.headPosition.x - p.headPosition.x) +
-<<<<<<< HEAD
         Math.abs(other.headPosition.y - p.headPosition.y) === 1
-      )
-      if (hasAdjacentAlly) {
-        p.addTempModifier({ defence: 1 })
-      } 
-=======
-          Math.abs(other.headPosition.y - p.headPosition.y) === 1
       )
 
       if (hasAdjacentAlly) {
         p.addTempModifier({ defence: 1 })
       }
->>>>>>> buildCleanupHome
     }
   }
 }
@@ -824,29 +812,18 @@ class Chivalry extends Admin {
   //on turn end
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces){
-      if (p.team !== 'player') continue
-<<<<<<< HEAD
-=======
+      if (p.team !== 'player') continue;
 
->>>>>>> buildCleanupHome
       const hasAdjacentAlly = activePieces.some(other =>
         other !== p &&
         other.team === 'player' &&
         Math.abs(other.headPosition.x - p.headPosition.x) +
-<<<<<<< HEAD
         Math.abs(other.headPosition.y - p.headPosition.y) === 1
-      )
-      if (hasAdjacentAlly) {
-        p.addModifier({ attack: 1 })
-      } 
-=======
-          Math.abs(other.headPosition.y - p.headPosition.y) === 1
       )
 
       if (hasAdjacentAlly) {
         p.addTempModifier({ attack: 1 })
       }
->>>>>>> buildCleanupHome
     }
   }
 }

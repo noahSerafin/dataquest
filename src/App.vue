@@ -285,7 +285,7 @@
           player.value.canPlace = true;
           player.value.canAction = true;
       }
-      item.apply(activePieces, itemMult);
+      item.apply(activePieces.value, itemMult);
     }
 
     /*if(item.targetType === 'piecesAndBoard'){
@@ -517,7 +517,7 @@
     const newPieces = rehydratePieces(newLevel.pieces);
     activePieces.value = processSpawnPoints(newPieces , difficultyMod);
     originalPieces.value = activePieces.value.map(p => p.clone());
-    originalSpawns.value = playerSpawns.value;
+    originalSpawns.value = [...playerSpawns.value];
     boardRef.value.clearHighlights();
     handleApplyAdmins('onRoundStart', '');
     toggleMap();
@@ -535,9 +535,10 @@
   function reloadLevel(){
     renewBlueprints();
     activePieces.value = originalPieces.value.map(p => p.clone());
+    //if piece has no tiles, use headposition
     graveyard.value = [];
     lastTurnPieces.value = originalPieces.value.map(p => p.clone());
-    playerSpawns.value = originalSpawns.value;
+    playerSpawns.value = [...originalSpawns.value];
     selectedPiece.value = null;
     isPlacing.value = true
     openSummary(false);

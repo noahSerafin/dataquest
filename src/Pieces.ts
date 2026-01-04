@@ -483,6 +483,7 @@ class Pitfall extends Piece {
   }
   async special(target: Piece): Promise<void> {
     if(!target.immunities.frozen){
+
       target.statuses.frozen = true;
     }
     this.actions--
@@ -2060,8 +2061,9 @@ class Vampire extends Piece {
     // Do NOT remove head tile
     if (tileIndex === 0) return;
     // --- 3. Remove that tile from the piece ---
+    if(piece.id === this.id) return;
     piece.tiles.splice(tileIndex, 1);
-    this.maxSize += 1;
+    //this.maxSize += 1;
     this.attack += 1;
     this.moves += 1;
     this.tiles.push(target);
@@ -2203,6 +2205,7 @@ class Croc extends Piece {
     this.specialName='Bite'
     this.targetType='piece'
     this.statuses.hidden = true;
+    this.canAttack = false;
   }
   async special(target: Piece): Promise<void> {
     await target.takeDamage(this.getStat('attack'))

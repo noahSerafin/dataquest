@@ -668,7 +668,7 @@ class Osiris extends Admin {
   static unicode = "U+13080";//horus: "U+1314A";
   static color = "#33073bff";
   constructor() {
-    super(Osiris.name, Osiris.description, Osiris.unicode, Osiris.color, 8, 5, 'gameState', 'onPieceDestruction')
+    super(Osiris.name, Osiris.description, Osiris.unicode, Osiris.color, 8, 6, 'gameState', 'onPieceDestruction')
   }
   //on receive damage //on piece destrcution
   async apply({ id: _id, activePieces }: {id: string, activePieces: Piece[] }) {
@@ -787,15 +787,28 @@ class Puzzle extends Admin {
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces){
       if (p.team !== 'player') continue
+<<<<<<< HEAD
+=======
+
+>>>>>>> buildCleanupHome
       const hasAdjacentAlly = activePieces.some(other =>
         other !== p &&
         other.team === 'player' &&
         Math.abs(other.headPosition.x - p.headPosition.x) +
+<<<<<<< HEAD
         Math.abs(other.headPosition.y - p.headPosition.y) === 1
       )
       if (hasAdjacentAlly) {
         p.addTempModifier({ defence: 1 })
       } 
+=======
+          Math.abs(other.headPosition.y - p.headPosition.y) === 1
+      )
+
+      if (hasAdjacentAlly) {
+        p.addTempModifier({ defence: 1 })
+      }
+>>>>>>> buildCleanupHome
     }
   }
 }
@@ -812,15 +825,28 @@ class Chivalry extends Admin {
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces){
       if (p.team !== 'player') continue
+<<<<<<< HEAD
+=======
+
+>>>>>>> buildCleanupHome
       const hasAdjacentAlly = activePieces.some(other =>
         other !== p &&
         other.team === 'player' &&
         Math.abs(other.headPosition.x - p.headPosition.x) +
+<<<<<<< HEAD
         Math.abs(other.headPosition.y - p.headPosition.y) === 1
       )
       if (hasAdjacentAlly) {
         p.addModifier({ attack: 1 })
       } 
+=======
+          Math.abs(other.headPosition.y - p.headPosition.y) === 1
+      )
+
+      if (hasAdjacentAlly) {
+        p.addTempModifier({ attack: 1 })
+      }
+>>>>>>> buildCleanupHome
     }
   }
 }
@@ -1149,7 +1175,7 @@ class Fountain extends Admin {
   static name = "Fountain of Youth";
   static description = "Programs get +2 max size on load";
   static unicode = "U+26F2";
-  static color = "#a3a3a3ff";
+  static color = "#20baf7ff";
   constructor() {
     super(Fountain.name, Fountain.description, Fountain.unicode, Fountain.color, 6, 3, 'gameState', 'onPlacement')
   }
@@ -1544,7 +1570,7 @@ class Loot extends Admin {
 
 class HedgeFund extends Admin {
   static name = "Hedge Fund";
-  static description = "Raises interest cap $10";
+  static description = "Raises interest cap by $10";
   static unicode = "U+1F4B8";
   static color = "#ff5555";
   constructor() {

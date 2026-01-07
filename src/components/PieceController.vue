@@ -230,4 +230,18 @@ p{
 #overlay-root.piece-controller{
   width: 100%;
 }
+@media (max-width: 360px) {
+  .piece-controller, .inventory-controller{
+    position: fixed;
+    top: 85vh;
+    width: 70%;
+    z-index: 999;
+    padding: 0.5rem;
+    left: 0.5rem;
+    p{
+      font-size: 0.7rem;
+      margin: 0
+    }
+  }
+}
 </style>

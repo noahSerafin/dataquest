@@ -902,6 +902,8 @@
 
   const damagePieceAt = async (coord:Coordinate) => {
     if (!selectedPiece.value) return
+    if (selectedPiece.value.actions <= 0) return
+    selectedPiece.value.actions --//prevent double clicking
     if((selectedPiece.value.team === 'enemy' && !selectedPiece.value.statuses.charmed) || (selectedPiece.value.team === 'player' && selectedPiece.value.statuses.charmed)) return
     player.value.canPlace = false;
     //if (selectedPiece.value.team !== 'player') return //damaging your own pieces is actually useful sometimes
@@ -924,9 +926,7 @@
     }
     selectedPiece.value.willRetaliate = false;//pieces that have enacted defensive option
     //could trigger blood tax here using 'other'
-    
-    selectedPiece.value.actions --//getstat?
-    selectedPiece.value.damageMult = 1;
+        selectedPiece.value.damageMult = 1;
     //console.log(damageReceiver?.name, ' tiles afterdmg: ', damageReceiver.tiles)
     boardRef.value.clearHighlights();
     checkForRoundEnd();
@@ -1240,7 +1240,7 @@
     }
   }, { immediate: true });
 
-  const debugMode = ref<boolean>(false);
+  const debugMode = ref<boolean>(true);
 </script>
 
 <template>
@@ -1279,7 +1279,7 @@
     v-if="debugMode === true" class="difficulty" @mousedown="decreaseDifficulty()">
       Decrease Security
     </button>
-    <button class="difficulty" @mousedown="toggleFastControls()">
+    <button class="phone-hide" @mousedown="toggleFastControls()">
       Fast Controls
     </button>
   </div>
@@ -1462,5 +1462,28 @@
 }
 .collapsed{
   top: 100%;
+}
+@media (max-width: 360px) {
+  .enemy-info{
+    display: block;
+  }
+  .debug-controls{
+    left: unset;
+    right: 2%;
+    font-size: 0.9rem;
+    padding: 0.5rem;
+    border: unset;
+  }
+  .top-hud p{
+    margin: 0;
+  }
+  .player-area{
+    p{
+      margin: 0;
+    }
+  }
+  .phone-hide{
+    display: none;
+  }
 }
 </style>

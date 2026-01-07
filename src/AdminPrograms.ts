@@ -871,7 +871,7 @@ class Diamond extends Admin {
     for (const p of activePieces){
       if(p.team==='player'){
         //from the headposition, look for adjacent player tiles
-        const noOfTens = player.money / 10 //rounded down
+        const noOfTens = Math.min(player.money / 10) //rounded down
         p.addModifier({defence: noOfTens})
         //else no buff
       }
@@ -1275,7 +1275,7 @@ class Barber extends Admin {
   static name = '"A little off the top."';
   static description = "Deals 1 damage to every piece at the start of a round";
   static unicode = "U+1F488";
-  static color = "#d1d1d1ff";
+  static color = "#4a4a4aff";
 
   constructor() {
     super(Barber.name, Barber.description, Barber.unicode, Barber.color, 10, 5, 'gameState', 'onRoundStart')
@@ -1739,11 +1739,12 @@ export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, 
 //console.log('admins length: ', allAdmins.length)
 //2
 
+//WHEEL, U+1F6DE
+//sell to reroll boss?
+
 //disco ball U+1FAA9
 //SCHOOL SATCHEL, U+1F392
-//WHEEL, U+1F6DE
 //ELECTRIC LIGHT BULB, U+1F4A1
-//LADDER, U+1FA9C
 //KNOT, U+1FAA2
 //TENT, U+26FA
 //FERRIS WHEEL, U+1F3A1

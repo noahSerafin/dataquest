@@ -4,7 +4,7 @@ import type { PieceBlueprint } from "../types"
 
 const props = defineProps<{
   piece: PieceBlueprint
-  mode: "shop" | "inventory"
+  mode: "shop" | "inventory" | 'skipReward'
   canBuy?: boolean
   canPlace?: boolean
 }>()
@@ -170,5 +170,17 @@ p{
 .shop-controller{
   bottom: unset;
   top: 1rem;
+}
+@media (max-width: 360px) {
+  .piece-controller, .inventory-controller, .skipReward-controller{
+    width: 80%;
+    bottom: 30%;
+    z-index: 9999;
+    font-size: 0.8rem;
+  }
+  .skipReward-controller{
+   top: 95vh;
+   position: fixed;
+  }
 }
 </style>

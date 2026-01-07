@@ -1192,7 +1192,7 @@ class Mammoth extends Piece {
 
 class Snowman extends Piece {
   static name = "Snowman";
-  static description = "A program that can use moves to snowball, increasing it's size";
+  static description = "A program that can snowball, increasing it's max size and moves";
   static unicode = "U+26C4";
   static color = "#4e4e4eff";
   static rarity = 4;
@@ -1203,11 +1203,9 @@ class Snowman extends Piece {
     //this.canMove = false;
   }
   async special({target, activePieces: _activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
-    if(this.movesRemaining > 0){
-      this.moveTo(target);
-      this.maxSize+=1;
-      this.movesRemaining--
-    }
+    this.maxSize+=1;
+    this.addModifier({moves: 1})
+    this.moveTo(target);
   }
   //maxSize = size
 }

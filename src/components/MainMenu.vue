@@ -67,8 +67,8 @@
 
 <template>
     <div class="container">
-        <h1>Welcome</h1>
-        <h2>Choose your OS:</h2>
+        <h1 class="mm-heading">Welcome</h1>
+        <h2 class="mm-heading2">Choose your OS:</h2>
         <div class="oses" ref="oses">
             <div class="os"
             v-for="os in allOSes">
@@ -149,5 +149,17 @@
         display: flex;
         justify-content: center;
         margin-bottom: 1rem;
+    }
+    @media (max-width: 360px) {
+        .mm-heading, .mm-heading2{
+            display: none;
+        }
+        .oses, .os{
+            padding: 0.5rem;
+            gap: 0.5rem;
+            h3, p{
+                margin: 0;
+            }
+        }
     }
 </style>

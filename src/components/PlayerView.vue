@@ -145,7 +145,7 @@
                     </li>
                 </ul>
             </div>
-            <button class="inv-btn mt-2 px-2 py-1 bg-blue-500 text-white rounded" @click="$emit('openInventory')">{{showInventory ? 'Hide Inventory' : 'Inventory' }}</button>
+            <button class="inv-btn mt-2 px-2 py-1 bg-blue-500 text-white rounded" @click="$emit('openInventory')">{{showInventory ? 'Hide Inv' : 'Inv' }}<span class="phone-hide">entory</span></button>
         </div>
 
     </div>
@@ -309,5 +309,17 @@
     }
     .float-inventory{
         
+    }
+    @media (max-width: 360px) {
+        .phone-hide{
+            display: none;
+        }
+        .inventory{
+            position: fixed;
+            left: 45%;
+            width: 85vw;
+            height: 40%;
+            bottom: 0;
+        }
     }
 </style>

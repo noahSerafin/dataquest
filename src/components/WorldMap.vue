@@ -53,7 +53,8 @@ import { level6Levels } from "../level6Levels";
         );
         return levelTiers[tierIndex];
     });
-    
+    const skipsThisLevel = ref<number>(0);
+
     const world = ref<WorldMap>(generateWorld(levelPool.value, props.player.difficulty));//should be called again with after boss after increase difficulty
     assignSkipRewards(world.value);
 
@@ -62,13 +63,14 @@ import { level6Levels } from "../level6Levels";
     const boss = ref<Admin>(returnNewBoss());
 
     function returnNewBoss() {
+        skipsThisLevel.value = 0;
         const bossPool = allBosses.filter(
             boss => boss.rarity <= props.player.difficulty
         );
         const pool = bossPool.length > 0 ? bossPool : allBosses;
         console.log('allbosses', allBosses.length)
         console.log('pool', pool.length)
-        return new pool[Math.floor(Math.random() * pool.length)]; 
+        return new pool[Math.floor(Math.random() * pool.length)];
     }
     function newBoss() {
         boss.value = returnNewBoss();
@@ -100,7 +102,7 @@ import { level6Levels } from "../level6Levels";
     }
 
     function canSkip(node: WorldNode){
-        if(props.player.hasAdmin('Ladder') && !(node.type==='boss')){
+        if(props.player.hasAdmin('Leg Up') && (node.type!=='boss')){
             return true;
         }
         if(props.player.hasAdmin('Golden Ticket') && !(node.type==='boss')){
@@ -112,7 +114,11 @@ import { level6Levels } from "../level6Levels";
     function skipNode(node: WorldNode){
         selectedPreviewNode.value = null;
         currentNodeId.value = node.id;
-        props.player.spend(5)
+        if(!props.player.hasAdmin('Leg Up') || skipsThisLevel.value !== 0){
+            props.player.spend(5)
+        } else{
+            skipsThisLevel.value += 1;
+        }
     }
 
     function enterNode(node: WorldNode) {
@@ -361,7 +367,7 @@ import { level6Levels } from "../level6Levels";
             <BlueprintController
                 v-if="selectedPreviewNode.skipReward?.kind === 'blueprint'"
                 :piece="selectedPreviewNode.skipReward.value"
-                mode="shop"
+                mode="skipReward"
                 :canBuy= "false"
                 @select="select(selectedPreviewNode.skipReward)"
                 @close="deselect"
@@ -419,7 +425,7 @@ import { level6Levels } from "../level6Levels";
             @click="enterNode(selectedPreviewNode)"
             >Enter</button>
             <button v-if="selectedPreviewNode" @click="selectedPreviewNode = null">Close</button>
-            <button v-if="canSkip(selectedPreviewNode)" @click="skipNode(selectedPreviewNode)">Skip $5</button>
+            <button v-if="canSkip(selectedPreviewNode)" @click="skipNode(selectedPreviewNode)">Skip <span v-if="!props.player.hasAdmin('Leg Up') || (props.player.hasAdmin('Leg Up') && skipsThisLevel>0)">$5</span></button>
         </div>
     </div>
   </div>

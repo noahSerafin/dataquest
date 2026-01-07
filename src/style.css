@@ -255,3 +255,20 @@ html, body, #app {
 .text-orange{
   color: #dd770a;;
 }
+
+@media (max-width: 360px) {
+  .debug-controls{
+    left: unset;
+    right: 2%;
+    font-size: 0.9rem;
+    padding: 0.5rem;
+  }
+  .top-hud p{
+    margin: 0;
+  }
+  .player-area{
+    p{
+      margin: 0;
+    }
+  }
+}

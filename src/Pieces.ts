@@ -222,6 +222,7 @@ export abstract class Piece {
       this.defence = Math.max(0, this.defence - 1) * mult;
     }
     if (this.statuses.frozen) {
+      this.moves = 0;
       this.movesRemaining = 0;
     }
   }
@@ -462,6 +463,9 @@ class Firewall extends Piece {
   }
   async special(target: Piece): Promise<void> {
     //await target.takeDamage(this.getStat('attack'));
+    if(target.statuses.burning = true){
+      target.takeDamage(this.getStat('attack'))
+    }
     if(!target.immunities.burning){
       target.statuses.burning = true;
     }
@@ -624,11 +628,16 @@ class Nerf extends Piece {
   }
   //nerf
   async special(target: Piece): Promise<void> {
-    target.maxSize -= 1;
-    target.moves -= 1;
-    target.range -= 1;
-    target.attack -= 1;
-    target.defence -= 1;
+    if(target.maxSize>0)
+      target.maxSize -= 1;
+    if(target.moves>0)
+      target.moves -= 1;
+    if(target.range>0)
+      target.range -= 1;
+    if(target.attack>0)
+      target.attack -= 1;
+    if(target.defence>0)
+      target.defence -= 1;
     this.actions --
   }
 }
@@ -1351,6 +1360,9 @@ class Dragon extends Piece {//line?
 
   async special(targets: Piece[]):Promise<void>{
     for (const t of targets) {
+      if(t.statuses.burning = true && t.team !== this.team){
+        t.takeDamage(this.getStat('attack'))
+      }
       if(!t.immunities.burning){
         //damage as well???
         t.statuses.burning = true
@@ -1642,6 +1654,9 @@ class Firebrand extends Piece {
 
   async special(targetPiece: Piece):Promise<void>{
     //await targetPiece.takeDamage(this.getStat('attack'));
+    if(targetPiece.statuses.burning = true){
+      targetPiece.takeDamage(this.getStat('attack'))
+    }
     if(!targetPiece.immunities.burning){
       targetPiece.statuses.burning = true;
     }
@@ -2331,7 +2346,6 @@ class Drum extends Piece {
    super(Drum.name, Drum.description, Drum.unicode, 1, 1, 4, 0, 0, Drum.color, headPosition, [headPosition], team, Drum.rarity, removeCallback, id)
     this.specialName = 'March';
     this.targetType = 'group'
-    this.canAttack = false;
   }
   async special(targets: Piece[]):Promise<void>{
     for (const t of targets) {

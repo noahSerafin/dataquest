@@ -615,7 +615,7 @@
 
           const validEnemies = allPieces.filter(EnemyClass => {
             //p.rarity >= min && p.rarity <= max //old method for spawnsize 1 only
-            if(EnemyClass.name !== "Nuke"){// remove nukes
+            if(EnemyClass.name !== "Nuke" && EnemyClass.name !== "Highwayman"){// remove nukes
               const temp = new EnemyClass(piece.headPosition, 'enemy', removePiece);
               return (
                 temp.rarity >= min &&
@@ -691,9 +691,9 @@
   }
 
   async function removePiece(piece: Piece) {
-    if(player.value.hasAdmin('Hi-Vis')){
+    if(player.value.hasAdmin('Hi-Vis') && piece.team === 'player'){
       piece.tiles = [piece.headPosition];
-      const index = player.value.admins.findIndex(a => a.name === 'Hi-vis');
+      const index = player.value.admins.findIndex(a => a.name === 'Hi-Vis');
       if (index !== -1) player.value.admins.splice(index, 1);
     } else {
       await handleApplyAdmins('onPieceDestruction', piece.id);
@@ -1240,7 +1240,7 @@
     }
   }, { immediate: true });
 
-  const debugMode = ref<boolean>(true);
+  const debugMode = ref<boolean>(false);
 </script>
 
 <template>

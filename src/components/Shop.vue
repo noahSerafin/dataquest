@@ -129,6 +129,7 @@ const type = ((item: Item) => {
       :piece="props.target"
       mode="shop"
       :canBuy= "canBuyPiece(props.target)"
+      :defaultPosition="{ x: 0, y: 0 }"
       @buy="handleBuyBlueprint"
       @close="deselect"
     />

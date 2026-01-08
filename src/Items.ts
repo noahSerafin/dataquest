@@ -562,7 +562,7 @@ class Battery extends Item<Piece[]> {
     apply(activePieces: Piece[], _itemMult: number) {
          activePieces.forEach(piece => {
             if(piece.team === 'player'){
-                piece.movesRemaining = piece.getStat('moves');
+                piece.resetMoves();
             }
         })
     }

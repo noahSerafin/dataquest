@@ -88,7 +88,7 @@ function decideEnemyIntent(
         let ally = findWeakestPlayerInRange(enemy, enemyPieces)?.piece
         if(ally){
           return {type: 'special', target: ally};
-        }
+        } //else find and path to an ally and move there
       }
     }
   }
@@ -105,6 +105,7 @@ function decideEnemyIntent(
 
 async function executeEnemyIntent(
   enemy: Piece,
+  activePieces: Piece[],
   intent: EnemyIntent,
   helpers: {  
     highlightMoves: (piece: Piece) => void,
@@ -142,6 +143,13 @@ async function executeEnemyIntent(
         }
         await sleep(helpers.delay);
         enemy.moveTo(step);//cant move here if its occupied
+        const trap = activePieces.find(p =>
+          p.targetType == 'trapPiece' && p.tiles.some(t => t.x === step.x && t.y === step.y)
+        );
+        if (trap && trap.id !== enemy.id) {
+          await trap.special(enemy);
+          //removePiece(trap);//shouldn't really be necessary
+        }
         helpers.clearHighlights();
       }
       break;
@@ -152,6 +160,13 @@ async function executeEnemyIntent(
           helpers.highlightMoves(enemy);
         }
         enemy.moveTo(intent.space)
+        const trap = activePieces.find(p =>
+          p.targetType == 'trapPiece' && p.tiles.some(t => t.x === intent.space.x && t.y === intent.space.y)
+        );
+        if (trap && trap.id !== enemy.id) {
+          await trap.special(enemy);
+          //removePiece(trap);//shouldn't really be necessary
+        }
         helpers.clearHighlights();
         break;
       }
@@ -181,7 +196,7 @@ export async function runEnemyStateMachine(
   for (const enemy of enemyPieces) {
     while (enemy.movesRemaining > 0 || enemy.actions > 0) {
       const intent = decideEnemyIntent(enemy, activePieces, playerPieces, enemyPieces, tileSet);
-      await executeEnemyIntent(enemy, intent, helpers);
+      await executeEnemyIntent(enemy, activePieces, intent, helpers);
       await sleep(helpers.delay);
       if (intent.type === 'wait') break;
     } 

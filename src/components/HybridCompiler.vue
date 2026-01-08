@@ -247,6 +247,7 @@
         mode="shop"
         :canBuy="false"
         :canPlace="false"
+        :defaultPosition="{ x: 0, y: 0 }"
         @close="deselect"
     />
 

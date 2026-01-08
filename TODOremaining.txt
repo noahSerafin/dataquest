@@ -23,7 +23,7 @@ retry button broken 5
 chivalry adding every turn, will puzzle do the same? 5
 web/ink not disappearing - inconclusive
 -visual: 5
--visualise traps
+-visualise traps - have credit pickups? disguise the cheese as one
 -skipNode controller
 inventory needs 5 columns at least...
 color code stats, and status

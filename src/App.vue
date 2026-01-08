@@ -1148,7 +1148,6 @@
     player.value.canPlace = false;
     player.value.canMove = false;
     player.value.canAction = false;
-    applyStatusEffects('player');
     activePieces.value.forEach(piece => {
       if(piece.team === 'player' ){
         piece.resetMoves();
@@ -1158,9 +1157,9 @@
         piece.resetTempModifiers();
       }
     });
+    applyStatusEffects('player');
     handleApplyAdmins('onTurnEnd', '');
     await enemyTurn();
-    applyStatusEffects('enemy');
     //player piece tempstats reset
     activePieces.value.forEach(piece => {
       if(piece.team === 'enemy' ){
@@ -1171,6 +1170,7 @@
         piece.resetTempModifiers();
       }
     })
+    applyStatusEffects('enemy');
     if(isFirstTurn){
       isFirstTurn.value = false;
     }
@@ -1287,7 +1287,7 @@
     <div class="enemy-info">
       <p><strong>Security level: </strong>{{ player.difficulty }}</p>
       <span>
-        <BossView :admins="bossAdmins"/>
+        <BossView v-if="bossAdmins.length> 0" :admins="bossAdmins"/>
       </span>
     </div>
     <div v-if="!displayEditor && roundHasStarted" class="player-helper">
@@ -1394,6 +1394,7 @@
       :canBuy="false"
       :canMove="player.canMove"
       :canAction="player.canAction"
+      :defaultPosition="{ x: 0, y: 0 }"
       @highlightMoves="boardRef.highlightMoves"
       @highlightTargets="boardRef.highlightTargets"
       @highlightSpecials="boardRef.highlightSpecials"
@@ -1476,6 +1477,7 @@
   }
   .top-hud p{
     margin: 0;
+    min-height: 30px;
   }
   .player-area{
     p{
@@ -1484,6 +1486,9 @@
   }
   .phone-hide{
     display: none;
+  }
+  .overlay-route{
+    left: 100%;
   }
 }
 </style>

@@ -201,6 +201,7 @@
         mode="inventory"
         :canBuy="false"
         :canPlace="player.canPlace"
+        :defaultPosition="{ x: 0, y: 0 }"
         @highlightPlacements="handlePlace"
         @sell="handleSellBlueprint"
         @close="handleClose"

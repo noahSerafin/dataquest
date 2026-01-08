@@ -201,13 +201,13 @@ export abstract class Piece {
 
   applyStatusEffects(mult: number) {
     if (this.statuses.diseased) {
-      this.maxSize = Math.max(1, this.maxSize - 1) * mult;
+      this.maxSize = Math.max(1, this.getStat('maxSize') - 1) * mult;
     }
     if (this.statuses.slowed) {
-      this.moves = Math.max(0, this.moves - 1) * mult;
+      this.moves = Math.max(0, this.getStat('moves') - 1) * mult;
     }
     if(this.statuses.blinded){
-      this.range = Math.max(0, this.range - 1) * mult;
+      this.range = Math.max(0, this.getStat('range') - 1) * mult;
     }
     if (this.statuses.burning) {
       if(this.tiles.length <= 1){
@@ -219,10 +219,9 @@ export abstract class Piece {
       }
     }
     if (this.statuses.poisoned) {
-      this.defence = Math.max(0, this.defence - 1) * mult;
+      this.defence = Math.max(0, this.getStat('defence') - 1) * mult;
     }
     if (this.statuses.frozen) {
-      this.moves = 0;
       this.movesRemaining = 0;
     }
   }
@@ -463,10 +462,9 @@ class Firewall extends Piece {
   }
   async special(target: Piece): Promise<void> {
     //await target.takeDamage(this.getStat('attack'));
-    if(target.statuses.burning = true){
+    if(target.statuses.burning){
       target.takeDamage(this.getStat('attack'))
-    }
-    if(!target.immunities.burning){
+    } else if(!target.immunities.burning){
       target.statuses.burning = true;
     }
     this.actions --
@@ -1325,7 +1323,7 @@ class Bat extends Piece {
   static color = "#ff290dff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Bat.name, Bat.description, Bat.unicode, 2, 3, 1, 1, 0, Bat.color, headPosition, [headPosition], team, Bat.rarity, removeCallback, id)
+   super(Bat.name, Bat.description, Bat.unicode, 3, 3, 1, 3, 1, Bat.color, headPosition, [headPosition], team, Bat.rarity, removeCallback, id)
    this.specialName = 'Bite';
    this.targetType = 'pieceAndPlace'
   }
@@ -1339,8 +1337,8 @@ class Bat extends Piece {
     if(this.tiles.length >= this.getStat('maxSize')){
       this.tiles.pop  
     }
-    this.tiles.push(target);
     this.actions--
+    this.tiles.push(target);
   }
   //raise defence +1 if total dmg > 0
 }
@@ -1360,10 +1358,9 @@ class Dragon extends Piece {//line?
 
   async special(targets: Piece[]):Promise<void>{
     for (const t of targets) {
-      if(t.statuses.burning = true && t.team !== this.team){
+      if(t.statuses.burning && t.team !== this.team){
         t.takeDamage(this.getStat('attack'))
-      }
-      if(!t.immunities.burning){
+      } else if(!t.immunities.burning){
         //damage as well???
         t.statuses.burning = true
       }
@@ -1606,17 +1603,30 @@ class Cockroach extends Piece {
   }
 }
 
-class Mosquito extends Piece {//unfinshed, differ to bat in some way
+class Mosquito extends Piece {
   static name = "Mosquito";
-  static description = "Can heal itself by damaging enemies";
+  static description = "Can steal enemy body pieces";
   static unicode = "U+1F99F";
   static color = "#271f0dff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Mosquito.name, Mosquito.description, Mosquito.unicode, 3, 3, 1, 2, 0, Mosquito.color, headPosition, [headPosition], team, Mosquito.rarity, removeCallback, id)
+   super(Mosquito.name, Mosquito.description, Mosquito.unicode, 2, 2, 1, 2, 0, Mosquito.color, headPosition, [headPosition], team, Mosquito.rarity, removeCallback, id)
+    this.specialName = 'Bite';
+   this.targetType = 'pieceAndPlace'
   }
-
-  //heal on succesful attack
+  async special({piece, target} : {piece: Piece, target: Coordinate}):Promise<void>{
+    const tileIndex = piece.tiles.findIndex(t => t.x === target.x && t.y === target.y);
+    if (tileIndex === -1) return;  // No tile there
+    // Do NOT remove head tile
+    if (tileIndex === 0) return;
+    // --- 3. Remove that tile from the piece ---
+    piece.tiles.splice(tileIndex, 1);
+    if(this.tiles.length >= this.getStat('maxSize')){
+      this.tiles.pop  
+    }
+    this.actions--
+    this.tiles.push(target);
+  }
 }
 
 class Scorpion extends Piece {
@@ -1654,10 +1664,9 @@ class Firebrand extends Piece {
 
   async special(targetPiece: Piece):Promise<void>{
     //await targetPiece.takeDamage(this.getStat('attack'));
-    if(targetPiece.statuses.burning = true){
+    if(targetPiece.statuses.burning){
       targetPiece.takeDamage(this.getStat('attack'))
-    }
-    if(!targetPiece.immunities.burning){
+    } else if(!targetPiece.immunities.burning){
       targetPiece.statuses.burning = true;
     }
     this.actions--

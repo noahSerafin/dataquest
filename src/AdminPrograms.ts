@@ -278,7 +278,7 @@ class Hamsa extends Admin {
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
     console.log('applying:', this.name)
-    activePieces[idx].addModifier({defence: 2})
+    activePieces[idx].addModifier({defence: 3})
   }
 }
 
@@ -1727,7 +1727,7 @@ class Ribbon extends Admin {
 
 class Ring extends Admin {
   static name = "Ring";
-  static description = "Stat changed inside a node persist across rounds";
+  static description = "Stats changed inside a node persist across rounds";
   static unicode = "U+1F48D";
   static color = "#ece942ff";
   constructor() {

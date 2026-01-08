@@ -20,8 +20,8 @@
     import { Box, Genie, Gift, Pinata } from "../Items";
     import BlueprintView from "./BlueprintView.vue";
     import ItemView from "./ItemView.vue";
-import BlueprintController from "./BlueprintController.vue";
-import { level6Levels } from "../level6Levels";
+    import BlueprintController from "./BlueprintController.vue";
+    import { level6Levels } from "../level6Levels";
 
     const props = defineProps<{
         player: Player;
@@ -369,6 +369,7 @@ import { level6Levels } from "../level6Levels";
                 :piece="selectedPreviewNode.skipReward.value"
                 mode="skipReward"
                 :canBuy= "false"
+                :defaultPosition="{ x: 0, y: 0 }"
                 @select="select(selectedPreviewNode.skipReward)"
                 @close="deselect"
             />

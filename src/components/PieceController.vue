@@ -7,7 +7,51 @@ const props = defineProps<{
   piece: InstanceType<typeof Piece>
   canMove?: boolean
   canAction?: boolean
+  defaultPosition?: {
+    x: number
+    y: number
+  }
 }>()
+
+const position = ref({
+  x: props.defaultPosition?.x ?? 20,
+  y: props.defaultPosition?.y ?? 20
+});
+
+let dragging = false
+let startX = 0
+let startY = 0
+
+function startDrag(e: MouseEvent | TouchEvent) {
+  dragging = true
+
+  const point = 'touches' in e ? e.touches[0] : e
+  startX = point.clientX - position.value.x
+  startY = point.clientY - position.value.y
+
+  window.addEventListener('mousemove', onMove)
+  window.addEventListener('mouseup', stopDrag)
+  window.addEventListener('touchmove', onMove, { passive: false })
+  window.addEventListener('touchend', stopDrag)
+}
+
+function onMove(e: MouseEvent | TouchEvent) {
+  if (!dragging) return
+  e.preventDefault()
+
+  const point = 'touches' in e ? e.touches[0] : e
+
+  position.value.x = point.clientX - startX
+  position.value.y = point.clientY - startY
+}
+
+function stopDrag() {
+  dragging = false
+  window.removeEventListener('mousemove', onMove)
+  window.removeEventListener('mouseup', stopDrag)
+  window.removeEventListener('touchmove', onMove)
+  window.removeEventListener('touchend', stopDrag)
+}
 
 defineEmits([
   "highlightMoves",
@@ -44,8 +88,10 @@ function toggleTooltip(key: string) {
 </script>
 
 <template>
-  <div class="piece-controller instance">
-    <div class="header">
+  <div class="piece-controller instance" :style="{
+    transform: `translate(${position.x}px, ${position.y}px)`
+  }">
+    <div class="header" @mousedown="startDrag" @touchstart="startDrag">
       <span class="symbol">
         {{ String.fromCodePoint(parseInt(piece.unicode.replace("U+", ""), 16)) }}
       </span>
@@ -123,11 +169,6 @@ function toggleTooltip(key: string) {
   </div>
 </template>
 <style scoped>
-.close{
-  position: absolute;
-  right: 0.5rem;
-  top: 0.5rem;
-}
 .piece-controller {
   text-align: left;
   position: fixed;
@@ -143,6 +184,7 @@ function toggleTooltip(key: string) {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  height: fit-content;
 }
 .inventory-controller{
  left: unset;
@@ -153,6 +195,25 @@ function toggleTooltip(key: string) {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+ cursor: grab;
+}
+.header::before{
+  content: '';
+  background-color: #363636;
+  border-radius: 12px;
+  width: 100%;
+  height: 50px;
+  left: 0;
+  top: 0;
+  z-index: -1;
+  position: absolute;
+}
+.close{
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+  border: 1px solid white;
+  cursor: pointer;
 }
 
 .symbol {

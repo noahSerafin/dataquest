@@ -1739,6 +1739,8 @@ export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, 
 //console.log('admins length: ', allAdmins.length)
 //2
 
+//llungs, trainers are the same
+
 //WHEEL, U+1F6DE
 //sell to reroll boss?
 

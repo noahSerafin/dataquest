@@ -1463,7 +1463,7 @@
 .collapsed{
   top: 100%;
 }
-@media (max-width: 360px) {
+@media (max-width: 380px) {
   .enemy-info{
     display: block;
   }

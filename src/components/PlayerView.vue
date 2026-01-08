@@ -307,10 +307,7 @@
     .admin-middle-container{
         width: 80%;
     }
-    .float-inventory{
-        
-    }
-    @media (max-width: 360px) {
+    @media (max-width: 380px) {
         .phone-hide{
             display: none;
         }

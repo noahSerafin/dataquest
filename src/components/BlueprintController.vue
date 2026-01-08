@@ -171,16 +171,24 @@ p{
   bottom: unset;
   top: 1rem;
 }
-@media (max-width: 360px) {
+@media (max-width: 380px) {
   .piece-controller, .inventory-controller, .skipReward-controller{
     width: 80%;
     bottom: 30%;
     z-index: 9999;
     font-size: 0.8rem;
+    height: fit-content;
   }
   .skipReward-controller{
    top: 95vh;
    position: fixed;
+  }
+  .shop-controller p{
+    margin: 0;
+  }
+  .shop-controller{
+    width: 80%;
+    top: 44vh;
   }
 }
 </style>

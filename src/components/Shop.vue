@@ -108,18 +108,21 @@ const type = ((item: Item) => {
     </div>
     <div class="item-row">
       Items/Admins:
-      <ItemView 
-        v-for="item in props.shopItems"
-        :item="item"
-        :type="type(item)"
-        cssclass="shop"
-        :tileSize="60"
-        :canBuy= "canBuyItem(item)"
-        :showController="(props.target === item)"
-        @buy="handleBuyItem"
-        @select="openShopController"
-        @deselect="deselect"
-      />
+      <li 
+      v-for="item in props.shopItems"
+      :class="{ 'z-top': target === item }">
+        <ItemView 
+          :item="item"
+          :type="type(item)"
+          cssclass="shop"
+          :tileSize="60"
+          :canBuy= "canBuyItem(item)"
+          :showController="(props.target === item)"
+          @buy="handleBuyItem"
+          @select="openShopController"
+          @deselect="deselect"
+        />
+      </li>
     </div>
     <BlueprintController
       v-if="props.target && !(props.target instanceof Item)"
@@ -191,5 +194,9 @@ button:disabled {
 }
 .collapsed {
   transform: translateY(500%);
+}
+.z-top {
+  position: relative;
+  z-index: 1000;
 }
 </style>

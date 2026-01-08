@@ -451,6 +451,7 @@ import { level6Levels } from "../level6Levels";
         position: relative;
         width: 50%;
         height: 80%;
+        left: -26px;
     }
     .map-lines{
         z-index: -1;
@@ -502,7 +503,7 @@ import { level6Levels } from "../level6Levels";
         background-color: #111;
         font-size: 14px;
         opacity: 1;
-        width: 260px;
+        width: 100px;
         left: 120%;
         border: 1px solid white;
         border-radius: 5px;
@@ -513,6 +514,10 @@ import { level6Levels } from "../level6Levels";
         left: unset;
         width: 50px;
         text-align: center;
+    }
+    .boss-info{
+        height: 110px;
+        top: -60px;
     }
     @media (max-width: 768px) {
         .world-map{

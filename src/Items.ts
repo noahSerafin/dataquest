@@ -177,7 +177,7 @@ export class Supplement extends Item<Piece> {
 }
 
 export class Juice extends Item<Piece> {
-    static name = "Juice";
+    static name = "Juiced";
     static description = "increases a placed program's moves by 1 for one round";
     static unicode = "U+1F9C3";
     static color = "#fcff47ff";

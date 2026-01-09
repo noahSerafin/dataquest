@@ -139,9 +139,9 @@ class Onion extends Admin {
     super(Onion.name, Onion.description, Onion.unicode, Onion.color, 10, 5, 'player', 'other')
   }
   //
-  async apply({ player }: { player: Player }) {
+  //async apply({ player }: { player: Player }) {
     //player.lives += 1
-  }//add a if for player death to remove this
+  //}//add a if for player death to remove this
 }
 //name desc utf || maxsize moves range atk def
 class Blood extends Admin {

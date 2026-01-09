@@ -37,4 +37,7 @@ After defeating a level 6 Boss, you win the game.
 */
 
 //hints
-//special moves will not trigger a retaliation from other pieces, even damaging ones
+//Always have a defensive program handy for nodes where you can be attacked immediately.
+//special moves will not trigger a retaliation from other pieces, even damaging ones.
+//line type target programs can effect the same program more than once if the multiple tiles occupy the line.
+//admin programs trigger left to right, so make sure you drag them into the optimum position.

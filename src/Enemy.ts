@@ -135,7 +135,7 @@ async function executeEnemyIntent(
       helpers.clearHighlights();
       break;
 
-    case 'move':
+    case 'move': //moving over players?
       for (const step of intent.path.slice(1)) {//make sure a path is found once, and then stick to it
         if (!enemy.movesRemaining || enemy.statuses.frozen) break;
         if(!enemy.statuses.hidden){

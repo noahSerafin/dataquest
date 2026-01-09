@@ -2446,6 +2446,7 @@ class Hedgehog extends Piece {
 export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Ink, Snail, Shark, Greatshield, Wizard, Ninja, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, Dolls, UFO, TP, Saw, Croc, Lighthouse, Torch, Camera, Drum, Shrike, Eagle, Recurve, Daemon, Rex, Hedgehog];//100 +2 (web, ink)
 //console.log('pieces length: ', allPieces.length)
 
+//chess knight special move L shape
 //doctor STETHOSCOPE, U+1FA7A medic, + max Size to a piece
 // HIGH-HEELED SHOE, U+1F460 small and slow but high attack
 //MILITARY AIRPLANE, U+1F6E6 line target airstike similar to charge

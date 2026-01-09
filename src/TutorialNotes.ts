@@ -35,3 +35,6 @@ On defeating a boss, the shop will restock for free, and the security level of a
 After defeating a level 6 Boss, you win the game.
 
 */
+
+//hints
+//special moves will not trigger a retaliation from other pieces, even damaging ones

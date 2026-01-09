@@ -25,6 +25,7 @@ const props = defineProps<{
   rerollCost: number;
   player: Player;
   target: Item | PieceBlueprint | null;
+  shopDisabled: boolean;
 }>();
 
 function openShopController(target: Item | PieceBlueprint | null) {///TODO SORT OUT IMPORTS
@@ -49,6 +50,7 @@ const effectiveMoney = computed(() => (props.player.admins.some(a => a.name === 
 const canReroll = computed(() => props.player.money >= props.rerollCost);
 
 const canBuyItem = ((item: Item) => {
+  if(props.shopDisabled) return false;
   if (item instanceof Admin) {
     return effectiveMoney.value >= item.cost && props.player.admins.length < props.player.adminSlots;
   }

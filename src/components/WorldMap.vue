@@ -33,6 +33,7 @@
     const emit = defineEmits<{
         (e: "select-level", level: Level, difficultyMod: number, reward: number): void;
         (e: "openShop"): void;
+        (e: "openDisabledShop"): void;
         (e: "openCompiler"): void;
         (e: "addBoss", admin: Admin): void;
         (e: "increaseDifficulty"): void;
@@ -98,7 +99,11 @@
         if(!props.player.hasAdmin('World Map') && node.type !== 'shop' || (!props.player.hasAdmin('Crystal Ball') && node.type === 'shop')){
             if (!canClick(node)) return;
         }
-        selectedPreviewNode.value = node;
+        if(props.player.hasAdmin('Crystal Ball') && node.type === 'shop' && selectedPreviewNode.value !== node){
+            emit('openDisabledShop')
+        } else {    
+            selectedPreviewNode.value = node;
+        }
     }
 
     function canSkip(node: WorldNode){

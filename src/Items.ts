@@ -495,9 +495,9 @@ class Hourglass extends Item<Piece[]> {//TODO test
 
 //affect all programs
 ////KEY, U+1F511 keygen item
-class Keygen extends Item<Piece[]> {//TODO test
+class Keygen extends Item<Piece[]> {//TODO test, unfinished
   static name = "Keygen";
-  static description = "Lower the defence of all enemy programs in a node";
+  static description = "Lower the defence of all enemy programs in a node (not working)";
   static unicode = "U+1F511";
   static color = "#89315aff";
   constructor() {

@@ -140,7 +140,7 @@ class Onion extends Admin {
   }
   //
   async apply({ player }: { player: Player }) {
-    player.lives += 1
+    //player.lives += 1
   }//add a if for player death to remove this
 }
 //name desc utf || maxsize moves range atk def
@@ -339,9 +339,9 @@ class AdminMap extends Admin {
   //player bool
 }
 
-class PetriDish extends Admin {// status test
+class PetriDish extends Admin {// status test unfinished: make enemies spread to fellow enemies
   static name = "Petri Dish";
-  static description = "Status effects can spread to adjacent enemy programs at the end of your turn";//effect all programs??
+  static description = "Status effects spread to adjacent enemy programs at the end of your turn";//effect all programs??
   static unicode = "U+1F9EB";
   static color = "#14532dff";
   constructor() {
@@ -349,10 +349,11 @@ class PetriDish extends Admin {// status test
   }
   //on turn end
   async apply({ id: _id, activePieces }: { id: string; activePieces: Piece[] }) {
-    const players = activePieces.filter(p => p.team === 'player');
+    //const players = activePieces.filter(p => p.team === 'player');
     const enemies = activePieces.filter(p => p.team === 'enemy');
 
-    for (const player of players) {
+    //for (const player of players) {
+    for (const player of activePieces) {
       for (const enemy of enemies) {
         const isAdjacent = enemy.tiles.some(t =>
           Math.abs(t.x - player.headPosition.x) +
@@ -584,9 +585,9 @@ class Stonks extends Admin {
 }
 
 class Trolley extends Admin {
-  static name = "Trolley";
+  static name = "Schoolbag";//"Trolley";
   static description = "Items only use 0.5 memory each";
-  static unicode = "U+1F6D2";
+  static unicode = "U+1F392";// "U+1F6D2";
   static color = "#55fff1ff";
   constructor() {
     super(Trolley.name, Trolley.description, Trolley.unicode, Trolley.color, 5, 2, 'player', 'other')//'player')??
@@ -595,7 +596,7 @@ class Trolley extends Admin {
    player.hasTrolley = true;
   }
   async remove({ player }: { player: Player }) {
-   player.hasToolbox = false;
+   player.hasTrolley = false;
   }
 }
 

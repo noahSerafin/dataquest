@@ -197,11 +197,12 @@
     
     if (item.targetType === "player") {
       //some these items cannot be passed allItems/ Alladmins because they are declared in /Items.ts first
-      if(item.name === 'Gift Box' && player.value.hasMemorySpace){
+      const hasRoom = player.value.usedMemory <= player.value.memory;
+      if(item.name === 'Gift Box' && hasRoom){
         player.value.programs.push(makeBlueprint(pickWeightedRandom(allPieces, player.value)));
         player.value.removeItem(item);
       }
-      if(item.name === 'Genie' && player.value.hasMemorySpace){
+      if(item.name === 'Genie' && player.value.usedMemory <= player.value.memory -2){
         const classes = [
           pickWeightedRandom(allPieces, player.value),
           pickWeightedRandom(allPieces, player.value),
@@ -211,11 +212,11 @@
         player.value.programs.push(...bps);
         player.value.removeItem(item)
       }
-      if(item.name === 'Mystery Box' && player.value.hasMemorySpace){
+      if(item.name === 'Mystery Box' &&  hasRoom){
         player.value.items.push(pickWeightedRandomItem(allItems, player.value))
         player.value.removeItem(item)
       }
-      if(item.name === 'Pinata' && player.value.hasAdminSpace){
+      if(item.name === 'Pinata' && hasRoom){
         player.value.admins.push(pickWeightedRandomItem(allAdmins, player.value))
         player.value.removeItem(item)
       }
@@ -245,8 +246,7 @@
       }
     }
 
-    if (item.targetType === "gameState") {
-      console.log('using voucher on ', shopTarget.value?.name)
+    if (item.targetType === 'gameState') {
       if(item.name === 'Hourglass'){
           reloadLevel();
           player.value.removeItem(item);
@@ -285,7 +285,7 @@
           player.value.canPlace = true;
           player.value.canAction = true;
       }
-      item.apply(activePieces.value, itemMult);
+      item.apply(activePieces.value, itemMult);// not working for keygen?
     }
 
     /*if(item.targetType === 'piecesAndBoard'){
@@ -483,11 +483,11 @@
         const id = piece.id;
         player.value.programs.forEach(blueprint => {
           if(blueprint.id === id){
-            blueprint.maxSize += (piece.maxSize);
-            blueprint.moves += (piece.moves);
-            blueprint.range += (piece.range);
-            blueprint.attack += (piece.attack);
-            blueprint.defence += (piece.defence);
+            blueprint.maxSize += (piece.getStat('maxSize'));
+            blueprint.moves += (piece.getStat('moves'));
+            blueprint.range += (piece.getStat('range'));
+            blueprint.attack += (piece.getStat('attack'));
+            blueprint.defence += (piece.getStat('defence'));
           }
         });
       });
@@ -542,6 +542,9 @@
     selectedPiece.value = null;
     isPlacing.value = true
     openSummary(false);
+    if(bossAdmins.value.length>0){
+      handleApplyAdmins('onRoundStart', '');
+    }
     roundHasStarted.value = true;
     isFirstTurn.value = true;
   }
@@ -553,11 +556,18 @@
   }
 
   //game loop
+  const shopDisabled = ref<boolean>(false);
+  const openDisabledShop = () => {
+    showShop.value = true;
+    shopDisabled.value = true;
+  }
   const toggleShop = () => {
     showShop.value = !showShop.value;
+    shopDisabled.value = false;
   }
   const openShop = () => {
     showShop.value = true;
+    shopDisabled.value = false;
   }
   const toggleCompiler = () => {
     showCompiler.value = !showCompiler.value;
@@ -1321,6 +1331,7 @@
       :cssclass="mapClass"
       @select-level="selectLevel"
       @openShop="openShop"
+      @openDisabledShop="openDisabledShop"
       @openCompiler="openCompiler"
       @addBoss="addBossAdmin"
       @increaseDifficulty="increaseDifficulty"
@@ -1338,6 +1349,7 @@
       @clearTarget="clearShopTarget"
       @toggleShop="toggleShop"
       :player="player"
+      :shop-disabled="shopDisabled"
     />
     <HybridCompiler v-if="!displayEditor" class="stage-panel" :class="{ active: showCompiler }"
       :player="player"

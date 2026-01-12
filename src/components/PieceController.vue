@@ -124,11 +124,10 @@ function toggleTooltip(key: string) {
     <div class="stats">
       <p class="">Size: {{ piece.tiles.length }}</p>
       <p class="text-green">Max Size: {{ piece.getStat('maxSize') }}</p>
-      <p class="text-blue">Moves: {{ piece.getStat('moves') }}</p>
-      <p class="text-blue">Moves Left: {{ piece.movesRemaining }}</p>
+      <p class="text-blue">Moves: {{ piece.getStat('moves') }}<span>Left: {{ piece.movesRemaining }}</span></p>
       <p class="text-orange">Range: {{ piece.getStat('range') }}</p>
       <p class="text-red">Attack: {{ piece.getStat('attack') }}</p>
-      <p class="text-cyan">Defence: {{ piece.getStat('defence') }}</p>
+      <p class="text-cyan">Defence: {{ piece.getStat('defence') }}<span>Left: {{ piece.defenceRemaining }}</span></p>
       <p class="text-yellow">Actions: {{ piece.getStat('actions') }}</p>
       <p v-if="activeImmunities.length > 0">Immune to:
         <span

@@ -1744,7 +1744,6 @@ export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, 
 //sell to reroll boss?
 
 //disco ball U+1FAA9
-//SCHOOL SATCHEL, U+1F392
 //ELECTRIC LIGHT BULB, U+1F4A1
 //KNOT, U+1FAA2
 //TENT, U+26FA

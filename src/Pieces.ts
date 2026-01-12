@@ -51,6 +51,7 @@ export abstract class Piece {
   headPosition: Coordinate
   tiles: Coordinate[] // an array of (x, y) positions
   movesRemaining: number
+  defenceRemaining: number
   actions: number
   team: string //'player' or 'enemy'
   rarity: number
@@ -86,6 +87,7 @@ export abstract class Piece {
     this.headPosition = headPosition ?? { x: -1, y: -1 };
     this.tiles = tiles.length ? tiles : headPosition ? [headPosition] : []; //default to head
     this.movesRemaining = this.getStat('moves') // default to full moves at start of turn
+    this.defenceRemaining = this.getStat('defence') // default to full moves at start of turn
     this.actions = 1
     this.team = team
     this.rarity = rarity
@@ -148,6 +150,9 @@ export abstract class Piece {
   resetMoves() {
     this.movesRemaining = this.getStat('moves');
   }
+  resetDefence() {
+    this.defenceRemaining = this.getStat('defence');
+  }
 
   useMove() {
     if (this.movesRemaining > 0) {
@@ -171,8 +176,16 @@ export abstract class Piece {
   }
 
   async takeDamage(damage: number) {
-    const received = Math.max(0, damage - this.getStat('defence'));//affect defense as well???
-    const removeCount = Math.min(received, this.tiles.length); // safety
+    if (damage <= 0) return;
+    const defenceBefore = this.defenceRemaining;
+    // 1. Apply damage to defence
+    this.defenceRemaining = Math.max(0, this.defenceRemaining - damage);
+    // 2. Calculate overflow damage
+    const overflow = Math.max(0, damage - defenceBefore);
+    // 3. No overflow → no tile damage
+    if (overflow === 0) return;
+    // 4. Apply tile damage
+    const removeCount = Math.min(overflow, this.tiles.length);
     if(removeCount){
       this.isTakingDamage = true
       //alert cactus admin

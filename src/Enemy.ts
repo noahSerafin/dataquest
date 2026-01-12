@@ -304,7 +304,7 @@ function findWeakestPlayerInRange(
 
   if (candidates.length === 0) return null;
 
-  // Pick the player with the lowest defence
+  // Pick the player with the lowest defence, or smallest size?
   candidates.sort(
     (a, b) => a.piece.getStat('defence') - b.piece.getStat('defence')
   );

@@ -1179,6 +1179,7 @@
     activePieces.value.forEach(piece => {
       if(piece.team === 'player' ){
         piece.resetMoves();
+        piece.resetDefence();
         piece.actions = 1;
       }
       if(piece.team === 'enemy'){
@@ -1192,6 +1193,7 @@
     activePieces.value.forEach(piece => {
       if(piece.team === 'enemy' ){
         piece.resetMoves();
+        piece.resetDefence();
         piece.actions = 1;
       }
       if(piece.team === 'player' ){

@@ -30,6 +30,7 @@ export abstract class Piece {
 
   specialName?: string;
   extraUnicode?: string;
+  variantName?: string;
   targetType: 'piece' | 'pieceAndPlayer' | 'space' | 'pieceAndPlace' | 'group' | 'line' | 'self' | 'all' | 'graveyard' | 'trapPiece' = 'piece';
 
   id: string
@@ -529,7 +530,7 @@ class Lance extends Piece {
   static description = "Can charge instead of attacking, adamaging targets in a staight line and moving forward until stopped";
   static unicode = "U+1F3A0";
   static color = "#f9f9f9";
-  static rarity = 2;
+  static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
   super(Lance.name, Lance.description, Lance.unicode, 3, 3, 3, 2, 0, Lance.color, headPosition, [headPosition], team, Lance.rarity, removeCallback, id)//horse carousel atm //cane: "U+1F9AF"
     this.specialName = 'Charge';
@@ -1484,7 +1485,6 @@ class Greatshield extends Piece {//testt
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
       );
       if (!stillOccupied) {
-        // The enemy died → Lance can move into the tile
         this.moveTo(tile);
         continue;
       }
@@ -1786,7 +1786,7 @@ class Beetle extends Piece {
 }
 
 class LadyBeetle extends Piece {
-  static name = "Lady Beetle";
+  static name = "LadyBird";
   static description = "A tougher beetle";
   static unicode = "U+1F41E";
   static color = "#059411ff";
@@ -2232,7 +2232,6 @@ class Croc extends Piece {
     this.specialName='Bite'
     this.targetType='piece'
     this.statuses.hidden = true;
-    this.canAttack = false;
   }
   async special(target: Piece): Promise<void> {
     await target.takeDamage(this.getStat('attack'))
@@ -2421,6 +2420,13 @@ class Daemon extends Piece {
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Daemon.name, Daemon.description, Daemon.unicode, 4, 3, 2, 3, 1, Daemon.color, headPosition, [headPosition], team, Daemon.rarity, removeCallback, id)
+   this.specialName = 'Chug'
+  }
+  async special(targetPiece: Piece):Promise<void>{
+    if(!targetPiece.immunities.slowed){
+      targetPiece.statuses.slowed = true
+    }
+    this.actions--
   }
 }
 

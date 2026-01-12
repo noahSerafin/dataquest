@@ -16,7 +16,7 @@
   import type { Coordinate, PieceBlueprint, Level, OS } from "./types";
   import { runEnemyStateMachine } from "./Enemy";
   import WorldMap from "./components/WorldMap.vue";
-  import { makeBlueprint, pickWeightedRandom, pickWeightedRandomItem } from "./helperFunctions";
+  import { applyVariant, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, rollVariant } from "./helperFunctions";
   import Shop from "./components/Shop.vue";
   import BossView from "./components/BossView.vue";
   import RoundSummary from "./components/RoundSummary.vue";
@@ -165,7 +165,7 @@
     const idx = player.value.admins.findIndex(i => i.id === itemId);
     if (idx === -1) return;
     const admin = player.value.admins[idx];
-    if(admin.triggerType === 'other'){
+    if(admin.triggerType === 'other' && admin.targetType==='player'){
       admin.remove({player: player.value});
     }
     player.value.admins.splice(idx, 1);
@@ -200,7 +200,8 @@
       //some these items cannot be passed allItems/ Alladmins because they are declared in /Items.ts first
       const hasRoom = player.value.usedMemory <= player.value.memory;
       if(item.name === 'Gift Box' && hasRoom){
-        player.value.programs.push(makeBlueprint(pickWeightedRandom(allPieces, player.value)));
+        const newProgram = pickWeightedRandom(allPieces, player.value);
+        player.value.programs.push(makeBlueprint(newProgram.class, newProgram.variant ?? undefined ));
         player.value.removeItem(item);
       }
       if(item.name === 'Genie' && player.value.usedMemory <= player.value.memory -2){
@@ -209,7 +210,7 @@
           pickWeightedRandom(allPieces, player.value),
           pickWeightedRandom(allPieces, player.value),
         ];
-        const bps = classes.map(c => makeBlueprint(c));
+        const bps = classes.map(c => makeBlueprint(c.class, c.variant ?? undefined));
         player.value.programs.push(...bps);
         player.value.removeItem(item)
       }
@@ -314,9 +315,11 @@
   const rerollCost = ref(5);//to be reset after shop
   const prevFib = ref(0);//to be reset after shop
   const currentFib = ref(1);//to be reset after shop
+  const canProceedFromShop = ref<boolean>(false);
 
   function refreshShop(isFree: boolean) {
     //console.log(rerollCost.value)
+    shopTarget.value = null;
     if(!isFree && player.value.money < rerollCost.value) return;//show to shop for disabled button
     if(!isFree) {//player is rerolling
       player.value.money -= rerollCost.value;
@@ -339,7 +342,7 @@
       pickWeightedRandom(allPieces, player.value),
       pickWeightedRandom(allPieces, player.value),
     ];
-    shopBlueprints.value = classes.map(c => makeBlueprint(c));
+    shopBlueprints.value = classes.map(c => makeBlueprint(c.class, c.variant ?? undefined));
 
     //no reappearing admins
     let availableAdmins = allAdmins;
@@ -357,7 +360,7 @@
     ];
     if(player.value.hasAdmin('Department Store')){
       const extraP = pickWeightedRandom(allPieces, player.value);
-      shopBlueprints.value.push(makeBlueprint(extraP));
+      shopBlueprints.value.push(makeBlueprint(extraP.class, extraP.variant ?? undefined));
       const extraI = pickWeightedRandomItem(allItems, player.value);
       const extraA = pickWeightedRandomItem(availableAdmins, player.value);
       shopItems.value.push(extraI, extraA);
@@ -371,14 +374,16 @@
     player.value.programs.push(bp);
     shopTarget.value = null;
   }
-  function buyItem(item: Item) {
+  async function buyItem(item: Item) {
     // remove from shop
     shopItems.value = shopItems.value.filter(i => i.id !== item.id);
     player.value.money -= item.cost;
     // decide which inventory to place it in
     if (item instanceof Admin) {
       player.value.admins.push(item);
-      handleApplyAdmins('other', item.id)
+      if(item.targetType === 'player' && item.triggerType == 'other'){
+        await item.apply({player: player.value})
+      }
     } else {
       player.value.items.push(item);
     }
@@ -486,7 +491,7 @@
   const originalPieces = ref<InstanceType<typeof Piece>[]>([]);
   const originalSpawns = ref<Coordinate[]>([]);
 
-  const selectLevel = (newLevel: Level, difficultyMod: number, lReward: number) => {//load level, start 
+  async function selectLevel(newLevel: Level, difficultyMod: number, lReward: number) {//load level, start 
     pieceToPlace.value = null;
     showBoard.value = true;
     renewBlueprints()//shouldnt be needed in final;
@@ -505,7 +510,7 @@
     originalPieces.value = activePieces.value.map(p => p.clone());
     originalSpawns.value = [...playerSpawns.value];
     boardRef.value.clearHighlights();
-    handleApplyAdmins('onRoundStart', '');
+    await handleApplyAdmins('onRoundStart', '');
     showMap.value = false;
     roundHasStarted.value = true;
   }
@@ -518,7 +523,7 @@
     showMap.value = true;
   }
 
-  function reloadLevel(){
+  async function reloadLevel(){
     renewBlueprints();
     activePieces.value = originalPieces.value.map(p => p.clone());
     //if piece has no tiles, use headposition
@@ -528,9 +533,9 @@
     selectedPiece.value = null;
     isPlacing.value = true
     openSummary(false);
-    if(bossAdmins.value.length>0){
-      handleApplyAdmins('onRoundStart', '');
-    }
+    //if(bossAdmins.value.length>0){
+    await handleApplyAdmins('onRoundStart', '');
+    //}
     roundHasStarted.value = true;
     isFirstTurn.value = true;
   }
@@ -550,10 +555,17 @@
   const toggleShop = () => {
     showShop.value = !showShop.value;
     shopDisabled.value = false;
+    canProceedFromShop.value = false;
   }
   const openShop = () => {
     showShop.value = true;
+    refreshShop(true);
+    canProceedFromShop.value = true;
     shopDisabled.value = false;
+  }
+  const closeShop = () => {
+    showShop.value = false;
+    canProceedFromShop.value = false;
   }
   const toggleCompiler = () => {
     showCompiler.value = !showCompiler.value;
@@ -619,7 +631,7 @@
 
           const validEnemies = allPieces.filter(EnemyClass => {
             //p.rarity >= min && p.rarity <= max //old method for spawnsize 1 only
-            if(EnemyClass.name !== "Nuke" && EnemyClass.name !== "Highwayman"){// remove nukes
+            if(EnemyClass.name !== "Nuke" && EnemyClass.name !== "Highwayman"){// remove broken pieces
               const temp = new EnemyClass(piece.headPosition, 'enemy', removePiece);
               return (
                 temp.rarity >= min &&
@@ -632,10 +644,15 @@
           //console.log('lengths:', min, max, allPieces.length, pool.length)
 
           const EnemyClass = pool[Math.floor(Math.random() * pool.length)];
-          //allPieces[Math.floor(Math.random() * allPieces.length)];//base this off rarity/difficulty later
-
+          
           const enemyInstance = new EnemyClass(piece.headPosition, 'enemy', removePiece);
           enemyInstance.tiles = piece.tiles;
+
+          const variantChance = (0.1*trueDifficulty-0.1)
+          const variant = rollVariant(variantChance, trueDifficulty);
+          if(variant){
+            applyVariant(enemyInstance, variant);
+          }
           //add tiles here? if spawn.tiles.length <= enemy.getStat(maxsize){ enemy.tiles = spawn.tiles }
           processed.push(enemyInstance);
           continue;
@@ -754,7 +771,7 @@
     return piece//modified piece with new stats
   }
 
-  function placePieceOnBoardAt(coord: Coordinate) {
+  async function placePieceOnBoardAt(coord: Coordinate) {
     if (!pieceToPlace.value) return
     
     const bp = pieceToPlace.value
@@ -776,7 +793,7 @@
     playerSpawns.value = newPlacementHighlights();
     
     //applyStatModifications()
-    handleApplyAdmins('onPlacement', PieceInstance.id)
+    await handleApplyAdmins('onPlacement', PieceInstance.id)
     if(player.value.hasAdmin('Copier')){
 
     }
@@ -924,6 +941,9 @@
     await handleApplyAdmins('onDealDamage', selectedPiece.value.id)//attacker's id, (bug: blood tax will trigger even on no damage)
     const damage = Math.floor(baseDamage * selectedPiece.value.damageMult)//mult should be applyed inside takeDamage for special moves
     await damageReceiver.takeDamage(damage);
+    if(selectedPiece.value.statuses.hidden){
+      selectedPiece.value.statuses.hidden = false;
+    }
     selectedPiece.value.damageMult = 1;
     if(damageReceiver.willRetaliate){
       await selectedPiece.value.takeDamage(damageReceiver.getStat('attack'));
@@ -1078,7 +1098,7 @@
     if(roundWon){
       //bring up round summary
       hasWonRound.value = true;
-      handleApplyAdmins('onRoundEnd', '');
+      handleApplyAdmins('onRoundEnd', '');//await??
       activePieces.value = [];//for needle
       openSummary(true);
       extraDifficulty.value = 0;
@@ -1107,8 +1127,8 @@
     roundHasStarted.value = false;
   }
       
-  function onReceiveDamage (id: string) {
-    handleApplyAdmins("onReceiveDamage", id);
+  async function onReceiveDamage (id: string) {
+    await handleApplyAdmins("onReceiveDamage", id);
   }
 
   //enemy moves
@@ -1166,7 +1186,7 @@
       }
     });
     applyStatusEffects('player');
-    handleApplyAdmins('onTurnEnd', '');
+    await handleApplyAdmins('onTurnEnd', '');
     await enemyTurn();
     //player piece tempstats reset
     activePieces.value.forEach(piece => {
@@ -1210,7 +1230,7 @@
   const worldSeed = ref(0);
   const increaseDifficulty = () => {
     player.value.difficulty += 1;
-    if(player.value.difficulty<6){//cumulate bosses in endless mode
+    if(player.value.difficulty<7){//cumulate bosses in endless mode
       bossAdmins.value = [];
     }
     refreshShop(true);
@@ -1250,7 +1270,7 @@
     }
   }, { immediate: true });
 
-  const debugMode = ref<boolean>(false);
+  const debugMode = ref<boolean>(true);
 </script>
 
 <template>
@@ -1347,9 +1367,10 @@
       @buy-item="buyItem"
       @selectTarget="selectShopTarget"
       @clearTarget="clearShopTarget"
-      @toggleShop="toggleShop"
+      @closeShop="closeShop"
       :player="player"
       :shop-disabled="shopDisabled"
+      :canProceed="canProceedFromShop"
     />
     <HybridCompiler v-if="!displayEditor" class="stage-panel" :class="{ active: showCompiler }"
       :player="player"

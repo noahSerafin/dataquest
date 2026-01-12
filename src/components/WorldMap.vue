@@ -212,9 +212,10 @@
     function generateSkipReward(): SkipReward{
         const roll = Math.random();
         if (roll < 0.4) {
+            const random = pickWeightedRandom(allPieces, props.player)
             return {
                 kind: 'blueprint',
-                value: makeBlueprint(pickWeightedRandom(allPieces, props.player))
+                value: makeBlueprint(random.class, random.variant ?? undefined)
             }
         }
         if (roll < 0.7) {
@@ -253,6 +254,9 @@
 
             case "admin":
             props.player.addAdmin(node.skipReward.value);
+            if(node.skipReward.value.triggerType === 'other' && node.skipReward.value.targetType==='player'){
+                node.skipReward.value.apply({player: props.player});
+            }
             break;
 
             case "item":

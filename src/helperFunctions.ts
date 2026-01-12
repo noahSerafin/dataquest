@@ -1,6 +1,7 @@
-import type { Coordinate, PieceBlueprint } from "./types";
+import type { Coordinate, PieceBlueprint, PieceVariant, StatKey } from "./types";
 import type { Piece } from "./Pieces";
 import type { Player } from "./Player";
+import { STAT_MIN, PIECE_VARIANTS } from "./constants";
 
 function coordKey(c: Coordinate): string {
   return `${c.x},${c.y}`;
@@ -34,8 +35,11 @@ export function getRandomUnoccupiedTile(
   return freeTiles[index];
 }
 
-export function makeBlueprint(PieceClass: any): PieceBlueprint {
+export function makeBlueprint(PieceClass: any, variant?: PieceVariant): PieceBlueprint {
     const temp = new PieceClass({ x: -1, y: -1 }, "player");
+    if (variant) {
+      applyVariant(temp, variant);
+    }
 
     return {
       id: crypto.randomUUID(),
@@ -50,8 +54,35 @@ export function makeBlueprint(PieceClass: any): PieceBlueprint {
       rarity: temp.rarity,
       color: PieceClass.color,
       isPlaced: false,
-      cost: temp.rarity*2-1                     
+      cost: temp.rarity*2-1,
+      variantName: temp.variantName
     };
+}
+
+const BASE_VARIANT_CHANCE = 0.5; // 15% chance a piece gets a variant
+export function rollVariant(chance: number, difficulty: number): PieceVariant | null{
+  if (Math.random() > chance) return null;
+
+  const pool: PieceVariant[] = [];
+  for (const v of PIECE_VARIANTS) {
+    const w = Math.max(1, Math.floor((v.weight ?? 1) * 10));
+    for (let i = 0; i < w; i++) {
+      if(v.minDifficulty <= difficulty) pool.push(v);  
+    }
+  }
+
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+export function applyVariant(piece: Piece, variant: PieceVariant) {
+  for (const [stat, delta] of Object.entries(variant.mods) as [StatKey, number][]) {
+    const min = STAT_MIN[stat];
+    const next = piece[stat] + delta;
+
+    piece[stat] = Math.max(min, next);
+  }
+
+  piece.variantName = variant.name;
 }
 
 export function pickWeightedRandom(PieceClasses: any[], player: Player) {//clover edit
@@ -72,7 +103,11 @@ export function pickWeightedRandom(PieceClasses: any[], player: Player) {//clove
     }
 
     const idx = Math.floor(Math.random() * weighted.length);
-    return weighted[idx];
+    const variant = rollVariant(BASE_VARIANT_CHANCE, 6);
+    return {
+      class: weighted[idx],
+      variant: variant
+    }
 }
 
 export function pickWeightedRandomItem(itemClasses: any[], player: Player) {//move to items.ts?

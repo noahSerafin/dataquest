@@ -13,10 +13,11 @@ Once entering a node, you will be able to see what enemy programs you are up aga
 Start by placing a program on the board, either by dragging into the green spawn point or using the place button then clicking on the spawn.
 Be aware you won't be able to move your program until after the enemy's turn, so make sure you're not going to be destroyed straight away.
 On each turn, you may either place a new program next to one of your own, or move your already placed programs.
-If you clear the board but the round doesn't finish, there's probably still a 'hidden' enemy program in play, either a trap or one that can hide itself such as a ghost or ninja.
+If you clear the board but the round doesn't finish, there's probably still a 'hidden' enemy program in play, either a trap, or one that can hide itself such as a ghost or ninja.
 
 SHOP
 At the shop, you can buy new programs (P), new Admin prgrams (A), or consumable items (I)
+There are 6 tiers of rarity, each becoming rarer in the shop the higher the tier.
 
 ADMINS
 Admins effects are passive, and all have different triggers. Admins with the same trigger will activate in the order you place them in your admin panel (left to right).
@@ -32,11 +33,15 @@ Some programs have special moves, click on them to see what they are.
 BOSSES
 Bosses act like admin programs for the enemy, they may boost enemy stats, nerf yours, or add some other challenging effect to a node.
 On defeating a boss, the shop will restock for free, and the security level of all future nodes will increase by one.
-After defeating a level 6 Boss, you win the game.
+After defeating a level 6 Boss, you win the game. You can still proceed into endless mode if you wish.
 
+DIFFICULTY (security level)
+At higher security levels, rarer pieces will start spawning as enemies, and variants are more likely to appear, as well as more powerful variants.
+Harder boss admins may also appear at higher security levels.
+In endless mode, new bosses persist into following rounds, and enemy variants become commonplace
 */
 
-//hints
+//Tips
 //Always have a defensive program handy for nodes where you can be attacked immediately.
 //special moves will not trigger a retaliation from other pieces, even damaging ones.
 //line type target programs can effect the same program more than once if the multiple tiles occupy the line.

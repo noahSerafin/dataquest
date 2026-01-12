@@ -95,6 +95,7 @@ function toggleTooltip(key: string) {
       <span class="symbol">
         {{ String.fromCodePoint(parseInt(piece.unicode.replace("U+", ""), 16)) }}
       </span>
+      <span v-if="piece.variantName" class="variant">{{ piece.variantName }}</span>
       <span class="name">{{ piece.name }}</span>
       <button class="close" @click="$emit('close', piece)">X</button>
     </div>
@@ -179,6 +180,7 @@ function toggleTooltip(key: string) {
   background: #222;
   color: #fff;
   padding: 1rem;
+  padding-top: 0;
   border-radius: 12px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
   display: flex;
@@ -220,7 +222,7 @@ function toggleTooltip(key: string) {
   font-size: 1.8rem;
 }
 
-.name {
+.variant, .name {
   font-weight: bold;
 }
 

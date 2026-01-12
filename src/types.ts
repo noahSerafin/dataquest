@@ -1,7 +1,15 @@
-// Define a coordinate type for readability
-export type Coordinate = { x: number; y: number }
 import { Item } from "./Items";
 import { Admin } from "./AdminPrograms";
+import { Piece } from "./Pieces";
+
+export type Coordinate = { x: number; y: number }
+
+export type PieceConstructor = new (
+  headPosition: Coordinate,
+  team: string,
+  removeCallback?: (p: Piece) => void,
+  id?: string
+) => Piece;
 
 export type PieceBlueprint = {
   id: string
@@ -19,6 +27,7 @@ export type PieceBlueprint = {
   cost: number
   hybridName?: string
   extraUnicode?: string
+  variantName?: string
 }
 
 export interface HybridBlueprint extends PieceBlueprint {
@@ -47,6 +56,20 @@ export type StatModifier = {
   range?: number
   maxSize?: number
   actions?: number
+}
+
+export type StatKey =
+  | 'maxSize'
+  | 'moves'
+  | 'range'
+  | 'attack'
+  | 'defence';
+
+export type PieceVariant = {
+  name: string,
+  mods: Partial<Record<StatKey, number>>,
+  minDifficulty: number,
+  weight?: number
 }
 
 export type Level = {

@@ -94,6 +94,7 @@ defineEmits(["buy", "sell", "highlightPlacements", "close"])
         <span class="symbol">
           {{ String.fromCodePoint(parseInt(piece.unicode.replace("U+", ""), 16)) }}
         </span>
+        <span v-if="piece.variantName" class="variant">{{ piece.variantName }}</span>
         <span class="name">{{ piece.hybridName ? piece.hybridName : piece.name }}</span>
         <button class="close" @click="$emit('close', piece)">X</button>
       </div>
@@ -133,7 +134,7 @@ defineEmits(["buy", "sell", "highlightPlacements", "close"])
   position: fixed;
   bottom: 1rem;
   left: 1rem;
-  width: 20%;
+  width: 30%;
   background: #222;
   color: #fff;
   padding: 1rem;
@@ -147,6 +148,9 @@ defineEmits(["buy", "sell", "highlightPlacements", "close"])
 .inventory-controller{
   left: unset;
   right: 1rem;
+}
+.shop-controller{
+  z-index: 99;
 }
 @media only screen and (min-width: 420px) {
   .inventory-controller{
@@ -186,7 +190,8 @@ defineEmits(["buy", "sell", "highlightPlacements", "close"])
   font-size: 1.8rem;
 }
 
-.name {
+.variant, .name {
+  font-size: 0.9rem;
   font-weight: bold;
 }
 
@@ -229,10 +234,6 @@ p{
 }
 .desc{
   border-bottom: none;
-}
-.shop-controller{
-  bottom: unset;
-  top: 1rem;
 }
 @media (max-width: 380px) {
   .piece-controller, .inventory-controller, .skipReward-controller{

@@ -14,7 +14,7 @@ const emit = defineEmits<{
   (e: 'refresh-shop'): void;
   (e: 'selectTarget', target: Item | PieceBlueprint | null): void;
   (e: 'clearTarget'): void;
-  (e: 'toggleShop'): void;
+  (e: 'closeShop'): void;
   //close shop, open map
 }>();
 
@@ -26,6 +26,7 @@ const props = defineProps<{
   player: Player;
   target: Item | PieceBlueprint | null;
   shopDisabled: boolean;
+  canProceed: boolean;
 }>();
 
 function openShopController(target: Item | PieceBlueprint | null) {///TODO SORT OUT IMPORTS
@@ -135,10 +136,10 @@ const type = ((item: Item) => {
       @buy="handleBuyBlueprint"
       @close="deselect"
     />
-    <div class="btn-container-centered">
+    <div v-if="canProceed" class="btn-container-centered">
       <button
       class="proceed-btn"
-      @click="emit('toggleShop')">
+      @click="emit('closeShop')">
         Proceed
       </button>
     </div>

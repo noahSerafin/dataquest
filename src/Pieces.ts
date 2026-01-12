@@ -465,7 +465,7 @@ class Firewall extends Piece {
   async special(target: Piece): Promise<void> {
     //await target.takeDamage(this.getStat('attack'));
     if(target.statuses.burning){
-      target.takeDamage(this.getStat('attack'))
+      target.takeDamage(this.getStat('attack'));
     } else if(!target.immunities.burning){
       target.statuses.burning = true;
     }
@@ -487,7 +487,6 @@ class Pitfall extends Piece {
   }
   async special(target: Piece): Promise<void> {
     if(!target.immunities.frozen){
-
       target.statuses.frozen = true;
     }
     this.actions--
@@ -806,7 +805,7 @@ class Copycat extends Piece {
 
 class Trap extends Piece {
   static name = "Trap";
-  static description = "A program invisble to the enemy that immobilises programs moving over it and applies posion to them";
+  static description = "A program invisble to the enemy that immobilises programs moving over it and applies posion to them, removing itself";
   static unicode = "U+1FAA4";
   static color = "#686026";
   static rarity = 2;
@@ -818,10 +817,40 @@ class Trap extends Piece {
   }
   //no active special, but a walkOver function we need to setup await handler in App.vue inside movePiece or even Piece moveTo
   async special(target: Piece): Promise<void> {
-    target.movesRemaining = 0;
-    target.statuses.frozen = true;
+    if(!target.immunities.frozen){
+      target.movesRemaining = 0;
+      target.statuses.frozen = true;
+    }
     if(!target.immunities.poisoned){
       target.statuses.poisoned = true
+    }
+    target.takeDamage(this.getStat('attack'))
+    this.actions--
+    this.statuses.hidden = false;
+    //remove until selection of negative is sorted
+    this.removeCallback?.(this);
+  }
+  //check for programs on top, make their movement 0
+}
+
+class Tar extends Piece {
+  static name = "Tar";
+  static description = "A program invisble to the enemy that applies slow to programs moving over it, removing itself";
+  static unicode = "U+1FAA4";
+  static color = "#686026";
+  static rarity = 2;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Tar.name, Tar.description, Tar.unicode, 1, 0, 0, 0, 0, Tar.color, headPosition, [headPosition], team, Tar.rarity, removeCallback, id)
+   this.targetType = 'trapPiece';
+   this.statuses.hidden = true
+   this.statuses.negative = true;
+  }
+  async special(target: Piece): Promise<void> {
+    if(!target.immunities.slowed){
+      target.statuses.slowed = true
+    }
+    if(target.statuses.slowed){
+      target.takeDamage(this.getStat('attack'));
     }
     this.actions--
     this.statuses.hidden = false;
@@ -833,7 +862,7 @@ class Trap extends Piece {
 
 class Mine extends Piece {
   static name = "Mine";
-  static description = "A program invisble to the enemy that damages programs moving over it";
+  static description = "A program invisble to the enemy that damages programs moving over it, removing itself";
   static unicode = "U+1F4A5";
   static color = "#ff9d00";
   static rarity = 2;
@@ -857,7 +886,7 @@ class Mine extends Piece {
 
 class Web extends Piece {
   static name = "Web";
-  static description = "A program that freezes enemies moving over it";//immobilises
+  static description = "A program that freezes enemies moving over it, removing itself";//immobilises
   static unicode = "U+1F578";
   static color = "#cfcfcfff";
   static rarity = 8; //maybe it should be a low level trap piece?
@@ -918,6 +947,10 @@ class Germ extends Piece {//up to here //TODO
       target.statuses.diseased = true
       this.actions --
     }
+    if(target.statuses.diseased){
+      target.takeDamage(this.getStat('attack'));
+    }
+    this.actions --
   }
 
   //infect a piece, drain it's max size every turn
@@ -932,7 +965,7 @@ class Vice extends Piece {
   static color = "#f5d58d";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Vice.name, Vice.description, Vice.unicode, 1, 2, 1, 0, 1, Vice.color, headPosition, [headPosition], team, Vice.rarity, removeCallback, id)
+   super(Vice.name, Vice.description, Vice.unicode, 1, 2, 1, 1, 1, Vice.color, headPosition, [headPosition], team, Vice.rarity, removeCallback, id)
     this.targetType = 'piece'
     this.specialName = 'Freeze'
   }
@@ -941,6 +974,9 @@ class Vice extends Piece {
       target.statuses.frozen = true
       target.movesRemaining = 0
     }
+    if(target.statuses.frozen){
+      target.takeDamage(this.getStat('attack'));
+    }
     this.actions--
   }
 }
@@ -948,7 +984,7 @@ class Vice extends Piece {
 //	U+1F441 U+FE0F U+200D U+1F5E8 U+FE0F eye
 class Watchman extends Piece {
   static name = "Watchman";
-  static description = "A program that spots other programs, making them unable to hide, and reducing their defence by 1 or damaging by 1 if defence is already 0";
+  static description = "A program that spots other programs, making them unable to hide, and reducing their defence by 1 or damaging if defence is already 0";
   static unicode = "U+1F441";
   static color = "#6730cf";
   static rarity = 2;
@@ -967,7 +1003,7 @@ class Watchman extends Piece {
         if(target.getStat('defence') > 0){
           target.defence -= 1
         } else {
-          await target.takeDamage(1)
+          await target.takeDamage(this.getStat('attack'))
         }
       }
     }
@@ -1407,7 +1443,7 @@ class Squid extends Piece {
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Squid.name, Squid.description, Squid.unicode, 5, 1, 1, 2, 1, Squid.color, headPosition, [headPosition], team, Squid.rarity, removeCallback, id)
     this.specialName = 'Ink';
-    this.targetType = 'all'
+    this.targetType = 'pieceAndPlace'
   }
   
   async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
@@ -1417,6 +1453,9 @@ class Squid extends Piece {
     if(targetPiece){
       if(!targetPiece.immunities.blinded){
         targetPiece.statuses.blinded = true;
+      }
+      if(targetPiece.statuses.blinded){
+        targetPiece.takeDamage(this.getStat('attack'));
       }
     }
 
@@ -1562,7 +1601,7 @@ class Cupid extends Piece {
   static color = "#ffb20dff";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Cupid.name, Cupid.description, Cupid.unicode, 1, 1, 3, 0, 0, Cupid.color, headPosition, [headPosition], team, Cupid.rarity, removeCallback, id)
+    super(Cupid.name, Cupid.description, Cupid.unicode, 1, 1, 3, 3, 0, Cupid.color, headPosition, [headPosition], team, Cupid.rarity, removeCallback, id)
     this.specialName='Charm'
     this.targetType='piece'
   }
@@ -1570,6 +1609,9 @@ class Cupid extends Piece {
   async special(targetPiece: Piece):Promise<void>{
     if(!targetPiece.immunities.charmed){
       targetPiece.statuses.charmed = true;
+    }
+    if(targetPiece.statuses.charmed){
+      targetPiece.takeDamage(this.getStat('attack'))
     }
     this.actions--
   }
@@ -1649,6 +1691,9 @@ class Scorpion extends Piece {
   async special(targetPiece: Piece):Promise<void>{
     if(!targetPiece.immunities.poisoned){
       targetPiece.statuses.poisoned = true;
+    }
+    if(targetPiece.statuses.poisioned){
+      targetPiece.takeDamage(this.getStat('attack'))
     }
     this.actions--
   }
@@ -2114,6 +2159,9 @@ class Centipede extends Piece {
     if(!targetPiece.immunities.poisoned){
       targetPiece.statuses.poisoned = true;
     }
+    if(targetPiece.statuses.poisioned){
+      targetPiece.takeDamage(this.getStat('attack'))
+    }
     this.actions --
   }
 }
@@ -2319,7 +2367,10 @@ class Camera extends Piece {
   }
   async special(target: Piece): Promise<void> {
     if(!target.immunities.blinded){
-        target.statuses.blinded = true;
+      target.statuses.blinded = true;
+    }
+    if(target.statuses.blinded){
+      target.takeDamage(this.getStat('attack'))
     }
     this.actions--
   }
@@ -2426,6 +2477,9 @@ class Daemon extends Piece {
     if(!targetPiece.immunities.slowed){
       targetPiece.statuses.slowed = true
     }
+    if(targetPiece.statuses.slowed){
+      targetPiece.takeDamage(this.getStat('attack'));
+    }
     this.actions--
   }
 }
@@ -2454,7 +2508,7 @@ class Hedgehog extends Piece {
 }
 
 //99 fairy
-export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Ink, Snail, Shark, Greatshield, Wizard, Ninja, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, Dolls, UFO, TP, Saw, Croc, Lighthouse, Torch, Camera, Drum, Shrike, Eagle, Recurve, Daemon, Rex, Hedgehog];//100 +2 (web, ink)
+export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Tar, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Ink, Snail, Shark, Greatshield, Wizard, Ninja, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, Dolls, UFO, TP, Saw, Croc, Lighthouse, Torch, Camera, Drum, Shrike, Eagle, Recurve, Daemon, Rex, Hedgehog];//100 +2 (web, ink)
 //console.log('pieces length: ', allPieces.length)
 
 //chess knight special move L shape
@@ -2478,6 +2532,8 @@ export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, G
 // TOP HAT, U+1F3A9 spawns a random piece/or rabbit?
 //ORANGUTAN, U+1F9A7
 //GORILLA, U+1F98D
+//OIL DRUM, U+1F6E2
+//WATER DROPLET U+1F4A7
 
 //RABBIT, U+1F407 high movement 1 atk 1 maxsize
 //EXTRATERRESTRIAL ALIEN, U+1F47D

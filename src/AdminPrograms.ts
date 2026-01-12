@@ -1738,6 +1738,8 @@ export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, 
 
 //llungs, trainers are the same
 
+// RAINBOW, U+1F308 beat a boss, earn extra money
+
 //WHEEL, U+1F6DE
 //sell to reroll boss?
 

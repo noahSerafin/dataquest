@@ -378,6 +378,7 @@ class SAM extends Piece {
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(SAM.name, SAM.description, SAM.unicode, 3, 1, 4, 3, 1, SAM.color, headPosition, [headPosition], team, SAM.rarity, removeCallback, id) //lacrosse
   }
+  //special: splash damage
 }
 
 class Gate extends Piece {
@@ -560,7 +561,7 @@ class Lance extends Piece {
   }
 }
 
-class Trojan extends Piece {
+class Trojan extends Piece {//test more
   static name = "Trojan";
   static description = "Can create clones of itself";
   static unicode = "U+1F434";
@@ -720,11 +721,13 @@ class Dataworm extends Piece {//test
     if (!isAdjacent) return;
     // --- 2. Identify if target tile belongs to that piece ---
     const tileIndex = piece.tiles.findIndex(t => t.x === target.x && t.y === target.y);
-   if (tileIndex === -1 || !tileIndex){
+   if (tileIndex === -1 ){
+      console.log("no tile to remove!")
       return;  // No tile there
     }
     // Do NOT remove head tile
     if (tileIndex === 0){
+      console.log("can't remove headPosition!")
       return;
     } 
     // --- 3. Remove that tile from the piece ---
@@ -1184,6 +1187,7 @@ class Elephant extends Piece {
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Elephant.name, Elephant.description, Elephant.unicode, 5, 2, 1, 2, 2, Elephant.color, headPosition, [headPosition], team, Elephant.rarity, removeCallback, id)
   }
+  //special - trample: similar to charge
 }
 
 class Mammoth extends Piece {
@@ -1213,6 +1217,7 @@ class Snowman extends Piece {
     this.maxSize+=1;
     this.addModifier({moves: 1})
     this.moveTo(target);
+    this.actions --
   }
   //maxSize = size
 }
@@ -1347,7 +1352,7 @@ class Dragon extends Piece {//line?
   static name = "Dragon";
   static description = "A large program with high stats that can apply burning to all programs in range";//multpie targets?
   static unicode = "U+1F409";
-  static color = "#00b61eff";
+  static color = "#5feb76ff";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Dragon.name, Dragon.description, Dragon.unicode, 6, 2, 2, 3, 2, Dragon.color, headPosition, [headPosition], team, Dragon.rarity, removeCallback, id)
@@ -2094,7 +2099,7 @@ class Vampire extends Piece {
 }
 
 class Centipede extends Piece {
-  static name = "Giant Centipede";
+  static name = "Centipede";
   static description = "A large piece with a high attack that's bite can poision and inflict damage";
   static unicode = "U+131A8";
   static color = "#3b2108ff";
@@ -2447,6 +2452,7 @@ export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, G
 //console.log('pieces length: ', allPieces.length)
 
 //chess knight special move L shape
+//BUG, U+1F41B caterpiller
 //doctor STETHOSCOPE, U+1FA7A medic, + max Size to a piece
 // HIGH-HEELED SHOE, U+1F460 small and slow but high attack
 //MILITARY AIRPLANE, U+1F6E6 line target airstike similar to charge

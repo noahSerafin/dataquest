@@ -136,8 +136,6 @@
         primaryBP.value = null
         secondaryBP.value = null
         resultBP.value = null
-
-        emit('close')//seperate for primary/secondary
     }
 
     function skip(){

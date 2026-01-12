@@ -31,7 +31,7 @@ const emit = defineEmits<{
 const actionToEmit = ref<string>(props.piece.canAttack? 'A' : 'S');
 
 function cycleAction(){
-  console.log(actionToEmit.value)
+  //console.log(actionToEmit.value)
   emit('select', props.piece)
   if(actionToEmit.value === 'A') {
     emit('highlightTargets', props.piece);
@@ -68,6 +68,7 @@ const bodyTiles = computed(() =>
     if (!props.piece?.tiles?.length || !props.piece?.headPosition || props.piece.tiles[0] == undefined) {
       return []
     } else {
+      console.log(props.piece.name, ' tiles: ', props.piece.tiles)
       return props.piece.tiles.filter(
         (p) => p.x !== props.piece.headPosition.x || p.y !== props.piece.headPosition.y
       )
@@ -135,7 +136,7 @@ const activeStatuses = computed((): [string, boolean][] => {
 
 <template>
   <div
-  :class="`piece ${piece.headPosition.x}-${piece.headPosition.y} ${cssclass}-piece ${props.piece.extraUnicode ? 'hybrid' : ''} team-${piece.team} taking-damage-${piece.isTakingDamage} hidden-${piece.statuses.hidden}`"
+  :class="`piece ${piece.headPosition.x}-${piece.headPosition.y} ${cssclass}-piece ${props.piece.extraUnicode ? 'hybrid' : ''} team-${piece.team} taking-damage-${piece.isTakingDamage} hidden-${piece.statuses.hidden} tiles:(${piece.tiles.toString()})`"
     :name="piece?.name"
     :id="piece?.id"
     :style="pieceStyle"

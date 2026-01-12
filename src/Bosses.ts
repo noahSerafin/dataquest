@@ -124,7 +124,7 @@ class Mirror extends Admin {
                 activePieces.push(enemyInstance);
                 piece.removeCallback?.(piece);
             }
-        })  
+        })  //does this always end the round??
     }
 }
 

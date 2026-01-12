@@ -25,7 +25,7 @@ export function blueprintFromPieceClass(piece: typeof Piece): PieceBlueprint {
     };
 }*/
 
-const knife =  {
+    const knife =  {
         id: crypto.randomUUID(),
         name: "Knife",
         description: '"A basic attack program"',
@@ -37,6 +37,38 @@ const knife =  {
         defence: 0,
         rarity: 1,
         color: '#2fc5ebff',
+        // blueprint-only fields:
+        isPlaced: false,
+        cost: 1 // or whatever cost formula you want
+    }
+    const worm =  {
+        id: crypto.randomUUID(),
+        name: "Dataworm",
+        description: '"A large program that can tunnel through adjacent programs, removing a piece of memory regardless of defence (head excluded)"',
+        unicode: 'U+1FAB1',
+        maxSize: 6,
+        moves: 3,
+        range: 1,
+        attack: 2,
+        defence: 0,
+        rarity: 5,
+        color: "#ee74eeff",
+        // blueprint-only fields:
+        isPlaced: false,
+        cost: 10 // or whatever cost formula you want
+    }
+    const superKnife =  {
+        id: crypto.randomUUID(),
+        name: "Knife",
+        description: '"A suped up attack program"',
+        unicode: 'U+1F52A',
+        maxSize: 2,
+        moves: 10,
+        range: 10,
+        attack: 20,
+        defence: 50,
+        rarity: 1,
+        color: '#902febff',
         // blueprint-only fields:
         isPlaced: false,
         cost: 1 // or whatever cost formula you want
@@ -284,7 +316,7 @@ const Debugger : OS = {//lance //bug //screwdriver
     money: 50,
     memory: 10,
     adminSlots: 6,
-    blueprints: [bug, aegis, knife, screwdriver],
+    blueprints: [bug, aegis, worm, superKnife, screwdriver],
     items: [new Genie, new Box, new Pinata, new Gift ],
     admins: [],
     lives: 9,

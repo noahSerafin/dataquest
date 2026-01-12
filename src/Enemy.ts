@@ -12,7 +12,8 @@ function decideEnemyIntent(
   activePieces: Piece[],
   playerPieces: Piece[],
   enemyPieces: Piece[],
-  tileSet: Set<string>
+  tileSet: Set<string>,
+  specialAttempts: number
 ): EnemyIntent {
   //first look for a player to attack or use special on
   const target = findWeakestPlayerInRange(enemy, playerPieces);//returning null even when there is a piece??!!!
@@ -38,10 +39,10 @@ function decideEnemyIntent(
         }
         if (newTarget)  return { type: 'special', target: {line: getTilesInLine(enemy, newTarget.place), activePieces: activePieces} }
       }
-      if(enemy.targetType == 'pieceAndPlace' && target.piece.headPosition !== target.place){
+      if(enemy.targetType == 'pieceAndPlace' && target.piece.headPosition !== target.place && specialAttempts < 1){//rectify attempts later
         return { type: 'special', target: {piece: target.piece, target: target.place}}
       }
-      if(enemy.targetType === 'piece'){ ///can execute a special
+      if(enemy.targetType === 'piece' && specialAttempts < 1){ ///can execute a special
         return { type: 'special', target: target.piece };
       }
       if(enemy.targetType === 'group'){//bomb type pieces
@@ -122,6 +123,7 @@ async function executeEnemyIntent(
         helpers.highlightTargets(enemy);
       }
       await sleep(helpers.delay);
+      //count specialuses for loops
       await enemy.special(intent.target);
       //helpers.onReceiveDamage(intent.target.id);
       helpers.clearHighlights();
@@ -194,8 +196,12 @@ export async function runEnemyStateMachine(
     delay
   }
   for (const enemy of enemyPieces) {
+    let specialAttempts = 0;
     while (enemy.movesRemaining > 0 || enemy.actions > 0) {
-      const intent = decideEnemyIntent(enemy, activePieces, playerPieces, enemyPieces, tileSet);
+      const intent = decideEnemyIntent(enemy, activePieces, playerPieces, enemyPieces, tileSet, specialAttempts);
+      if(intent.type === 'special'){
+        specialAttempts += 1;
+      }
       await executeEnemyIntent(enemy, activePieces, intent, helpers);
       await sleep(helpers.delay);
       if (intent.type === 'wait') break;

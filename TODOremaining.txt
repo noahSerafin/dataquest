@@ -1,8 +1,7 @@
 GAME
 Defense - lose on damage (and reset every turn???) - would make ai easier
-make more levels, smaller levels (max size 9)
 test interest is working properly 
-hide hidden enemies - test
+reveal hidden enemies before damage
 
 AI 6 nearly-done
 non-friendly specials not targeting players with high defence
@@ -12,15 +11,12 @@ handle friendlySpecials 7
     !attackingSpecial use on friendly??? or friendlySpecial bool
 
 BOSSES 7
-EDIT SPAWN FUNCTION FOR MIRROR
 test damage all bosses
 fog
 redacted
 
 BUGS 6
 Spanner not working
-retry button broken 5
-chivalry adding every turn, will puzzle do the same? 5
 web/ink not disappearing - inconclusive
 -visual: 5
 -visualise traps - have credit pickups? disguise the cheese as one
@@ -40,8 +36,8 @@ Altar nodes - sacrifice a program for more money than selling - 8
 
 PIECES
 Fairy - graveyard interaction 8
-keep track of upgrades and display on piece, and move/attack/spceial btn that cycles 7
-variants?
+keep track of upgrades and display on piece 7
+variants? Giant, Speedy, Longshot, Savage, Stalwart
 
 ADMINS - Onion Icon - Petri - spread statuses -test, crystal - test, chemistry - test 22 off 100
 money admins on interest - test, implement into ROUND SUMMARY, maybe store earned money in a temp variable, add it in the summary with awaits? 7

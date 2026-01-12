@@ -305,7 +305,6 @@ function getReachableTiles(
 }
 
 const highlightMoves = (piece: InstanceType<typeof Piece>) => {
-  console.log('moves:')
   clearHighlights();
   moveHighlights.value = getReachableTiles(piece, tileSet.value, pieceMap.value)//actually get in range and not blocked or occupied
   moveButtons.value = getAvailableMoves(piece, tileSet.value, pieceMap.value);
@@ -387,7 +386,6 @@ function getTilesInStraightLine(
 //(damageReceiver: InstanceType<typeof Piece>) => {
 
 const highlightTargets = (piece: InstanceType<typeof Piece>) => {
-  console.log('targets')
   clearHighlights();
   if(piece.actions <= 0) return;
   inRangeHighlights.value = getTilesInRange(
@@ -397,7 +395,7 @@ const highlightTargets = (piece: InstanceType<typeof Piece>) => {
   ); 
 }
 const highlightSpecials = (piece: InstanceType<typeof Piece>) => {
-  console.log('specialtargets', piece.name)
+  //console.log('specialtargets', piece.name)
   clearHighlights();
   if(piece.actions <= 0) return;
   if(piece.targetType === 'line'){

@@ -49,6 +49,9 @@
     ]
 
     const levelPool = computed(() => {
+        if(props.player.difficulty > 6){
+            return [...level1Levels, ...level2Levels, ...level3Levels, ...level4Levels, ...level5Levels, ...level6Levels]
+        }
         const tierIndex = Math.min(
             props.player.difficulty -1
         );
@@ -355,6 +358,7 @@
       <h6 v-if="selectedPreviewNode.type==='hybrid compiler'">Combine two programs stats into one (rounded up). Keep the primary's special move.</h6>
       <h6 v-if="selectedPreviewNode.type==='skip'">(Must have room)</h6>
       <h4 v-if="selectedPreviewNode.type==='boss' || selectedPreviewNode.type==='level'">{{ selectedPreviewNode.company.name}}</h4>
+      <h5 v-if="selectedPreviewNode.type==='boss' || selectedPreviewNode.type==='level'">Security Level: {{ player.difficulty + selectedPreviewNode.difficultyMod}}</h5>
       <h6 v-if="selectedPreviewNode.type==='boss' || selectedPreviewNode.type==='level'">Reward: ${{ selectedPreviewNode.reward }}</h6>
       <MiniMap v-if="selectedPreviewNode && selectedPreviewNode.level"
         :level="selectedPreviewNode.level"

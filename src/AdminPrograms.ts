@@ -960,17 +960,13 @@ class Copier extends Admin {
     super(Copier.name, Copier.description, Copier.unicode, Copier.color, 9, 5, 'gameState', 'onPlacement')
   }
   //on placement, handle in App
-    async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[]}) {
-    //const idx = activePieces.findIndex(p => p.id === id);
+    async apply({ id, activePieces }: { id: string, activePieces: Piece[]}) {
+    const idx = activePieces.findIndex(p => p.id === id);
     const playerPieces : Piece[] = [];
     for (const p of activePieces){
       if(p.team==='player'){
         playerPieces.push(p)
       }
-    }
-
-    function removePiece(piece: Piece) {
-      activePieces = activePieces.filter(p => p.id !== piece.id);
     }
 
     if(playerPieces.length === 1 ){//&& player.isfirstTurn){
@@ -981,7 +977,7 @@ class Copier extends Admin {
         p.tiles.some(t => t.x === newHead.x && t.y === newHead.y)
       );
       if(!isOccupied){
-        const copy = new PieceClass(newHead, 'player', removePiece, crypto.randomUUID());
+        const copy = new PieceClass(newHead, 'player', activePieces[idx].removeCallback, crypto.randomUUID());
         activePieces.push(copy);
       }
     }
@@ -1294,7 +1290,7 @@ class Umbrella extends Admin {
   static unicode = "U+2614";
   static color = "#0e107eff";
   constructor() {
-    super(Umbrella.name, Umbrella.description, Umbrella.unicode, Umbrella.color, 5, 5, 'gameState', 'other')
+    super(Umbrella.name, Umbrella.description, Umbrella.unicode, Umbrella.color, 10, 5, 'gameState', 'other')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
@@ -1565,7 +1561,7 @@ class HedgeFund extends Admin {
 
 class PeaPod extends Admin {
   static name = "Pea Pod";
-  static description = "Inreases Admin slots by 2";
+  static description = "Inreases Admin slots by 3";
   static unicode = "U+1FADB";
   static color = "#55ff7aff";
   constructor() {
@@ -1603,7 +1599,7 @@ class Punching extends Admin {
   }
   async apply({ player }: { player: Player }) {
     player.difficulty += 1
-    player.bonusReward += 5;
+    player.bonusReward += 5; 
   }
   remove({ player }: { player: Player }) {
     player.difficulty -= 1
@@ -1611,7 +1607,7 @@ class Punching extends Admin {
   }
 }
 
-class Teddy extends Admin {
+class Teddy extends Admin {//handle in app
   static name = "Playtime";
   static description = "-1 security level";
   static unicode = "U+1F9F8";
@@ -1623,7 +1619,7 @@ class Teddy extends Admin {
     player.difficulty -= 1;
   }
   remove({ player }: { player: Player }) {
-    player.difficulty -= 1;
+    player.difficulty += 1;
   }
 }
 
@@ -1655,7 +1651,7 @@ class Cheese extends Admin {
   static name = "Chedda";
   static description = "+$1 at the end of a round";
   static unicode = "U+1F9C0";
-  static color = "#f3dc2fff";
+  static color = "#d39e58ff";
   constructor() {
     super(Cheese.name, Cheese.description, Cheese.unicode, Cheese.color, 3, 1, 'player', 'onRoundEnd')
   }
@@ -1687,7 +1683,7 @@ class DartBoard extends Admin {//test
   static unicode = "U+1F3AF";
   static color = "#d52020ff";
   constructor() {
-    super(DartBoard.name, DartBoard.description, DartBoard.unicode, DartBoard.color, 10, 4, 'gameState', 'onDealDamage')
+    super(DartBoard.name, DartBoard.description, DartBoard.unicode, DartBoard.color, 8, 4, 'gameState', 'onDealDamage')
   }
   //onDamage
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {

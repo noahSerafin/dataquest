@@ -16,7 +16,7 @@
   import type { Coordinate, PieceBlueprint, Level, OS } from "./types";
   import { runEnemyStateMachine } from "./Enemy";
   import WorldMap from "./components/WorldMap.vue";
-  import { pickWeightedRandom, pickWeightedRandomItem } from "./helperFunctions";
+  import { makeBlueprint, pickWeightedRandom, pickWeightedRandomItem } from "./helperFunctions";
   import Shop from "./components/Shop.vue";
   import BossView from "./components/BossView.vue";
   import RoundSummary from "./components/RoundSummary.vue";
@@ -127,6 +127,7 @@
     showMainMenu.value = false;
     showMap.value = true;
   }
+  const extraDifficulty=ref<number>(0)
 
   function openMainMenu(){
     showBoard.value = false;
@@ -308,26 +309,6 @@
     shopTarget.value=target;
   }
 
-  function makeBlueprint(PieceClass: any) {
-    const temp = new PieceClass({ x: -1, y: -1 }, "player");
-
-    return {
-      id: crypto.randomUUID(),
-      name: PieceClass.name,
-      description: PieceClass.description,
-      unicode: PieceClass.unicode,
-      maxSize: temp.maxSize,//get stat?
-      moves: temp.moves,
-      range: temp.range,
-      attack: temp.attack,
-      defence: temp.defence,
-      rarity: temp.rarity,
-      color: PieceClass.color,
-      isPlaced: false,
-      cost: temp.rarity*2-1                     
-    };
-  }
-
   const shopBlueprints = ref<PieceBlueprint[]>([]);
   const shopItems = ref<Item[]>([]);
   const rerollCost = ref(5);//to be reset after shop
@@ -347,6 +328,10 @@
       if(player.value.hasAdmin('Slots')){
         rerollCost.value-=2;
       }
+    } else { //boss/level has been defeated
+      rerollCost.value = 5;
+      prevFib.value = 0;
+      currentFib.value = 1
     }
 
     const classes = [
@@ -435,7 +420,7 @@
             await admin.apply({activePieces: activePieces.value, board: level.value.tiles})
           }
           if(admin.targetType === 'all'){
-            await admin.apply({activePieces: activePieces.value, board: level.value.tiles, player: player.value});//, graveyard: graveyard.value})
+            await admin.apply({id, activePieces: activePieces.value, removeCallback: removePiece, board: level.value.tiles, player: player.value });//, graveyard: graveyard.value})
           }
         }
       }
@@ -515,6 +500,7 @@
     level.value = newLevel;
     player.value.nextReward = lReward;
     const newPieces = rehydratePieces(newLevel.pieces);
+    extraDifficulty.value = difficultyMod;
     activePieces.value = processSpawnPoints(newPieces , difficultyMod);
     originalPieces.value = activePieces.value.map(p => p.clone());
     originalSpawns.value = [...playerSpawns.value];
@@ -621,7 +607,15 @@
         // Enemy spawn → replace with random enemy piece
         if (piece.team === 'enemy') {
           //difficulty from constants ramp
-          const { min, max } = DIFFICULTY_RARITY[player.value.difficulty + mod];
+          let trueDifficulty = 0;
+          if(player.value.difficulty + mod > 6){
+            trueDifficulty= 6; //remove later when endless mode is done
+          } else if (player.value.difficulty + mod < 1){
+            trueDifficulty = 1;
+          } else{
+           trueDifficulty = player.value.difficulty + mod;
+          }
+          const { min, max } = DIFFICULTY_RARITY[trueDifficulty];
 
           const validEnemies = allPieces.filter(EnemyClass => {
             //p.rarity >= min && p.rarity <= max //old method for spawnsize 1 only
@@ -783,6 +777,9 @@
     
     //applyStatModifications()
     handleApplyAdmins('onPlacement', PieceInstance.id)
+    if(player.value.hasAdmin('Copier')){
+
+    }
 
     const hasDove = player.value.hasAdmin('Dove');
     const hasPalette = player.value.hasAdmin('Palette');
@@ -1084,6 +1081,7 @@
       handleApplyAdmins('onRoundEnd', '');
       activePieces.value = [];//for needle
       openSummary(true);
+      extraDifficulty.value = 0;
       //move to btn inside round summary
     } else {
       hasWonRound.value = false;
@@ -1212,7 +1210,9 @@
   const worldSeed = ref(0);
   const increaseDifficulty = () => {
     player.value.difficulty += 1;
-    bossAdmins.value = [];
+    if(player.value.difficulty<6){//cumulate bosses in endless mode
+      bossAdmins.value = [];
+    }
     refreshShop(true);
     worldSeed.value++
   }
@@ -1295,7 +1295,7 @@
   </div>
   <div class="top-hud">
     <div class="enemy-info">
-      <p><strong>Security level: </strong>{{ player.difficulty }}</p>
+      <p><strong>Security level: </strong>{{ player.difficulty + extraDifficulty }}</p>
       <span>
         <BossView v-if="bossAdmins.length> 0" :admins="bossAdmins"/>
       </span>

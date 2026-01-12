@@ -518,7 +518,7 @@ class Bugle extends Item<Piece[]> {
     static name = "Bugle";
     static description = "all placed player programs gain +1 attack";
     static unicode = "U+1F4EF";
-    static color = "#ffb20dff";
+    static color = "#ff450dff";
     constructor(){
         super(Bugle.name, Bugle.description, Bugle.unicode, Bugle.color, 3, 3, 'gameState');
         //name desc utf || maxsize moves range atk def

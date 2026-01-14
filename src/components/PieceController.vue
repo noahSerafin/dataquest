@@ -292,7 +292,7 @@ p{
 #overlay-root.piece-controller{
   width: 100%;
 }
-@media (max-width: 380px) {
+@media (max-width: 440px) {
   .piece-controller, .inventory-controller{
     position: fixed;
     top: 85vh;

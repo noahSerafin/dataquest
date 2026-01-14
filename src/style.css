@@ -258,7 +258,7 @@ html, body, #app {
   color: #dd770a;;
 }
 
-@media (max-width: 380px) {
+@media (max-width: 440px) {
   .debug-controls{
     left: unset;
     right: 2%;

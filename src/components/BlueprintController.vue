@@ -235,7 +235,7 @@ p{
 .desc{
   border-bottom: none;
 }
-@media (max-width: 380px) {
+@media (max-width: 440px) {
   .piece-controller, .inventory-controller, .skipReward-controller{
     width: 80%;
     bottom: 30%;

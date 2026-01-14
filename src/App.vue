@@ -1512,7 +1512,7 @@
 .collapsed{
   top: 100%;
 }
-@media (max-width: 380px) {
+@media (max-width: 440px) {
   .enemy-info{
     display: block;
   }

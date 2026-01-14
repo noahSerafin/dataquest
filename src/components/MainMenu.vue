@@ -150,7 +150,7 @@
         justify-content: center;
         margin-bottom: 1rem;
     }
-    @media (max-width: 380px) {
+    @media (max-width: 440px) {
         .mm-heading, .mm-heading2{
             display: none;
         }

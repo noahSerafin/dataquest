@@ -789,7 +789,7 @@ class Snake extends Piece {//test
 
 class Copycat extends Piece {
   static name = "Copycat";
-  static description = "Can take on the traits of any program in range";
+  static description = "Can take on the stats of any program in range";
   static unicode = "U+1F63C";//"U+1F431";
   static color = "#fff643";
   static rarity = 5;
@@ -1450,35 +1450,17 @@ class Ink extends Piece {
 
 class Squid extends Piece {
   static name = "Squid";
-  static description = "A program that can creat ink decoy tiles that blinds enemies";
+  static description = "A program that can creat ink decoy tiles that blinds enemies, immune to being blinded itself";
   static unicode = "U+1F991";
   static color = "#08004dff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Squid.name, Squid.description, Squid.unicode, 5, 1, 1, 2, 1, Squid.color, headPosition, [headPosition], team, Squid.rarity, removeCallback, id)
+    this.immunities.blinded = true;
     this.specialName = 'Ink';
-    this.targetType = 'line'
+    this.targetType = 'line';
   }
-  //async special({piece, target} : {piece: Piece, target: Coordinate}):Promise<void>{ //for pieceAndPlace
-  //for space
-  /*async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
-    const targetPiece = activePieces.find(p => 
-      p.tiles.some(t => t.x === target.x && t.y === target.y)
-    )
-    if(targetPiece){
-      if(!targetPiece.immunities.blinded){
-        targetPiece.statuses.blinded = true;
-      }
-      if(targetPiece.statuses.blinded){
-        targetPiece.takeDamage(this.getStat('attack'));
-      }
-    }
 
-    const newInk = new Ink(target, this.team, this.removeCallback, crypto.randomUUID());
-    activePieces.push(newInk);
-
-    this.actions--
-  }*/
  async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
      for (const tile of line) {
       const occupier = activePieces.find(p =>
@@ -1497,13 +1479,12 @@ class Squid extends Piece {
         }
         break;
       }  
-      // Tile is *not* empty → cannot pull anything into it
-      
-
     }
     this.actions--
   }
 }
+
+//OCTOPUS, U+1F419 ink and hide itself
 
 class Snail extends Piece {
   static name = "Snail";
@@ -2558,25 +2539,31 @@ export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, G
 // HIGH-HEELED SHOE, U+1F460 small and slow but high attack
 //MILITARY AIRPLANE, U+1F6E6 line target airstike similar to charge
 //ANT, U+1F41C //high movement
-//LIZARD, U+1F98E - regenerate?
+//LIZARD, U+1F98E - Gecko, special move leave a tail piece in place of last tile
 //HIPPOPOTAMUS, U+1F99B
 //YO-YO, U+1FA80
 //BEAR FACE, U+1F43B
 //TIGER, U+1F405
+//DOG, U+1F415 , DOG FACE, U+1F436 sniff, expose group?
 //WOLF FACE, U+1F43A expose?
 //LION FACE, U+1F981
 //PLAYGROUND SLIDE, U+1F6DD like gate but with more range? line target??
 //JAPANESE GOBLIN, U+1F47A
 // KITE, U+1FA81
 //DANCER, U+1F483 //high movement no damage
+//SWAN, U+1F9A2
+//GOAT, U+1F410 charge line
+// ZEBRA FACE, U+1F993 fast donkey
+//GIRAFFE FACE, U+1F992 large fast donkey
 //FROG FACE, U+1F438 //range 3 low atk //hop ability?
-// TOP HAT, U+1F3A9 spawns a random piece/or rabbit?
-//ORANGUTAN, U+1F9A7
-//GORILLA, U+1F98D
+// TOP HAT, U+1F3A9 spawns a rabbit
+//RABBIT, U+1F407 high movement 1 atk 1 maxsize, special make more rabbits
+
+//ORANGUTAN, U+1F9A7 //Pummel, reduce defence to 0
+//GORILLA, U+1F98D //Pummel, reduce defence to 0
 //OIL DRUM, U+1F6E2
 //WATER DROPLET U+1F4A7
 
-//RABBIT, U+1F407 high movement 1 atk 1 maxsize
 //EXTRATERRESTRIAL ALIEN, U+1F47D
 
 //megaphone U+1F4E3

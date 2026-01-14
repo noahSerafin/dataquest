@@ -695,8 +695,8 @@ class Slots extends Admin {
 class Newspaper extends Admin {
   static name = "Millwall Brick";
   static description = "+1 damage for programs with 1 range on load";
-  static unicode = "U+1F5DE";
-  static color = "#5c5c5cff";
+  static unicode = "U+1F4F0";//"U+1F5DE";
+  static color = "#eb1919ff";
   constructor() {
     super(Newspaper.name, Newspaper.description, Newspaper.unicode, Newspaper.color, 1, 2, 'gameState', 'onPlacement')
   }
@@ -1738,16 +1738,20 @@ export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, 
 
 //llungs, trainers are the same
 
+//SPIRAL SHELL, U+1F41A hermit shell +def -moves
+//OWL, U+1F989 Minerva /sacrifice pieces/+range?
+// PAW PRINTS, U+1F43E Tracker - reveal all hidden progrms at the start of a round
+// FOOTPRINTS, U+1F463 Tracker
 // RAINBOW, U+1F308 beat a boss, earn extra money
-
-//WHEEL, U+1F6DE
-//sell to reroll boss?
+//WHEEL, U+1F6DE reroll bosses?
+//TABLE TENNIS PADDLE AND BALL, U+1F3D3 //all pieces retaliate with their damage
 
 //disco ball U+1FAA9
 //ELECTRIC LIGHT BULB, U+1F4A1
 //KNOT, U+1FAA2
 //TENT, U+26FA
 //FERRIS WHEEL, U+1F3A1
+//
 
 //SYMBOL FOR SALT OF ANTIMONY, U+1F72D sceptre
 //LINK SYMBOL, U+1F517

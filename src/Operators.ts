@@ -1,5 +1,5 @@
 import type { OS } from "./types";
-import { Voucher, Whetstone, Iron, Garlic, Lightning, RedMeat, Genie, Box, Gift, Pinata } from "./Items";
+import { Voucher, Whetstone, Iron, Garlic, Lightning, RedMeat, Genie, Box, Gift, Pinata, Pandora, Update2, Update3, Floppy } from "./Items";
 
 /*
 export function findPieceClassByName(name: string) {
@@ -300,24 +300,24 @@ const Apple : OS = {//TP //rat
 const Temple : OS = {//lance //bug //screwdriver
     name: 'Temple',
     unicode: 'U+2696',
-    money: 2,
-    memory: 4,
+    money: 1,
+    memory: 6,
     adminSlots: 6,
     blueprints: [bug, aegis, screwdriver],
-    items: [new Iron],
+    items: [new Pandora],
     admins: [],
     lives: 2,
-    description: 'Overclocked admin slots, low money. Some unique starting programs.'
+    description: "Overclocked memory and admin slots, low money. Some unique starting programs, and a pandora's Box."
 }
 
 const Debugger : OS = {//lance //bug //screwdriver
     name: 'Debugger',
-    unicode: 'U+1F47E',
+    unicode: 'U+1F41B',
     money: 50,
     memory: 10,
     adminSlots: 6,
-    blueprints: [bug, aegis, testPiece, superKnife, screwdriver],
-    items: [new Genie, new Box, new Pinata, new Gift ],
+    blueprints: [bug, aegis, superKnife, screwdriver],
+    items: [new Genie, new Box, new Pinata, new Gift, new Pandora, new Update2, new Update3, new Floppy ],
     admins: [],
     lives: 9,
     description: 'FOR TESTING'
@@ -336,4 +336,4 @@ const Debugger : OS = {//lance //bug //screwdriver
 
 //GREEK CAPITAL LETTER DELTA, U+394
 
-export const allOSes = [Steam, Penguin, Window, Apple, Temple, Debugger ];
+export const allOSes = [Steam, Penguin, Window, Apple, Temple, Debugger];

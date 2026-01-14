@@ -67,6 +67,10 @@ export class Player {
     return itemUsage + bpUsage;
   }
 
+  get freeMemory(): number {
+    return Math.max(0, this.memory - this.usedMemory);
+  }
+
   /** Returns whether player can hold more items/programs */
   get hasMemorySpace(): boolean {
     return this.usedMemory < this.memory;

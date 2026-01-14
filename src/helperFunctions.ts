@@ -1,7 +1,8 @@
 import type { Coordinate, PieceBlueprint, PieceVariant, StatKey } from "./types";
-import type { Piece } from "./Pieces";
+import { allPieces, type Piece } from "./Pieces";
 import type { Player } from "./Player";
 import { STAT_MIN, PIECE_VARIANTS } from "./constants";
+import { upgradeItems } from "./Items";
 
 function coordKey(c: Coordinate): string {
   return `${c.x},${c.y}`;
@@ -137,3 +138,39 @@ export function pickWeightedRandomItem(itemClasses: any[], player: Player) {//mo
 
     return new PickedClass();  // RETURN INSTANCE
   }
+
+export function addProgramsUntilFull(//not working, "PieceClass is not a constructor"
+  player: Player,
+  maxAttempts = 3
+) {
+  let attempts = 0;
+  let freeMemory = player.memory - player.usedMemory
+
+  while ((freeMemory >=1 || player.hasToolbox && freeMemory >= 0.5) && attempts < maxAttempts) {
+    const bp = makeBlueprint(pickWeightedRandom(allPieces, player))
+
+    // If addProgram returns false when full, even better
+    const added = player.addProgram(bp);
+    if (!added) break;
+
+    attempts++;
+  }
+}
+
+export function addItemsUntilFull(
+  player: Player,
+  maxAttempts = 3
+) {
+  let attempts = 0;
+  let freeMemory = player.memory - player.usedMemory
+
+  while ((freeMemory >=1 || player.hasTrolley && freeMemory >= 0.5)&& attempts < maxAttempts) {
+    const item = pickWeightedRandomItem(upgradeItems, player);
+
+    // If addProgram returns false when full, even better
+    const added = player.addItem(item);
+    if (!added) break;
+
+    attempts++;
+  }
+}

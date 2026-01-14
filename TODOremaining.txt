@@ -2,25 +2,24 @@ GAME
 Defense - lose on damage (and reset every turn???) - would make ai easier 4
 test interest is working properly 
 reveal hidden enemies before damage
+sort out graveyard 8
 
 AI 6 nearly-done
-non-friendly specials not targeting players with high defence
-handle friendlySpecials 7
 -confused todo on enemy 9
     maybe ignore statuses if already has a status??? or dont consume an action??
     !attackingSpecial use on friendly??? or friendlySpecial bool
 
 BOSSES 7
 test damage all bosses
+hide sell button on bosses, move description down
 fog - edit board (fog layer)
 redacted - edit piece view
 
 BUGS 6
-hide sell button on bosses, move description down
 Spanner not working
-web/ink not disappearing - inconclusive
-Offroader allowing redos, add done tag to nodes
+Offroader allowing redos, add done tag to nodes 5
 -visual: 5
+and class to acting admins
 -visualise traps - have credit pickups? disguise the cheese as one
 -skipNode controller
 inventory needs 5 columns at least...
@@ -28,6 +27,7 @@ color code stats, and status
 status tooltips
 
 ITEMS - clean up player items, add activePieces/gameState items 7
+item to duplicate an admin
 
 SAVE GAME STATE for bugs 7.5
 -more tiles on starting programs in levels three and up 5
@@ -44,19 +44,20 @@ add backup damage to specials that apply status for AI 4
 ADMINS - Onion Icon - Petri - spread statuses -test, crystal - test, chemistry - test 22 off 100
 money admins on interest - test, implement into ROUND SUMMARY, maybe store earned money in a temp variable, add it in the summary with awaits? 7
 
-companies 8 - own list of programs;
+companies 8 - own list of programs/variants;
 
 SHOP - 8
 - two piece/item slots
 piece packs/item packs?
-vouchers?
 
-PLAYER 8
+PLAYER
 rarity = value ?+=no. of upgrades used on a piece? 6 but test
 
 COOKIES - game progress permanence 9
 COLLECTION 9
 
-CLEANUP
+CLEANUP 8
+sort out player inv items - genie + gift: Piececlass is not a constructor - don't use any type
+move pandora + box to own apply funcs
 move refresh shop to shop
 move random items to items

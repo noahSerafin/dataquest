@@ -4,7 +4,7 @@
   import Leveleditor from './components/Leveleditor.vue';
   import { castled, level1Levels } from './level1Levels';
   import { Player } from "./Player";
-  import { Item, Voucher, allItems} from "./Items";
+  import { Item, Voucher, allItems, upgradeItems} from "./Items";
   import type { ItemConstructor } from "./Items";
   import { allAdmins } from "./AdminPrograms";
   import { Admin } from "./AdminPrograms";
@@ -16,7 +16,7 @@
   import type { Coordinate, PieceBlueprint, Level, OS } from "./types";
   import { runEnemyStateMachine } from "./Enemy";
   import WorldMap from "./components/WorldMap.vue";
-  import { applyVariant, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, rollVariant } from "./helperFunctions";
+  import { addItemsUntilFull, addProgramsUntilFull, applyVariant, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, rollVariant } from "./helperFunctions";
   import Shop from "./components/Shop.vue";
   import BossView from "./components/BossView.vue";
   import RoundSummary from "./components/RoundSummary.vue";
@@ -204,7 +204,14 @@
         player.value.programs.push(makeBlueprint(newProgram.class, newProgram.variant ?? undefined ));
         player.value.removeItem(item);
       }
-      if(item.name === 'Genie' && player.value.usedMemory <= player.value.memory -2){
+      if(item.name === 'Genie' && (player.value.freeMemory >= 2 || player.value.hasToolbox && player.value.freeMemory >= 0.5)){//check for toolbox
+        //addProgramsUntilFull(player.value, 3)
+        /*let attempts = 0
+        while ((player.value.freeMemory >=1 || player.value.hasToolbox && player.value.freeMemory >= 0.5) && attempts < 2) {
+          const PieceClass = pickWeightedRandom(allPieces, player.value)
+          const bp = makeBlueprint(PieceClass);
+          player.value.addProgram(bp);
+        }*/
         const classes = [
           pickWeightedRandom(allPieces, player.value),
           pickWeightedRandom(allPieces, player.value),
@@ -218,12 +225,16 @@
         player.value.items.push(pickWeightedRandomItem(allItems, player.value))
         player.value.removeItem(item)
       }
+      if(item.name === 'Pandora' && player.value.usedMemory <= player.value.memory -2){//check for trolley/schoolbag
+        addItemsUntilFull(player.value, 3);
+        player.value.removeItem(item)
+      }
       if(item.name === 'Pinata' && hasRoom){
         player.value.admins.push(pickWeightedRandomItem(allAdmins, player.value))
         player.value.removeItem(item)
       }
       if(!(item.name === 'Gift Box' || item.name === 'Genie' || item.name === 'Mystery Box' || item.name === 'Pinata')) {
-        item.apply(player, itemMult)
+        item.apply(player.value, itemMult)
         player.value.removeItem(item)
       }
     }

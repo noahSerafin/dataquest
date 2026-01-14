@@ -41,14 +41,14 @@ export function blueprintFromPieceClass(piece: typeof Piece): PieceBlueprint {
         isPlaced: false,
         cost: 1 // or whatever cost formula you want
     }
-    const worm =  {
+    const testPiece =  {
         id: crypto.randomUUID(),
-        name: "Dataworm",
-        description: '"A large program that can tunnel through adjacent programs, removing a piece of memory regardless of defence (head excluded)"',
+        name: "Squid",
+        description: '"A squid to test ink function"',
         unicode: 'U+1FAB1',
-        maxSize: 6,
+        maxSize: 5,
         moves: 3,
-        range: 1,
+        range: 2,
         attack: 2,
         defence: 0,
         rarity: 5,
@@ -316,7 +316,7 @@ const Debugger : OS = {//lance //bug //screwdriver
     money: 50,
     memory: 10,
     adminSlots: 6,
-    blueprints: [bug, aegis, worm, superKnife, screwdriver],
+    blueprints: [bug, aegis, testPiece, superKnife, screwdriver],
     items: [new Genie, new Box, new Pinata, new Gift ],
     admins: [],
     lives: 9,

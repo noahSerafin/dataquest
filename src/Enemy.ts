@@ -51,7 +51,7 @@ function decideEnemyIntent(
     }
     console.log('no special moves');
     //if target is not attackable, is there one that is?
-    if(target.piece.getStat('defence') < enemy.getStat('attack') && enemy.canAttack){//no special to use, can we attack?
+    if(enemy.canAttack){//no special to use, can we attack? //&&target.piece.getStat('defence') < enemy.getStat('attack')
       console.log('attacking target');
       return {type: 'attack', target: target.piece}
     }

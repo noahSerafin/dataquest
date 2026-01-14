@@ -46,3 +46,4 @@ In endless mode, new bosses persist into following rounds, and enemy variants be
 //special moves will not trigger a retaliation from other pieces, even damaging ones.
 //line type target programs can effect the same program more than once if the multiple tiles occupy the line.
 //admin programs trigger left to right, so make sure you drag them into the optimum position.
+//damage mult on attacking means just that, damage mult will not apply to special moves

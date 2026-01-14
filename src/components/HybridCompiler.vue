@@ -175,7 +175,8 @@
 
 <template>
   <div class="container hybrid-compiler">
-
+    <h1>HYBRID COMPILER</h1>
+    <p>Choose 2 programs to combine into 1 with the average of each stats (rounded up), keep the primary program's special move.</p>
     <!-- Slots -->
     <div class="slots">
         <div class="slot-container">

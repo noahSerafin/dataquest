@@ -927,9 +927,9 @@
 
   const damagePieceAt = async (coord:Coordinate) => {
     if (!selectedPiece.value) return
+    if((selectedPiece.value.team === 'enemy' && !selectedPiece.value.statuses.charmed)) return; //don't wan't control of enemies pieces
     if (selectedPiece.value.actions <= 0) return
     selectedPiece.value.actions --//prevent double clicking
-    //if((selectedPiece.value.team === 'enemy' || (selectedPiece.value.team === 'player' && selectedPiece.value.statuses.charmed))) return;
     player.value.canPlace = false;
     //if (selectedPiece.value.team !== 'player') return //damaging your own pieces is actually useful sometimes
     const damageReceiver = activePieces.value.find(piece =>

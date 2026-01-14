@@ -12,12 +12,14 @@ handle friendlySpecials 7
 
 BOSSES 7
 test damage all bosses
-fog
-redacted
+fog - edit board (fog layer)
+redacted - edit piece view
 
 BUGS 6
+hide sell button on bosses, move description down
 Spanner not working
 web/ink not disappearing - inconclusive
+Offroader allowing redos, add done tag to nodes
 -visual: 5
 -visualise traps - have credit pickups? disguise the cheese as one
 -skipNode controller

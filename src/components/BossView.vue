@@ -30,7 +30,7 @@
                 <ItemView 
                     :item="item"
                     type="admin"
-                    cssclass="inventory"
+                    cssclass="boss"
                     :tileSize="60"
                     :canBuy="false"
                     :showController="(selectedItem === item)"

@@ -1457,10 +1457,11 @@ class Squid extends Piece {
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Squid.name, Squid.description, Squid.unicode, 5, 1, 1, 2, 1, Squid.color, headPosition, [headPosition], team, Squid.rarity, removeCallback, id)
     this.specialName = 'Ink';
-    this.targetType = 'pieceAndPlace'
+    this.targetType = 'line'
   }
-  
-  async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
+  //async special({piece, target} : {piece: Piece, target: Coordinate}):Promise<void>{ //for pieceAndPlace
+  //for space
+  /*async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
     const targetPiece = activePieces.find(p => 
       p.tiles.some(t => t.x === target.x && t.y === target.y)
     )
@@ -1476,6 +1477,30 @@ class Squid extends Piece {
     const newInk = new Ink(target, this.team, this.removeCallback, crypto.randomUUID());
     activePieces.push(newInk);
 
+    this.actions--
+  }*/
+ async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
+     for (const tile of line) {
+      const occupier = activePieces.find(p =>
+        p.tiles.some(t => t.x === tile.x && t.y === tile.y)
+      );
+      if(!occupier) {
+        const newInk = new Ink(tile, this.team, this.removeCallback, crypto.randomUUID());
+        activePieces.push(newInk);
+        continue;
+      }else{
+        if(!occupier.immunities.blinded){
+          occupier.statuses.blinded = true;
+        }
+        if(occupier.statuses.blinded){
+          occupier.takeDamage(this.getStat('attack'));
+        }
+        break;
+      }  
+      // Tile is *not* empty → cannot pull anything into it
+      
+
+    }
     this.actions--
   }
 }

@@ -59,10 +59,10 @@ function showRarity(rarity: number) {
       return { text: "Common", color: "lightgreen" };
 
     case 2:
-      return { text: "Uncommon", color: "orangered" };
+      return { text: "Uncommon", color: "orange" };
 
     case 3:
-      return { text: "Rare", color: "red" };
+      return { text: "Rare", color: "orangered" };
 
     case 4:
       return { text: "Very Rare", color: "#9052f3ff" };
@@ -94,7 +94,7 @@ defineEmits(["buy", "sell", "highlightPlacements", "close"])
         <span class="symbol">
           {{ String.fromCodePoint(parseInt(piece.unicode.replace("U+", ""), 16)) }}
         </span>
-        <span v-if="piece.variantName" class="variant">{{ piece.variantName }}</span>
+        <span v-if="piece.variantName" class="variant">"{{ piece.variantName }}"</span>
         <span class="name">{{ piece.hybridName ? piece.hybridName : piece.name }}</span>
         <button class="close" @click="$emit('close', piece)">X</button>
       </div>

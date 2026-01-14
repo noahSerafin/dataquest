@@ -235,7 +235,7 @@ function findNearestAttackableCoordinate(
   playerPieces: Piece[]
 ): Coordinate | null {
   // Filter out pieces that the enemy can't damage
-  const attackable = playerPieces.filter(p => enemy.attack > p.defence && !p.statuses.hidden);
+  const attackable = playerPieces.filter(p => !p.statuses.hidden);//&& enemy.attack > p.defence 
   if (attackable.length === 0) return null;
 
   let minDist = Infinity;

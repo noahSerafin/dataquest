@@ -767,6 +767,9 @@
         //piece.unicode = bp.unicode //should already be the case
         piece.extraUnicode = bp.extraUnicode
       }
+      if(bp.variantName){
+        piece.variantName = bp.variantName;
+      }
 
     return piece//modified piece with new stats
   }
@@ -794,9 +797,7 @@
     
     //applyStatModifications()
     await handleApplyAdmins('onPlacement', PieceInstance.id)
-    if(player.value.hasAdmin('Copier')){
-
-    }
+    //if(player.value.hasAdmin('Copier')){}
 
     const hasDove = player.value.hasAdmin('Dove');
     const hasPalette = player.value.hasAdmin('Palette');
@@ -928,14 +929,15 @@
     if (!selectedPiece.value) return
     if (selectedPiece.value.actions <= 0) return
     selectedPiece.value.actions --//prevent double clicking
-    if((selectedPiece.value.team === 'enemy' && !selectedPiece.value.statuses.charmed) || (selectedPiece.value.team === 'player' && selectedPiece.value.statuses.charmed)) return
+    //if((selectedPiece.value.team === 'enemy' || (selectedPiece.value.team === 'player' && selectedPiece.value.statuses.charmed))) return;
     player.value.canPlace = false;
     //if (selectedPiece.value.team !== 'player') return //damaging your own pieces is actually useful sometimes
     const damageReceiver = activePieces.value.find(piece =>
       piece.tiles.some(t => t.x === coord.x && t.y === coord.y)
     );
+    if(!damageReceiver) return;
     //console.log('receiver: ', damageReceiver?.name)
-    if (!damageReceiver || (damageReceiver.team === selectedPiece.value.team && !selectedPiece.value.statuses.charmed)) return;
+    //if (!damageReceiver || (damageReceiver.team === selectedPiece.value.team && !selectedPiece.value.statuses.charmed)) return;
     //console.log("Damage call:", coord, damage)
     const baseDamage = selectedPiece.value.getStat('attack');
     await handleApplyAdmins('onDealDamage', selectedPiece.value.id)//attacker's id, (bug: blood tax will trigger even on no damage)

@@ -351,7 +351,7 @@ class Aegis extends Piece {
   static color = "#06789bff";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Aegis.name, Aegis.description, Aegis.unicode, 3, 2, 0, 1, 1, Aegis.color, headPosition, [headPosition], team, Aegis.rarity, removeCallback, id)
+   super(Aegis.name, Aegis.description, Aegis.unicode, 3, 2, 0, 1, 2, Aegis.color, headPosition, [headPosition], team, Aegis.rarity, removeCallback, id)
     this.specialName = 'Parry';
     this.targetType = 'self'
   }
@@ -402,7 +402,7 @@ class Gate extends Piece {
   static color = "#ff9900ff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Gate.name, Gate.description, Gate.unicode, 1, 1, 1, 0, 2, Gate.color, headPosition, [headPosition], team, Gate.rarity, removeCallback, id)
+   super(Gate.name, Gate.description, Gate.unicode, 1, 1, 1, 0, 3, Gate.color, headPosition, [headPosition], team, Gate.rarity, removeCallback, id)
    this.targetType = 'space';//line?? how does this work with larger ranges than 1?
    this.specialName = 'Chaperone'
   }
@@ -444,12 +444,12 @@ class Gate extends Piece {
 
 class Fence extends Piece {
   static name = "Fence";
-  static description = "A large program for consuming spaces";
+  static description = "A large defensive program";
   static unicode = "U+1F6A7";
   static color = "#ffd000ff";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Fence.name, Fence.description, Fence.unicode, 8, 1, 0, 0, 1, Fence.color, headPosition, [headPosition], team, Fence.rarity, removeCallback, id)
+    super(Fence.name, Fence.description, Fence.unicode, 8, 1, 0, 0, 2, Fence.color, headPosition, [headPosition], team, Fence.rarity, removeCallback, id)
   }
 }
 
@@ -1011,6 +1011,7 @@ class Watchman extends Piece {
     for (const target of targets) {
       if(target.team !== this.team){
         if(!target.immunities.exposed){
+          target.statuses.hidden = false;
           target.statuses.exposed = true;
         }
         if(target.getStat('defence') > 0){
@@ -1247,7 +1248,7 @@ class Mammoth extends Piece {
   static color = "#77736bff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Mammoth.name, Mammoth.description, Mammoth.unicode, 6, 2, 1, 3, 2, Mammoth.color, headPosition, [headPosition], team, Mammoth.rarity, removeCallback, id)
+   super(Mammoth.name, Mammoth.description, Mammoth.unicode, 6, 2, 1, 3, 3, Mammoth.color, headPosition, [headPosition], team, Mammoth.rarity, removeCallback, id)
   }
 }
 
@@ -1279,7 +1280,7 @@ class Soldier extends Piece {
   static color = "#1a5200ff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Soldier.name, Soldier.description, Soldier.unicode, 3, 2, 2, 2, 1, Soldier.color, headPosition, [headPosition], team, Soldier.rarity, removeCallback, id)
+   super(Soldier.name, Soldier.description, Soldier.unicode, 3, 2, 2, 2, 3, Soldier.color, headPosition, [headPosition], team, Soldier.rarity, removeCallback, id)
   }
 }
 
@@ -1554,7 +1555,7 @@ class Wizard extends Piece {
   static color = "#7600c5ff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Wizard.name, Wizard.description, Wizard.unicode, 3, 2, 3, 2, 0, Wizard.color, headPosition, [headPosition], team, Wizard.rarity, removeCallback, id)
+    super(Wizard.name, Wizard.description, Wizard.unicode, 3, 2, 3, 2, 1, Wizard.color, headPosition, [headPosition], team, Wizard.rarity, removeCallback, id)
     this.specialName='Teleport'
     this.targetType='space'
   }
@@ -1659,7 +1660,7 @@ class Cockroach extends Piece {
   static color = "#e09f79ff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Cockroach.name, Cockroach.description, Cockroach.unicode, 1, 5, 1, 2, 2, Cockroach.color, headPosition, [headPosition], team, Cockroach.rarity, removeCallback, id)
+   super(Cockroach.name, Cockroach.description, Cockroach.unicode, 1, 6, 1, 2, 2, Cockroach.color, headPosition, [headPosition], team, Cockroach.rarity, removeCallback, id)
   }
 }
 
@@ -1744,7 +1745,7 @@ class Golem extends Piece {
   static color = "#777777ff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Golem.name, Golem.description, Golem.unicode, 5, 1, 1, 3, 3, Golem.color, headPosition, [headPosition], team, Golem.rarity, removeCallback, id)
+   super(Golem.name, Golem.description, Golem.unicode, 5, 1, 1, 3, 4, Golem.color, headPosition, [headPosition], team, Golem.rarity, removeCallback, id)
   }
 }
 
@@ -1795,7 +1796,7 @@ class Troll extends Piece {
   static color = "#740000ff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Troll.name, Troll.description, Troll.unicode, 4, 1, 1, 3, 2, Troll.color, headPosition, [headPosition], team, Troll.rarity, removeCallback, id)
+   super(Troll.name, Troll.description, Troll.unicode, 4, 1, 1, 3, 3, Troll.color, headPosition, [headPosition], team, Troll.rarity, removeCallback, id)
   }
 }
 
@@ -1839,7 +1840,7 @@ class Beetle extends Piece {
   static color = "#059411ff";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Beetle.name, Beetle.description, Beetle.unicode, 4, 2, 1, 1, 1, Beetle.color, headPosition, [headPosition], team, Beetle.rarity, removeCallback, id)
+   super(Beetle.name, Beetle.description, Beetle.unicode, 4, 2, 1, 1, 2, Beetle.color, headPosition, [headPosition], team, Beetle.rarity, removeCallback, id)
   }
 }
 
@@ -1850,7 +1851,7 @@ class LadyBeetle extends Piece {
   static color = "#059411ff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(LadyBeetle.name, LadyBeetle.description, LadyBeetle.unicode, 4, 3, 1, 2, 2, LadyBeetle.color, headPosition, [headPosition], team, LadyBeetle.rarity, removeCallback, id)
+   super(LadyBeetle.name, LadyBeetle.description, LadyBeetle.unicode, 4, 3, 1, 2, 3, LadyBeetle.color, headPosition, [headPosition], team, LadyBeetle.rarity, removeCallback, id)
   }
 }
 //name desc unicode || maxsize moves range atk def
@@ -1917,7 +1918,7 @@ class Decoy extends Piece {
   static description = "A defensive program that can swap head positions with other programs";
   static unicode = "U+1FAB5";
   static color = "#96ff0dff";
-  static rarity = 3;
+  static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Decoy.name, Decoy.description, Decoy.unicode, 1, 3, 3, 0, 2, Decoy.color, headPosition, [headPosition], team, Decoy.rarity, removeCallback, id)
     this.specialName='Substitute'
@@ -2098,14 +2099,14 @@ class Angel extends Piece {//not passive, same as fairy, remove?? unfinished
   //access graveyard
 }*/
 
-export class Stopwatch extends Piece {//not passive
+class Stopwatch extends Piece {//not passive
   static name = "Stopwatch";
   static description = "Can replenish another program's moves and actions";
   static unicode = "U+23F1";
   static color = "#ff5555";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Stopwatch.name, Stopwatch.description, Stopwatch.unicode, 4, 0, 1, 0, 0, Stopwatch.color, headPosition, [headPosition], team, Stopwatch.rarity, removeCallback, id)
+    super(Stopwatch.name, Stopwatch.description, Stopwatch.unicode, 4, 2, 1, 0, 0, Stopwatch.color, headPosition, [headPosition], team, Stopwatch.rarity, removeCallback, id)
     this.targetType = 'piece'
     this.specialName = 'Time Out'
     this.hasFriendlySpecial = true;
@@ -2117,7 +2118,7 @@ export class Stopwatch extends Piece {//not passive
   }
 }
 
-export class Sol extends Piece {//not passive
+class Sol extends Piece {//not passive
   static name = "Sol";
   static description = "extreme range and damage";
   static unicode = "U+1F6F0";
@@ -2186,7 +2187,7 @@ class Helicopter extends Piece {//unfinished, handle in app
   static color = "#0d9effff";
   static rarity = 6;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Helicopter.name, Helicopter.description, Helicopter.unicode, 2, 2, 2, 4, 2, Helicopter.color, headPosition, [headPosition], team, Helicopter.rarity, removeCallback, id)
+   super(Helicopter.name, Helicopter.description, Helicopter.unicode, 2, 2, 4, 5, 2, Helicopter.color, headPosition, [headPosition], team, Helicopter.rarity, removeCallback, id)
   }
 }
 
@@ -2197,7 +2198,7 @@ export class Dolls extends Piece {//finished? test, will have to be handled in a
   static color = "#ff5a0dff";
   static rarity = 6;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Dolls.name, Dolls.description, Dolls.unicode, 3, 0, 1, 0, 0, Dolls.color, headPosition, [headPosition], team, Dolls.rarity, removeCallback, id)
+   super(Dolls.name, Dolls.description, Dolls.unicode, 3, 0, 1, 3, 0, Dolls.color, headPosition, [headPosition], team, Dolls.rarity, removeCallback, id)
   }
 }
 
@@ -2321,6 +2322,7 @@ class Lighthouse extends Piece {
           t.statuses.blinded = true;
         }
         if(!t.immunities.exposed){
+          t.statuses.hidden = false;
           t.statuses.exposed = true;
         }
       }
@@ -2359,6 +2361,7 @@ class Torch extends Piece {//remove from enemies for now
     for (const t of targets) {
       if(t.team !== this.team){
         if(!t.immunities.exposed){
+          t.statuses.hidden = false;
           t.statuses.exposed = true;
         }
       }
@@ -2441,7 +2444,7 @@ class Shrike extends Piece {
   static color = "#bebebeff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Shrike.name, Shrike.description, Shrike.unicode, 2, 5, 1, 1, 1, Shrike.color, headPosition, [headPosition], team, Shrike.rarity, removeCallback, id)
+   super(Shrike.name, Shrike.description, Shrike.unicode, 2, 5, 1, 1, 2, Shrike.color, headPosition, [headPosition], team, Shrike.rarity, removeCallback, id)
    this.targetType = 'piece'
    this.specialName = 'Pierce'
   }
@@ -2461,7 +2464,7 @@ class Eagle extends Piece {
   static color = "#0dbaffff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Eagle.name, Eagle.description, Eagle.unicode, 2, 6, 1, 3, 0, Eagle.color, headPosition, [headPosition], team, Eagle.rarity, removeCallback, id)
+   super(Eagle.name, Eagle.description, Eagle.unicode, 2, 6, 1, 3, 1, Eagle.color, headPosition, [headPosition], team, Eagle.rarity, removeCallback, id)
   }
 }
 
@@ -2472,7 +2475,7 @@ class Recurve extends Piece {
   static color = "#06640fff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Recurve.name, Recurve.description, Recurve.unicode, 3, 3, 4, 3, 0, Recurve.color, headPosition, [headPosition], team, Recurve.rarity, removeCallback, id)
+   super(Recurve.name, Recurve.description, Recurve.unicode, 3, 3, 4, 3, 1, Recurve.color, headPosition, [headPosition], team, Recurve.rarity, removeCallback, id)
   }
 }
 
@@ -2499,12 +2502,12 @@ class Daemon extends Piece {
 
 class Rex extends Piece {
   static name = "T-Rex";
-  static description = "A large program with high attack";
+  static description = "A tough, large program with high attack";
   static unicode = "U+1F996";
   static color = "#1e4419ff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Rex.name, Rex.description, Rex.unicode, 5, 2, 1, 5, 1, Rex.color, headPosition, [headPosition], team, Rex.rarity, removeCallback, id)
+   super(Rex.name, Rex.description, Rex.unicode, 5, 2, 1, 5, 3, Rex.color, headPosition, [headPosition], team, Rex.rarity, removeCallback, id)
   }
 }
 
@@ -2521,7 +2524,7 @@ class Hedgehog extends Piece {
 }
 
 //99 fairy
-export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Tar, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Ink, Snail, Shark, Greatshield, Wizard, Ninja, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, Dolls, UFO, TP, Saw, Croc, Lighthouse, Torch, Camera, Drum, Shrike, Eagle, Recurve, Daemon, Rex, Hedgehog];//100 +2 (web, ink)
+export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Tar, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Ink, Snail, Shark, Greatshield, Wizard, Ninja, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, Dolls, UFO, TP, Saw, Croc, Lighthouse, Torch, Camera, Drum, Shrike, Eagle, Recurve, Daemon, Rex, Hedgehog, Sol, Stopwatch];//100 +2 (web, ink)
 //console.log('pieces length: ', allPieces.length)
 
 //chess knight special move L shape

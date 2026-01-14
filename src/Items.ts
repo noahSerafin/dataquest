@@ -75,7 +75,7 @@ class Training extends Item<PieceBlueprint> {
     }
     apply(target: PieceBlueprint, itemMult: number) {
         console.log('target: ', target)
-        target.attack += (1* itemMult);
+        target.attack += (2* itemMult);
     }
 }
 

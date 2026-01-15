@@ -4,7 +4,7 @@
   import Leveleditor from './components/Leveleditor.vue';
   import { castled, level1Levels } from './level1Levels';
   import { Player } from "./Player";
-  import { Item, Voucher, allItems, upgradeItems} from "./Items";
+  import { Item, Voucher, allItems} from "./Items";
   import type { ItemConstructor } from "./Items";
   import { allAdmins } from "./AdminPrograms";
   import { Admin } from "./AdminPrograms";
@@ -16,7 +16,7 @@
   import type { Coordinate, PieceBlueprint, Level, OS } from "./types";
   import { runEnemyStateMachine } from "./Enemy";
   import WorldMap from "./components/WorldMap.vue";
-  import { addItemsUntilFull, addProgramsUntilFull, applyVariant, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, rollVariant } from "./helperFunctions";
+  import { addItemsUntilFull, applyVariant, findAnyPiecesInRange, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, rollVariant } from "./helperFunctions";
   import Shop from "./components/Shop.vue";
   import BossView from "./components/BossView.vue";
   import RoundSummary from "./components/RoundSummary.vue";
@@ -128,6 +128,12 @@
     showMap.value = true;
   }
   const extraDifficulty=ref<number>(0)
+  const mapProgress=ref<number>(0)
+
+  function incrementMapProgress(){
+    mapProgress.value++
+    //console.log('progress increased:', mapProgress.value)
+  }
 
   function openMainMenu(){
     showBoard.value = false;
@@ -226,8 +232,8 @@
         player.value.removeItem(item)
       }
       if(item.name === 'Pandora' && player.value.usedMemory <= player.value.memory -2){//check for trolley/schoolbag
-        addItemsUntilFull(player.value, 3);
         player.value.removeItem(item)
+        addItemsUntilFull(player.value, 3);
       }
       if(item.name === 'Pinata' && hasRoom){
         player.value.admins.push(pickWeightedRandomItem(allAdmins, player.value))
@@ -298,7 +304,8 @@
           player.value.canPlace = true;
           player.value.canAction = true;
       }
-      item.apply(activePieces.value, itemMult);// not working for keygen?
+      item.apply(activePieces.value, itemMult);
+      player.value.removeItem(item)// not working for keygen?
     }
 
     /*if(item.targetType === 'piecesAndBoard'){
@@ -528,8 +535,10 @@
 
   function handleProceed(){
     openSummary(false);
-    if(bossAdmins.value.length > 0){
+    incrementMapProgress();
+    if(mapProgress.value >= 3){
       increaseDifficulty();
+      mapProgress.value = 0
     }
     showMap.value = true;
   }
@@ -659,7 +668,7 @@
           const enemyInstance = new EnemyClass(piece.headPosition, 'enemy', removePiece);
           enemyInstance.tiles = piece.tiles;
 
-          const variantChance = (0.1*trueDifficulty-0.1)
+          const variantChance = Math.min((0.1*trueDifficulty-0.1), 1)
           const variant = rollVariant(variantChance, trueDifficulty);
           if(variant){
             applyVariant(enemyInstance, variant);
@@ -1038,12 +1047,7 @@
     // --- group target (AOE) ---
     if (selectedPiece.value.targetType === 'group') {
       // get every piece inside selectedPiece.value.range
-      const thisRange = selectedPiece.value.getStat('range');
-      const inRange = activePieces.value.filter(p => 
-        p.tiles.some(tile => 
-          Math.abs(tile.x - target.x) + Math.abs(tile.y - target.y) <= thisRange//check
-        )
-      );
+      const inRange = findAnyPiecesInRange(selectedPiece.value, activePieces.value);
       await selectedPiece.value.special(inRange);
       playerSpawns.value = newPlacementHighlights();
       selectedPiece.value = null;
@@ -1285,7 +1289,7 @@
     }
   }, { immediate: true });
 
-  const debugMode = ref<boolean>(true);
+  const debugMode = ref<boolean>(false);
 </script>
 
 <template>
@@ -1368,6 +1372,7 @@
       @openShop="openShop"
       @openDisabledShop="openDisabledShop"
       @openCompiler="openCompiler"
+      @incrementProgress="incrementMapProgress"
       @addBoss="addBossAdmin"
       @increaseDifficulty="increaseDifficulty"
     />
@@ -1512,7 +1517,7 @@
 .collapsed{
   top: 100%;
 }
-@media (max-width: 440px) {
+@media (max-width: 500px) {
   .enemy-info{
     display: block;
   }

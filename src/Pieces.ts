@@ -1259,7 +1259,7 @@ class Snowman extends Piece {
   static color = "#4e4e4eff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Snowman.name, Snowman.description, Snowman.unicode, 1, 1, 1, 0, 0, Snowman.color, headPosition, [headPosition], team, Snowman.rarity, removeCallback, id)
+   super(Snowman.name, Snowman.description, Snowman.unicode, 1, 1, 1, 3, 0, Snowman.color, headPosition, [headPosition], team, Snowman.rarity, removeCallback, id)
     this.specialName = 'Snowball';
     this.targetType = 'space'
     //this.canMove = false;
@@ -1455,7 +1455,7 @@ class Squid extends Piece {
   static color = "#08004dff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Squid.name, Squid.description, Squid.unicode, 5, 1, 1, 2, 1, Squid.color, headPosition, [headPosition], team, Squid.rarity, removeCallback, id)
+    super(Squid.name, Squid.description, Squid.unicode, 5, 2, 1, 2, 1, Squid.color, headPosition, [headPosition], team, Squid.rarity, removeCallback, id)
     this.immunities.blinded = true;
     this.specialName = 'Ink';
     this.targetType = 'line';
@@ -2142,7 +2142,7 @@ class Vampire extends Piece {
   static color = "#000000ff";
   static rarity = 6;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Vampire.name, Vampire.description, Vampire.unicode, 4, 1, 1, 0, 1, Vampire.color, headPosition, [headPosition], team, Vampire.rarity, removeCallback, id)
+   super(Vampire.name, Vampire.description, Vampire.unicode, 4, 3, 1, 0, 1, Vampire.color, headPosition, [headPosition], team, Vampire.rarity, removeCallback, id)
    this.targetType = 'pieceAndPlace'
    this.specialName = 'Siphon'
   }
@@ -2193,7 +2193,7 @@ class Helicopter extends Piece {//unfinished, handle in app
   static color = "#0d9effff";
   static rarity = 6;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Helicopter.name, Helicopter.description, Helicopter.unicode, 2, 2, 4, 5, 2, Helicopter.color, headPosition, [headPosition], team, Helicopter.rarity, removeCallback, id)
+   super(Helicopter.name, Helicopter.description, Helicopter.unicode, 2, 3, 4, 5, 2, Helicopter.color, headPosition, [headPosition], team, Helicopter.rarity, removeCallback, id)
   }
 }
 
@@ -2475,7 +2475,7 @@ class Eagle extends Piece {
 }
 
 class Recurve extends Piece {
-  static name = "Recurve Bow";
+  static name = "Archer";
   static description = "A Longer Ranged program";
   static unicode = "U+1664";
   static color = "#06640fff";
@@ -2530,7 +2530,7 @@ class Hedgehog extends Piece {
 }
 
 //99 fairy
-export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Tar, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Ink, Snail, Shark, Greatshield, Wizard, Ninja, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, Dolls, UFO, TP, Saw, Croc, Lighthouse, Torch, Camera, Drum, Shrike, Eagle, Recurve, Daemon, Rex, Hedgehog, Sol, Stopwatch];//100 +2 (web, ink)
+export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Tar, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Ink, Snail, Shark, Greatshield, Wizard, Ninja, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, UFO, TP, Saw, Croc, Lighthouse, Torch, Camera, Drum, Shrike, Eagle, Recurve, Daemon, Rex, Hedgehog, Sol, Stopwatch];//Dolls //100 +2 (web, ink)
 //console.log('pieces length: ', allPieces.length)
 
 //chess knight special move L shape

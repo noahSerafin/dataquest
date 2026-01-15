@@ -308,7 +308,7 @@
     .admin-middle-container{
         width: 80%;
     }
-    @media (max-width: 440px) {
+    @media (max-width: 500px) {
         .phone-hide{
             display: none;
         }

@@ -960,7 +960,7 @@ class Copier extends Admin {
     super(Copier.name, Copier.description, Copier.unicode, Copier.color, 9, 5, 'gameState', 'onPlacement')
   }
   //on placement, handle in App
-    async apply({ id, activePieces }: { id: string, activePieces: Piece[]}) {
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[]}) {
     const idx = activePieces.findIndex(p => p.id === id);
     const playerPieces : Piece[] = [];
     for (const p of activePieces){
@@ -978,6 +978,11 @@ class Copier extends Admin {
       );
       if(!isOccupied){
         const copy = new PieceClass(newHead, 'player', activePieces[idx].removeCallback, crypto.randomUUID());
+        copy.maxSize = playerPieces[0].maxSize
+        copy.moves = playerPieces[0].moves
+        copy.range = playerPieces[0].range
+        copy.attack = playerPieces[0].attack
+        copy.defence = playerPieces[0].defence
         activePieces.push(copy);
       }
     }
@@ -1264,7 +1269,7 @@ class Shades extends Admin {
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].immunities.exposed = true;
+    activePieces[idx].immunities.blinded = true;
   }
 }
 

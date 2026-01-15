@@ -42,6 +42,7 @@ keep track of upgrades and display on piece 7
 add backup damage to specials that apply status for AI 4
 
 ADMINS - Onion Icon - Petri - spread statuses -test, crystal - test, chemistry - test 22 off 100
+test world map, enable previewing of nodes after shops
 money admins on interest - test, implement into ROUND SUMMARY, maybe store earned money in a temp variable, add it in the summary with awaits? 7
 
 companies 8 - own list of programs/variants;

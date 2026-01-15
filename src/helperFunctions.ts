@@ -36,6 +36,28 @@ export function getRandomUnoccupiedTile(
   return freeTiles[index];
 }
 
+//for group targets. Check if any piece tile that is in range, return a list of pieces
+export function findAnyPiecesInRange(piece: Piece, pieces: Piece[]): Piece[] | null {
+  const ex = piece.headPosition.x;
+  const ey = piece.headPosition.y;
+
+  const piecesInRange = new Set<Piece>();
+
+  for (const p of pieces) {
+    for (const tile of p.tiles) {
+      const dx = Math.abs(ex - tile.x);
+      const dy = Math.abs(ey - tile.y);
+
+      if (dx + dy <= piece.range) {
+        piecesInRange.add(p);
+        break; // important: stop checking this piece once found
+      }
+    }
+  }
+
+  return piecesInRange.size > 0 ? [...piecesInRange] : null;
+}
+
 export function makeBlueprint(PieceClass: any, variant?: PieceVariant): PieceBlueprint {
     const temp = new PieceClass({ x: -1, y: -1 }, "player");
     if (variant) {

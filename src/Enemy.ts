@@ -1,5 +1,7 @@
 import type { Piece } from "./Pieces";
 import type { Coordinate } from "./types";
+import { findAnyPiecesInRange } from "./helperFunctions";
+
 type EnemyIntent =
   | { type: 'attack'; target: Piece }
   | { type: 'special'; target: Piece | Coordinate | Piece[] | {piece: Piece, target: Coordinate} | {line: Coordinate[], activePieces: Piece[]} | { target: Coordinate, activePieces: Piece[] } | null }
@@ -21,7 +23,11 @@ function decideEnemyIntent(
   console.log('target: ', target)
   if (target && enemy.actions > 0 ){//target found
     console.log('target found');
-    if(enemy.specialName && !enemy.hasFriendlySpecial && enemy.targetType !== 'trapPiece'){//can we use an attacking special?
+    if(target.piece.defenceRemaining + target.piece.tiles.length <= enemy.getStat('attack')){//can we kill a player piece?
+      return {type: 'attack', target: target.piece}
+    }
+    if(enemy.specialName && !enemy.hasFriendlySpecial && enemy.targetType !== 'trapPiece'){
+      //if not, can we use an attacking special?
       //line and pieceAndplace types also need the target location
       if(enemy.targetType === 'line'){//line type pieces
         const options = getAllTilesInStraightLines(enemy.headPosition, enemy.getStat('range'), tileSet);//all line tiles in range
@@ -310,28 +316,6 @@ function findWeakestPlayerInRange(
   );
 
   return candidates[0];
-}
-
-//for group targets. Check if any piece tile that is in range, return a list of pieces
-function findAnyPiecesInRange(enemy: Piece, pieces: Piece[]): Piece[] | null {
-  const ex = enemy.headPosition.x;
-  const ey = enemy.headPosition.y;
-
-  const piecesInRange = new Set<Piece>();
-
-  for (const p of pieces) {
-    for (const tile of p.tiles) {
-      const dx = Math.abs(ex - tile.x);
-      const dy = Math.abs(ey - tile.y);
-
-      if (dx + dy <= enemy.range) {
-        piecesInRange.add(p);
-        break; // important: stop checking this piece once found
-      }
-    }
-  }
-
-  return piecesInRange.size > 0 ? [...piecesInRange] : null;
 }
 
 // Move one tile toward the target using simple orthogonal movement

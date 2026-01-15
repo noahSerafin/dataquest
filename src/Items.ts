@@ -171,7 +171,7 @@ class Glasses extends Item<PieceBlueprint> {
 class Teapot extends Item<PieceBlueprint> {
     static name = "Teapot";
     static description = "increases a program's moves by 1";
-    static unicode = "U+26A1";
+    static unicode = "U+1FAD6";
     static color = "#dc00e4ff";
     constructor(){
         super(Teapot.name, Teapot.description, Teapot.unicode, Teapot.color, 3, 1, 'blueprint')
@@ -708,10 +708,10 @@ export class Update2 extends Item {
 export class Update3 extends Item {
     static name = "Hardware Upgrade";
     static description = "+1 admin slot";
-    static unicode = "U+1F4C0"; // MINIDISC, U+1F4BD
+    static unicode = " U+1F4BD";//"U+1F4C0"; // MINIDISC, U+1F4BD
     static color = "#000000ff";
     constructor(){
-        super(Update3.name, Update3.description, Update3.unicode, Update3.color, 5, 5, 'player')
+        super(Update3.name, Update3.description, Update3.unicode, Update3.color, 6, 9, 'player')
         //name desc utf || maxsize moves range atk def
     }
     apply(player: Player) {

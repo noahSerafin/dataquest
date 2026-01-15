@@ -12,7 +12,7 @@ export const DIFFICULTY_RARITY: Record<number, { min: number; max: number }> = {
 export const STAT_MIN: Record<StatKey, number> = {
   maxSize: 1,
   moves: 0,
-  range: 0,
+  range: 1,
   attack: 0,
   defence: 0
 };

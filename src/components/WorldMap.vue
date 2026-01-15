@@ -2,7 +2,7 @@
     import { computed, ref } from "vue";
     import MiniMap from "./MiniMap.vue";
     import { Admin } from "../AdminPrograms";
-    import { Item } from "../Items";
+    import { Item, Box, Genie, Gift, Pinata, Pandora } from "../Items";
     import { allBosses } from "../Bosses";
     import { watch } from "vue";
     import { Player } from "../Player";
@@ -17,7 +17,6 @@
     import { allPieces } from "../Pieces";
     import { allAdmins } from "../AdminPrograms";
     import { makeBlueprint, pickWeightedRandom, pickWeightedRandomItem } from "../helperFunctions";
-    import { Box, Genie, Gift, Pinata } from "../Items";
     import BlueprintView from "./BlueprintView.vue";
     import ItemView from "./ItemView.vue";
     import BlueprintController from "./BlueprintController.vue";
@@ -37,6 +36,7 @@
         (e: "openCompiler"): void;
         (e: "addBoss", admin: Admin): void;
         (e: "increaseDifficulty"): void;
+        (e: "incrementProgress"): void;
     }>();
 
     const levelTiers = [
@@ -144,7 +144,7 @@
             emit("addBoss", boss.value);
         }
         if (node.level) {
-            console.log(node.level)
+            //console.log(node.level)
             emit("select-level", node.level, node.difficultyMod, (node.reward + props.player.bonusReward));
         }
     }
@@ -226,7 +226,7 @@
         }
         return {
             kind: "item",
-            value: pickWeightedRandomItem([Box, Gift, Genie, Pinata], props.player),
+            value: pickWeightedRandomItem([Box, Gift, Genie, Pinata, Pandora], props.player),
         };
     }
 
@@ -266,6 +266,7 @@
         currentNodeId.value = node.id
         selectedPreviewNode.value = null;
         canReroll.value = false;
+        emit('incrementProgress');
     }
 
     const skipTarget = ref<PieceBlueprint | Item | null>(null);

@@ -101,7 +101,7 @@ function getPathPositions(
   pathIndex: number,
   totalPaths: number
 ) {
-  const spacing = 100;
+  const spacing = 120;
   const startX = 200 - ((totalPaths - 1) * spacing) / 2;
 
   return {
@@ -293,7 +293,7 @@ export function generateWorld(
     position: { x: 200, y: 0 },
     company: chooseRandomCompany(),
     difficultyMod: 0,
-    reward: 5 + difficulty * 2
+    reward: 5 + Math.min(10, difficulty * 2)
   };
 
   return {

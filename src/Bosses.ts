@@ -530,7 +530,7 @@ class Razor extends Admin {
 class Omega extends Admin {
     static name = "Omega";
     static description = "Every enemy gains +1 to all stats";
-    static unicode = "U+1F433";
+    static unicode = "U+3A9";
     static color = "#000000ff";
     static rarity = 6;
     constructor() {

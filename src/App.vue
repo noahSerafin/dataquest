@@ -1289,7 +1289,7 @@
     }
   }, { immediate: true });
 
-  const debugMode = ref<boolean>(false);
+  const debugMode = ref<boolean>(true);
 </script>
 
 <template>

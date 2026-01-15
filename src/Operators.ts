@@ -1,5 +1,5 @@
 import type { OS } from "./types";
-import { Voucher, Whetstone, Iron, Garlic, Lightning, RedMeat, Genie, Box, Gift, Pinata, Pandora, Update2, Update3, Floppy } from "./Items";
+import { Voucher, Whetstone, Garlic, Lightning, RedMeat, Genie, Box, Gift, Pinata, Pandora, Update2, Update3, Floppy } from "./Items";
 
 /*
 export function findPieceClassByName(name: string) {
@@ -41,7 +41,7 @@ export function blueprintFromPieceClass(piece: typeof Piece): PieceBlueprint {
         isPlaced: false,
         cost: 1 // or whatever cost formula you want
     }
-    const testPiece =  {
+    /*const testPiece =  {
         id: crypto.randomUUID(),
         name: "Squid",
         description: '"A squid to test ink function"',
@@ -56,7 +56,7 @@ export function blueprintFromPieceClass(piece: typeof Piece): PieceBlueprint {
         // blueprint-only fields:
         isPlaced: false,
         cost: 10 // or whatever cost formula you want
-    }
+    }*/
     const superKnife =  {
         id: crypto.randomUUID(),
         name: "Knife",

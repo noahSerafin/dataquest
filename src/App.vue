@@ -4,7 +4,7 @@
   import Leveleditor from './components/Leveleditor.vue';
   import { castled, level1Levels } from './level1Levels';
   import { Player } from "./Player";
-  import { Item, Voucher, allItems, upgradeItems} from "./Items";
+  import { Item, Voucher, allItems} from "./Items";
   import type { ItemConstructor } from "./Items";
   import { allAdmins } from "./AdminPrograms";
   import { Admin } from "./AdminPrograms";
@@ -16,7 +16,7 @@
   import type { Coordinate, PieceBlueprint, Level, OS } from "./types";
   import { runEnemyStateMachine } from "./Enemy";
   import WorldMap from "./components/WorldMap.vue";
-  import { addItemsUntilFull, addProgramsUntilFull, applyVariant, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, rollVariant } from "./helperFunctions";
+  import { addItemsUntilFull, applyVariant, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, rollVariant } from "./helperFunctions";
   import Shop from "./components/Shop.vue";
   import BossView from "./components/BossView.vue";
   import RoundSummary from "./components/RoundSummary.vue";
@@ -1285,7 +1285,7 @@
     }
   }, { immediate: true });
 
-  const debugMode = ref<boolean>(true);
+  const debugMode = ref<boolean>(false);
 </script>
 
 <template>

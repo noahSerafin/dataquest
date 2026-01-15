@@ -512,7 +512,7 @@ class Whale extends Admin {
 class Razor extends Admin {
     static name = "Razor Sharp";
     static description = "Every enemy gains +1 attack at the start of the round";
-    static unicode = "U+1F433";
+    static unicode = "U+1FA92";
     static color = "#c7200aff";
     static rarity = 3;
     constructor() {

@@ -479,6 +479,7 @@ class Firewall extends Piece {
     //await target.takeDamage(this.getStat('attack'));
     if(target.statuses.burning){
       target.takeDamage(this.getStat('attack'));
+      if(target.willRetaliate) this.takeDamage(target.getStat('attack'))
     } else if(!target.immunities.burning){
       target.statuses.burning = true;
     }
@@ -861,9 +862,9 @@ class Tar extends Piece {
   async special(target: Piece): Promise<void> {
     if(!target.immunities.slowed){
       target.statuses.slowed = true
-    }
-    if(target.statuses.slowed){
+    } else if(target.statuses.slowed){
       target.takeDamage(this.getStat('attack'));
+      if(target.willRetaliate) this.takeDamage(target.getStat('attack'))
     }
     this.actions--
     this.statuses.hidden = false;
@@ -959,9 +960,9 @@ class Germ extends Piece {//up to here //TODO
     if(!target.immunities.diseased){
       target.statuses.diseased = true
       this.actions --
-    }
-    if(target.statuses.diseased){
+    } else if(target.statuses.diseased){
       target.takeDamage(this.getStat('attack'));
+      if(target.willRetaliate) this.takeDamage(target.getStat('attack'))
     }
     this.actions --
   }
@@ -973,7 +974,7 @@ class Germ extends Piece {//up to here //TODO
 //	U+1F5DC U+FE0F vice hold others in place
 class Vice extends Piece {
   static name = "Vice";
-  static description = "A program that can reduce other programs moves to 0";
+  static description = "A program that can freeze others, reducing their moves to 0";
   static unicode = "U+1F5DC";
   static color = "#f5d58d";
   static rarity = 3;
@@ -986,9 +987,9 @@ class Vice extends Piece {
     if(!target.immunities.frozen){
       target.statuses.frozen = true
       target.movesRemaining = 0
-    }
-    if(target.statuses.frozen){
+    } else if(target.statuses.frozen){
       target.takeDamage(this.getStat('attack'));
+      if(target.willRetaliate) this.takeDamage(target.getStat('attack'))
     }
     this.actions--
   }
@@ -1629,9 +1630,9 @@ class Cupid extends Piece {
   async special(targetPiece: Piece):Promise<void>{
     if(!targetPiece.immunities.charmed){
       targetPiece.statuses.charmed = true;
-    }
-    if(targetPiece.statuses.charmed){
+    } else if(targetPiece.statuses.charmed){
       targetPiece.takeDamage(this.getStat('attack'))
+      if(targetPiece.willRetaliate) this.takeDamage(targetPiece.getStat('attack'))
     }
     this.actions--
   }
@@ -1711,9 +1712,9 @@ class Scorpion extends Piece {
   async special(targetPiece: Piece):Promise<void>{
     if(!targetPiece.immunities.poisoned){
       targetPiece.statuses.poisoned = true;
-    }
-    if(targetPiece.statuses.poisioned){
+    } else if(targetPiece.statuses.poisioned){
       targetPiece.takeDamage(this.getStat('attack'))
+      if(targetPiece.willRetaliate) this.takeDamage(targetPiece.getStat('attack'))
     }
     this.actions--
   }
@@ -1736,6 +1737,7 @@ class Firebrand extends Piece {
     //await targetPiece.takeDamage(this.getStat('attack'));
     if(targetPiece.statuses.burning){
       targetPiece.takeDamage(this.getStat('attack'))
+      if(targetPiece.willRetaliate) this.takeDamage(targetPiece.getStat('attack'))
     } else if(!targetPiece.immunities.burning){
       targetPiece.statuses.burning = true;
     }
@@ -2181,6 +2183,7 @@ class Centipede extends Piece {
     }
     if(targetPiece.statuses.poisioned){
       targetPiece.takeDamage(this.getStat('attack'))
+      if(targetPiece.willRetaliate) this.takeDamage(targetPiece.getStat('attack'))
     }
     this.actions --
   }
@@ -2390,9 +2393,9 @@ class Camera extends Piece {
   async special(target: Piece): Promise<void> {
     if(!target.immunities.blinded){
       target.statuses.blinded = true;
-    }
-    if(target.statuses.blinded){
+    } else if(target.statuses.blinded){
       target.takeDamage(this.getStat('attack'))
+      if(target.willRetaliate) this.takeDamage(target.getStat('attack'))
     }
     this.actions--
   }
@@ -2498,9 +2501,9 @@ class Daemon extends Piece {
   async special(targetPiece: Piece):Promise<void>{
     if(!targetPiece.immunities.slowed){
       targetPiece.statuses.slowed = true
-    }
-    if(targetPiece.statuses.slowed){
+    } else if(targetPiece.statuses.slowed){
       targetPiece.takeDamage(this.getStat('attack'));
+      if(targetPiece.willRetaliate) this.takeDamage(targetPiece.getStat('attack'))
     }
     this.actions--
   }

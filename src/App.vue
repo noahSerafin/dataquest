@@ -338,7 +338,7 @@
   function refreshShop(isFree: boolean) {
     //console.log(rerollCost.value)
     shopTarget.value = null;
-    if(!isFree && player.value.money < rerollCost.value) return;//show to shop for disabled button
+    //if(!isFree && player.value.money < rerollCost.value) return;//show to shop for disabled button
     if(!isFree) {//player is rerolling
       player.value.money -= rerollCost.value;
       const nextFib = prevFib.value + currentFib.value;
@@ -1157,7 +1157,7 @@
       activePieces.value,
       //removePiece, // callback to remove dead pieces
       boardRef.value.highlightMoves,
-      boardRef.value.highlightTargets,
+      boardRef.value.highlightTargets,//highlightspecials?
       boardRef.value.clearHighlights,
       //handleSpecialActionAt,
       tileSet,

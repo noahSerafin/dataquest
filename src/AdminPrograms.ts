@@ -161,6 +161,23 @@ class Blood extends Admin {
   
 }
 
+class Razor extends Admin {
+  static name = "Razor";
+  static description = "+1 attack to all your placed programs";
+  static unicode = "U+1F9BE";
+  static color = "#ff4040ff";
+
+  constructor() {
+    super(Razor.name, Razor.description, Razor.unicode, Razor.color, 7, 4, 'gameState', 'onPlacement')
+  }
+  
+  //on placement/after hydration
+  async apply({ id, activePieces }: {  id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    activePieces[idx].addModifier({attack: 1})//enemy pieces only?  
+  }
+}
+
 class BionicArm extends Admin {
   static name = "Bionic Arms";
   static description = "Raises all your program's attack by 2";
@@ -174,7 +191,6 @@ class BionicArm extends Admin {
   //on placement/after hydration
   async apply({ id, activePieces }: {  id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    console.log('applying:', this.name)
     activePieces[idx].addModifier({attack: 2})//enemy pieces only?  
   }
 }
@@ -191,7 +207,6 @@ class BionicLeg extends Admin {
 
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    console.log('applying:', this.name)
     activePieces[idx].addModifier({moves: 2})
     activePieces[idx].movesRemaining += 2;
   }
@@ -239,7 +254,7 @@ class Eye extends Admin {//test try
   }
 }
 
-class Bouquet extends Admin {//duplicates showing up anyway
+/*class Bouquet extends Admin {//duplicates showing up anyway
   static name = "Bouquet";
   static description = "Held admin programs can reappear in the shop";
   static unicode = "U+1F490";
@@ -249,7 +264,7 @@ class Bouquet extends Admin {//duplicates showing up anyway
     super(Bouquet.name, Bouquet.description, Bouquet.unicode, Bouquet.color, 3, 3, 'gameState', 'other')//shop
   }
   //shop, disable for now
-}
+}*/
 
 class Heartbreaker extends Admin {
   static name = "Heartbreaker";
@@ -1737,11 +1752,11 @@ class Ring extends Admin {
   }
 }
 
-export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, OffRoader, Seed, Puzzle, Chivalry, Roger, Bucket, Diamond, Sneakers, Candle, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FireTruck, FakeID, Shades, Barber, Umbrella, Bank, Ballet, Pants, Ace, Pi, Pazzaz, Toilet, Harvest, Bipolar, Taoism, Loot, HedgeFund, PeaPod, Liberty, Punching, Teddy, Abacus, DNA, Cheese, AirSupport, DartBoard, Dice, Ladder, Ribbon, Ring];
-//console.log('admins length: ', allAdmins.length)
+export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, Razor, BionicArm, BionicLeg, Convenience, Department, Eye, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, OffRoader, Seed, Puzzle, Chivalry, Roger, Bucket, Diamond, Sneakers, Candle, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FireTruck, FakeID, Shades, Barber, Umbrella, Bank, Ballet, Pants, Ace, Pi, Pazzaz, Toilet, Harvest, Bipolar, Taoism, Loot, HedgeFund, PeaPod, Liberty, Punching, Teddy, Abacus, DNA, Cheese, AirSupport, DartBoard, Dice, Ladder, Ribbon, Ring];
+console.log('admins length: ', allAdmins.length)
 //2
 
-//llungs, trainers are the same
+//lungs, trainers are the same
 
 //SPIRAL SHELL, U+1F41A hermit shell +def -moves
 //OWL, U+1F989 Minerva /sacrifice pieces/+range?
@@ -1750,13 +1765,15 @@ export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, 
 // RAINBOW, U+1F308 beat a boss, earn extra money
 //WHEEL, U+1F6DE reroll bosses?
 //TABLE TENNIS PADDLE AND BALL, U+1F3D3 //all pieces retaliate with their damage
+//KNOT, U+1FAA2 your pieces can pass through themselves
 
 //disco ball U+1FAA9
 //ELECTRIC LIGHT BULB, U+1F4A1
 //KNOT, U+1FAA2
 //TENT, U+26FA
 //FERRIS WHEEL, U+1F3A1
-//
+
+//PINE DECORATION, U+1F38D
 
 //SYMBOL FOR SALT OF ANTIMONY, U+1F72D sceptre
 //LINK SYMBOL, U+1F517

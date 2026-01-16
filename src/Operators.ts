@@ -306,7 +306,7 @@ const Temple : OS = {//lance //bug //screwdriver
     blueprints: [bug, aegis, screwdriver],
     items: [new Pandora],
     admins: [],
-    lives: 2,
+    lives: 3,
     description: "Overclocked memory and admin slots, low money. Some unique starting programs, and a pandora's Box."
 }
 

@@ -46,9 +46,9 @@ function handleBuyItem(item: Item) {
 //        @select="openItemController"
 
 //canAfford???
-const effectiveMoney = computed(() => (props.player.admins.some(a => a.name === 'CreditCard')? props.player.money + 20 : props.player.money));
+const effectiveMoney = computed(() => (props.player.hasAdmin('Credit Card')? props.player.money + 20 : props.player.money));
 
-const canReroll = computed(() => props.player.money >= props.rerollCost);
+const canReroll = computed(() => props.player.money >= props.rerollCost || props.player.hasAdmin('Credit Card') && props.player.money +20 >= props.rerollCost);
 
 const canBuyItem = ((item: Item) => {
   if(props.shopDisabled) return false;

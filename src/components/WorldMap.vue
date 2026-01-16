@@ -114,7 +114,7 @@
             return true;
         }
         if(props.player.hasAdmin('Golden Ticket') && !(node.type==='boss')){
-            if(props.player.money >= 5 || (props.player.hasAdmin('Golden Ticket') && props.player.money >= -15 )){
+            if(props.player.money >= 5 || props.player.hasAdmin('Credit Card') && props.player.money +20 >= 5){
                 return true;
             } else return false;
         } else return false;

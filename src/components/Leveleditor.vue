@@ -402,11 +402,14 @@ const boardHeight = computed(() => tileSize.value * height.value)
   position: fixed;
   right: 5%;
   top: 10%;
-  overflow-y: scroll;
   height: 80%;
   button{
     display: block;
     z-index: 999999;
+  }
+  .piece-selector{
+    height: 100%;
+    overflow-y: scroll;
   }
 }
 </style>

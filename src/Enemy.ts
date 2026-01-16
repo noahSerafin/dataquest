@@ -23,7 +23,7 @@ function decideEnemyIntent(
   console.log('target: ', target)
   if (target && enemy.actions > 0 ){//target found
     console.log('target found');
-    if(target.piece.defenceRemaining + target.piece.tiles.length <= enemy.getStat('attack')){//can we kill a player piece?
+    if(enemy.canAttack && target.piece.defenceRemaining + target.piece.tiles.length <= enemy.getStat('attack')){//can we kill a player piece?
       return {type: 'attack', target: target.piece}
     }
     if(enemy.specialName && !enemy.hasFriendlySpecial && enemy.targetType !== 'trapPiece'){
@@ -229,6 +229,9 @@ async function attackPiece(attacker: Piece, defender: Piece) {
       await attacker.takeDamage(defender.getStat('attack'));
       if(defender.name === 'Puffer' && !attacker.immunities.poisoned){
         attacker.statuses.poisoned = true;
+      }
+      if(defender.name === 'Hedgehog'){
+        attacker.takeDamage(defender.getStat('attack'))
       }
     }
     attacker.actions--;

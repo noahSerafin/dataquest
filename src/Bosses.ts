@@ -509,14 +509,14 @@ class Whale extends Admin {
     }
 }
 
-class Razor extends Admin {
-    static name = "Razor Sharp";
+class Hammer extends Admin {
+    static name = "Banhammer";
     static description = "Every enemy gains +1 attack at the start of the round";
-    static unicode = "U+1FA92";
+    static unicode = "U+1F528";
     static color = "#c7200aff";
     static rarity = 3;
     constructor() {
-        super(Razor.name, Razor.description, Razor.unicode, Razor.color, 3, 3, 'gameState', 'onRoundStart')
+        super(Hammer.name, Hammer.description, Hammer.unicode, Hammer.color, 3, 3, 'gameState', 'onRoundStart')
     }
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
         activePieces.forEach(piece => {
@@ -613,7 +613,7 @@ class Coral extends Admin {
 //REDACTED - all enemy programs classes are hidden with black squares
 
 //fog //square //tornado tsunami
-export const allBosses = [Mirror, Factory, NorthWind, Hook, Downturn, Wrath, Reaper, Volcano, Circus, Castle, Anchor, Jack, Lock, Eclipse, Battery, Customs, Shrine, Snowflake, Sun, Whale, Bones, Frog, Coral, Izakaya, Razor, Omega]//22
+export const allBosses = [Mirror, Factory, NorthWind, Hook, Downturn, Wrath, Reaper, Volcano, Circus, Castle, Anchor, Jack, Lock, Eclipse, Battery, Customs, Shrine, Snowflake, Sun, Whale, Bones, Frog, Coral, Izakaya, Hammer, Omega]//22
 //3
 
 //ROBOT HEAD "U+1F916"

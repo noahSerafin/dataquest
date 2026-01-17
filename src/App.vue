@@ -139,6 +139,9 @@
     showBoard.value = false;
     showSummary.value = false;
     showMainMenu.value = true;
+    //sessionStorage.clear();
+    //localStorage.clear(); // only if you aren't using it yet
+    window.location.reload();
   }
   const showFastControls = ref<boolean>(true);
   function toggleFastControls(){
@@ -180,10 +183,8 @@
 
   function handleApplyItem(payload: {item: Item, id:string}) {
     const item = payload.item;
-    let itemMult = 1;
-    if(player.value.hasAdmin('Chemistry')){
-      itemMult = 2;
-    }
+    const itemMult = 1 + player.value.admins.filter(a => a.name === 'Chemsitry').length;
+
     //check it is to be applied to playerBlueprints
     if (item.targetType === "blueprint") {
       const id = payload.id;
@@ -905,7 +906,6 @@
   }
 
   const movePiece = async (coord : Coordinate) => {
-    console.log('moving player')
     if(!selectedPiece.value || !player.value.canMove) return;
     isPlacing.value = false;
     player.value.canPlace = false;

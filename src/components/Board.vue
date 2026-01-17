@@ -294,7 +294,13 @@ function getReachableTiles(
       if (!tileSet.has(nKey)) continue;
 
       // If NOT negative, cannot go through occupied tiles
-      if (!isNegative && pieceMap.has(nKey)) continue;
+      //if (!isNegative && pieceMap.has(nKey)) continue; //old method
+      const occupyingPiece = pieceMap.get(nKey);
+
+      if (!isNegative && occupyingPiece) {
+        const canPassThroughOwn = occupyingPiece === piece && piece.team === 'player' && props.player.hasAdmin('Knot'); // pass this in or close over it
+        if (!canPassThroughOwn) continue;
+      }
 
       // Add to queue
       queue.push({ x: n.x, y: n.y, steps: steps + 1 });

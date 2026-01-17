@@ -166,7 +166,12 @@ export abstract class Piece {
   }
 
   moveTo(newPosition: Coordinate): void {
-    this.headPosition = newPosition
+    this.headPosition = newPosition;
+    // Remove existing occurrence if moving onto own tile
+    this.tiles = this.tiles.filter(
+      t => !(t.x === newPosition.x && t.y === newPosition.y)
+    );
+    
     this.tiles.unshift(newPosition)
     // If exceeding maxSize, remove the oldest tile
     if (this.tiles.length > this.getStat('maxSize')) {

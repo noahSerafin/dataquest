@@ -48,7 +48,7 @@ export abstract class Admin<
 
 class Meteor extends Admin {
   static name = "Meteor Shower";
-  static description = "Deals 3 damage to every piece at the start of a round";
+  static description = "Deals 2 damage to every piece at the start of a round";
   static unicode = "U+2604";
   static color = "#000000ff";
 
@@ -58,7 +58,7 @@ class Meteor extends Admin {
 
   //onRoundStart
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-    for (const p of activePieces) p.takeDamage(3);
+    for (const p of activePieces) p.takeDamage(2);
   }
 }
 
@@ -112,7 +112,7 @@ class Crystal extends Admin {//test
   static color = "#4b003bff";
 
   constructor() {
-    super(Crystal.name, Crystal.description, Crystal.unicode, Crystal.color, 5, 1, 'gameState', 'other')
+    super(Crystal.name, Crystal.description, Crystal.unicode, Crystal.color, 3, 1, 'gameState', 'other')
   }
   //modify app for this one
 }
@@ -485,8 +485,8 @@ class Joker extends Admin {
 
 class Chemistry extends Admin {//test
   static name = "Chemistry";
-  static description = "Items that affect stats effects are doubled, does not stack";
-  static unicode = "U+2697";//BENZENE RING, U+232C
+  static description = "Items that affect stats effects are doubled (+1 item effect mult)";
+  static unicode = "U+232C";//"U+2697";//BENZENE RING, U+232C
   static color = "#4eb95cff";
   constructor() {
     super(Chemistry.name, Chemistry.description, Chemistry.unicode, Chemistry.color, 6, 5, 'gameState', 'other')//on Item use
@@ -523,24 +523,22 @@ class Heart extends Admin {//change
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    console.log('applying:', this.name)
     activePieces[idx].addModifier({maxSize: 1})
   }
 }
 
 class Lungs extends Admin {
   static name = "Lungs";
-  static description = "Programs all gain +1 moves on placement";
+  static description = "Programs all gain +3 moves on placement";
   static unicode = "U+1FAC1";
   static color = "#9e0e0eff";
   constructor() {
-    super(Lungs.name, Lungs.description, Lungs.unicode, Lungs.color, 5, 2, 'gameState', 'onPlacement')
+    super(Lungs.name, Lungs.description, Lungs.unicode, Lungs.color, 8, 4, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    console.log('applying:', this.name)
-    activePieces[idx].addModifier({moves: 1})
-        activePieces[idx].movesRemaining += 1;
+    activePieces[idx].addModifier({moves: 3})
+    activePieces[idx].movesRemaining += 3;
   }
 }
 
@@ -933,7 +931,7 @@ class Sneakers extends Admin {//item???
 //candle U+1F56F
 class Candle extends Admin {
   static name = "Candle";
-  static description = "+1 range for all programs on placement";
+  static description = "+1 range for all your programs on load";
   static unicode = "U+1F56F";
   static color = "#f0aa13ff";
   constructor() {
@@ -945,6 +943,22 @@ class Candle extends Admin {
     activePieces[idx].addModifier({range: 1})
   }
 }
+
+class Lightbulb extends Admin {
+  static name = "Lightbulb";
+  static description = "+2 range for all your programs on load";
+  static unicode = "U+1F4A1";
+  static color = "#f06b13ff";
+  constructor() {
+    super(Lightbulb.name, Lightbulb.description, Lightbulb.unicode, Lightbulb.color, 6, 4, 'gameState', 'onPlacement')
+  }
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    console.log('applying:', this.name)
+    activePieces[idx].addModifier({range: 1})
+  }
+}
+////ELECTRIC LIGHT BULB, U+1F4A1 +2 range?
 
 class Feather extends Admin {
   static name = "Feather";
@@ -1006,22 +1020,22 @@ class Copier extends Admin {
 
 class Telescope extends Admin {
   static name = "Telescope";
-  static description = "+2 range for all your placed programs";
+  static description = "+3 range, -1 moves for all your placed programs";
   static unicode = "U+1F52D";
   static color = "#ff5555";
   constructor() {
-    super(Telescope.name, Telescope.description, Telescope.unicode, Telescope.color, 6, 4, 'gameState', 'onPlacement')
+    super(Telescope.name, Telescope.description, Telescope.unicode, Telescope.color, 5, 3, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    console.log('applying:', this.name)
-    activePieces[idx].addModifier({range: 2})
+    activePieces[idx].addModifier({range: 3})
+    activePieces[idx].addModifier({moves: -1})
   }
 }
 
 class Microscope extends Admin {
   static name = "Microbiology";
-  static description = "Placed programs with a max size of 1 get +1 defence on load";
+  static description = "Placed programs with a max size of 1 get +2 defence on load";
   static unicode = "U+1F52C";
   static color = "#ff5555";
   constructor() {
@@ -1030,7 +1044,6 @@ class Microscope extends Admin {
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
     if(activePieces[idx].maxSize === 1){
-      console.log('applying:', this.name)
       activePieces[idx].addModifier({defence: 1})
     }
   }
@@ -1193,7 +1206,7 @@ export class Spoon extends Admin {
   }
 }
 
-class Hermes extends Admin {
+class Hermes extends Admin {//moves
   static name = "Hermes Wings";
   static description = "All placed programs are immune to being slowed";
   static unicode = "U+1FABD";//wing, icarus?
@@ -1392,7 +1405,7 @@ class Pants extends Admin {
 }
 
 class Ace extends Admin {//test
-  static name = "Ace up the sleeve";
+  static name = "Ace in the hole";
   static description = "If your last placed program is destroyed, move it back to your inventory (untested)";
   static unicode = "U+2660";
   static color = "#f8f8f8ff";
@@ -1731,8 +1744,8 @@ class Ladder extends Admin {
     super(Ladder.name, Ladder.description, Ladder.unicode, Ladder.color, 5, 3, 'gameState', 'other')
   }
 }
-
-class Ribbon extends Admin {
+/*
+class Ribbon extends Admin {//change
   static name = "Ribbon";
   static description = "Hybrids take cumulative rather than average stats";
   static unicode = "U+1F380";
@@ -1741,7 +1754,7 @@ class Ribbon extends Admin {
     super(Ribbon.name, Ribbon.description, Ribbon.unicode, Ribbon.color, 8, 6, 'gameState', 'other')
   }
 }
-
+*/
 class Ring extends Admin {
   static name = "Ring";
   static description = "Stats changed inside a node persist across rounds";
@@ -1752,26 +1765,98 @@ class Ring extends Admin {
   }
 }
 
-export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, Razor, BionicArm, BionicLeg, Convenience, Department, Eye, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, OffRoader, Seed, Puzzle, Chivalry, Roger, Bucket, Diamond, Sneakers, Candle, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FireTruck, FakeID, Shades, Barber, Umbrella, Bank, Ballet, Pants, Ace, Pi, Pazzaz, Toilet, Harvest, Bipolar, Taoism, Loot, HedgeFund, PeaPod, Liberty, Punching, Teddy, Abacus, DNA, Cheese, AirSupport, DartBoard, Dice, Ladder, Ribbon, Ring];
+class Minerva extends Admin {
+  static name = "Minerva";
+  static description = "+1 range all your placed programs each time a program is destroyed";
+  static unicode = "U+1F989";//horus: "U+1314A";
+  static color = "#d3761fff";
+  constructor() {
+    super(Minerva.name, Minerva.description, Minerva.unicode, Minerva.color, 9, 6, 'gameState', 'onPieceDestruction')
+  }
+  //on receive damage //on piece destrcution
+  async apply({ id: _id, activePieces }: {id: string, activePieces: Piece[] }) {
+    for (const p of activePieces){
+      if(p.team==='player'){
+        p.addModifier({attack: 1})
+      }
+    }
+  }
+}
+
+class Hermit extends Admin {
+  static name = "Hermit Shell";
+  static description = "Programs get +1 defence and -1 moves on load";
+  static unicode = "U+1F41A";
+  static color = "#22b3dfff";
+  constructor() {
+    super(Hermit.name, Hermit.description, Hermit.unicode, Hermit.color, 3, 1, 'gameState', 'onPlacement')
+  }
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    console.log('applying:', this.name)
+    activePieces[idx].addModifier({defence: 1})
+    activePieces[idx].addModifier({moves: -1})
+  }
+}
+
+class Tracker extends Admin {// PAW PRINTS, U+1F43E Tracker // FOOTPRINTS, U+1F463 Tracker
+  static name = "Tracker";
+  static description = "Exposes all hidden enemies at the start of a round";
+  static unicode = "U+1F43E";
+  static color = "#020072ff";
+
+  constructor() {
+    super(Tracker.name, Tracker.description, Tracker.unicode, Tracker.color, 5, 2, 'gameState', 'onRoundStart')
+  }
+  
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    for (const p of activePieces){
+      if(p.team==='enemy' && !p.immunities.exposed){
+        p.statuses.exposed = true;
+      }
+    }
+  }
+}
+
+class Pong extends Admin {
+  static name = "Pong";
+  static description = "Programs retaliate with their damage when they are attacked";
+  static unicode = "U+1F3D3";
+  static color = "#72b7dfff";
+  constructor() {
+    super(Pong.name, Pong.description, Pong.unicode, Pong.color, 7, 5, 'gameState', 'onReceiveDamage')//pieces?
+  }
+  //on receive damage
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    activePieces[idx].takeDamage(1);
+  }
+}
+
+class Knot extends Admin {//test
+  static name = "Knot";
+  static description = "Your programs can move through themselves";
+  static unicode = "U+1FAA2";
+  static color = "#61baeeff";
+
+  constructor() {
+    super(Knot.name, Knot.description, Knot.unicode, Knot.color, 4, 2, 'gameState', 'other')
+  }
+}
+
+
+export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, Razor, BionicArm, BionicLeg, Convenience, Department, Eye, Heartbreaker, Hamsa, Relay, Hivis, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Lungs, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, OffRoader, Seed, Puzzle, Chivalry, Roger, Bucket, Diamond, Sneakers, Candle, Lightbulb, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FireTruck, FakeID, Shades, Barber, Umbrella, Bank, Ballet, Pants, Ace, Pi, Pazzaz, Toilet, Harvest, Bipolar, Taoism, Loot, HedgeFund, PeaPod, Liberty, Punching, Teddy, Abacus, DNA, Cheese, AirSupport, DartBoard, Dice, Ladder, Ring, Minerva, Hermit, Tracker, Pong, Knot];
 console.log('admins length: ', allAdmins.length)
-//2
 
-//lungs, trainers are the same
-
-//SPIRAL SHELL, U+1F41A hermit shell +def -moves
-//OWL, U+1F989 Minerva /sacrifice pieces/+range?
-// PAW PRINTS, U+1F43E Tracker - reveal all hidden progrms at the start of a round
-// FOOTPRINTS, U+1F463 Tracker
 // RAINBOW, U+1F308 beat a boss, earn extra money
 //WHEEL, U+1F6DE reroll bosses?
-//TABLE TENNIS PADDLE AND BALL, U+1F3D3 //all pieces retaliate with their damage
-//KNOT, U+1FAA2 your pieces can pass through themselves
 
 //disco ball U+1FAA9
-//ELECTRIC LIGHT BULB, U+1F4A1
-//KNOT, U+1FAA2
-//TENT, U+26FA
+//ELECTRIC LIGHT BULB, U+1F4A1 +2 range?
+//TENT, U+26FA //Camp redo nodes once?
 //FERRIS WHEEL, U+1F3A1
+
+////FISHING POLE AND FISH, U+1F3A3 Bait, enemies attack player with highest defence?
 
 //PINE DECORATION, U+1F38D
 
@@ -1792,11 +1877,6 @@ console.log('admins length: ', allAdmins.length)
 //CLOSED MAILBOX WITH RAISED FLAG, U+1F4EB
 
 //CHEQUERED FLAG, U+1F3C1
-
-// LOCK, U+1F512
-
-//FISHING POLE AND FISH, U+1F3A3
-
 // Bright idea, special modifier does not consume actions??
 
 // PLACARD, U+1FAA7
@@ -1825,7 +1905,6 @@ console.log('admins length: ', allAdmins.length)
 
 // ICE CUBE, U+1F9CA
 
-//BLACK CHESS KNIGHT, U+265E
 //TURNED BLACK SHOGI PIECE, U+26CA //black shield 
 
 //8ball BILLIARDS, U+1F3B1
@@ -1883,7 +1962,6 @@ console.log('admins length: ', allAdmins.length)
 //EGYPTIAN HIEROGLYPH F002, U+13100
 // EGYPTIAN HIEROGLYPH F001, U+130FE
 
-
 //turtle
 // EGYPTIAN HIEROGLYPH I002, U+13189
 
@@ -1897,7 +1975,7 @@ console.log('admins length: ', allAdmins.length)
 // EGYPTIAN HIEROGLYPH L003, U+131A6
 
 //cricket
-//EGYPTIAN HIEROGLYPH L004, U+131A7
+//EGYPTIAN HIEROGLYPH L004, U+131A7 Plague of locusts, remove all body tiles from enemies at start of round
 
 //MONEY BAG, U+1F4B0
 

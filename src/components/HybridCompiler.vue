@@ -88,11 +88,11 @@
             description: 'A hybrid, primary feature: '+primary.description,
             unicode: primary.unicode,
             // averaged stats (rounded down)
-            maxSize: Math.ceil((primary.maxSize + secondary.maxSize) / 2),
-            moves: Math.ceil((primary.moves + secondary.moves) / 2),
-            range: Math.ceil((primary.range + secondary.range) / 2),
-            attack: Math.ceil((primary.attack + secondary.attack) / 2),
-            defence: Math.ceil((primary.defence + secondary.defence) / 2),
+            maxSize: primary.maxSize + secondary.maxSize,//Math.ceil((primary.maxSize + secondary.maxSize) / 2),
+            moves: primary.moves + secondary.moves,//Math.ceil((primary.moves + secondary.moves) / 2),
+            range: primary.range + secondary.range,//Math.ceil((primary.range + secondary.range) / 2),
+            attack: primary.attack + secondary.attack,//Math.ceil((primary.attack + secondary.attack) / 2),
+            defence: primary.defence + secondary.defence,//Math.ceil((primary.defence + secondary.defence) / 2),
             rarity: Math.max(primary.rarity, secondary.rarity),
             color: primary.color,
             isPlaced: false,
@@ -176,7 +176,7 @@
 <template>
   <div class="container hybrid-compiler">
     <h4>HYBRID COMPILER</h4>
-    <p>Choose 2 programs to combine into 1 with the average of each stats (rounded up), keep the primary program's special move.</p>
+    <p>Choose 2 programs to combine into 1, adding their stats together and keeping the primary program's special move.</p>
     <!-- Slots -->
     <div class="slots">
         <div class="slot-container">

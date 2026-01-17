@@ -164,7 +164,7 @@ class Blood extends Admin {
 class Razor extends Admin {
   static name = "Razor";
   static description = "+1 attack to all your placed programs";
-  static unicode = "U+1F9BE";
+  static unicode = "U+1FA92";
   static color = "#ff4040ff";
 
   constructor() {

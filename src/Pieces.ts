@@ -855,7 +855,7 @@ class Trap extends Piece {
 class Tar extends Piece {
   static name = "Tar";
   static description = "A program invisble to the enemy that applies slow to programs moving over it, removing itself";
-  static unicode = "U+1FAA4";
+  static unicode = "U+2668";
   static color = "#686026";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){

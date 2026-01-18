@@ -236,12 +236,18 @@ function getAvailableMoves(
   ]
 
   return potentialMoves.filter(pos => {
-    const key = `${pos.x},${pos.y}`
-    if(piece.statuses.negative){
-      return tileSet.has(key);
-    } else{
-      return tileSet.has(key) && !pieceMap.has(key);
-    }
+    const key = `${pos.x},${pos.y}`;
+
+    if (!tileSet.has(key)) return false;
+
+    if (piece.statuses.negative) return true;
+
+    const occupyingPiece = pieceMap.get(key);
+
+    if (!occupyingPiece) return true;
+
+    // Knot rule: can move into own tiles
+    return props.player.hasAdmin('Knot') && occupyingPiece === piece;
   })
 }
 

@@ -80,7 +80,6 @@ const canBuyPiece = ((piece: PieceBlueprint) => {
 });
 
 const type = ((item: Item) => {
-  console.log(item instanceof Admin)
   return ((item instanceof Admin) ? "admin" : "consumable")
 });
 </script>

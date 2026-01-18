@@ -31,7 +31,7 @@ export abstract class Piece {
   specialName?: string;
   extraUnicode?: string;
   variantName?: string;
-  targetType: 'piece' | 'pieceAndPlayer' | 'space' | 'pieceAndPlace' | 'group' | 'line' | 'self' | 'all' | 'graveyard' | 'trapPiece' = 'piece';
+  targetType: 'piece' | 'pieceAndPlayer' | 'space' | 'pieceAndPlace' | 'group' | 'line' | 'self' | 'all' | 'graveyard' | 'trapPiece' | 'spaceAndPieces' | 'placeAndPieces' = 'piece';
 
   id: string
   static name : string
@@ -679,7 +679,7 @@ class Dynamite extends Piece {
   static color = "#be3737ff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Dynamite.name, Dynamite.description, Dynamite.unicode, 1, 3, 2, 6, 0, Dynamite.color, headPosition, [headPosition], team, Dynamite.rarity, removeCallback, id)
+    super(Dynamite.name, Dynamite.description, Dynamite.unicode, 1, 2, 2, 6, 0, Dynamite.color, headPosition, [headPosition], team, Dynamite.rarity, removeCallback, id)
     this.specialName = 'Boom';
     this.targetType = 'group'
     this.canAttack = false;
@@ -703,7 +703,7 @@ class Bomb extends Piece {
   static color = "#2c2c2cff";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Bomb.name, Bomb.description, Bomb.unicode, 1, 2, 4, 10, 1, Bomb.color, headPosition, [headPosition], team, Bomb.rarity, removeCallback, id)
+    super(Bomb.name, Bomb.description, Bomb.unicode, 1, 2, 3, 10, 0, Bomb.color, headPosition, [headPosition], team, Bomb.rarity, removeCallback, id)
     this.specialName = 'Boom';
     this.targetType = 'group'
     this.canAttack = false;
@@ -740,7 +740,7 @@ class Dataworm extends Piece {//test
     if (!isAdjacent) return;
     // --- 2. Identify if target tile belongs to that piece ---
     const tileIndex = piece.tiles.findIndex(t => t.x === target.x && t.y === target.y);
-   if (tileIndex === -1 ){
+    if (tileIndex === -1 ){
       console.log("no tile to remove!")
       return;  // No tile there
     }
@@ -1311,15 +1311,15 @@ class Fencer extends Piece {
 
 class Pawn extends Piece {
   static name = "Pawn";
-  static description = "A slow program that can be promoted into another piece";
+  static description = "A slow program that can be promoted into another piece in range";
   static unicode = "U+265F";
   static color = "#131313ff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Pawn.name, Pawn.description, Pawn.unicode, 1, 1, 1, 1, 0, Pawn.color, headPosition, [headPosition], team, Pawn.rarity, removeCallback, id)
    this.specialName = 'Promote';
-   this.targetType = 'all'
-   //neutral special
+   this.targetType = 'placeAndPieces'
+   this.hasFriendlySpecial = true;
   }
   async special({ target, activePieces }: { target: Coordinate; activePieces: Piece[] }): Promise<void> {
     
@@ -1343,6 +1343,82 @@ class Pawn extends Piece {
     this.removeCallback?.(this);
     // Add to activePieces
     promoted.actions--
+  }
+}
+
+class Larva extends Piece {
+  static name = "Larva";
+  static description = "A program that can consume other's body tiles and turn into a wasp after reaching it's max size";
+  static unicode = "U+1F41B";
+  static color = "#f5f4e2ff";
+  static rarity = 2;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Larva.name, Larva.description, Larva.unicode, 3, 1, 1, 0, 0, Larva.color, headPosition, [headPosition], team, Larva.rarity, removeCallback, id)
+   this.specialName = 'Feed';
+   this.targetType = 'placeAndPieces';
+   this.hasFriendlySpecial = false;
+  }
+  async special({ target, activePieces }: { target: Coordinate; activePieces: Piece[] }): Promise<void> {
+    //Find the piece that owns the target tile
+    const targetPiece = activePieces.find(p =>
+      p.tiles.some(t => t.x === target.x && t.y === target.y)
+    );
+    if (!targetPiece) return;
+    const tileIndex = targetPiece.tiles.findIndex(
+      t => t.x === target.x && t.y === target.y
+    );
+    // Reject invalid targets
+    if (tileIndex === -1) return;
+    if (tileIndex === 0) return; // cannot infect head
+    // --- 3. Remove that tile from the piece ---
+    targetPiece.tiles.splice(tileIndex, 1);
+    this.tiles.push(target);
+    if(this.tiles.length >= this.getStat('maxSize')){
+      //replace this with a new wasp
+      const wasp = new Wasp(this.headPosition, this.team, this.removeCallback, crypto.randomUUID());
+      wasp.tiles = this.tiles;
+      activePieces.push(wasp);
+      this.removeCallback?.(this)
+    }
+    this.actions--
+  }
+}
+
+class Wasp extends Piece {
+  static name = "Parasitic Wasp";
+  static description = "A program that can replace an enemy body piece with a larva";
+  static unicode = "U+131A4";
+  static color = "#802f00ff";
+  static rarity = 4;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Wasp.name, Wasp.description, Wasp.unicode, 3, 3, 1, 3, 1, Wasp.color, headPosition, [headPosition], team, Wasp.rarity, removeCallback, id)
+   this.specialName = 'Inject';
+   this.targetType = 'placeAndPieces';
+   this.hasFriendlySpecial = false;
+  }
+  async special({target, activePieces, }: { target: Coordinate; activePieces: Piece[]; }): Promise<void> {
+    
+    //Find the piece that owns the target tile
+    const targetPiece = activePieces.find(p =>
+      p.tiles.some(t => t.x === target.x && t.y === target.y)
+    );
+    if (!targetPiece) return;
+
+    const tileIndex = targetPiece.tiles.findIndex(
+      t => t.x === target.x && t.y === target.y
+    );
+    // Reject invalid targets
+    if (tileIndex === -1) return;
+    if (tileIndex === 0) return; // cannot infect head
+    //if (targetPiece.team === this.team) return;
+    // Remove the body tile
+    targetPiece.tiles.splice(tileIndex, 1);
+
+    //Spawn larva at that position
+    const larva = new Larva(target, this.team, this.removeCallback, crypto.randomUUID());
+    activePieces.push(larva);
+
+    this.actions--;
   }
 }
 
@@ -1380,7 +1456,7 @@ class Flute extends Piece {//not working
 
 class Bat extends Piece {
   static name = "Vampire Bat";
-  static description = "A program that can steal body memory spaces from other programs";
+  static description = "A program that can steal body memory spaces from other programs, increasing it's max size";
   static unicode = "U+1F987";
   static color = "#ff290dff";
   static rarity = 4;
@@ -1396,11 +1472,12 @@ class Bat extends Piece {
     if (tileIndex === 0) return;
     // --- 3. Remove that tile from the piece ---
     piece.tiles.splice(tileIndex, 1);
-    if(this.tiles.length >= this.getStat('maxSize')){
-      this.tiles.pop  
-    }
+    //if(this.tiles.length >= this.getStat('maxSize')){
+      //this.tiles.pop  
+    //}
     this.actions--
     this.tiles.push(target);
+    this.maxSize += 1;
   }
   //raise defence +1 if total dmg > 0
 }
@@ -1685,7 +1762,7 @@ class Mosquito extends Piece {
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Mosquito.name, Mosquito.description, Mosquito.unicode, 2, 2, 1, 2, 0, Mosquito.color, headPosition, [headPosition], team, Mosquito.rarity, removeCallback, id)
     this.specialName = 'Bite';
-   this.targetType = 'pieceAndPlace'
+    this.targetType = 'pieceAndPlace'
   }
   async special({piece, target} : {piece: Piece, target: Coordinate}):Promise<void>{
     const tileIndex = piece.tiles.findIndex(t => t.x === target.x && t.y === target.y);
@@ -2538,11 +2615,9 @@ class Hedgehog extends Piece {
 }
 
 //99 fairy
-export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Tar, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Rat, Flute, Bat, Dragon, Squid, Snail, Shark, Greatshield, Wizard, Ninja, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, UFO, TP, Saw, Croc, Lighthouse, Torch, Camera, Drum, Shrike, Eagle, Recurve, Daemon, Rex, Hedgehog, Sol, Stopwatch];//Dolls //100 +2 (web, ink)
-//console.log('pieces length: ', allPieces.length)
+export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Tar, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Larva, Wasp, Rat, Flute, Bat, Dragon, Squid, Snail, Shark, Greatshield, Wizard, Ninja, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, UFO, TP, Saw, Croc, Lighthouse, Torch, Camera, Drum, Shrike, Eagle, Recurve, Daemon, Rex, Hedgehog, Sol, Stopwatch];//Dolls //100 +2 (web, ink)
+console.log('pieces length: ', allPieces.length)
 
-//chess knight special move L shape
-//BUG, U+1F41B caterpiller
 //doctor STETHOSCOPE, U+1FA7A medic, + max Size to a piece
 // HIGH-HEELED SHOE, U+1F460 small and slow but high attack
 //MILITARY AIRPLANE, U+1F6E6 line target airstike similar to charge
@@ -2563,9 +2638,13 @@ export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, G
 //GOAT, U+1F410 charge line
 // ZEBRA FACE, U+1F993 fast donkey
 //GIRAFFE FACE, U+1F992 large fast donkey
-//FROG FACE, U+1F438 //range 3 low atk //hop ability?
+//FROG FACE, U+1F438 //range 3 low atk //hop ability? FROG EGYPTIAN HIEROGLYPH I007, U+1318F
 // TOP HAT, U+1F3A9 spawns a rabbit
 //RABBIT, U+1F407 high movement 1 atk 1 maxsize, special make more rabbits
+//VULTURE EGYPTIAN HIEROGLYPH G014, U+13150 special that increases stats if it can kill
+//SCARAB EGYPTIAN HIEROGLYPH I007, U+1318F //special 'roll' to increase max size
+////BLACK CROSS ON SHIELD, U+26E8 shield medic
+//chess knight special move L shape
 
 //ORANGUTAN, U+1F9A7 //Pummel, reduce defence to 0
 //GORILLA, U+1F98D //Pummel, reduce defence to 0

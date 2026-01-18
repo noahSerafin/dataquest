@@ -68,7 +68,7 @@ const bodyTiles = computed(() =>
     if (!props.piece?.tiles?.length || !props.piece?.headPosition || props.piece.tiles[0] == undefined) {
       return []
     } else {
-      console.log(props.piece.name, ' tiles: ', props.piece.tiles)
+      //console.log(props.piece.name, ' tiles: ', props.piece.tiles)
       return props.piece.tiles.filter(
         (p) => p.x !== props.piece.headPosition.x || p.y !== props.piece.headPosition.y
       )

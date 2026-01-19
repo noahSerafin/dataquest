@@ -1451,7 +1451,7 @@ class Ace extends Admin {//test
   static name = "Ace in the hole";
   static description = "Your last placed program gets +1 to all stats";
   static unicode = "U+2660";
-  static color = "#f8f8f8ff";
+  static color = "#000000ff";
   constructor() {
     super(Ace.name, Ace.description, Ace.unicode, Ace.color, 7, 3, 'playerAndGame', 'onPlacement')
   }

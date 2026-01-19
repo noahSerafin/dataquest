@@ -857,7 +857,7 @@ class Tar extends Piece {
   static description = "A program invisble to the enemy that applies slow to programs moving over it, removing itself";
   static unicode = "U+2668";
   static color = "#686026";
-  static rarity = 2;
+  static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Tar.name, Tar.description, Tar.unicode, 1, 0, 0, 0, 0, Tar.color, headPosition, [headPosition], team, Tar.rarity, removeCallback, id)
    this.targetType = 'trapPiece';
@@ -884,9 +884,9 @@ class Mine extends Piece {
   static description = "A program invisble to the enemy that damages programs moving over it, removing itself";
   static unicode = "U+1F4A5";
   static color = "#ff9d00";
-  static rarity = 2;
+  static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Mine.name, Mine.description, Mine.unicode, 1, 1, 0, 3, 0, Mine.color, headPosition, [headPosition], team, Mine.rarity, removeCallback, id)
+    super(Mine.name, Mine.description, Mine.unicode, 1, 1, 0, 5, 0, Mine.color, headPosition, [headPosition], team, Mine.rarity, removeCallback, id)
     this.targetType = 'trapPiece';
     this.statuses.hidden = true
     this.statuses.negative = true;
@@ -2298,7 +2298,7 @@ class UFO extends Piece {
   static name = "UFO";
   static description = "A program that can move enemies away from itself";//without increasing size?? headposition = 
   static unicode = "U+1F6F8";
-  static color = "#000000ff";
+  static color = "#000d47ff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(UFO.name, UFO.description, UFO.unicode, 4, 3, 3, 2, 2, UFO.color, headPosition, [headPosition], team, UFO.rarity, removeCallback, id)

@@ -1821,7 +1821,7 @@ class Minerva extends Admin {
   async apply({ id: _id, activePieces }: {id: string, activePieces: Piece[] }) {
     for (const p of activePieces){
       if(p.team==='player'){
-        p.addModifier({attack: 1})
+        p.addModifier({range: 1})
       }
     }
   }

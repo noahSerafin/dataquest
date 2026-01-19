@@ -1449,11 +1449,11 @@ class Pants extends Admin {
 
 class Ace extends Admin {//test
   static name = "Ace in the hole";
-  static description = "If your last placed program is destroyed, move it back to your inventory (untested)";
+  static description = "Your last placed program gets +1 to all stats";
   static unicode = "U+2660";
   static color = "#f8f8f8ff";
   constructor() {
-    super(Ace.name, Ace.description, Ace.unicode, Ace.color, 4, 3, 'playerAndGame', 'onPieceDestruction')
+    super(Ace.name, Ace.description, Ace.unicode, Ace.color, 7, 3, 'playerAndGame', 'onPlacement')
   }
 
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
@@ -1463,10 +1463,11 @@ class Ace extends Admin {//test
     });
     if(isLastBp){
       const idx = activePieces.findIndex(p => p.id === id);
-      const bpIdx = player.programs.findIndex(bp => bp.id === activePieces[idx].id )
+      //const bpIdx = player.programs.findIndex(bp => bp.id === activePieces[idx].id )
       if(activePieces[idx].team==='player'){
-        player.programs[bpIdx].isPlaced = false;
-        activePieces.filter(p => p.id !== activePieces[idx].id);//we could splice, but this might be safer?
+        activePieces[idx].addModifier({maxSize: 1, moves: 1, range: 1, attack: 1, defence: 1})
+        //player.programs[bpIdx].isPlaced = false;
+        //activePieces.filter(p => p.id !== activePieces[idx].id);//we could splice, but this might be safer?
       }
     }
       

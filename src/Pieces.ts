@@ -540,6 +540,7 @@ class Mole extends Piece {//unfinished - test negative
   */
 
 class Lance extends Piece {
+  static name = "Lance";
   static description = "Can charge instead of attacking, adamaging targets in a staight line and moving forward until stopped";
   static unicode = "U+1F3A0";
   static color = "#f9f9f9";
@@ -1662,7 +1663,7 @@ class Bug extends Piece {
 
 class Cockroach extends Piece {
   static name = "Cockroach";
-  static description = "A faster, tougher bug";
+  static description = "A faster, tougher bug, immune to disease";
   static unicode = "U+1FAB3";
   static color = "#e09f79ff";
   static rarity = 4;

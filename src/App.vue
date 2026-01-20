@@ -346,13 +346,13 @@
       currentFib.value = nextFib;
 
       rerollCost.value += currentFib.value;
-      if(player.value.hasAdmin('Slots')){
-        rerollCost.value-=2;
-      }
     } else { //boss/level has been defeated
       rerollCost.value = 5;
       prevFib.value = 0;
       currentFib.value = 1
+    }
+    if(player.value.hasAdmin("Slots")){
+      rerollCost.value-=2;
     }
 
     const classes = [
@@ -525,8 +525,9 @@
     const newPieces = rehydratePieces(newLevel.pieces);
     extraDifficulty.value = difficultyMod;
     activePieces.value = processSpawnPoints(newPieces , difficultyMod);
-    originalPieces.value = activePieces.value.map(p => p.clone());
     originalSpawns.value = [...playerSpawns.value];
+    originalPieces.value = activePieces.value.map(p => p.clone());
+    //originalSpawns.value = playerSpawns.value.map(s => ({ ...s }));
     boardRef.value.clearHighlights();
     await handleApplyAdmins('onRoundStart', '');
     showMap.value = false;
@@ -631,7 +632,7 @@
 
   function processSpawnPoints(pieces: Piece[], mod: number) {
     const processed: Piece[] = [];
-    playerSpawns.value = []
+    const newPlayerSpawns: Coordinate[] = [];
 
     for (const piece of pieces) {
       if (piece instanceof Spawn) {
@@ -680,10 +681,7 @@
 
         if (piece.team === 'player') {
           //placementHighlights.value.push(piece.headPosition);
-          playerSpawns.value = [//for reactivity
-            ...playerSpawns.value,
-            piece.headPosition
-          ];
+          newPlayerSpawns.push(piece.headPosition);
           // Do *not* add Spawn to active pieces — it is a marker, not a unit
           continue;
         }
@@ -691,6 +689,7 @@
       //console.log("placementHighlights after:", playerSpawns.value);
       processed.push(piece);
     }
+    playerSpawns.value = newPlayerSpawns;
 
     return processed;
   }

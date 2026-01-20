@@ -66,10 +66,10 @@
             return {
                 id: crypto.randomUUID(),
                 name: primary.name,//for finding the base class with special move
-                description: 'A boosted hybrid, primary feature: '+primary.description,
+                description: 'A boosted hybrid, primary feature: '+primary.description,//need to remove string 'A boosted hybrid, primary feature: ' for double hybrid
                 unicode: primary.unicode,
                 // averaged stats (rounded down)
-                maxSize: Math.ceil(primary.maxSize + secondary.maxSize),
+                maxSize: Math.ceil(primary.maxSize + secondary.maxSize),//change back
                 moves: Math.ceil(primary.moves + secondary.moves),
                 range: Math.ceil(primary.range + secondary.range),
                 attack: Math.ceil(primary.attack + secondary.attack),

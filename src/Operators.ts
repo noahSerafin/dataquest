@@ -316,8 +316,8 @@ const Debugger : OS = {//lance //bug //screwdriver
     money: 50,
     memory: 10,
     adminSlots: 6,
-    blueprints: [bug, aegis, superKnife, screwdriver],
-    items: [new Genie, new Box, new Pinata, new Gift, new Pandora, new Update2, new Update3, new Floppy ],
+    blueprints: [aegis, superKnife, screwdriver, testPiece],
+    items: [new Genie, new Box, new Pinata, new Gift, new Pandora, new Update2],
     admins: [],
     lives: 9,
     description: 'FOR TESTING'

@@ -154,7 +154,7 @@ defineEmits(["buy", "sell", "highlightPlacements", "close"])
 }
 @media only screen and (min-width: 420px) {
   .inventory-controller{
-    display: flex;
+    display: block;
     flex-direction: row;
     width: 66%;
     padding-right: 2.5rem;

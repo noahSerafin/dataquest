@@ -27,6 +27,7 @@
         allLevels: Level[];
         seed: number;
         cssclass: 'visible' | 'collapsed';
+        bosses: Admin[]
     }>();
 
     const emit = defineEmits<{
@@ -35,6 +36,7 @@
         (e: "openDisabledShop"): void;
         (e: "openCompiler"): void;
         (e: "addBoss", admin: Admin): void;
+        (e: "replaceBosses", admins: Admin[]): void;
         (e: "increaseDifficulty"): void;
         (e: "incrementProgress"): void;
     }>();
@@ -73,11 +75,21 @@
         );
         const pool = bossPool.length > 0 ? bossPool : allBosses;
         console.log('allbosses', allBosses.length)
-        console.log('pool', pool.length)
+        //console.log('pool', pool.length)
         return new pool[Math.floor(Math.random() * pool.length)];
     }
     function newBoss() {
         boss.value = returnNewBoss();
+    }
+    const rerollBossCost = ref<number>(5);
+    function rerollBosses(){
+        const newBosses = []
+        for (let index = 0; index < props.bosses.length; index++) {
+            newBosses.push(returnNewBoss());
+        }
+        emit('replaceBosses', newBosses);
+        props.player.spend(rerollBossCost.value);
+        rerollBossCost.value = rerollBossCost.value*2;
     }
 
     const worldNodes = computed(() =>
@@ -242,6 +254,7 @@
     const canReroll = ref<boolean>(true);
     function rerollSkipReward(node: WorldNode){
         node.skipReward = generateSkipReward();
+        canReroll.value = false;
     }
 
     function takeSkipReward(node: WorldNode){//ask about this next
@@ -265,7 +278,7 @@
         }
         currentNodeId.value = node.id
         selectedPreviewNode.value = null;
-        canReroll.value = false;
+        canReroll.value = true;
         emit('incrementProgress');
     }
 
@@ -360,6 +373,13 @@
     <!-- Preview modal -->
     <div v-if="selectedPreviewNode" class="preview-modal">
       <h3>{{ selectedPreviewNode.type.toUpperCase() }}</h3>
+       <h6 v-if="selectedPreviewNode.type==='boss'"></h6>
+        <button
+            v-if="selectedPreviewNode?.type === 'skip' && player.hasAdmin('Roulette Wheel')"
+            @click="rerollBosses()"
+        >
+            Reroll
+    </button>
       <h6 v-if="selectedPreviewNode.type==='hybrid compiler'">Combine two programs stats into one (rounded up). Keep the primary's special move.</h6>
       <h6 v-if="selectedPreviewNode.type==='skip'">(Must have room)</h6>
       <h4 v-if="selectedPreviewNode.type==='boss' || selectedPreviewNode.type==='level'">{{ selectedPreviewNode.company.name}}</h4>

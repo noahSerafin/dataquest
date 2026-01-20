@@ -236,12 +236,18 @@ function getAvailableMoves(
   ]
 
   return potentialMoves.filter(pos => {
-    const key = `${pos.x},${pos.y}`
-    if(piece.statuses.negative){
-      return tileSet.has(key);
-    } else{
-      return tileSet.has(key) && !pieceMap.has(key);
-    }
+    const key = `${pos.x},${pos.y}`;
+
+    if (!tileSet.has(key)) return false;
+
+    if (piece.statuses.negative) return true;
+
+    const occupyingPiece = pieceMap.get(key);
+
+    if (!occupyingPiece) return true;
+
+    // Knot rule: can move into own tiles
+    return props.player.hasAdmin('Knot') && occupyingPiece === piece;
   })
 }
 
@@ -294,7 +300,13 @@ function getReachableTiles(
       if (!tileSet.has(nKey)) continue;
 
       // If NOT negative, cannot go through occupied tiles
-      if (!isNegative && pieceMap.has(nKey)) continue;
+      //if (!isNegative && pieceMap.has(nKey)) continue; //old method
+      const occupyingPiece = pieceMap.get(nKey);
+
+      if (!isNegative && occupyingPiece) {
+        const canPassThroughOwn = occupyingPiece === piece && piece.team === 'player' && props.player.hasAdmin('Knot'); // pass this in or close over it
+        if (!canPassThroughOwn) continue;
+      }
 
       // Add to queue
       queue.push({ x: n.x, y: n.y, steps: steps + 1 });

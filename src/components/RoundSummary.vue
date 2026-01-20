@@ -1,9 +1,12 @@
 <script setup lang="ts">
     import { Player } from '../Player';
+    import { Admin } from '../AdminPrograms';
+import { computed } from 'vue';
 
     interface Props{
         hasWonRound: boolean,
-        player: Player
+        player: Player,
+        bosses: Admin[]
     }
     const props = defineProps<Props>()
 
@@ -15,8 +18,12 @@
    
     props.player.calcInterest(); //await?? for html
 
+    const bonus = computed(() => 
+        props.player.hasAdmin('Pot of Gold') && props.bosses.length > 0 ? 10 : 0
+    )
+
     function collectAndProceed(){
-        props.player.collectMoney();
+        props.player.collectMoney(bonus.value);
         emit('proceedFromEndOfRound');
         props.player.resetInterestAndReward();
     }
@@ -50,6 +57,8 @@
                 <span v-if="player.hasAdmin('Abacus')">+ Abacus ${{ Math.floor(3/player.difficulty) }}</span>
                 <span v-if="player.hasAdmin('Loot')">+ Loot $4</span>
                 <span v-if="player.hasAdmin('Tithe')">+ Tithe $5</span>
+                <span v-if="player.hasAdmin('Pot of Gold') && bosses.length > 0">+ Pot of Gold $10</span>
+
             </div>
             <button @click="collectAndProceed">Collect and proceed</button>
         </div>

@@ -139,6 +139,9 @@
     showBoard.value = false;
     showSummary.value = false;
     showMainMenu.value = true;
+    //sessionStorage.clear();
+    //localStorage.clear(); // only if you aren't using it yet
+    window.location.reload();
   }
   const showFastControls = ref<boolean>(true);
   function toggleFastControls(){
@@ -180,10 +183,8 @@
 
   function handleApplyItem(payload: {item: Item, id:string}) {
     const item = payload.item;
-    let itemMult = 1;
-    if(player.value.hasAdmin('Chemistry')){
-      itemMult = 2;
-    }
+    const itemMult = 1 + player.value.admins.filter(a => a.name === 'Chemsitry').length;
+
     //check it is to be applied to playerBlueprints
     if (item.targetType === "blueprint") {
       const id = payload.id;
@@ -424,6 +425,9 @@
   function addBossAdmin(admin: Admin){
     bossAdmins.value.push(admin)
   }
+  function replaceBosses(admins: Admin[]){
+    bossAdmins.value = admins;
+  }
 
   async function handleApplyAdmins(trigger: AdminTrigger, id:string){//admin and target
     if(!player.value.hasAdmin('Umbrella')){
@@ -554,9 +558,7 @@
     selectedPiece.value = null;
     isPlacing.value = true
     openSummary(false);
-    //if(bossAdmins.value.length>0){
     await handleApplyAdmins('onRoundStart', '');
-    //}
     roundHasStarted.value = true;
     isFirstTurn.value = true;
   }
@@ -652,7 +654,7 @@
 
           const validEnemies = allPieces.filter(EnemyClass => {
             //p.rarity >= min && p.rarity <= max //old method for spawnsize 1 only
-            if(EnemyClass.name !== "Nuke" && EnemyClass.name !== "Highwayman"){// remove broken pieces
+            if(EnemyClass.name !== "Nuke" && EnemyClass.name !== "Highwayman"){// bomb too?
               const temp = new EnemyClass(piece.headPosition, 'enemy', removePiece);
               return (
                 temp.rarity >= min &&
@@ -731,9 +733,9 @@
   }
 
   async function removePiece(piece: Piece) {
-    if(player.value.hasAdmin('Hi-Vis') && piece.team === 'player'){
+    if(player.value.hasAdmin('Parachute') && piece.team === 'player'){
       piece.tiles = [piece.headPosition];
-      const index = player.value.admins.findIndex(a => a.name === 'Hi-Vis');
+      const index = player.value.admins.findIndex(a => a.name === 'Parachute');
       if (index !== -1) player.value.admins.splice(index, 1);
     } else {
       await handleApplyAdmins('onPieceDestruction', piece.id);
@@ -904,7 +906,6 @@
   }
 
   const movePiece = async (coord : Coordinate) => {
-    console.log('moving player')
     if(!selectedPiece.value || !player.value.canMove) return;
     isPlacing.value = false;
     player.value.canPlace = false;
@@ -1021,6 +1022,17 @@
       }
       return;
     }
+    if (selectedPiece.value.targetType === 'placeAndPieces') {
+      if (targetPiece) {
+        await selectedPiece.value.special({
+          target: target,
+          activePieces: activePieces.value
+        });
+        playerSpawns.value = newPlacementHighlights();
+        selectedPiece.value = null;
+      }
+      return;
+    }
     // --- space target --- target must be a space
     if (selectedPiece.value.targetType === 'space') {//test
       if(!targetPiece){
@@ -1112,7 +1124,6 @@
     selectedPiece.value = null;
     renewBlueprints();//move to end round?
     if(roundWon){
-      //bring up round summary
       hasWonRound.value = true;
       handleApplyAdmins('onRoundEnd', '');//await??
       activePieces.value = [];//for needle
@@ -1178,8 +1189,8 @@
     activePieces.value.forEach(piece => {
       //petri dish, spread statuses here
       if(piece.team === team){
-        const mult = player.value.hasAdmin('Volatile') ? 2 : 1
-        piece.applyStatusEffects(mult);
+        const statusMult = 1 + player.value.admins.filter(a => a.name === 'Volatile').length;
+        piece.applyStatusEffects(statusMult);
       }
     });
   }
@@ -1202,8 +1213,8 @@
         piece.resetTempModifiers();
       }
     });
+    await handleApplyAdmins('onTurnEnd', '');//sprinkler
     applyStatusEffects('player');
-    await handleApplyAdmins('onTurnEnd', '');
     await enemyTurn();
     //player piece tempstats reset
     activePieces.value.forEach(piece => {
@@ -1358,6 +1369,7 @@
     <RoundSummary v-if="showSummary" class="stage-panel" :class="{ active: showSummary }"
       :hasWonRound="hasWonRound"
       :player="player"
+      :bosses="bossAdmins"
       @proceedFromEndOfRound="handleProceed"
       @reloadLevel="reloadLevel"
       @mainMenu="openMainMenu"
@@ -1367,12 +1379,14 @@
       :player="player"
       :seed="worldSeed"
       :cssclass="mapClass"
+      :bosses="bossAdmins"
       @select-level="selectLevel"
       @openShop="openShop"
       @openDisabledShop="openDisabledShop"
       @openCompiler="openCompiler"
       @incrementProgress="incrementMapProgress"
       @addBoss="addBossAdmin"
+      @replaceBosses="replaceBosses"
       @increaseDifficulty="increaseDifficulty"
     />
     <Shop v-if="!displayEditor" class="stage-panel" :class="{ active: showShop }"

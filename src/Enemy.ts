@@ -48,6 +48,9 @@ function decideEnemyIntent(
       if(enemy.targetType == 'pieceAndPlace' && target.piece.headPosition !== target.place && specialAttempts < 1){//rectify attempts later
         return { type: 'special', target: {piece: target.piece, target: target.place}}
       }
+      if(enemy.targetType == 'placeAndPieces' && target.piece.headPosition !== target.place && specialAttempts < 1){//rectify attempts later
+        return { type: 'special', target: {target: target.place, activePieces: activePieces}}
+      }
       if(enemy.targetType === 'piece' && specialAttempts < 1){ ///can execute a special
         return { type: 'special', target: target.piece };
       }
@@ -88,6 +91,10 @@ function decideEnemyIntent(
       if(space) return {type: 'special', target: {target: space, activePieces: activePieces}}
     }
     if(enemy.hasFriendlySpecial){
+      if(enemy.targetType === 'placeAndPieces'){
+        const strongest = findStrongestInRange(enemy, activePieces)
+        if (strongest) return {type: 'special', target: {target: strongest.place, activePieces: activePieces}}
+      }
       if(enemy.targetType === 'group'){
         return {type: 'special', target: (findAnyPiecesInRange(enemy, enemyPieces))}
       }
@@ -541,130 +548,35 @@ function getTilesInLine(piece: Piece, target: Coordinate) {
   return tilesInLine;
 }
 
-//old method, big unreadable loop
-/*
-export async function takeEnemyTurn(
-  activePieces: Piece[],
-  removePieceCallback: (piece: Piece) => void,
-  highlightMoves: (piece: Piece) => void,
-  highlightTargets: (piece: Piece) => void,
-  clearHighlights: () => void,
-  tileSet: Set<string>,
-  onReceiveDamage: (id: string) => void,
-  delay = 200 // ms between moves for visibility
-) {
-  const enemyPieces = activePieces.filter(p => (p.team === 'enemy' && !p.statuses.charmed));//not refs so won't update?
-  const playerPieces = activePieces.filter(p => p.team === 'player' && !p.statuses.charmed);
+function findStrongestInRange(
+  enemy: Piece,
+  activePieces: Piece[]
+): { piece: Piece; place: Coordinate } | null {
+  const ex = enemy.headPosition.x;
+  const ey = enemy.headPosition.y;
 
-  for (const enemy of enemyPieces) {
-    const isMaxSize = enemy.tiles.length === enemy.getStat('maxSize') ? true : false
+  const candidates: { piece: Piece; place: Coordinate }[] = [];
 
-      // Check for any player piece in attack range
-    const target = findPlayerInRange(enemy, playerPieces);
-    if (target) {
-        highlightTargets(enemy);
-        await sleep(delay);
-        if(enemy.actions > 0){
-          if(enemy.targetType === 'piece' && !enemy.hasFriendlySpecial){
-            enemy.special(target)
-            onReceiveDamage(enemy.id);//notify player admins, we whould really do this inside piece.takeDamage for non damaging specials and status damages
-          } else if(enemy.getStat('attack') > target.piece.getStat('defence')){
-            attackPiece(enemy, target.piece);
-            onReceiveDamage(enemy.id);//notify player admins, we whould really do this inside piece.takeDamage
-          }
-          if(enemy.targetType === "space"){
-            enemy.special(getAnySpaceInRange(enemy, activePieces, tileSet));
-          }
-          await sleep(delay);
-          clearHighlights()
-          
-          if(isMaxSize){//at max size so no need to move
-            continue;
-          }
-        } else {
-          clearHighlights();//move laterally to the player
-        }
-    } else {
+  for (const player of activePieces) {
+    if (player.statuses.hidden) continue;
 
-      //look for a non hidden player
-      const nearestAttackable = findNearestAttackableCoordinate(enemy, playerPieces);
-      const nearest = findNearestPieceCoordinate(enemy, activePieces);//differentiate between playerPieces/enemyPieces if enemy has a damaging/helpful special
-      //also prioritise nearest if special move??
-      //or decide randomly?
-      
-      if (!nearest && !nearestAttackable){
-        if(enemy.hasExposingSpecial){
-          enemy.special(findAnyPiecesInRange(enemy, playerPieces))
-        }
-        if(!isMaxSize){
-          //move somewhere free to reach max size
-          while (enemy.movesRemaining) {
-            const space = getAdjacentEmptySpace(enemy.headPosition, activePieces, tileSet)
-            if(space){
-              enemy.moveTo(space)
-            }
-          }
-        }
-        break;//no players found, we move on to next piece
-      } 
+    for (const tile of player.tiles) {
+      const dist =
+        Math.abs(ex - tile.x) + Math.abs(ey - tile.y);
 
-      // Otherwise, move toward nearest player piece, first we get a path
-      let pathToNearest: Coordinate[] = [];
-      if(nearestAttackable){//can attack a piece
-        pathToNearest = findShortestPath(enemy.headPosition, nearestAttackable, tileSet, activePieces) ?? []
-      } else if(nearest){//can't attack but can increase it's size
-        pathToNearest = findShortestPath(enemy.headPosition, nearest, tileSet, activePieces) ?? []//move toward another piece
-      }
-      let pathIdx = 1;
-      while (enemy.movesRemaining > 0 && enemy.actions > 0) {//split up 
-          let nextStep = null;
-          if(pathToNearest.length > 1){//if there is a path
-            nextStep = pathToNearest[pathIdx]//next move should be along this path
-          } else if(nearestAttackable){
-            nextStep = getNextStepTowards(enemy.headPosition, nearestAttackable, tileSet, activePieces);//attempt to get in range
-            //for ranged pieces only??
-          } else if(nearest){
-            nextStep = getNextStepTowards(enemy.headPosition, nearest, tileSet, activePieces);//attempt to get closer to another piece
-          }
-          if (nextStep) {
-            highlightMoves(enemy);
-            await sleep(delay);
-            enemy.moveTo(nextStep);
-            pathIdx ++
-            //checkForTrap
-            const trap = activePieces.find(p =>
-              p.targetType == 'trapPiece' && p.tiles.some(t => t.x === nextStep.x && t.y === nextStep.y)
-            );
-            if (trap) {
-              await trap.special(enemy);
-            }
-            await sleep(delay);
-            clearHighlights();
-          } else {
-            // Cannot move, skip
-            break;
-          }
-
-        const newTarget = findPlayerInRange(enemy, playerPieces);
-        if (newTarget && enemy.actions > 0) {
-          highlightTargets(enemy);
-          if(!enemy.hasFriendlySpecial && enemy.targetType == 'piece'){
-            await enemy.special(newTarget);
-            enemy.actions --
-          }
-          if(enemy.attack > newTarget.piece.defence){
-            await sleep(300);
-            attackPiece(enemy, newTarget.piece);
-            onReceiveDamage(enemy.id);
-            await sleep(delay);
-            clearHighlights();
-            continue; // still in loop if actions > 0
-          }
-        } else if (enemy.actions > 0 && enemy.targetType === 'self'){
-          //use special on self
-          await enemy.special(enemy)
-        }
+      if (dist <= enemy.range) {
+        candidates.push({ piece: player, place: tile });
+        break; // one tile in range is enough per piece
       }
     }
   }
-}*/
+
+  if (candidates.length === 0) return null;
+
+  // Pick the player with the lowest defence, or smallest size?
+  candidates.sort(
+    (a, b) => a.piece.getStat('attack') - b.piece.getStat('attack')
+  );
+
+  return candidates[candidates.length-1];
+}

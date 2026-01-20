@@ -41,22 +41,22 @@ export function blueprintFromPieceClass(piece: typeof Piece): PieceBlueprint {
         isPlaced: false,
         cost: 1 // or whatever cost formula you want
     }
-    /*const testPiece =  {
+    const testPiece =  {
         id: crypto.randomUUID(),
-        name: "Squid",
-        description: '"A squid to test ink function"',
-        unicode: 'U+1FAB1',
-        maxSize: 5,
-        moves: 3,
+        name: "Highwayman",
+        description: '"testing this pieces special move"',
+        unicode: 'U+1F47E',
+        maxSize: 3,
+        moves: 10,
         range: 2,
         attack: 2,
-        defence: 0,
+        defence: 2,
         rarity: 5,
         color: "#ee74eeff",
         // blueprint-only fields:
         isPlaced: false,
         cost: 10 // or whatever cost formula you want
-    }*/
+    }
     const superKnife =  {
         id: crypto.randomUUID(),
         name: "Arms",

@@ -1213,12 +1213,12 @@ class Nuke extends Piece {
 
 class Highwayman extends Piece {//not working
   static name = "Highwayman";
-  static description = "A program that can generate money from an enemy piece";
+  static description = "A program that can generate money from an enemy piece (testing)";
   static unicode = "U+1F9B9";
   static color = "#494646ff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Highwayman.name, Highwayman.description, Highwayman.unicode, 2, 1, 1, 1, 0, Highwayman.color, headPosition, [headPosition], team, Highwayman.rarity, removeCallback, id)
+   super(Highwayman.name, Highwayman.description, Highwayman.unicode, 2, 1, 1, 3, 0, Highwayman.color, headPosition, [headPosition], team, Highwayman.rarity, removeCallback, id)
    this.specialName = 'Rob';
    this.targetType = 'pieceAndPlayer'
    //this.canAttack = false;
@@ -1228,6 +1228,8 @@ class Highwayman extends Piece {//not working
       //await piece.takeDamage(this.getStat('attack'))
       if(piece.team === 'enemy' && this.team === 'player'){
         player.money += 1;
+      } else {
+        piece.takeDamage(this.getStat('attack'));
       }
       this.actions--
     }

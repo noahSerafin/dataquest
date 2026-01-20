@@ -1211,7 +1211,7 @@ class Nuke extends Piece {
   //destroy self on attack
 }
 
-class Highwayman extends Piece {
+class Highwayman extends Piece {//not working
   static name = "Highwayman";
   static description = "A program that can generate money from an enemy piece";
   static unicode = "U+1F9B9";
@@ -1354,7 +1354,7 @@ class Larva extends Piece {
   static color = "#f5f4e2ff";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Larva.name, Larva.description, Larva.unicode, 3, 1, 1, 0, 0, Larva.color, headPosition, [headPosition], team, Larva.rarity, removeCallback, id)
+   super(Larva.name, Larva.description, Larva.unicode, 3, 1, 1, 1, 0, Larva.color, headPosition, [headPosition], team, Larva.rarity, removeCallback, id)
    this.specialName = 'Feed';
    this.targetType = 'placeAndPieces';
    this.hasFriendlySpecial = false;
@@ -2646,6 +2646,7 @@ console.log('pieces length: ', allPieces.length)
 //SCARAB EGYPTIAN HIEROGLYPH I007, U+1318F //special 'roll' to increase max size
 ////BLACK CROSS ON SHIELD, U+26E8 shield medic
 //chess knight special move L shape
+//OCTAGONAL SIGN, U+1F6D1 stop sign
 
 //ORANGUTAN, U+1F9A7 //Pummel, reduce defence to 0
 //GORILLA, U+1F98D //Pummel, reduce defence to 0

@@ -1864,7 +1864,7 @@ class Tracker extends Admin {// PAW PRINTS, U+1F43E Tracker // FOOTPRINTS, U+1F4
 
 class Pong extends Admin {
   static name = "Pong";
-  static description = "Programs retaliate with their damage when they are attacked";
+  static description = "Damage received from enemies is repeated back to them";
   static unicode = "U+1F3D3";
   static color = "#9ecae4ff";
   constructor() {
@@ -1873,7 +1873,7 @@ class Pong extends Admin {
   //on receive damage
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].takeDamage(1);
+    activePieces[idx].takeDamage(activePieces[idx].getStat('attack'));
   }
 }
 
@@ -1988,6 +1988,7 @@ console.log('admins length: ', allAdmins.length)
 //BRIEFCASE, U+1F4BC
 // COFFIN, U+26B0
 //CLOSED MAILBOX WITH RAISED FLAG, U+1F4EB
+//OLD KEY, U+1F5DD
 
 //CHEQUERED FLAG, U+1F3C1
 // Bright idea, special modifier does not consume actions??

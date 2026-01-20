@@ -1,5 +1,5 @@
 import type { OS } from "./types";
-import { Voucher, Whetstone, Garlic, Lightning, RedMeat, Genie, Box, Gift, Pinata, Pandora, Update2, Update3, Floppy } from "./Items";
+import { Voucher, Whetstone, Garlic, Lightning, RedMeat, Genie, Box, Gift, Pinata, Pandora, Update2} from "./Items";
 
 /*
 export function findPieceClassByName(name: string) {

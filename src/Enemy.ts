@@ -4,7 +4,7 @@ import { findAnyPiecesInRange } from "./helperFunctions";
 
 type EnemyIntent =
   | { type: 'attack'; target: Piece }
-  | { type: 'special'; target: Piece | Coordinate | Piece[] | {piece: Piece, target: Coordinate} | {line: Coordinate[], activePieces: Piece[]} | { target: Coordinate, activePieces: Piece[] } | null }
+  | { type: 'special'; target: Piece | Coordinate | Piece[] | {piece: Piece, target: Coordinate} | {line: Coordinate[], activePieces: Piece[]} | {target: Coordinate, activePieces: Piece[]} | null }
   | { type: 'move'; path: Coordinate[] }
   | { type: 'wander'; space: Coordinate }
   | { type: 'wait' };
@@ -93,6 +93,7 @@ function decideEnemyIntent(
     if(enemy.hasFriendlySpecial){
       if(enemy.targetType === 'placeAndPieces'){
         const strongest = findStrongestInRange(enemy, activePieces)
+        console.log('strongest: ', strongest)
         if (strongest) return {type: 'special', target: {target: strongest.place, activePieces: activePieces}}
       }
       if(enemy.targetType === 'group'){
@@ -548,7 +549,7 @@ function getTilesInLine(piece: Piece, target: Coordinate) {
   return tilesInLine;
 }
 
-function findStrongestInRange(
+function findStrongestInRange(//for pawn
   enemy: Piece,
   activePieces: Piece[]
 ): { piece: Piece; place: Coordinate } | null {
@@ -557,18 +558,19 @@ function findStrongestInRange(
 
   const candidates: { piece: Piece; place: Coordinate }[] = [];
 
-  for (const player of activePieces) {
-    if (player.statuses.hidden) continue;
+  for (const piece of activePieces) {
+    if (piece.statuses.hidden && piece.team !== 'enemy' || piece.id === enemy.id || piece.name === enemy.name) continue;
 
-    for (const tile of player.tiles) {
+    for (const tile of piece.tiles) {
       const dist =
         Math.abs(ex - tile.x) + Math.abs(ey - tile.y);
 
       if (dist <= enemy.range) {
-        candidates.push({ piece: player, place: tile });
+        candidates.push({ piece: piece, place: tile });
         break; // one tile in range is enough per piece
       }
     }
+    
   }
 
   if (candidates.length === 0) return null;

@@ -956,7 +956,7 @@ class Germ extends Piece {//up to here //TODO
   static description = "A program that infects other programs, draining their max size over time";
   static unicode = "U+1F9A0";
   static color = "#27ff00";
-  static rarity = 4;
+  static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Germ.name, Germ.description, Germ.unicode, 1, 4, 1, 0, 0, Germ.color, headPosition, [headPosition], team, Germ.rarity, removeCallback, id)
     this.targetType = 'piece'
@@ -1082,7 +1082,7 @@ class Turtle extends Piece {
 //	U+1F997 hopper
 class Hopper extends Piece {
   static name = "Hopper";
-  static description = "A program that can jump over programs next to it";
+  static description = "A program that can jump to spaces in range";
   static unicode = "U+1F997";
   static color = "#9aff46";
   static rarity = 2;
@@ -1091,7 +1091,8 @@ class Hopper extends Piece {
     this.targetType = 'space'
     this.specialName = 'Hop'
   }
-  async special({target, activePieces}:{target: Coordinate, activePieces: Piece[]}): Promise<void> {
+  async special({target, activePieces: _activePieces}:{target: Coordinate, activePieces: Piece[]}): Promise<void> {
+    /*
     //if there all spaces between the hopper and the target contain and piece tiles
     // 1. Target must be within Hopper's range.
     const dx = target.x - this.headPosition.x;
@@ -1124,17 +1125,15 @@ class Hopper extends Piece {
       cx += stepX;
       cy += stepY;
     }
-
     // 4. Every tile between must contain *some piece tile*
     const allBetweenAreOccupied = tilesBetween.every(tile =>
       activePieces.some(piece =>
         piece.tiles.some(t => t.x === tile.x && t.y === tile.y)
       )
     );
-
     if (!allBetweenAreOccupied) return;
-
     // 5. Conditions satisfied → perform hop
+    */
     this.moveTo(target);
     this.actions --
   }
@@ -1213,24 +1212,26 @@ class Nuke extends Piece {
 
 class Highwayman extends Piece {//not working
   static name = "Highwayman";
-  static description = "A program that can generate money from an enemy piece (testing)";
+  static description = "A program that can generate money once from an enemy piece based on it's rarity (testing)";
   static unicode = "U+1F9B9";
   static color = "#494646ff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Highwayman.name, Highwayman.description, Highwayman.unicode, 2, 1, 1, 3, 0, Highwayman.color, headPosition, [headPosition], team, Highwayman.rarity, removeCallback, id)
-   this.specialName = 'Rob';
+   this.specialName = 'Steal';
    this.targetType = 'pieceAndPlayer'
    //this.canAttack = false;
   }
+  private ids: string[] = []//track already stolen pieces?
   async special({piece, player} : {piece: Piece, player: Player}):Promise<void>{
-    if(this.getStat('attack') > piece.getStat('defence')){
+    if(this.ids.includes(piece.id)){
       //await piece.takeDamage(this.getStat('attack'))
       if(piece.team === 'enemy' && this.team === 'player'){
-        player.money += 1;
+        player.money += piece.rarity;
       } else {
         piece.takeDamage(this.getStat('attack'));
       }
+      this.ids.push(piece.id)
       this.actions--
     }
   }
@@ -1427,12 +1428,12 @@ class Wasp extends Piece {
 
 class Rat extends Piece {
   static name = "Rat";
-  static description = "A small but fast program ";
+  static description = "A small but fast program"
   static unicode = "U+1F400";
   static color = "#6e6e6eff";
   static rarity = 1;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Rat.name, Rat.description, Rat.unicode, 1, 3, 1, 1, 0, Rat.color, headPosition, [headPosition], team, Rat.rarity, removeCallback, id)
+    super(Rat.name, Rat.description, Rat.unicode, 1, 3, 1, 1, 0, Rat.color, headPosition, [headPosition], team, Rat.rarity, removeCallback, id)
   }
 }
 
@@ -1455,6 +1456,29 @@ class Flute extends Piece {//not working
   }
 
   //create rat instances
+}
+
+class LabRat extends Piece {
+  static name = "Lab Rat";
+  static description = "A small but fast program that can bite to apply disease, reducing max size"
+  static unicode = "U+1F401";
+  static color = "rgb(222, 255, 171)";
+  static rarity = 3;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+    super(LabRat.name, LabRat.description, LabRat.unicode, 1, 3, 1, 2, 0, LabRat.color, headPosition, [headPosition], team, LabRat.rarity, removeCallback, id)
+    this.specialName = 'bite'
+    this.targetType = 'piece'
+  }
+
+  async special(target: Piece): Promise<void> {
+    target.takeDamage(this.getStat('attack'));
+    if(target.willRetaliate) this.takeDamage(target.getStat('attack'))
+    if(!target.immunities.diseased){
+      target.statuses.diseased = true
+      this.actions --
+    }
+    this.actions --
+  }
 }
 
 class Bat extends Piece {
@@ -1652,7 +1676,10 @@ class Wizard extends Piece {
     this.targetType='space'
   }
   async special({target, activePieces: _activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
-    this.moveTo(target)
+    //this.moveTo(target)
+    this.headPosition = target;
+    this.tiles.splice(0, 1);
+    this.tiles.unshift(this.headPosition)
     this.actions--
   }
   //teleport
@@ -2618,7 +2645,7 @@ class Hedgehog extends Piece {
 }
 
 //99 fairy
-export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Tar, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Larva, Wasp, Rat, Flute, Bat, Dragon, Squid, Snail, Shark, Greatshield, Wizard, Ninja, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, UFO, TP, Saw, Croc, Lighthouse, Torch, Camera, Drum, Shrike, Eagle, Recurve, Daemon, Rex, Hedgehog, Sol, Stopwatch];//Dolls //100 +2 (web, ink)
+export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Tar, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Larva, Wasp, Rat, Flute, LabRat, Bat, Dragon, Squid, Snail, Shark, Greatshield, Wizard, Ninja, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, UFO, TP, Saw, Croc, Lighthouse, Torch, Camera, Drum, Shrike, Eagle, Recurve, Daemon, Rex, Hedgehog, Sol, Stopwatch];//Dolls //100 +2 (web, ink)
 console.log('pieces length: ', allPieces.length)
 
 //doctor STETHOSCOPE, U+1FA7A medic, + max Size to a piece
@@ -2633,6 +2660,7 @@ console.log('pieces length: ', allPieces.length)
 //DOG, U+1F415 , DOG FACE, U+1F436 sniff, expose group?
 //WOLF FACE, U+1F43A expose?
 //LION FACE, U+1F981
+// RHINOCEROS, U+1F98F //charge
 //PLAYGROUND SLIDE, U+1F6DD like gate but with more range? line target??
 //JAPANESE GOBLIN, U+1F47A
 // KITE, U+1FA81
@@ -2649,6 +2677,7 @@ console.log('pieces length: ', allPieces.length)
 ////BLACK CROSS ON SHIELD, U+26E8 shield medic
 //chess knight special move L shape
 //OCTAGONAL SIGN, U+1F6D1 stop sign
+//sauropod U+1F995
 
 //ORANGUTAN, U+1F9A7 //Pummel, reduce defence to 0
 //GORILLA, U+1F98D //Pummel, reduce defence to 0

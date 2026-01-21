@@ -57,10 +57,10 @@ function decideEnemyIntent(
       if(enemy.targetType === 'group'){//bomb type pieces
         return { type: 'special', target: findAnyPiecesInRange(enemy, activePieces)}
       }
+      console.log('no special moves');
+      //if target is not attackable, is there one that is?
     }
-    console.log('no special moves');
-    //if target is not attackable, is there one that is?
-    if(enemy.canAttack){//no special to use, can we attack? //&&target.piece.getStat('defence') < enemy.getStat('attack')
+    if(enemy.canAttack && !enemy.hasFriendlySpecial){//no special to use, can we attack? //&&target.piece.getStat('defence') < enemy.getStat('attack')
       console.log('attacking target');
       return {type: 'attack', target: target.piece}
     }
@@ -91,7 +91,7 @@ function decideEnemyIntent(
       if(space) return {type: 'special', target: {target: space, activePieces: activePieces}}
     }
     if(enemy.hasFriendlySpecial){
-      if(enemy.targetType === 'placeAndPieces'){
+      if(enemy.targetType === 'placeAndPieces'){//pawn
         const strongest = findStrongestInRange(enemy, activePieces)
         console.log('strongest: ', strongest)
         if (strongest) return {type: 'special', target: {target: strongest.place, activePieces: activePieces}}

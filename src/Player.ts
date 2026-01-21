@@ -166,7 +166,11 @@ export class Player {
   }
 
   spend(amount: number){
-    this.money -= amount;
+    if(this.hasAdmin('Coinpurse')){
+      this.money -= (amount + 1);
+    } else {
+      this.money -= amount;
+    }
   }
 
   hasAdmin(name: string){

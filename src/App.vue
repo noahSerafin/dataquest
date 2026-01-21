@@ -931,7 +931,7 @@
   }
 
   function checkForRoundEnd(){
-    console.log('checking for round end: ', activePieces.value)
+    //console.log('checking for round end: ', activePieces.value)
     const enemyPieces = activePieces.value.filter(p => p.team === 'enemy');
     const playerPiecesRemaining = activePieces.value.filter(p => p.team === 'player');
     if (enemyPieces.length === 0) {
@@ -1299,7 +1299,7 @@
     }
   }, { immediate: true });
 
-  const debugMode = ref<boolean>(false);
+  const debugMode = ref<boolean>(true);
 </script>
 
 <template>

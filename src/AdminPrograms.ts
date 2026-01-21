@@ -168,7 +168,7 @@ class Razor extends Admin {
   static color = "#ff4040ff";
 
   constructor() {
-    super(Razor.name, Razor.description, Razor.unicode, Razor.color, 7, 4, 'gameState', 'onPlacement')
+    super(Razor.name, Razor.description, Razor.unicode, Razor.color, 6, 3, 'gameState', 'onPlacement')
   }
   
   //on placement/after hydration
@@ -903,7 +903,7 @@ class Bucket extends Admin {
 
 class Diamond extends Admin {
   static name = "Diamond";//payroll
-  static description = "Every $10 increases a program's defence by 1 on load";
+  static description = "Every $10 you have increases your program's defence by 1 on load";
   static unicode = "U+1F48E";
   static color = "#ff5555";
   constructor() {
@@ -1638,17 +1638,17 @@ class HedgeFund extends Admin {
 
 class PeaPod extends Admin {
   static name = "Pea Pod";
-  static description = "Inreases Admin slots by 3";
+  static description = "Inreases Admin slots by 2";
   static unicode = "U+1FADB";
   static color = "#55ff7aff";
   constructor() {
-    super(PeaPod.name, PeaPod.description, PeaPod.unicode, PeaPod.color, 7, 4, 'player', 'other')
+    super(PeaPod.name, PeaPod.description, PeaPod.unicode, PeaPod.color, 7, 5, 'player', 'other')
   }
   async apply({ player }: { player: Player }) {
-    player.adminSlots += 3;
+    player.adminSlots += 2;
   }
   remove({ player }: { player: Player }) {
-    player.adminSlots -= 3;
+    player.adminSlots -= 2;
   }
 }
 
@@ -1961,18 +1961,18 @@ class Bath extends Admin {
   }
 }
 
-/*class Purse extends Admin {
+class Purse extends Admin {
   static name = "Coinpurse";
   static description = "Save $1 on every shop purchase";
   static unicode = "U+1F45B";
   static color = "rgb(230, 61, 230)";
   constructor() {
-    super(Purse.name, Purse.description, Purse.unicode, Purse.color, 6, 4, 'player', 'other')
+    super(Purse.name, Purse.description, Purse.unicode, Purse.color, 2, 1, 'player', 'other')
   }
-  //handle in worldmap/app
-}*/
+  //handle in player
+}
 
-export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, Razor, BionicArm, BionicLeg, Convenience, Department, Eye, Heartbreaker, Hamsa, Relay, Parachute, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Bone, RollerBlades, Lungs, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, OffRoader, Seed, Puzzle, Chivalry, Roger, Bucket, Diamond, Sneakers, Candle, Lightbulb, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, Sprinkler, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FireTruck, FakeID, Shades, Barber, Umbrella, Bank, Ballet, Pants, Ace, Pi, Pazzaz, Toilet, Harvest, Bipolar, Taoism, Loot, HedgeFund, PeaPod, Liberty, Punching, Teddy, Abacus, DNA, Cheese, AirSupport, DartBoard, Dice, Ladder, Ring, Minerva, Hermit, Tracker, Pong, Knot, Rainbow, Jammer, Balloon, Wheel, Bath];
+export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, Razor, BionicArm, BionicLeg, Convenience, Department, Eye, Heartbreaker, Hamsa, Relay, Parachute, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Bone, RollerBlades, Lungs, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, OffRoader, Seed, Puzzle, Chivalry, Roger, Bucket, Diamond, Sneakers, Candle, Lightbulb, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, Sprinkler, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FireTruck, FakeID, Shades, Barber, Umbrella, Bank, Ballet, Pants, Ace, Pi, Pazzaz, Toilet, Harvest, Bipolar, Taoism, Loot, HedgeFund, PeaPod, Liberty, Punching, Teddy, Abacus, DNA, Cheese, AirSupport, DartBoard, Dice, Ladder, Ring, Minerva, Hermit, Tracker, Pong, Knot, Rainbow, Jammer, Balloon, Wheel, Bath, Purse];
 console.log('admins length: ', allAdmins.length)
 
 //disco ball U+1FAA9

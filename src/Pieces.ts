@@ -1224,7 +1224,7 @@ class Highwayman extends Piece {//not working
   }
   private ids: string[] = []//track already stolen pieces?
   async special({piece, player} : {piece: Piece, player: Player}):Promise<void>{
-    if(this.ids.includes(piece.id)){
+    if(!this.ids.includes(piece.id)){
       //await piece.takeDamage(this.getStat('attack'))
       if(piece.team === 'enemy' && this.team === 'player'){
         player.money += piece.rarity;
@@ -1344,9 +1344,11 @@ class Pawn extends Piece {
     );
 
     activePieces.push(promoted);
+    this.actions--
     this.removeCallback?.(this);
     // Add to activePieces
     promoted.actions--
+    promoted.movesRemaining = 0
   }
 }
 
@@ -1381,10 +1383,12 @@ class Larva extends Piece {
       //replace this with a new wasp
       const wasp = new Wasp(this.headPosition, this.team, this.removeCallback, crypto.randomUUID());
       wasp.tiles = this.tiles;
+      wasp.actions = 0
+      wasp.movesRemaining = 0
       activePieces.push(wasp);
+      this.actions--
       this.removeCallback?.(this)
     }
-    this.actions--
   }
 }
 
@@ -1671,7 +1675,7 @@ class Wizard extends Piece {
   static color = "#7600c5ff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Wizard.name, Wizard.description, Wizard.unicode, 3, 2, 3, 2, 1, Wizard.color, headPosition, [headPosition], team, Wizard.rarity, removeCallback, id)
+    super(Wizard.name, Wizard.description, Wizard.unicode, 3, 2, 3, 2, 2, Wizard.color, headPosition, [headPosition], team, Wizard.rarity, removeCallback, id)
     this.specialName='Teleport'
     this.targetType='space'
   }
@@ -2406,21 +2410,21 @@ class Saw extends Piece {
 
 class Croc extends Piece {
   static name = "Croc";
-  static description = "A slow program with high attack that starts hidden from enemy pieces until attacking";
+  static description = "A slow program with high attack that starts hidden from enemy pieces";
   static unicode = "U+1F40A";
   static color = "#022f0eff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Croc.name, Croc.description, Croc.unicode, 2, 1, 1, 4, 1, Croc.color, headPosition, [headPosition], team, Croc.rarity, removeCallback, id)
-    this.specialName='Bite'
-    this.targetType='piece'
+    //this.specialName='Submerge'
+    //this.targetType='piece'
     this.statuses.hidden = true;
   }
-  async special(target: Piece): Promise<void> {
+  /*async special(target: Piece): Promise<void> {
     await target.takeDamage(this.getStat('attack'))
     this.statuses.hidden = false;
     this.actions--
-  }
+  }*/
 }
 
 class Lighthouse extends Piece {

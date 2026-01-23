@@ -355,7 +355,7 @@ class AdminMap extends Admin {
 
 export class PetriDish extends Admin {// status test unfinished: make enemies spread to fellow enemies
   static name = "Petri Dish";
-  static description = "Status effects spread to adjacent enemy programs at the end of your turn";//effect all programs??
+  static description = "Harmful status effects spread to adjacent enemy programs at the end of your turn";//effect all programs??
   static unicode = "U+1F9EB";
   static color = "#14532dff";
   constructor() {
@@ -379,6 +379,7 @@ export class PetriDish extends Admin {// status test unfinished: make enemies sp
         for (const statusKey of Object.keys(piece.statuses) as StatusKey[]) {
           if (piece === enemy) continue;
           if (statusKey === 'negative') continue;
+          if (statusKey === 'hidden') continue;
           if (!piece.statuses[statusKey]) continue;
           if (enemy.immunities?.[statusKey]) continue;
 

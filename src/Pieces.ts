@@ -172,10 +172,10 @@ export abstract class Piece {
       t => !(t.x === newPosition.x && t.y === newPosition.y)
     );
     
-    this.tiles.unshift(newPosition)
+    this.tiles.unshift(newPosition)//move below the pop for disease to shrink on move?
     // If exceeding maxSize, remove the oldest tile
     if (this.tiles.length > this.getStat('maxSize')) {
-      this.tiles.pop() // removes first element
+      this.tiles.pop() // removes last element
     }
     this.useMove();
   }
@@ -229,12 +229,12 @@ export abstract class Piece {
       this.range = Math.max(0, this.getStat('range') - 1 * mult);
     }
     if (this.statuses.burning) {
-      if(this.tiles.length <= 1){
-        this.removeCallback?.(this);
-      }
       this.tiles.pop()
       if(mult > 1){
         this.tiles.pop()
+      }
+      if(this.tiles.length <= 1){
+        this.removeCallback?.(this);
       }
     }
     if (this.statuses.poisoned) {
@@ -2124,7 +2124,7 @@ class Jellyfish extends Piece {
 
 class Screwdriver extends Piece {
   static name = "Screwdriver";
-  static description = "A program that can tinker with another, boosting a random stat by 1";
+  static description = "A program that can tinker with another, giving +1 to a friendly's stat, or -1 to an enemy's";
   static unicode = "U+1FA9B";
   static color = "#ff1d0dff";
   static rarity = 5;
@@ -2150,7 +2150,7 @@ class Screwdriver extends Piece {
       possibleStats[Math.floor(Math.random() * possibleStats.length)];
 
     // Apply +1 to that stat using your modifier system
-    const mod: StatModifier = { [randomStat]: 1 };
+    const mod: StatModifier = { [randomStat]: (targetPiece.team === this.team) ? 1 : -1};
 
     targetPiece.addModifier(mod);
     this.actions--

@@ -219,7 +219,6 @@ const inRangeHighlights = ref<Coordinate[]>([]);
 const specialHighlights = ref<Coordinate[]>([]);
 //const placeHighlights = ref<Coordinate[]>([])
 
-//change to one move at a time
 function getAvailableMoves(
   piece: Piece,
   tileSet: Set<string>, // the valid board tiles like "x,y"

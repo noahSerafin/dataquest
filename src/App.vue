@@ -157,7 +157,7 @@
     
     // remove from programs
     player.value.programs.splice(idx, 1);
-
+    pieceToPlace.value = null;
     // refund money (e.g., half cost or some formula)
     player.value.money += piece.rarity;
   }
@@ -183,7 +183,8 @@
 
   function handleApplyItem(payload: {item: Item, id:string}) {
     const item = payload.item;
-    const itemMult = 1 + player.value.admins.filter(a => a.name === 'Chemsitry').length;
+    const itemMult = 1 + player.value.admins.filter(a => a.name === 'Chemistry').length;
+    console.log('itemMult:', itemMult);
 
     //check it is to be applied to playerBlueprints
     if (item.targetType === "blueprint") {
@@ -364,13 +365,9 @@
     shopBlueprints.value = classes.map(c => makeBlueprint(c.class, c.variant ?? undefined));
 
     //no reappearing admins
-    let availableAdmins = allAdmins;
-    if(player.value.hasAdmin('Bouquet')){
-      const ownedAdmins = new Set(player.value.admins.map(a => a.name));
-      availableAdmins = allAdmins.filter(
-        AdminClass => !ownedAdmins.has(AdminClass.name) // or .name
-      );
-    }
+    const ownedAdmins = new Set(player.value.admins.map(a => a.name));
+    const availableAdmins = (player.value.hasAdmin('Bouquet')) ? allAdmins : allAdmins.filter(AdminClass => !ownedAdmins.has(AdminClass.name));
+
     const allItemsAndAdmins: ItemConstructor[] = [...allItems, ...availableAdmins];
     shopItems.value = [
       pickWeightedRandomItem(allItemsAndAdmins, player.value),
@@ -890,6 +887,7 @@
   function handlePieceSelect(piece: Piece) {//handleselect
     if(isPlacing.value){
       isPlacing.value = false;
+      pieceToPlace.value = null;
     }
     selectedPiece.value = piece
     //highlight range
@@ -1244,7 +1242,6 @@
     // Hydrate pieces once
     const initPieces = rehydratePieces(level.value.pieces);
     activePieces.value = processSpawnPoints(initPieces, 0);
-
     displayEditor.value = false; // swap to board view
   };
 
@@ -1469,9 +1466,9 @@
     <div v-if="!displayEditor" class="player-actions">
       <button v-if="(!displayEditor && roundHasStarted && !hasFinishedTurn) || debugMode" class="end-turn" v-on:click="endTurn()">End Turn</button>
       <!--<button class="mt-2 px-2 py-1 bg-blue-500 text-white rounded" @click="showInventory = !showInventory">{{showInventory ? 'Hide Inventory' : 'Inventory' }}</button>-->
-      <div v-if="!displayEditor && roundHasStarted" class="graveyard">
+      <!--<div v-if="!displayEditor && roundHasStarted" class="graveyard">
         <button>🪦</button>
-      </div>
+      </div>-->
       <button v-if="!displayEditor && roundHasStarted && player.lives > 1" class="retry-btn" v-on:click="retryLevel()">Retry</button>
     </div>
   </div>

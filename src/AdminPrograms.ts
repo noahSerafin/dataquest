@@ -254,7 +254,7 @@ class Eye extends Admin {//test try
   }
 }
 
-/*class Bouquet extends Admin {//duplicates showing up anyway
+class Bouquet extends Admin {//duplicates showing up anyway
   static name = "Bouquet";
   static description = "Held admin programs can reappear in the shop";
   static unicode = "U+1F490";
@@ -264,7 +264,7 @@ class Eye extends Admin {//test try
     super(Bouquet.name, Bouquet.description, Bouquet.unicode, Bouquet.color, 3, 3, 'gameState', 'other')//shop
   }
   //shop, disable for now
-}*/
+}
 
 class Heartbreaker extends Admin {
   static name = "Heartbreaker";
@@ -424,11 +424,11 @@ class CreditCard extends Admin {
 
 class Needle extends Admin {//try it out test
   static name = "Needle";
-  static description = "Winning a round with one program placed boosts all it's stats by one permanently (testing)";
+  static description = "Winning a round with one program placed boosts all it's stats by one permanently";
   static unicode = "U+1FAA1";
-  static color = "#b448a6ff";
+  static color = "rgb(209, 89, 193)";
   constructor() {
-    super(Needle.name, Needle.description, Needle.unicode, Needle.color, 10, 5, 'playerAndGame', 'onRoundEnd')//6 and player?
+    super(Needle.name, Needle.description, Needle.unicode, Needle.color, 10, 6, 'playerAndGame', 'onRoundEnd')//6 and player?
   }
   async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     for (const p of activePieces){
@@ -482,7 +482,7 @@ class Joker extends Admin {
   }
 }
 
-class Chemistry extends Admin {//test
+export class Chemistry extends Admin {//test
   static name = "Chemistry";
   static description = "Items that affect stats effects are doubled (+1 item effect mult)";
   static unicode = "U+232C";//"U+2697";//BENZENE RING, U+232C
@@ -559,7 +559,7 @@ class Lungs extends Admin {
   static name = "Cardio";
   static description = "Programs all gain +4 moves on placement";
   static unicode = "U+1FAC1";
-  static color = "#9e0e0eff";
+  static color = "rgb(146, 14, 158)";
   constructor() {
     super(Lungs.name, Lungs.description, Lungs.unicode, Lungs.color, 10, 5, 'gameState', 'onPlacement')
   }
@@ -1505,7 +1505,7 @@ class Pazzaz extends Admin {
 }
 
 class Toilet extends Admin {
-  static name = "Circling the drain";
+  static name = "Circling The Drain";
   static description = "Common admins each provide +1 to all stats on placement";
   static unicode = "U+1F6BD";
   static color = "#557affff";
@@ -1714,15 +1714,15 @@ class Abacus extends Admin {
   }
 }
 
-class DNA extends Admin {
+/*class DNA extends Admin {
   static name = "Gene Splicing";
-  static description = "Open the hybrid compiler at any time";
+  static description = "Open the hybrid compiler at any time"; //??Hybrids take cumulative rather than average stats
   static unicode = "U+1F9EC";
   static color = "#ff55b5ff";
   constructor() {
     super(DNA.name, DNA.description, DNA.unicode, DNA.color, 5, 3, 'gameState', 'other')
   }
-}
+}*/
 
 class Cheese extends Admin {
   static name = "Chedda";
@@ -1864,7 +1864,7 @@ class Tracker extends Admin {// PAW PRINTS, U+1F43E Tracker // FOOTPRINTS, U+1F4
 
 class Pong extends Admin {
   static name = "Pong";
-  static description = "Damage received from enemies is repeated back to them";
+  static description = "Damage received from enemies is returned back to them";
   static unicode = "U+1F3D3";
   static color = "#9ecae4ff";
   constructor() {
@@ -1972,7 +1972,7 @@ class Purse extends Admin {
   //handle in player
 }
 
-export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, Razor, BionicArm, BionicLeg, Convenience, Department, Eye, Heartbreaker, Hamsa, Relay, Parachute, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Bone, RollerBlades, Lungs, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, OffRoader, Seed, Puzzle, Chivalry, Roger, Bucket, Diamond, Sneakers, Candle, Lightbulb, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, Sprinkler, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FireTruck, FakeID, Shades, Barber, Umbrella, Bank, Ballet, Pants, Ace, Pi, Pazzaz, Toilet, Harvest, Bipolar, Taoism, Loot, HedgeFund, PeaPod, Liberty, Punching, Teddy, Abacus, DNA, Cheese, AirSupport, DartBoard, Dice, Ladder, Ring, Minerva, Hermit, Tracker, Pong, Knot, Rainbow, Jammer, Balloon, Wheel, Bath, Purse];
+export const allAdmins = [Meteor, Miner, Bubble, Crystal, Clover, Onion, Blood, Razor, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Parachute, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Bone, RollerBlades, Lungs, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, OffRoader, Seed, Puzzle, Chivalry, Roger, Bucket, Diamond, Sneakers, Candle, Lightbulb, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, Sprinkler, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FireTruck, FakeID, Shades, Barber, Umbrella, Bank, Ballet, Pants, Ace, Pi, Pazzaz, Toilet, Harvest, Bipolar, Taoism, Loot, HedgeFund, PeaPod, Liberty, Punching, Teddy, Abacus, Cheese, AirSupport, DartBoard, Dice, Ladder, Ring, Minerva, Hermit, Tracker, Pong, Knot, Rainbow, Jammer, Balloon, Wheel, Bath, Purse];
 console.log('admins length: ', allAdmins.length)
 
 //disco ball U+1FAA9
@@ -1982,6 +1982,9 @@ console.log('admins length: ', allAdmins.length)
 //SKATEBOARD, U+1F6F9 ollie
 //BOWLING, U+1F3B3
 //SLED, U+1F6F7
+//NEST WITH EGGS, U+1FABA Nest Egg/Egg basket
+//COCKTAIL GLASS, U+1F378 hybrid effect
+//DECIDΑCPS TREE, U+1F333
 
 //PINE DECORATION, U+1F38D
 //SYMBOL FOR SALT OF ANTIMONY, U+1F72D sceptre

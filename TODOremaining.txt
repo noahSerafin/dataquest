@@ -1,11 +1,8 @@
 GAME
-Defense - lose on damage (and reset every turn???) - would make ai easier 4
-test interest is working properly 
 reveal hidden enemies before damage
 sort out graveyard 8
 
 AI 6 nearly-done
--confused todo on enemy 9
     maybe ignore statuses if already has a status??? or dont consume an action??
     !attackingSpecial use on friendly??? or friendlySpecial bool
 
@@ -41,9 +38,7 @@ Fairy - graveyard interaction 8
 keep track of upgrades and display on piece 7
 add backup damage to specials that apply status for AI 4
 
-ADMINS - Onion Icon - Petri - spread statuses -test, crystal - test, chemistry - test 22 off 100
-test world map, enable previewing of nodes after shops
-money admins on interest - test, implement into ROUND SUMMARY, maybe store earned money in a temp variable, add it in the summary with awaits? 7
+ADMINS - Onion Icon, chemistry - test
 
 companies 8 - own list of programs/variants;
 

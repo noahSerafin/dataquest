@@ -82,7 +82,7 @@ function decideEnemyIntent(
     }
   }
 
-  if(enemy.actions > 0){//still have an action? 
+  if(enemy.actions > 0  && specialAttempts < 1){//still have an action? 
     if(enemy.targetType === 'self'){
       return {type: 'special', target: enemy}
     }
@@ -111,8 +111,8 @@ function decideEnemyIntent(
   //no targets, or no actions left
   if(enemy.tiles.length < enemy.maxSize && enemy.movesRemaining > 0 && !enemy.statuses.frozen){
     //move somewhere free to reach max size
-    const space = getAdjacentEmptySpace(enemy.headPosition, activePieces, tileSet)
-    if(space) return { type: 'wander', space: space };
+    const spaces = getAdjacentEmptySpaces(enemy.headPosition, activePieces, tileSet)
+    if(spaces) return { type: 'wander', space: spaces[Math.floor(Math.random() * spaces.length)] };
   }
   //is already max size, or no moves left, or no space to move into
   return {type: 'wait'};
@@ -121,6 +121,7 @@ function decideEnemyIntent(
 async function executeEnemyIntent(
   enemy: Piece,
   activePieces: Piece[],
+  tileSet: Set<string>,
   intent: EnemyIntent,
   helpers: {  
     highlightMoves: (piece: Piece) => void,
@@ -147,7 +148,7 @@ async function executeEnemyIntent(
       helpers.highlightTargets(enemy);
       await sleep(helpers.delay);
       await attackPiece(enemy, intent.target);
-      helpers.onReceiveDamage(intent.target.id);
+      helpers.onReceiveDamage(enemy.id);
       helpers.clearHighlights();
       break;
 
@@ -158,7 +159,14 @@ async function executeEnemyIntent(
           helpers.highlightMoves(enemy);
         }
         await sleep(helpers.delay);
-        enemy.moveTo(step);//cant move here if its occupied
+        if(enemy.statuses.confused){
+          const allMoves = getAdjacentEmptySpaces(enemy.headPosition, activePieces, tileSet);
+          if(allMoves){
+            enemy.moveTo(allMoves[Math.floor(Math.random() * allMoves.length)]);
+          } 
+        } else {
+          enemy.moveTo(step);//cant move here if its occupied
+        }
         const trap = activePieces.find(p =>
           p.targetType == 'trapPiece' && p.tiles.some(t => t.x === step.x && t.y === step.y)
         );
@@ -216,7 +224,7 @@ export async function runEnemyStateMachine(
       if(intent.type === 'special'){
         specialAttempts += 1;
       }
-      await executeEnemyIntent(enemy, activePieces, intent, helpers);
+      await executeEnemyIntent(enemy, activePieces, tileSet, intent, helpers);
       await sleep(helpers.delay);
       if (intent.type === 'wait') break;
     } 
@@ -427,11 +435,11 @@ function getNextStepTowards(
   return validMoves[0];
 }
 */
-function getAdjacentEmptySpace(
+function getAdjacentEmptySpaces(
   coord: Coordinate,
   activePieces: Piece[],
   tileSet: Set<string>
-): Coordinate | null {
+): Coordinate[] | null {
 
   const directions = [
     { x: coord.x + 1, y: coord.y },
@@ -455,7 +463,7 @@ function getAdjacentEmptySpace(
 
   if (validSpaces.length === 0) return null;
 
-  return validSpaces[Math.floor(Math.random() * validSpaces.length)];
+  return validSpaces;
 }
 
 function getAnySpaceInRange(

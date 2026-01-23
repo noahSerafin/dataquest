@@ -582,7 +582,7 @@ class Keygen extends Item<Piece[]> {//TODO test, unfinished
     apply(activePieces: Piece[], itemMult: number) {//game state from app??
         activePieces.forEach(piece => {
             if(piece.team === 'enemy' && piece.getStat('defence') > 0){
-                piece.addModifier({defence: -itemMult})//test
+                piece.addModifier({defence: 1*(-itemMult)})//test
             }
         })
         //receive game state, and map
@@ -602,7 +602,7 @@ class Bugle extends Item<Piece[]> {
     apply(activePieces: Piece[], itemMult: number) {
          activePieces.forEach(piece => {
             if(piece.team === 'player'){
-                piece.addModifier({attack: itemMult})//test
+                piece.addModifier({attack: 1 * itemMult})//test
             }
         })
     }
@@ -620,7 +620,7 @@ class Megaphone extends Item<Piece[]> {
     apply(activePieces: Piece[], itemMult: number) {
          activePieces.forEach(piece => {
             if(piece.team === 'player'){
-                piece.addModifier({attack: itemMult})//test
+                piece.addModifier({attack: 1 * itemMult})//test
             }
         })
     }

@@ -1,5 +1,6 @@
 import type { OS } from "./types";
 import { Voucher, Whetstone, Garlic, Lightning, RedMeat, Genie, Box, Gift, Pinata, Pandora, Update2} from "./Items";
+import { Chemistry } from "./AdminPrograms";
 
 /*
 export function findPieceClassByName(name: string) {
@@ -318,7 +319,7 @@ const Debugger : OS = {//lance //bug //screwdriver
     adminSlots: 6,
     blueprints: [aegis, superKnife, screwdriver, testPiece],
     items: [new Genie, new Box, new Pinata, new Gift, new Pandora, new Update2],
-    admins: [],
+    admins: [new Chemistry],
     lives: 9,
     description: 'FOR TESTING'
 }

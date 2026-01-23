@@ -162,7 +162,7 @@ export function blueprintFromPieceClass(piece: typeof Piece): PieceBlueprint {
         name: "Lab Rat",
         description: "A small but fast program that can spread disease",
         unicode: "U+1F401",
-        color: "rgb(170, 170, 170)",
+        color: "rgb(190, 214, 81)",
         maxSize: 1,
         moves: 3,
         range: 1,
@@ -337,7 +337,7 @@ const Fortran : OS = {//lance //bug //screwdriver
     items: [new Pandora],
     admins: [new Chemistry, new Volatile, new PetriDish],
     lives: 1,
-    description: "Ancient alchemical technology"
+    description: "Ancient alchemical technology, heavily focused on statuses."
 }
 
 const Cobol : OS = {//lance //bug //screwdriver

@@ -157,9 +157,9 @@ class Glasses extends Item<PieceBlueprint> {
     static name = "Glasses";
     static description = "increases a program's range by 2";
     static unicode = "U+1F453"
-    static color = "#fff12bff";
+    static color = "rgb(255, 188, 43)";
     constructor(){
-        super(Glasses.name, Glasses.description, Glasses.unicode, Glasses.color, 4, 2, 'blueprint')
+        super(Glasses.name, Glasses.description, Glasses.unicode, Glasses.color, 5, 4, 'blueprint')
     }
     //increases a program's range by 1
     apply(target: PieceBlueprint, itemMult: number) {
@@ -188,7 +188,7 @@ export class Lightning extends Item<PieceBlueprint> {
     static unicode = "U+26A1";
     static color = "#dc00e4ff";
     constructor(){
-        super(Lightning.name, Lightning.description, Lightning.unicode, Lightning.color, 4, 2, 'blueprint')
+        super(Lightning.name, Lightning.description, Lightning.unicode, Lightning.color, 4, 3, 'blueprint')
     }
     //increases a program's moves by 1
     apply(target: PieceBlueprint, itemMult: number) {

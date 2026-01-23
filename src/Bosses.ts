@@ -158,7 +158,7 @@ class Factory extends Admin {
             //random piece in all pieces using player difficulty level
             const { min, max } = DIFFICULTY_RARITY[player.difficulty];
             const validEnemies = allPieces.filter(p =>
-                p.rarity >= min && p.rarity <= max
+                p.rarity >= min && p.rarity <= max && p.name !== 'Nuke' && p.name !== 'Trap' &&  p.name !== 'Tar' && p.name !== 'Pitfall' && p.name !== 'Web' && p.name !== 'Mine'
             );
             const pool = validEnemies.length > 0 ? validEnemies : allPieces;
             const EnemyClass = pool[Math.floor(Math.random() * pool.length)];//random piece ranked for diificulty

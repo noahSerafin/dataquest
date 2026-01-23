@@ -79,7 +79,7 @@ class Miner extends Admin {
   //
 }
 
-class Bubble extends Admin {
+export class Bubble extends Admin {
   static name = "Bubble";
   static description = "Gain +$1 bonus interest every round, 10% chance to pop and reset, also reducing money to 0";
   static unicode = "U+1FAE7";
@@ -353,7 +353,7 @@ class AdminMap extends Admin {
   //player bool
 }
 
-class PetriDish extends Admin {// status test unfinished: make enemies spread to fellow enemies
+export class PetriDish extends Admin {// status test unfinished: make enemies spread to fellow enemies
   static name = "Petri Dish";
   static description = "Status effects spread to adjacent enemy programs at the end of your turn";//effect all programs??
   static unicode = "U+1F9EB";
@@ -363,32 +363,36 @@ class PetriDish extends Admin {// status test unfinished: make enemies spread to
   }
   //on turn end
   async apply({ id: _id, activePieces }: { id: string; activePieces: Piece[] }) {
-    //const players = activePieces.filter(p => p.team === 'player');
     const enemies = activePieces.filter(p => p.team === 'enemy');
+    const toApply: Array<{ piece: Piece; status: StatusKey }> = [];
 
-    //for (const player of players) {
-    for (const player of activePieces) {
+    for (const piece of activePieces) {
       for (const enemy of enemies) {
-        const isAdjacent = enemy.tiles.some(t =>
-          Math.abs(t.x - player.headPosition.x) +
-          Math.abs(t.y - player.headPosition.y) === 1
-        );
+        const isAdjacent = piece.tiles.some(st =>
+          enemy.tiles.some(tt =>
+          Math.abs(st.x - tt.x) + Math.abs(st.y - tt.y) === 1
+        )
+      );
 
         if (!isAdjacent) continue;
 
-        for (const statusKey of Object.keys(player.statuses) as StatusKey[]) {
+        for (const statusKey of Object.keys(piece.statuses) as StatusKey[]) {
+          if (piece === enemy) continue;
           if (statusKey === 'negative') continue;
-          if (!player.statuses[statusKey]) continue;
+          if (!piece.statuses[statusKey]) continue;
           if (enemy.immunities?.[statusKey]) continue;
 
-          enemy.statuses[statusKey] = true;
+          toApply.push({ piece: enemy, status: statusKey });
         }
       }
+    }
+    for (const { piece, status } of toApply) {
+      piece.statuses[status] = true;
     }
   }
 }
 
-class Volatile extends Admin {//handled in app
+export class Volatile extends Admin {//handled in app
   static name = "Volatile";
   static description = "Status effects are doubled (+1 status mult)";
   static unicode = "U+1F9EA";
@@ -411,7 +415,7 @@ class Inheritance extends Admin {
   }
 }
 
-class CreditCard extends Admin {
+export class CreditCard extends Admin {
   static name = "Credit Card";
   static description = "Go up to $20 in debt";
   static unicode = "U+1F4B3";
@@ -801,7 +805,7 @@ class OffRoader extends Admin {
   //map edit
 }
 
-class Seed extends Admin {
+export class Seed extends Admin {
   static name = "Seed";
   static description = "Raises maximum interest by $5";
   static unicode = "U+1F331";
@@ -1236,7 +1240,7 @@ class Fountain extends Admin {
   }
 }
 
-export class Spoon extends Admin {
+class Spoon extends Admin {
   static name =  "Silver Spoon";
   static description = "Gain $4 at the start of every round";
   static unicode = "U+1F944";
@@ -1375,7 +1379,7 @@ class Umbrella extends Admin {
   }*/
 }
 
-class Bank extends Admin {
+export class Bank extends Admin {
   static name = "Bank";
   static description = "Increases sell value of held items and admins by $2 every round";
   static unicode = "U+1F3E6";
@@ -1700,7 +1704,7 @@ class Teddy extends Admin {//handle in app
   }
 }
 
-class Abacus extends Admin {
+export class Abacus extends Admin {
   static name = "Abacus";
   static description = "gain 6/your current security level in $ at the end of a round (rounded down)";
   static unicode = "U+1F9EE";
@@ -1724,7 +1728,7 @@ class Abacus extends Admin {
   }
 }*/
 
-class Cheese extends Admin {
+export class Cheese extends Admin {
   static name = "Chedda";
   static description = "+$1 at the end of a round";
   static unicode = "U+1F9C0";
@@ -1983,8 +1987,12 @@ console.log('admins length: ', allAdmins.length)
 //BOWLING, U+1F3B3
 //SLED, U+1F6F7
 //NEST WITH EGGS, U+1FABA Nest Egg/Egg basket
-//COCKTAIL GLASS, U+1F378 hybrid effect
+//COCKTAIL GLASS, U+1F378 hybrids get bonus stats on placement
 //DECIDΑCPS TREE, U+1F333
+// OFFICE BUILDING, U+1F3E2
+// HOSPITAL, U+1F3E5
+//SCHOOL, U+1F3EB
+//blue screen of death - freezes all programs
 
 //PINE DECORATION, U+1F38D
 //SYMBOL FOR SALT OF ANTIMONY, U+1F72D sceptre

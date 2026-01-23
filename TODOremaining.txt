@@ -3,8 +3,8 @@ reveal hidden enemies before damage
 sort out graveyard 8
 
 AI 6 nearly-done
-    maybe ignore statuses if already has a status??? or dont consume an action??
-    !attackingSpecial use on friendly??? or friendlySpecial bool
+    handle onrecievedamage admins with specials that deal damage
+    maybe ignore statuses if already has a status??? or dont consume an action amd increase special count??
 
 BOSSES 7
 test damage all bosses
@@ -14,7 +14,7 @@ redacted - edit piece view
 
 BUGS 6
 Spanner not working
-Offroader allowing redos, add done tag to nodes 5
+
 -visual: 5
 and class to acting admins
 -visualise traps - have credit pickups? disguise the cheese as one

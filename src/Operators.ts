@@ -1,6 +1,6 @@
 import type { OS } from "./types";
-import { Voucher, Whetstone, Garlic, Lightning, RedMeat, Genie, Box, Gift, Pinata, Pandora, Update2} from "./Items";
-import { Chemistry } from "./AdminPrograms";
+import { Voucher, Whetstone, Garlic, Lightning, RedMeat, Genie, Box, Pandora, Update2} from "./Items";
+import { Abacus, Bank, Bubble, Cheese, Chemistry, PetriDish, Seed, Volatile } from "./AdminPrograms";
 
 /*
 export function findPieceClassByName(name: string) {
@@ -157,6 +157,22 @@ export function blueprintFromPieceClass(piece: typeof Piece): PieceBlueprint {
         isPlaced: false,
         cost: 1 // or whatever cost formula you want
     }
+    const labrat =  {
+        id: crypto.randomUUID(),
+        name: "Lab Rat",
+        description: "A small but fast program that can spread disease",
+        unicode: "U+1F401",
+        color: "rgb(170, 170, 170)",
+        maxSize: 1,
+        moves: 3,
+        range: 1,
+        attack: 1,
+        defence: 0,
+        rarity: 2,
+        // blueprint-only fields:
+        isPlaced: false,
+        cost: 1 // or whatever cost formula you want
+    }
     const snail =  {
         id: crypto.randomUUID(),
         name: "Snail",
@@ -249,7 +265,7 @@ export function blueprintFromPieceClass(piece: typeof Piece): PieceBlueprint {
 const Steam : OS = {//knife //shield //sling
     name: 'Steam',
     unicode: 'U+1F682',
-    money: 5,
+    money: 3,
     memory: 6,
     adminSlots: 5,
     blueprints: [knife, sling, shield],
@@ -261,7 +277,7 @@ const Steam : OS = {//knife //shield //sling
 const Penguin : OS = {//potato //shield
     name: 'Penguin',
     unicode: 'U+1F427',
-    money: 3,
+    money: 4,
     memory: 5,
     adminSlots: 5,
     blueprints: [potato, sling, aegis],
@@ -277,7 +293,7 @@ const Window : OS = {//knife //shield //snail
     money: 5,
     memory: 4,
     adminSlots: 5,
-    blueprints: [knife, snail, tp, shield],
+    blueprints: [knife, sling, snail, tp],
     items: [],
     admins: [],
     lives: 2,
@@ -308,7 +324,33 @@ const Temple : OS = {//lance //bug //screwdriver
     items: [new Pandora],
     admins: [],
     lives: 3,
-    description: "Overclocked memory and admin slots, low money. Some unique starting programs, and a pandora's Box."
+    description: "Overclocked memory and admin slots, low money. Some unique starting programs, and a Pandora's Box."
+}
+
+const Fortran : OS = {//lance //bug //screwdriver
+    name: 'Fortran',
+    unicode: 'U+2697',
+    money: 0,
+    memory: 4,
+    adminSlots: 3,
+    blueprints: [labrat],
+    items: [new Pandora],
+    admins: [new Chemistry, new Volatile, new PetriDish],
+    lives: 1,
+    description: "Ancient alchemical technology"
+}
+
+const Cobol : OS = {//lance //bug //screwdriver
+    name: 'Cobol',
+    unicode: 'U+1F3DB',
+    money: 15,
+    memory: 3,
+    adminSlots: 5,
+    blueprints: [bug, sling, aegis],
+    items: [new Voucher],
+    admins: [new Cheese, new Abacus, new Bank, new Seed, new Bubble],
+    lives: 1,
+    description: "All about money"
 }
 
 const Debugger : OS = {//lance //bug //screwdriver
@@ -318,8 +360,8 @@ const Debugger : OS = {//lance //bug //screwdriver
     memory: 10,
     adminSlots: 6,
     blueprints: [aegis, superKnife, screwdriver, testPiece],
-    items: [new Genie, new Box, new Pinata, new Gift, new Pandora, new Update2],
-    admins: [new Chemistry],
+    items: [new Genie, new Box, new Pandora, new Update2],
+    admins: [],
     lives: 9,
     description: 'FOR TESTING'
 }
@@ -337,4 +379,4 @@ const Debugger : OS = {//lance //bug //screwdriver
 
 //GREEK CAPITAL LETTER DELTA, U+394
 
-export const allOSes = [Steam, Penguin, Window, Apple, Temple, Debugger];
+export const allOSes = [Steam, Penguin, Window, Apple, Temple, Fortran, Cobol, Debugger];

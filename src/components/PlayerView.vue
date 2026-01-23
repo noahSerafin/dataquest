@@ -130,7 +130,7 @@
                         @dragstart="onDragStart(index)"
                         @dragover.prevent
                         @drop="onDrop(index)"
-                        class="p-1 border rounded mb-1 flex justify-between items-center">
+                        class="p-1 border rounded mb-1 flex items-center">
                         <ItemView 
                             :item="item"
                             type="admin"
@@ -177,7 +177,7 @@
             <ul class="inventory-relative">
                 <li
                 v-for="item in props.player.items"
-                class="p-1 border rounded mb-1 flex justify-between items-center"
+                class="p-1 border rounded mb-1 flex items-center"
                 :class="{ 'z-top': selectedItem === item }"
                 >
                     <ItemView 

@@ -203,7 +203,7 @@ export class Blessing extends Item<PieceBlueprint> {
     static unicode = "U+1F389";
     static color = "#a9ffffff";
     constructor(){
-        super(Blessing.name, Blessing.description, Blessing.unicode, Blessing.color, 9, 5, 'blueprint')
+        super(Blessing.name, Blessing.description, Blessing.unicode, Blessing.color, 9, 6, 'blueprint')
     }
     apply(target: PieceBlueprint, itemMult: number) {
         console.log('target: ', target)

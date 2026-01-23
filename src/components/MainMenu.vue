@@ -92,6 +92,18 @@
                     {{ returnUnicode(bp.unicode) }}
                 </div>
             </div>
+            <div class="bps">
+                <div class="logo" 
+                    v-for="bp in os.items">
+                    {{ returnUnicode(bp.unicode) }}
+                </div>
+            </div>
+            <div class="bps">
+                <div class="logo" 
+                    v-for="bp in os.admins">
+                    {{ returnUnicode(bp.unicode) }}
+                </div>
+            </div>
             <button @click="emit('createNewPlayer', os)">Choose</button>
             </div>
         </div>
@@ -148,7 +160,7 @@
     .bps{
         display: flex;
         justify-content: center;
-        margin-bottom: 1rem;
+        margin-bottom: 0.5rem;
     }
     @media (max-width: 500px) {
         .mm-heading, .mm-heading2{

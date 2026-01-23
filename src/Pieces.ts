@@ -220,13 +220,13 @@ export abstract class Piece {
 
   applyStatusEffects(mult: number) {
     if (this.statuses.diseased) {
-      this.maxSize = Math.max(1, this.getStat('maxSize') - 1) * mult;
+      this.maxSize = Math.max(1, this.getStat('maxSize') - 1 * mult);
     }
     if (this.statuses.slowed) {
-      this.moves = Math.max(0, this.getStat('moves') - 1) * mult;
+      this.moves = Math.max(0, this.getStat('moves') - 1 * mult);
     }
     if(this.statuses.blinded){
-      this.range = Math.max(0, this.getStat('range') - 1) * mult;
+      this.range = Math.max(0, this.getStat('range') - 1 * mult);
     }
     if (this.statuses.burning) {
       if(this.tiles.length <= 1){
@@ -238,7 +238,7 @@ export abstract class Piece {
       }
     }
     if (this.statuses.poisoned) {
-      this.defence = Math.max(0, this.getStat('defence') - 1) * mult;
+      this.defence = Math.max(0, this.getStat('defence') - 1 * mult);
     }
     if (this.statuses.frozen) {
       this.movesRemaining = 0;
@@ -1469,20 +1469,21 @@ class Flute extends Piece {//not working
 
 class LabRat extends Piece {
   static name = "Lab Rat";
-  static description = "A small but fast program that can bite to apply disease, reducing max size"
+  static description = "A small but fast program that can spread disease, reducing max size"
   static unicode = "U+1F401";
-  static color = "rgb(222, 255, 171)";
+  static color = "rgb(174, 255, 171)";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(LabRat.name, LabRat.description, LabRat.unicode, 1, 3, 1, 2, 0, LabRat.color, headPosition, [headPosition], team, LabRat.rarity, removeCallback, id)
-    this.specialName = 'bite'
+    this.specialName = 'Fleas'
     this.targetType = 'piece'
   }
 
   async special(target: Piece): Promise<void> {
-    target.takeDamage(this.getStat('attack'));
-    if(target.willRetaliate) this.takeDamage(target.getStat('attack'))
-    if(!target.immunities.diseased){
+    if(target.statuses.diseased){
+      target.takeDamage(this.getStat('attack'));
+      if(target.willRetaliate) this.takeDamage(target.getStat('attack'))
+    } else if(!target.immunities.diseased){
       target.statuses.diseased = true
       this.actions --
     }
@@ -2796,7 +2797,7 @@ class Rhino extends Piece {
 }
 
 class Tail extends Piece {
-  static name = "Gecko";
+  static name = "Gecko Tail";
   static description = "An immobile decoy program spawned by a Gecko";
   static unicode = "U+1F98E";
   static color = "#0dff7aff";

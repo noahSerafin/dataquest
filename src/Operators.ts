@@ -1,5 +1,5 @@
 import type { OS } from "./types";
-import { Voucher, Whetstone, Garlic, Lightning, RedMeat, Genie, Box, Pandora, Update2} from "./Items";
+import { Voucher, Whetstone, Garlic, Lightning, RedMeat, Genie, Box, Pandora, Update2, Update3} from "./Items";
 import { Abacus, Bank, Bubble, Cheese, Chemistry, PetriDish, Seed, Volatile } from "./AdminPrograms";
 
 /*
@@ -278,7 +278,7 @@ const Penguin : OS = {//potato //shield
     name: 'Penguin',
     unicode: 'U+1F427',
     money: 4,
-    memory: 5,
+    memory: 6,
     adminSlots: 5,
     blueprints: [potato, sling, aegis],
     items: [new Whetstone, new Lightning],
@@ -360,7 +360,7 @@ const Debugger : OS = {//lance //bug //screwdriver
     memory: 10,
     adminSlots: 6,
     blueprints: [aegis, superKnife, screwdriver, testPiece],
-    items: [new Genie, new Box, new Pandora, new Update2],
+    items: [new Genie, new Box, new Pandora, new Update2, new Update3],
     admins: [],
     lives: 9,
     description: 'FOR TESTING'

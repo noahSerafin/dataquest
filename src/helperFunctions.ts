@@ -184,9 +184,9 @@ export function addItemsUntilFull(
   maxAttempts = 3
 ) {
   let attempts = 0;
-  let freeMemory = player.memory - player.usedMemory
-
-  while ((freeMemory >=1 || player.hasTrolley && freeMemory >= 0.5)&& attempts < maxAttempts) {
+  let freeMemory = player.freeMemory
+  
+  while ((freeMemory >= 1 || player.hasTrolley && freeMemory >= 0.5)&& attempts < maxAttempts) {
     const item = pickWeightedRandomItem(upgradeItems, player);
 
     // If addProgram returns false when full, even better

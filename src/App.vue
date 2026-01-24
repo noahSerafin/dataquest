@@ -233,7 +233,7 @@
         player.value.items.push(pickWeightedRandomItem(allItems, player.value))
         player.value.removeItem(item)
       }
-      if(item.name === 'Pandora' && player.value.usedMemory <= player.value.memory -2){//check for trolley/schoolbag
+      if(item.name === 'Pandora' && player.value.freeMemory){//check for trolley/schoolbag
         player.value.removeItem(item)
         addItemsUntilFull(player.value, 3);
       }

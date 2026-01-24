@@ -347,7 +347,7 @@ const Cobol : OS = {//lance //bug //screwdriver
     memory: 3,
     adminSlots: 5,
     blueprints: [bug, sling, aegis],
-    items: [new Voucher],
+    items: [],
     admins: [new Cheese, new Abacus, new Bank, new Seed, new Bubble],
     lives: 1,
     description: "All about money"

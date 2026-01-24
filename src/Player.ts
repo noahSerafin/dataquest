@@ -167,7 +167,7 @@ export class Player {
 
   spend(amount: number){
     if(this.hasAdmin('Coinpurse')){
-      this.money -= (amount + 1);
+      this.money -= (amount - 1);
     } else {
       this.money -= amount;
     }

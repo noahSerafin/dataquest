@@ -2,6 +2,30 @@ GAME
 reveal hidden enemies before damage
 sort out graveyard 8
 
+ITEMS/admins shortand descriptions eg. +1 attack instead of "increases"
+
+try out randomised levels 4
+no. of pieces range
+min + max width/height
+negatives some percentage, remain connected(no islands) or allow single islets of 1 tile with 1 gap
+
+AI 3
+prioritise killable pieces
+
+VISUAL: 5
+show defence in lower left on pieces, attack when selected?
+show variant mark in top left of pieces?
+variant tooltip to show stat mods, use colored text
+add class to acting admins
+-visualise traps - have credit pickups? disguise the cheese trap as one
+-skipNode controller
+inventory needs 5 columns at least...
+color code stats, and status
+status tooltips
+
+3D ELEMENTS
+nodemap on a sphere with hexagons
+
 AI 6 nearly-done
     handle onrecievedamage admins with specials that deal damage
     maybe ignore statuses if already has a status??? or dont consume an action amd increase special count??
@@ -12,22 +36,11 @@ hide sell button on bosses, move description down
 fog - edit board (fog layer)
 redacted - edit piece view
 
-BUGS 6
-Spanner not working
-
--visual: 5
-and class to acting admins
--visualise traps - have credit pickups? disguise the cheese as one
--skipNode controller
-inventory needs 5 columns at least...
-color code stats, and status
-status tooltips
-
 ITEMS - clean up player items, add activePieces/gameState items 7
 item to duplicate an admin
 
 SAVE GAME STATE for bugs 7.5
--more tiles on starting programs in levels three and up 5
+COOKIES - game progress permanence
 
 MAP
 allow some randomised crossover points?
@@ -36,24 +49,18 @@ Altar nodes - sacrifice a program for more money than selling - 8
 PIECES
 Fairy - graveyard interaction 8
 keep track of upgrades and display on piece 7
-add backup damage to specials that apply status for AI 4
 
-ADMINS - Onion Icon, chemistry - test
+ADMINS
+Onion Icon
 
 companies 8 - own list of programs/variants;
 
 SHOP - 8
 - two piece/item slots
-piece packs/item packs?
+piece packs/item packs/admin packs?
 
-PLAYER
-rarity = value ?+=no. of upgrades used on a piece? 6 but test
-
-COOKIES - game progress permanence 9
 COLLECTION 9
 
 CLEANUP 8
 sort out player inv items - genie + gift: Piececlass is not a constructor - don't use any type
 move pandora + box to own apply funcs
-move refresh shop to shop
-move random items to items

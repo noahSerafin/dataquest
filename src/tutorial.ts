@@ -1,21 +1,23 @@
-//clippy - provides hints
-//PAPERCLIP, U+1F4CE
 
-/*for (const step of tutorialSteps) {
-    await showStep(step);   // highlights element + shows tooltip
-    await waitForContinue(); // e.g. user clicks "Next"
-}*/
+import type { TutorialStep } from "./tutorialSteps";
+import { allTips } from "./tutorialSteps";
 
-/*
+
+for (const tip of allTips){//but do this every time the enviroment change
+  //find html element by class = tip.id
+
+  //append a new tooltip to element  
+  const tooltip = document.createElement("div");
+  tooltip.className = "tutorial-tooltip";
+  tooltip.innerHTML = tip.tooltip;
+  document.body.appendChild(tooltip);
+}
+
 export function highlightElement(el: HTMLElement) {
   el.classList.add("tutorial-highlight");
 }
 
-const tooltip = document.createElement("div");
-tooltip.className = "tutorial-tooltip";
-document.body.appendChild(tooltip);
-
-export function showTooltip(text: string, target: HTMLElement, offsetX = 20, offsetY = 20) {
+/*export function showTooltip(text: string, target: HTMLElement, offsetX = 20, offsetY = 20) {
   tooltip.textContent = text;
 
   const rect = target.getBoundingClientRect();
@@ -23,44 +25,30 @@ export function showTooltip(text: string, target: HTMLElement, offsetX = 20, off
   tooltip.style.top = rect.top + offsetY + "px";
 
   tooltip.classList.add("visible");
-}
+}*/
 
-export async function showStep(step: TutorialStep) {
-  const target = document.getElementById(step.keyId);
-  if (!target) return;
+export function applyTutorialTooltips(steps: TutorialStep[]) {
+  // clean up old tooltips first
+  document.querySelectorAll('.tutorial-tooltip').forEach(t => t.remove());
 
-  highlightElement(target);
-  showTooltip(step.tip, target, step.offsetX, step.offsetY);
+  for (const step of steps) {
+    const targets = document.querySelectorAll(`.${step.id}`);
 
-  await waitForContinue();
+    targets.forEach(target => {
+      const tooltip = document.createElement("div");
+      tooltip.className = "tutorial-tooltip";
+      tooltip.innerHTML = step.tooltip;
 
-  target.classList.remove("tutorial-highlight");
-  hideTooltip();
-}
+      // attach tooltip to the element, not body
+      target.appendChild(tooltip);
 
-export function waitForContinue(): Promise<void> {
-  return new Promise(resolve => {
-    const nextBtn = document.getElementById("tutorial-next-button");
-    if (!nextBtn) resolve();
+      target.classList.add("has-tutorial");
 
-    const handler = () => {
-      nextBtn.removeEventListener("click", handler);
-      resolve();
-    };
-
-    nextBtn.addEventListener("click", handler);
-  });
-}
-
-//in app:
-import { tutorialSteps } from "./TutorialSteps";
-import { showStep } from "./TutorialEngine";
-
-export async function runTutorial() {
-  for (const step of tutorialSteps) {
-    await showStep(step);
+      //positionTooltip(target as HTMLElement, tooltip, step.position);
+    });
   }
 }
+
 
 /*tutorial css
 .tutorial-highlight {

@@ -28,7 +28,7 @@ function rarityStyle(rarity: number) {
   switch (rarity) {
     case 1: return { label: "Common", color: "lightgreen" };
     case 2: return { label: "Uncommon", color: "orange" };
-    case 3: return { label: "Rare", color: "orangered" };
+    case 3: return { label: "Rare", color: "red" };//orangered?
     case 4: return { label: "Very Rare", color: "#9052f3ff" };
     case 5: return { label: "Black Market", color: "#ff0df3ff" };
     case 6: return { label: "Legendary", color: "#ffd700" };
@@ -66,7 +66,7 @@ const handleUse = () => {
   <div
     :id="item.id"
     class="item"
-    :class="`item-${cssclass} item-${type}`"
+    :class="`item-${cssclass} item-${type} itemName-${item.name}`"
     @click="handleSelect"
     :style="itemStyle"
   >

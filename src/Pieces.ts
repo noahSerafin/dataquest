@@ -138,7 +138,11 @@ export abstract class Piece {
   }
 
   getStat(stat: keyof StatModifier) {
-    return this.getBaseStat(stat) + this.getModifier(stat) + this.getTempModifier(stat);
+    if(stat === 'maxSize'){
+      return Math.max(1, this.getBaseStat(stat) + this.getModifier(stat) + this.getTempModifier(stat));
+    } else {
+      return Math.max(0, this.getBaseStat(stat) + this.getModifier(stat) + this.getTempModifier(stat));
+    }
   }
   //----------------
 
@@ -961,6 +965,7 @@ class Germ extends Piece {//up to here //TODO
     super(Germ.name, Germ.description, Germ.unicode, 1, 4, 1, 0, 0, Germ.color, headPosition, [headPosition], team, Germ.rarity, removeCallback, id)
     this.targetType = 'piece'
     this.specialName = 'Infect'
+    this.immunities.diseased = true;
   }
   async special(target: Piece): Promise<void> {
     if(!target.immunities.diseased){
@@ -1180,6 +1185,7 @@ class Puffer extends Piece {
    super(Puffer.name, Puffer.description, Puffer.unicode, 4, 2, 1, 2, 1, Puffer.color, headPosition, [headPosition], team, Puffer.rarity, removeCallback, id)
    this.specialName = 'Puffup';
    this.targetType = 'self'
+   this.immunities.poisoned = true;
   }
   async special(_target: Piece):Promise<void>{
     this.willRetaliate = true;
@@ -1829,6 +1835,7 @@ class Scorpion extends Piece {
     super(Scorpion.name, Scorpion.description, Scorpion.unicode, 2, 1, 1, 2, 1, Scorpion.color, headPosition, [headPosition], team, Scorpion.rarity, removeCallback, id)
     this.specialName='Sting'
     this.targetType='piece'
+    this.immunities.poisoned = true;
   }
 
   async special(targetPiece: Piece):Promise<void>{
@@ -2627,7 +2634,7 @@ class Diplodocus extends Piece {
   static color = "#1e4419ff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Diplodocus.name, Diplodocus.description, Diplodocus.unicode, 8, 2, 5, 2, 2, Diplodocus.color, headPosition, [headPosition], team, Diplodocus.rarity, removeCallback, id)
+   super(Diplodocus.name, Diplodocus.description, Diplodocus.unicode, 8, 2, 5, 3, 2, Diplodocus.color, headPosition, [headPosition], team, Diplodocus.rarity, removeCallback, id)
   }
 }
 
@@ -2800,20 +2807,20 @@ class Tail extends Piece {
   static name = "Gecko Tail";
   static description = "An immobile decoy program spawned by a Gecko";
   static unicode = "U+1F98E";
-  static color = "#0dff7aff";
+  static color = "rgb(185, 255, 217)";
   static rarity = 99;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Tail.name, Tail.description, Tail.unicode, 1, 0, 0, 0, 0, Tail.color, headPosition, [headPosition], team, Tail.rarity, removeCallback, id)
+    super(Tail.name, Tail.description, Tail.unicode, 2, 1, 0, 0, 0, Tail.color, headPosition, [headPosition], team, Tail.rarity, removeCallback, id)
   }
 }
 class Gecko extends Piece {
   static name = "Gecko";
   static description = "A program that replaces it's last piece with a decoy tail program";
   static unicode = "U+1F98E";
-  static color = "#0dff9aff";
+  static color = "rgb(167, 255, 218)";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Gecko.name, Gecko.description, Gecko.unicode, 3, 3, 1, 2, 0, Gecko.color, headPosition, [headPosition], team, Gecko.rarity, removeCallback, id)
+    super(Gecko.name, Gecko.description, Gecko.unicode, 2, 3, 1, 2, 0, Gecko.color, headPosition, [headPosition], team, Gecko.rarity, removeCallback, id)
     this.specialName='Shed Tail'
     this.targetType='space'
   }

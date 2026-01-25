@@ -258,6 +258,33 @@ html, body, #app {
   color: #dd770a;;
 }
 
+
+.has-tutorial {
+  position: relative;
+}
+
+.tutorial-tooltip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: white;
+  border-radius: 50%;
+  color: #a7f3d0;
+  border: 1px solid #34d399;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  max-width: 220px;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.has-tutorial:hover .tutorial-tooltip {
+  opacity: 1;
+}
+
 @media (max-width: 500px) {
   .debug-controls{
     left: unset;

@@ -114,7 +114,7 @@
         if(!props.player.hasAdmin('World Map') && node.type !== 'shop' || (!props.player.hasAdmin('Crystal Ball') && node.type === 'shop')){
             if (!canClick(node)) return;
         }
-        if(props.player.hasAdmin('Crystal Ball') && node.type === 'shop' && selectedPreviewNode.value !== node){
+        if(props.player.hasAdmin('Crystal Ball') && node.type === 'shop' && selectedPreviewNode.value !== node){//
             emit('openDisabledShop')
         } else {    
             selectedPreviewNode.value = node;
@@ -325,6 +325,9 @@
                 current: node.id === currentNodeId,
                 hidden: !visibleNodeIds.has(node.id),
                 visible: visibleNodeIds.has(node.id),
+                bossNode: node.type === 'boss',
+                shopNode: node.type === 'shop',
+                skipNode: node.type === 'skip',
             }"
             :style="{
                 left: node.position.x + 'px',
@@ -335,6 +338,9 @@
         <div v-if="node.type=='boss' || node.type=='level' && node.id !== currentNodeId  && node.id !=='start'" class="company-info">
             <div>
                 {{ node.company.abbr }}
+            </div>
+            <div>
+                {{ String.fromCodePoint(parseInt(node.company.unicode.replace('U+', ''), 16)) }}
             </div>
             <div>
                 $ {{ node.reward }}
@@ -363,7 +369,7 @@
             :y1="conn.y1"
             :x2="conn.x2"
             :y2="conn.y2"
-            stroke="#000"
+            stroke="#fff"
             stroke-width="3"
             stroke-linecap="round"
             />
@@ -476,7 +482,7 @@
         top: 100%;
     }
     .world-map {
-        background-color: rgb(230, 218, 181);
+        background-color: rgb(8, 47, 0);
         z-index: 3;
         display: flex;
         justify-content: center;
@@ -495,7 +501,14 @@
         position: absolute;
         width: 32px;
         height: 32px;
-        border: 2px solid #444;
+        /*border-bottom: 3px dashed white;
+        border-top: 3px dashed white;
+        border-left: none;
+        border-right: none;*/
+        border-left: 3px dashed white;
+        border-right: 3px dashed white;
+        border-bottom: none;
+        border-top: none;
         background: #222;
         color: white;
         display: flex;
@@ -505,13 +518,26 @@
         opacity: 0.4;
         z-index: 0;
     }
+    .bossNode{
+        border-bottom: 4px dashed white;
+        border-top: 4px dashed white;
+        border-left: none;
+        border-right: none;
+    }
+    .shopNode{
+        border: 3px inset white;
+        /*outline: 3px dashed white;*/
+    }
+    /*.skipNode{
+
+    }*/
     .node.clickable {
         opacity: 1;
         cursor: pointer;
         border-color: yellow;
     }
     .node.current {
-        border-color: cyan;
+        border: 2px outset cyan;
     }
     .preview-modal {
         position: absolute;
@@ -546,9 +572,10 @@
     }
     .company-info{
         right: 100%;
-        left: unset;
+        left: -65px;
         width: 50px;
         text-align: center;
+        top: 0;
     }
     .boss-info{
         height: 110px;

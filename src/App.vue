@@ -25,6 +25,8 @@
   import MainMenu from "./components/MainMenu.vue";
   import PieceController from "./components/PieceController.vue";
   import HybridCompiler from "./components/HybridCompiler.vue";
+  import { applyTutorialTooltips } from "./tutorial.ts";
+  import { allTips } from "./tutorialSteps.ts";
   
   const testSword = {
     id: "274ec329-8c17-4265-8c12-e9a28bcf0833",
@@ -1295,6 +1297,22 @@
       window.removeEventListener('keydown', onKeydown);
     }
   }, { immediate: true });
+
+  watch(
+    () => [
+      showBoard.value,
+      showMap.value,
+      roundHasStarted.value,
+      activePieces.value.length,
+    ],
+    () => {
+      if (player.value.hasAdmin("Clippy")) {
+        requestAnimationFrame(() => {
+          applyTutorialTooltips(allTips);
+        });
+      }
+    }
+  );
 
   const debugMode = ref<boolean>(false);
 </script>

@@ -135,11 +135,16 @@ const type = ((item: Item) => {
       @buy="handleBuyBlueprint"
       @close="deselect"
     />
-    <div v-if="canProceed" class="btn-container-centered">
-      <button
+    <div class="btn-container-centered">
+      <button v-if="canProceed"
       class="proceed-btn"
       @click="emit('closeShop')">
         Proceed
+      </button>
+      <button v-if="!canProceed"
+      class="proceed-btn"
+      @click="emit('closeShop')">
+        Close
       </button>
     </div>
   </div>

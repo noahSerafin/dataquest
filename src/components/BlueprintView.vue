@@ -45,7 +45,7 @@ function showRarity(rarity: number) {
       return "orange";
 
     case 3:
-      return "red";
+      return "red";//orangered
 
     case 4:
       return  "#9052f3ff";

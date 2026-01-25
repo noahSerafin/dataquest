@@ -1,6 +1,6 @@
 import type { OS } from "./types";
 import { Voucher, Whetstone, Garlic, Lightning, RedMeat, Genie, Box, Pandora, Update2, Update3} from "./Items";
-import { Abacus, Bank, Bubble, Cheese, Chemistry, PetriDish, Seed, Volatile } from "./AdminPrograms";
+import { Abacus, Bank, Bubble, Cheese, Chemistry, Clippy, Crystal, PetriDish, Seed, Volatile } from "./AdminPrograms";
 
 /*
 export function findPieceClassByName(name: string) {
@@ -336,7 +336,7 @@ const Fortran : OS = {//lance //bug //screwdriver
     blueprints: [labrat],
     items: [new Pandora],
     admins: [new Chemistry, new Volatile, new PetriDish],
-    lives: 1,
+    lives: 2,
     description: "Ancient alchemical technology, heavily focused on statuses."
 }
 
@@ -361,7 +361,7 @@ const Debugger : OS = {//lance //bug //screwdriver
     adminSlots: 6,
     blueprints: [aegis, superKnife, screwdriver, testPiece],
     items: [new Genie, new Box, new Pandora, new Update2, new Update3],
-    admins: [],
+    admins: [new Clippy, new Crystal],
     lives: 9,
     description: 'FOR TESTING'
 }

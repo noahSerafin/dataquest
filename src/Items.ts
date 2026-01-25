@@ -52,13 +52,13 @@ export abstract class Item<TTarget = any> {
 
 export class Whetstone extends Item<PieceBlueprint> {
     static name = "Whetstone";
-    static description = "increases a program's attack by 1";
+    static description = "Increases a program's attack by 1";
     static unicode = "U+1FAA8";
     static color = "#ff2222ff";
     constructor(){
         super(Whetstone.name, Whetstone.description, Whetstone.unicode, Whetstone.color, 3, 1, 'blueprint')
     }
-    //increases a program's atk by 
+    //Increases a program's atk by 
     apply(target: PieceBlueprint, itemMult: number) {
         console.log('target: ', target)
         target.attack += (1* itemMult);
@@ -67,7 +67,7 @@ export class Whetstone extends Item<PieceBlueprint> {
 
 class Training extends Item<PieceBlueprint> {
     static name = "Training";
-    static description = "increases a program's attack by 2";
+    static description = "Increases a program's attack by 2";
     static unicode = "U+1F3CB";
     static color = "#ff5656ff";
     constructor(){
@@ -81,13 +81,13 @@ class Training extends Item<PieceBlueprint> {
 
 export class Iron extends Item<PieceBlueprint> {
     static name = "Iron";
-    static description = "increases a program's defence by 1";
+    static description = "Increases a program's defence by 1";
     static unicode = "U+1F96C"
     static color = "#54a4ffff"
     constructor(){
         super(Iron.name, Iron.description, Iron.unicode, Iron.color, 3, 1, 'blueprint')      
     }
-    //increases a program's def by 1
+    //Increases a program's def by 1
     apply(target: PieceBlueprint, itemMult: number) {
         console.log('target: ', target)
         target.defence += (1* itemMult);
@@ -95,13 +95,13 @@ export class Iron extends Item<PieceBlueprint> {
 }
 class Reinforcement extends Item<PieceBlueprint> {
     static name = "Reinforcement";
-    static description = "increases a program's defence by 2";
+    static description = "Increases a program's defence by 2";
     static unicode = "U+1F529"
     static color = "#54a4ffff"
     constructor(){
         super(Reinforcement.name, Reinforcement.description, Reinforcement.unicode, Reinforcement.color, 5, 4, 'blueprint')      
     }
-    //increases a program's def by 1
+    //Increases a program's def by 1
     apply(target: PieceBlueprint, itemMult: number) {
         console.log('target: ', target)
         target.defence += (2* itemMult);
@@ -112,13 +112,13 @@ class Reinforcement extends Item<PieceBlueprint> {
 
 export class Blueberry extends Item<PieceBlueprint> {
     static name = "Blueberry";
-    static description = "increases a program's max size by 1";
+    static description = "Increases a program's max size by 1";
     static unicode = "U+1FAD0";
     static color = "#1cffe1ff";
     constructor(){
         super(Blueberry.name, Blueberry.description, Blueberry.unicode, Blueberry.color, 3, 1, 'blueprint')      
     }
-    //increases a program's maxSize by 1
+    //Increases a program's maxSize by 1
     apply(target: PieceBlueprint, itemMult: number) {
         console.log('target: ', target)
         target.maxSize += (1* itemMult);
@@ -126,13 +126,13 @@ export class Blueberry extends Item<PieceBlueprint> {
 }
 class Pie extends Item<PieceBlueprint> {
     static name = "Pie";
-    static description = "increases a program's max size by 2";
+    static description = "Increases a program's max size by 2";
     static unicode = "U+1F967";
     static color = "#1c33ffff";
     constructor(){
         super(Pie.name, Pie.description, Pie.unicode, Pie.color, 5, 3, 'blueprint')      
     }
-    //increases a program's maxSize by 1
+    //Increases a program's maxSize by 1
     apply(target: PieceBlueprint, itemMult: number) {
         console.log('target: ', target)
         target.maxSize += (2* itemMult);
@@ -141,13 +141,13 @@ class Pie extends Item<PieceBlueprint> {
 
 export class Carrot extends Item<PieceBlueprint> {
     static name = "Carrot";
-    static description = "increases a program's range by 1";
+    static description = "Increases a program's range by 1";
     static unicode = "U+1F955"//scope "U+1F52D";
     static color = "#fff12bff";
     constructor(){
         super(Carrot.name, Carrot.description, Carrot.unicode, Carrot.color, 3, 1, 'blueprint')
     }
-    //increases a program's range by 1
+    //Increases a program's range by 1
     apply(target: PieceBlueprint, itemMult: number) {
         console.log('target: ', target)
         target.range += (1* itemMult);
@@ -155,13 +155,13 @@ export class Carrot extends Item<PieceBlueprint> {
 }
 class Glasses extends Item<PieceBlueprint> {
     static name = "Glasses";
-    static description = "increases a program's range by 2";
+    static description = "Increases a program's range by 2";
     static unicode = "U+1F453"
     static color = "rgb(255, 188, 43)";
     constructor(){
         super(Glasses.name, Glasses.description, Glasses.unicode, Glasses.color, 5, 4, 'blueprint')
     }
-    //increases a program's range by 1
+    //Increases a program's range by 1
     apply(target: PieceBlueprint, itemMult: number) {
         console.log('target: ', target)
         target.range += (2* itemMult);
@@ -170,13 +170,13 @@ class Glasses extends Item<PieceBlueprint> {
 
 class Teapot extends Item<PieceBlueprint> {
     static name = "Teapot";
-    static description = "increases a program's moves by 1";
+    static description = "Increases a program's moves by 1";
     static unicode = "U+1FAD6";
     static color = "#dc00e4ff";
     constructor(){
         super(Teapot.name, Teapot.description, Teapot.unicode, Teapot.color, 3, 1, 'blueprint')
     }
-    //increases a program's moves by 1
+    //Increases a program's moves by 1
     apply(target: PieceBlueprint, itemMult: number) {
         console.log('target: ', target)
         target.moves += (1* itemMult);
@@ -184,13 +184,13 @@ class Teapot extends Item<PieceBlueprint> {
 }
 export class Lightning extends Item<PieceBlueprint> {
     static name = "Charge";
-    static description = "increases a program's moves by 2";
+    static description = "Increases a program's moves by 2";
     static unicode = "U+26A1";
     static color = "#dc00e4ff";
     constructor(){
         super(Lightning.name, Lightning.description, Lightning.unicode, Lightning.color, 4, 3, 'blueprint')
     }
-    //increases a program's moves by 1
+    //Increases a program's moves by 1
     apply(target: PieceBlueprint, itemMult: number) {
         console.log('target: ', target)
         target.moves += (2* itemMult);
@@ -199,7 +199,7 @@ export class Lightning extends Item<PieceBlueprint> {
 
 export class Blessing extends Item<PieceBlueprint> {
     static name = "Blessing";
-    static description = "increases all a program's stats by 1";
+    static description = "Increases all a program's stats by 1";
     static unicode = "U+1F389";
     static color = "#a9ffffff";
     constructor(){
@@ -217,7 +217,7 @@ export class Blessing extends Item<PieceBlueprint> {
 
 export class Supplement extends Item<Piece> {
     static name = "Supplement";
-    static description = "increases all a placed program's stats by 1 for one round";
+    static description = "Increases all a placed program's stats by 1 for one round";
     static unicode = "U+1F48A";
     static color = "#6e0c8bff";
     constructor(){
@@ -235,7 +235,7 @@ export class Supplement extends Item<Piece> {
 
 export class Juice extends Item<Piece> {
     static name = "Juiced";
-    static description = "increases a placed program's moves by 1 for one round";
+    static description = "Increases a placed program's moves by 1 for one round";
     static unicode = "U+1F9C3";
     static color = "#fcff47ff";
     constructor(){
@@ -249,7 +249,7 @@ export class Juice extends Item<Piece> {
 
 export class Roids extends Item<Piece> {
     static name = "Roids";
-    static description = "increases all a placed program's attack by 1 for one round";
+    static description = "Increases all placed program's attack by 1 for one round";
     static unicode = "U+1F489";
     static color = "#00e4b3ff";
     constructor(){
@@ -262,7 +262,7 @@ export class Roids extends Item<Piece> {
 
 export class Formula extends Item<Piece> {
     static name = "Formula";
-    static description = "increases a placed program's max size by 1 for one round";
+    static description = "Increases a placed program's max size by 1 for one round";
     static unicode = "U+1F37C";
     static color = "#27f743ff";
     constructor(){
@@ -275,7 +275,7 @@ export class Formula extends Item<Piece> {
 
 export class Garlic extends Item<Piece> {
     static name = "Garlic";
-    static description = "increases a placed program's defence by 1 for one round";
+    static description = "Increases a placed program's defence by 1 for one round";
     static unicode = "U+1F9C4";
     static color = "#26d0faff";
     constructor(){
@@ -288,7 +288,7 @@ export class Garlic extends Item<Piece> {
 
 export class RedMeat extends Item<Piece> {
     static name = "Red Meat";
-    static description = "increases a placed program's attack by 1 for one round";
+    static description = "Increases a placed program's attack by 1 for one round";
     static unicode = "U+1F356";
     static color = "#ff3737ff";
     constructor(){

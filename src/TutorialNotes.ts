@@ -60,7 +60,7 @@ If you have any thoughts about potential changes or additions I would love to he
 To save making artwork everything has been done with unicodes, which is where most of the ideas have sprouted from.
 If you want to browse for inspiration to contribute any ideas: http://xahlee.info/comp/unicode_index.html?q=
 
-PLANNED CHANGES (motes for me really, you can ignore these)
+PLANNED CHANGES (notes for me really, you can ignore these)
 The nodes are decorated with fake 'companies', that at the moment have no effect on the game. But I plan to have them use specific pools of enemy programs/variants in future.
 The balance of attack/defence is still something I'm figuring out, in some rare situations its possible to get stuck if one enemy's defence is higher than your combined programs' attack.
 Maybe defence should not restore each turn, and add a 'fortify' action that restores a programs' defence...

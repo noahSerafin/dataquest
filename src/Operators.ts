@@ -166,7 +166,7 @@ export function blueprintFromPieceClass(piece: typeof Piece): PieceBlueprint {
         maxSize: 1,
         moves: 3,
         range: 1,
-        attack: 1,
+        attack: 2,
         defence: 0,
         rarity: 2,
         // blueprint-only fields:

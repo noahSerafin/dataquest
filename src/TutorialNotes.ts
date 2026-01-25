@@ -53,4 +53,15 @@ Special moves will not trigger a retaliation from other pieces, even damaging on
 Your damage mult will only apply to attacks, not to special moves that cause damage.
 Admin programs trigger left to right, so make sure you drag them into the optimum position.
 Special moves that target in a line can effect the same program more than once if the multiple tiles occupy the line.
+
+OTHER NOTES
+There are still some bugs and balancing issues to be fixed. Please let me know what you find, preferably with a screenshot.
+If you have any thoughts about potential changes or additions I would love to hear them.
+To save making artwork everything has been done with unicodes, which is where most of the ideas have sprouted from.
+If you want to browse for inspiration to contribute any ideas: http://xahlee.info/comp/unicode_index.html?q=
+
+PLANNED CHANGES (motes for me really, you can ignore these)
+The nodes are decorated with fake 'companies', that at the moment have no effect on the game. But I plan to have them use specific pools of enemy programs/variants in future.
+The balance of attack/defence is still something I'm figuring out, in some rare situations its possible to get stuck if one enemy's defence is higher than your combined programs' attack.
+Maybe defence should not restore each turn, and add a 'fortify' action that restores a programs' defence...
 */

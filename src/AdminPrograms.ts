@@ -2074,6 +2074,8 @@ export class Clippy extends Admin {
 export const allAdmins = [Meteor, Miner, Bubble, Clover, Onion, Blood, Razor, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Parachute, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Bone, RollerBlades, Lungs, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, OffRoader, Seed, Puzzle, Chivalry, Roger, Bucket, Diamond, Sneakers, Candle, Lightbulb, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, Sprinkler, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FakeID, Shades, Barber, Umbrella, Bank, Ballet, Pants, Ace, Pi, Pazzaz, Toilet, Harvest, Bipolar, Taoism, Loot, HedgeFund, PeaPod, Liberty, Punching, Teddy, Abacus, Cheese, AirSupport, DartBoard, Dice, Ladder, Ring, Minerva, Hermit, Tracker, Pong, Knot, Rainbow, Jammer, Balloon, Wheel, Bath, Purse];
 console.log('admins length: ', allAdmins.length)
 
+//blood tax nerf to only attacking own pieces? overkills? or jolly roger?
+//nerf needle to random stat? have a count? only trigger on bosses?
 //disco ball U+1FAA9
 //TENT, U+26FA //Camp redo nodes once?
 //FERRIS WHEEL, U+1F3A1 //reroll node layout?

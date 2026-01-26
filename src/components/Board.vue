@@ -586,7 +586,10 @@ function resolveMove(
 }
 .tile{
   background-color: gainsboro;
+  background-color: rgb(8, 47, 0);
+  background-color: rgb(17, 31, 15);
   border: 2px solid black;
+  border: 2px solid #9CC954;
   aspect-ratio: 1/1;
 }
 .tile-empty{

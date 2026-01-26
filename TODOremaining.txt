@@ -10,6 +10,7 @@ min + max width/height
 negatives some percentage, remain connected(no islands) or allow single islets of 1 tile with 1 gap
 
 AI 3
+enemies killed by admins still take moves despite not existing in activepieces, are the removed too late? admins not awaited?
 prioritise killable pieces
 
 VISUAL: 5

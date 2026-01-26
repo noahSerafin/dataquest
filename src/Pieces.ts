@@ -679,7 +679,7 @@ class Tank extends Piece {
 
 class Dynamite extends Piece {
   static name = "Dynamite";
-  static description = "Can be sacrificed to inflict high damage tot a group of enemies";
+  static description = "Can be sacrificed to inflict high damage to a group of enemies";
   static unicode = "U+1F9E8";
   static color = "#be3737ff";
   static rarity = 3;

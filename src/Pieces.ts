@@ -622,7 +622,7 @@ class Cannon extends Piece {
   static color = "#bb3030ff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Cannon.name, Cannon.description, Cannon.unicode, 1, 1, 6, 3, 1, Cannon.color, headPosition, [headPosition], team, Cannon.rarity, removeCallback, id) //water pistol
+   super(Cannon.name, Cannon.description, Cannon.unicode, 1, 1, 5, 3, 1, Cannon.color, headPosition, [headPosition], team, Cannon.rarity, removeCallback, id) //water pistol
     this.specialName = 'Fire';
     this.targetType = 'line'
   }
@@ -672,7 +672,7 @@ class Tank extends Piece {
   static color = "#00470a";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Tank.name, Tank.description, Tank.unicode, 4, 2, 6, 3, 3, Tank.color, headPosition, [headPosition], team, Tank.rarity, removeCallback, id)//curling stone //cog "U+2699 U+FE0F",
+   super(Tank.name, Tank.description, Tank.unicode, 4, 2, 5, 3, 3, Tank.color, headPosition, [headPosition], team, Tank.rarity, removeCallback, id)//curling stone //cog "U+2699 U+FE0F",
   }
   //line?
 }

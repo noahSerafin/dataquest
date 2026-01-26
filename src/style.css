@@ -307,3 +307,62 @@ html, body, #app {
     right: 100%;
   }
 }
+
+/*css specials
+holo
+glass - transparency +atk - def
+steel
+
+/* The Shader Stuff */
+.shader {
+  position: relative;
+  overflow: hidden;
+  backface-visibility: hidden; /* Forces GPU */
+}
+
+.shader-layer {
+  background: black;
+  mix-blend-mode: multiply;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* background-size: 100%; */
+  background-position: center;
+}
+
+.specular {
+  mix-blend-mode: color-dodge;
+  background-attachment: fixed;
+}
+
+.mask {
+  mix-blend-mode: multiply;
+  /* background-image: url(sparrow_mask.png); */
+}
+/*
+<div class="shader framed">
+          <img src="https://assets.codepen.io/2153413/sparrow-base.png" alt="Silhouette design of a sparrow sitting on a branch" width="512">
+          <div class="shader-layer specular gradient-sparrow">
+            <img class="shader-layer mask" src="https://assets.codepen.io/2153413/sparrow-mask.png" alt="" width="300">
+          </div>
+
+.gradient-sparrow {
+  background-image: linear-gradient(
+    0deg,
+    hsl(359, 60%, 40%),
+    hsl(16, 60%, 45%),
+    hsl(33, 60%, 50%),
+    hsl(45, 60%, 55%),
+    hsl(58, 60%, 60%),
+    hsl(58, 60%, 65%),
+    hsl(58, 60%, 70%),
+    hsl(96, 60%, 65%),
+    hsl(146, 60%, 60%),
+    hsl(183, 60%, 55%),
+    hsl(225, 60%, 50%),
+    hsl(265, 60%, 45%),
+    hsl(303, 60%, 40%)
+  );
+}
+*/

@@ -101,12 +101,12 @@ function getPathPositions(
   pathIndex: number,
   totalPaths: number
 ) {
-  const spacing = 120;
+  const spacing = 140;
   const startX = 200 - ((totalPaths - 1) * spacing) / 2;
 
   return {
-    node1: { x: startX + pathIndex * spacing, y: 250 },
-    node2: { x: startX + pathIndex * spacing, y: 100 },
+    node1: { x: startX + pathIndex * spacing, y: 280 },
+    node2: { x: startX + pathIndex * spacing, y: 120 },
   };
 }
 

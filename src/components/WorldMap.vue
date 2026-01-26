@@ -335,6 +335,13 @@
             }"
             @click="trySelect(node)"
         >
+        <div class="pins">
+            <div class="pins-top"></div>
+            <div class="pins-bottom"></div>
+            <div class="pins-left"></div>
+            <div class="pins-right"></div>
+        </div>
+        <div class="node-inner">
         <div v-if="node.type=='boss' || node.type=='level' && node.id !== currentNodeId  && node.id !=='start'" class="company-info">
             <div>
                 {{ node.company.abbr }}
@@ -361,6 +368,7 @@
             </span>
         </div>
         </div>
+        </div>
         <svg class="map-lines" style="position: absolute; inset: 0; width: 100vw; height: 100vh; pointer-events: none;">
             <line
             v-for="(conn, i) in connections"
@@ -369,8 +377,8 @@
             :y1="conn.y1"
             :x2="conn.x2"
             :y2="conn.y2"
-            stroke="#fff"
-            stroke-width="3"
+            stroke="#9CC954"
+            stroke-width="2"
             stroke-linecap="round"
             />
         </svg>
@@ -500,29 +508,80 @@
     .node {
         position: absolute;
         width: 32px;
+        height: 42px;
+        opacity: 0.4;
+    }
+    .bossNode, .shopNode, .current{
+        width: 32px;
         height: 32px;
-        /*border-bottom: 3px dashed white;
-        border-top: 3px dashed white;
-        border-left: none;
-        border-right: none;*/
-        border-left: 3px dashed white;
-        border-right: 3px dashed white;
-        border-bottom: none;
-        border-top: none;
-        background: #222;
+    }
+    .node-inner{
+        height: 100%;        
+        background: #141414;
         color: white;
         display: flex;
         align-items: center;
         justify-content: center;
         user-select: none;
-        opacity: 0.4;
-        z-index: 0;
     }
     .bossNode{
-        border-bottom: 4px dashed white;
-        border-top: 4px dashed white;
         border-left: none;
-        border-right: none;
+        border-right: none;    
+    }
+    .bossNode.node-inner{
+        width: 100%;
+        height: 100%;
+    }
+    .pins{
+        position: absolute;
+        z-index: -1;
+        width: 80%;
+        height: 80%;
+    }
+    .pins-left, .pins-right, .pins-bottom, .pins-top{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+    .shopNode .pins, .current .pins{
+        display: none;
+    }
+    .pins-top{
+        left: 10%;
+        top: -10%;
+        /*border-top: 3px dashed white;*/
+    }
+    .pins-left{
+        top: 10%;
+        left: -10%;
+        border-left: 3px dashed white;
+    }
+    .pins-bottom{
+        left: 10%;
+        top: 22%;
+        /*border-bottom: 3px dashed white;*/
+    }
+    .pins-right{
+        border-right: 3px dashed white;
+        left: 24%;
+        top: 10%;
+    }
+    .bossNode .pins-left, .bossNode .pins-right, .bossNode .pins-top, .bossNode .pins-bottom{
+        top: 5%;
+        border-top: 2px dotted white;
+        border-bottom: 2px dotted white;
+        border-right: 2px dotted white;
+        border-left: 2px dotted white;
+    }
+    .bossNode .pins-top{
+        left: 5%;
+        top: -10%;
+    }
+    .bossNode .pins-bottom{
+        top: 20%;
+    }
+    .bossNode .pins-right{
+        left: 20%;
     }
     .shopNode{
         border: 3px inset white;
@@ -577,9 +636,13 @@
         text-align: center;
         top: 0;
     }
+    .boss-info, .bossNode .company-info{
+        top: -30px;
+    }
     .boss-info{
         height: 110px;
-        top: -60px;
+        top: -35px;
+        left: 175%;
     }
     @media (max-width: 768px) {
         .world-map{

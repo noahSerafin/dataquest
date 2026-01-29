@@ -805,7 +805,7 @@ class Copycat extends Piece {
   static color = "#fff643";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Copycat.name, Copycat.description, Copycat.unicode, 1, 0, 1, 0, 0, Copycat.color, headPosition, [headPosition], team, Copycat.rarity, removeCallback, id)
+    super(Copycat.name, Copycat.description, Copycat.unicode, 1, 2, 1, 0, 0, Copycat.color, headPosition, [headPosition], team, Copycat.rarity, removeCallback, id)
     this.targetType = 'piece'
     this.specialName = 'Imitate'
     //neutral special
@@ -1152,7 +1152,7 @@ class Sponge extends Piece {
   static color = "#ffd446";
   static rarity = 6;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Sponge.name, Sponge.description, Sponge.unicode, 1, 0, 1, 0, 0, Sponge.color, headPosition, [headPosition], team, Sponge.rarity, removeCallback, id)
+   super(Sponge.name, Sponge.description, Sponge.unicode, 1, 2, 1, 0, 0, Sponge.color, headPosition, [headPosition], team, Sponge.rarity, removeCallback, id)
    this.targetType = 'piece'
     this.specialName = 'Absorb'
   }

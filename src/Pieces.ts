@@ -866,9 +866,9 @@ class Tar extends Piece {
   static description = "A program invisble to the enemy that applies slow to programs moving over it, removing itself";
   static unicode = "U+2668";
   static color = "#686026";
-  static rarity = 3;
+  static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Tar.name, Tar.description, Tar.unicode, 1, 0, 0, 0, 0, Tar.color, headPosition, [headPosition], team, Tar.rarity, removeCallback, id)
+   super(Tar.name, Tar.description, Tar.unicode, 3, 1, 0, 0, 0, Tar.color, headPosition, [headPosition], team, Tar.rarity, removeCallback, id)
    this.targetType = 'trapPiece';
    this.statuses.hidden = true
    this.statuses.negative = true;
@@ -1048,7 +1048,7 @@ class Magnet extends Piece {
   static color = "#6fa9ffff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Magnet.name, Magnet.description, Magnet.unicode, 2, 2, 3, 0, 1, Magnet.color, headPosition, [headPosition], team, Magnet.rarity, removeCallback, id)
+   super(Magnet.name, Magnet.description, Magnet.unicode, 2, 2, 3, 1, 1, Magnet.color, headPosition, [headPosition], team, Magnet.rarity, removeCallback, id)
    this.targetType = 'line'
    this.specialName = 'Pull'
   }

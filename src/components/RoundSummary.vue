@@ -57,8 +57,9 @@ import { computed } from 'vue';
                 </span>
             </div>
             <div class="reward-summary">
+                Reward: 
                 <span class="text-yellow">
-                    Reward: ${{ player.nextReward }}
+                    ${{ player.nextReward }}
                 </span>
                 <span v-if="player.hasAdmin('Chedda')">+ Chedda 
                     <span class="text-yellow">
@@ -117,6 +118,9 @@ import { computed } from 'vue';
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+    .reward-summary{
+        margin-bottom: 10px;
     }
     .interest-summary{
         margin-bottom: 2rem;

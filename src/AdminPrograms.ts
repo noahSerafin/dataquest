@@ -550,7 +550,7 @@ class Heart extends Admin {//change
 
 class Bone extends Admin {//change
   static name = "Big Boned";
-  static description = "Programs all gain +3 max size on placement";
+  static description = "Programs all gain +2 max size on placement";
   static unicode = "U+1F9B4";
   static color = "#d33636ff";
   static rarity = 3;
@@ -595,22 +595,19 @@ class Lungs extends Admin {
   }
 }
 
-/*
 class Brain extends Admin {//unfinished, actionsHandler in Piececontroller playing up, or canAttack bool being set false somewhere?
-  static name = "Brain";
-  static description = "placed programs all have +1 actions on placement";
+  static name = "Machine Learning";
+  static description = "Every program in your inventory gives +1 attack to your programs on load";
   static unicode = "U+1F9E0";
-  static color = "#ff5555";
+  static color = "#570606";
   constructor() {
-    super(Brain.name, Brain.description, Brain.unicode, Brain.color, 9, 4, 'gameState', 'onPlacement')
+    super(Brain.name, Brain.description, Brain.unicode, Brain.color, 9, 5, 'playerAndGame', 'onPlacement')
   }
-  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    console.log('applying:', this.name)
-    activePieces[idx].addModifier({actions: 1})
+    activePieces[idx].addModifier({attack: player.programs.length})
   }
 }
-*/
 
 class GoldenTicket extends Admin {
   static name = "Golden Ticket";
@@ -862,7 +859,7 @@ class Puzzle extends Admin {
   static name = "Puzzle Piece";
   static description = "Pieces with an ally adjacent to their head temporarily +1 defence until the start of your next turn";
   static unicode = "U+1F9E9";
-  static color = "#ff5555";
+  static color = "#55b0ff";
   static rarity = 3;
   constructor() {
     super(Puzzle.name, Puzzle.description, Puzzle.unicode, Puzzle.color, 6, Puzzle.rarity, 'gameState', 'onTurnEnd')
@@ -1285,17 +1282,17 @@ class Protein extends Admin {
 
 class Fountain extends Admin {
   static name = "Fountain of Youth";
-  static description = "Programs get +2 max size on load";
+  static description = "Programs get +3 max size on load";
   static unicode = "U+26F2";
   static color = "#20baf7ff";
-  static rarity = 3;
+  static rarity = 4;
   constructor() {
     super(Fountain.name, Fountain.description, Fountain.unicode, Fountain.color, 6, Fountain.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
     console.log('applying:', this.name)
-    activePieces[idx].addModifier({maxSize: 2})
+    activePieces[idx].addModifier({maxSize: 3})
   }
 }
 
@@ -1452,7 +1449,7 @@ export class Bank extends Admin {
   }
 }
 
-class Ballet extends Admin {
+class Ballet extends Admin {//needs to reset
   static name = "Twinkle Toes";
   static description = "all your programs are hidden for the first 3 turns of a round";
   static unicode = "U+1FA70";
@@ -1638,7 +1635,7 @@ class Bipolar extends Admin {
 
 class Taoism extends Admin {
   static name = "Taoism";
-  static description = "At the end of your turn, when the number of enemy programs equals the number of your programs in a node, +1 to all your programs' stats";
+  static description = "At the end of your turn, when the number of enemy programs equals the number of your programs, +1 to all your placed programs' stats";
   static unicode = "U+262F";
   static color = "rgba(92, 92, 92, 1)ff";
   static rarity = 6;
@@ -1924,7 +1921,7 @@ class Hermit extends Admin {
 
 class Tracker extends Admin {// PAW PRINTS, U+1F43E Tracker // FOOTPRINTS, U+1F463 Tracker
   static name = "Tracker";
-  static description = "Exposes all hidden enemies at the start of a round";
+  static description = "Exposes all enemies at the start of a round";
   static unicode = "U+1F43E";
   static color = "#00720fff";
   static rarity = 2;
@@ -2028,8 +2025,8 @@ class Wheel extends Admin {
 }
 
 class Bath extends Admin {
-  static name = "Bath";
-  static description = "Removes all statuses from all programs at the end of each turn";
+  static name = "Decontamination";
+  static description = "Removes all negative statuses from all programs at the end of each turn";
   static unicode = "U+1F6C1";
   static color = "#cc1515ff";
   static rarity = 6;//5,4?
@@ -2037,13 +2034,14 @@ class Bath extends Admin {
     super(Bath.name, Bath.description, Bath.unicode, Bath.color, 12, Bath.rarity, 'gameState', 'onTurnEnd')
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-    for (const p of activePieces){
+    activePieces.forEach(p=> {
+      p.statuses.exposed = false;
       p.statuses.burning = false;
       p.statuses.diseased = false;
       p.statuses.slowed = false;
       p.statuses.frozen = false;
       p.statuses.poisoned = false;
-    }
+    });
   }
 }
 
@@ -2071,8 +2069,13 @@ export class Clippy extends Admin {
   //handle in player
 }
 
-export const allAdmins = [Meteor, Miner, Bubble, Clover, Onion, Blood, Razor, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Parachute, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Bone, RollerBlades, Lungs, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, OffRoader, Seed, Puzzle, Chivalry, Roger, Bucket, Diamond, Sneakers, Candle, Lightbulb, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, Sprinkler, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FakeID, Shades, Barber, Umbrella, Bank, Ballet, Pants, Ace, Pi, Pazzaz, Toilet, Harvest, Bipolar, Taoism, Loot, HedgeFund, PeaPod, Liberty, Punching, Teddy, Abacus, Cheese, AirSupport, DartBoard, Dice, Ladder, Ring, Minerva, Hermit, Tracker, Pong, Knot, Rainbow, Jammer, Balloon, Wheel, Bath, Purse];
+export const allAdmins = [Brain, Meteor, Miner, Bubble, Clover, Onion, Blood, Razor, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Parachute, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Bone, RollerBlades, Lungs, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, OffRoader, Seed, Puzzle, Chivalry, Roger, Bucket, Diamond, Sneakers, Candle, Lightbulb, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, Sprinkler, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FakeID, Shades, Barber, Umbrella, Bank, Ballet, Pants, Ace, Pi, Pazzaz, Toilet, Harvest, Bipolar, Taoism, Loot, HedgeFund, PeaPod, Liberty, Punching, Teddy, Abacus, Cheese, AirSupport, DartBoard, Dice, Ladder, Ring, Minerva, Hermit, Tracker, Pong, Knot, Rainbow, Jammer, Balloon, Wheel, Bath, Purse];
 console.log('admins length: ', allAdmins.length)
+
+//variety box chocolates
+//four finger
+//magnifying appraisal
+//red sky- dmg mult / bomb bonuses
 
 //blood tax nerf to only attacking own pieces? overkills? or jolly roger?
 //nerf needle to random stat? have a count? only trigger on bosses?

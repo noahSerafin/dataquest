@@ -34,30 +34,62 @@ import { computed } from 'vue';
 <template>
     <div class="container round-summary">
         <div class="if-won" v-if="hasWonRound">
-            <h3 v-if="player.difficulty >= 6">
+            <h1 v-if="player.bossesCleared >= 6">
                 You win!
-            </h3>
+            </h1>
             <h3>
                 Node complete
             </h3>
-            <div class="interest-summary">
-                Interest earned: ${{ player.nextInterest }}
-                <span class="bonus"
-                 v-if="player.bonusInterest > 0">
-                    + Bonus interest ${{ player.bonusInterest }}
+            <div class="interest-summary">Interest earned: 
+                <span class="text-yellow">
+                    ${{ player.nextInterest }}
                 </span>
-                <span class="inheritance" v-if="player.hasAdmin('inheritance')">
-                + Inheritance ${{ (player.nextInterest + player.bonusInterest) * 2 }}
+                <span class="bonus"
+                 v-if="player.bonusInterest > 0">+ Bonus interest
+                    <span class="text-yellow">
+                        ${{ player.bonusInterest }}
+                    </span>
+                </span>
+                <span class="inheritance" v-if="player.hasAdmin('inheritance')">+ Inheritance 
+                    <span class="text-yellow">
+                        ${{ (player.nextInterest + player.bonusInterest) * 2 }}
+                    </span>
                 </span>
             </div>
             <div class="reward-summary">
-                Reward: ${{ player.nextReward }}
-                <span v-if="player.hasAdmin('Chedda')">+ Chedda $1</span>
-                <span v-if="player.hasAdmin('Miner')">+ Miner $2</span>
-                <span v-if="player.hasAdmin('Abacus')">+ Abacus ${{ Math.floor(3/player.difficulty) }}</span>
-                <span v-if="player.hasAdmin('Loot')">+ Loot $4</span>
-                <span v-if="player.hasAdmin('Tithe')">+ Tithe $5</span>
-                <span v-if="player.hasAdmin('Pot of Gold') && bosses.length > 0">+ Pot of Gold $10</span>
+                <span class="text-yellow">
+                    Reward: ${{ player.nextReward }}
+                </span>
+                <span v-if="player.hasAdmin('Chedda')">+ Chedda 
+                    <span class="text-yellow">
+                        $1
+                    </span>
+                </span>
+                <span v-if="player.hasAdmin('Miner')">+ Miner 
+                    <span class="text-yellow">
+                        $2
+                    </span>
+                </span>
+                <span v-if="player.hasAdmin('Abacus')">+ Abacus 
+                    <span class="text-yellow">
+                        ${{ Math.floor(3/player.difficulty) }}
+                    </span>
+                </span>
+                <span v-if="player.hasAdmin('Loot')">+ Loot 
+                    <span class="text-yellow">
+                        $4
+                    </span>
+                </span>
+                <span v-if="player.hasAdmin('Tithe')">+ Tithe 
+                    <span class="text-yellow">
+                        $5
+                    </span>
+                </span>
+                <span v-if="player.hasAdmin('Pot of Gold') && bosses.length > 0">+ Pot of Gold 
+                    <span class="text-yellow">
+                        $10
+                    </span>
+                </span>
 
             </div>
             <button @click="collectAndProceed">Collect and proceed</button>

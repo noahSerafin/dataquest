@@ -429,6 +429,22 @@
   }
 
   async function handleApplyAdmins(trigger: AdminTrigger, id:string){//admin and target
+    const playerAdmins = player.value.admins;
+    for (const admin of playerAdmins) {
+      if(trigger === admin.triggerType){
+        // sort through target types, decide what to pass
+        if(admin.targetType === 'gameState'){
+          await admin.apply({id, activePieces: activePieces.value})
+        }
+        if(admin.targetType === 'playerAndGame'){
+          await admin.apply({id, activePieces: activePieces.value, player: player.value})
+        }
+        if(admin.targetType === 'player'){
+          await admin.apply({player: player.value})
+        }
+      }
+    };
+    //we do bosses second for onPlacement immunities to take effect
     if(!player.value.hasAdmin('Umbrella')){
       for (const admin of bossAdmins.value) {
         if(trigger === admin.triggerType){
@@ -448,21 +464,6 @@
           if(admin.targetType === 'all'){
             await admin.apply({id, activePieces: activePieces.value, removeCallback: removePiece, board: level.value.tiles, player: player.value });//, graveyard: graveyard.value})
           }
-        }
-      }
-    };
-    const playerAdmins = player.value.admins;
-    for (const admin of playerAdmins) {
-      if(trigger === admin.triggerType){
-        // sort through target types, decide what to pass
-        if(admin.targetType === 'gameState'){
-          await admin.apply({id, activePieces: activePieces.value})
-        }
-        if(admin.targetType === 'playerAndGame'){
-          await admin.apply({id, activePieces: activePieces.value, player: player.value})
-        }
-        if(admin.targetType === 'player'){
-          await admin.apply({player: player.value})
         }
       }
     };
@@ -548,6 +549,12 @@
   }
 
   async function reloadLevel(){
+    player.value.admins.forEach(admin => {
+      if(admin.onRoundEnd) admin.onRoundEnd();
+    });
+    bossAdmins.value.forEach(admin => {
+      if(admin.onRoundEnd) admin.onRoundEnd();
+    });
     renewBlueprints();
     activePieces.value = originalPieces.value.map(p => p.clone());
     //if piece has no tiles, use headposition
@@ -658,7 +665,7 @@
               return (
                 temp.rarity >= min &&
                 temp.rarity <= max &&
-                temp.maxSize >= spawnSize
+                temp.maxSize >= spawnSize //not working??? test
               );
             }
           });
@@ -669,6 +676,7 @@
           
           const enemyInstance = new EnemyClass(piece.headPosition, 'enemy', removePiece);
           enemyInstance.tiles = piece.tiles;
+          enemyInstance.defenceRemaining = enemyInstance.getStat('defence');
 
           const variantChance = Math.min((0.1*trueDifficulty-0.1), 1)
           const variant = rollVariant(variantChance, trueDifficulty);
@@ -778,6 +786,7 @@
       piece.range = bp.range
       piece.attack = bp.attack
       piece.defence = bp.defence
+      piece.defenceRemaining = bp.defence
 
 
       // Step 3: hybrid-specific augmentation
@@ -938,6 +947,18 @@
       console.log('round won!')
       endRound(true);
     }
+    
+    let hiddenEnemies = []
+    enemyPieces.forEach(enemy => {
+      if(enemy.statuses.hidden)
+      hiddenEnemies.push(enemy)
+    });
+    if(hiddenEnemies.length === enemyPieces.length){
+      activePieces.value.forEach(piece => {
+        if(piece.team === 'enemy') piece.statuses.hidden = false
+      });
+    }
+
     // If no player pieces → round lost
     if (playerPiecesRemaining.length === 0) {
       console.log('round failed!')
@@ -1119,6 +1140,13 @@
   const hasWonRound = ref<boolean>(false);
   
   const endRound = (roundWon: boolean) => {
+    //reset counts
+    player.value.admins.forEach(admin => {
+      if(admin.onRoundEnd) admin.onRoundEnd();
+    });
+    bossAdmins.value.forEach(admin => {
+      if(admin.onRoundEnd) admin.onRoundEnd();
+    });
     graveyard.value = [];
     lastTurnPieces.value = [];
     selectedPiece.value = null;
@@ -1258,6 +1286,7 @@
   const worldSeed = ref(0);
   const increaseDifficulty = () => {
     player.value.difficulty += 1;
+    player.value.bossesCleared += 1;
     if(player.value.difficulty<7){//cumulate bosses in endless mode
       bossAdmins.value = [];
     }

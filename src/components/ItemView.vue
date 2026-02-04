@@ -193,4 +193,8 @@ button:disabled {
     z-index: 9999;
   }
 }
+.enemy-info .info{
+  top: 0;
+  height: fit-content;
+}
 </style>

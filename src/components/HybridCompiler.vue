@@ -41,7 +41,7 @@
         // Primary → first word
         const primaryWord = primaryName.trim().split(/\s+/)[0];
 
-        // Secondary → last word OR last 3 letters
+        // Secondary → last word OR last 4 letters
         const secondaryParts = secondaryName.trim().split(/\s+/);
 
         let secondaryPart: string;

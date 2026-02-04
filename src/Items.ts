@@ -237,7 +237,7 @@ export class Juice extends Item<Piece> {
     static name = "Juiced";
     static description = "Increases a placed program's moves by 1 for one round";
     static unicode = "U+1F9C3";
-    static color = "#fcff47ff";
+    static color = "rgb(255, 227, 71)";
     constructor(){
         super(Juice.name, Juice.description, Juice.unicode, Juice.color, 1, 2, 'piece')  
     }

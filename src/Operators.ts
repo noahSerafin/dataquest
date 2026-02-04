@@ -353,6 +353,8 @@ const Cobol : OS = {//lance //bug //screwdriver
     description: "All about money"
 }
 
+//explorer - map, compass, offroader
+
 const Debugger : OS = {//lance //bug //screwdriver
     name: 'Debugger',
     unicode: 'U+1F41B',

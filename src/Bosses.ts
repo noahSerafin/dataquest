@@ -258,7 +258,7 @@ class Volcano extends Admin {
     private count: number = 0
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
         this.count += 1
-        if(this.count === 5){
+        if(this.count >= 5){
             activePieces.forEach(piece => {
                 if(piece.team === 'player' && !piece.immunities.burning){
                     piece.statuses.burning = true;
@@ -421,7 +421,8 @@ class Customs extends Admin {//remove
     async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
         const idx = activePieces.findIndex(p => p.id === id);
         if(!activePieces[idx].immunities.exposed){
-            activePieces[idx].statuses.exposed = true
+            activePieces[idx].statuses.exposed = true;
+            activePieces[idx].statuses.hidden = false;
         }
         //activePieces[idx].addModifier({moves: -1})
     }

@@ -122,6 +122,7 @@
     }
 
     function canSkip(node: WorldNode){
+        if(node.type === 'shop') return false;
         if(props.player.hasAdmin('Leg Up') && (node.type!=='boss')){
             return true;
         }
@@ -139,6 +140,7 @@
         } else{
             skipsThisLevel.value += 1;
         }
+        emit('incrementProgress')
     }
 
     function enterNode(node: WorldNode) {

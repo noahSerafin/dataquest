@@ -130,7 +130,6 @@ html, body, #app {
   position: absolute;
   width: min(90vmin, 720px);
   aspect-ratio: 1 / 1;
-  border-radius: 12px;
   transform: translateY(120%);
   opacity: 0;
   pointer-events: none;
@@ -162,7 +161,6 @@ html, body, #app {
 .container {
   width: min(92vw, 720px);
   aspect-ratio: 1 / 1;
-  border-radius: 12px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.4);
   overflow: hidden;
 }

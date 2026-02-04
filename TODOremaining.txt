@@ -1,5 +1,17 @@
-GAME
+GAME / BUGS
+visualise retaliation, defence, dmg mult, admin counts, enemy movement distance (hide move buttons)
+self specials easy to accidentally auto click
+Player OS icon dissapears after hidden nodes
+fix ufo
+pawn can't promote to hybrids
+make charmedpieces not moveable
+store ids/check statuses in special move pieces to prevent enemies using special mutliple times on the same player program
+enemies not walking over traps/enemy traps not walking over players
 reveal hidden enemies before damage
+----low priority:
+display company/node name in board
+difficulty - add +1, +2 programs for variety, or make variants +- security level
+Ties currently count as wins - but player still loses a life?
 sort out graveyard 8
 
 ITEMS/admins shortand descriptions eg. +1 attack instead of "increases"
@@ -45,7 +57,8 @@ COOKIES - game progress permanence
 
 MAP
 allow some randomised crossover points?
-Altar nodes - sacrifice a program for more money than selling - 8
+Altar nodes - sacrifice a program for more money than selling - 8 - skippable
+Gladiator nodes - place only once in arena node for reward - skippable
 
 PIECES
 Fairy - graveyard interaction 8
@@ -59,6 +72,18 @@ companies 8 - own list of programs/variants;
 SHOP - 8
 - two piece/item slots
 piece packs/item packs/admin packs?
+
+EXPERIMENT:
+Spawn all enemies at all difficulties, but do not weight selection,
+enemies of lower rank get +1 to all stats for every rarity below the current security level
+
+DIFFICULTY/HARD MODE
+Bosses accumulate from begining
+Enemies get +1 maxSize per security level
+Enemies get +1 defence per security level
+Enemies get +1 attack per security level
+Enemies get +1 moves per security level
+Enemies get +1 range per security level
 
 COLLECTION 9
 

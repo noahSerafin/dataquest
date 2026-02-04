@@ -169,7 +169,7 @@ export abstract class Piece {
     //this.headPosition
   }
 
-  moveTo(newPosition: Coordinate): void {
+  move(newPosition: Coordinate): void {
     this.headPosition = newPosition;
     // Remove existing occurrence if moving onto own tile
     this.tiles = this.tiles.filter(
@@ -181,6 +181,10 @@ export abstract class Piece {
     if (this.tiles.length > this.getStat('maxSize')) {
       this.tiles.pop() // removes last element
     }
+  }
+
+  moveTo(newPosition: Coordinate): void {//make a free version
+    this.move(newPosition)
     this.useMove();
   }
 
@@ -224,15 +228,15 @@ export abstract class Piece {
 
   applyStatusEffects(mult: number) {
     if (this.statuses.diseased) {
-      this.maxSize = Math.max(1, this.getStat('maxSize') - 1 * mult);
+      this.maxSize = Math.max(1, this.getStat('maxSize') - (1 * mult));
     }
     if (this.statuses.slowed) {
-      this.moves = Math.max(0, this.getStat('moves') - 1 * mult);
+      this.moves = Math.max(0, this.getStat('moves') - (1 * mult));
     }
     if(this.statuses.blinded){
-      this.range = Math.max(0, this.getStat('range') - 1 * mult);
+      this.range = Math.max(0, this.getStat('range') - (1 * mult));
     }
-    if (this.statuses.burning) {
+    if (this.statuses.burning) {//scale for multiple volatiles
       this.tiles.pop()
       if(mult > 1){
         this.tiles.pop()
@@ -242,7 +246,7 @@ export abstract class Piece {
       }
     }
     if (this.statuses.poisoned) {
-      this.defence = Math.max(0, this.getStat('defence') - 1 * mult);
+      this.defence = Math.max(0, this.getStat('defence') - (1 * mult));
     }
     if (this.statuses.frozen) {
       this.movesRemaining = 0;
@@ -446,7 +450,7 @@ class Gate extends Piece {
     if (isOccupied) {
       return;
     }
-    pieceToMove.moveTo({ x: tx, y: ty });
+    pieceToMove.move({ x: tx, y: ty });
     this.actions--
   }
 }
@@ -567,7 +571,7 @@ class Lance extends Piece {
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
       );
       if(!occupier) {
-        this.moveTo(tile);
+        this.move(tile);
         continue;
       }
       await occupier.takeDamage(this.getStat('attack'));
@@ -576,7 +580,7 @@ class Lance extends Piece {
       );
       if (!stillOccupied) {
         // The enemy died → Lance can move into the tile
-        this.moveTo(tile);
+        this.move(tile);
         continue;
       }
       break;
@@ -757,7 +761,7 @@ class Dataworm extends Piece {//test
     // --- 3. Remove that tile from the piece ---
     piece.tiles.splice(tileIndex, 1);
     // --- 4. Move Dataworm into that tile ---
-    this.moveTo(target);
+    this.move(target);
     this.actions --
   }
 }
@@ -793,7 +797,7 @@ class Snake extends Piece {//test
     piece.tiles.splice(tileIndex, 1);
     this.maxSize += 1;
     // --- 4. Move Snake into that tile ---
-    this.moveTo(target);
+    this.move(target);
     this.actions --
   }
 }
@@ -805,7 +809,7 @@ class Copycat extends Piece {
   static color = "#fff643";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Copycat.name, Copycat.description, Copycat.unicode, 1, 2, 1, 0, 0, Copycat.color, headPosition, [headPosition], team, Copycat.rarity, removeCallback, id)
+    super(Copycat.name, Copycat.description, Copycat.unicode, 1, 2, 2, 0, 0, Copycat.color, headPosition, [headPosition], team, Copycat.rarity, removeCallback, id)
     this.targetType = 'piece'
     this.specialName = 'Imitate'
     //neutral special
@@ -912,7 +916,7 @@ class Web extends Piece {
   static name = "Web";
   static description = "A program that freezes enemies moving over it, removing itself";//immobilises
   static unicode = "U+1F578";
-  static color = "#cfcfcfff";
+  static color = "rgb(96, 96, 96)";
   static rarity = 8; //maybe it should be a low level trap piece?
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Web.name, Web.description, Web.unicode, 1, 0, 0, 0, 0, Web.color, headPosition, [headPosition], team, Web.rarity, removeCallback, id)
@@ -1139,7 +1143,7 @@ class Hopper extends Piece {
     if (!allBetweenAreOccupied) return;
     // 5. Conditions satisfied → perform hop
     */
-    this.moveTo(target);
+    this.move(target);
     this.actions --
   }
 }
@@ -1196,7 +1200,7 @@ class Puffer extends Piece {
 
 class Nuke extends Piece {
   static name = "Nuke";
-  static description = "A slow and fragile program that destroys itself and damages all pieces in range";
+  static description = "A slow and fragile program that destroys itself and damages all in range";
   static unicode = "U+2622";
   static color = "#ff0000ff";
   static rarity = 6;
@@ -1218,7 +1222,7 @@ class Nuke extends Piece {
 
 class Highwayman extends Piece {//not working
   static name = "Highwayman";
-  static description = "A program that can generate money once from an enemy piece based on it's rarity (testing)";
+  static description = "A program that can generate money once from an enemy piece based on it's rarity";
   static unicode = "U+1F9B9";
   static color = "#494646ff";
   static rarity = 3;
@@ -1283,7 +1287,7 @@ class Snowman extends Piece {
   async special({target, activePieces: _activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
     this.maxSize+=1;
     this.addModifier({moves: 1})
-    this.moveTo(target);
+    this.move(target);
     this.actions --
   }
   //maxSize = size
@@ -1339,7 +1343,10 @@ class Pawn extends Piece {
     if (!targetPiece) return;
     
     const newPieceConstructor = allPieces.find(c => c.name === targetPiece.name);
-    if (!newPieceConstructor) return;
+    if (!newPieceConstructor){
+      //find using name with hybrid removed
+      return;
+    }
     
     const head = this.headPosition;
     const promoted = new newPieceConstructor(
@@ -1662,7 +1669,7 @@ class Greatshield extends Piece {//testt
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
       );
       if(!occupier) {
-        this.moveTo(tile);
+        this.move(tile);
         continue;
       }
       await occupier.takeDamage(this.getStat('attack'));
@@ -1670,7 +1677,7 @@ class Greatshield extends Piece {//testt
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
       );
       if (!stillOccupied) {
-        this.moveTo(tile);
+        this.move(tile);
         continue;
       }
       break;
@@ -1703,7 +1710,7 @@ class Wizard extends Piece {
 
 class Ninja extends Piece {
   static name = "Ninja";
-  static description = "A small program with high attack that can hide itself from enemy pieces until attacking";
+  static description = "A small program with high attack that can hide itself from enemies until attacking";
   static unicode = "U+1F977";
   static color = "#000000ff";
   static rarity = 3;
@@ -1801,7 +1808,7 @@ class Cockroach extends Piece {
 
 class Mosquito extends Piece {
   static name = "Mosquito";
-  static description = "Can steal enemy body pieces";
+  static description = "Can steal enemy body tiles";
   static unicode = "U+1F99F";
   static color = "#271f0dff";
   static rarity = 3;
@@ -1983,7 +1990,7 @@ class Beetle extends Piece {
 }
 
 class LadyBeetle extends Piece {
-  static name = "LadyBird";
+  static name = "Ladybird";
   static description = "A tougher beetle";
   static unicode = "U+1F41E";
   static color = "#059411ff";
@@ -2060,7 +2067,6 @@ class Decoy extends Piece {
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Decoy.name, Decoy.description, Decoy.unicode, 1, 3, 3, 0, 2, Decoy.color, headPosition, [headPosition], team, Decoy.rarity, removeCallback, id)
     this.specialName='Substitute'
-    this.canAttack = false;
     this.targetType='piece'
   }
 
@@ -2354,6 +2360,7 @@ class UFO extends Piece {
     this.specialName = 'Tractor Beam'
   }
 
+  //pushing pieces off board, needs tileset also
   async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
 
     const origin = this.headPosition;
@@ -2424,7 +2431,7 @@ class Saw extends Piece {
 
 class Croc extends Piece {
   static name = "Croc";
-  static description = "A slow program with high attack that starts hidden from enemy pieces";
+  static description = "A slow program with high attack that starts hidden from enemies";
   static unicode = "U+1F40A";
   static color = "#022f0eff";
   static rarity = 3;
@@ -2643,7 +2650,7 @@ class Hedgehog extends Piece {
   static description = "A program that always retaliates when attacked";
   static unicode = "U+1F994";
   static color = "#504020ff";
-  static rarity = 3;
+  static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Hedgehog.name, Hedgehog.description, Hedgehog.unicode, 3, 2, 1, 1, 1, Hedgehog.color, headPosition, [headPosition], team, Hedgehog.rarity, removeCallback, id)
    this.willRetaliate = true;
@@ -2748,7 +2755,7 @@ class Bull extends Piece {
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
       );
       if(!occupier) {
-        this.moveTo(tile);
+        this.move(tile);
         continue;
       }
       await occupier.takeDamage(this.getStat('attack'));
@@ -2757,7 +2764,7 @@ class Bull extends Piece {
       );
       if (!stillOccupied) {
         // The enemy died → Lance can move into the tile
-        this.moveTo(tile);
+        this.move(tile);
         continue;
       }
       break;
@@ -2785,7 +2792,7 @@ class Rhino extends Piece {
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
       );
       if(!occupier) {
-        this.moveTo(tile);
+        this.move(tile);
         continue;
       }
       await occupier.takeDamage(this.getStat('attack'));
@@ -2794,7 +2801,7 @@ class Rhino extends Piece {
       );
       if (!stillOccupied) {
         // The enemy died → Lance can move into the tile
-        this.moveTo(tile);
+        this.move(tile);
         continue;
       }
       break;
@@ -2829,7 +2836,7 @@ class Gecko extends Piece {
     if(this.tiles.length <= 1) return;
     const newTail = new Tail(this.tiles[this.tiles.length-1], this.team, this.removeCallback, crypto.randomUUID());
     this.tiles.splice(this.tiles.length-1, 1);
-    this.moveTo(target);
+    this.move(target);
     activePieces.push(newTail);
     this.actions--
   }

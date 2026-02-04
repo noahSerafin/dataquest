@@ -52,7 +52,11 @@ function decideEnemyIntent(
         return { type: 'special', target: {target: target.place, activePieces: activePieces}}
       }
       if(enemy.targetType === 'piece' && specialAttempts < 1){ ///can execute a special
-        return { type: 'special', target: target.piece };
+        if(enemy.attack > 2 && (enemy.specialName === 'Imitate' || enemy.specialName === 'Absorb')){
+          return { type: 'attack', target: target.piece };
+        } else {
+          return { type: 'special', target: target.piece };
+        }
       }
       if(enemy.targetType === 'group'){//bomb type pieces
         return { type: 'special', target: findAnyPiecesInRange(enemy, activePieces)}
@@ -320,7 +324,7 @@ function findWeakestPlayerInRange(
       const dist =
         Math.abs(ex - tile.x) + Math.abs(ey - tile.y);
 
-      if (dist <= enemy.range) {
+      if (dist <= enemy.getStat('range')) {
         candidates.push({ piece: player, place: tile });
         break; // one tile in range is enough per piece
       }
@@ -479,7 +483,7 @@ function getAnySpaceInRange(
   }
 
   const { x: ox, y: oy } = piece.headPosition;
-  const range = piece.range;
+  const range = piece.getStat('range');
 
   const candidates: Coordinate[] = [];
 
@@ -573,7 +577,7 @@ function findStrongestInRange(//for pawn
       const dist =
         Math.abs(ex - tile.x) + Math.abs(ey - tile.y);
 
-      if (dist <= enemy.range) {
+      if (dist <= enemy.getStat('range')) {
         candidates.push({ piece: piece, place: tile });
         break; // one tile in range is enough per piece
       }

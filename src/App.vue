@@ -1343,7 +1343,7 @@
     }
   );
 
-  const debugMode = ref<boolean>(true);
+  const debugMode = ref<boolean>(false);
   function toggleDebug(){
     debugMode.value = !debugMode.value;
   }

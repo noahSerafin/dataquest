@@ -97,7 +97,7 @@ function handleSelect() {
 
 <template>
   <div
-  :class="`blueprint ${props.cssclass}-piece ${props.blueprint.hybridName ? 'hybrid' : ''}`"
+  :class="`blueprint ${props.cssclass}-piece ${props.blueprint.hybridName ? 'hybrid' : ''} ${props.blueprint.variantName ? ('variant-program v_'+blueprint.variantName) : ''}`"
     :name="props.blueprint?.name"
     :id="props.blueprint?.id"
     :style="pieceStyle"

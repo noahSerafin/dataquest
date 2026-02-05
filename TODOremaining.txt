@@ -8,6 +8,9 @@ make charmedpieces not moveable
 store ids/check statuses in special move pieces to prevent enemies using special mutliple times on the same player program
 enemies not walking over traps/enemy traps not walking over players
 reveal hidden enemies before damage
+make a visual distinction between bp items and placed program items/food? shape of item?
+level4 fort - change
+'lockup' change
 ----low priority:
 display company/node name in board
 difficulty - add +1, +2 programs for variety, or make variants +- security level

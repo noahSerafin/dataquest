@@ -90,15 +90,15 @@ defineEmits(["buy", "sell", "highlightPlacements", "close"])
     transform: `translate(${position.x}px, ${position.y}px)`
   }">
     <div class="left">
-      <div class="header" @mousedown="startDrag" @touchstart="startDrag">
+      <div :class="`header ${piece.variantName ? ('variant-header v_'+piece.variantName) : ''}`" @mousedown="startDrag" @touchstart="startDrag">
         <span class="symbol">
           {{ String.fromCodePoint(parseInt(piece.unicode.replace("U+", ""), 16)) }}
         </span>
-        <span v-if="piece.variantName" class="variant">"{{ piece.variantName }}"</span>
+        <span v-if="piece.variantName" class="variant">{{ piece.variantName }}</span>
         <span class="name">{{ piece.hybridName ? piece.hybridName : piece.name }}</span>
         <button class="close" @click="$emit('close', piece)">X</button>
       </div>
-      <div :style="{ color: rarityInfo.color }">
+      <div class='bp-rarity' :style="{ color: rarityInfo.color }">
         {{ rarityInfo.text }}
       </div>
       <p class="desc">{{ piece.description }}</p>
@@ -177,6 +177,10 @@ defineEmits(["buy", "sell", "highlightPlacements", "close"])
   top: 0;
   z-index: -1;
   position: absolute;
+}
+.bp-rarity{
+  position: relative;
+  z-index: 2;
 }
 .close{
   position: absolute;

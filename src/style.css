@@ -265,14 +265,13 @@ html, body, #app {
   position: absolute;
   top: 0;
   left: 0;
-  background: white;
+  background: rgb(213, 210, 210);
+  color: #000;
   border-radius: 50%;
-  color: #a7f3d0;
-  border: 1px solid #34d399;
+  border: 1px solid #0dc95b;
   border-radius: 6px;
   padding: 6px 10px;
   font-size: 12px;
-  max-width: 220px;
   z-index: 1000;
   pointer-events: none;
   opacity: 0;
@@ -338,14 +337,187 @@ steel
   mix-blend-mode: multiply;
   /* background-image: url(sparrow_mask.png); */
 }
-/*
-<div class="shader framed">
-          <img src="https://assets.codepen.io/2153413/sparrow-base.png" alt="Silhouette design of a sparrow sitting on a branch" width="512">
-          <div class="shader-layer specular gradient-sparrow">
-            <img class="shader-layer mask" src="https://assets.codepen.io/2153413/sparrow-mask.png" alt="" width="300">
-          </div>
 
-.gradient-sparrow {
+.variant-program, .variant-item, .variant-header{
+  background: linear-gradient(to left, rgb(226, 226, 226), rgba(255, 255, 255, 0));
+  overflow: hidden;
+}
+.variant-header{
+  position: relative;
+  left: -1rem;
+  overflow: hidden;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  width: 100%;
+}
+.piece-controller, .shop-controller, .blueprint-controller{
+  overflow: hidden;
+}
+.variant-program:hover::before, .variant-item:hover::before, .variant-header:hover::before{
+  content: '';
+  position: absolute;
+  width: 100px;
+  height: 100%;
+  background-image: linear-gradient(
+    120deg,
+    rgba(255,255,2555,0)20%,
+    rgba(255,255,2555,0.9),
+    rgba(255,255,2555,0)80%
+  );
+  top: 0;
+  left: -100px;
+  animation: shine 3s infinite linear;
+}
+@keyframes shine {/*not-triggering*/
+  0% {left: -100px}
+  20% {left: 100%}
+  100% {left: 100%}
+}
+.v_Bronze{
+  box-shadow: inset 0 0 10px #2f1606, inset 0 3px 30px #87442b, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
+}
+.v_Bronze .variant{
+  color: #b75d3c;
+}
+.v_Steel{
+  box-shadow: inset 0 0 10px #464646, inset 0 3px 30px #838489, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
+}
+.v_Steel .variant{
+  color: #c4c4c4;
+}
+.v_Longshot{
+  box-shadow: inset 0 0 10px #704001, inset 0 3px 30px #ff6f00, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
+}
+.v_Longshot .variant{
+  color: #ff6f00;
+}
+.v_Gold{
+  box-shadow: inset 0 0 10px #b36806, inset 0 3px 30px #ffd046, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
+}
+.v_Gold .variant{
+  color: #e3af12;
+}
+.v_Sharp{
+  box-shadow: inset 0 0 10px #561002, inset 0 3px 30px #ff716c, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
+}
+.v_Sharp .variant{
+  color: rgb(244, 53, 20);
+}
+.v_Speedy{
+  box-shadow: inset 0 0 10px #180a55, inset 0 3px 30px #12add9, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
+}
+.v_Speedy .variant{
+  color: #12add9;
+}
+.v_Lead{
+  box-shadow: inset 0 0 10px #201638, inset 0 3px 30px #323577, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
+}
+.v_Lead .variant{
+  color: #323577;
+}
+.v_Stone{
+  box-shadow: inset 0 0 10px #1c1b1e, inset 0 3px 30px #515369, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
+}
+.v_Stone .variant{
+  color: #515369;
+}
+.v_Fast{
+  box-shadow: inset 0 0 10px #290464, inset 0 3px 30px #002de0, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
+}
+.v_Fast  .variant{
+  color: #002de0;
+}
+.v_Bloated{
+  box-shadow: inset 0 0 10px #060725, inset 0 3px 30px #2cc899, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
+}
+.v_Bloated .variant{
+  color: #2cc899;
+}
+.v_Giant{
+  box-shadow: inset 0 0 10px #06250c, inset 0 3px 30px #024a19, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
+}
+.v_Giant .variant{
+  color: #024a19;
+}
+.v_Large{
+  box-shadow: inset 0 0 10px #115802, inset 0 3px 30px #0ab342, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
+}
+.v_Large  .variant{
+  color: #0ab342;
+}
+.v_Reaching{
+  box-shadow: inset 0 0 10px #381e16, inset 0 3px 30px #ff9d00, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
+}
+.v_Reaching .variant{
+  color: #d46600;
+}
+.v_Towering, .v_Phosphoric{
+  box-shadow: inset 0 0 10px #381e16, inset 0 3px 30px #ff9d00, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
+}
+.v_Towering .variant{
+  color: #cf6609;
+}
+.v_Cautious{
+  box-shadow: inset 0 0 10px #043a54, inset 0 3px 30px #00ffdd, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
+}
+.v_Cautious .variant{
+  color: #00ffdd;
+}
+.v_Beserker{
+  box-shadow: inset 0 0 10px #1d0101, inset 0 3px 30px #a00303, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
+}
+.v_Beserker  .variant{
+  color: #a00303;
+}
+.v_Savage{
+  box-shadow: inset 0 0 10px #571532, inset 0 3px 30px #ff005d, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
+}
+.v_Savage  .variant{
+  color: #c40505;
+}
+.v_Vicious{
+  box-shadow: inset 0 0 10px #3c0b0b, inset 0 3px 30px #d21515, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
+}
+.v_Vicious  .variant{
+  color: #d21515;
+}
+.v_Overclocked{
+  box-shadow: inset 0 0 10px #370334, inset 0 3px 30px #ff00f2, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
+}
+.v_Overclocked .variant{
+
+}
+.v_Lightweight{
+  box-shadow: inset 0 0 10px #453a0d, inset 0 3px 30px #ffdc69, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
+}
+.v_Lightweight .variant{
+  color: #ffdc69;
+}
+.v_Glass{
+  box-shadow: inset 0 0 10px #0f2c49, inset 0 3px 30px #69fff5, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
+  opacity: 0.5;
+}
+.v_Glass .variant{
+  color: #8b0909;
+}
+.v_stone{
+  
+}
+.v_plated{
+  /* thick border */
+}
+.v_stilted{
+  
+}
+.v_Exec{
+
+}
+.v_negative{
+  box-shadow: inset 0 0 10px #000000, inset 0 3px 30px #4b4b4b, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
+  filter: invert(1);
+}
+.v_Holographic{
+  background: linear-gradient(to left, black, rgba(255, 255, 255, 0));
   background-image: linear-gradient(
     0deg,
     hsl(359, 60%, 40%),
@@ -363,4 +535,3 @@ steel
     hsl(303, 60%, 40%)
   );
 }
-*/

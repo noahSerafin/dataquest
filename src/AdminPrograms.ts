@@ -597,7 +597,7 @@ class Lungs extends Admin {
 
 class Brain extends Admin {//unfinished, actionsHandler in Piececontroller playing up, or canAttack bool being set false somewhere?
   static name = "Machine Learning";
-  static description = "Every program in your inventory gives +1 attack to your programs on load";
+  static description = "Every space of free memory in your inventory gives +1 attack to your programs on load";
   static unicode = "U+1F9E0";
   static color = "#570606";
   constructor() {
@@ -605,7 +605,7 @@ class Brain extends Admin {//unfinished, actionsHandler in Piececontroller playi
   }
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({attack: player.programs.length})
+    activePieces[idx].addModifier({attack: Math.round(player.freeMemory)})
   }
 }
 
@@ -1617,8 +1617,8 @@ class Bipolar extends Admin {
   static name = "Ups and Downs";
   static description = "Gain $1 on destroying an enemy, lose $5 on destruction of your own programs";
   static unicode = "U+1F3AD";
-  static color = "#dbd58dff";
-  static rarity = 1;
+  static color = "rgb(196, 167, 87)";
+  static rarity = 2;
   constructor() {
     super(Bipolar.name, Bipolar.description, Bipolar.unicode, Bipolar.color, 5, Bipolar.rarity, 'playerAndGame', 'onPieceDestruction')
   }
@@ -2076,6 +2076,7 @@ console.log('admins length: ', allAdmins.length)
 //four finger
 //magnifying appraisal
 //red sky- dmg mult / bomb bonuses
+//gene hybrids appear in shop
 
 //blood tax nerf to only attacking own pieces? overkills? or jolly roger?
 //nerf needle to random stat? have a count? only trigger on bosses?

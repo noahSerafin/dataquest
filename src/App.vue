@@ -1343,7 +1343,10 @@
     }
   );
 
-  const debugMode = ref<boolean>(false);
+  const debugMode = ref<boolean>(true);
+  function toggleDebug(){
+    debugMode.value = !debugMode.value;
+  }
 </script>
 
 <template>
@@ -1384,6 +1387,9 @@
     </button>
     <button class="phone-hide" @mousedown="toggleFastControls()">
       Fast Controls
+    </button>
+    <button class="phone-hide" @mousedown="toggleDebug()">
+      Debug mode
     </button>
   </div>
   <div class="top-hud">

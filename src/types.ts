@@ -71,6 +71,13 @@ export type PieceVariant = {
   minDifficulty: number,
   weight?: number
 }
+export type Variant = {
+  name: string,
+  mods: Partial<Record<StatKey, number>>,
+  color: string,
+  minDifficulty: number,
+  weight?: number
+}
 
 export type Level = {
   name: string,

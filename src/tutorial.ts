@@ -7,7 +7,8 @@ for (const tip of allTips){//but do this every time the enviroment change
   //find html element by class = tip.id
 
   //append a new tooltip to element  
-  const tooltip = document.createElement("div");
+  //const tooltipBtn = document.createElement("button");//change to button, add function for player to toggle the div
+  const tooltip = document.createElement("div");//append/insert inside btn
   tooltip.className = "tutorial-tooltip";
   tooltip.innerHTML = tip.tooltip;
   document.body.appendChild(tooltip);

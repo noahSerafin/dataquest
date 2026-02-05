@@ -136,7 +136,7 @@ const activeStatuses = computed((): [string, boolean][] => {
 
 <template>
   <div
-  :class="`piece ${piece.headPosition.x}-${piece.headPosition.y} ${cssclass}-piece ${props.piece.extraUnicode ? 'hybrid' : ''} team-${piece.team} taking-damage-${piece.isTakingDamage} hidden-${piece.statuses.hidden} tiles:(${piece.tiles.toString()})`"
+  :class="`piece ${piece.headPosition.x}-${piece.headPosition.y} ${cssclass}-piece ${props.piece.variantName ? ('variant-program v_'+piece.variantName) : ''} ${props.piece.extraUnicode ? 'hybrid' : ''} team-${piece.team} taking-damage-${piece.isTakingDamage} hidden-${piece.statuses.hidden} tiles:(${piece.tiles.toString()})`"
     :name="piece?.name"
     :id="piece?.id"
     :style="pieceStyle"

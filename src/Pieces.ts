@@ -1647,7 +1647,7 @@ class Shark extends Piece {
   static color = "#0061bdff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Shark.name, Shark.description, Shark.unicode, 4, 4, 1, 3, 1, Shark.color, headPosition, [headPosition], team, Shark.rarity, removeCallback, id)
+   super(Shark.name, Shark.description, Shark.unicode, 4, 4, 1, 4, 1, Shark.color, headPosition, [headPosition], team, Shark.rarity, removeCallback, id)
   }
 }
 
@@ -1889,7 +1889,7 @@ class Golem extends Piece {
   static color = "#777777ff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Golem.name, Golem.description, Golem.unicode, 5, 1, 1, 3, 4, Golem.color, headPosition, [headPosition], team, Golem.rarity, removeCallback, id)
+   super(Golem.name, Golem.description, Golem.unicode, 5, 1, 1, 4, 4, Golem.color, headPosition, [headPosition], team, Golem.rarity, removeCallback, id)
   }
 }
 
@@ -2436,7 +2436,7 @@ class Croc extends Piece {
   static color = "#022f0eff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Croc.name, Croc.description, Croc.unicode, 2, 1, 1, 4, 1, Croc.color, headPosition, [headPosition], team, Croc.rarity, removeCallback, id)
+    super(Croc.name, Croc.description, Croc.unicode, 2, 1, 1, 3, 1, Croc.color, headPosition, [headPosition], team, Croc.rarity, removeCallback, id)
     //this.specialName='Submerge'
     //this.targetType='piece'
     this.statuses.hidden = true;

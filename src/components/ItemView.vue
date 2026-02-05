@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { Item } from "../Items"; // adjust path
+import type { PieceVariant } from "../types";
 
 const props = defineProps<{
   item: InstanceType<typeof Item>;
@@ -9,6 +10,7 @@ const props = defineProps<{
   tileSize: number;
   canBuy: boolean;       // for custom styling (shop / inventory)
   showController: boolean;
+  variant: PieceVariant;
 }>();
 
 const emit = defineEmits<{
@@ -43,9 +45,11 @@ const unicodeSymbol = computed(() =>
 )
   
 const itemStyle = computed(() => {
+  const widthAdjustment = props.type === 'consumable' ? 10 : 16
+  const heightAdjustment = props.type === 'admin' ? 10 : 16
   let styles = {
-    width: props.tileSize-16 + 'px',
-    height: props.tileSize-16 + 'px',
+    width: props.tileSize-widthAdjustment + 'px',
+    height: props.tileSize-heightAdjustment + 'px',
     fontSize: props.tileSize * 0.6 + 'px',
     lineHeight: props.tileSize -24 + 'px',
     backgroundColor: props.item.color,
@@ -66,7 +70,7 @@ const handleUse = () => {
   <div
     :id="item.id"
     class="item"
-    :class="`item-${cssclass} item-${type} itemName-${item.name}`"
+    :class="`item-${cssclass} item-${type} itemName-${item.name} v_${item.variantName}`"
     @click="handleSelect"
     :style="itemStyle"
   >

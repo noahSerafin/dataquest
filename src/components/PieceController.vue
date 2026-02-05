@@ -88,14 +88,14 @@ function toggleTooltip(key: string) {
 </script>
 
 <template>
-  <div class="piece-controller instance" :style="{
+  <div :class="`piece-controller instance v_${piece.variantName}`" :style="{
     transform: `translate(${position.x}px, ${position.y}px)`
   }">
-    <div class="header" @mousedown="startDrag" @touchstart="startDrag">
+    <div :class="`header ${piece.variantName ? ('variant-header v_'+piece.variantName) : ''}`" @mousedown="startDrag" @touchstart="startDrag">
       <span class="symbol">
         {{ String.fromCodePoint(parseInt(piece.unicode.replace("U+", ""), 16)) }}
       </span>
-      <span v-if="piece.variantName" class="variant">"{{ piece.variantName }}"</span>
+      <span v-if="piece.variantName" class="variant">{{ piece.variantName }}</span>
       <span class="name">{{ piece.name }}</span>
       <button class="close" @click="$emit('close', piece)">X</button>
     </div>

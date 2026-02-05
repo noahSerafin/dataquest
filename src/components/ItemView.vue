@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { Item } from "../Items"; // adjust path
-import type { PieceVariant } from "../types";
+//import type { PieceVariant } from "../types";
 
 const props = defineProps<{
   item: InstanceType<typeof Item>;
@@ -10,7 +10,7 @@ const props = defineProps<{
   tileSize: number;
   canBuy: boolean;       // for custom styling (shop / inventory)
   showController: boolean;
-  variant: PieceVariant;
+  //variant: PieceVariant;
 }>();
 
 const emit = defineEmits<{
@@ -63,14 +63,14 @@ const itemStyle = computed(() => {
 const handleUse = () => {
   emit('use', props.item);
 }
-
+// /<!-- v_${item.variantName}`
 </script>
 
 <template>
   <div
     :id="item.id"
     class="item"
-    :class="`item-${cssclass} item-${type} itemName-${item.name} v_${item.variantName}`"
+    :class="`item-${cssclass} item-${type} itemName-${item.name}`"
     @click="handleSelect"
     :style="itemStyle"
   >

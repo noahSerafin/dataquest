@@ -16,7 +16,7 @@ export abstract class Item<TTarget = any> {
   cost: number
   rarity: number
   targetType: 'blueprint' | 'piece' | 'shopItem' | 'player' | 'gameState'  | 'playerAndGame' | 'piecesAndBoard' | 'all'
-  variantName: string
+  //variantName: string
   constructor(
     name : string, 
     description : string,
@@ -25,7 +25,7 @@ export abstract class Item<TTarget = any> {
     cost: number,
     rarity: number,
     targetType: 'blueprint' | 'piece' | 'shopItem' | 'player' | 'gameState'  | 'playerAndGame' | 'piecesAndBoard' | 'all',
-    variantName: string
+    //variantName: string
   ) {
     this.id = crypto.randomUUID()
     this.name = name
@@ -35,7 +35,7 @@ export abstract class Item<TTarget = any> {
     this.cost = cost
     this.rarity = rarity
     this.targetType = targetType
-    this.variantName = variantName
+    //this.variantName = variantName
     }
 
   getItemInfo(): string {

@@ -2077,6 +2077,7 @@ console.log('admins length: ', allAdmins.length)
 //magnifying appraisal
 //red sky- dmg mult / bomb bonuses
 //gene hybrids appear in shop
+//admin to add held item variants to all pieces
 
 //blood tax nerf to only attacking own pieces? overkills? or jolly roger?
 //nerf needle to random stat? have a count? only trigger on bosses?

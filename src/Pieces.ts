@@ -241,7 +241,7 @@ export abstract class Piece {
       if(mult > 1){
         this.tiles.pop()
       }
-      if(this.tiles.length <= 1){
+      if(this.tiles.length <= 0){
         this.removeCallback?.(this);
       }
     }
@@ -736,7 +736,7 @@ class Dataworm extends Piece {//test
   static color = "#ee74eeff";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Dataworm.name, Dataworm.description, Dataworm.unicode, 6, 3, 1, 2, 0, Dataworm.color, headPosition, [headPosition], team, Dataworm.rarity, removeCallback, id)
+    super(Dataworm.name, Dataworm.description, Dataworm.unicode, 6, 3, 1, 4, 2, Dataworm.color, headPosition, [headPosition], team, Dataworm.rarity, removeCallback, id)
     this.specialName = 'Tunnel';
     this.targetType = 'pieceAndPlace'
   }
@@ -768,10 +768,10 @@ class Dataworm extends Piece {//test
 
 class Snake extends Piece {//test
   static name = "Snake";
-  static description = "A large program that can swallow tiles (head excluded), removing a piece of memory regardless of defence and adding to its own max size";
+  static description = "A large program that can move into others' tiles (head excluded), removing a piece of memory regardless of defence and adding to its own max size";
   static unicode = "U+1F40D";
   static color = "#034d22ff";
-  static rarity = 4;
+  static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Snake.name, Snake.description, Snake.unicode, 3, 1, 1, 1, 0, Snake.color, headPosition, [headPosition], team, Snake.rarity, removeCallback, id)
     this.specialName = 'Swallow';
@@ -1621,7 +1621,7 @@ class Squid extends Piece {
 
 class Snail extends Piece {
   static name = "Snail";
-  static description = "A slow program that can retract itself to boost it's defence temporarily until your next turn";
+  static description = "A slow program that can retract itself to double it's defence temporarily until the next turn";
   static unicode = "U+1F40C";
   static color = "#4d3502ff";
   static rarity = 1;
@@ -1633,7 +1633,7 @@ class Snail extends Piece {
   async special(_target: Piece):Promise<void>{
     if(this.tiles.length > 1){
       this.tiles = [this.headPosition]//use array modifier
-      this.addTempModifier({defence: 1});//double it's defense/ or +1?
+      this.addTempModifier({defence: (this.getStat('defence')/2)});//double it's defense/ or +1?
       this.movesRemaining = 0;
     }
     this.actions--

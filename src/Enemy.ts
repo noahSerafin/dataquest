@@ -154,6 +154,7 @@ async function executeEnemyIntent(
       await attackPiece(enemy, intent.target);
       helpers.onReceiveDamage(enemy.id);
       helpers.clearHighlights();
+      if(enemy.statuses.hidden) enemy.statuses.hidden = false;
       break;
 
     case 'move': //moving over players?

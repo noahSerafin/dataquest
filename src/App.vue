@@ -388,14 +388,14 @@
 
   function buyBlueprint(bp: PieceBlueprint) {
     shopBlueprints.value = shopBlueprints.value.filter(b => b.id !== bp.id);
-    player.value.money -= bp.cost;
+    player.value.spend(bp.cost);
     player.value.programs.push(bp);
     shopTarget.value = null;
   }
   async function buyItem(item: Item) {
     // remove from shop
     shopItems.value = shopItems.value.filter(i => i.id !== item.id);
-    player.value.money -= item.cost;
+    player.value.spend(item.cost);
     // decide which inventory to place it in
     if (item instanceof Admin) {
       player.value.admins.push(item);
@@ -676,7 +676,7 @@
           
           const enemyInstance = new EnemyClass(piece.headPosition, 'enemy', removePiece);
           enemyInstance.tiles = piece.tiles;
-          enemyInstance.defenceRemaining = enemyInstance.getStat('defence');
+          enemyInstance.defenceRemaining = enemyInstance.getStat('defence');//not working??
 
           const variantChance = Math.min((0.1*trueDifficulty-0.1), 1)
           const variant = rollVariant(variantChance, trueDifficulty);

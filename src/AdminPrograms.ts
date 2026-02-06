@@ -2178,12 +2178,6 @@ console.log('admins length: ', allAdmins.length)
 
 //EGYPTIAN HIEROGLYPH D009, U+1307F //eye on stilts
 
-//PURSE, U+1F45B
-
-//NO MOBILE PHONES, U+1F4F5
-
-//SEEDLING, U+1F331
-
 // //bull
 //EGYPTIAN HIEROGLYPH E001, U+130D2
 //EGYPTIAN HIEROGLYPH F002, U+13100

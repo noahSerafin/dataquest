@@ -1,15 +1,17 @@
 GAME / BUGS
+variant should overide base piece color, (and tile colour???)
 visualise retaliation, defence, dmg mult, admin counts, enemy movement distance (hide move buttons)
 self specials easy to accidentally auto click
+variant tooltips
 Player OS icon dissapears after hidden nodes
-fix ufo
+fix ufo - make it a two click special???
 pawn can't promote to hybrids
 make charmedpieces not moveable
 store ids/check statuses in special move pieces to prevent enemies using special mutliple times on the same player program
 enemies not walking over traps/enemy traps not walking over players
 reveal hidden enemies before damage
 make a visual distinction between bp items and placed program items/food? shape of item?
-level4 fort - change
+level4 lock, fort? - change
 move encircled to level2
 'lockup' change
 ----low priority:

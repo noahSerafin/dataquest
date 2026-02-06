@@ -591,6 +591,7 @@ function resolveMove(
   border: 2px solid black;
   border: 2px solid #9CC954;
   aspect-ratio: 1/1;
+  margin: -1px;
 }
 .tile-empty{
   background-color: black;

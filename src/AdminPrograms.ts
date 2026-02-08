@@ -107,7 +107,7 @@ export class Bubble extends Admin {
 
 export class Crystal extends Admin {//test
   static name = "Crystal Ball";
-  static description = "See the next shop in advance";
+  static description = "See the next shop in advance";//and show hidden nodes?
   static unicode = "U+1F52E";
   static color = "#4b003bff";
   static rarity = 1;
@@ -814,9 +814,9 @@ class Cactus extends Admin {
   }
 }
 
-class Compass extends Admin {
+export class Compass extends Admin {
   static name = "Compass";
-  static description = "Shows nodes that are normally hidden";
+  static description = "Shows nodes that are normally hidden";//make the path red/white? keep the hidden nodes hidden
   static unicode = "U+1F9ED";
   static color = "#ff5555";
   static rarity = 1;
@@ -956,7 +956,7 @@ class Diamond extends Admin {
     for (const p of activePieces){
       if(p.team==='player'){
         //from the headposition, look for adjacent player tiles
-        const noOfTens = Math.floor(player.money / 10) //rounded down
+        const noOfTens = Math.max(0, Math.floor(player.money / 10)); //rounded down
         p.addModifier({defence: noOfTens})
         //else no buff
       }
@@ -1149,7 +1149,7 @@ class Lotus extends Admin {//boss? remove money?
 
 class Broom extends Admin {
   static name = "Broom";
-  static description = "Automatically clears all enemies with 1 size and 0 defence on the end of your turn";
+  static description = "Clears all enemies with 1 size and 0 defence on the end of your turn";
   static unicode = "U+1F9F9";
   static color = "#c7b07eff";
   static rarity = 4;
@@ -1557,7 +1557,7 @@ class Pazzaz extends Admin {
   }
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    const noOfTens = Math.floor(player.money / 10);
+    const noOfTens = Math.max(0, Math.floor(player.money / 10));
     activePieces[idx].addModifier({moves: noOfTens})
   }
 }

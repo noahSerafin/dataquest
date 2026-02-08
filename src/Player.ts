@@ -4,7 +4,7 @@ import { Admin } from "./AdminPrograms";
 
 export class Player {
     difficulty: number = 1;
-    bossesCleared: number = 1;
+    bossesCleared: number = 0;
     money: number
     memory: number
     adminSlots: number

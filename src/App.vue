@@ -650,7 +650,7 @@
           //difficulty from constants ramp
           let trueDifficulty = 0;
           if(player.value.difficulty + mod > 6){
-            trueDifficulty= 6; //remove later when endless mode is done
+            trueDifficulty = 6; //remove later when endless mode is done
           } else if (player.value.difficulty + mod < 1){
             trueDifficulty = 1;
           } else{
@@ -1135,6 +1135,7 @@
       selectedPiece.value = null;
       return;
     }
+    checkForRoundEnd();
   };
 
   const hasWonRound = ref<boolean>(false);
@@ -1342,6 +1343,22 @@
       }
     }
   );
+
+  document.addEventListener('keydown', (event) => {
+    if(event.key === 'Enter'){
+      endTurn();
+    }
+    if(event.key === 'Space' || event.key === ' '){
+      endTurn();
+    }
+    if(event.key === 'Tab'){
+      //cycle selectedPiece through activePieces
+    }
+    if(selectedPiece.value){
+      //wasd
+    }
+  }
+  )
 
   const debugMode = ref<boolean>(false);
   function toggleDebug(){

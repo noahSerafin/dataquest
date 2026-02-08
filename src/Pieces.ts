@@ -608,6 +608,7 @@ class Trojan extends Piece {//test more
     newTrojan.range = this.range
     newTrojan.attack = this.attack
     newTrojan.defence = this.defence
+    newTrojan.defenceRemaining = this.defence
     newTrojan.statModifiers = this.statModifiers
     newTrojan.movesRemaining = 0;
     newTrojan.actions = 0;
@@ -1360,7 +1361,8 @@ class Pawn extends Piece {
     promoted.range = targetPiece.range;
     promoted.attack = targetPiece.attack;
     promoted.defence = targetPiece.defence;
-
+    promoted.statModifiers = this.statModifiers
+    
     activePieces.push(promoted);
     this.actions--
     this.removeCallback?.(this);

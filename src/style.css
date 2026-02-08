@@ -349,7 +349,10 @@ steel
   overflow: hidden;
   padding-left: 1rem;
   padding-right: 1rem;
-  width: 100%;
+  width: 120%;
+}
+.variant-header .close{
+  right: 20%;
 }
 .piece-controller, .shop-controller, .blueprint-controller{
   overflow: hidden;

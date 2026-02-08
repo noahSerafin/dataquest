@@ -21,6 +21,7 @@ export interface WorldNode {
   hiddenUntilVisited?: string; // node id that must be completed first
   skipReward?: SkipReward; //get shop function into helpers to create these
   resolved?: boolean;          // skip nodes only
+  visible?: boolean;
 }
 
 export interface WorldMap {
@@ -191,7 +192,8 @@ export function generateWorld(
         company: chooseRandomCompany(),
         difficultyMod: 0,
         reward: 0,
-        hiddenUntilVisited: p1
+        hiddenUntilVisited: p1,
+        visible: false
       };
 
       nodes[p2] = {
@@ -207,21 +209,21 @@ export function generateWorld(
     }
 
     if (spec.type === 'hiddenCompiler') {
-      const hiddenShopId = `path_${i}_hidden_compiler`;
+      const hiddenCompilerId = `path_${i}_hidden_compiler`;
 
       nodes[p1] = {
         id: p1,
         type: 'level',
         level: pick(),
-        next: [hiddenShopId],
+        next: [hiddenCompilerId],
         position: pos.node1,
         company: chooseRandomCompany(),
         difficultyMod: spec.mods[0],
         reward: spec.rewards[0]
       };
 
-      nodes[hiddenShopId] = {
-        id: hiddenShopId,
+      nodes[hiddenCompilerId] = {
+        id: hiddenCompilerId,
         type: 'hybrid compiler',
         next: [p2],
         position: {
@@ -231,7 +233,8 @@ export function generateWorld(
         company: chooseRandomCompany(),
         difficultyMod: 0,
         reward: 0,
-        hiddenUntilVisited: p1
+        hiddenUntilVisited: p1,
+        visible: false
       };
 
       nodes[p2] = {
@@ -295,6 +298,15 @@ export function generateWorld(
     difficultyMod: 0,
     reward: 5 + Math.min(10, difficulty * 2)
   };
+
+
+  for (const node of Object.values(nodes)) {
+    if (!node.hiddenUntilVisited) {
+      node.visible = true;
+    } else {
+      node.visible = false;
+    }
+  }
 
   return {
     startNode: startId,

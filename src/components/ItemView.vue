@@ -45,8 +45,8 @@ const unicodeSymbol = computed(() =>
 )
   
 const itemStyle = computed(() => {
-  const widthAdjustment = props.type === 'consumable' ? 10 : 16
-  const heightAdjustment = props.type === 'admin' ? 10 : 16
+  const widthAdjustment = props.type === 'admin' ? 22 : 16
+  const heightAdjustment = props.type === 'consumable' ? 22 : 16
   let styles = {
     width: props.tileSize-widthAdjustment + 'px',
     height: props.tileSize-heightAdjustment + 'px',

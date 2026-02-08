@@ -114,7 +114,7 @@
         if(!props.player.hasAdmin('World Map') && node.type !== 'shop' || (!props.player.hasAdmin('Crystal Ball') && node.type === 'shop')){
             if (!canClick(node)) return;
         }
-        if(props.player.hasAdmin('Crystal Ball') && node.type === 'shop' && selectedPreviewNode.value !== node){//
+        if(props.player.hasAdmin('Crystal Ball') && node.type === 'shop' && (selectedPreviewNode.value && node.next.includes(selectedPreviewNode.value.id))){//
             emit('openDisabledShop')
         } else {    
             selectedPreviewNode.value = node;
@@ -140,13 +140,14 @@
         } else{
             skipsThisLevel.value += 1;
         }
+        //node.visible = true;
         emit('incrementProgress')
     }
 
     function enterNode(node: WorldNode) {
         selectedPreviewNode.value = null;
-
         currentNodeId.value = node.id;
+        node.visible = true;
 
         if(node.type === 'shop'){
             emit('openShop')
@@ -183,41 +184,39 @@
     }
 
     const connections = computed(() => {
-    const list: { x1: number; y1: number; x2: number; y2: number }[] = [];
+        const list: { x1: number; y1: number; x2: number; y2: number }[] = [];
 
-    const nodes = world.value.nodes;
+        const nodes = world.value.nodes;
 
-    for (const node of Object.values(nodes)) {
-        // Node → all its next connections
-        for (const nextId of node.next) {
-        const nextNode = nodes[nextId];
-        if (!nextNode) continue;
+        for (const node of Object.values(nodes)) {
+            // Node → all its next connections
+            for (const nextId of node.next) {
+                const nextNode = nodes[nextId];
+                if (!nextNode) continue;
 
-        // Center the line on the node "dot"
-        const x1 = node.position.x + 12; // adjust if your node size changes
-        const y1 = node.position.y + 12;
-        const x2 = nextNode.position.x + 12;
-        const y2 = nextNode.position.y + 12;
+                // Center the line on the node "dot"
+                const x1 = node.position.x + 12; // adjust if your node size changes
+                const y1 = node.position.y + 12;
+                const x2 = nextNode.position.x + 12;
+                const y2 = nextNode.position.y + 12;
 
-        list.push({ x1, y1, x2, y2 });
+                list.push({ x1, y1, x2, y2 });
+            }
         }
-    }
-    return list;
+        return list;
     });
 
     const visibleNodeIds = computed(() => {
         const visible = new Set<string>();
 
         for (const node of Object.values(world.value.nodes)) {
-            // not hidden at all
-            if (!node.hiddenUntilVisited || props.player.hasAdmin('Compass')) {
-            visible.add(node.id);
-            continue;
+            //
+            if (!node.hiddenUntilVisited || node.visible || props.player.hasAdmin('Compass')) {
+                visible.add(node.id);
             }
-
-            // becomes visible once prerequisite is current or passed
             if (node.hiddenUntilVisited === currentNodeId.value) {
-            visible.add(node.id);
+                node.visible = true;
+                visible.add(node.id);
             }
         }
         return visible;
@@ -281,6 +280,7 @@
         currentNodeId.value = node.id
         selectedPreviewNode.value = null;
         canReroll.value = true;
+        node.visible = true;
         emit('incrementProgress');
     }
 
@@ -310,6 +310,7 @@
             newBoss();
         }
     );
+    
 </script>
 
 <template>
@@ -652,14 +653,14 @@
         }
     }
     .node.hidden {
-    visibility: hidden;
-    pointer-events: none;
-    opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        opacity: 0;
     }
 
     .node.visible {
-    visibility: visible;
-    opacity: 1;
+        visibility: visible;
+        opacity: 1;
     }
     h6{
         margin: 0.5rem;

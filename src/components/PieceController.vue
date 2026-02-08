@@ -122,8 +122,7 @@ function toggleTooltip(key: string) {
     </div>
 
     <div class="stats">
-      <p class="">Size: {{ piece.tiles.length }}</p>
-      <p class="text-green">Max Size: {{ piece.getStat('maxSize') }}</p>
+      <p class="text-green">Max Size: {{ piece.getStat('maxSize') }} Current: {{ piece.tiles.length }}</p>
       <p class="text-blue">Moves: {{ piece.getStat('moves') }} <span>Left: {{ piece.movesRemaining }}</span></p>
       <p class="text-orange">Range: {{ piece.getStat('range') }}</p>
       <p class="text-red">Attack: {{ piece.getStat('attack') }}</p>

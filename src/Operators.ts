@@ -1,6 +1,6 @@
 import type { OS } from "./types";
 import { Voucher, Whetstone, Garlic, Lightning, RedMeat, Genie, Box, Pandora, Update2, Update3} from "./Items";
-import { Abacus, Bank, Bubble, Cheese, Chemistry, Clippy, Crystal, PetriDish, Seed, Volatile } from "./AdminPrograms";
+import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Compass, Clippy } from "./AdminPrograms";
 
 /*
 export function findPieceClassByName(name: string) {
@@ -363,7 +363,7 @@ const Debugger : OS = {//lance //bug //screwdriver
     adminSlots: 6,
     blueprints: [aegis, superKnife, screwdriver, testPiece],
     items: [new Genie, new Box, new Pandora, new Update2, new Update3],
-    admins: [new Clippy, new Crystal],
+    admins: [new Crystal, new Compass],
     lives: 9,
     description: 'FOR TESTING'
 }

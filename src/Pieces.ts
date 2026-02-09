@@ -176,11 +176,11 @@ export abstract class Piece {
       t => !(t.x === newPosition.x && t.y === newPosition.y)
     );
     
+    this.tiles.unshift(newPosition)//move below the pop for disease to shrink on move?
     // If exceeding maxSize, remove the oldest tile
     if (this.tiles.length > this.getStat('maxSize')) {
       this.tiles.pop() // removes last element
     }
-    this.tiles.unshift(newPosition)//move below the pop for disease to shrink on move?
   }
 
   moveTo(newPosition: Coordinate): void {//make a free version

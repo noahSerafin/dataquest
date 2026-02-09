@@ -2756,7 +2756,7 @@ class Bull extends Piece {
   static description = "Can charge, damaging and moving forward";
   static unicode = "U+1F402"// water buffalo "U+1F403"; //BISON, U+1F9AC
   static color = "#be4414ff";
-  static rarity = 4;
+  static rarity = 4;//3?
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
   super(Bull.name, Bull.description, Bull.unicode, 4, 3, 1, 3, 2, Bull.color, headPosition, [headPosition], team, Bull.rarity, removeCallback, id)//horse carousel atm //cane: "U+1F9AF"
     this.specialName = 'Charge';

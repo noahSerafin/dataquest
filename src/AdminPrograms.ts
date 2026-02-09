@@ -1758,7 +1758,7 @@ class Teddy extends Admin {//handle in app
   static description = "-1 security level";
   static unicode = "U+1F9F8";
   static color = "#7c5a33ff";
-  static rarity = 2;
+  static rarity = 5;
   constructor() {
     super(Teddy.name, Teddy.description, Teddy.unicode, Teddy.color, 7, Teddy.rarity, 'player', 'other')
   }
@@ -2077,7 +2077,7 @@ class Variety extends Admin {
   static description = "Variants are +25% more likely to appear in the shop";
   static unicode = "U+1F371"; //BENTO BOX, U+1F371 variety box chocolates  CHOCOLATE BAR, U+1F36B
   static color = "rgb(114, 89, 46)";
-  static rarity = 3;
+  static rarity = 4;
   constructor() {
     super(Variety.name, Variety.description, Variety.unicode, Variety.color, 2, Variety.rarity, 'player', 'other')
     //private count for shop reference?
@@ -2169,7 +2169,7 @@ class Stiletto extends Admin {
   static description = "Programs all gain +1 attack, -1 moves on placement";
   static unicode = "U+1F460";
   static color = "rgb(182, 21, 126)";
-  static rarity = 5;
+  static rarity = 2;
   constructor() {
     super(Stiletto.name, Stiletto.description, Stiletto.unicode, Stiletto.color, 10, Stiletto.rarity, 'gameState', 'onPlacement')
   }

@@ -81,7 +81,7 @@
     function newBoss() {
         boss.value = returnNewBoss();
     }
-    const rerollBossCost = ref<number>(5);
+    const rerollBossCost = ref<number>(props.player.hasAdmin('Wheel of Dharma') ? 0 : 5);
     function rerollBosses(){
         const newBosses = []
         for (let index = 0; index < props.bosses.length; index++) {

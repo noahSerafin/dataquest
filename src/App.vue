@@ -334,7 +334,7 @@
 
   const shopBlueprints = ref<PieceBlueprint[]>([]);
   const shopItems = ref<Item[]>([]);
-  const rerollCost = ref(player.value.hasAdmin('Wheel of Dharma') ? 5 : 0);//to be reset after shop
+  const rerollCost = ref(player.value.hasAdmin('Wheel of Dharma') ? 0 : 5);//to be reset after shop
   const prevFib = ref(0);//to be reset after shop
   const currentFib = ref(1);//to be reset after shop
   const canProceedFromShop = ref<boolean>(false);
@@ -350,7 +350,7 @@
 
       rerollCost.value += currentFib.value;
     } else { //boss/level has been defeated
-      rerollCost.value = player.value.hasAdmin('Wheel of Dharma') ? 5 : 0;
+      rerollCost.value = player.value.hasAdmin('Wheel of Dharma') ? 0 : 5;
       prevFib.value = 0;
       currentFib.value = 1
       hasStolenFromThisShop.value = false;

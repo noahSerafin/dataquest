@@ -97,3 +97,4 @@ COLLECTION 9
 CLEANUP 8
 sort out player inv items - genie + gift: Piececlass is not a constructor - don't use any type
 move pandora + box to own apply funcs
+worldmap, get seperate preview components for node/boss/skip

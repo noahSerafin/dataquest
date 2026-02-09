@@ -9,6 +9,7 @@ const props = defineProps<{
   cssclass?: string;
   tileSize: number;
   canBuy: boolean;       // for custom styling (shop / inventory)
+  canSteal?: boolean;
   showController: boolean;
   //variant: PieceVariant;
 }>();
@@ -91,7 +92,7 @@ const handleUse = () => {
             @click="$emit('buy', item)"
             :disabled="!canBuy"
             >
-            Buy ${{ item.cost }}
+            {{canSteal ? 'Steal' : 'Buy($'+item.cost+')'}}
           </button>
             <button v-if="(cssclass == 'inventory' && type == 'consumable')"  @click="handleUse">
               Use

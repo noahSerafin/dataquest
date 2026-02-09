@@ -476,6 +476,12 @@
             :disabled="!canClick(selectedPreviewNode)"
             @click="enterNode(selectedPreviewNode)"
             >Enter</button>
+            <!--
+                <button 
+                v-if="selectedPreviewNode && selectedPreviewNode?.type !== 'skip' && player.hasAdmin('Ferris Wheel')"
+                @click="rerollNode(selectedPreviewNode)"
+                >Reroll</button>
+            -->
             <button v-if="selectedPreviewNode" @click="selectedPreviewNode = null">Close</button>
             <button v-if="canSkip(selectedPreviewNode)" @click="skipNode(selectedPreviewNode)">Skip <span v-if="!props.player.hasAdmin('Leg Up') || (props.player.hasAdmin('Leg Up') && skipsThisLevel>0)">$5</span></button>
         </div>

@@ -58,7 +58,7 @@ export function findAnyPiecesInRange(piece: Piece, pieces: Piece[]): Piece[] | n
   return piecesInRange.size > 0 ? [...piecesInRange] : null;
 }
 
-export function makeBlueprint(PieceClass: any, variant?: PieceVariant): PieceBlueprint {
+export function makeBlueprint(PieceClass: any, variant?: PieceVariant, costReduction?: number): PieceBlueprint {
     const temp = new PieceClass({ x: -1, y: -1 }, "player");
     if (variant) {
       applyVariant(temp, variant);
@@ -77,12 +77,12 @@ export function makeBlueprint(PieceClass: any, variant?: PieceVariant): PieceBlu
       rarity: temp.rarity,
       color: PieceClass.color,
       isPlaced: false,
-      cost: temp.rarity*2-1,
+      cost: Math.max(0, temp.rarity*2-1 - (costReduction ? costReduction : 0)),
       variantName: temp.variantName
     };
 }
 
-const BASE_VARIANT_CHANCE = 0.5; // 15% chance a piece gets a variant
+const BASE_VARIANT_CHANCE = 0.15; // 15% chance a piece gets a variant
 export function rollVariant(chance: number, difficulty: number): PieceVariant | null{
   if (Math.random() > chance) return null;
 
@@ -113,7 +113,9 @@ export function pickWeightedRandom(PieceClasses: any[], player: Player) {//clove
 
     //stacking
     const cloverCount = player.admins.filter(a => a.name === 'Clover').length;
+    const varCount = player.admins.filter(a => a.name === 'Variety Box').length;
     const cloverMultiplier = 1 + cloverCount * 0.3; // each clover +30%
+    const variantMultiplier = BASE_VARIANT_CHANCE + varCount * 0.25; // each box +25%
 
     for (const PieceClass of PieceClasses) {
       const temp = new PieceClass({ x: -1, y: -1 }, "player"); 
@@ -126,14 +128,14 @@ export function pickWeightedRandom(PieceClasses: any[], player: Player) {//clove
     }
 
     const idx = Math.floor(Math.random() * weighted.length);
-    const variant = rollVariant(BASE_VARIANT_CHANCE, 6);
+    const variant = rollVariant(variantMultiplier, 6);
     return {
       class: weighted[idx],
       variant: variant
     }
 }
 
-export function pickWeightedRandomItem(itemClasses: any[], player: Player) {//move to items.ts?
+export function pickWeightedRandomItem(itemClasses: any[], player: Player, costReduction?: number) {//move to items.ts?
     const weighted: any[] = [];
 
     //non stacking
@@ -157,6 +159,7 @@ export function pickWeightedRandomItem(itemClasses: any[], player: Player) {//mo
     const idx = Math.floor(Math.random() * weighted.length);
     //console.log('idx: ', weighted[idx])
     const PickedClass = weighted[idx];
+    PickedClass.cost -= costReduction ? costReduction : 0;
 
     return new PickedClass();  // RETURN INSTANCE
   }

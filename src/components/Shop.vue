@@ -27,6 +27,7 @@ const props = defineProps<{
   target: Item | PieceBlueprint | null;
   shopDisabled: boolean;
   canProceed: boolean;
+  hasStolen: boolean;
 }>();
 
 function openShopController(target: Item | PieceBlueprint | null) {///TODO SORT OUT IMPORTS
@@ -46,37 +47,30 @@ function handleBuyItem(item: Item) {
 //        @select="openItemController"
 
 //canAfford???
-const effectiveMoney = computed(() => (props.player.hasAdmin('Credit Card')? props.player.money + 20 : props.player.money));
+const effectiveMoney = computed(() => (//move to player
+  props.player.hasAdmin('Credit Card')? props.player.money + 20 : props.player.money
+));
 
 const canReroll = computed(() => props.player.money >= props.rerollCost || props.player.hasAdmin('Credit Card') && props.player.money +20 >= props.rerollCost);
+const canSteal = computed(() => props.player.hasAdmin('Five Finger Discount') && !props.hasStolen);
 
 const canBuyItem = ((item: Item) => {
   if(props.shopDisabled) return false;
   if (item instanceof Admin) {
     return effectiveMoney.value >= item.cost && props.player.admins.length < props.player.adminSlots;
   }
-
-  const hasToolbox = props.player.admins.some(a => a.name === 'Toolbox');
-  const hasTrolley = props.player.admins.some(a => a.name === 'Trolley');
-
-  const effectivePrograms = props.player.programs.length * (hasTrolley ? 0.5 : 1);
-  const effectiveItems    = props.player.items.length    * (hasToolbox ? 0.5 : 1);
-
-  const memoryUsed = effectivePrograms + effectiveItems;
-
-  return effectiveMoney.value >= item.cost && memoryUsed < props.player.memory;
+  const hasTrolley = props.player.hasTrolley;
+  //const hasToolbox = props.player.hasAdmin('Schoolbag');
+  const hasSpace = hasTrolley ? props.player.usedMemory <= props.player.memory-0.5 : props.player.usedMemory <= props.player.memory-1;
+  
+  return (effectiveMoney.value >= item.cost || canSteal ) && hasSpace;
 });
 
 const canBuyPiece = ((piece: PieceBlueprint) => {
-  const hasToolbox = props.player.admins.some(a => a.name === 'Toolbox');
-  const hasTrolley = props.player.admins.some(a => a.name === 'Trolley');
+  const hasToolbox = props.player.hasAdmin('Toolbox');
+  const hasSpace = hasToolbox ? props.player.usedMemory <= props.player.memory-0.5 : props.player.usedMemory <= props.player.memory-1;
 
-  const effectivePrograms = props.player.programs.length * (hasTrolley ? 0.5 : 1);
-  const effectiveItems    = props.player.items.length    * (hasToolbox ? 0.5 : 1);
-
-  const memoryUsed = effectivePrograms + effectiveItems;
-
-  return effectiveMoney.value >= piece.cost && memoryUsed < props.player.memory;
+  return (effectiveMoney.value >= piece.cost || canSteal ) && hasSpace;
 });
 
 const type = ((item: Item) => {
@@ -120,6 +114,7 @@ const type = ((item: Item) => {
           :tileSize="60"
           :canBuy= "canBuyItem(item)"
           :showController="(props.target === item)"
+          :canSteal = canSteal
           @buy="handleBuyItem"
           @select="openShopController"
           @deselect="deselect"
@@ -132,6 +127,7 @@ const type = ((item: Item) => {
       mode="shop"
       :canBuy= "canBuyPiece(props.target)"
       :defaultPosition="{ x: 0, y: 0 }"
+      :canSteal = canSteal
       @buy="handleBuyBlueprint"
       @close="deselect"
     />

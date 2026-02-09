@@ -338,13 +338,14 @@
   const prevFib = ref(0);//to be reset after shop
   const currentFib = ref(1);//to be reset after shop
   const canProceedFromShop = ref<boolean>(false);
+  const hasStolenFromThisShop = ref<boolean>(false);
 
   function refreshShop(isFree: boolean) {
     //console.log(rerollCost.value)
     shopTarget.value = null;
     //if(!isFree && player.value.money < rerollCost.value) return;//show to shop for disabled button
     if(!isFree) {//player is rerolling
-      player.value.money -= rerollCost.value;
+      player.value.spend(rerollCost.value);
       const nextFib = prevFib.value + currentFib.value;
       prevFib.value = currentFib.value;
       currentFib.value = nextFib;
@@ -354,17 +355,20 @@
       rerollCost.value = 5;
       prevFib.value = 0;
       currentFib.value = 1
+      hasStolenFromThisShop.value = false;
     }
     if(player.value.hasAdmin("Slots")){
       rerollCost.value-=2;
     }
+
+    const appraisalDiscount = 2* player.value.admins.filter(a => a.name === 'Appraisal').length;
 
     const classes = [
       pickWeightedRandom(allPieces, player.value),
       pickWeightedRandom(allPieces, player.value),
       pickWeightedRandom(allPieces, player.value),
     ];
-    shopBlueprints.value = classes.map(c => makeBlueprint(c.class, c.variant ?? undefined));
+    shopBlueprints.value = classes.map(c => makeBlueprint(c.class, c.variant ?? undefined, appraisalDiscount));
 
     //no reappearing admins
     const ownedAdmins = new Set(player.value.admins.map(a => a.name));
@@ -372,15 +376,15 @@
 
     const allItemsAndAdmins: ItemConstructor[] = [...allItems, ...availableAdmins];
     shopItems.value = [
-      pickWeightedRandomItem(allItemsAndAdmins, player.value),
-      pickWeightedRandomItem(allItemsAndAdmins, player.value),
-      pickWeightedRandomItem(allItemsAndAdmins, player.value),
+      pickWeightedRandomItem(allItemsAndAdmins, player.value, appraisalDiscount),
+      pickWeightedRandomItem(allItemsAndAdmins, player.value, appraisalDiscount),
+      pickWeightedRandomItem(allItemsAndAdmins, player.value, appraisalDiscount),
     ];
     if(player.value.hasAdmin('Department Store')){
       const extraP = pickWeightedRandom(allPieces, player.value);
-      shopBlueprints.value.push(makeBlueprint(extraP.class, extraP.variant ?? undefined));
-      const extraI = pickWeightedRandomItem(allItems, player.value);
-      const extraA = pickWeightedRandomItem(availableAdmins, player.value);
+      shopBlueprints.value.push(makeBlueprint(extraP.class, extraP.variant ?? undefined, appraisalDiscount));
+      const extraI = pickWeightedRandomItem(allItems, player.value, appraisalDiscount);
+      const extraA = pickWeightedRandomItem(availableAdmins, player.value, appraisalDiscount);
       shopItems.value.push(extraI, extraA);
     }
     //if triggered by player
@@ -388,14 +392,27 @@
 
   function buyBlueprint(bp: PieceBlueprint) {
     shopBlueprints.value = shopBlueprints.value.filter(b => b.id !== bp.id);
-    player.value.spend(bp.cost);
+    if(player.value.hasAdmin('Five Finger Discount') && !hasStolenFromThisShop.value){
+      hasStolenFromThisShop.value = true;
+    } else {
+      player.value.spend(bp.cost);
+      if(player.value.hasAdmin('Piggy')){
+        player.value.money += 2;
+      }
+    }
     player.value.programs.push(bp);
     shopTarget.value = null;
   }
   async function buyItem(item: Item) {
-    // remove from shop
     shopItems.value = shopItems.value.filter(i => i.id !== item.id);
-    player.value.spend(item.cost);
+    if(player.value.hasAdmin('Five Finger Discount') && !hasStolenFromThisShop.value){
+      hasStolenFromThisShop.value = true;
+    } else {
+      player.value.spend(item.cost);
+      if(player.value.hasAdmin('Piggy')){
+        player.value.money += 2;
+      }
+    }
     // decide which inventory to place it in
     if (item instanceof Admin) {
       player.value.admins.push(item);
@@ -746,7 +763,7 @@
       if (index !== -1) player.value.admins.splice(index, 1);
     } else {
       await handleApplyAdmins('onPieceDestruction', piece.id);
-      activePieces.value = activePieces.value.filter(p => p.id !== piece.id);
+      activePieces.value = activePieces.value.filter(p => p.id !== piece.id);//removes the piece
       //graveyard?
       if (piece.name == 'Dolls') {//hybrids will need a flag other than name
         if (piece.getStat('maxSize') > 1) {
@@ -1462,6 +1479,7 @@
       :shopItems="shopItems"
       :rerollCost="rerollCost"
       :target="shopTarget"
+      :hasStolen="hasStolenFromThisShop"
       @refresh-shop="refreshShop(false)"
       @buy-blueprint="buyBlueprint"
       @buy-item="buyItem"

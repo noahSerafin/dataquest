@@ -1,6 +1,6 @@
 import type { OS } from "./types";
 import { Voucher, Whetstone, Garlic, Lightning, RedMeat, Genie, Box, Pandora, Update2, Update3} from "./Items";
-import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Compass, Clippy } from "./AdminPrograms";
+import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Compass} from "./AdminPrograms";
 
 /*
 export function findPieceClassByName(name: string) {
@@ -353,7 +353,9 @@ const Cobol : OS = {//lance //bug //screwdriver
     description: "All about money"
 }
 
+//challenges:
 //explorer - map, compass, offroader
+//Fleet - vehicles: offroader, pickup, van, artic, ambulance, firetruck
 
 const Debugger : OS = {//lance //bug //screwdriver
     name: 'Debugger',

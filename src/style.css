@@ -352,7 +352,7 @@ steel
   width: 120%;
 }
 .variant-header .close{
-  right: 20%;
+  right: 20%!important;
 }
 .piece-controller, .shop-controller, .blueprint-controller{
   overflow: hidden;

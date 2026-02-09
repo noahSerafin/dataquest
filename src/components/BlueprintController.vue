@@ -3,14 +3,15 @@ import { computed, ref } from "vue"
 import type { PieceBlueprint } from "../types"
 
 const props = defineProps<{
-  piece: PieceBlueprint
-  mode: "shop" | "inventory" | 'skipReward'
-  canBuy?: boolean
-  canPlace?: boolean
+  piece: PieceBlueprint;
+  mode: "shop" | "inventory" | 'skipReward';
+  canBuy?: boolean;
+  canSteal?: boolean;
+  canPlace?: boolean;
   defaultPosition?: {
     x: number
     y: number
-  }
+  };
 }>()
 
 const position = ref({
@@ -115,7 +116,7 @@ defineEmits(["buy", "sell", "highlightPlacements", "close"])
       <div class="actions">
         <template v-if="mode === 'shop'">
           <button :disabled="!canBuy" @click="$emit('buy', piece)">
-            Buy (${{ piece.cost }})
+            {{canSteal ? 'Steal' : 'Buy($'+piece.cost+')'}}
           </button>
         </template>
 

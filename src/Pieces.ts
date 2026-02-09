@@ -2198,22 +2198,6 @@ class Axe extends Piece {
       indexesToRemove.push(targetIndex +1);
     }
     
-    /* remove in + shape
-    const targetTile = piece.tiles[targetIndex];
-    piece.tiles.forEach((tile, i) => {
-      if (i === 0) return; // never remove head
-      if (i === piece.tiles.length) return;
-      if (i === targetIndex) return;  
-      const dist =
-        Math.abs(tile.x - targetTile.x) +
-        Math.abs(tile.y - targetTile.y);
-
-      if (dist === 1) {
-        indexesToRemove.push(i);
-      }
-    });
-    */
-
     // remove from highest index to lowest
     indexesToRemove
       .sort((a, b) => b - a)
@@ -2770,7 +2754,7 @@ class Wolf extends Piece {
 class Bull extends Piece {
   static name = "Bull";
   static description = "Can charge, damaging and moving forward";
-  static unicode = "U+1F403";
+  static unicode = "U+1F402"// water buffalo "U+1F403"; //BISON, U+1F9AC
   static color = "#be4414ff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
@@ -2877,8 +2861,12 @@ export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, G
 console.log('pieces length: ', allPieces.length)
 
 //doctor STETHOSCOPE, U+1FA7A medic, + max Size to a piece
+// BANANA, U+1F34C trap piece that applies confused, moves the piece a random direction? both?
 // HIGH-HEELED SHOE, U+1F460 small and slow but high attack
 //ANT, U+1F41C //high movement
+
+// PALM TREE, U+1F334 spawn coconuts
+//COCONUT, U+1F965
 
 //HIPPOPOTAMUS, U+1F99B
 //YO-YO, U+1FA80

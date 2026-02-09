@@ -2201,7 +2201,7 @@ class Disco extends Admin {
       {x: targetTile.x, y: targetTile.y+1 },
       {x: targetTile.x, y: targetTile.y-1 }
     ];
-    activePieces.forEach((piece, i) => {
+    activePieces.forEach((piece) => {
       if(piece.id === id) return;//skip the piece being destroyed, continue?
       const isAdjacent = piece.tiles.some(t =>
         adjacent.some(c => c.x === t.x && c.y === t.y)
@@ -2281,7 +2281,7 @@ class Skyscraper extends Admin {//test
   constructor() {
     super(Skyscraper.name, Skyscraper.description, Skyscraper.unicode, Skyscraper.color, 2, Skyscraper.rarity, 'gameState', 'onTurnEnd')
   }
-  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     //const idx = activePieces.findIndex(p => p.id === id);
     activePieces.forEach((piece) => {
       if(piece.team === 'player'){
@@ -2363,7 +2363,7 @@ class Smoker extends Admin {
   }
 }
 
-class Ferris extends Admin {
+export class Ferris extends Admin {
   static name = "Ferris Wheel";
   static description = "Reroll node layouts once each for $5";//will need a hasBeenRerolled flag in each WorldNode
   static unicode = "U+1F3A1"
@@ -2379,7 +2379,7 @@ class Ferris extends Admin {
 
 //SPLATTER, U+1FADF
 //SPLASHING SWEAT SYMBOL, U+1F4A6
-class Splash extends Admin {
+export class Splash extends Admin {
   static name = "Splash";
   static description = "Damage dealt applies to tiles adjacent to the target";
   static unicode = "U+1FADF";

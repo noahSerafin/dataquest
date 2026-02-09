@@ -1581,6 +1581,7 @@
 .end-turn, .retry-btn{
   border: 1px solid white;
   z-index: 9999;
+  margin-bottom: 0.5rem;
 }
 .logo {
   height: 6em;

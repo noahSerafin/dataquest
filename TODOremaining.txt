@@ -1,5 +1,7 @@
 GAME / BUGS
 variant should overide base piece color, (and tile colour???)
+pandora not giving 1 at full inventory
+checkforroundend after takedamage
 visualise retaliation, defence, dmg mult, admin counts, enemy movement distance (hide move buttons)
 self specials easy to accidentally auto click
 variant tooltips

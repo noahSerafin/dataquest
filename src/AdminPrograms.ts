@@ -1477,7 +1477,7 @@ class Ballet extends Admin {//needs to reset
 }
 
 class Pants extends Admin {
-  static name = "Spair Pair";
+  static name = "Spare Pair";
   static description = "Your first destroyed program is moved back to your inventory (testing)";
   static unicode = "U+1FA72";
   static color = "#f8f8f8ff";
@@ -2072,8 +2072,8 @@ export class Clippy extends Admin {
 export const allAdmins = [Brain, Meteor, Miner, Bubble, Clover, Onion, Blood, Razor, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Parachute, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Bone, RollerBlades, Lungs, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, OffRoader, Seed, Puzzle, Chivalry, Roger, Bucket, Diamond, Sneakers, Candle, Lightbulb, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, Sprinkler, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FakeID, Shades, Barber, Umbrella, Bank, Ballet, Pants, Ace, Pi, Pazzaz, Toilet, Harvest, Bipolar, Taoism, Loot, HedgeFund, PeaPod, Liberty, Punching, Teddy, Abacus, Cheese, AirSupport, DartBoard, Dice, Ladder, Ring, Minerva, Hermit, Tracker, Pong, Knot, Rainbow, Jammer, Balloon, Wheel, Bath, Purse];
 console.log('admins length: ', allAdmins.length)
 
-//variety box chocolates
-//four finger
+//BENTO BOX, U+1F371 variety box chocolates  CHOCOLATE BAR, U+1F36B
+//PALM DOWN HAND, U+1FAF3 five finger
 //magnifying appraisal
 //red sky- dmg mult / bomb bonuses
 //gene hybrids appear in shop
@@ -2081,6 +2081,8 @@ console.log('admins length: ', allAdmins.length)
 
 //blood tax nerf to only attacking own pieces? overkills? or jolly roger?
 //nerf needle to random stat? have a count? only trigger on bosses?
+//CHERRIES, U+1F352
+//COCONUT, U+1F965
 //disco ball U+1FAA9
 //TENT, U+26FA //Camp redo nodes once?
 //FERRIS WHEEL, U+1F3A1 //reroll node layout?

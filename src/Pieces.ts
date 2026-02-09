@@ -176,11 +176,11 @@ export abstract class Piece {
       t => !(t.x === newPosition.x && t.y === newPosition.y)
     );
     
-    this.tiles.unshift(newPosition)//move below the pop for disease to shrink on move?
     // If exceeding maxSize, remove the oldest tile
     if (this.tiles.length > this.getStat('maxSize')) {
       this.tiles.pop() // removes last element
     }
+    this.tiles.unshift(newPosition)//move below the pop for disease to shrink on move?
   }
 
   moveTo(newPosition: Coordinate): void {//make a free version
@@ -317,7 +317,7 @@ class Dagger extends Piece {
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
   super(Dagger.name, Dagger.description, Dagger.unicode, 3, 2, 1, 3, 0, Dagger.color, headPosition, [headPosition], team, Dagger.rarity, removeCallback, id)
   this.targetType = 'piece'
-    this.specialName = 'Hack'
+    this.specialName = 'Assasinate'
   }
   async special(target: Piece): Promise<void> {
     await target.takeDamage(this.getStat('attack') + target.getStat('defence'));//change if we change defence later
@@ -2174,23 +2174,51 @@ class Screwdriver extends Piece {
 
 class Axe extends Piece {
   static name = "Axe";
-  static description = "A short ranged program with a high attack that can hack off one non head piece of memory";
+  static description = "A short ranged program with a high attack that can chop off a non-head piece of memory and it's neighbours";//and adjacent tiles?
   static unicode = "U+1FA93";
   static color = "#ff0d0dff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Axe.name, Axe.description, Axe.unicode, 4, 2, 2, 4, 2, Axe.color, headPosition, [headPosition], team, Axe.rarity, removeCallback, id)
-    this.specialName='Hack';
+    this.specialName='Chop';
     this.targetType='pieceAndPlace';
   }
 
   async special({piece, target} : {piece: Piece, target: Coordinate}):Promise<void>{
-    const tileIndex = piece.tiles.findIndex(t => t.x === target.x && t.y === target.y);
-    if (tileIndex === -1 || !tileIndex) return;  // No tile there
-    // Do NOT remove head tile
-    if (tileIndex === 0) return;
-    // --- 3. Remove that tile from the piece ---
-    piece.tiles.splice(tileIndex, 1);
+    const targetIndex = piece.tiles.findIndex(t => t.x === target.x && t.y === target.y);
+    if (targetIndex <= 0 || !targetIndex) return;  // No tile, or head tile
+    
+    const indexesToRemove: number[] = [targetIndex];
+    
+    // find adjacent tiles 0 1 2
+    if(targetIndex-1 >= 1){
+      indexesToRemove.push(targetIndex -1);
+    }
+    if(targetIndex+1 <= piece.tiles.length-1){
+      indexesToRemove.push(targetIndex +1);
+    }
+    
+    /* remove in + shape
+    const targetTile = piece.tiles[targetIndex];
+    piece.tiles.forEach((tile, i) => {
+      if (i === 0) return; // never remove head
+      if (i === piece.tiles.length) return;
+      if (i === targetIndex) return;  
+      const dist =
+        Math.abs(tile.x - targetTile.x) +
+        Math.abs(tile.y - targetTile.y);
+
+      if (dist === 1) {
+        indexesToRemove.push(i);
+      }
+    });
+    */
+
+    // remove from highest index to lowest
+    indexesToRemove
+      .sort((a, b) => b - a)
+      .forEach(i => piece.tiles.splice(i, 1));
+
     this.actions --
   }
 }

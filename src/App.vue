@@ -334,16 +334,14 @@
 
   const shopBlueprints = ref<PieceBlueprint[]>([]);
   const shopItems = ref<Item[]>([]);
-  const rerollCost = ref(5);//to be reset after shop
+  const rerollCost = ref(player.value.hasAdmin('Wheel of Dharma') ? 5 : 0);//to be reset after shop
   const prevFib = ref(0);//to be reset after shop
   const currentFib = ref(1);//to be reset after shop
   const canProceedFromShop = ref<boolean>(false);
   const hasStolenFromThisShop = ref<boolean>(false);
 
   function refreshShop(isFree: boolean) {
-    //console.log(rerollCost.value)
     shopTarget.value = null;
-    //if(!isFree && player.value.money < rerollCost.value) return;//show to shop for disabled button
     if(!isFree) {//player is rerolling
       player.value.spend(rerollCost.value);
       const nextFib = prevFib.value + currentFib.value;
@@ -352,13 +350,13 @@
 
       rerollCost.value += currentFib.value;
     } else { //boss/level has been defeated
-      rerollCost.value = 5;
+      rerollCost.value = player.value.hasAdmin('Wheel of Dharma') ? 5 : 0;
       prevFib.value = 0;
       currentFib.value = 1
       hasStolenFromThisShop.value = false;
     }
     if(player.value.hasAdmin("Slots")){
-      rerollCost.value-=2;
+      rerollCost.value = Math.max(0, rerollCost.value - 2);
     }
 
     const appraisalDiscount = 2* player.value.admins.filter(a => a.name === 'Appraisal').length;
@@ -946,7 +944,7 @@
     );
     if (trap && trap.id !== selectedPiece.value.id) {
       await trap.special(selectedPiece.value);
-      removePiece(trap);//shouldn't really be necessary
+      //removePiece(trap);//shouldn't really be necessary - testing without
     }
     if(selectedPiece.value.movesRemaining > 0){
       boardRef.value.highlightMoves(selectedPiece.value);
@@ -1168,10 +1166,9 @@
     graveyard.value = [];
     lastTurnPieces.value = [];
     selectedPiece.value = null;
-    renewBlueprints();//move to end round?
     if(roundWon){
       hasWonRound.value = true;
-      handleApplyAdmins('onRoundEnd', '');//await??
+      handleApplyAdmins('onRoundEnd', '');//await??--
       activePieces.value = [];//for needle
       openSummary(true);
       extraDifficulty.value = 0;
@@ -1191,6 +1188,7 @@
         alert('game over!')
       }
     }
+    renewBlueprints();//after applyadmins for school
     for (const admin of bossAdmins.value) {//only necessary if we keep boss admins
       admin.onRoundEnd?.();
     }

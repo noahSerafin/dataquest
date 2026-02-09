@@ -458,7 +458,7 @@ class Izakaya extends Admin {
     }
 }
 
-class Snowflake extends Admin {
+class Snowflake extends Admin {//LEAFLESS TREE, U+1FABE
     static name = "Cold Snap";
     static description = "Every player program is frozen";
     static unicode = "U+2744";

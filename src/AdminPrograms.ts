@@ -454,7 +454,7 @@ class Needle extends Admin {//needs some kind of nerf, increase max size only?
         playerPieces.push(p)
         //p.addModifier({lives: 1})
       }
-      if(playerPieces.length === 1){
+      if(playerPieces.length === 1){//we find by activepieces, not by no. of placed bps
        //needs to interact with the blueprint
        const bpID = playerPieces[0].id
        const idx = player.programs.findIndex(p => p.id === bpID);
@@ -514,7 +514,7 @@ export class Chemistry extends Admin {//test
 }
 
 class Aesculapius extends Admin {
-  static name = "Aesculapius";//caduceus
+  static name = "Aesculapius";//CADUCEUS, U+2624
   static description = "All placed programs are immune to posion and disease";
   static unicode = "U+2695";
   static color = "#084610ff";
@@ -621,7 +621,7 @@ class GoldenTicket extends Admin {
   }
 }
 
-class Dove extends Admin {
+class Dove extends Admin {// PEACE SYMBOL, U+262E
   static name = "Dove";
   static description = "1 free move after placing at the start of every round";
   static unicode = "U+1F54A";////CHURCH, sanctuary U+26EA
@@ -1060,7 +1060,7 @@ class Copier extends Admin {
   static name = "Copier";
   static description = "Places a copy of your first placed program 1 space to the right if it is unnocupied";
   static unicode = "U+1F4E0";//"U+1F5A8";
-  static color = "#ff5555";
+  static color = "#414141";
   static rarity = 5;
   constructor() {
     super(Copier.name, Copier.description, Copier.unicode, Copier.color, 9, Copier.rarity, 'gameState', 'onPlacement')
@@ -1382,10 +1382,11 @@ class FakeID extends Admin {
     activePieces[idx].immunities.exposed = true;
   }
 }
+
 class Shades extends Admin {
-  static name = "Shades";
+  static name = "Shades";//GOGGLES, U+1F97D
   static description = "Your programs are immune to being blinded";
-  static unicode = "U+1F60E";// U+1F576
+  static unicode = "U+1F60E";// U+1F576, GOGGLES, U+1F97D
   static color = "#df7d22ff";
   static rarity = 3;
   constructor() {
@@ -2285,15 +2286,86 @@ class Skyscraper extends Admin {//test
     activePieces.forEach((piece) => {
       if(piece.team === 'player'){
         const noOfTwos = Math.floor(piece.tiles.length / 2);
-        piece.addModifier({defence: noOfTwos});
+        piece.addTempModifier({defence: noOfTwos});
       }
     });
   }
 }
 
+class School extends Admin {//test
+  static name = "Staying in School";
+  static description = "Each unplaced program in your inventory gains +1 to all stats at the end of a round, up to a max of +7."
+  static unicode = "U+1F3EB";
+  static color = "rgb(193, 193, 193)";
+  static rarity = 6;
+  constructor() {
+    super(School.name, School.description, School.unicode, School.color, 2, School.rarity, 'player', 'onRoundEnd')
+  }
+  private count = 0;
+  async apply({ player }: { player: Player }) {
+    if(this.count < 7){
+      player.programs.forEach(bp => {
+        bp.maxSize += 1;
+        bp.moves += 1;
+        bp.attack += 1;
+        bp.range += 1;
+        bp.defence += 1;
+      });
+      this.count ++
+    }
+  }
+}
+
+class Dharma extends Admin {//test
+  static name = "Wheel of Dharma";
+  static description = "Every kind of reroll is free."
+  static unicode = "U+2638"; //every kind of reroll is free (shop, bosses(roulette) ---- nodes(ferris), skips(dice-already free), )
+  static color = "rgb(249, 213, 36)";
+  static rarity = 6;
+  constructor() {
+    super(Dharma.name, Dharma.description, Dharma.unicode, Dharma.color, 2, Dharma.rarity, 'player', 'onRoundEnd')
+  }
+}
+
+//FLAG IN HOLE, U+26F3 -- last enemy piece gets debuffed?
+class Putter extends Admin {//test
+  static name = "Putter";
+  static description = "The last enemy program loses -1 to all stats";
+  static unicode = "U+26F3";
+  static color = "rgb(25, 215, 107)";
+  static rarity = 2;
+  constructor() {
+    super(Putter.name, Putter.description, Putter.unicode, Putter.color, 2, Putter.rarity, 'gameState', 'onPieceDestruction')
+  }
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+
+    const enemiesLeft = activePieces.filter(p => p.team === 'enemy' && p.id !== id);//tile check because piece will not have been removed yet
+    if(enemiesLeft.length === 1){
+      const idx = activePieces.findIndex(p => p.id === enemiesLeft[0].id); 
+      activePieces[idx].addModifier({maxSize: -1, moves: -1, range: -1, attack: -1, defence: -1})
+    }
+  }
+}
+
+//SMOKING SYMBOL, U+1F6AC
+class Smoker extends Admin {
+  static name = "Ciggarette";//GOGGLES, U+1F97D
+  static description = "Your programs are immune to being confused";
+  static unicode = "U+1F6AC";
+  static color = "rgb(255, 255, 255)";
+  static rarity = 1;
+  constructor() {
+    super(Smoker.name, Smoker.description, Smoker.unicode, Smoker.color, 5, Smoker.rarity, 'gameState', 'onPlacement')
+  }
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    activePieces[idx].immunities.confused = true;
+  }
+}
+
 class Ferris extends Admin {
   static name = "Ferris Wheel";
-  static description = "Reroll node layouts once each";//will need a hasBeenRerolled flag in each WorldNode
+  static description = "Reroll node layouts once each for $5";//will need a hasBeenRerolled flag in each WorldNode
   static unicode = "U+1F3A1"
   static color = "rgb(20, 212, 255)";
   static rarity = 2;
@@ -2339,7 +2411,7 @@ export class Clippy extends Admin {
 }
 
 
-export const allAdmins = [Brain, Meteor, Miner, Bubble, Clover, Onion, Blood, Razor, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Parachute, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Bone, RollerBlades, Lungs, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, OffRoader, Seed, Puzzle, Chivalry, Roger, Bucket, Diamond, Sneakers, Candle, Lightbulb, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, Sprinkler, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FakeID, Shades, Barber, Umbrella, Bank, Ballet, Pants, Ace, Pi, Pazzaz, Toilet, Harvest, Bipolar, Taoism, Loot, HedgeFund, PeaPod, Liberty, Punching, Teddy, Abacus, Cheese, AirSupport, DartBoard, Dice, Ladder, Ring, Minerva, Hermit, Tracker, Pong, Knot, Rainbow, Jammer, Balloon, Wheel, Bath, Purse, Discount, Variety, Appraisal, Camp, Piggy, Bowling, Stiletto, Disco, Nest, Sled, Crash, Skyscraper];
+export const allAdmins = [Brain, Meteor, Miner, Bubble, Clover, Onion, Blood, Razor, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Parachute, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Bone, RollerBlades, Lungs, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, OffRoader, Seed, Puzzle, Chivalry, Roger, Bucket, Diamond, Sneakers, Candle, Lightbulb, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, Sprinkler, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FakeID, Shades, Barber, Umbrella, Bank, Ballet, Pants, Ace, Pi, Pazzaz, Toilet, Harvest, Bipolar, Taoism, Loot, HedgeFund, PeaPod, Liberty, Punching, Teddy, Abacus, Cheese, AirSupport, DartBoard, Dice, Ladder, Ring, Minerva, Hermit, Tracker, Pong, Knot, Rainbow, Jammer, Balloon, Wheel, Bath, Purse, Discount, Variety, Appraisal, Camp, Piggy, Bowling, Stiletto, Disco, Nest, Sled, Crash, Skyscraper, School, Dharma, Putter, Smoker];
 console.log('admins length: ', allAdmins.length)
 let adminLogs = {
   rarity1: 0,
@@ -2383,6 +2455,25 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 
 //TULIP, U+1F337 pair with bubble, some kind of effect based off money???
 
+//Arevakhach LEFT-FACING ARMENIAN ETERNITY SIGN, U+58E
+//RIGHT-FACING ARMENIAN ETERNITY SIGN, U+58D
+//GAMER  VIDEO GAME, U+1F3AE
+//COIN, U+1FA99 Bank token - consumables are free
+//VIOLIN, U+1F3BB onPieceDestruction gain money
+// SAXOPHONE, U+1F3B7 + moves 
+// ACCORDION, U+1FA97 Busker - 
+//PINE DECORATION, U+1F38D
+//BIRTHDAY CAKE, U+1F382
+//SEAT, U+1F4BA Recliner
+//WIND CHIME, U+1F390
+//CHAIR, U+1FA91
+//HAIR PICK, U+1FAAE
+//FOLDING HAND FAN, U+1FAAD
+//SPOOL OF THREAD, U+1F9F5
+//KITE, U+1FA81
+//YO-YO, U+1FA80
+//JUGGLING, U+1F939 - use a different program each round for bonus
+
 //complicated edits...
 // BASEBALL, U+26BE Strike out, Enemies that fail to damage a program 3 times are removed - onreceivedamage would need a second id to check
 //ROUND PUSHPIN, U+1F4CD trap's heads are marked with pin, doesn't reveal them though
@@ -2392,7 +2483,8 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //SKATEBOARD, U+1F6F9 ollie, extend move distance by 1
 //TRIANGULAR RULER, U+1F4D0 , move diagonally? change range calculation
 // BLOSSOM, U+1F33C daisy chain, damage effects all touching pieces (use petri dish to get touching)
-//FLAG IN HOLE, U+26F3 -- last enemy piece? winning in one turn gives something?
+//SHOVEL, U+1FA8F remove node memory -
+
 //FISHING POLE AND FISH, U+1F3A3 Bait, enemies attack player with highest defence?
 
 //blood tax nerf to only attacking own pieces? overkills? or jolly roger?
@@ -2401,9 +2493,9 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //COCKTAIL GLASS, U+1F378 hybrids get bonus stats on placement
 //DECIDΑCPS TREE, U+1F333 OLD OAK, spawns acorns // CHESTNUT, U+1F330
 // HOSPITAL, U+1F3E5
-//SCHOOL, U+1F3EB
 //blue screen of death - freezes all programs
 // BLACK ROSETTE, U+1F3F6
+//MOUNTAIN BICYCLIST, U+1F6B5
 
 //PINE DECORATION, U+1F38D
 //SYMBOL FOR SALT OF ANTIMONY, U+1F72D sceptre
@@ -2413,7 +2505,8 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //WAVING BLACK FLAG, U+1F3F4
 
 
-//ankh
+//ANKH, U+2625
+
 //EGYPTIAN HIEROGLYPH S034, U+132F9
 //EGYPTIAN HIEROGLYPH O010A, U+13262
 // LEFT LUGGAGE, U+1F6C5 Key and suitcase

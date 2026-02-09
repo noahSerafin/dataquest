@@ -55,7 +55,7 @@ export abstract class Item<TTarget = any> {
 export class Whetstone extends Item<PieceBlueprint> {
     static name = "Whetstone";
     static description = "Increases a program's attack by 1";
-    static unicode = "U+1FAA8";
+    static unicode = "U+1FAA8";//U+1F969 red meat
     static color = "#ff2222ff";
     constructor(){
         super(Whetstone.name, Whetstone.description, Whetstone.unicode, Whetstone.color, 3, 1, 'blueprint')
@@ -70,7 +70,7 @@ export class Whetstone extends Item<PieceBlueprint> {
 class Training extends Item<PieceBlueprint> {
     static name = "Training";
     static description = "Increases a program's attack by 2";
-    static unicode = "U+1F3CB";
+    static unicode = "U+1F3CB";//U+1F356 Large meat
     static color = "#ff5656ff";
     constructor(){
         super(Training.name, Training.description, Training.unicode, Training.color, 5, 4, 'blueprint')
@@ -98,7 +98,7 @@ export class Iron extends Item<PieceBlueprint> {
 class Reinforcement extends Item<PieceBlueprint> {
     static name = "Reinforcement";
     static description = "Increases a program's defence by 2";
-    static unicode = "U+1F529"
+    static unicode = "U+1F529"//GARLIC, U+1F9C4 // GINGER ROOT, U+1FADA
     static color = "#54a4ffff"
     constructor(){
         super(Reinforcement.name, Reinforcement.description, Reinforcement.unicode, Reinforcement.color, 5, 4, 'blueprint')      
@@ -158,7 +158,7 @@ export class Carrot extends Item<PieceBlueprint> {
 class Glasses extends Item<PieceBlueprint> {
     static name = "Glasses";
     static description = "Increases a program's range by 2";
-    static unicode = "U+1F453"
+    static unicode = "U+1F453" //Radish U+1FADC
     static color = "rgb(255, 188, 43)";
     constructor(){
         super(Glasses.name, Glasses.description, Glasses.unicode, Glasses.color, 5, 4, 'blueprint')
@@ -173,7 +173,7 @@ class Glasses extends Item<PieceBlueprint> {
 class Teapot extends Item<PieceBlueprint> {
     static name = "Teapot";
     static description = "Increases a program's moves by 1";
-    static unicode = "U+1FAD6";
+    static unicode = "U+1FAD6";//BEANS, U+1FAD8
     static color = "#dc00e4ff";
     constructor(){
         super(Teapot.name, Teapot.description, Teapot.unicode, Teapot.color, 3, 1, 'blueprint')
@@ -187,7 +187,7 @@ class Teapot extends Item<PieceBlueprint> {
 export class Lightning extends Item<PieceBlueprint> {
     static name = "Charge";
     static description = "Increases a program's moves by 2";
-    static unicode = "U+26A1";
+    static unicode = "U+26A1";//coffee //SPAGHETTI, U+1F35D
     static color = "#dc00e4ff";
     constructor(){
         super(Lightning.name, Lightning.description, Lightning.unicode, Lightning.color, 4, 3, 'blueprint')

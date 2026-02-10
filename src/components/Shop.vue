@@ -51,7 +51,7 @@ const effectiveMoney = computed(() => (//move to player
   props.player.hasAdmin('Credit Card')? props.player.money + 20 : props.player.money
 ));
 
-const canReroll = computed(() => props.player.money >= props.rerollCost || props.player.hasAdmin('Credit Card') && props.player.money +20 >= props.rerollCost);
+const canReroll = computed(() => effectiveMoney.value >= props.rerollCost);
 const canSteal = computed(() => props.player.hasAdmin('Five Finger Discount') && !props.hasStolen);
 
 const canBuyItem = ((item: Item) => {
@@ -66,8 +66,8 @@ const canBuyItem = ((item: Item) => {
   return (effectiveMoney.value >= item.cost || canSteal ) && hasSpace;
 });
 
-const canBuyPiece = ((piece: PieceBlueprint) => {
-  const hasToolbox = props.player.hasAdmin('Toolbox');
+const canBuyPiece = ((piece: PieceBlueprint) => {//wrong??? not being recalculated after purchase
+  const hasToolbox = props.player.hasToolbox;//hasAdmin('Toolbox');
   const hasSpace = hasToolbox ? props.player.usedMemory <= props.player.memory-0.5 : props.player.usedMemory <= props.player.memory-1;
 
   return (effectiveMoney.value >= piece.cost || canSteal ) && hasSpace;

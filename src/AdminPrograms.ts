@@ -2138,7 +2138,7 @@ class Bowling extends Admin {//test
   static description = "Destroying a program deals 1 damage to each tile adjacent to it's head (testing)";
   static unicode = "U+1F3B3"; // damage adjacent tiles
   static color = "rgb(215, 44, 25)";
-  static rarity = 2;
+  static rarity = 2;//3?
   constructor() {
     super(Bowling.name, Bowling.description, Bowling.unicode, Bowling.color, 2, Bowling.rarity, 'gameState', 'onPieceDestruction')
   }
@@ -2157,7 +2157,7 @@ class Bowling extends Admin {//test
       const isAdjacent = piece.tiles.some(t =>
         adjacent.some(c => c.x === t.x && c.y === t.y)
       );
-      if (isAdjacent) {
+      if (isAdjacent && piece.team === 'enemy') {//only attacks enemies
         piece.takeDamage(1);
       }
     });
@@ -2272,7 +2272,7 @@ class Crash extends Admin {//test
   }
 }
 
-class Skyscraper extends Admin {//test
+export class Skyscraper extends Admin {//test not working
   static name = "Highrise";
   static description = "Each placed program gains +1 temporary defence for every 2 tiles of currently occupied on the end of your turns";//every 3? can make larger to nerf
   static unicode = "U+1F3E2";
@@ -2349,8 +2349,8 @@ class Putter extends Admin {//test
 
 //SMOKING SYMBOL, U+1F6AC
 class Smoker extends Admin {
-  static name = "Ciggarette";//GOGGLES, U+1F97D
-  static description = "Your programs are immune to being confused";
+  static name = "Cigarette";//GOGGLES, U+1F97D
+  static description = "Your programs have -1 max size, but are immune to being confused";
   static unicode = "U+1F6AC";
   static color = "rgb(255, 255, 255)";
   static rarity = 1;
@@ -2359,6 +2359,7 @@ class Smoker extends Admin {
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
+    activePieces[idx].addModifier({maxSize: -1});
     activePieces[idx].immunities.confused = true;
   }
 }
@@ -2445,9 +2446,11 @@ console.log("Admins of rarity 3: ", adminLogs.rarity3)
 console.log("Admins of rarity 4: ", adminLogs.rarity4)
 console.log("Admins of rarity 5: ", adminLogs.rarity5)
 console.log("Admins of rarity 6: ", adminLogs.rarity6)
+//make all immunity admins <= uncommon?
 
 //doctor STETHOSCOPE, U+1FA7A medic, + max Size?
-//red sky- dmg mult / bomb bonuses
+//splash damage- mult to group targets??
+//bomb bonuses -
 //gene hybrids appear in shop
 //admin to add held item variants to all pieces
 //CHERRIES, U+1F352 free rerolls?

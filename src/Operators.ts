@@ -179,11 +179,11 @@ export function blueprintFromPieceClass(piece: typeof Piece): PieceBlueprint {
         description: "A slow program that can retract itself to boost its defence",
         unicode: "U+1F40C",
         color: "#4d3502ff",
-        maxSize: 3,
+        maxSize: 2,
         moves: 1,
         range: 1,
         attack: 1,
-        defence: 0,
+        defence: 1,
         rarity: 1,
         // blueprint-only fields:
         isPlaced: false,

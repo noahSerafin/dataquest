@@ -1,5 +1,7 @@
+HOTKEYS
 GAME / BUGS
 variant should overide base piece color, (and tile colour???)
+eagle retaliated?, axe after using bee retaliated on? - was strike, visualise admin functions!!!!
 pandora not giving 1 at full inventory
 checkforroundend after takedamage
 visualise retaliation, defence, dmg mult, admin counts, enemy movement distance (hide move buttons)

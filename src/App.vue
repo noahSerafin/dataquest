@@ -98,7 +98,7 @@
     false,
     false,
   ));
-  const showInventory = ref(false);
+  const showInventory = ref(true);
   //function closeInventory(){
     //showInventory.value = false;
   //}
@@ -575,7 +575,7 @@
     //if piece has no tiles, use headposition
     graveyard.value = [];
     lastTurnPieces.value = originalPieces.value.map(p => p.clone());
-    playerSpawns.value = [...originalSpawns.value];
+    playerSpawns.value = [...originalSpawns.value];//not working, original spawn normally 1 coord is missing;
     selectedPiece.value = null;
     isPlacing.value = true
     openSummary(false);
@@ -714,6 +714,7 @@
       processed.push(piece);
     }
     playerSpawns.value = newPlayerSpawns;
+    originalSpawns.value = newPlayerSpawns;
 
     return processed;
   }
@@ -1314,27 +1315,6 @@
     worldSeed.value--
   }
 
-  function onKeydown(e: KeyboardEvent) {
-    // ignore typing in inputs
-    const tag = (e.target as HTMLElement)?.tagName;
-    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
-
-    switch (e.code) {
-      case 'Space':
-        e.preventDefault(); // stop page scroll
-        endTurn();
-        break;
-
-      case 'A':
-        boardRef.value.highlightTargets;
-        break;
-
-      case 'S':
-        boardRef.value.highlightSpecials;
-        break;
-    }
-  }
-
   watch(hasFinishedTurn, () => {
     if (!hasFinishedTurn) {
       window.addEventListener('keydown', onKeydown);
@@ -1359,21 +1339,35 @@
     }
   );
 
-  document.addEventListener('keydown', (event) => {
-    if(event.key === 'Enter'){
-      endTurn();
-    }
-    if(event.key === 'Space' || event.key === ' '){
-      endTurn();
-    }
-    if(event.key === 'Tab'){
-      //cycle selectedPiece through activePieces
-    }
-    if(selectedPiece.value){
-      //wasd
+  //HOTKEYS
+
+  function onKeydown(e: KeyboardEvent) {
+    // ignore typing in inputs
+    const tag = (e.target as HTMLElement)?.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+
+    switch (e.code) {
+      case 'Space':
+        e.preventDefault(); // stop page scroll
+        endTurn();
+        break;
+      case 'Enter':
+        e.preventDefault(); // stop page scroll
+        endTurn();
+        break;
+      case 'Tab':
+        //cycle thru activepieces
+        break;
+      //inside pieceview???
+      case 'A':
+        boardRef.value.highlightTargets;
+        break;
+
+      case 'S':
+        boardRef.value.highlightSpecials;
+        break;
     }
   }
-  )
 
   const debugMode = ref<boolean>(false);
   function toggleDebug(){

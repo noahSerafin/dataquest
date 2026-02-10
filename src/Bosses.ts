@@ -35,6 +35,8 @@ targetType: 'blueprint' | 'piece' | 'shopItem' | 'player' | 'gameState'  | 'play
     }
 */
 
+//lower difficulty of +1 bosses, more +2 bosses
+//have boss maximums before endless mode
 class NorthWind extends Admin {
     static rarity = 1;
   static name = "North Wind";
@@ -216,7 +218,7 @@ class Wrath extends Admin {
             const idx = activePieces.findIndex(p => p.id === randId);
             activePieces[idx].takeDamage(1 + activePieces[idx].getStat('defence'));//shouold also remove a size 1 piece from the board
         }
-        this.count +=1
+        this.count ++
     }
     onRoundEnd() {
         this.count = 0;
@@ -296,7 +298,7 @@ class Circus extends Admin {
     static description = "Every enemy gains +1 moves at the start of the round";
     static unicode = "U+1F3AA";
     static color = "#eb3ec0ff";
-    static rarity = 4;
+    static rarity = 3;
     constructor() {
         super(Circus.name, Circus.description, Circus.unicode, Circus.color, 5, 1, 'gameState', 'onRoundStart')
     }
@@ -314,7 +316,7 @@ class Castle extends Admin {
     static description = "Every enemy gains +1 defence at the start of the round";
     static unicode = "U+1F3EF";
     static color = "#eb523eff";
-    static rarity = 5;
+    static rarity = 4;
     constructor() {
         super(Castle.name, Castle.description, Castle.unicode, Castle.color, 5, 1, 'gameState', 'onRoundStart')
     }
@@ -332,7 +334,7 @@ class Anchor extends Admin {
     static description = "Every player program loses -1 moves";
     static unicode = "U+2693";
     static color = "#0a063fff";
-    static rarity = 5;
+    static rarity = 3;
     constructor() {
         super(Anchor.name, Anchor.description, Anchor.unicode, Anchor.color, 5, 1, 'gameState', 'onPlacement')
     }
@@ -365,7 +367,7 @@ class Lock extends Admin {
     static description = "Every enemy gains +2 defence at the start of the round";
     static unicode = "U+1F512";
     static color = "#ad1400ff";
-    static rarity = 6;
+    static rarity = 5;
     constructor() {
         super(Lock.name, Lock.description, Lock.unicode, Lock.color, 6, 3, 'gameState', 'onRoundStart')
     }

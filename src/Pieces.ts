@@ -627,7 +627,7 @@ class Cannon extends Piece {
   static color = "#bb3030ff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Cannon.name, Cannon.description, Cannon.unicode, 1, 1, 5, 3, 1, Cannon.color, headPosition, [headPosition], team, Cannon.rarity, removeCallback, id) //water pistol
+   super(Cannon.name, Cannon.description, Cannon.unicode, 2, 1, 5, 3, 1, Cannon.color, headPosition, [headPosition], team, Cannon.rarity, removeCallback, id) //water pistol
     this.specialName = 'Fire';
     this.targetType = 'line'
   }
@@ -686,7 +686,7 @@ class Dynamite extends Piece {
   static name = "Dynamite";
   static description = "Can be sacrificed to inflict high damage to a group of enemies";
   static unicode = "U+1F9E8";
-  static color = "#be3737ff";
+  static color = "rgb(43, 26, 26)";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Dynamite.name, Dynamite.description, Dynamite.unicode, 1, 2, 2, 6, 0, Dynamite.color, headPosition, [headPosition], team, Dynamite.rarity, removeCallback, id)
@@ -743,11 +743,13 @@ class Dataworm extends Piece {//test
   }
 
   async special({piece, target} : {piece: Piece, target: Coordinate}):Promise<void>{
-    // --- 1. Check adjacency ---
-    const isAdjacent =
+    // --- 1. Check adjacency --- use 4 way check maybe. Or leave black and let it tunnel anywhere in range
+    /*const isAdjacent =
       Math.abs(piece.headPosition.x - target.x) +
       Math.abs(piece.headPosition.y - target.y) === 1;
     if (!isAdjacent) return;
+    */
+
     // --- 2. Identify if target tile belongs to that piece ---
     const tileIndex = piece.tiles.findIndex(t => t.x === target.x && t.y === target.y);
     if (tileIndex === -1 ){
@@ -774,17 +776,18 @@ class Snake extends Piece {//test
   static color = "#034d22ff";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Snake.name, Snake.description, Snake.unicode, 3, 1, 1, 1, 0, Snake.color, headPosition, [headPosition], team, Snake.rarity, removeCallback, id)
+    super(Snake.name, Snake.description, Snake.unicode, 3, 1, 2, 1, 0, Snake.color, headPosition, [headPosition], team, Snake.rarity, removeCallback, id)
     this.specialName = 'Swallow';
     this.targetType = 'pieceAndPlace'
   }
 
   async special({piece, target} : {piece: Piece, target: Coordinate}):Promise<void>{
-    // --- 1. Check adjacency ---
-    const isAdjacent =
+    // --- 1. Check adjacency --- adjaceny check is off, use 4 way check instead. But maybe we should allow any use in range?
+    /*const isAdjacent =
       Math.abs(piece.headPosition.x - target.x) +
       Math.abs(piece.headPosition.y - target.y) === 1;
-    if (!isAdjacent) return;
+    if (!isAdjacent) return;*/
+
     // --- 2. Identify if target tile belongs to that piece ---
     const tileIndex = piece.tiles.findIndex(t => t.x === target.x && t.y === target.y);
     if (tileIndex === -1){
@@ -1628,7 +1631,7 @@ class Snail extends Piece {
   static color = "#4d3502ff";
   static rarity = 1;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Snail.name, Snail.description, Snail.unicode, 3, 1, 1, 1, 1, Snail.color, headPosition, [headPosition], team, Snail.rarity, removeCallback, id)
+    super(Snail.name, Snail.description, Snail.unicode, 2, 1, 1, 1, 1, Snail.color, headPosition, [headPosition], team, Snail.rarity, removeCallback, id)
     this.targetType = 'self'
     this.specialName = 'Retract'
   }
@@ -1691,7 +1694,7 @@ class Greatshield extends Piece {//testt
 
 class Wizard extends Piece {
   static name = "Wizard";
-  static description = "A program that can telport to unnoccupied spaces";
+  static description = "A program that can telport to unnoccupied spaces";//load other programs without ending a turn?
   static unicode = "U+1F9D9";
   static color = "#7600c5ff";
   static rarity = 4;
@@ -2364,18 +2367,18 @@ export class Dolls extends Piece {//finished? test, will have to be handled in a
 
 class UFO extends Piece {
   static name = "UFO";
-  static description = "A program that can move enemies away from itself";//without increasing size?? headposition = 
+  static description = "A strong ranged program";// that can move enemies away from itself";//without increasing size?? headposition = 
   static unicode = "U+1F6F8";
   static color = "#000d47ff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(UFO.name, UFO.description, UFO.unicode, 4, 3, 3, 2, 2, UFO.color, headPosition, [headPosition], team, UFO.rarity, removeCallback, id)
-    this.targetType = 'line'//piecesInLine
-    this.specialName = 'Tractor Beam'
+    super(UFO.name, UFO.description, UFO.unicode, 4, 3, 3, 3, 2, UFO.color, headPosition, [headPosition], team, UFO.rarity, removeCallback, id)
+    //this.targetType = 'line'//piecesInLine
+    //this.specialName = 'Tractor Beam'
   }
 
   //pushing pieces off board, needs tileset also
-  async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
+  /*async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
 
     const origin = this.headPosition;
     for (let i = 0; i < line.length; i++) {
@@ -2405,7 +2408,7 @@ class UFO extends Piece {
       occupier.moveTo(targetTile);
     }
     this.actions--;
-  }
+  }*/
 }
 
 class TP extends Piece {
@@ -2421,10 +2424,10 @@ class TP extends Piece {
 
 class Saw extends Piece {
   static name = "Saw";
-  static description = "A program that can remove a body tile from an enemy, regadless of its defence";
+  static description = "A program that can remove a body tile from an enemy, regardless of its defence";
   static unicode = "U+1FA9A";
   static color = "#ffb20dff";
-  static rarity = 3;
+  static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Saw.name, Saw.description, Saw.unicode, 3, 2, 1, 0, 1, Saw.color, headPosition, [headPosition], team, Saw.rarity, removeCallback, id)
    this.specialName='Hack'
@@ -2859,6 +2862,39 @@ class Gecko extends Piece {
 //99 fairy
 export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Tar, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Larva, Wasp, Rat, Flute, LabRat, Bat, Dragon, Squid, Snail, Shark, Greatshield, Wizard, Ninja, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, UFO, TP, Saw, Croc, Lighthouse, Torch, Camera, Drum, Shrike, Eagle, Recurve, Daemon, Rex, Diplodocus, Hedgehog, Sol, Stopwatch, Bull, Rhino, Peacock, Gecko, Dog, Wolf];//Dolls //100 +2 (web, ink)
 console.log('pieces length: ', allPieces.length)
+
+let adminLogs = {
+  rarity1: 0,
+  rarity2: 0,
+  rarity3: 0,
+  rarity4: 0,
+  rarity5: 0,
+  rarity6: 0
+}
+/*
+ | 'onPlacement'
+  | 'onTurnEnd'
+  | 'onRoundStart'
+  | 'onRoundEnd'
+  | 'onDealDamage' //piece id of receiver?
+  | 'onReceiveDamage'
+  | 'onPieceDestruction'
+  | 'other';
+*/
+allPieces.forEach(piece => {
+  if(piece.rarity === 1) adminLogs.rarity1 += 1;
+  if(piece.rarity === 2) adminLogs.rarity2 += 1;
+  if(piece.rarity === 3) adminLogs.rarity3 += 1;
+  if(piece.rarity === 4) adminLogs.rarity4 += 1;
+  if(piece.rarity === 5) adminLogs.rarity5 += 1;
+  if(piece.rarity === 6) adminLogs.rarity6 += 1;
+});
+console.log("Pieces of rarity 1: ", adminLogs.rarity1)
+console.log("Pieces of rarity 2: ", adminLogs.rarity2)
+console.log("Pieces of rarity 3: ", adminLogs.rarity3)
+console.log("Pieces of rarity 4: ", adminLogs.rarity4)
+console.log("Pieces of rarity 5: ", adminLogs.rarity5)
+console.log("Pieces of rarity 6: ", adminLogs.rarity6)
 
 //doctor STETHOSCOPE, U+1FA7A medic, + max Size to a piece
 // BANANA, U+1F34C trap piece that applies confused, moves the piece a random direction? both?

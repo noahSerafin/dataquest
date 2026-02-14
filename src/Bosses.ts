@@ -132,13 +132,13 @@ class Mirror extends Admin {
 
 class Downturn extends Admin {
     static rarity = 2;
-  static name = "Downturn";
-  static description = "Lose $1 after every turn";
-  static unicode = "U+1F4C9";
-  static color = "#f11212ff";
-  constructor() {
-    super(Downturn.name, Downturn.description, Downturn.unicode, Downturn.color, 5, 2, 'player', 'onTurnEnd')
-  }
+    static name = "Downturn";
+    static description = "Lose $1 after every turn";
+    static unicode = "U+1F4C9";
+    static color = "#f11212ff";
+    constructor() {
+        super(Downturn.name, Downturn.description, Downturn.unicode, Downturn.color, 5, 2, 'player', 'onTurnEnd')
+    }
     async apply({ player }: { player: Player }) {
        player.money --
     }
@@ -216,7 +216,7 @@ class Wrath extends Admin {
             const rand = Math.floor((Math.random() * playerPieces.length) + 1);
             const randId = playerPieces[rand].id
             const idx = activePieces.findIndex(p => p.id === randId);
-            activePieces[idx].takeDamage(1 + activePieces[idx].getStat('defence'));//shouold also remove a size 1 piece from the board
+            activePieces[idx].takeDamage(1 + activePieces[idx].getStat('defence'));//should also remove a size 1 piece from the board
         }
         this.count ++
     }
@@ -616,6 +616,7 @@ class Coral extends Admin {
 //REDACTED - all enemy programs classes are hidden with black squares
 
 //fog //square //tornado tsunami
+// damage mult for enemy
 export const allBosses = [Mirror, Factory, NorthWind, Hook, Downturn, Wrath, Reaper, Volcano, Circus, Castle, Anchor, Jack, Lock, Eclipse, Battery, Customs, Shrine, Snowflake, Sun, Whale, Bones, Frog, Coral, Izakaya, Hammer, Omega]//22
 //3
 

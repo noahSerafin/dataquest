@@ -46,7 +46,7 @@ function decideEnemyIntent(
         if (newTarget)  return { type: 'special', target: {line: getTilesInLine(enemy, newTarget.place), activePieces: activePieces} }
       }
       if(enemy.targetType == 'pieceAndPlace' && target.piece.headPosition !== target.place && specialAttempts < 1){//rectify attempts later
-        return { type: 'special', target: {piece: target.piece, target: target.place}}
+        return { type: 'special', target: {piece: target.piece, target: target.place}}//enemy still attacking- but should use this
       }
       if(enemy.targetType == 'placeAndPieces' && target.piece.headPosition !== target.place && specialAttempts < 1){//rectify attempts later
         return { type: 'special', target: {target: target.place, activePieces: activePieces}}

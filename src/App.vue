@@ -831,6 +831,7 @@
     lastTurnPieces.value = activePieces.value.map(p => p.clone());
 
     //pass admin modifiers to the piece
+    PieceInstance.movesRemaining = 0;
     activePieces.value.push(PieceInstance);
 
     // Mark blueprint as placed so it greys in inventory
@@ -911,7 +912,7 @@
   const boardRef = ref();
   
   //selectedPiece functions
-  function handlePieceSelect(piece: Piece) {//handleselect
+  function handlePieceSelect(piece: Piece) {
     if(isPlacing.value){
       isPlacing.value = false;
       pieceToPlace.value = null;
@@ -986,13 +987,13 @@
     if (!selectedPiece.value) return
     if((selectedPiece.value.team === 'enemy' && !selectedPiece.value.statuses.charmed)) return; //don't wan't control of enemies pieces
     if (selectedPiece.value.actions <= 0) return
-    selectedPiece.value.actions --//prevent double clicking
     player.value.canPlace = false;
     //if (selectedPiece.value.team !== 'player') return //damaging your own pieces is actually useful sometimes
     const damageReceiver = activePieces.value.find(piece =>
       piece.tiles.some(t => t.x === coord.x && t.y === coord.y)
     );
     if(!damageReceiver) return;
+    selectedPiece.value.actions --//prevent double clicking
     //console.log('receiver: ', damageReceiver?.name)
     //if (!damageReceiver || (damageReceiver.team === selectedPiece.value.team && !selectedPiece.value.statuses.charmed)) return;
     //console.log("Damage call:", coord, damage)
@@ -1248,6 +1249,8 @@
     player.value.canPlace = false;
     player.value.canMove = false;
     player.value.canAction = false;
+    await handleApplyAdmins('onTurnEnd', '');//sprinkler
+    applyStatusEffects('player');
     activePieces.value.forEach(piece => {
       if(piece.team === 'player' ){
         piece.resetMoves();
@@ -1258,9 +1261,8 @@
         piece.resetTempModifiers();
       }
     });
-    await handleApplyAdmins('onTurnEnd', '');//sprinkler
-    applyStatusEffects('player');
     await enemyTurn();
+    applyStatusEffects('enemy');
     //player piece tempstats reset
     activePieces.value.forEach(piece => {
       if(piece.team === 'enemy' ){
@@ -1272,7 +1274,6 @@
         piece.resetTempModifiers();
       }
     })
-    applyStatusEffects('enemy');
     if(isFirstTurn){
       isFirstTurn.value = false;
     }
@@ -1315,14 +1316,6 @@
     worldSeed.value--
   }
 
-  watch(hasFinishedTurn, () => {
-    if (!hasFinishedTurn) {
-      window.addEventListener('keydown', onKeydown);
-    } else {
-      window.removeEventListener('keydown', onKeydown);
-    }
-  }, { immediate: true });
-
   watch(
     () => [
       showBoard.value,
@@ -1340,17 +1333,18 @@
   );
 
   //HOTKEYS
+  onMounted(() => {
+    window.addEventListener('keydown', onKeydown);
+  });
 
   function onKeydown(e: KeyboardEvent) {
     // ignore typing in inputs
+    if(hasFinishedTurn.value) return;
     const tag = (e.target as HTMLElement)?.tagName;
     if (tag === 'INPUT' || tag === 'TEXTAREA') return;
-
+    e.preventDefault();
     switch (e.code) {
       case 'Space':
-        e.preventDefault(); // stop page scroll
-        endTurn();
-        break;
       case 'Enter':
         e.preventDefault(); // stop page scroll
         endTurn();
@@ -1358,13 +1352,16 @@
       case 'Tab':
         //cycle thru activepieces
         break;
+      case 'KeyI':
+        toggleInventory();
+        break;
       //inside pieceview???
-      case 'A':
-        boardRef.value.highlightTargets;
+      case 'KeyA':
+        boardRef.value.highlightTargets(selectedPiece.value);
         break;
 
-      case 'S':
-        boardRef.value.highlightSpecials;
+      case 'KeyS':
+        boardRef.value.highlightSpecials(selectedPiece.value);
         break;
     }
   }

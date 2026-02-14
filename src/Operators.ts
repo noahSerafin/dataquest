@@ -1,5 +1,5 @@
 import type { OS } from "./types";
-import { Voucher, Whetstone, Garlic, Lightning, RedMeat, Genie, Box, Pandora, Update2, Update3} from "./Items";
+import { Voucher, Mushroom, Garlic, Juice, Meat, Genie, Box, Pandora, Update2, Update3} from "./Items";
 import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Compass} from "./AdminPrograms";
 
 /*
@@ -281,7 +281,7 @@ const Penguin : OS = {//potato //shield
     memory: 6,
     adminSlots: 5,
     blueprints: [potato, sling, aegis],
-    items: [new Whetstone, new Lightning],
+    items: [new Garlic, new Meat],
     admins: [],
     lives: 4,
     description: 'A versatile system with extra lives. Start with some upgrade items.'
@@ -308,7 +308,7 @@ const Apple : OS = {//TP //rat
     memory: 5,
     adminSlots: 4,
     blueprints: [rat, bee, shield],
-    items: [new Garlic, new RedMeat],
+    items: [new Mushroom, new Juice],
     admins: [],
     lives: 3,
     description: 'Limited admin functionality, but start with excess money and some consumable items.'

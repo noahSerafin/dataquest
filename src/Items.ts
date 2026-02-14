@@ -52,31 +52,29 @@ export abstract class Item<TTarget = any> {
     */
 }
 
-export class Whetstone extends Item<PieceBlueprint> {
-    static name = "Whetstone";
+export class Mushroom extends Item<PieceBlueprint> {
+    static name = "Mushroom";
     static description = "Increases a program's attack by 1";
-    static unicode = "U+1FAA8";//U+1F969 red meat
+    static unicode = "U+1F344";
     static color = "#ff2222ff";
     constructor(){
-        super(Whetstone.name, Whetstone.description, Whetstone.unicode, Whetstone.color, 3, 1, 'blueprint')
+        super(Mushroom.name, Mushroom.description, Mushroom.unicode, Mushroom.color, 3, 1, 'blueprint')
     }
     //Increases a program's atk by 
     apply(target: PieceBlueprint, itemMult: number) {
-        console.log('target: ', target)
         target.attack += (1* itemMult);
     }
 }
 
-class Training extends Item<PieceBlueprint> {
-    static name = "Training";
+export class Meat extends Item<PieceBlueprint> {
+    static name = "Meat";
     static description = "Increases a program's attack by 2";
-    static unicode = "U+1F3CB";//U+1F356 Large meat
+    static unicode = "U+1F356";//Meat "U+1F3CB"; //U+1F356 Large meat
     static color = "#ff5656ff";
     constructor(){
-        super(Training.name, Training.description, Training.unicode, Training.color, 5, 4, 'blueprint')
+        super(Meat.name, Meat.description, Meat.unicode, Meat.color, 5, 4, 'blueprint')
     }
     apply(target: PieceBlueprint, itemMult: number) {
-        console.log('target: ', target)
         target.attack += (2* itemMult);
     }
 }
@@ -91,24 +89,38 @@ export class Iron extends Item<PieceBlueprint> {
     }
     //Increases a program's def by 1
     apply(target: PieceBlueprint, itemMult: number) {
-        console.log('target: ', target)
         target.defence += (1* itemMult);
     }
 }
-class Reinforcement extends Item<PieceBlueprint> {
-    static name = "Reinforcement";
-    static description = "Increases a program's defence by 2";
-    static unicode = "U+1F529"//GARLIC, U+1F9C4 // GINGER ROOT, U+1FADA
+
+export class Garlic extends Item<PieceBlueprint> {
+    static name = "Garlic";
+    static description = "Increases a placed program's defence by 2";
+    static unicode = "U+1F9C4";
+    static color = "#26d0faff";
+    constructor(){
+        super(Garlic.name, Garlic.description, Garlic.unicode, Garlic.color, 5, 4, 'blueprint')
+    }
+    apply(target: PieceBlueprint, itemMult: number) {
+        target.defence += (2* itemMult);
+    }
+}
+
+export class Ginger extends Item<PieceBlueprint> {
+    static name = "Ginger";
+    static description = "Increases a program's defence by 3";
+    static unicode = "U+1FADA"
     static color = "#54a4ffff"
     constructor(){
-        super(Reinforcement.name, Reinforcement.description, Reinforcement.unicode, Reinforcement.color, 5, 4, 'blueprint')      
+        super(Ginger.name, Ginger.description, Ginger.unicode, Ginger.color, 7, 6, 'blueprint')      
     }
     //Increases a program's def by 1
     apply(target: PieceBlueprint, itemMult: number) {
         console.log('target: ', target)
-        target.defence += (2* itemMult);
+        target.defence += (3* itemMult);
     }
 }
+
 //"U+1F356" //meat
  //??"U+26E8";
 
@@ -126,13 +138,14 @@ export class Blueberry extends Item<PieceBlueprint> {
         target.maxSize += (1* itemMult);
     }
 }
-class Pie extends Item<PieceBlueprint> {
-    static name = "Pie";
-    static description = "Increases a program's max size by 2";
-    static unicode = "U+1F967";
-    static color = "#1c33ffff";
+
+class Melon extends Item<PieceBlueprint> {
+    static name = "Melon";
+    static description = "+3 max size";
+    static unicode = "U+1F349";
+    static color = "rgb(17, 110, 71)";
     constructor(){
-        super(Pie.name, Pie.description, Pie.unicode, Pie.color, 5, 3, 'blueprint')      
+        super(Melon.name, Melon.description, Melon.unicode, Melon.color, 5, 3, 'blueprint')      
     }
     //Increases a program's maxSize by 1
     apply(target: PieceBlueprint, itemMult: number) {
@@ -141,13 +154,28 @@ class Pie extends Item<PieceBlueprint> {
     }
 }
 
-export class Carrot extends Item<PieceBlueprint> {
-    static name = "Carrot";
-    static description = "Increases a program's range by 1";
-    static unicode = "U+1F955"//scope "U+1F52D";
-    static color = "#fff12bff";
+class Pie extends Item<PieceBlueprint> {
+    static name = "Pie";
+    static description = "+3 max size";
+    static unicode = "U+1F967";
+    static color = "rgb(11, 122, 20)";
     constructor(){
-        super(Carrot.name, Carrot.description, Carrot.unicode, Carrot.color, 3, 1, 'blueprint')
+        super(Pie.name, Pie.description, Pie.unicode, Pie.color, 6, 4, 'blueprint')      
+    }
+    //Increases a program's maxSize by 1
+    apply(target: PieceBlueprint, itemMult: number) {
+        console.log('target: ', target)
+        target.maxSize += (3* itemMult);
+    }
+}
+
+class Pepper extends Item<PieceBlueprint> {
+    static name = "Pepper";
+    static description = "Increases a program's range by 1";
+    static unicode = "U+1FAD1" //Radish U+1FADC
+    static color = "rgb(255, 188, 43)";
+    constructor(){
+        super(Pepper.name, Pepper.description, Pepper.unicode, Pepper.color, 3, 1, 'blueprint')
     }
     //Increases a program's range by 1
     apply(target: PieceBlueprint, itemMult: number) {
@@ -155,13 +183,14 @@ export class Carrot extends Item<PieceBlueprint> {
         target.range += (1* itemMult);
     }
 }
-class Glasses extends Item<PieceBlueprint> {
-    static name = "Glasses";
+
+export class Carrot extends Item<PieceBlueprint> {
+    static name = "Carrot";
     static description = "Increases a program's range by 2";
-    static unicode = "U+1F453" //Radish U+1FADC
-    static color = "rgb(255, 188, 43)";
+    static unicode = "U+1F955"//scope "U+1F52D";
+    static color = "#fff12bff";
     constructor(){
-        super(Glasses.name, Glasses.description, Glasses.unicode, Glasses.color, 5, 4, 'blueprint')
+        super(Carrot.name, Carrot.description, Carrot.unicode, Carrot.color, 5, 4, 'blueprint')
     }
     //Increases a program's range by 1
     apply(target: PieceBlueprint, itemMult: number) {
@@ -170,32 +199,71 @@ class Glasses extends Item<PieceBlueprint> {
     }
 }
 
-class Teapot extends Item<PieceBlueprint> {
-    static name = "Teapot";
-    static description = "Increases a program's moves by 1";
-    static unicode = "U+1FAD6";//BEANS, U+1FAD8
-    static color = "#dc00e4ff";
+export class Juice extends Item<PieceBlueprint> {
+    static name = "Juiced";
+    static description = "Increases a placed program's moves by 1";
+    static unicode = "U+1F9C3";
+    static color = "rgb(255, 227, 71)";
     constructor(){
-        super(Teapot.name, Teapot.description, Teapot.unicode, Teapot.color, 3, 1, 'blueprint')
+        super(Juice.name, Juice.description, Juice.unicode, Juice.color, 1, 1, 'blueprint')  
     }
-    //Increases a program's moves by 1
     apply(target: PieceBlueprint, itemMult: number) {
-        console.log('target: ', target)
         target.moves += (1* itemMult);
     }
 }
-export class Lightning extends Item<PieceBlueprint> {
-    static name = "Charge";
+
+class Teapot extends Item<PieceBlueprint> {
+    static name = "Teapot";//defence?
     static description = "Increases a program's moves by 2";
-    static unicode = "U+26A1";//coffee //SPAGHETTI, U+1F35D
+    static unicode = "U+1FAD6";//BEANS, U+1FAD8
     static color = "#dc00e4ff";
     constructor(){
-        super(Lightning.name, Lightning.description, Lightning.unicode, Lightning.color, 4, 3, 'blueprint')
+        super(Teapot.name, Teapot.description, Teapot.unicode, Teapot.color, 3, 2, 'blueprint')
     }
     //Increases a program's moves by 1
     apply(target: PieceBlueprint, itemMult: number) {
-        console.log('target: ', target)
-        target.moves += (2* itemMult);
+        target.moves += (1* itemMult);
+    }
+}
+
+export class Coffee extends Item<PieceBlueprint> {
+    static name = "Coffee";
+    static description = "Increases a program's moves by 3";
+    static unicode = "U+2615";
+    static color = "#e346f1ff";
+    constructor(){
+        super(Coffee.name, Coffee.description, Coffee.unicode, Coffee.color, 5, 4, 'blueprint')
+    }
+    apply(target: PieceBlueprint, itemMult: number) {
+        target.moves += (3* itemMult);
+    }
+}
+
+export class Roids extends Item<PieceBlueprint> {
+    static name = "Roids";
+    static description = "Increase a program's attack by 1, and moves by 1";
+    static unicode = "U+1F489";
+    static color = "#00e4b3ff";
+    constructor(){
+        super(Roids.name, Roids.description, Roids.unicode, Roids.color, 4, 2, 'blueprint')
+    }
+    apply(target: PieceBlueprint, itemMult: number) {
+        target.attack += (1* itemMult);
+        target.moves += (1* itemMult);
+    }
+}
+
+export class Formula extends Item<PieceBlueprint> {
+    static name = "Formula";
+    static description = "Increases a program's max size by 1 and defence by 1";
+    static unicode = "U+1F37C";
+    static color = "#27f743ff";
+    constructor(){
+        super(Formula.name, Formula.description, Formula.unicode, Formula.color, 4, 2, 'blueprint')
+    }
+    apply(target: PieceBlueprint, itemMult: number) {
+        target.maxSize += (1* itemMult);
+        target.defence += (1* itemMult);
     }
 }
 
@@ -217,6 +285,20 @@ export class Blessing extends Item<PieceBlueprint> {
     }
 }
 
+/*class Reinforcement extends Item<PieceBlueprint> {
+    static name = "Reinforcement";
+    static description = "Increases a program's defence by 2";
+    static unicode = "U+1F529"//GARLIC, U+1F9C4 // GINGER ROOT, U+1FADA
+    static color = "#54a4ffff"
+    constructor(){
+        super(Reinforcement.name, Reinforcement.description, Reinforcement.unicode, Reinforcement.color, 5, 4, 'blueprint')      
+    }
+    //Increases a program's def by 1
+    apply(target: PieceBlueprint, itemMult: number) {
+        target.defence += (2* itemMult);
+    }
+}*/
+
 export class Supplement extends Item<Piece> {
     static name = "Supplement";
     static description = "Increases all a placed program's stats by 1 for one round";
@@ -234,59 +316,7 @@ export class Supplement extends Item<Piece> {
         target.defence += (1* itemMult);
     }
 }
-
-export class Juice extends Item<Piece> {
-    static name = "Juiced";
-    static description = "Increases a placed program's moves by 1 for one round";
-    static unicode = "U+1F9C3";
-    static color = "rgb(255, 227, 71)";
-    constructor(){
-        super(Juice.name, Juice.description, Juice.unicode, Juice.color, 1, 2, 'piece')  
-    }
-    apply(target: Piece, itemMult: number) {
-        target.moves += (1* itemMult);
-        target.movesRemaining += (1* itemMult);
-    }
-}
-
-export class Roids extends Item<Piece> {
-    static name = "Roids";
-    static description = "Increases all placed program's attack by 1 for one round";
-    static unicode = "U+1F489";
-    static color = "#00e4b3ff";
-    constructor(){
-        super(Roids.name, Roids.description, Roids.unicode, Roids.color, 1, 2, 'piece')
-    }
-    apply(target: Piece, itemMult: number) {
-        target.attack += (1* itemMult);
-    }
-}
-
-export class Formula extends Item<Piece> {
-    static name = "Formula";
-    static description = "Increases a placed program's max size by 1 for one round";
-    static unicode = "U+1F37C";
-    static color = "#27f743ff";
-    constructor(){
-        super(Formula.name, Formula.description, Formula.unicode, Formula.color, 1, 2, 'piece')
-    }
-    apply(target: Piece, itemMult: number) {
-        target.maxSize += (1* itemMult);
-    }
-}
-
-export class Garlic extends Item<Piece> {
-    static name = "Garlic";
-    static description = "Increases a placed program's defence by 1 for one round";
-    static unicode = "U+1F9C4";
-    static color = "#26d0faff";
-    constructor(){
-        super(Garlic.name, Garlic.description, Garlic.unicode, Garlic.color, 1, 2, 'piece')
-    }
-    apply(target: Piece, itemMult: number) {
-        target.defence += (1* itemMult);
-    }
-}
+/*
 
 export class RedMeat extends Item<Piece> {
     static name = "Red Meat";
@@ -300,19 +330,7 @@ export class RedMeat extends Item<Piece> {
         target.attack += (1* itemMult);
     }
 }
-
-export class Coffee extends Item<Piece> {
-    static name = "Coffee";
-    static description = "give a program 3 extra moves once";
-    static unicode = "U+2615";
-    static color = "#e346f1ff";
-    constructor(){
-        super(Coffee.name, Coffee.description, Coffee.unicode, Coffee.color, 1, 1, 'piece')
-    }
-    apply(target: Piece, itemMult: number) {
-        target.movesRemaining += (3* itemMult);
-    }
-}
+*/
 
 
 export class Bandage extends Item<Piece> {
@@ -370,20 +388,6 @@ export class Voucher extends Item<Item> {
     }
     apply(target: Item | PieceBlueprint ) {
         target.cost = 0
-    }
-}
-
-export class Mushroom extends Item<Piece> {
-    static name = "Mushroom";
-    static description = "Replenish a programs moves and actions";
-    static unicode = "U+1F344";
-    static color = "#5c0000ff";
-    constructor(){
-        super(Mushroom.name, Mushroom.description, Mushroom.unicode, Mushroom.color, 3, 4, 'piece')
-    }
-    apply(target: Piece, _itemMult: number) {
-        target.movesRemaining = target.moves;
-        target.actions = 1;
     }
 }
 
@@ -573,6 +577,24 @@ class Hourglass extends Item<Piece[]> {//TODO test
 
 //affect all programs
 ////KEY, U+1F511 keygen item
+
+class Extinguisher extends Item<Piece[]> {
+  static name = "Extinguisher";
+  static description = "Removes burning from all your programs";
+  static unicode = "U+1F9EF";
+  static color = "#e7aa92ff";
+  constructor() {
+   super(Extinguisher.name, Extinguisher.description, Extinguisher.unicode, Extinguisher.color, 2, 2, 'gameState')
+  }
+    apply(activePieces: Piece[], _itemMult: number) {//game state from app??
+        activePieces.forEach(piece => {
+            if(piece.team === 'player'){
+                piece.statuses.burning = false;
+            }
+        });
+    }
+}
+
 class Keygen extends Item<Piece[]> {//TODO test, unfinished
   static name = "Keygen";
   static description = "Lower the defence of all enemy programs in a node (not working)";
@@ -594,7 +616,7 @@ class Keygen extends Item<Piece[]> {//TODO test, unfinished
 
 class Bugle extends Item<Piece[]> {
     static name = "Bugle";
-    static description = "all placed player programs gain +1 attack";
+    static description = "All placed player programs gain +1 attack";
     static unicode = "U+1F4EF";
     static color = "#ff450dff";
     constructor(){
@@ -612,7 +634,7 @@ class Bugle extends Item<Piece[]> {
 
 class Megaphone extends Item<Piece[]> {
     static name = "Pep Talk";
-    static description = "all placed player programs gain +1 moves";
+    static description = "All placed player programs gain +1 moves";
     static unicode = "U+1F4E3";
     static color = "#0d86ffff";
     constructor(){
@@ -630,7 +652,7 @@ class Megaphone extends Item<Piece[]> {
 
 class Battery extends Item<Piece[]> {
     static name = "Fresh Batteries";
-    static description = "all placed player programs replenish their moves remaining";
+    static description = "All placed player programs replenish their moves remaining";
     static unicode = " U+1F50B";
     static color = "#0dff35ff";
     constructor(){
@@ -723,14 +745,15 @@ export class Update3 extends Item {
 
 //PIG, U+1F416 random money?
 //update x3, hotline buoy bugle batteries pig 9
-export const allItems = [Whetstone, Training, Iron, Reinforcement, Blueberry, Pie, Carrot, Glasses, Teapot, Lightning, Blessing, Supplement, Juice, Roids, Formula, Garlic, RedMeat, Coffee, Bandage, Soap, Voucher, Mushroom, Rations, Beans, Pandora, Box, Genie, Gift, Pinata, Wand, Hourglass, Spanner, Makeover, ShootingStar, Keygen, Bugle, Megaphone, Battery, Floppy, Update2, Update3]
-export const upgradeItems = [Whetstone, Training, Iron, Reinforcement, Blueberry, Pie, Carrot, Glasses, Teapot, Lightning, Blessing]
-export const activeItems = [Juice, Roids, Formula, Garlic, RedMeat, Coffee,  Mushroom, Rations, Beans]
+export const allItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Supplement, Juice, Roids, Formula, Garlic, Coffee, Bandage, Soap, Voucher, Mushroom, Rations, Beans, Pandora, Box, Genie, Gift, Pinata, Extinguisher, Wand, Hourglass, Spanner, Makeover, ShootingStar, Keygen, Bugle, Megaphone, Battery, Floppy, Update2, Update3]
+export const upgradeItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Roids, Formula]
+//export const activeItems = [Rations, Beans]
 
 export type ItemConstructor = new (...args: any[]) => Item<any>;
 
 console.log('all items: ', allItems.length);
 
+//RING BUOY, U+1F6DF revive a dead program
 // /SCROLL, U+1F4DC
 
 //PAGE WITH CURL, U+1F4C3

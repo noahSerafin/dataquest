@@ -322,7 +322,7 @@ class Relay extends Admin {
 class Parachute extends Admin {
   static name = "Parachute";
   static description = "Saves a program from destruction once, then is deleted";
-  static unicode = "U+1FA82";
+  static unicode = "U+1FA82";//RING BUOY, U+1F6DF
   static color = "#55ffe8ff";
   static rarity = 1;
   constructor() {
@@ -1599,7 +1599,7 @@ class Harvest extends Admin {
   static color = "#ff5555";
   static rarity = 1;
   constructor() {
-    super(Harvest.name, Harvest.description, Harvest.unicode, Harvest.color, 5, Harvest.rarity, 'gameState', 'onTurnEnd')
+    super(Harvest.name, Harvest.description, Harvest.unicode, Harvest.color, 3, Harvest.rarity, 'gameState', 'onTurnEnd')//playerandgame, we can +1 blueprints as well
   }
   private count = 0;
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
@@ -1620,7 +1620,7 @@ class Bipolar extends Admin {
   static description = "Gain $1 on destroying an enemy, lose $5 on destruction of your own programs";
   static unicode = "U+1F3AD";
   static color = "rgb(196, 167, 87)";
-  static rarity = 2;
+  static rarity = 4;
   constructor() {
     super(Bipolar.name, Bipolar.description, Bipolar.unicode, Bipolar.color, 5, Bipolar.rarity, 'playerAndGame', 'onPieceDestruction')
   }
@@ -2100,10 +2100,10 @@ class Appraisal extends Admin {
 
 class Camp extends Admin {//TENT, U+26FA //Camp redo nodes once?
   static name = "Camper";
-  static description = "Your non-hidden Programs that don't move gain +1 to all stats on the end of your turn";
+  static description = "Your non-hidden Programs that don't move gain +1 range every turn";// to all stats on the end of your turn";
   static unicode = "U+26FA";
   static color = "rgb(26, 2, 65)";
-  static rarity = 3;
+  static rarity = 3;//5 for all stats
   constructor() {
     super(Camp.name, Camp.description,Camp.unicode, Camp.color, 2, Camp.rarity, 'gameState', 'onTurnEnd')
     //private count for shop reference?
@@ -2111,11 +2111,11 @@ class Camp extends Admin {//TENT, U+26FA //Camp redo nodes once?
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     activePieces.forEach(piece => {
       if(piece.team === 'player' && !piece.statuses.hidden && piece.movesRemaining === piece.getStat('moves')){
-        piece.maxSize += 1;
-        piece.moves += 1;
-        piece.attack += 1;
+        //piece.maxSize += 1;
+        //piece.moves += 1;
+        //piece.attack += 1;
         piece.range += 1;
-        piece.defence += 1;
+        //piece.defence += 1;
       }
     });
   }
@@ -2183,7 +2183,7 @@ class Stiletto extends Admin {
 
 class Disco extends Admin {
   static name = "Disco Ball";
-  static description = "Damage received from enemies also applies to programs adjacent to the attacker's head";
+  static description = "Damage received from enemies also applies to enemies adjacent to the attacker's head";
   static unicode = "U+1FAA9";
   static color = "rgb(255, 36, 182)";
   static rarity = 6;
@@ -2202,7 +2202,7 @@ class Disco extends Admin {
       {x: targetTile.x, y: targetTile.y-1 }
     ];
     activePieces.forEach((piece) => {
-      if(piece.id === id) return;//skip the piece being destroyed, continue?
+      if(piece.id === id || piece.team === 'player') return;//skip the attacker?, and only reflect damage to enemies
       const isAdjacent = piece.tiles.some(t =>
         adjacent.some(c => c.x === t.x && c.y === t.y)
       );
@@ -2216,7 +2216,7 @@ class Disco extends Admin {
 class Nest extends Admin {
   static name = "Nest Egg";
   static description = "Gains $3 sell value each round";
-  static unicode = "U+1F3A1"
+  static unicode = "U+1FABA"
   static color = "rgb(20, 212, 255)";
   static rarity = 1;
   constructor() {
@@ -2260,7 +2260,7 @@ class Crash extends Admin {//test
   static color = "rgb(0, 13, 255)";
   static rarity = 4;
   constructor() {
-    super(Crash.name, Crash.description, Crash.unicode, Crash.color, 7, Crash.rarity, 'playerAndGame', 'onPlacement')
+    super(Crash.name, Crash.description, Crash.unicode, Crash.color, 7, Crash.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     activePieces.forEach(piece => {
@@ -2279,7 +2279,7 @@ export class Skyscraper extends Admin {//test not working
   static color = "rgb(215, 44, 25)";
   static rarity = 5;
   constructor() {
-    super(Skyscraper.name, Skyscraper.description, Skyscraper.unicode, Skyscraper.color, 2, Skyscraper.rarity, 'gameState', 'onTurnEnd')
+    super(Skyscraper.name, Skyscraper.description, Skyscraper.unicode, Skyscraper.color, 7, Skyscraper.rarity, 'gameState', 'onTurnEnd')
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     //const idx = activePieces.findIndex(p => p.id === id);
@@ -2299,7 +2299,7 @@ class School extends Admin {//test
   static color = "rgb(193, 193, 193)";
   static rarity = 6;
   constructor() {
-    super(School.name, School.description, School.unicode, School.color, 2, School.rarity, 'player', 'onRoundEnd')
+    super(School.name, School.description, School.unicode, School.color, 12, School.rarity, 'player', 'onRoundEnd')
   }
   private count = 0;
   async apply({ player }: { player: Player }) {
@@ -2364,6 +2364,38 @@ class Smoker extends Admin {
   }
 }
 
+class Medic extends Admin {
+  static name = "Field Medic";//GOGGLES, U+1F97D
+  static description = "+1 max size, +1 defence";
+  static unicode = "U+1FA7A";// medic, + max Size/defence?
+  static color = "rgb(255, 255, 255)";
+  static rarity = 2;
+  constructor() {
+    super(Medic.name, Medic.description, Medic.unicode, Medic.color, 5, Medic.rarity, 'gameState', 'onPlacement')
+  }
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    activePieces[idx].addModifier({maxSize: +1});
+    activePieces[idx].addModifier({defence: +1});
+  }
+}
+
+/*class Pie extends Admin {
+    static name = "Pie";
+    static description = "+2 max size, -1 moves";
+    static unicode = "U+1F967";
+    static color = "#1c33ffff";
+    constructor(){
+        super(Pie.name, Pie.description, Pie.unicode, Pie.color, 5, 3, 'blueprint')      
+    }
+    //Increases a program's maxSize by 1
+    apply(target: PieceBlueprint, itemMult: number) {
+        console.log('target: ', target)
+        target.maxSize += (2* itemMult);
+    }
+}*/
+
+//to be finished:
 export class Ferris extends Admin {
   static name = "Ferris Wheel";
   static description = "Reroll node layouts once each for $5";//will need a hasBeenRerolled flag in each WorldNode
@@ -2381,23 +2413,102 @@ export class Ferris extends Admin {
 //SPLATTER, U+1FADF
 //SPLASHING SWEAT SYMBOL, U+1F4A6
 export class Splash extends Admin {
-  static name = "Splash";
-  static description = "Damage dealt applies to tiles adjacent to the target";
+  static name = "Splash Damage";
+  static description = "Damage dealt by your programs also applies to tiles adjacent to the target's head";//change to coord adjacency, need coord instead of id
   static unicode = "U+1FADF";
   static color = "rgb(31, 5, 125)";
-  static rarity = 5;
+  static rarity = 4;
   constructor() {
     super(Splash.name, Splash.description, Splash.unicode, Splash.color, 10, Splash.rarity, 'gameState', 'onDealDamage')
   }
   //to handle here, onDealDamage would need coord of target
-  /*async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({attack: 1})
-    activePieces[idx].addModifier({moves: -1})
-    //activePieces[idx].movesRemaining -= 1;
-  }*/
+    //activePieces[idx].takeDamage(activePieces[idx].getStat('attack'));
+    const targetTile = activePieces[idx].headPosition
+    const adjacent : Coordinate[] = [
+      {x: targetTile.x+1, y: targetTile.y },
+      {x: targetTile.x-1, y: targetTile.y },
+      {x: targetTile.x, y: targetTile.y+1 },
+      {x: targetTile.x, y: targetTile.y-1 }
+    ];
+    activePieces.forEach((piece) => {
+      //if(piece.id === id || piece.team === 'player') return;//skip the receiver?
+      const isAdjacent = piece.tiles.some(t =>
+        adjacent.some(c => c.x === t.x && c.y === t.y)
+      );
+      if (isAdjacent) {
+        piece.takeDamage(activePieces[idx].getStat('attack'));
+      }
+    });
+  }
 }
-//baseball also needs id of receiver, could use target to determine if tiles were spliced or not
+
+// BASEBALL, U+26BE Strike out, Enemies that fail to damage a program 3 times are removed - onreceivedamage would need a second id to check
+//baseball also needs id of receiver, only onReceiveDamage only gets dealer atm, could use target to determine if tiles were spliced or not
+/*
+class Baseball extends Admin {
+  static name = "Strike Out";
+  static description = "Enemies that fail to damage your programs 3 times are removed";
+  static unicode = "U+26BE";
+  static color = "rgb(36, 255, 138)";
+  static rarity = 4;
+  constructor() {
+    super(Baseball.name, Baseball.description, Baseball.unicode, Baseball.color, 7, Baseball.rarity, 'gameState', 'onReceiveDamage')//pieces?
+  }
+  //on receive damage
+  private candidates: object[{id: string, strikes: number}] = [];
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idxa = activePieces.findIndex(p => p.id === id);//index of attacker
+    //activePieces[idx].takeDamage(activePieces[idx].getStat('attack'));
+    //using id of defender
+    const idxd = activePieces.findIndex(p => p.idR === idR);//index of receiver
+    if(activePieces[idxd].defence > 0){
+      if(this.candidates.includes(id)){
+        //for this id, strikes ++
+        //if strikes >= 3, activePieces.splice(idxa)
+      } else {
+        this.candidates.push({id: id, })
+      }
+    }
+  }
+  onRoundEnd() {
+    this.candidates = [];
+  }
+}
+  */
+
+//admin to add held item variants to all pieces
+//face down card, close to chest etc.
+class Cards extends Admin {//test
+  static name = "Hidden Hand";
+  static description = "Held upgrade item's effects apply to all placed programs";
+  static unicode = "U+1FAAD"; //FOLDING HAND FAN, 
+  static color = "rgb(0, 13, 255)";
+  static rarity = 6;
+  constructor() {
+    super(Cards.name, Cards.description, Cards.unicode, Cards.color, 7, Cards.rarity, 'playerAndGame', 'onPlacement')
+  }
+  async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    const maxSizeMod = player.items.filter(i => i.name === 'Formula').length + player.items.filter(i => i.name === 'Blueberry').length + (2*player.items.filter(i => i.name === 'Melon').length) + (3*player.items.filter(i => i.name === 'Pie').length);
+    const movesMod = player.items.filter(i => i.name === 'Roids').length + player.items.filter(i => i.name === 'Juice').length + (2*player.items.filter(i => i.name === 'Teapot').length) + (2*player.items.filter(i => i.name === 'Coffee').length);
+    const rangeMod = player.items.filter(i => i.name === 'Glasses').length + (2*player.items.filter(i => i.name === 'Carrot').length);
+    const attackMod = player.items.filter(i => i.name === 'Roids').length + player.items.filter(i => i.name === 'Mushroom').length + (2*player.items.filter(i => i.name === 'Meat').length);
+    const defenceMod = player.items.filter(i => i.name === 'Formula').length + player.items.filter(i => i.name === 'Iron').length + (2*player.items.filter(i => i.name === 'Garlic').length) + (3*player.items.filter(i => i.name === 'Ginger').length);
+    const blessingBonus = player.items.filter(i => i.name === 'Blessing').length;
+
+    //[Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Roids, Formula]
+    activePieces[idx].addModifier({
+      maxSize: maxSizeMod + blessingBonus,
+      moves: movesMod + blessingBonus,
+      range: rangeMod + blessingBonus,
+      attack: attackMod + blessingBonus,
+      defence: defenceMod + blessingBonus
+    })
+  }
+}
+
 
 export class Clippy extends Admin {
   static name = "Clippy";
@@ -2412,7 +2523,7 @@ export class Clippy extends Admin {
 }
 
 
-export const allAdmins = [Brain, Meteor, Miner, Bubble, Clover, Onion, Blood, Razor, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Parachute, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Bone, RollerBlades, Lungs, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, OffRoader, Seed, Puzzle, Chivalry, Roger, Bucket, Diamond, Sneakers, Candle, Lightbulb, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, Sprinkler, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FakeID, Shades, Barber, Umbrella, Bank, Ballet, Pants, Ace, Pi, Pazzaz, Toilet, Harvest, Bipolar, Taoism, Loot, HedgeFund, PeaPod, Liberty, Punching, Teddy, Abacus, Cheese, AirSupport, DartBoard, Dice, Ladder, Ring, Minerva, Hermit, Tracker, Pong, Knot, Rainbow, Jammer, Balloon, Wheel, Bath, Purse, Discount, Variety, Appraisal, Camp, Piggy, Bowling, Stiletto, Disco, Nest, Sled, Crash, Skyscraper, School, Dharma, Putter, Smoker];
+export const allAdmins = [Brain, Meteor, Miner, Bubble, Clover, Onion, Blood, Razor, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Parachute, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Bone, RollerBlades, Lungs, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, OffRoader, Seed, Puzzle, Chivalry, Roger, Bucket, Diamond, Sneakers, Candle, Lightbulb, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, Sprinkler, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FakeID, Shades, Barber, Umbrella, Bank, Ballet, Pants, Ace, Pi, Pazzaz, Toilet, Harvest, Bipolar, Taoism, Loot, HedgeFund, PeaPod, Liberty, Punching, Teddy, Abacus, Cheese, AirSupport, DartBoard, Dice, Ladder, Ring, Minerva, Hermit, Tracker, Pong, Knot, Rainbow, Jammer, Balloon, Wheel, Bath, Purse, Discount, Variety, Appraisal, Camp, Piggy, Bowling, Stiletto, Disco, Nest, Sled, Crash, Skyscraper, School, Dharma, Putter, Smoker, Medic, Cards];
 console.log('admins length: ', allAdmins.length)
 let adminLogs = {
   rarity1: 0,
@@ -2427,8 +2538,8 @@ let adminLogs = {
   | 'onTurnEnd'
   | 'onRoundStart'
   | 'onRoundEnd'
-  | 'onDealDamage' //piece id of receiver?
-  | 'onReceiveDamage'
+  | 'onDealDamage' we get dealer, add piece id of receiver?
+  | 'onReceiveDamage' we get dealer, add piece id of receiver?
   | 'onPieceDestruction'
   | 'other';
 */
@@ -2448,16 +2559,16 @@ console.log("Admins of rarity 5: ", adminLogs.rarity5)
 console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //make all immunity admins <= uncommon?
 
-//doctor STETHOSCOPE, U+1FA7A medic, + max Size?
 //splash damage- mult to group targets??
 //bomb bonuses -
 //gene hybrids appear in shop
-//admin to add held item variants to all pieces
 //CHERRIES, U+1F352 free rerolls?
-// CRICKET BAT AND BALL, U+1F3CF, Howzat! take a piece off with 1 tile left?
-
+// CRICKET BAT AND BALL, U+1F3CF, Howzat! take a piece off with 1 tile left? broom does this already
 //TULIP, U+1F337 pair with bubble, some kind of effect based off money???
+//FRIED SHRIMP, U+1F364 Tempura
 
+// TOOTHBRUSH, U+1FAA5
+//CLAPPER BOARD, U+1F3AC
 //Arevakhach LEFT-FACING ARMENIAN ETERNITY SIGN, U+58E
 //RIGHT-FACING ARMENIAN ETERNITY SIGN, U+58D
 //GAMER  VIDEO GAME, U+1F3AE
@@ -2471,14 +2582,12 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //WIND CHIME, U+1F390
 //CHAIR, U+1FA91
 //HAIR PICK, U+1FAAE
-//FOLDING HAND FAN, U+1FAAD
 //SPOOL OF THREAD, U+1F9F5
 //KITE, U+1FA81
 //YO-YO, U+1FA80
 //JUGGLING, U+1F939 - use a different program each round for bonus
 
 //complicated edits...
-// BASEBALL, U+26BE Strike out, Enemies that fail to damage a program 3 times are removed - onreceivedamage would need a second id to check
 //ROUND PUSHPIN, U+1F4CD trap's heads are marked with pin, doesn't reveal them though
 //NEST WITH EGGS, U+1FABA after placing last program, buff all pieces but make their deaths permanent?
 //NEST WITH EGGS, U+1FABA Nest Egg gains $3 sell value every round

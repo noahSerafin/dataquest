@@ -429,6 +429,7 @@ const highlightSpecials = (piece: InstanceType<typeof Piece>) => {
 defineExpose({
   highlightMoves,
   highlightTargets,
+  highlightSpecials,
   clearHighlights
 });
 

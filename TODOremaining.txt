@@ -1,10 +1,16 @@
 HOTKEYS
 GAME / BUGS
+hotkeys enabled whilst map is open(board needs to be open, and needs to be players turn)
+Amins appearing as items in shop (department store only???) and hasspace function not working
+frozen players can still move?
+pieces canbuy is true even when player does not have enough money?
+visualise, retaliation, dmg + dmg mult, admin actions and counts, enemy movement distance (hide move buttons)
 variant should overide base piece color, (and tile colour???)
-eagle retaliated?, axe after using bee retaliated on? - was strike, visualise admin functions!!!!
 pandora not giving 1 at full inventory
 checkforroundend after takedamage
-visualise retaliation, defence, dmg mult, admin counts, enemy movement distance (hide move buttons)
+//move itemmult to player?
+//sort out trolley/toolbox
+Nerf Pandora by using allitems???
 self specials easy to accidentally auto click
 variant tooltips
 fix ufo - make it a two click special???
@@ -13,7 +19,7 @@ make charmedpieces not moveable-
 store ids/check statuses in special move pieces to prevent enemies using special mutliple times on the same player program
 enemies not walking over traps/enemy traps not walking over players
 reveal hidden enemies before damage
-make a visual distinction between bp items and placed program items/food? shape of item?
+-level edits-
 level 3 siege change head of wall
 level4 lock, fort? - change
 'lockup' change
@@ -35,8 +41,7 @@ enemies killed by admins still take moves despite not existing in activepieces, 
 prioritise killable pieces
 
 VISUAL: 5
-show defence in lower left on pieces, attack when selected?
-show variant mark in top left of pieces?
+show defence in lower left on pieces, - attack when selected?
 variant tooltip to show stat mods, use colored text
 add class to acting admins
 -visualise traps - have credit pickups? disguise the cheese trap as one

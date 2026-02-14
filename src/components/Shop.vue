@@ -46,31 +46,27 @@ function handleBuyItem(item: Item) {
 }
 //        @select="openItemController"
 
-//canAfford???
-const effectiveMoney = computed(() => (//move to player
-  props.player.hasAdmin('Credit Card')? props.player.money + 20 : props.player.money
-));
-
-const canReroll = computed(() => effectiveMoney.value >= props.rerollCost);
+const canReroll = computed(() => props.player.effectiveMoney() >= props.rerollCost);
 const canSteal = computed(() => props.player.hasAdmin('Five Finger Discount') && !props.hasStolen);
 
 const canBuyItem = ((item: Item) => {
   if(props.shopDisabled) return false;
   if (item instanceof Admin) {
-    return effectiveMoney.value >= item.cost && props.player.admins.length < props.player.adminSlots;
+    return props.player.effectiveMoney() >= item.cost && props.player.admins.length < props.player.adminSlots;
   }
   const hasTrolley = props.player.hasTrolley;
   //const hasToolbox = props.player.hasAdmin('Schoolbag');
   const hasSpace = hasTrolley ? props.player.usedMemory <= props.player.memory-0.5 : props.player.usedMemory <= props.player.memory-1;
   
-  return (effectiveMoney.value >= item.cost || canSteal ) && hasSpace;
+  return (props.player.effectiveMoney() >= item.cost || canSteal ) && hasSpace;
 });
 
 const canBuyPiece = ((piece: PieceBlueprint) => {//wrong??? not being recalculated after purchase
-  const hasToolbox = props.player.hasToolbox;//hasAdmin('Toolbox');
+  if(props.shopDisabled) return false;
+  const hasToolbox = props.player.hasAdmin('Toolbox');
   const hasSpace = hasToolbox ? props.player.usedMemory <= props.player.memory-0.5 : props.player.usedMemory <= props.player.memory-1;
 
-  return (effectiveMoney.value >= piece.cost || canSteal ) && hasSpace;
+  return (props.player.effectiveMoney() >= piece.cost || canSteal ) && hasSpace;
 });
 
 const type = ((item: Item) => {

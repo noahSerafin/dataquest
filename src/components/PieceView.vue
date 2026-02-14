@@ -132,6 +132,9 @@ const activeStatuses = computed((): [string, boolean][] => {
     .filter(([, active]) => active);
 });
 
+const shieldIcon = String.fromCodePoint(
+  parseInt("U+1F6E1".replace("U+", ""), 16)
+);
 </script>
 
 <template>
@@ -142,7 +145,7 @@ const activeStatuses = computed((): [string, boolean][] => {
     :style="pieceStyle"
     @click="handleSelect"
   >
-      <span v-if="piece.extraUnicode" class="extra-unicode">{{ ExtraUnicodeSymbol }}</span><span class="primary-unicode">{{ unicodeSymbol }}</span>
+    <span v-if="piece.extraUnicode" class="extra-unicode">{{ ExtraUnicodeSymbol }}</span><span class="primary-unicode">{{ unicodeSymbol }}</span>
     <button v-if="showFastControls && selectedPiece === piece" class="deselect-btn"
     @click.stop = "$emit('deselect')"
     >x
@@ -161,11 +164,20 @@ const activeStatuses = computed((): [string, boolean][] => {
         {{ STATUS_ICONS[key] ?? '?' }}
       </span>
     </div>
+    <div class="piece-defence">
+      <span class="piece-defence-shield"
+        v-for="n in Math.min(piece.defenceRemaining, 2)"
+        :key="n"
+      >
+        {{ shieldIcon }}
+      </span>
+      <span class="piece-defence-shield" v-if="piece.defenceRemaining > 2">+</span>
+    </div>
   </div>
   <div
     v-for="(tile, index) in bodyTiles"
     :key="index"
-    :class="`piece-tile ${tile.x}-${tile.y} ${getDirectionClass(tile, index+1)} team-${props.piece.team} hidden-${piece.statuses.hidden}`"
+    :class="`piece-tile ${tile.x}-${tile.y} ${getDirectionClass(tile, index+1)} team-${piece.team} hidden-${piece.statuses.hidden}`"
     :style="{
       ...pieceStyle,
       ...getTileStyle(tile),
@@ -287,6 +299,18 @@ const activeStatuses = computed((): [string, boolean][] => {
   .team-enemy.hidden-true{
      opacity: 1;
   }
+}
+.piece-defence{
+  position: absolute;
+  bottom: -40px;
+  left: 0;
+  bottom: -24px;
+}
+.piece-defence-shield{
+  background-color: rgb(130, 226, 226);
+  color: black;
+  border: 1px solid white;
+  font-size: 12px;
 }
 .hybrid .primary-unicode{
   position: absolute;

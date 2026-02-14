@@ -124,12 +124,8 @@ export class Player {
     this.items = this.items.filter(i => i !== item);
   }
 
-  applyConsumableToBlueprint(){
-    
-  }
-  
-  applyConsumableToPiece(){
-  
+  effectiveMoney(): number {
+    return this.hasAdmin('Credit Card')? this.money + 20 : this.money;
   }
 
   applyItemToPieceBlueprint(payload : {item: Item, id: string}, itemMult: number) {

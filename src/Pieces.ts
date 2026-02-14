@@ -152,7 +152,9 @@ export abstract class Piece {
   }
 
   resetMoves() {
-    this.movesRemaining = this.getStat('moves');
+    if(!this.statuses.frozen){
+      this.movesRemaining = this.getStat('moves');
+    }
   }
   resetDefence() {
     this.defenceRemaining = this.getStat('defence');
@@ -178,7 +180,7 @@ export abstract class Piece {
     
     this.tiles.unshift(newPosition)//move below the pop for disease to shrink on move?
     // If exceeding maxSize, remove the oldest tile
-    if (this.tiles.length > this.getStat('maxSize')) {
+    if (this.tiles.length > this.getStat('maxSize')) {//>= ???
       this.tiles.pop() // removes last element
     }
   }
@@ -249,6 +251,7 @@ export abstract class Piece {
       this.defence = Math.max(0, this.getStat('defence') - (1 * mult));
     }
     if (this.statuses.frozen) {
+      //this.moves = 0;
       this.movesRemaining = 0;
     }
   }
@@ -330,7 +333,7 @@ class Arms extends Piece {
   static description = "A stronger attacking piece that can attack all enemies in range";
   static unicode = "U+2694";
   static color = "#1b84caff";
-  static rarity = 3;
+  static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
   super(Arms.name, Arms.description, Arms.unicode, 3, 2, 1, 4, 0, Arms.color, headPosition, [headPosition], team, Arms.rarity, removeCallback, id)
     this.specialName = 'Assault';
@@ -401,7 +404,7 @@ class SAM extends Piece {
   static description = "A slow moving but long ranged program with high damage";
   static unicode = "U+1F680";//"U+1F94D";
   static color = "#970000ff";
-  static rarity = 3;
+  static rarity = 3;//4?
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(SAM.name, SAM.description, SAM.unicode, 3, 1, 4, 3, 1, SAM.color, headPosition, [headPosition], team, SAM.rarity, removeCallback, id) //lacrosse
   }
@@ -916,6 +919,33 @@ class Mine extends Piece {
   //check for programs on top, damage them
 }
 
+class Oil extends Piece {
+  static name = "Oil";
+  static description = "A program invisble to the enemy that confuses programs moving over it, removing itself";
+  static unicode = "U+1F6E2";
+  static color = "#3a3a3a";
+  static rarity = 4;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+    super(Oil.name, Oil.description, Oil.unicode, 3, 2, 0, 0, 0, Oil.color, headPosition, [headPosition], team, Oil.rarity, removeCallback, id)
+    this.targetType = 'trapPiece';
+    this.statuses.hidden = true
+    this.statuses.negative = true;
+  }
+  //no active special, but a walkOver function we need to setup await handler in App.vue inside movePiece or even Piece moveTo
+  async special(target: Piece): Promise<void> {
+    if(!target.immunities.confused){
+      target.statuses.confused = true;
+      //damage as well?
+    }
+    this.actions--
+    this.statuses.hidden = false;
+    this.removeCallback?.(this);
+    //remove self?
+  }
+
+  //check for programs on top, damage them
+}
+
 class Web extends Piece {
   static name = "Web";
   static description = "A program that freezes enemies moving over it, removing itself";//immobilises
@@ -1052,7 +1082,7 @@ class Magnet extends Piece {
   static color = "#6fa9ffff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Magnet.name, Magnet.description, Magnet.unicode, 2, 2, 3, 1, 1, Magnet.color, headPosition, [headPosition], team, Magnet.rarity, removeCallback, id)
+   super(Magnet.name, Magnet.description, Magnet.unicode, 2, 2, 3, 2, 1, Magnet.color, headPosition, [headPosition], team, Magnet.rarity, removeCallback, id)
    this.targetType = 'line'
    this.specialName = 'Pull'
   }
@@ -1188,9 +1218,9 @@ class Puffer extends Piece {
   static description = "A program that damages programs that attack it, poisoning them";
   static unicode = "U+1F421";
   static color = "#0d8affff";
-  static rarity = 3;
+  static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Puffer.name, Puffer.description, Puffer.unicode, 4, 2, 1, 2, 1, Puffer.color, headPosition, [headPosition], team, Puffer.rarity, removeCallback, id)
+   super(Puffer.name, Puffer.description, Puffer.unicode, 4, 2, 1, 2, 2, Puffer.color, headPosition, [headPosition], team, Puffer.rarity, removeCallback, id)
    this.specialName = 'Puffup';
    this.targetType = 'self'
    this.immunities.poisoned = true;
@@ -1283,7 +1313,7 @@ class Snowman extends Piece {
   static color = "#4e4e4eff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Snowman.name, Snowman.description, Snowman.unicode, 1, 1, 1, 3, 0, Snowman.color, headPosition, [headPosition], team, Snowman.rarity, removeCallback, id)
+   super(Snowman.name, Snowman.description, Snowman.unicode, 2, 1, 1, 3, 0, Snowman.color, headPosition, [headPosition], team, Snowman.rarity, removeCallback, id)
     this.specialName = 'Snowball';
     this.targetType = 'space'
     //this.canMove = false;
@@ -1302,9 +1332,9 @@ class Soldier extends Piece {
   static description = "An all rounder program";
   static unicode = "U+1FA96";
   static color = "#1a5200ff";
-  static rarity = 3;
+  static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Soldier.name, Soldier.description, Soldier.unicode, 3, 2, 2, 2, 3, Soldier.color, headPosition, [headPosition], team, Soldier.rarity, removeCallback, id)
+   super(Soldier.name, Soldier.description, Soldier.unicode, 3, 2, 3, 3, 3, Soldier.color, headPosition, [headPosition], team, Soldier.rarity, removeCallback, id)
   }
 }
 
@@ -1332,7 +1362,7 @@ class Pawn extends Piece {
   static description = "A slow program that can be promoted into another piece in range";
   static unicode = "U+265F";
   static color = "#131313ff";
-  static rarity = 3;
+  static rarity = 3;//4?
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Pawn.name, Pawn.description, Pawn.unicode, 1, 1, 1, 1, 0, Pawn.color, headPosition, [headPosition], team, Pawn.rarity, removeCallback, id)
    this.specialName = 'Promote';
@@ -1471,7 +1501,7 @@ class Flute extends Piece {//not working
   static color = "#6ea1caff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Flute.name, Flute.description, Flute.unicode, 1, 0, 1, 0, 0, Flute.color, headPosition, [headPosition], team, Flute.rarity, removeCallback, id)
+   super(Flute.name, Flute.description, Flute.unicode, 1, 1, 1, 0, 0, Flute.color, headPosition, [headPosition], team, Flute.rarity, removeCallback, id)
    this.specialName='Summon'
    this.targetType='space'
    this.canAttack=false;
@@ -1638,7 +1668,7 @@ class Snail extends Piece {
   async special(_target: Piece):Promise<void>{
     if(this.tiles.length > 1){
       this.tiles = [this.headPosition]//use array modifier
-      this.addTempModifier({defence: (this.getStat('defence')/2)});//double it's defense/ or +1?
+      this.addTempModifier({defence: this.getStat('defence')});//double it's defense/ or +1?
       this.movesRemaining = 0;
     }
     this.actions--
@@ -1780,23 +1810,54 @@ class Cupid extends Piece {
 
 class Oni extends Piece {
   static name = "Oni";
-  static description = "A strong but slow program";
+  static description = "A strong but slow program that can inflict the slow status";
   static unicode = "U+1F479";
   static color = "#9e0303ff";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Oni.name, Oni.description, Oni.unicode, 6, 1, 1, 4, 2, Oni.color, headPosition, [headPosition], team, Oni.rarity, removeCallback, id)
+    super(Oni.name, Oni.description, Oni.unicode, 6, 1, 1, 5, 3, Oni.color, headPosition, [headPosition], team, Oni.rarity, removeCallback, id)
+    this.specialName = 'Curse'
+  }
+  async special(targetPiece: Piece):Promise<void>{
+    if(!targetPiece.immunities.slowed){
+      targetPiece.statuses.slowed = true
+    } else if(targetPiece.statuses.slowed){
+      targetPiece.takeDamage(this.getStat('attack'));
+      if(targetPiece.willRetaliate) this.takeDamage(targetPiece.getStat('attack'))
+    }
+    this.actions--
   }
 }
 
-class Bug extends Piece {
-  static name = "Bug";
+class Ant extends Piece {//ant - bug can be higher and cause slow
+  static name = "Ant";
   static description = "A fast but small program";
-  static unicode = "U+1F47E";
-  static color = "#04ca0eff";
+  static unicode = "U+1F41C"; //high movement - lvl 2 bug
+  static color = "rgb(4, 156, 202)";
   static rarity = 1;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Bug.name, Bug.description, Bug.unicode, 1, 5, 1, 1, 0, Bug.color, headPosition, [headPosition], team, Bug.rarity, removeCallback, id)
+   super(Ant.name, Ant.description, Ant.unicode, 1, 5, 1, 1, 0, Ant.color, headPosition, [headPosition], team, Ant.rarity, removeCallback, id)
+  }
+}
+
+class Bug extends Piece {//ant - bug can be higher and cause slow
+  static name = "Bug";
+  static description = "A fast small program that can slow others";
+  static unicode = "U+1F47E";
+  static color = "rgb(4, 202, 129)";
+  static rarity = 3;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+    super(Bug.name, Bug.description, Bug.unicode, 1, 5, 1, 1, 1, Bug.color, headPosition, [headPosition], team, Bug.rarity, removeCallback, id)
+    this.specialName = 'Glitch'
+  }
+  async special(targetPiece: Piece):Promise<void>{
+    if(!targetPiece.immunities.slowed){
+      targetPiece.statuses.slowed = true
+    } else if(targetPiece.statuses.slowed){
+      targetPiece.takeDamage(this.getStat('attack'));
+      if(targetPiece.willRetaliate) this.takeDamage(targetPiece.getStat('attack'))
+    }
+    this.actions--
   }
 }
 
@@ -1839,12 +1900,12 @@ class Mosquito extends Piece {
 
 class Scorpion extends Piece {
   static name = "Scorpion";
-  static description = "Can sting enemies inflicting a poison that lowers their defence by 1 each turn";
+  static description = "Can sting enemies inflicting poison, lowering their defence by 1 each turn";
   static unicode = "U+1F982";
   static color = "#681f08ff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Scorpion.name, Scorpion.description, Scorpion.unicode, 2, 1, 1, 2, 1, Scorpion.color, headPosition, [headPosition], team, Scorpion.rarity, removeCallback, id)
+    super(Scorpion.name, Scorpion.description, Scorpion.unicode, 2, 2, 1, 2, 1, Scorpion.color, headPosition, [headPosition], team, Scorpion.rarity, removeCallback, id)
     this.specialName='Sting'
     this.targetType='piece'
     this.immunities.poisoned = true;
@@ -1910,7 +1971,10 @@ class Gman extends Piece {
    this.specialName = 'Stun'
   }
   async special(targetPiece: Piece):Promise<void>{
-    targetPiece.statuses.frozen = true;
+    if(!targetPiece.immunities.frozen){
+      targetPiece.statuses.frozen = true;
+      targetPiece.movesRemaining = 0;
+    }
     targetPiece.actions = 0;
     this.actions--
   }
@@ -1940,7 +2004,7 @@ class Officer extends Piece {
 
 class Troll extends Piece {
   static name = "Troll";
-  static description = "A large and strong program ";
+  static description = "A large and strong program";
   static unicode = "U+1F9CC";
   static color = "#740000ff";
   static rarity = 3;
@@ -2085,8 +2149,8 @@ class Decoy extends Piece {
   }
   
 }
-
-class Extinguisher extends Piece {//item?
+/*
+class Extinguisher extends Piece {//item for all activeitems? admin instead of fire truck?
   static name = "Extinguisher";
   static description = "A short ranged program that can remove burning";
   static unicode = "U+1F9EF";
@@ -2106,7 +2170,7 @@ class Extinguisher extends Piece {//item?
 
   //remove burning
 }
-
+*/
 class Donkey extends Piece {
   static name = "Donkey";
   static description = "A slow program with a powerful kick";
@@ -2451,9 +2515,9 @@ class Croc extends Piece {
   static description = "A slow program with high attack that starts hidden from enemies";
   static unicode = "U+1F40A";
   static color = "#022f0eff";
-  static rarity = 3;
+  static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Croc.name, Croc.description, Croc.unicode, 2, 1, 1, 3, 1, Croc.color, headPosition, [headPosition], team, Croc.rarity, removeCallback, id)
+    super(Croc.name, Croc.description, Croc.unicode, 2, 1, 1, 4, 1, Croc.color, headPosition, [headPosition], team, Croc.rarity, removeCallback, id)
     //this.specialName='Submerge'
     //this.targetType='piece'
     this.statuses.hidden = true;
@@ -2624,9 +2688,9 @@ class Daemon extends Piece {
   static description = "A program that can apply slow to other programs";
   static unicode = "U+1F47F";//smiling: U+1F608
   static color = "#4e105eff";
-  static rarity = 3;
+  static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Daemon.name, Daemon.description, Daemon.unicode, 4, 3, 2, 3, 1, Daemon.color, headPosition, [headPosition], team, Daemon.rarity, removeCallback, id)
+   super(Daemon.name, Daemon.description, Daemon.unicode, 4, 3, 2, 3, 2, Daemon.color, headPosition, [headPosition], team, Daemon.rarity, removeCallback, id)
    this.specialName = 'Chug'
   }
   async special(targetPiece: Piece):Promise<void>{
@@ -2817,7 +2881,7 @@ class Rhino extends Piece {
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
       );
       if (!stillOccupied) {
-        // The enemy died → Lance can move into the tile
+        // The enemy died → can move into the tile
         this.move(tile);
         continue;
       }
@@ -2858,9 +2922,304 @@ class Gecko extends Piece {
     this.actions--
   }
 }
+class Yoyo extends Piece {
+  static name = "Yo-yo";
+  static description = "A mobile program that charges instead of attacking, and retracts into it's own tail position after a succesful hit";
+  static unicode = "U+1FA80";
+  static color = "rgb(247, 232, 68)";
+  static rarity = 2;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+  super(Yoyo.name, Yoyo.description, Yoyo.unicode, 5, 3, 3, 2, 0, Yoyo.color, headPosition, [headPosition], team, Yoyo.rarity, removeCallback, id)//horse carousel atm //cane: "U+1F9AF"
+    this.specialName = 'Yo';
+    this.targetType = 'line';
+    this.canAttack = false;
+  }
+
+  async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
+    for (const tile of line) {
+      const occupier = activePieces.find(p =>
+        p.tiles.some(t => t.x === tile.x && t.y === tile.y)
+      );
+      if(!occupier) {
+        this.move(tile);
+        continue;
+      }
+      await occupier.takeDamage(this.getStat('attack'));
+      const stillOccupied = activePieces.find(p =>
+        p.tiles.some(t => t.x === tile.x && t.y === tile.y)
+      );
+      if (!stillOccupied) {
+        // The enemy died → can move into the tile
+        this.move(tile);
+        continue;
+      } else{//space is still occupied, retract
+        const tail = this.tiles[this.tiles.length-1];
+        this.headPosition = tail;
+        this.tiles = [tail];
+      }
+      break;
+    }
+    this.actions--
+  }
+}
+
+//EXTRATERRESTRIAL ALIEN, U+1F47D confuse
+class Alien extends Piece {
+  static name = "Alien";
+  static description = "A program that can confuse all enemies in range";
+  static unicode = "U+1F47D";
+  static color = "rgb(130, 46, 131)";
+  static rarity = 4;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+  super(Alien.name, Alien.description, Alien.unicode, 2, 2, 3, 4, 2, Alien.color, headPosition, [headPosition], team, Alien.rarity, removeCallback, id)
+    this.specialName = 'Bluebeam';
+    this.targetType = 'group'
+  }
+  async special(targets: Piece[]):Promise<void>{
+    for (const t of targets) {
+      if(t.team != this.team){
+        if(!t.immunities.confused){
+          t.statuses.confused = true;
+        }
+      }
+    }
+    this.actions--
+  }
+}
+
+class Lightning extends Piece {
+  static name = "Juicer";
+  static description = "A program that can give an extra action to another";
+  static unicode = "U+26A1";
+  static color = "rgb(44, 125, 255)";
+  static rarity = 4;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Lightning.name, Lightning.description, Lightning.unicode, 3, 2, 2, 3, 0, Lightning.color, headPosition, [headPosition], team, Lightning.rarity, removeCallback, id)
+   this.specialName = 'Juice'
+   this.targetType = 'piece';
+   this.hasFriendlySpecial = true;
+   this.canAttack = false;
+  }
+  async special(targetPiece: Piece):Promise<void>{
+    targetPiece.actions ++
+    this.actions--
+  }
+}
+
+class Tiger extends Piece {
+  static name = "Tiger";
+  static description = "A program that can pounce to move to a target, deal damage, and reduce it's moves by 1.";
+  static unicode = "U+1F405";
+  static color = "rgb(85, 163, 11)";
+  static rarity = 4;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Tiger.name, Tiger.description, Tiger.unicode, 3, 2, 2, 4, 1, Tiger.color, headPosition, [headPosition], team, Tiger.rarity, removeCallback, id)
+   this.specialName = 'Pounce';
+   //this.targetType = 'piece';
+   this.targetType = 'line';
+  }
+  async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
+    for (const tile of line) {
+      const occupier = activePieces.find(p =>
+        p.tiles.some(t => t.x === tile.x && t.y === tile.y)
+      );
+      if(!occupier) {
+        this.move(tile);
+        continue;
+      }
+      await occupier.takeDamage(this.getStat('attack'));
+      occupier.addModifier({moves: -1})
+      const stillOccupied = activePieces.find(p =>
+        p.tiles.some(t => t.x === tile.x && t.y === tile.y)
+      );
+      if (!stillOccupied) {
+        // The enemy died → can move into the tile
+        this.move(tile);
+        continue;
+      }
+      break;
+    }
+    this.actions--
+  }
+}
+
+class Lion extends Piece {
+  static name = "Lion";
+  static description = "A powerful program that can pounce to move to a target, deal damage, and reduce it's moves by 1.";
+  static unicode = "U+1F981";
+  static color = "rgb(176, 132, 50)";
+  static rarity = 5;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Lion.name, Lion.description, Lion.unicode, 4, 2, 2, 6, 3, Lion.color, headPosition, [headPosition], team, Lion.rarity, removeCallback, id)
+   this.specialName = 'Pounce';
+   //this.targetType = 'piece';
+    this.targetType = 'line';
+  }
+  async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
+    for (const tile of line) {
+      const occupier = activePieces.find(p =>
+        p.tiles.some(t => t.x === tile.x && t.y === tile.y)
+      );
+      if(!occupier) {
+        this.move(tile);
+        continue;
+      }
+      await occupier.takeDamage(this.getStat('attack'));
+      occupier.addModifier({moves: -1})
+      const stillOccupied = activePieces.find(p =>
+        p.tiles.some(t => t.x === tile.x && t.y === tile.y)
+      );
+      if (!stillOccupied) {
+        // The enemy died → can move into the tile
+        this.move(tile);
+        continue;
+      }
+      break;
+    }
+    this.actions--
+  }
+}
+
+class Bear extends Piece {
+  static name = "Grizzly";
+  static description = "A slow, powerful program that can pounce to move to a target, deal damage, and reduce it's moves by 2.";
+  static unicode = "U+1F43B";
+  static color = "rgb(1, 101, 8)";
+  static rarity = 6;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Bear.name, Bear.description, Bear.unicode, 5, 1, 2, 8, 5, Bear.color, headPosition, [headPosition], team, Bear.rarity, removeCallback, id)
+   this.specialName = 'Pounce';
+   //this.targetType = 'piece';
+    this.targetType = 'line';
+  }
+  async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
+    for (const tile of line) {
+      const occupier = activePieces.find(p =>
+        p.tiles.some(t => t.x === tile.x && t.y === tile.y)
+      );
+      if(!occupier) {
+        this.move(tile);
+        continue;
+      }
+      await occupier.takeDamage(this.getStat('attack'));
+      occupier.addModifier({moves: -2})
+      const stillOccupied = activePieces.find(p =>
+        p.tiles.some(t => t.x === tile.x && t.y === tile.y)
+      );
+      if (!stillOccupied) {
+        // The enemy died → can move into the tile
+        this.move(tile);
+        continue;
+      }
+      break;
+    }
+    this.actions--
+  }
+}
+
+class Zebra extends Piece {
+  static name = "Zebra";
+  static description = "A fast program a powerful kick";
+  static unicode = "U+1F993";
+  static color = "rgb(212, 190, 61)";
+  static rarity = 4;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Zebra.name, Zebra.description, Zebra.unicode, 4, 4, 1, 5, 1, Zebra.color, headPosition, [headPosition], team, Zebra.rarity, removeCallback, id)
+  }
+}
+
+class Giraffe extends Piece {
+  static name = "Giraffe";
+  static description = "A large and fast program a powerful kick";
+  static unicode = "U+1F992";
+  static color = "rgb(162, 181, 20)";
+  static rarity = 5;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Giraffe.name, Giraffe.description, Giraffe.unicode, 6, 4, 2, 6, 1, Giraffe.color, headPosition, [headPosition], team, Giraffe.rarity, removeCallback, id)
+  }
+}
+
+class Kite extends Piece {
+  static name = "Kite";
+  static description = "A very fast and large program";
+  static unicode = "U+1FA81";
+  static color = "rgb(124, 233, 255)";
+  static rarity = 3;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Kite.name, Kite.description, Kite.unicode, 8, 6, 1, 2, 0, Kite.color, headPosition, [headPosition], team, Kite.rarity, removeCallback, id)
+   //this.targetType = 'self'
+   //this.specialName = 'Reel in'
+  }
+  /*async special(target: Piece):Promise<void>{
+    this.tiles = [this.headPosition]
+    this.actions--
+  }*/
+}
+
+//SCARAB EGYPTIAN HIEROGLYPH I007, U+1318F
+class Scarab extends Piece {
+  static name = "Scarab";
+  static description = "A program that can roll into empty spaces to increase it's max size.";
+  static unicode = "U+1318F";//frog heiroglyph!
+  static color = "rgb(116, 77, 33)";
+  static rarity = 4;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+    super(Scarab.name, Scarab.description, Scarab.unicode, 4, 3, 1, 3, 3, Scarab.color, headPosition, [headPosition], team, Scarab.rarity, removeCallback, id)
+    this.specialName='Roll'
+    this.targetType='space'
+  }
+
+  async special({target, activePieces: _activePieces, }: { target: Coordinate; activePieces: Piece[]; }): Promise<void> {
+    this.addModifier({maxSize: 1});
+    this.move(target);
+    this.actions --
+  }
+}
+
+class Orangutan extends Piece {
+  static name = "Orangutan";
+  static description = "Can strong program that can damage and then reduce another program's defence remaining to 0";
+  static unicode = "U+1F9A7";
+  static color = "rgb(118, 177, 0)";
+  static rarity = 5;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Orangutan.name, Orangutan.description, Orangutan.unicode, 3, 2, 1, 6, 2, Orangutan.color, headPosition, [headPosition], team, Orangutan.rarity, removeCallback, id)
+   this.specialName = 'Pummel'
+   this.targetType = 'piece';
+  }
+  async special(targetPiece: Piece):Promise<void>{
+    targetPiece.takeDamage(this.getStat('attack'));
+    targetPiece.defenceRemaining = 0;
+    this.actions--
+  }
+}
+
+class Gorilla extends Piece {
+  static name = "Kong";
+  static description = "A fiece program that can damage and then reduce another program's defence remaining to 0";
+  static unicode = "U+1F98D";
+  static color = "rgb(118, 177, 0)";
+  static rarity = 6;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Gorilla.name, Gorilla.description, Gorilla.unicode, 4, 3, 1, 8, 4, Gorilla.color, headPosition, [headPosition], team, Gorilla.rarity, removeCallback, id)
+   this.specialName = 'Pummel'
+   this.targetType = 'piece';
+  }
+  async special(targetPiece: Piece):Promise<void>{
+    targetPiece.takeDamage(this.getStat('attack'));
+    targetPiece.defenceRemaining = 0;
+    this.actions--
+  }
+}
+
+//have a piece that can move it's head elsewhere in its body?
+
+//bush/frond trappiece that hides friendlies. do not include in enemy list? Should be visible itself
+
+//building castle? creates a wall around it of 8 tiles 
 
 //99 fairy
-export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Tar, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Larva, Wasp, Rat, Flute, LabRat, Bat, Dragon, Squid, Snail, Shark, Greatshield, Wizard, Ninja, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Extinguisher, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, UFO, TP, Saw, Croc, Lighthouse, Torch, Camera, Drum, Shrike, Eagle, Recurve, Daemon, Rex, Diplodocus, Hedgehog, Sol, Stopwatch, Bull, Rhino, Peacock, Gecko, Dog, Wolf];//Dolls //100 +2 (web, ink)
+export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Tar, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Larva, Wasp, Rat, Flute, LabRat, Bat, Dragon, Squid, Snail, Shark, Greatshield, Wizard, Ninja, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, UFO, TP, Saw, Croc, Lighthouse, Torch, Camera, Drum, Shrike, Eagle, Recurve, Daemon, Rex, Diplodocus, Hedgehog, Sol, Stopwatch, Bull, Rhino, Peacock, Gecko, Dog, Wolf, Oil, Yoyo, Alien, Lightning, Tiger, Lion, Bear, Zebra, Giraffe, Kite, Scarab, Orangutan, Gorilla];//Dolls //100 +2 (web, ink)
 console.log('pieces length: ', allPieces.length)
 
 let adminLogs = {
@@ -2896,47 +3255,33 @@ console.log("Pieces of rarity 4: ", adminLogs.rarity4)
 console.log("Pieces of rarity 5: ", adminLogs.rarity5)
 console.log("Pieces of rarity 6: ", adminLogs.rarity6)
 
-//doctor STETHOSCOPE, U+1FA7A medic, + max Size to a piece
-// BANANA, U+1F34C trap piece that applies confused, moves the piece a random direction? both?
-// HIGH-HEELED SHOE, U+1F460 small and slow but high attack
-//ANT, U+1F41C //high movement
+// BANANA, U+1F34C trap piece that moves the piece a random direction? both?
 
-// PALM TREE, U+1F334 spawn coconuts
+//HIPPOPOTAMUS, U+1F99B rhino stats, charge or attack
+// PALM TREE, U+1F334 spawn coconuts at max size
 //COCONUT, U+1F965
 
-//HIPPOPOTAMUS, U+1F99B
-//YO-YO, U+1FA80
-//BEAR FACE, U+1F43B
-//TIGER, U+1F405
-//LION FACE, U+1F981
-//PLAYGROUND SLIDE, U+1F6DD like gate but with more range? line target??
-//JAPANESE GOBLIN, U+1F47A
-// KITE, U+1FA81
 //DANCER, U+1F483 //high movement no damage
-//SWAN, U+1F9A2
+
+//VULTURE EGYPTIAN HIEROGLYPH G014, U+13150 special that increases stats if it can kill, - would need change in ai
+
+//WATER BUFFALO, U+1F403
+
+//doctor STETHOSCOPE, U+1FA7A medic, + max Size to a piece
+//JAPANESE GOBLIN, U+1F47A steal from player
+//SWAN, U+1F9A2 - break a man's arm /reduce range?
 //GOAT, U+1F410 charge line
-// ZEBRA FACE, U+1F993 fast donkey
-//GIRAFFE FACE, U+1F992 large fast donkey
+//PLAYGROUND SLIDE, U+1F6DD like gate but with more range? line target??
 //FROG FACE, U+1F438 //range 3 low atk //poison/hop ability? FROG EGYPTIAN HIEROGLYPH I007, U+1318F
 // TOP HAT, U+1F3A9 spawns a rabbit
 //RABBIT, U+1F407 high movement 1 atk 1 maxsize, special make more rabbits
-//VULTURE EGYPTIAN HIEROGLYPH G014, U+13150 special that increases stats if it can kill
-//SCARAB EGYPTIAN HIEROGLYPH I007, U+1318F //special 'roll' to increase max size
 ////BLACK CROSS ON SHIELD, U+26E8 shield medic
 //chess knight special move L shape
 //OCTAGONAL SIGN, U+1F6D1 stop sign
-//sauropod U+1F995
 
-//ORANGUTAN, U+1F9A7 //Pummel, reduce defence to 0
-//GORILLA, U+1F98D //Pummel, reduce defence to 0
-//OIL DRUM, U+1F6E2
 //WATER DROPLET U+1F4A7
 
-//EXTRATERRESTRIAL ALIEN, U+1F47D
-
 //megaphone U+1F4E3
-
-//WATER BUFFALO, U+1F403
 
 //U+1F9C3 ice cube decreases size each round?
 

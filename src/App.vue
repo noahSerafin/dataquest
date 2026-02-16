@@ -807,7 +807,7 @@
 
       // Step 3: hybrid-specific augmentation
       if (bp.hybridName) {
-        piece.name = bp.hybridName ? bp.hybridName : 'Unknown Hybrid'
+        piece.hybridName = bp.hybridName;
         piece.description = bp.description;
         //piece.unicode = bp.unicode //should already be the case
         piece.extraUnicode = bp.extraUnicode
@@ -839,10 +839,10 @@
 
     // Reset placement state
     pieceToPlace.value = null;
+    await handleApplyAdmins('onPlacement', PieceInstance.id)
     playerSpawns.value = newPlacementHighlights();
     
     //applyStatModifications()
-    await handleApplyAdmins('onPlacement', PieceInstance.id)
     //if(player.value.hasAdmin('Copier')){}
 
     const hasDove = player.value.hasAdmin('Dove');
@@ -1135,7 +1135,7 @@
     }
     // --- self target ---
     if (selectedPiece.value.targetType === 'self') {
-      await selectedPiece.value.special(selectedPiece.value);
+      await selectedPiece.value.special(target);
       playerSpawns.value = newPlacementHighlights();
       selectedPiece.value = null;
       return;
@@ -1167,11 +1167,12 @@
     });
     graveyard.value = [];
     lastTurnPieces.value = [];
-    selectedPiece.value = null;
+    selectedPiece.value = null;    
     if(roundWon){
       hasWonRound.value = true;
       handleApplyAdmins('onRoundEnd', '');//await??--
       activePieces.value = [];//for needle
+      originalPieces.value = [];
       openSummary(true);
       extraDifficulty.value = 0;
       //move to btn inside round summary
@@ -1339,7 +1340,7 @@
 
   function onKeydown(e: KeyboardEvent) {
     // ignore typing in inputs
-    if(hasFinishedTurn.value) return;
+    if(hasFinishedTurn.value || !roundHasStarted.value) return;
     const tag = (e.target as HTMLElement)?.tagName;
     if (tag === 'INPUT' || tag === 'TEXTAREA') return;
     e.preventDefault();

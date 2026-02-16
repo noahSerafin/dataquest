@@ -416,7 +416,7 @@ const highlightSpecials = (piece: InstanceType<typeof Piece>) => {
       tileSet.value,
     )
   } else if(piece.targetType === 'self'){
-    specialHighlights.value = [piece.headPosition]
+    specialHighlights.value = piece.tiles
   } else {
     specialHighlights.value = getTilesInRange(
       piece.headPosition,

@@ -5,7 +5,7 @@ import type { PieceBlueprint } from "../types"
 const props = defineProps<{
   piece: PieceBlueprint;
   mode: "shop" | "inventory" | 'skipReward';
-  canBuy?: boolean;
+  canBuy?: boolean;//pass the function, use the piece
   canSteal?: boolean;
   canPlace?: boolean;
   defaultPosition?: {

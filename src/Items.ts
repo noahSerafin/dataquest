@@ -141,7 +141,7 @@ export class Blueberry extends Item<PieceBlueprint> {
 
 class Melon extends Item<PieceBlueprint> {
     static name = "Melon";
-    static description = "+3 max size";
+    static description = "+2 max size";
     static unicode = "U+1F349";
     static color = "rgb(17, 110, 71)";
     constructor(){
@@ -201,7 +201,7 @@ export class Carrot extends Item<PieceBlueprint> {
 
 export class Juice extends Item<PieceBlueprint> {
     static name = "Juiced";
-    static description = "Increases a placed program's moves by 1";
+    static description = "Increases a program's moves by 1";
     static unicode = "U+1F9C3";
     static color = "rgb(255, 227, 71)";
     constructor(){
@@ -222,7 +222,7 @@ class Teapot extends Item<PieceBlueprint> {
     }
     //Increases a program's moves by 1
     apply(target: PieceBlueprint, itemMult: number) {
-        target.moves += (1* itemMult);
+        target.moves += (2* itemMult);
     }
 }
 

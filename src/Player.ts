@@ -124,7 +124,7 @@ export class Player {
     this.items = this.items.filter(i => i !== item);
   }
 
-  effectiveMoney(): number {
+  get effectiveMoney(): number {
     return this.hasAdmin('Credit Card')? this.money + 20 : this.money;
   }
 
@@ -167,6 +167,9 @@ export class Player {
       this.money -= (amount - 1);
     } else {
       this.money -= amount;
+    }
+    if(this.hasAdmin('Piggy Bank')){
+      this.money += 2;
     }
   }
 

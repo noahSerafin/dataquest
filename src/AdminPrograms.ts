@@ -131,7 +131,7 @@ class Clover extends Admin {
 
 class Onion extends Admin {
   static name = "Onion";
-  static description = "Saves you from one lost round but is destroyed in the process.";
+  static description = "Saves you from one lost round but is destroyed in the process";
   static unicode = "U+1F9C5";
   static color = "#00af17ad";
   static rarity = 5;
@@ -723,7 +723,7 @@ class Communism extends Admin {
   }
 }
 
-class Palette extends Admin {
+export class Palette extends Admin {
   static name = "Palette";
   static description = "Place twice at the start of a round";
   static unicode = "U+1F3A8";
@@ -1056,7 +1056,7 @@ class Feather extends Admin {
   }
 }
 
-class Copier extends Admin {
+export class Copier extends Admin {
   static name = "Copier";
   static description = "Places a copy of your first placed program 1 space to the right if it is unnocupied";
   static unicode = "U+1F4E0";//"U+1F5A8";
@@ -1084,11 +1084,16 @@ class Copier extends Admin {
       );
       if(!isOccupied){
         const copy = new PieceClass(newHead, 'player', activePieces[idx].removeCallback, crypto.randomUUID());
-        copy.maxSize = playerPieces[0].maxSize
+        copy.maxSize = playerPieces[0].maxSize//getStat()???
         copy.moves = playerPieces[0].moves
         copy.range = playerPieces[0].range
         copy.attack = playerPieces[0].attack
         copy.defence = playerPieces[0].defence
+        if(playerPieces[0].hybridName){
+          copy.hybridName = playerPieces[0].hybridName;
+          copy.description = playerPieces[0].description;
+          copy.extraUnicode = playerPieces[0].extraUnicode;
+        }
         activePieces.push(copy);
       }
     }
@@ -1399,11 +1404,11 @@ class Shades extends Admin {
 }
 
 class Barber extends Admin {
-  static name = '"A little off the top."';
+  static name = '"A little off the top"';
   static description = "Deals 1 damage to every piece at the start of a round";
   static unicode = "U+1F488";
   static color = "#4a4a4aff";
-  static rarity = 5;
+  static rarity = 3;
   constructor() {
     super(Barber.name, Barber.description, Barber.unicode, Barber.color, 10, Barber.rarity, 'gameState', 'onRoundStart')
   }
@@ -1480,7 +1485,7 @@ class Ballet extends Admin {//needs to reset
 
 class Pants extends Admin {
   static name = "Spare Pair";
-  static description = "Your first destroyed program is moved back to your inventory (testing)";
+  static description = "Your first destroyed program is moved back to your inventory";
   static unicode = "U+1FA72";
   static color = "#f8f8f8ff";
   static rarity = 4;
@@ -1619,7 +1624,7 @@ class Bipolar extends Admin {
   static name = "Ups and Downs";
   static description = "Gain $1 on destroying an enemy, lose $5 on destruction of your own programs";
   static unicode = "U+1F3AD";
-  static color = "rgb(196, 167, 87)";
+  static color = "rgb(174, 87, 196)";
   static rarity = 4;
   constructor() {
     super(Bipolar.name, Bipolar.description, Bipolar.unicode, Bipolar.color, 5, Bipolar.rarity, 'playerAndGame', 'onPieceDestruction')
@@ -1630,7 +1635,7 @@ class Bipolar extends Admin {
       player.money += 1
     }
     if(activePieces[idx].team === 'player'){
-      player.money -= 1
+      player.money -= 5
     }
   }
 }
@@ -2000,7 +2005,7 @@ class Jammer extends Admin {
 
 class Balloon extends Admin {
   static name = "Balloon";
-  static description = "+1 max size to all your programs each round";
+  static description = "+1 max size to all your programs after each round";
   static unicode = "U+1F388";
   static color = "#12b8b8ff";
   static rarity = 2;
@@ -2066,7 +2071,7 @@ class Discount extends Admin {
   static color = "rgb(105, 46, 114)";
   static rarity = 4;
   constructor() {
-    super(Discount.name, Discount.description, Discount.unicode, Discount.color, 2, Discount.rarity, 'player', 'other')
+    super(Discount.name, Discount.description, Discount.unicode, Discount.color, 5, Discount.rarity, 'player', 'other')
     //private count for shop reference?
   }
   //handle in shop
@@ -2079,7 +2084,7 @@ class Variety extends Admin {
   static color = "rgb(114, 89, 46)";
   static rarity = 4;
   constructor() {
-    super(Variety.name, Variety.description, Variety.unicode, Variety.color, 2, Variety.rarity, 'player', 'other')
+    super(Variety.name, Variety.description, Variety.unicode, Variety.color, 5, Variety.rarity, 'player', 'other')
     //private count for shop reference?
   }
   //handle in shop
@@ -2135,12 +2140,12 @@ class Piggy extends Admin {
 
 class Bowling extends Admin {//test
   static name = "Strike";
-  static description = "Destroying a program deals 1 damage to each tile adjacent to it's head (testing)";
+  static description = "Destroying a program deals 1 damage to each tile adjacent to it's head";
   static unicode = "U+1F3B3"; // damage adjacent tiles
   static color = "rgb(215, 44, 25)";
   static rarity = 2;//3?
   constructor() {
-    super(Bowling.name, Bowling.description, Bowling.unicode, Bowling.color, 2, Bowling.rarity, 'gameState', 'onPieceDestruction')
+    super(Bowling.name, Bowling.description, Bowling.unicode, Bowling.color, 4, Bowling.rarity, 'gameState', 'onPieceDestruction')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);//gets called just before removal, so piece hasn't been removed yet
@@ -2171,7 +2176,7 @@ class Stiletto extends Admin {
   static color = "rgb(182, 21, 126)";
   static rarity = 2;
   constructor() {
-    super(Stiletto.name, Stiletto.description, Stiletto.unicode, Stiletto.color, 10, Stiletto.rarity, 'gameState', 'onPlacement')
+    super(Stiletto.name, Stiletto.description, Stiletto.unicode, Stiletto.color, 6, Stiletto.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
@@ -2294,7 +2299,7 @@ export class Skyscraper extends Admin {//test not working
 
 class School extends Admin {//test
   static name = "Staying in School";
-  static description = "Each unplaced program in your inventory gains +1 to all stats at the end of a round, up to a max of +7."
+  static description = "Each unplaced program in your inventory gains +1 to all stats at the end of a round, up to a max of +7"
   static unicode = "U+1F3EB";
   static color = "rgb(193, 193, 193)";
   static rarity = 6;
@@ -2318,7 +2323,7 @@ class School extends Admin {//test
 
 class Dharma extends Admin {//test
   static name = "Wheel of Dharma";
-  static description = "Every kind of reroll is free."
+  static description = "Every kind of reroll is free"
   static unicode = "U+2638"; //every kind of reroll is free (shop, bosses(roulette) ---- nodes(ferris), skips(dice-already free), )
   static color = "rgb(249, 213, 36)";
   static rarity = 6;
@@ -2566,6 +2571,7 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 // CRICKET BAT AND BALL, U+1F3CF, Howzat! take a piece off with 1 tile left? broom does this already
 //TULIP, U+1F337 pair with bubble, some kind of effect based off money???
 //FRIED SHRIMP, U+1F364 Tempura
+//CLAPPER BOARD, U+1F3AC Action
 
 // TOOTHBRUSH, U+1FAA5
 //CLAPPER BOARD, U+1F3AC

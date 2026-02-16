@@ -127,7 +127,7 @@
             return true;
         }
         if(props.player.hasAdmin('Golden Ticket') && !(node.type==='boss')){
-            if(props.player.money >= 5 || props.player.hasAdmin('Credit Card') && props.player.money +20 >= 5){
+            if(props.player.effectiveMoney >= 5){
                 return true;
             } else return false;
         } else return false;
@@ -391,7 +391,7 @@
     <div v-if="selectedPreviewNode" class="preview-modal">
       <h3>{{ selectedPreviewNode.type.toUpperCase() }}</h3>
        <h6 v-if="selectedPreviewNode.type==='boss'"></h6>
-        <button
+        <button :disabled="player.effectiveMoney >= rerollBossCost"
             v-if="selectedPreviewNode?.type === 'skip' && player.hasAdmin('Roulette Wheel')"
             @click="rerollBosses()"
         >

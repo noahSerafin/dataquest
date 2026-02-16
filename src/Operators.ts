@@ -1,6 +1,6 @@
 import type { OS } from "./types";
 import { Voucher, Mushroom, Garlic, Juice, Meat, Genie, Box, Pandora, Update2, Update3} from "./Items";
-import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Compass} from "./AdminPrograms";
+import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Compass, Copier, Palette} from "./AdminPrograms";
 
 /*
 export function findPieceClassByName(name: string) {
@@ -44,10 +44,10 @@ export function blueprintFromPieceClass(piece: typeof Piece): PieceBlueprint {
     }
     const testPiece =  {
         id: crypto.randomUUID(),
-        name: "Highwayman",
+        name: "Octopus",
         description: '"testing this pieces special move"',
         unicode: 'U+1F47E',
-        maxSize: 3,
+        maxSize: 4,
         moves: 10,
         range: 2,
         attack: 2,
@@ -253,6 +253,23 @@ export function blueprintFromPieceClass(piece: typeof Piece): PieceBlueprint {
         isPlaced: false,
         cost: 1 // or whatever cost formula you want
     }
+    const testhybrid = {
+    id: "274ec329-8c17-4265-8c12-e9a28bcf0112",
+    name: "Lance",
+    description: "A test piece",
+    unicode: "U+1F3A0",
+    maxSize: 3,
+    moves: 2,
+    range: 3,
+    attack: 2,
+    defence: 0,
+    rarity: 1,
+    color: "#2fc5ebff",
+    isPlaced: false,
+    cost: 1,
+    hybridName: 'LanceHog',
+    extraUnicode: 'U+1F994'
+  }
 
     //guard, snail, TP, Lance, Bug, Screwdriver
 
@@ -363,7 +380,7 @@ const Debugger : OS = {//lance //bug //screwdriver
     money: 50,
     memory: 10,
     adminSlots: 6,
-    blueprints: [aegis, superKnife, screwdriver, testPiece],
+    blueprints: [aegis, superKnife, testhybrid, testPiece],
     items: [new Genie, new Box, new Pandora, new Update2, new Update3],
     admins: [new Crystal, new Compass],
     lives: 9,

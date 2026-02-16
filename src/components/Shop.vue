@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed} from "vue"
+import {computed, watchEffect} from "vue"
 import type { PieceBlueprint } from "../types"
 import { Player } from "../Player.ts";
 import BlueprintView from "./BlueprintView.vue";
@@ -46,27 +46,33 @@ function handleBuyItem(item: Item) {
 }
 //        @select="openItemController"
 
-const canReroll = computed(() => props.player.effectiveMoney() >= props.rerollCost);
+const canReroll = computed(() => props.player.effectiveMoney >= props.rerollCost);
 const canSteal = computed(() => props.player.hasAdmin('Five Finger Discount') && !props.hasStolen);
 
 const canBuyItem = ((item: Item) => {
   if(props.shopDisabled) return false;
   if (item instanceof Admin) {
-    return props.player.effectiveMoney() >= item.cost && props.player.admins.length < props.player.adminSlots;
+    return (props.player.effectiveMoney >= item.cost || canSteal.value ) && props.player.admins.length < props.player.adminSlots;
   }
   const hasTrolley = props.player.hasTrolley;
   //const hasToolbox = props.player.hasAdmin('Schoolbag');
   const hasSpace = hasTrolley ? props.player.usedMemory <= props.player.memory-0.5 : props.player.usedMemory <= props.player.memory-1;
   
-  return (props.player.effectiveMoney() >= item.cost || canSteal ) && hasSpace;
+  return (props.player.effectiveMoney >= item.cost || canSteal.value ) && hasSpace;
 });
 
-const canBuyPiece = ((piece: PieceBlueprint) => {//wrong??? not being recalculated after purchase
+const canBuyTargetPiece = ((blueprint: PieceBlueprint) => {//wrong??? not being recalculated after purchase
+  //if (!props.target) return false;
+  //if (props.target instanceof Item) return false;
   if(props.shopDisabled) return false;
   const hasToolbox = props.player.hasAdmin('Toolbox');
   const hasSpace = hasToolbox ? props.player.usedMemory <= props.player.memory-0.5 : props.player.usedMemory <= props.player.memory-1;
 
-  return (props.player.effectiveMoney() >= piece.cost || canSteal ) && hasSpace;
+  return (props.player.effectiveMoney >= blueprint.cost || canSteal.value ) && hasSpace;
+});
+
+watchEffect(() => {
+  //console.log("canBuyTargetPiece:", canBuyTargetPiece.value);
 });
 
 const type = ((item: Item) => {
@@ -121,7 +127,7 @@ const type = ((item: Item) => {
       v-if="props.target && !(props.target instanceof Item)"
       :piece="props.target"
       mode="shop"
-      :canBuy= "canBuyPiece(props.target)"
+      :canBuy= "canBuyTargetPiece(props.target)"
       :defaultPosition="{ x: 0, y: 0 }"
       :canSteal = canSteal
       @buy="handleBuyBlueprint"

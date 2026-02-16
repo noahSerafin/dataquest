@@ -1,9 +1,14 @@
 HOTKEYS
 GAME / BUGS
+cave level1 possible to get stuck, gauntlet also if sling and knife spawn
+spare pair only works once
+pieces canbuy is true even when player does not have enough money? - testing
+round summary not appearing on win
+nerf rosebud - pieces can't stay exposed after a spcial?
+slots broken, and only applies before a shop, not on the same shop you buy it in
 hotkeys enabled whilst map is open(board needs to be open, and needs to be players turn)
-Amins appearing as items in shop (department store only???) and hasspace function not working
-frozen players can still move?
-pieces canbuy is true even when player does not have enough money?
+Admins appearing as items in shop (department store only???) and hasspace function not working
+Level loaded twice with same piece causes bug where it cannot be attacked is not in activepieces to be targeted - test
 visualise, retaliation, dmg + dmg mult, admin actions and counts, enemy movement distance (hide move buttons)
 variant should overide base piece color, (and tile colour???)
 pandora not giving 1 at full inventory
@@ -11,7 +16,7 @@ checkforroundend after takedamage
 //move itemmult to player?
 //sort out trolley/toolbox
 Nerf Pandora by using allitems???
-self specials easy to accidentally auto click
+self specials easy to accidentally auto click, move buttons z-index up
 variant tooltips
 fix ufo - make it a two click special???
 pawn can't promote to hybrids
@@ -90,6 +95,8 @@ piece packs/item packs/admin packs?
 EXPERIMENT:
 Spawn all enemies at all difficulties, but do not weight selection,
 enemies of lower rank get +1 to all stats for every rarity below the current security level
+Altar - sacrifice pieces, nerf pieces?
+Node to nerf stats
 
 DIFFICULTY/HARD MODE
 Bosses accumulate from begining

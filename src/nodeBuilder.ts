@@ -22,7 +22,7 @@ function parseCoord(k: string): Coordinate {
   return { x, y };
 }
 
-function shuffle(array: Array<any>) {
+/*function shuffle(array: Array<any>) {
   let currentIndex = array.length;
 
   // While there remain elements to shuffle...
@@ -37,14 +37,16 @@ function shuffle(array: Array<any>) {
       array[randomIndex], array[currentIndex]];
   }
 }
-/*shorthand
-function shuffle<T>(arr: T[]): void {
+  */
+//shorthand
+function shuffle<T>(arr: T[]): T[] {
   for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = randInt(0, i);
     [arr[i], arr[j]] = [arr[j], arr[i]];
   }
+  return arr;
 }
-*/
+
 
 //3
 function generateFullGrid(width: number, height: number): Set<string> {
@@ -95,8 +97,8 @@ function carveGaps(tiles: Set<string>, width: number, height: number) {
   const totalTiles = width * height;
   const targetRemovals = Math.floor(totalTiles * 0.25);
 
-  const tileArray = Array.from(tiles);
-  shuffle(tileArray);
+  const tileArray = shuffle(Array.from(tiles));
+  //shuffle(tileArray);
 
   let removed = 0;
 
@@ -117,6 +119,97 @@ function carveGaps(tiles: Set<string>, width: number, height: number) {
   }
 
   return tiles;
+}
+
+//5
+function computeDistancesFrom(
+  start: Coordinate,
+  tiles: Set<string>
+): Map<string, number> {
+  const distances = new Map<string, number>();
+  const queue: { x: number; y: number; d: number }[] = [];
+
+  const startKey = key(start.x, start.y);
+  queue.push({ x: start.x, y: start.y, d: 0 });
+  distances.set(startKey, 0);
+
+  while (queue.length) {
+    const { x, y, d } = queue.shift()!;
+
+    const neighbors = [
+      { x: x + 1, y },
+      { x: x - 1, y },
+      { x, y: y + 1 },
+      { x, y: y - 1 },
+    ];
+
+    for (const n of neighbors) {
+      const k = key(n.x, n.y);
+
+      if (!tiles.has(k)) continue;           // must exist
+      if (distances.has(k)) continue;        // already visited
+
+      distances.set(k, d + 1);
+      queue.push({ x: n.x, y: n.y, d: d + 1 });
+    }
+  }
+
+  return distances;
+}
+
+function growEnemy(
+  head: Coordinate,
+  targetSize: number,
+  availableTiles: Set<string>
+): Coordinate[] {
+
+  const result: Coordinate[] = [];
+  const frontier: Coordinate[] = [head];
+
+  const headKey = key(head.x, head.y);
+  if (!availableTiles.has(headKey)) return result;
+
+  result.push(head);
+  availableTiles.delete(headKey);
+
+  while (frontier.length && result.length < targetSize) {
+
+    // pick random frontier tile
+    const current = frontier[randInt(0, frontier.length - 1)];
+
+    const neighbors = [
+      { x: current.x + 1, y: current.y },
+      { x: current.x - 1, y: current.y },
+      { x: current.x, y: current.y + 1 },
+      { x: current.x, y: current.y - 1 },
+    ];
+
+    // shuffle for organic growth
+    const sNeighbors = shuffle(neighbors);
+
+    let grew = false;
+
+    for (const n of sNeighbors) {
+      const k = key(n.x, n.y);
+
+      if (!availableTiles.has(k)) continue;
+
+      result.push(n);
+      frontier.push(n);
+      availableTiles.delete(k);
+      grew = true;
+
+      if (result.length >= targetSize) break;
+    }
+
+    // If this frontier tile cannot grow anymore, remove it
+    if (!grew) {
+      const index = frontier.indexOf(current);
+      frontier.splice(index, 1);
+    }
+  }
+
+  return result;
 }
 
 export function generateNode(difficulty: number): Level {
@@ -143,19 +236,24 @@ export function generateNode(difficulty: number): Level {
     const carvedTiles = carveGaps(gridTiles, width, height);
     const tiles: Coordinate[] = Array.from(carvedTiles).map(parseCoord);
 
-
     //4
     const playerTile = tiles[randInt(0, tiles.length-1)];
 
-    //5 -TBC
-    const distances = computeDistancesFrom(playerTile, tiles);//function to find invalid tiles
+    //5
+    const distances = computeDistancesFrom(playerTile, carvedTiles);//function to find invalid tiles
 
-    const validEnemyTiles = [...tiles].filter(tile =>
-        distances.get(key(tile)) >= 5
-    );
+    const validEnemyTiles: Coordinate[] = tiles.filter(tile => {
+        const d = distances.get(key(tile.x, tile.y));
+        return d !== undefined && d >= 5;
+    });
+    //if (validEnemyTiles.length < enemyCount) {
+        // Not enough space — regenerate level
+        //return null; restart function
+    //}
 
-    //randomly assign enemy headpostions from the valid tiles
-    let headPositions: Coordinate[] = [];
+    const shuffled: Coordinate[] = shuffle([...validEnemyTiles]);
+    const headPositions = shuffled.slice(0, enemyCount);
+    //something here to randomly assign enemy headpostions from the valid tiles
 
     let enemySpawns: any[] = [];
     for (let index = 0; index < enemyCount; index++) {
@@ -185,37 +283,36 @@ export function generateNode(difficulty: number): Level {
         sizes.push(1);
     }
 
-    function growSpawn(//ask about this
-        head: Coordinate,
-        size: number,
-        availableTiles: Set<string>
-    ): Coordinate[] {
-        const result = [head];
-        const used = new Set([key(head)]);
+    const availableTiles = new Set(carvedTiles);
+    //remove player spawn from set
+    availableTiles.delete(key(playerTile.x, playerTile.y));
 
-        while (result.length < size) {
-            const candidates = result.flatMap(t =>
-                neighbors(t.x, t.y)
-            ).filter(n =>
-                availableTiles.has(key(n)) &&
-                !used.has(key(n))
-            );
+    //grow spawns up to their assigned size or up to their limit
+    for (let i = 0; i < enemySpawns.length; i++) {
+        const spawn = enemySpawns[i];
+        const targetSize = sizes[i] ?? 1;
 
-            if (!candidates.length) break;
+        const grownTiles = growEnemy(
+            spawn.headPosition,
+            targetSize,
+            availableTiles
+        );
 
-            const next = randomChoice(candidates);
-            result.push(next);
-            used.add(key(next));
-        }
-
-        return result;
+        spawn.tiles = grownTiles;
     }
 
     return {
         name: `Generated-${difficulty}-${crypto.randomUUID()}`,
-        tiles: [...tiles].map(parseCoord),
+        tiles: [...tiles],//.map(parseCoord),
         pieces: [
-            createSpawn('player', playerTile, 1),
+            {
+            "id": crypto.randomUUID(),
+            "name": "Spawn",
+            "team": "player",
+            "headPosition": playerTile,
+            "tiles": [],
+            "rarity": 1
+            },
             ...enemySpawns
         ]
     };

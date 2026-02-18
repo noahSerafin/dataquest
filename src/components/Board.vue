@@ -408,7 +408,7 @@ const highlightTargets = (piece: InstanceType<typeof Piece>) => {
 const highlightSpecials = (piece: InstanceType<typeof Piece>) => {
   //console.log('specialtargets', piece.name)
   clearHighlights();
-  if(piece.actions <= 0) return;
+  if(piece.actions <= 0 || !piece.specialName) return;
   if(piece.targetType === 'line'){
     specialHighlights.value = getTilesInStraightLine(
       piece.headPosition,

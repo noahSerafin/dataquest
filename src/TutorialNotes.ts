@@ -33,7 +33,7 @@ Some programs have special moves, click on them to see what they are. You can dr
 Programs have different stats: 
     Max size: Maximum size  a program can reach, essentially it's max HP.
     Moves: How many spaces a program can move each turn.
-    Range: The orthagonal distance a program can target attacks or it's special move.
+    Range: The Manhattan distance a program can target attacks or it's special move.
     Attack: How much damage a program will do to another on attacking.
     Defence: How much damage a program can take before losing tiles. Like moves, this resets each turn.
 

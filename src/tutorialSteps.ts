@@ -40,7 +40,7 @@ const movesTip: TutorialStep = {
 }
 const rangeTip: TutorialStep = {
     id: 'range',
-    tooltip: "Range: The orthagonal distance a program can target attacks or it's special move."
+    tooltip: "Range: The manhattan distance a program can target attacks or it's special move."
 }
 const attackTip: TutorialStep = {
     id: 'attack',

@@ -3041,15 +3041,14 @@ class Leopard extends Piece {
         this.move(tile);
         continue;
       }
-      await occupier.takeDamage(this.getStat('attack'));
       occupier.addModifier({moves: -1})
+      await occupier.takeDamage(this.getStat('attack'));
       const stillOccupied = activePieces.find(p =>
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
       );
       if (!stillOccupied) {
         // The enemy died → can move into the tile
         this.move(tile);
-        continue;
       }
       break;
     }
@@ -3063,7 +3062,7 @@ class Tiger extends Piece {
   static color = "rgb(85, 163, 11)";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Tiger.name, Tiger.description, Tiger.unicode, 4, 2, 2, 4, 2, Tiger.color, headPosition, [headPosition], team, Tiger.rarity, removeCallback, id)
+   super(Tiger.name, Tiger.description, Tiger.unicode, 4, 3, 2, 4, 2, Tiger.color, headPosition, [headPosition], team, Tiger.rarity, removeCallback, id)
    this.specialName = 'Pounce';
    //this.targetType = 'piece';
    this.targetType = 'line';
@@ -3078,15 +3077,14 @@ class Tiger extends Piece {
         this.move(tile);
         continue;
       }
-      await occupier.takeDamage(this.getStat('attack'));
       occupier.addModifier({moves: -1})
+      await occupier.takeDamage(this.getStat('attack'));
       const stillOccupied = activePieces.find(p =>
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
       );
       if (!stillOccupied) {
         // The enemy died → can move into the tile
         this.move(tile);
-        continue;
       }
       break;
     }
@@ -3116,15 +3114,14 @@ class Lion extends Piece {
         this.move(tile);
         continue;
       }
-      await occupier.takeDamage(this.getStat('attack'));
       occupier.addModifier({moves: -1})
+      await occupier.takeDamage(this.getStat('attack'));
       const stillOccupied = activePieces.find(p =>
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
       );
       if (!stillOccupied) {
         // The enemy died → can move into the tile
         this.move(tile);
-        continue;
       }
       break;
     }
@@ -3154,15 +3151,14 @@ class Bear extends Piece {
         this.move(tile);
         continue;
       }
-      await occupier.takeDamage(this.getStat('attack'));
       occupier.addModifier({moves: -2})
+      await occupier.takeDamage(this.getStat('attack'));
       const stillOccupied = activePieces.find(p =>
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
       );
       if (!stillOccupied) {
         // The enemy died → can move into the tile
         this.move(tile);
-        continue;
       }
       break;
     }
@@ -3304,7 +3300,7 @@ class Octopus extends Piece {
 //building castle? creates a wall around it of 8 tiles 
 
 //99 fairy
-export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Tar, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Larva, Wasp, Rat, Flute, LabRat, Bat, Dragon, Squid, Snail, Shark, Greatshield, Wizard, Ninja, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, UFO, TP, Saw, Croc, Lighthouse, Torch, Camera, Drum, Shrike, Eagle, Recurve, Daemon, Rex, Diplodocus, Hedgehog, Sol, Stopwatch, Bull, Rhino, Peacock, Gecko, Dog, Wolf, Oil, Yoyo, Alien, Lightning, Leopard, Tiger, Lion, Bear, Zebra, Giraffe, Kite, Scarab, Orangutan, Gorilla, Octopus];//Dolls //100 +2 (web, ink)
+export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, Ant, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Tar, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Larva, Wasp, Rat, Flute, LabRat, Bat, Dragon, Squid, Snail, Shark, Greatshield, Wizard, Ninja, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, UFO, TP, Saw, Croc, Lighthouse, Torch, Camera, Drum, Shrike, Eagle, Recurve, Daemon, Rex, Diplodocus, Hedgehog, Sol, Stopwatch, Bull, Rhino, Peacock, Gecko, Dog, Wolf, Oil, Yoyo, Alien, Lightning, Leopard, Tiger, Lion, Bear, Zebra, Giraffe, Kite, Scarab, Orangutan, Gorilla, Octopus];//Dolls //100 +2 (web, ink)
 console.log('pieces length: ', allPieces.length)
 
 let adminLogs = {

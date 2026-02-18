@@ -595,6 +595,9 @@ class Frog extends Admin {
         }
     }
 }
+//quicksand
+//THONG SANDAL, U+1FA74
+//HOURGLASS WITH FLOWING SAND, U+23F3
 class Coral extends Admin {
   static name = "Deep Water";
   static description = "Every player program is slowed";

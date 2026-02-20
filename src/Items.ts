@@ -667,7 +667,8 @@ class Battery extends Item<Piece[]> {
         })
     }
 }
-//HAMMER, U+1F528
+
+//SANDWICH, U+1F96A, all rounder? random stat?
 
 /*
 class Hotline extends Item {

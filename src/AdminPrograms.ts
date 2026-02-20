@@ -1933,7 +1933,7 @@ class Tracker extends Admin {// PAW PRINTS, U+1F43E Tracker // FOOTPRINTS, U+1F4
   static color = "#00720fff";
   static rarity = 2;
   constructor() {
-    super(Tracker.name, Tracker.description, Tracker.unicode, Tracker.color, 5, Tracker.rarity, 'gameState', 'onRoundStart')
+    super(Tracker.name, Tracker.description, Tracker.unicode, Tracker.color, 3, Tracker.rarity, 'gameState', 'onRoundStart')
   }
   
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
@@ -2415,6 +2415,9 @@ export class Ferris extends Admin {
 
 // EVERGREEN TREE, U+1F332, cannot be frozen, scarf already does this
 
+//anchor
+//- sludge slow down enemies
+
 //SPLATTER, U+1FADF
 //SPLASHING SWEAT SYMBOL, U+1F4A6
 export class Splash extends Admin {
@@ -2514,7 +2517,6 @@ class Cards extends Admin {//test
   }
 }
 
-
 export class Clippy extends Admin {
   static name = "Clippy";
   static description = "Provides tutorial hints";
@@ -2526,7 +2528,6 @@ export class Clippy extends Admin {
   }
   //handle in player
 }
-
 
 export const allAdmins = [Brain, Meteor, Miner, Bubble, Clover, Onion, Blood, Razor, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Parachute, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Bone, RollerBlades, Lungs, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, OffRoader, Seed, Puzzle, Chivalry, Roger, Bucket, Diamond, Sneakers, Candle, Lightbulb, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, Sprinkler, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FakeID, Shades, Barber, Umbrella, Bank, Ballet, Pants, Ace, Pi, Pazzaz, Toilet, Harvest, Bipolar, Taoism, Loot, HedgeFund, PeaPod, Liberty, Punching, Teddy, Abacus, Cheese, AirSupport, DartBoard, Dice, Ladder, Ring, Minerva, Hermit, Tracker, Pong, Knot, Rainbow, Jammer, Balloon, Wheel, Bath, Purse, Discount, Variety, Appraisal, Camp, Piggy, Bowling, Stiletto, Disco, Nest, Sled, Crash, Skyscraper, School, Dharma, Putter, Smoker, Medic, Cards];
 console.log('admins length: ', allAdmins.length)
@@ -2603,7 +2604,14 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 // BLOSSOM, U+1F33C daisy chain, damage effects all touching pieces (use petri dish to get touching)
 //SHOVEL, U+1FA8F remove node memory -
 
+
 //FISHING POLE AND FISH, U+1F3A3 Bait, enemies attack player with highest defence?
+
+//AMPERSAND, U+26
+
+//AEGEAN NUMBER ONE THOUSAND, U+10122 hit markers
+
+//MUSICAL SYMBOL GLISSANDO UP, U+1D1B1, stairs
 
 //blood tax nerf to only attacking own pieces? overkills? or jolly roger?
 //nerf needle to random stat? have a count? only trigger on bosses?

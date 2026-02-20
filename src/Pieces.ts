@@ -1265,7 +1265,7 @@ class Highwayman extends Piece {//not working
   static color = "#494646ff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Highwayman.name, Highwayman.description, Highwayman.unicode, 2, 1, 1, 3, 0, Highwayman.color, headPosition, [headPosition], team, Highwayman.rarity, removeCallback, id)
+   super(Highwayman.name, Highwayman.description, Highwayman.unicode, 2, 2, 1, 3, 0, Highwayman.color, headPosition, [headPosition], team, Highwayman.rarity, removeCallback, id)
    this.specialName = 'Steal';
    this.targetType = 'pieceAndPlayer'
    //this.canAttack = false;
@@ -1276,15 +1276,15 @@ class Highwayman extends Piece {//not working
       //await piece.takeDamage(this.getStat('attack'))
       if(piece.team === 'enemy' && this.team === 'player'){
         player.money += piece.rarity;
-      } else {
-        piece.takeDamage(this.getStat('attack'));
+      } else if(piece.team === 'player' && this.team === 'enemy'){
+        player.money -= piece.rarity;
       }
       this.ids.push(piece.id)
       this.actions--
+    } else {
+      piece.takeDamage(this.getStat('attack'));
     }
   }
-  //disable regular attack?
-  //if attacking detroys a piece, gain 1 money
 }
 
 class Elephant extends Piece {
@@ -3242,7 +3242,7 @@ class Orangutan extends Piece {
   static color = "rgb(118, 177, 0)";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Orangutan.name, Orangutan.description, Orangutan.unicode, 3, 2, 1, 6, 2, Orangutan.color, headPosition, [headPosition], team, Orangutan.rarity, removeCallback, id)
+   super(Orangutan.name, Orangutan.description, Orangutan.unicode, 3, 2, 1, 4, 2, Orangutan.color, headPosition, [headPosition], team, Orangutan.rarity, removeCallback, id)
    this.specialName = 'Pummel'
    this.targetType = 'piece';
   }
@@ -3260,7 +3260,7 @@ class Gorilla extends Piece {
   static color = "rgb(118, 177, 0)";
   static rarity = 6;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Gorilla.name, Gorilla.description, Gorilla.unicode, 4, 3, 1, 8, 4, Gorilla.color, headPosition, [headPosition], team, Gorilla.rarity, removeCallback, id)
+   super(Gorilla.name, Gorilla.description, Gorilla.unicode, 4, 3, 1, 5, 3, Gorilla.color, headPosition, [headPosition], team, Gorilla.rarity, removeCallback, id)
    this.specialName = 'Pummel'
    this.targetType = 'piece';
   }

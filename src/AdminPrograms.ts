@@ -1101,8 +1101,8 @@ export class Copier extends Admin {
 }
 
 class Telescope extends Admin {
-  static name = "Telescope";
-  static description = "+3 range, -1 moves for all your placed programs";
+  static name = "Telescope";//tower
+  static description = "+3 range, -2 moves for all your placed programs";
   static unicode = "U+1F52D";
   static color = "#ff5555";
   static rarity = 3;
@@ -1112,7 +1112,7 @@ class Telescope extends Admin {
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({range: 3})
-    activePieces[idx].addModifier({moves: -1})
+    activePieces[idx].addModifier({moves: -2})
   }
 }
 
@@ -1987,8 +1987,8 @@ class Rainbow extends Admin {
 
 class Jammer extends Admin {
   static name = "Jammer";
-  static description = "-1 range to all enemy programs";
-  static unicode = "U+1F4F5";
+  static description = "-1 range to all enemy programs with a range > 1";
+  static unicode = "U+1F5FC";//no phones "U+1F4F5";
   static color = "#e4884bff";
   static rarity = 3;
   constructor() {
@@ -1996,7 +1996,7 @@ class Jammer extends Admin {
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces){
-      if(p.team==='enemy'){
+      if(p.team==='enemy' && p.getStat('range') > 1){
         p.addModifier({range: -1});
       }
     }

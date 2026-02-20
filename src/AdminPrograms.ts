@@ -1987,7 +1987,7 @@ class Rainbow extends Admin {
 
 class Jammer extends Admin {
   static name = "Jammer";
-  static description = "-1 range to all enemy programs";
+  static description = "-1 range to all enemy programs with a range > 1";
   static unicode = "U+1F4F5";
   static color = "#e4884bff";
   static rarity = 3;
@@ -1996,7 +1996,7 @@ class Jammer extends Admin {
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces){
-      if(p.team==='enemy'){
+      if(p.team==='enemy' && p.getStat('range') > 1){
         p.addModifier({range: -1});
       }
     }

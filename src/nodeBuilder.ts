@@ -10,7 +10,7 @@ import type { Coordinate, Level } from "./types";
 */
 //helpers
 function randInt(min: number, max: number): number {
-    return Math.random() * (max - min) + min;
+    return Math.floor(Math.random() * (max - min)) + min;
 }
 
 function key(x: number, y: number) {
@@ -162,50 +162,51 @@ function growEnemy(
   targetSize: number,
   availableTiles: Set<string>
 ): Coordinate[] {
-
   const result: Coordinate[] = [];
-  const frontier: Coordinate[] = [head];
-
+  
+  // 1. Validate and lock the head
   const headKey = key(head.x, head.y);
   if (!availableTiles.has(headKey)) return result;
 
   result.push(head);
   availableTiles.delete(headKey);
 
-  while (frontier.length && result.length < targetSize) {
+  // 2. Track the "tip" of the chain
+  let currentTip = head;
 
-    // pick random frontier tile
-    const current = frontier[randInt(0, frontier.length - 1)];
-
+  while (result.length < targetSize) {
     const neighbors = [
-      { x: current.x + 1, y: current.y },
-      { x: current.x - 1, y: current.y },
-      { x: current.x, y: current.y + 1 },
-      { x: current.x, y: current.y - 1 },
+      { x: currentTip.x + 1, y: currentTip.y },
+      { x: currentTip.x - 1, y: currentTip.y },
+      { x: currentTip.x, y: currentTip.y + 1 },
+      { x: currentTip.x, y: currentTip.y - 1 },
     ];
 
-    // shuffle for organic growth
-    const sNeighbors = shuffle(neighbors);
+    // Shuffle to ensure the "random walk" feel
+    const shuffledNeighbors = shuffle(neighbors);
+    
+    let moved = false;
 
-    let grew = false;
-
-    for (const n of sNeighbors) {
+    for (const n of shuffledNeighbors) {
       const k = key(n.x, n.y);
 
-      if (!availableTiles.has(k)) continue;
-
-      result.push(n);
-      frontier.push(n);
-      availableTiles.delete(k);
-      grew = true;
-
-      if (result.length >= targetSize) break;
+      if (availableTiles.has(k)) {
+        // Add to result
+        result.push(n);
+        availableTiles.delete(k);
+        
+        // Move the tip to the new tile and mark that we successfully grew
+        currentTip = n;
+        moved = true;
+        
+        // Break the FOR loop immediately to ensure we only add ONE tile per step
+        break; 
+      }
     }
 
-    // If this frontier tile cannot grow anymore, remove it
-    if (!grew) {
-      const index = frontier.indexOf(current);
-      frontier.splice(index, 1);
+    // 3. Termination Condition: If no neighbors were available, the chain is stuck
+    if (!moved) {
+      break; 
     }
   }
 
@@ -237,9 +238,11 @@ export function generateNode(difficulty: number): Level {
     const tiles: Coordinate[] = Array.from(carvedTiles).map(parseCoord);
 
     //4
+    console.log('tiles:', tiles);
     const playerTile = tiles[randInt(0, tiles.length-1)];
 
     //5
+    console.log('player start:', playerTile);
     const distances = computeDistancesFrom(playerTile, carvedTiles);//function to find invalid tiles
 
     const validEnemyTiles: Coordinate[] = tiles.filter(tile => {
@@ -284,22 +287,33 @@ export function generateNode(difficulty: number): Level {
     }
 
     const availableTiles = new Set(carvedTiles);
-    //remove player spawn from set
-    availableTiles.delete(key(playerTile.x, playerTile.y));
+    availableTiles.delete(key(playerTile.x, playerTile.y));//remove player spawn from set
 
+    enemySpawns.forEach(enemy => {
+      availableTiles.delete(key(enemy.headPosition.x,enemy.headPosition.y));//remove from avialable to grow into, //stops growth entirely for some reason???
+    });
+
+    
     //grow spawns up to their assigned size or up to their limit
     for (let i = 0; i < enemySpawns.length; i++) {
-        const spawn = enemySpawns[i];
-        const targetSize = sizes[i] ?? 1;
+      const spawn = enemySpawns[i];
+      const targetSize = sizes[i] ?? 1;
 
-        const grownTiles = growEnemy(
-            spawn.headPosition,
-            targetSize,
-            availableTiles
-        );
+      // 2. TEMPORARILY add this enemy's head back so the function can "see" it
+      const headKey = key(spawn.headPosition.x, spawn.headPosition.y);
+      availableTiles.add(headKey);
 
-        spawn.tiles = grownTiles;
+      const grownTiles = growEnemy(
+        spawn.headPosition,
+        targetSize,
+        availableTiles
+      );
+        
+      spawn.tiles = grownTiles;
     }
+      /*grownTiles.forEach(tile => {
+        availableTiles.delete(key(tile.x, tile.y));//remove from available for next enemy
+      });*/
 
     return {
         name: `Generated-${difficulty}-${crypto.randomUUID()}`,

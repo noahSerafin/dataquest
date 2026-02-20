@@ -135,11 +135,15 @@ const activeStatuses = computed((): [string, boolean][] => {
 const shieldIcon = String.fromCodePoint(
   parseInt("U+1F6E1".replace("U+", ""), 16)
 );
+
+function mapTiles(tiles: Coordinate []):string{
+  return tiles.map(obj =>`(${obj.x}, ${obj.y})`).join(', ');
+}
 </script>
 
 <template>
   <div
-  :class="`piece ${piece.headPosition.x}-${piece.headPosition.y} ${cssclass}-piece ${props.piece.variantName ? ('variant-program v_'+piece.variantName) : ''} ${props.piece.extraUnicode ? 'hybrid' : ''} team-${piece.team} taking-damage-${piece.isTakingDamage} hidden-${piece.statuses.hidden} tiles:(${piece.tiles.toString()})`"
+  :class="`piece ${piece.headPosition.x}-${piece.headPosition.y} ${cssclass}-piece ${props.piece.variantName ? ('variant-program v_'+piece.variantName) : ''} ${props.piece.extraUnicode ? 'hybrid' : ''} team-${piece.team} taking-damage-${piece.isTakingDamage} hidden-${piece.statuses.hidden} tiles:(${mapTiles(piece.tiles)})`"
     :name="piece?.hybridName? piece.hybridName : piece?.name"
     :id="piece?.id"
     :style="pieceStyle"

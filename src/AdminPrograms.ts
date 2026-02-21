@@ -540,7 +540,7 @@ class Heart extends Admin {//change
   static color = "#ff5555";
   static rarity = 2;
   constructor() {
-    super(Heart.name, Heart.description, Heart.unicode, Heart.color, 6, Heart.rarity, 'gameState', 'onPlacement')
+    super(Heart.name, Heart.description, Heart.unicode, Heart.color, 5, Heart.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
@@ -858,7 +858,7 @@ export class Seed extends Admin {
 
 class Puzzle extends Admin {
   static name = "Puzzle Piece";
-  static description = "Pieces with an ally adjacent to their head temporarily +1 defence until the start of your next turn";
+  static description = "Pieces with an ally adjacent to their head temporarily gain +1 defence until the start of your next turn";
   static unicode = "U+1F9E9";
   static color = "#55b0ff";
   static rarity = 3;
@@ -905,7 +905,7 @@ class Chivalry extends Admin {
       )
 
       if (hasAdjacentAlly) {
-        p.addTempModifier({ attack: 1 })
+        p.addModifier({ attack: 1 })
       }
     }
   }
@@ -1410,7 +1410,7 @@ class Barber extends Admin {
   static color = "#4a4a4aff";
   static rarity = 3;
   constructor() {
-    super(Barber.name, Barber.description, Barber.unicode, Barber.color, 10, Barber.rarity, 'gameState', 'onRoundStart')
+    super(Barber.name, Barber.description, Barber.unicode, Barber.color, 8, Barber.rarity, 'gameState', 'onRoundStart')
   }
 
   //onRoundStart
@@ -2105,22 +2105,23 @@ class Appraisal extends Admin {
 
 class Camp extends Admin {//TENT, U+26FA //Camp redo nodes once?
   static name = "Camper";
-  static description = "Your non-hidden Programs that don't move gain +1 range every turn";// to all stats on the end of your turn";
+  static description = "Your non-hidden Programs that don't move gain +1 range, ones that do move lose -1 range.";// to all stats on the end of your turn";
   static unicode = "U+26FA";
   static color = "rgb(26, 2, 65)";
   static rarity = 3;//5 for all stats
   constructor() {
-    super(Camp.name, Camp.description,Camp.unicode, Camp.color, 2, Camp.rarity, 'gameState', 'onTurnEnd')
+    super(Camp.name, Camp.description,Camp.unicode, Camp.color, 6, Camp.rarity, 'gameState', 'onTurnEnd')
     //private count for shop reference?
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     activePieces.forEach(piece => {
-      if(piece.team === 'player' && !piece.statuses.hidden && piece.movesRemaining === piece.getStat('moves')){
-        //piece.maxSize += 1;
-        //piece.moves += 1;
-        //piece.attack += 1;
-        piece.range += 1;
-        //piece.defence += 1;
+      if(piece.team === 'player' && !piece.statuses.hidden){
+        if(piece.movesRemaining === piece.getStat('moves')){
+          piece.addModifier({range: 1});//encourages camping
+          //piece.addTempModifier({defence : 1})
+        } else {
+          piece.addModifier({range: 1});//encourages camping
+        }
       }
     });
   }
@@ -2574,8 +2575,13 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //FRIED SHRIMP, U+1F364 Tempura
 //CLAPPER BOARD, U+1F3AC Action
 
+// ROLLER COASTER, U+1F3A2
 // TOOTHBRUSH, U+1FAA5
 //CLAPPER BOARD, U+1F3AC
+// HINDU TEMPLE, U+1F6D5 polytheism
+//KAABA, U+1F54B move in a circle
+//WATER WAVE, U+1F30A surf
+
 //Arevakhach LEFT-FACING ARMENIAN ETERNITY SIGN, U+58E
 //RIGHT-FACING ARMENIAN ETERNITY SIGN, U+58D
 //GAMER  VIDEO GAME, U+1F3AE

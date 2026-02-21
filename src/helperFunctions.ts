@@ -48,7 +48,7 @@ export function findAnyPiecesInRange(piece: Piece, pieces: Piece[]): Piece[] | n
       const dx = Math.abs(ex - tile.x);
       const dy = Math.abs(ey - tile.y);
 
-      if (dx + dy <= piece.range) {
+      if (dx + dy <= piece.getStat('range')) {
         piecesInRange.add(p);
         break; // important: stop checking this piece once found
       }

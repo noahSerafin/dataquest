@@ -783,7 +783,7 @@ class Snake extends Piece {//test
   static color = "#034d22ff";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Snake.name, Snake.description, Snake.unicode, 3, 1, 2, 1, 0, Snake.color, headPosition, [headPosition], team, Snake.rarity, removeCallback, id)
+    super(Snake.name, Snake.description, Snake.unicode, 3, 1, 1, 1, 0, Snake.color, headPosition, [headPosition], team, Snake.rarity, removeCallback, id)
     this.specialName = 'Swallow';
     this.targetType = 'pieceAndPlace'
   }
@@ -3219,7 +3219,7 @@ class Scarab extends Piece {
   static color = "rgb(116, 77, 33)";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Scarab.name, Scarab.description, Scarab.unicode, 4, 3, 1, 3, 3, Scarab.color, headPosition, [headPosition], team, Scarab.rarity, removeCallback, id)
+    super(Scarab.name, Scarab.description, Scarab.unicode, 2, 2, 1, 3, 2, Scarab.color, headPosition, [headPosition], team, Scarab.rarity, removeCallback, id)
     this.specialName='Roll'
     this.targetType='space'
   }
@@ -3251,9 +3251,9 @@ class Orangutan extends Piece {
 
 class Gorilla extends Piece {
   static name = "Kong";
-  static description = "A fiece program that can damage and then reduce another program's defence remaining to 0";
+  static description = "A fierce program that can damage and then reduce another program's defence remaining to 0";
   static unicode = "U+1F98D";
-  static color = "rgb(118, 177, 0)";
+  static color = "rgb(68, 97, 10)";
   static rarity = 6;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Gorilla.name, Gorilla.description, Gorilla.unicode, 4, 3, 1, 5, 3, Gorilla.color, headPosition, [headPosition], team, Gorilla.rarity, removeCallback, id)

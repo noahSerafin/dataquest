@@ -80,6 +80,8 @@
   const swapDisplay = () => {
     displayEditor.value = !displayEditor.value;//add map later, make shop an overlay?
   }
+
+  const stake = ref(1);
   
   const player = ref(new Player(
     'U+1F60A',
@@ -97,6 +99,7 @@
     0,
     false,
     false,
+    stake.value
   ));
   const showInventory = ref(true);
   //function closeInventory(){
@@ -124,7 +127,8 @@
       0,
       0,
       false,
-      false
+      false,
+      stake.value
     )
     showMainMenu.value = false;
     showMap.value = true;
@@ -699,6 +703,13 @@
             applyVariant(enemyInstance, variant);
           }
           //add tiles here? if spawn.tiles.length <= enemy.getStat(maxsize){ enemy.tiles = spawn.tiles }
+
+          if(player.value.stake > 2) enemyInstance.maxSize+=1;
+          if(player.value.stake > 3) enemyInstance.defence+=1;
+          if(player.value.stake > 4) enemyInstance.moves+=1;
+          if(player.value.stake > 5) enemyInstance.attack+=1;
+          if(player.value.stake > 6) enemyInstance.range+=1;
+
           processed.push(enemyInstance);
           continue;
         }
@@ -1306,7 +1317,7 @@
   const increaseDifficulty = () => {
     player.value.difficulty += 1;
     player.value.bossesCleared += 1;
-    if(player.value.difficulty<7){//cumulate bosses in endless mode
+    if(player.value.difficulty<7 || player.value.stake > 1){//cumulate bosses in endless mode
       bossAdmins.value = [];
     }
     refreshShop(true);
@@ -1315,6 +1326,12 @@
   const decreaseDifficulty = () => {
     player.value.difficulty -= 1;
     worldSeed.value--
+  }
+  const increaseStake = () => {
+    stake.value += 1;
+  }
+  const decreaseStake = () => {
+    stake.value -= 1;
   }
 
   watch(
@@ -1411,6 +1428,12 @@
     </button>
     <button class="phone-hide" @mousedown="toggleFastControls()">
       Fast Controls
+    </button>
+    <button class="phone-hide" @mousedown="increaseStake()">
+     Increase Stake: {{stake}}
+    </button>
+    <button class="phone-hide" @mousedown="decreaseStake()">
+     Decrease Stake: {{stake}}
     </button>
     <button class="phone-hide" @mousedown="toggleDebug()">
       Debug mode

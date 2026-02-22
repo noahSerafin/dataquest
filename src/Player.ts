@@ -4,6 +4,7 @@ import { Admin } from "./AdminPrograms";
 
 export class Player {
     difficulty: number = 1;
+    stake: number;
     bossesCleared: number = 0;
     money: number
     memory: number
@@ -39,8 +40,9 @@ export class Player {
         bonusReward: number,
         nextInterest: number,
         nextReward: number,
-        hasTrolley: boolean,
-        hasToolbox: boolean,
+        hasTrolley: boolean,//remove
+        hasToolbox: boolean,//remove
+        stake: number
         //adminModifiers: Record<string, StatModifier> = {}
     ) {
         this.osunicode = osunicode
@@ -58,6 +60,7 @@ export class Player {
         this.nextReward = nextReward;
         this.hasTrolley = hasTrolley;
         this.hasToolbox = hasToolbox;
+        this.stake = stake;
         //this.adminModifiers = adminModifiers;
     }
 

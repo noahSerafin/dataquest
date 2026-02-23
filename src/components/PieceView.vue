@@ -139,7 +139,7 @@ const shieldIcon = String.fromCodePoint(
 
 <template>
   <div
-  :class="`piece ${piece.headPosition.x}-${piece.headPosition.y} ${cssclass}-piece ${props.piece.variantName ? ('variant-program v_'+piece.variantName) : ''} ${props.piece.extraUnicode ? 'hybrid' : ''} team-${piece.team} taking-damage-${piece.isTakingDamage} hidden-${piece.statuses.hidden} tiles:(${piece.tiles.toString()})`"
+  :class="`piece ${piece.headPosition.x}-${piece.headPosition.y} ${cssclass}-piece ${props.piece.variantName ? ('variant-program v_'+piece.variantName) : ''} ${props.piece.extraUnicode ? 'hybrid' : ''} team-${piece.team} taking-damage-${piece.isTakingDamage} hidden-${piece.statuses.hidden} tiles:(${piece.tiles.toString()}) redacted-${piece.redacted}`"
     :name="piece?.hybridName? piece.hybridName : piece?.name"
     :id="piece?.id"
     :style="pieceStyle"
@@ -177,7 +177,7 @@ const shieldIcon = String.fromCodePoint(
   <div
     v-for="(tile, index) in bodyTiles"
     :key="index"
-    :class="`piece-tile ${tile.x}-${tile.y} ${getDirectionClass(tile, index+1)} team-${piece.team} hidden-${piece.statuses.hidden}`"
+    :class="`piece-tile ${tile.x}-${tile.y} ${getDirectionClass(tile, index+1)} team-${piece.team} hidden-${piece.statuses.hidden} redacted-${piece.redacted}`"
     :style="{
       ...pieceStyle,
       ...getTileStyle(tile),
@@ -200,12 +200,16 @@ const shieldIcon = String.fromCodePoint(
 .piece:hover{
   cursor: pointer;
 }
+
 .piece-tile::before {
   content: '';
   position: absolute;
   width: 25%;
   height: 25%;
   background-color: var(--piece-color);
+}
+.piece-tile.redacted-true::before {
+  background-color: black;
 }
 
 /* directional placement */
@@ -322,5 +326,18 @@ const shieldIcon = String.fromCodePoint(
   left: 10%;
   top: 5%;
   z-index: 0;
+}
+.redacted-true{
+  background-color: black;
+}
+.redacted-true::after{
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  z-index: 3;
+  top: 0;
+  left: 0;
 }
 </style>

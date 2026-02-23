@@ -1,5 +1,6 @@
 HOTKEYS
 GAME / BUGS
+boss min, boss max
 cave level1 possible to get stuck, gauntlet also if sling and knife spawn
 spare pair only works once
 pieces canbuy is true even when player does not have enough money? - testing
@@ -33,6 +34,12 @@ display company/node name in board
 difficulty - add +1, +2 programs for variety, or make variants +- security level
 Ties currently count as wins - but player still loses a life?
 sort out graveyard 8
+
+MAP
+allow some randomised crossover points?
+Altar nodes - sacrifice a program for more money than selling - 8 - skippable
+Duplicator nodes - dupelicate a program
+Gladiator nodes - place only once in arena node for reward - skippable
 
 ITEMS/admins shortand descriptions eg. +1 attack instead of "increases"
 
@@ -74,11 +81,6 @@ item to duplicate an admin
 SAVE GAME STATE for bugs 7.5
 COOKIES - game progress permanence
 
-MAP
-allow some randomised crossover points?
-Altar nodes - sacrifice a program for more money than selling - 8 - skippable
-Gladiator nodes - place only once in arena node for reward - skippable
-
 PIECES
 Fairy - graveyard interaction 8
 keep track of upgrades and display on piece 7
@@ -97,14 +99,6 @@ Spawn all enemies at all difficulties, but do not weight selection,
 enemies of lower rank get +1 to all stats for every rarity below the current security level
 Altar - sacrifice pieces, nerf pieces?
 Node to nerf stats
-
-DIFFICULTY/HARD MODE
-Bosses accumulate from begining
-Enemies get +1 maxSize per security level
-Enemies get +1 defence per security level
-Enemies get +1 attack per security level
-Enemies get +1 moves per security level
-Enemies get +1 range per security level
 
 COLLECTION 9
 

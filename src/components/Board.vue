@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount, watch, nextTick } from "vue"
 import type { Coordinate, PieceBlueprint } from "../types"
+import { getTilesInRange } from "../helperFunctions";
 import PieceView from "./PieceView.vue";
 import { Piece } from "../Pieces"
 import { Player } from "../Player";
 
 interface Props{
-  tiles : Coordinate[]//Set<string>
+  tiles : Coordinate[]
+  foggedTiles : Coordinate[]
   pieces: Piece[]
   selectedPiece: InstanceType<typeof Piece> | null
   placementHighlights: Coordinate[]
@@ -130,6 +132,8 @@ function onMouseUp() {
 
 // Make a Set for fast lookup
 const tileSet = computed(() => new Set(props.tiles.map(t => `${t.x},${t.y}`)))
+const fogSet = computed(() => {return new Set(props.foggedTiles.map(t => `${t.x},${t.y}`))});
+console.log('set: ', [...fogSet.value])
 
 // Get cols/rows from tiles
 const cols = computed(() =>
@@ -227,12 +231,32 @@ function getAvailableMoves(
   if (piece.movesRemaining <= 0) return [] // no moves left
 
   const { x, y } = piece.headPosition
-  const potentialMoves = [
+  const potentialMoves =  [
     { x: x + 1, y, direction: "right" },
     { x: x - 1, y, direction: "left" },
     { x, y: y + 1, direction: "down" },
-    { x, y: y - 1, direction: "up" },
-  ]
+    { x, y: y - 1, direction: "up" },//include regular moves too?? push these on instead of ternary
+  ] 
+  if(props.player.hasAdmin('Ollie') || piece.name === 'Helicopter'){
+    const ollies =
+    [
+      { x: x + 2, y, direction: "right" },
+      { x: x - 2, y, direction: "left" },
+      { x, y: y + 2, direction: "down" },
+      { x, y: y - 2, direction: "up" },
+    ];
+    potentialMoves.push(...ollies);
+  }
+
+  if(props.player.hasAdmin('Edge Case')){
+    const diagonals = [
+      { x: x + 1, y: y - 1, direction: "up-right" },
+      { x: x - 1, y: y - 1, direction: "up-left" },
+      { x: x + 1, y: y + 1, direction: "down-right" },
+      { x: x - 1, y: y + 1, direction: "down-left" }
+    ]
+    potentialMoves.push(...diagonals);
+  }
 
   return potentialMoves.filter(pos => {
     const key = `${pos.x},${pos.y}`;
@@ -326,36 +350,6 @@ const clearHighlights = () => {
   inRangeHighlights.value = [];
   specialHighlights.value = [];
   moveButtons.value = [];
-}
-
-function getTilesInRange(
-  center: Coordinate,
-  range: number,
-  tileSet: Set<string>,       // valid board tiles like "x,y"
-): Coordinate[] {
-  const tiles: Coordinate[] = [];
-  const { x, y } = center;
-  const r = range;
-
-  for (let dx = -r; dx <= r; dx++) {
-    for (let dy = -r; dy <= r; dy++) {
-      const dist = Math.abs(dx) + Math.abs(dy);
-
-      // Only include tiles within Manhattan range
-      if (dist > 0 && dist <= r) {
-        const tx = x + dx;
-        const ty = y + dy;
-        const key = `${tx},${ty}`;
-
-        // Only add if tile exists on board
-        if (tileSet.has(key)) {
-          tiles.push({ x: tx, y: ty });
-        }
-      }
-    }
-  }
-
-  return tiles;
 }
 
 function getTilesInStraightLine(
@@ -477,6 +471,23 @@ function resolveMove(
         </template>
       </template>
     </div>
+    <div v-if="player.fogged" class="fog-container"
+      :style="{
+        width: '100%',
+        height: '100%',
+        gridTemplateColumns: `repeat(${cols}, ${tileSize}px)`,
+        gridTemplateRows: `repeat(${rows}, ${tileSize}px)`,
+      }">
+      <template v-for="row in rows" :key="row">
+        <template v-for="col in cols" :key="`${col},${row}`">
+          <div
+          class="border border-black"
+          :class="fogSet.has(`${col-1},${row-1}`) ? 'tile fog-tile' : 'tile-empty fog-cleared'"
+          :id="(col-1)+', '+(row-1)"
+          />
+        </template>
+      </template>
+    </div>
     <!-- Render pieces -->
     <div
       v-for="piece in pieces"
@@ -572,7 +583,7 @@ function resolveMove(
     >
     {{ String.fromCodePoint(parseInt(pieceToPlace.unicode.replace("U+", ""), 16)) }}
     </div>
-    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -640,6 +651,38 @@ function resolveMove(
   height: 80%;
   clip-path: polygon(0% 50%, 100% 0%, 100% 100%);
 }
+.move-button-up-left:before {
+  left: 10%;
+  bottom: 4%;
+  width: 80%;
+  height: 32%;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  transform: translateY(-100%) rotate(-45deg);
+}
+.move-button-up-right:before {
+  left: 10%;
+  bottom: 4%;
+  width: 80%;
+  height: 32%;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  transform: translateY(-100%) rotate(45deg);
+}
+.move-button-down-left:before {
+  width: 80%;
+  height: 32%;
+  left: 10%;
+  top: 4%;
+  clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+  transform: translateY(100%) rotate(45deg);
+}
+.move-button-down-right:before {
+  width: 80%;
+  height: 32%;
+  left: 10%;
+  top: 4%;
+  clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+  transform: translateY(100%) rotate(-45deg);
+}
 .move-button:after {
   right: 0;
 }
@@ -663,5 +706,19 @@ function resolveMove(
   opacity: 0.5;
   pointer-events: none;
   z-index: 10;
+}
+.fog-container{
+  position: absolute;
+  top: 0;
+  display: grid;
+  background-color: transparent;
+}
+.fog-tile{
+  border: 1px dashed lightgray;
+  background-color: grey;
+  z-index: 4;
+}
+.fog-cleared{
+  background-color: transparent;
 }
 </style>

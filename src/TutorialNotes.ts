@@ -47,6 +47,15 @@ At higher security levels, rarer pieces will start spawning as enemies, and vari
 Harder boss admins may also appear at higher security levels.
 In endless mode, new bosses persist into following rounds, and enemy variants become commonplace.
 
+INFAMY (base difficulty)
+Adjust your Infamy level for an increased challenge
+lvl 2: Bosses accumulate from begining
+lvl 3: Enemies get +1 maxSize per security level
+lvl 4: Enemies get +1 defence per security level
+lvl 5: Enemies get +1 attack per security level
+lvl 6: Enemies get +1 moves per security level
+lvl 7: Enemies get +1 range per security level
+
 //TIPS
 Always have a defensive program handy for nodes where you can be attacked immediately.
 Special moves will not trigger a retaliation from other pieces, even damaging ones.

@@ -199,3 +199,33 @@ export function addItemsUntilFull(
     attempts++;
   }
 }
+
+export function getTilesInRange(
+  center: Coordinate,
+  range: number,
+  tileSet: Set<string>,       // valid board tiles like "x,y"
+): Coordinate[] {
+  const tiles: Coordinate[] = [];
+  const { x, y } = center;
+  const r = range;
+
+  for (let dx = -r; dx <= r; dx++) {
+    for (let dy = -r; dy <= r; dy++) {
+      const dist = Math.abs(dx) + Math.abs(dy);
+
+      // Only include tiles within Manhattan range
+      if (dist > 0 && dist <= r) {
+        const tx = x + dx;
+        const ty = y + dy;
+        const key = `${tx},${ty}`;
+
+        // Only add if tile exists on board
+        if (tileSet.has(key)) {
+          tiles.push({ x: tx, y: ty });
+        }
+      }
+    }
+  }
+
+  return tiles;
+}

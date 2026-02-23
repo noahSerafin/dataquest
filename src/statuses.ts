@@ -6,8 +6,8 @@ export const STATUS_ICONS: Record<string, string> = {
   poisoned: "🤢",    // U+1F922
   frozen: "🥶",      // U+1F976
   charmed: "😍",     // U+1F60D
-  confused: "🤕",    // U+1F915
-  exposed: "🫣",
+  confused: "🤕",    // U+1F915 // SHAKING FACE, U+1FAE8
+  exposed: "🫣",  
   hidden: "🤫",      // U+1F92B
   negative: "🫥",    // U+1FAE5
 };

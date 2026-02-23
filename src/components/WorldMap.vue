@@ -3,7 +3,7 @@
     import MiniMap from "./MiniMap.vue";
     import { Admin } from "../AdminPrograms";
     import { Item, Box, Genie, Gift, Pinata, Pandora } from "../Items";
-    import { allBosses } from "../Bosses";
+    import { allBosses, nonStackableBosses } from "../Bosses";
     import { watch } from "vue";
     import { Player } from "../Player";
     import type { WorldMap, WorldNode } from "../worldBuilder";
@@ -70,13 +70,21 @@
 
     function returnNewBoss() {
         skipsThisLevel.value = 0;
-        const bossPool = allBosses.filter(
-            boss => boss.rarity <= props.player.difficulty
+        const bossPool = props.player.difficulty > 6 ? allBosses : allBosses.filter(
+            boss => boss.rarity <= props.player.difficulty && boss.rarity >= props.player.difficulty - 2
         );
         const pool = bossPool.length > 0 ? bossPool : allBosses;
+
+        //don't add bosses whose effects don't stack
+        const duplicatesToRemove = nonStackableBosses.filter(boss => 
+            props.bosses.some(playerBoss => playerBoss.name === boss.name)
+        );
+        const duplicateNames = new Set(duplicatesToRemove.map(b => b.name));
+        const filteredPool = pool.filter(boss => !duplicateNames.has(boss.name));
+
         console.log('allbosses', allBosses.length)
         //console.log('pool', pool.length)
-        return new pool[Math.floor(Math.random() * pool.length)];
+        return new filteredPool[Math.floor(Math.random() * filteredPool.length)];
     }
     function newBoss() {
         boss.value = returnNewBoss();
@@ -86,7 +94,7 @@
         const newBosses = []
         for (let index = 0; index < props.bosses.length; index++) {
             newBosses.push(returnNewBoss());
-        }
+        }        
         emit('replaceBosses', newBosses);
         props.player.spend(rerollBossCost.value);
         rerollBossCost.value = rerollBossCost.value*2;
@@ -170,7 +178,7 @@
         }
         if (node.type === 'skip' && node.skipReward) {
             return String.fromCodePoint(
-            parseInt(node.skipReward.value.unicode.replace('U+', ''), 16)
+                parseInt(node.skipReward.value.unicode.replace('U+', ''), 16)
             );
         }
         switch (node.type) {

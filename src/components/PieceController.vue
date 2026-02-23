@@ -88,7 +88,7 @@ function toggleTooltip(key: string) {
 </script>
 
 <template>
-  <div :class="`piece-controller instance v_${piece.variantName}`" :style="{
+  <div :class="`piece-controller instance v_${piece.variantName} redacted-${piece.redacted}`" :style="{
     transform: `translate(${position.x}px, ${position.y}px)`
   }">
     <div :class="`header ${piece.variantName ? ('variant-header v_'+piece.variantName) : ''}`" @mousedown="startDrag" @touchstart="startDrag">
@@ -122,12 +122,12 @@ function toggleTooltip(key: string) {
     </div>
 
     <div class="stats">
-      <p class="text-green">Max Size: {{ piece.getStat('maxSize') }} Current: {{ piece.tiles.length }}</p>
-      <p class="text-blue">Moves: {{ piece.getStat('moves') }} <span>Left: {{ piece.movesRemaining }}</span></p>
-      <p class="text-orange">Range: {{ piece.getStat('range') }}</p>
-      <p class="text-red">Attack: {{ piece.getStat('attack') }}</p>
-      <p class="text-cyan">Defence: {{ piece.getStat('defence') }} <span>Left: {{ piece.defenceRemaining }}</span></p>
-      <p class="text-yellow">Actions: {{ piece.getStat('actions') }}</p>
+      <p class="text-green">Max Size: <span class='stat'>{{ piece.getStat('maxSize') }}</span> Current: {{ piece.tiles.length }}</p>
+      <p class="text-blue">Moves: <span class='stat'>{{ piece.getStat('moves') }}</span> <span>Left: <span class='stat'>{{ piece.movesRemaining }}</span></span></p>
+      <p class="text-orange">Range: <span class='stat'>{{ piece.getStat('range') }}</span></p>
+      <p class="text-red">Attack: <span class='stat'>{{ piece.getStat('attack') }}</span></p>
+      <p class="text-cyan">Defence: <span class='stat'>{{ piece.getStat('defence') }}</span> <span>Left: <span class="stat">{{ piece.defenceRemaining }}</span></span></p>
+      <p class="text-yellow">Actions: <span class='stat'>{{ piece.getStat('actions') }}</span></p>
       <p v-if="activeImmunities.length > 0">Immune to:
         <span
         v-for="([key]) in activeImmunities"
@@ -304,5 +304,19 @@ p{
       margin: 0
     }
   }
+}
+.symbol, .variant, .name, .desc, .stat{
+  position: relative;
+}
+
+.redacted-true .symbol::after, .redacted-true .variant::after, .redacted-true .name::after, .redacted-true .desc::after, .redacted-true .stat::after{
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  z-index: 3;
+  top: 0;
+  left: 0;
 }
 </style>

@@ -6,6 +6,9 @@ export class Player {
     difficulty: number = 1;
     stake: number;
     bossesCleared: number = 0;
+    mapProgress: number = 0;
+    hasWonGame: boolean = false;
+    fogged: boolean = false;
     money: number
     memory: number
     adminSlots: number

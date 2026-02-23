@@ -16,7 +16,7 @@
   import type { Coordinate, PieceBlueprint, Level, OS } from "./types";
   import { runEnemyStateMachine } from "./Enemy";
   import WorldMap from "./components/WorldMap.vue";
-  import { addItemsUntilFull, applyVariant, findAnyPiecesInRange, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, rollVariant } from "./helperFunctions";
+  import { addItemsUntilFull, applyVariant, findAnyPiecesInRange, getTilesInRange, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, rollVariant } from "./helperFunctions";
   import Shop from "./components/Shop.vue";
   import BossView from "./components/BossView.vue";
   import RoundSummary from "./components/RoundSummary.vue";
@@ -82,6 +82,7 @@
   }
 
   const stake = ref(1);
+  const gameStarted = ref(false);
   
   const player = ref(new Player(
     'U+1F60A',
@@ -132,12 +133,12 @@
     )
     showMainMenu.value = false;
     showMap.value = true;
+    gameStarted.value = true;
   }
   const extraDifficulty=ref<number>(0)
-  const mapProgress=ref<number>(0)
 
   function incrementMapProgress(){
-    mapProgress.value++
+    player.value.mapProgress++
     //console.log('progress increased:', mapProgress.value)
   }
 
@@ -232,7 +233,7 @@
           pickWeightedRandom(allPieces, player.value),
         ];
         const bps = classes.map(c => makeBlueprint(c.class, c.variant ?? undefined));
-        player.value.programs.push(...bps);
+        player.value.programs.push(...bps);//do one by one
         player.value.removeItem(item)
       }
       if(item.name === 'Mystery Box' &&  hasRoom){
@@ -496,9 +497,38 @@
   const isFirstTurn = ref(true);
   const pieceToPlace = ref<PieceBlueprint | null>(null);
   //world logic
+  const showSummary = ref(false);
   const level = ref(castled);//tiles
   const displayEditor = ref(false);
-  const showSummary = ref(false);
+  const foggedTiles = ref<Coordinate []>([]);
+
+  function clearFog (){
+    if(!player.value.fogged) return;
+    const revealKeys = new Set<string>();
+    playerSpawns.value.forEach(p => revealKeys.add(`${p.x},${p.y}`));
+
+    const levelSet = new Set(level.value.tiles.map(t => `${t.x},${t.y}`));
+    /*if (selectedPiece.value) {//for persistant clearance
+      const piece = selectedPiece.value;  
+      const rangeTiles = getTilesInRange(piece.headPosition, piece.range, levelSet);
+      rangeTiles.forEach(t => revealKeys.add(`${t.x},${t.y}`));
+    }*/
+
+    //for non persistent clearance - we need to do all active pieces every time
+    activePieces.value.forEach(pieceToCheck => {
+      if(pieceToCheck.team === 'player'){  
+        const rangeTiles = getTilesInRange(pieceToCheck.headPosition, pieceToCheck.range, levelSet);
+        rangeTiles.forEach(t => revealKeys.add(`${t.x},${t.y}`));
+        pieceToCheck.tiles.forEach(t => revealKeys.add(`${t.x},${t.y}`));
+      }
+    });
+
+    // 2. Filter the foggedTiles by checking if their key exists in the revealKeys Set
+    // This removes both spawns and piece-range in one go without overwriting
+    foggedTiles.value = foggedTiles.value.filter(tile => 
+      !revealKeys.has(`${tile.x},${tile.y}`)
+    );
+  }
   
   //map
   const toggleMap = () => {
@@ -553,6 +583,10 @@
     //originalSpawns.value = playerSpawns.value.map(s => ({ ...s }));
     boardRef.value.clearHighlights();
     await handleApplyAdmins('onRoundStart', '');
+    if(player.value.fogged){
+      foggedTiles.value = [...level.value.tiles];
+      clearFog();
+    }
     showMap.value = false;
     roundHasStarted.value = true;
   }
@@ -560,9 +594,12 @@
   function handleProceed(){
     openSummary(false);
     incrementMapProgress();
-    if(mapProgress.value >= 3){
+    if(player.value.mapProgress >= 3){
       increaseDifficulty();
-      mapProgress.value = 0
+      player.value.mapProgress = 0
+      if(player.value.bossesCleared === 6){
+        player.value.hasWonGame = false;
+      }
     }
     showMap.value = true;
   }
@@ -586,6 +623,10 @@
     await handleApplyAdmins('onRoundStart', '');
     roundHasStarted.value = true;
     isFirstTurn.value = true;
+    if(player.value.fogged){
+      foggedTiles.value = [...level.value.tiles];
+      clearFog();
+    }
   }
 
   function retryLevel(){
@@ -704,11 +745,11 @@
           }
           //add tiles here? if spawn.tiles.length <= enemy.getStat(maxsize){ enemy.tiles = spawn.tiles }
 
-          if(player.value.stake > 2) enemyInstance.maxSize+=1;
-          if(player.value.stake > 3) enemyInstance.defence+=1;
-          if(player.value.stake > 4) enemyInstance.moves+=1;
-          if(player.value.stake > 5) enemyInstance.attack+=1;
-          if(player.value.stake > 6) enemyInstance.range+=1;
+          if(player.value.stake > 2) enemyInstance.maxSize+=player.value.difficulty;
+          if(player.value.stake > 3) enemyInstance.defence+=player.value.difficulty;
+          if(player.value.stake > 4) enemyInstance.moves+=player.value.difficulty;
+          if(player.value.stake > 5) enemyInstance.attack+=player.value.difficulty;
+          if(player.value.stake > 6) enemyInstance.range+=player.value.difficulty;
 
           processed.push(enemyInstance);
           continue;
@@ -842,17 +883,18 @@
     lastTurnPieces.value = activePieces.value.map(p => p.clone());
 
     //pass admin modifiers to the piece
-    PieceInstance.movesRemaining = 0;
+    //PieceInstance.movesRemaining = PieceInstance.moves;
     activePieces.value.push(PieceInstance);
 
     // Mark blueprint as placed so it greys in inventory
     bp.isPlaced = true
 
     // Reset placement state
-    pieceToPlace.value = null;
     await handleApplyAdmins('onPlacement', PieceInstance.id)
     playerSpawns.value = newPlacementHighlights();
-    
+    clearFog();
+    pieceToPlace.value = null;
+
     //applyStatModifications()
     //if(player.value.hasAdmin('Copier')){}
 
@@ -959,12 +1001,23 @@
       await trap.special(selectedPiece.value);
       //removePiece(trap);//shouldn't really be necessary - testing without
     }
+    if(selectedPiece.value.targetType === 'trapPiece'){
+      //check for others
+      const trapTarget = activePieces.value.find(p =>
+        p.tiles.some(t => t.x === coord.x && t.y === coord.y)
+      );
+      await selectedPiece.value.special(trapTarget);
+    }
     if(selectedPiece.value.movesRemaining > 0){
       boardRef.value.highlightMoves(selectedPiece.value);
     }else {
       boardRef.value.clearHighlights();
     }
     playerSpawns.value = newPlacementHighlights();
+    if(player.value.fogged){
+      foggedTiles.value = [...level.value.tiles];//non persistant clearance
+      clearFog();
+    }
   }
 
   function checkForRoundEnd(){
@@ -1009,8 +1062,8 @@
     //if (!damageReceiver || (damageReceiver.team === selectedPiece.value.team && !selectedPiece.value.statuses.charmed)) return;
     //console.log("Damage call:", coord, damage)
     const baseDamage = selectedPiece.value.getStat('attack');
-    await handleApplyAdmins('onDealDamage', selectedPiece.value.id)//attacker's id, (bug: blood tax will trigger even on no damage)
-    const damage = Math.floor(baseDamage * selectedPiece.value.damageMult)//mult should be applyed inside takeDamage for special moves
+    await handleApplyAdmins('onDealDamage', selectedPiece.value.id);// damageReceiver.id)//attacker's id, (bug: blood tax will trigger even on no damage)
+    const damage = Math.floor(baseDamage * selectedPiece.value.damageMult);//mult should be applyed inside takeDamage for special moves
     await damageReceiver.takeDamage(damage);
     if(selectedPiece.value.statuses.hidden){
       selectedPiece.value.statuses.hidden = false;
@@ -1168,7 +1221,7 @@
 
   const hasWonRound = ref<boolean>(false);
   
-  const endRound = (roundWon: boolean) => {
+  const endRound = async (roundWon: boolean) => {
     //reset counts
     player.value.admins.forEach(admin => {
       if(admin.onRoundEnd) admin.onRoundEnd();
@@ -1181,11 +1234,17 @@
     selectedPiece.value = null;    
     if(roundWon){
       hasWonRound.value = true;
-      handleApplyAdmins('onRoundEnd', '');//await??--
+      await handleApplyAdmins('onRoundEnd', '');//await??--
       activePieces.value = [];//for needle
       originalPieces.value = [];
-      openSummary(true);
       extraDifficulty.value = 0;
+      if(player.value.mapProgress >= 3){
+        player.value.bossesCleared += 1;
+        if(player.value.bossesCleared === 6){
+          player.value.hasWonGame = true;
+        }
+      }
+      openSummary(true);
       //move to btn inside round summary
     } else {
       hasWonRound.value = false;
@@ -1209,6 +1268,7 @@
     /*for (const admin of player.value.admins) {
       admin.onRoundEnd?.();
     }*/
+    player.value.fogged = false;
     roundHasStarted.value = false;
   }
       
@@ -1271,9 +1331,11 @@
       }
       if(piece.team === 'enemy'){
         piece.resetTempModifiers();
+        piece.willRetaliate = false;//
       }
     });
     await enemyTurn();
+    await handleApplyAdmins('onEnemyTurnEnd', '');
     applyStatusEffects('enemy');
     //player piece tempstats reset
     activePieces.value.forEach(piece => {
@@ -1284,6 +1346,7 @@
       }
       if(piece.team === 'player' ){
         piece.resetTempModifiers();
+        piece.willRetaliate = false;//
       }
     })
     if(isFirstTurn){
@@ -1316,8 +1379,7 @@
   const worldSeed = ref(0);
   const increaseDifficulty = () => {
     player.value.difficulty += 1;
-    player.value.bossesCleared += 1;
-    if(player.value.difficulty<7 || player.value.stake > 1){//cumulate bosses in endless mode
+    if(player.value.difficulty<7 && player.value.stake === 1){//cumulate bosses in endless mode
       bossAdmins.value = [];
     }
     refreshShop(true);
@@ -1328,10 +1390,14 @@
     worldSeed.value--
   }
   const increaseStake = () => {
-    stake.value += 1;
+    if(stake.value < 6){
+      stake.value += 1;
+    }
   }
   const decreaseStake = () => {
-    stake.value -= 1;
+    if(stake.value > 1){
+      stake.value -= 1;
+    }
   }
 
   watch(
@@ -1429,12 +1495,15 @@
     <button class="phone-hide" @mousedown="toggleFastControls()">
       Fast Controls
     </button>
-    <button class="phone-hide" @mousedown="increaseStake()">
-     Increase Stake: {{stake}}
-    </button>
-    <button class="phone-hide" @mousedown="decreaseStake()">
-     Decrease Stake: {{stake}}
-    </button>
+    <div v-if="!gameStarted" class="flex">
+      <button class="phone-hide" @mousedown="decreaseStake()">
+        -
+      </button>
+      <span>Stake: {{ stake }}</span>
+      <button class="phone-hide" @mousedown="increaseStake()">
+        +
+      </button>
+    </div>
     <button class="phone-hide" @mousedown="toggleDebug()">
       Debug mode
     </button>
@@ -1442,6 +1511,7 @@
   <div class="top-hud">
     <div class="enemy-info">
       <p><strong>Security level: </strong>{{ player.difficulty + extraDifficulty }}</p>
+      <p><strong>Infamy: </strong>{{ stake }}</p>
       <span>
         <BossView v-if="bossAdmins.length> 0" :admins="bossAdmins"/>
       </span>
@@ -1514,6 +1584,7 @@
     />
     <Board ref="boardRef" v-if="!displayEditor" class="stage-panel" :class="{ active: showBoard }"
     :tiles="level.tiles"
+    :foggedTiles="foggedTiles"
     :pieces="activePieces"
     :selectedPiece="selectedPiece"
     :placementHighlights="playerSpawns"

@@ -1,10 +1,11 @@
 import { Item } from "./Items";
 import { Piece, allPieces } from "./Pieces";
 import { Player } from "./Player";
-import type { Coordinate, StatModifier, StatusKey } from "./types";
+import type { Coordinate, PieceBlueprint, StatModifier, StatusKey } from "./types";
 
 export type AdminTrigger =
   | 'onPlacement'
+  | 'onEnemyTurnEnd'
   | 'onTurnEnd'
   | 'onRoundStart'
   | 'onRoundEnd'
@@ -51,7 +52,7 @@ class Meteor extends Admin {
   static description = "Deals 2 damage to every piece at the start of a round";
   static unicode = "U+2604";//"U+1F71A"
   static color = "#000000ff";
-  static rarity = 4;
+  static rarity = 5;
   constructor() {
     super(Meteor.name, Meteor.description, Meteor.unicode, Meteor.color, 10, Meteor.rarity, 'gameState', 'onRoundStart')
   }
@@ -212,7 +213,7 @@ class BionicLeg extends Admin {
   }
 }
 
-class Convenience extends Admin {//TODO test
+class Convenience extends Admin {
   static name = "Convenience Store";
   static description = "Open the shop any time (still only reloads for free at shop nodes)";
   static unicode = "U+1F3EA";
@@ -236,9 +237,9 @@ class Department extends Admin {
   //modify shop/player bool for this
 }
 
-class Eye extends Admin {//test try
+class Eye extends Admin {
   static name = "Evil Eye";
-  static description = "Lower's the defences of all enemy progams by 1 at start of round";
+  static description = "Lower's the defences of all enemy progams by 1 at the start of a round";
   static unicode = "U+1F9FF";
   static color = "#020072ff";
   static rarity = 4;
@@ -267,7 +268,7 @@ class Bouquet extends Admin {//duplicates showing up anyway
   //shop, disable for now
 }
 
-class Heartbreaker extends Admin {
+class Heartbreaker extends Admin {//make a boss
   static name = "Heartbreaker";
   static description = "Makes your programs immune to being charmed on placement";
   static unicode = "U+1F494";//charmed symbol? "U+1F498";
@@ -535,7 +536,7 @@ class Aesculapius extends Admin {
 
 class Heart extends Admin {//change
   static name = "Heart";
-  static description = "Programs all gain +2 max size on placement";
+  static description = "+1 max size and +1 moves on placement";
   static unicode = "U+1FAC0";
   static color = "#ff5555";
   static rarity = 2;
@@ -544,7 +545,8 @@ class Heart extends Admin {//change
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({maxSize: 2})
+    activePieces[idx].addModifier({maxSize: 1})
+    activePieces[idx].addModifier({moves: 1})
   }
 }
 
@@ -555,7 +557,7 @@ class Bone extends Admin {//change
   static color = "#d33636ff";
   static rarity = 3;
   constructor() {
-    super(Bone.name, Bone.description, Bone.unicode, Bone.color, 7, Bone.rarity, 'gameState', 'onPlacement')
+    super(Bone.name, Bone.description, Bone.unicode, Bone.color, 6, Bone.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
@@ -621,12 +623,12 @@ class GoldenTicket extends Admin {
   }
 }
 
-class Dove extends Admin {// PEACE SYMBOL, U+262E
+class Dove extends Admin {// PEACE SYMBOL, U+262E // HERB, Olive branch U+1F33F
   static name = "Dove";
   static description = "1 free move after placing at the start of every round";
   static unicode = "U+1F54A";////CHURCH, sanctuary U+26EA
   static color = "rgb(77, 156, 170)";
-  static rarity = 5;
+  static rarity = 4;
   constructor() {
     super(Dove.name, Dove.description, Dove.unicode, Dove.color, 7, Dove.rarity, 'gameState', 'other')
   }
@@ -756,7 +758,7 @@ class Osiris extends Admin {
 
 class Slots extends Admin {
   static name = "Slots";
-  static description = "Rerolls cost $2 less";
+  static description = "Rerolls in the next shop cost $2 less";//can fix by moving reroll calculation into player
   static unicode = "U+1F3B0";
   static color = "#ff5555";
   static rarity = 1;
@@ -1118,10 +1120,10 @@ class Telescope extends Admin {
 
 class Microscope extends Admin {
   static name = "Microbiology";
-  static description = "Placed programs with a max size of 1 get +2 defence on load";
+  static description = "Placed programs with a max size of 1 get +2 defence on load";//+2 temp defence on end of turn? 
   static unicode = "U+1F52C";
   static color = "#ff5555";
-  static rarity = 3;
+  static rarity = 2;
   constructor() {
     super(Microscope.name, Microscope.description, Microscope.unicode, Microscope.color, 5, Microscope.rarity, 'gameState', 'onPlacement')
   }
@@ -1339,7 +1341,7 @@ class Scarf extends Admin {
   static name = "Scarf";
   static description = "All programs are immune to being frozen";
   static unicode = "U+1F9E3";
-  static color = "#f04814ff";
+  static color = "rgb(216, 248, 244)";
   static rarity = 2;
   constructor() {
     super(Scarf.name, Scarf.description, Scarf.unicode, Scarf.color, 4, Scarf.rarity, 'gameState', 'onPlacement')//or gamestate?
@@ -1509,7 +1511,7 @@ class Pants extends Admin {
   }
 }
 
-class Ace extends Admin {//test
+class Ace extends Admin {
   static name = "Ace in the hole";
   static description = "Your last placed program gets +1 to all stats";
   static unicode = "U+2660";
@@ -1893,7 +1895,7 @@ class Ring extends Admin {
 
 class Minerva extends Admin {
   static name = "Minerva";
-  static description = "+1 range all your placed programs each time a program is destroyed";
+  static description = "+1 range for all your placed programs each time a program is destroyed";
   static unicode = "U+1F989";//horus: "U+1314A";
   static color = "#d3761fff";
   static rarity = 6;
@@ -1912,7 +1914,7 @@ class Minerva extends Admin {
 
 class Hermit extends Admin {
   static name = "Hermit Shell";
-  static description = "Programs get +1 defence and -1 moves on load";
+  static description = "Programs get +2 defence and -1 moves on load";
   static unicode = "U+1F41A";
   static color = "#22b3dfff";
   static rarity = 1;
@@ -1921,7 +1923,7 @@ class Hermit extends Admin {
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({defence: 1});
+    activePieces[idx].addModifier({defence: 2});
     activePieces[idx].addModifier({moves: -1});
   }
 }
@@ -2080,7 +2082,7 @@ class Discount extends Admin {
 class Variety extends Admin {
   static name = "Variety Box";
   static description = "Variants are +25% more likely to appear in the shop";
-  static unicode = "U+1F371"; //BENTO BOX, U+1F371 variety box chocolates  CHOCOLATE BAR, U+1F36B
+  static unicode = "U+1F371"; //variety box chocolates  HEART WITH RIBBON, U+1F49D , CHOCOLATE BAR, U+1F36B
   static color = "rgb(114, 89, 46)";
   static rarity = 4;
   constructor() {
@@ -2103,7 +2105,7 @@ class Appraisal extends Admin {
   //handle in shop
 }
 
-class Camp extends Admin {//TENT, U+26FA //Camp redo nodes once?
+class Camp extends Admin {//needs reviewing
   static name = "Camper";
   static description = "Your non-hidden Programs that don't move gain +1 range, ones that do move lose -1 range.";// to all stats on the end of your turn";
   static unicode = "U+26FA";
@@ -2117,10 +2119,10 @@ class Camp extends Admin {//TENT, U+26FA //Camp redo nodes once?
     activePieces.forEach(piece => {
       if(piece.team === 'player' && !piece.statuses.hidden){
         if(piece.movesRemaining === piece.getStat('moves')){
-          piece.addModifier({range: 1});//encourages camping
+          piece.addModifier({range: 1});//encourages camping, seemingly only temporary. If so change to attack
           //piece.addTempModifier({defence : 1})
         } else {
-          piece.addModifier({range: 1});//encourages camping
+          piece.addModifier({range: -1});//encourages campinga
         }
       }
     });
@@ -2237,7 +2239,7 @@ class Sled extends Admin {//test
   static name = "Rosebud";
   static description = "Your last placed program starts hidden";
   static unicode = "U+1F6F7";
-  static color = "#000000ff";
+  static color = "rgb(185, 185, 185)";
   static rarity = 3;
   constructor() {
     super(Sled.name, Sled.description, Sled.unicode, Sled.color, 7, Sled.rarity, 'playerAndGame', 'onPlacement')
@@ -2311,11 +2313,13 @@ class School extends Admin {//test
   async apply({ player }: { player: Player }) {
     if(this.count < 7){
       player.programs.forEach(bp => {
-        bp.maxSize += 1;
-        bp.moves += 1;
-        bp.attack += 1;
-        bp.range += 1;
-        bp.defence += 1;
+        if(!bp.isPlaced){
+          bp.maxSize += 1;
+          bp.moves += 1;
+          bp.attack += 1;
+          bp.range += 1;
+          bp.defence += 1;
+        }
       });
       this.count ++
     }
@@ -2327,16 +2331,15 @@ class Dharma extends Admin {//test
   static description = "Every kind of reroll is free"
   static unicode = "U+2638"; //every kind of reroll is free (shop, bosses(roulette) ---- nodes(ferris), skips(dice-already free), )
   static color = "rgb(249, 213, 36)";
-  static rarity = 6;
+  static rarity = 5;
   constructor() {
     super(Dharma.name, Dharma.description, Dharma.unicode, Dharma.color, 2, Dharma.rarity, 'player', 'onRoundEnd')
   }
 }
 
-//FLAG IN HOLE, U+26F3 -- last enemy piece gets debuffed?
 class Putter extends Admin {//test
   static name = "Putter";
-  static description = "The last enemy program loses -1 to all stats";
+  static description = "The last enemy program loses -1 to all stats";//0 defence?
   static unicode = "U+26F3";
   static color = "rgb(25, 215, 107)";
   static rarity = 2;
@@ -2353,7 +2356,6 @@ class Putter extends Admin {//test
   }
 }
 
-//SMOKING SYMBOL, U+1F6AC
 class Smoker extends Admin {
   static name = "Cigarette";//GOGGLES, U+1F97D
   static description = "Your programs have -1 max size, but are immune to being confused";
@@ -2371,7 +2373,7 @@ class Smoker extends Admin {
 }
 
 class Medic extends Admin {
-  static name = "Field Medic";//GOGGLES, U+1F97D
+  static name = "Field Medic";
   static description = "+1 max size, +1 defence";
   static unicode = "U+1FA7A";// medic, + max Size/defence?
   static color = "rgb(255, 255, 255)";
@@ -2414,10 +2416,419 @@ export class Ferris extends Admin {
   //handle in worldmap
 }
 
-// EVERGREEN TREE, U+1F332, cannot be frozen, scarf already does this
-
 //anchor
 //- sludge slow down enemies
+
+// EVERGREEN TREE, U+1F332, cannot be frozen, scarf already does this
+class Evergreen extends Admin {
+  static name = "Evergreen";
+  static description = "+1 max size to all your programs at the end of every turn";
+  static unicode = "U+1F332";
+  static color = "#ff5555";
+  static rarity = 4;
+  constructor() {
+    super(Evergreen.name, Evergreen.description, Evergreen.unicode, Evergreen.color, 7, Evergreen.rarity, 'gameState', 'onTurnEnd')//playerandgame, we can +1 blueprints as well
+  }
+  //private count = 0;
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    //this.count += 1;
+    //if(this.count === 4){
+      activePieces.forEach(p => {
+        if(p.team==='player'){
+          p.addModifier({maxSize: 1})
+        }
+      });
+      //this.count = 0;
+    //}
+  }
+}
+
+//admin to add held item variants to all pieces
+//face down card, close to chest etc.
+class Cards extends Admin {//test
+  static name = "Hidden Hand";
+  static description = "Held upgrade item's effects apply to all placed programs";
+  static unicode = "U+1FAAD"; //FOLDING HAND FAN, 
+  static color = "rgb(0, 13, 255)";
+  static rarity = 6;
+  constructor() {
+    super(Cards.name, Cards.description, Cards.unicode, Cards.color, 7, Cards.rarity, 'playerAndGame', 'onPlacement')
+  }
+  async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    const maxSizeMod = player.items.filter(i => i.name === 'Formula').length + player.items.filter(i => i.name === 'Blueberry').length + (2*player.items.filter(i => i.name === 'Melon').length) + (3*player.items.filter(i => i.name === 'Pie').length);
+    const movesMod = player.items.filter(i => i.name === 'Roids').length + player.items.filter(i => i.name === 'Juice').length + (2*player.items.filter(i => i.name === 'Teapot').length) + (2*player.items.filter(i => i.name === 'Coffee').length);
+    const rangeMod = player.items.filter(i => i.name === 'Glasses').length + (2*player.items.filter(i => i.name === 'Carrot').length);
+    const attackMod = player.items.filter(i => i.name === 'Roids').length + player.items.filter(i => i.name === 'Mushroom').length + (2*player.items.filter(i => i.name === 'Meat').length);
+    const defenceMod = player.items.filter(i => i.name === 'Formula').length + player.items.filter(i => i.name === 'Iron').length + (2*player.items.filter(i => i.name === 'Garlic').length) + (3*player.items.filter(i => i.name === 'Ginger').length);
+    const blessingBonus = player.items.filter(i => i.name === 'Blessing').length;
+
+    //[Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Roids, Formula]
+    activePieces[idx].addModifier({
+      maxSize: maxSizeMod + blessingBonus,
+      moves: movesMod + blessingBonus,
+      range: rangeMod + blessingBonus,
+      attack: attackMod + blessingBonus,
+      defence: defenceMod + blessingBonus
+    })
+  }
+}
+
+class Ollie extends Admin {
+  static name = "Ollie";
+  static description = "Moves can cover 2 spaces and jump tile gaps";
+  static unicode = "U+1F6F9";
+  static color = "rgb(147, 182, 190)";
+  static rarity = 4;
+  constructor() {
+    super(Ollie.name, Ollie.description, Ollie.unicode, Ollie.color, 7, Ollie.rarity, 'player', 'other')
+  }
+  //handle in board
+}
+
+class Triangle extends Admin {
+  static name = "Edge Case";
+  static description = "Your programs can move diagonally";
+  static unicode = "U+1F4D0";//TRIANGULAR RULER, U+1F4D0 , move diagonally? change range calculation?
+  static color = "rgb(18, 122, 219)";
+  static rarity = 3;
+  constructor() {
+    super(Triangle.name, Triangle.description, Triangle.unicode, Triangle.color, 6, Triangle.rarity, 'player', 'other')
+  }
+  //handle in board
+}
+
+class Juggler extends Admin {//test
+  static name = "Juggler";
+  static description = "If your first loaded program is different to the previous round's first, +1 to all its stats";//store multiple ids?
+  static unicode = "U+1F939";
+  static color = "#000000ff";
+  static rarity = 3;
+  constructor() {
+    super(Juggler.name, Juggler.description, Juggler.unicode, Juggler.color, 7, Juggler.rarity, 'playerAndGame', 'onPlacement')
+  }
+  private firstId: string = '';
+  async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+    let placedBps = [];
+    player.programs.forEach(bp => {
+      if(bp.isPlaced) placedBps.push(bp.id)
+    });
+    if(placedBps.length <= 1 && this.firstId !== id){
+      const idx = activePieces.findIndex(p => p.id === id);
+      activePieces[idx].addModifier({maxSize: 1, moves: 1, range: 1, attack: 1, defence: 1})
+      this.firstId = id;
+    }
+  }
+}
+
+class Ice extends Admin {//needs to reset
+  static name = "Thaw";
+  static description = "Freezes all programs for on first turn of a round, then unfreezes them";
+  static unicode = "U+1F9CA";
+  static color = "rgb(186, 255, 246)";
+  static rarity = 5;
+  constructor() {
+    super(Ice.name, Ice.description, Ice.unicode, Ice.color, 10, Ice.rarity, 'gameState', 'onTurnEnd')
+  }
+  private count = 0;
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.count += 1;
+    activePieces.forEach(piece => {
+      //if(piece.team === 'player'){
+        if(this.count <= 1 && !piece.immunities.frozen){
+          piece.statuses.frozen = true
+        } else {
+          piece.statuses.frozen = false;
+        }
+      //}
+    });
+  }
+  onRoundEnd() {
+    this.count = 0;
+  }
+}
+
+// CRICKET BAT AND BALL, U+1F3CF, Howzat! take a piece off with 1 tile left? broom does this already
+class Howzat extends Admin {
+  static name = "Howzat!";
+  static description = "Clears all enemies with <= 2 size and 0 defence on the end of your turn";
+  static unicode = "U+1F9F9";
+  static color = "#c7b07eff";
+  static rarity = 5;
+  constructor() {
+    super(Howzat.name, Howzat.description, Howzat.unicode, Howzat.color, 11, Howzat.rarity, 'gameState', 'onTurnEnd')
+  }
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    for (let index = 0; index < activePieces.length; index++) {
+      const p = activePieces[index];
+      if(p.team==='enemy' && p.tiles.length <= 2 && p.getStat('defence') === 0){
+        activePieces.splice(index, 1);
+      }    
+    }
+  }
+}
+
+class Cherries extends Admin {//test
+  static name = "Jackpot";
+  static description = "Unplaced programs of the same base type in your inventory add their stats to the loaded program";
+  static unicode = "U+1F352";
+  static color = "#000000ff";
+  static rarity = 5;
+  constructor() {
+    super(Cherries.name, Cherries.description, Cherries.unicode, Cherries.color, 15, Cherries.rarity, 'playerAndGame', 'onPlacement')
+  }
+  async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    const matchingBps: PieceBlueprint[] = [];
+    player.programs.forEach(bp => {
+      if((bp.name === activePieces[idx].name) && !bp.isPlaced) matchingBps.push(bp)
+    });
+    matchingBps.forEach(bp => {
+      activePieces[idx].addModifier({maxSize: bp.maxSize, moves: bp.moves, range: bp.range, attack: bp.attack, defence: bp.defence})
+      //activePieces[idx].addModifier({maxSize: 1, moves: 1, range: 1, attack: 1, defence: 1})
+    });
+  }
+}
+
+class Coin extends Admin {
+  static name = "Coin Toss";
+  static description = "50% chance for +1 damage multiplyer on attacking";
+  static unicode = "U+1FA99";
+  static color = "#d4a792";
+  static rarity = 2;
+  constructor() {
+    super(Coin.name, Coin.description, Coin.unicode, Coin.color, 5, Coin.rarity, 'piece', 'onDealDamage')
+  }
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    if(Math.random() < 0.5){
+      const idx = activePieces.findIndex(p => p.id === id);
+      activePieces[idx].damageMult += 1;
+    }
+  }
+}
+
+class Monarch extends Admin {
+  static name = "Monarch";
+  static description = "Charm a random enemy at the start of a round";
+  static unicode = "U+1F98B";
+  static color = "rgb(40, 11, 167)";
+  static rarity = 3;
+  constructor() {
+    super(Monarch.name, Monarch.description, Monarch.unicode, Monarch.color, 6, Monarch.rarity, 'gameState', 'onRoundStart')
+  }
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const enemyPieces = activePieces.filter(p => (p.team === 'enemy'));
+    const randomEnemy = enemyPieces[Math.floor(Math.random() * enemyPieces.length)];
+    if (randomEnemy && !randomEnemy.immunities.charmed) {
+      randomEnemy.statuses.charmed = true;
+    }
+  }
+}
+
+class Tempura extends Admin {
+  static name = "Tempura";
+  static description = "-1 max size, +1 defence";
+  static unicode = "U+1F364";
+  static color = "rgb(224, 41, 215)";
+  static rarity = 1;
+  constructor() {
+    super(Tempura.name, Tempura.description, Tempura.unicode, Tempura.color, 3, Tempura.rarity, 'gameState', 'onPlacement')
+  }
+  async apply({ id, activePieces }: {  id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    activePieces[idx].addModifier({defence: 1}) 
+    activePieces[idx].addModifier({maxSize: -1}) 
+  }
+}
+
+//MARTIAL ARTS UNIFORM, U+1F94B Black belt, +temp defence each turn with ab action left
+class BlackBelt extends Admin {
+  static name = "Black Belt";
+  static description = "Your programs with an action remaining on the end of your turn will retaliate with their attack on incoming damage";
+  static unicode = "U+1F9F9";
+  static color = "rgb(0, 0, 0)";
+  static rarity = 5;
+  constructor() {
+    super(BlackBelt.name, BlackBelt.description, BlackBelt.unicode, BlackBelt.color, 9, BlackBelt.rarity, 'gameState', 'onTurnEnd')
+  }
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    for (let index = 0; index < activePieces.length; index++) {
+      const p = activePieces[index];
+      if(p.team==='player' && p.actions >= 1){
+        p.willRetaliate = true;
+      }    
+    }
+  }
+}
+
+class Bell extends Admin {//needs to reset
+  static name = "Saved by the Bell";
+  static description = "Freezes programs attacking yours when there is only 1 player program in a node";
+  static unicode = "U+1F514";
+  static color = "rgb(186, 255, 246)";
+  static rarity = 5;
+  constructor() {
+    super(Bell.name, Bell.description, Bell.unicode, Bell.color, 8, Bell.rarity, 'gameState', 'onReceiveDamage')
+  }
+  
+  async apply({ id: id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const playerPieces = activePieces.filter(p => (p.team === 'player'));
+    const idx = activePieces.findIndex(p => p.id === id);
+    const dealer = activePieces[idx];
+    if(playerPieces.length === 1 && dealer && !dealer.immunities.frozen){
+      dealer.statuses.frozen = true;
+    }
+  }
+}
+
+//onPieceDestruction gain money
+class Violin extends Admin {//test
+  static name = "Violin";
+  static description = "Gain $3 on destruction of your programs";//0 defence?
+  static unicode = "U+1F3BB";
+  static color = "rgb(68, 0, 77)";
+  static rarity = 2;
+  constructor() {
+    super(Violin.name, Violin.description, Violin.unicode, Violin.color, 3, Violin.rarity, 'playerAndGame', 'onPieceDestruction')
+  }
+  async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    if(activePieces[idx].team === 'player'){
+      player.money += 3;
+    }
+  }
+}
+
+// LUGGAGE, U+1F9F3 Carry on
+class Luggage extends Admin {
+  static name = "Carry On";
+  static description = "+1 memory each time a boss is cleared";
+  static unicode = "U+1F9F3";
+  static color = "#75a8d8";
+  static rarity = 3;
+  constructor() {
+    super(Luggage.name, Luggage.description, Luggage.unicode, Luggage.color, 5, Luggage.rarity, 'player', 'onRoundEnd')
+  }
+
+  //noRoundend
+  async apply({ player }: { player: Player }) {
+    if(player.mapProgress === 3){
+      player.memory += 1;
+    }
+  }
+  /*
+  remove({ player }: { player: Player }) {//might not work without other type
+    player.memory -= player.difficulty;
+  }
+  */
+}
+
+class Reinforcement extends Admin {
+  static name = "Reinforcement";
+  static description = "+1 max size, +1 defence, -2 moves";
+  static unicode = "U+1F529";
+  static color = "rgb(41, 126, 224)";
+  static rarity = 1;
+  constructor() {
+    super(Reinforcement.name, Reinforcement.description, Reinforcement.unicode, Reinforcement.color, 4, Reinforcement.rarity, 'gameState', 'onPlacement')
+  }
+  async apply({ id, activePieces }: {  id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    activePieces[idx].addModifier({defence: 1}) 
+    activePieces[idx].addModifier({maxSize: +1}) 
+    activePieces[idx].addModifier({moves: -2}) 
+  }
+}
+
+class Chime extends Admin {
+  static name = "Wind Chime";
+  static description = "Enemies that have moved lose -1 defence for 1 turn";
+  static unicode = "U+1F390";
+  static color = "rgb(185, 250, 255)";
+  static rarity = 1;
+  constructor() {
+    super(Chime.name, Chime.description, Chime.unicode, Chime.color, 3, Chime.rarity, 'gameState', 'onEnemyTurnEnd')
+  }
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    activePieces.forEach(p => {
+      if(p.team==='enemy' && p.movesRemaining < p.getStat('moves')){
+        p.addTempModifier({defence: -1})
+      }    
+    });
+  }
+}
+
+class Fuel extends Admin {
+  static name = "Gassed";
+  static description = "Player programs get an extra 1 moves remaining after the enemy's turn";
+  static unicode = "U+26FD";
+  static color = "rgb(185, 250, 255)";
+  static rarity = 4;
+  constructor() {
+    super(Fuel.name, Fuel.description, Fuel.unicode, Fuel.color, 6, Fuel.rarity, 'gameState', 'onEnemyTurnEnd')
+  }
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    activePieces.forEach(p => {
+      if(p.team==='player'){
+        p.movesRemaining += 1;
+      }    
+    });
+  }
+}
+
+//BRIEFCASE, U+1F4BC bribe $10 reduces defence
+class Briefcase extends Admin {
+  static name = "Bribe";
+  static description = "If possible, spends $10 to lower the defences of all enemy progams by 1 at the start of a round";
+  static unicode = "U+1F4BC";
+  static color = "rgb(131, 131, 131)";
+  static rarity = 2;
+  constructor() {
+    super(Briefcase.name, Briefcase.description, Briefcase.unicode, Briefcase.color, 5, Briefcase.rarity, 'playerAndGame', 'onRoundStart')
+  }
+  
+  async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+    if(player.effectiveMoney >= 10){
+      for (const p of activePieces){
+        if(p.team==='enemy'){
+          p.addModifier({defence: -1})//enemy pieces only?
+        }
+      }
+      player.spend(10);
+    }
+  }
+}
+
+//4 all require damage receiver
+/*
+//SELFIE, U+1F933 use action on self for a temp defence?
+
+export class Chain extends Admin {// status test unfinished: make enemies spread to fellow enemies
+  static name = "Daisy Chain";
+  static description = "Attacks damage enemy programs next to the damage dealer";//effect all programs??
+  static unicode = "U+1F33C";
+  static color = "rgb(27, 230, 245)";
+  static rarity = 5;
+  constructor() {
+    super(Chain.name, Chain.description, Chain.unicode, Chain.color, 7, Chain.rarity, 'gameState', 'onDealDamage')
+  }
+  //on turn end
+  async apply({ id: id, activePieces }: { id: string; activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    const dealer = activePieces[idx];
+    const enemies = activePieces.filter(p => p.team === 'enemy');
+
+    //for (const piece of activePieces) {
+    for (const enemy of enemies) {
+      const isAdjacent = dealer.tiles.some(st =>
+        enemy.tiles.some(tt =>
+        Math.abs(st.x - tt.x) + Math.abs(st.y - tt.y) === 1)
+      );
+      if (!isAdjacent) continue;
+      enemy.takeDamage(dealer.getStat('attack'));
+    }
+  }
+}
 
 //SPLATTER, U+1FADF
 //SPLASHING SWEAT SYMBOL, U+1F4A6
@@ -2452,6 +2863,7 @@ export class Splash extends Admin {
     });
   }
 }
+  */
 
 // BASEBALL, U+26BE Strike out, Enemies that fail to damage a program 3 times are removed - onreceivedamage would need a second id to check
 //baseball also needs id of receiver, only onReceiveDamage only gets dealer atm, could use target to determine if tiles were spliced or not
@@ -2487,37 +2899,6 @@ class Baseball extends Admin {
 }
   */
 
-//admin to add held item variants to all pieces
-//face down card, close to chest etc.
-class Cards extends Admin {//test
-  static name = "Hidden Hand";
-  static description = "Held upgrade item's effects apply to all placed programs";
-  static unicode = "U+1FAAD"; //FOLDING HAND FAN, 
-  static color = "rgb(0, 13, 255)";
-  static rarity = 6;
-  constructor() {
-    super(Cards.name, Cards.description, Cards.unicode, Cards.color, 7, Cards.rarity, 'playerAndGame', 'onPlacement')
-  }
-  async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
-    const idx = activePieces.findIndex(p => p.id === id);
-    const maxSizeMod = player.items.filter(i => i.name === 'Formula').length + player.items.filter(i => i.name === 'Blueberry').length + (2*player.items.filter(i => i.name === 'Melon').length) + (3*player.items.filter(i => i.name === 'Pie').length);
-    const movesMod = player.items.filter(i => i.name === 'Roids').length + player.items.filter(i => i.name === 'Juice').length + (2*player.items.filter(i => i.name === 'Teapot').length) + (2*player.items.filter(i => i.name === 'Coffee').length);
-    const rangeMod = player.items.filter(i => i.name === 'Glasses').length + (2*player.items.filter(i => i.name === 'Carrot').length);
-    const attackMod = player.items.filter(i => i.name === 'Roids').length + player.items.filter(i => i.name === 'Mushroom').length + (2*player.items.filter(i => i.name === 'Meat').length);
-    const defenceMod = player.items.filter(i => i.name === 'Formula').length + player.items.filter(i => i.name === 'Iron').length + (2*player.items.filter(i => i.name === 'Garlic').length) + (3*player.items.filter(i => i.name === 'Ginger').length);
-    const blessingBonus = player.items.filter(i => i.name === 'Blessing').length;
-
-    //[Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Roids, Formula]
-    activePieces[idx].addModifier({
-      maxSize: maxSizeMod + blessingBonus,
-      moves: movesMod + blessingBonus,
-      range: rangeMod + blessingBonus,
-      attack: attackMod + blessingBonus,
-      defence: defenceMod + blessingBonus
-    })
-  }
-}
-
 export class Clippy extends Admin {
   static name = "Clippy";
   static description = "Provides tutorial hints";
@@ -2530,7 +2911,7 @@ export class Clippy extends Admin {
   //handle in player
 }
 
-export const allAdmins = [Brain, Meteor, Miner, Bubble, Clover, Onion, Blood, Razor, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Parachute, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Bone, RollerBlades, Lungs, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, OffRoader, Seed, Puzzle, Chivalry, Roger, Bucket, Diamond, Sneakers, Candle, Lightbulb, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, Sprinkler, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FakeID, Shades, Barber, Umbrella, Bank, Ballet, Pants, Ace, Pi, Pazzaz, Toilet, Harvest, Bipolar, Taoism, Loot, HedgeFund, PeaPod, Liberty, Punching, Teddy, Abacus, Cheese, AirSupport, DartBoard, Dice, Ladder, Ring, Minerva, Hermit, Tracker, Pong, Knot, Rainbow, Jammer, Balloon, Wheel, Bath, Purse, Discount, Variety, Appraisal, Camp, Piggy, Bowling, Stiletto, Disco, Nest, Sled, Crash, Skyscraper, School, Dharma, Putter, Smoker, Medic, Cards];
+export const allAdmins = [Brain, Meteor, Miner, Bubble, Clover, Onion, Blood, Razor, BionicArm, BionicLeg, Convenience, Department, Eye, Bouquet, Heartbreaker, Hamsa, Relay, Parachute, Notepad, AdminMap, PetriDish, Volatile, Inheritance, CreditCard, Needle, Rune, Joker, Chemistry, Aesculapius, Heart, Bone, RollerBlades, Lungs, GoldenTicket, Dove, Stonks, Trolley, Toolbox, Backdoor, Communism, Palette, Osiris, Slots, Newspaper, Crown, Cactus, Compass, OffRoader, Seed, Puzzle, Chivalry, Roger, Bucket, Diamond, Sneakers, Candle, Lightbulb, Feather, Copier, Telescope, Microscope, Lotus, Broom, Pickup, Artic, Sprinkler, FireEngine, Protein, Vitamins, Prayer, Fountain, Spoon, Hermes, Scarf, Ambulance, FakeID, Shades, Barber, Umbrella, Bank, Ballet, Pants, Ace, Pi, Pazzaz, Toilet, Harvest, Bipolar, Taoism, Loot, HedgeFund, PeaPod, Liberty, Punching, Teddy, Abacus, Cheese, AirSupport, DartBoard, Dice, Ladder, Ring, Minerva, Hermit, Tracker, Pong, Knot, Rainbow, Jammer, Balloon, Wheel, Bath, Purse, Discount, Variety, Appraisal, Camp, Piggy, Bowling, Stiletto, Disco, Nest, Sled, Crash, Skyscraper, School, Dharma, Putter, Smoker, Medic, Evergreen, Cards, Ollie, Triangle, Juggler, Ice, Howzat, Cherries, Coin, Monarch, Tempura, BlackBelt, Bell, Violin, Luggage, Reinforcement, Chime, Fuel, Briefcase];
 console.log('admins length: ', allAdmins.length)
 let adminLogs = {
   rarity1: 0,
@@ -2569,47 +2950,55 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //splash damage- mult to group targets??
 //bomb bonuses -
 //gene hybrids appear in shop
-//CHERRIES, U+1F352 free rerolls?
-// CRICKET BAT AND BALL, U+1F3CF, Howzat! take a piece off with 1 tile left? broom does this already
-//TULIP, U+1F337 pair with bubble, some kind of effect based off money???
-//FRIED SHRIMP, U+1F364 Tempura
-//CLAPPER BOARD, U+1F3AC Action
 
-// ROLLER COASTER, U+1F3A2
-// TOOTHBRUSH, U+1FAA5
-//CLAPPER BOARD, U+1F3AC
-// HINDU TEMPLE, U+1F6D5 polytheism
+//TULIP, U+1F337 pair with bubble, some kind of effect based off money???
+
+//CLAPPER BOARD, U+1F3AC Action 
+// CRESCENT MOON, U+1F319
+
+
+//MEDIUM WHITE CIRCLE, U+26AA Pearl
+//ROLLER COASTER, U+1F3A2
+//TOOTHBRUSH, U+1FAA5
+//HINDU TEMPLE, U+1F6D5 polytheism
 //KAABA, U+1F54B move in a circle
 //WATER WAVE, U+1F30A surf
+//HIBISCUS, U+1F33A + health
+//FINGERPRINT, U+1FAC6
+//LOLLIPOP, U+1F36D sweet tooth
+//CANDY, U+1F36C
+//PINCHED FINGERS, U+1F90C
 
+//SOCKS, U+1F9E6
+// BILLED CAP, U+1F9E2
+//DIVING MASK, U+1F93F
+//POURING LIQUID, U+1FAD7, spillage
+//DUMPLING, U+1F95F Pierog
+//PEANUTS, U+1F95C
+
+//GAMER  VIDEO GAME, U+1F3AE
 //Arevakhach LEFT-FACING ARMENIAN ETERNITY SIGN, U+58E
 //RIGHT-FACING ARMENIAN ETERNITY SIGN, U+58D
-//GAMER  VIDEO GAME, U+1F3AE
-//COIN, U+1FA99 Bank token - consumables are free
-//VIOLIN, U+1F3BB onPieceDestruction gain money
 // SAXOPHONE, U+1F3B7 + moves 
 // ACCORDION, U+1FA97 Busker - 
 //PINE DECORATION, U+1F38D
-//BIRTHDAY CAKE, U+1F382
 //SEAT, U+1F4BA Recliner
-//WIND CHIME, U+1F390
 //CHAIR, U+1FA91
 //HAIR PICK, U+1FAAE
 //SPOOL OF THREAD, U+1F9F5
-//KITE, U+1FA81
-//YO-YO, U+1FA80
-//JUGGLING, U+1F939 - use a different program each round for bonus
+// COFFIN, U+26B0
+//CLOSED MAILBOX WITH RAISED FLAG, U+1F4EB
+//OLD KEY, U+1F5DD
 
 //complicated edits...
 //ROUND PUSHPIN, U+1F4CD trap's heads are marked with pin, doesn't reveal them though
 //NEST WITH EGGS, U+1FABA after placing last program, buff all pieces but make their deaths permanent?
-//NEST WITH EGGS, U+1FABA Nest Egg gains $3 sell value every round
 //changes to movement/range
-//SKATEBOARD, U+1F6F9 ollie, extend move distance by 1
-//TRIANGULAR RULER, U+1F4D0 , move diagonally? change range calculation
-// BLOSSOM, U+1F33C daisy chain, damage effects all touching pieces (use petri dish to get touching)
 //SHOVEL, U+1FA8F remove node memory -
 
+//SEE-NO-EVIL MONKEY, U+1F648
+//HEAR-NO-EVIL MONKEY, U+1F649
+//SPEAK-NO-EVIL MONKEY, U+1F64A
 
 //FISHING POLE AND FISH, U+1F3A3 Bait, enemies attack player with highest defence?
 
@@ -2621,7 +3010,6 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 
 //blood tax nerf to only attacking own pieces? overkills? or jolly roger?
 //nerf needle to random stat? have a count? only trigger on bosses?
-//LOLLIPOP, U+1F36D sweet tooth
 //COCKTAIL GLASS, U+1F378 hybrids get bonus stats on placement
 //DECIDΑCPS TREE, U+1F333 OLD OAK, spawns acorns // CHESTNUT, U+1F330
 // HOSPITAL, U+1F3E5
@@ -2642,10 +3030,7 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //EGYPTIAN HIEROGLYPH S034, U+132F9
 //EGYPTIAN HIEROGLYPH O010A, U+13262
 // LEFT LUGGAGE, U+1F6C5 Key and suitcase
-//BRIEFCASE, U+1F4BC
-// COFFIN, U+26B0
-//CLOSED MAILBOX WITH RAISED FLAG, U+1F4EB
-//OLD KEY, U+1F5DD
+
 
 //CHEQUERED FLAG, U+1F3C1
 
@@ -2664,10 +3049,6 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //EXTRATERRESTRIAL ALIEN, U+1F47D
 
 // AUTOMATED TELLER MACHINE, U+1F3E7
-// SNOWFLAKE, U+2744
-//AI TRACKBALL, U+1F5B2
-
-// ICE CUBE, U+1F9CA
 
 //TURNED BLACK SHOGI PIECE, U+26CA //black shield 
 

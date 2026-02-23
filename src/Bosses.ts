@@ -15,24 +15,6 @@ targetType: 'blueprint' | 'piece' | 'shopItem' | 'player' | 'gameState'  | 'play
   | 'onPieceDestruction'
   | 'other';
   
-  class Fog extends Admin {//unfinished
-    static name = "Fog of War";
-    static description = "All tiles outside player range are obscured";//handle in app
-    static unicode = "U+1F301";//cloud U+2601";
-    static color = "#575757ff";
-    static rarity = 3;
-    constructor() {
-        super(Fog.name, Fog.description, Fog.unicode, Fog.color, 5, 3, 'playerAndGame', 'onRoundStart')
-    }
-    
-    async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
-            
-        const idx = activePieces.findIndex(p => p.id === id);
-        console.log('applying:', this.name)
-        activePieces[idx].addModifier({moves: 2})
-        activePieces[idx].movesRemaining += 2;
-    }
-    }
 */
 
 //lower difficulty of +1 bosses, more +2 bosses
@@ -182,25 +164,12 @@ class Factory extends Admin {
     }
 }
 
-/*class Tornado extends Admin {//unfinished
-  static name = "Tornado";
-  static description = "All load points are randomised";
-  static unicode = "U+1F32A";
-  static color = "#790a0aff";
-  constructor() {
-    super(Tornado.name, Tornado.description, Tornado.unicode, Tornado.color, 5, 3, 'piecesAndBoard', 'onRoundStart')
-  }
-    async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
-        const idx = activePieces.findIndex(p => p.id === id);
-    }
-}*/
-
 class Wrath extends Admin {
   static name = "Wrath";
   static description = "A random player piece loses a tile each turn after the first";
   static unicode = "U+1F329";
   static color = "#790a0aff";
-  static rarity = 5;
+  static rarity = 4;
   constructor() {
     super(Wrath.name, Wrath.description, Wrath.unicode, Wrath.color, 5, 2, 'gameState', 'onTurnEnd')
   }
@@ -272,26 +241,6 @@ class Volcano extends Admin {
         this.count = 0;
     }
 }
-/*
-class Tsunami extends Admin { //coundown to round loss??
-  static name = "Tsunami";
-  static description = "Every piece loses 1 tile damage each turn after the first";
-  static unicode = "U+1F30A";
-  static color = "#3eebd4ff";
-  constructor() {
-    super(Tsunami.name, Tsunami.description, Tsunami.unicode, Tsunami.color, 5, 9, 'all', 'onTurnEnd')
-  }
-    async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
-        const playerPieces: Piece[] = []
-        activePieces.forEach(piece => {
-            if(piece.team === 'player'){
-                playerPieces.push(piece)
-                piece.tiles.pop()
-            }
-        });
-    }
-}
-*/
 
 class Circus extends Admin {
     static name = "Circus";
@@ -349,7 +298,7 @@ class Jack extends Admin {
     static description = "Every enemy gains +1 range at the start of the round";
     static unicode = "U+1F383";
     static color = "#000000ff";
-    static rarity = 5;
+    static rarity = 4;
     constructor() {
         super(Jack.name, Jack.description, Jack.unicode, Jack.color, 5, 1, 'gameState', 'onRoundStart')
     }
@@ -367,7 +316,7 @@ class Lock extends Admin {
     static description = "Every enemy gains +2 defence at the start of the round";
     static unicode = "U+1F512";
     static color = "#ad1400ff";
-    static rarity = 5;
+    static rarity = 4;
     constructor() {
         super(Lock.name, Lock.description, Lock.unicode, Lock.color, 6, 3, 'gameState', 'onRoundStart')
     }
@@ -537,7 +486,7 @@ class Omega extends Admin {
     static color = "#000000ff";
     static rarity = 6;
     constructor() {
-        super(Omega.name, Omega.description, Omega.unicode, Omega.color, 3, 6, 'gameState', 'onRoundStart')
+        super(Omega.name, Omega.description, Omega.unicode, Omega.color, 6, 6, 'gameState', 'onRoundStart')
     }
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
         activePieces.forEach(piece => {
@@ -561,7 +510,7 @@ class Bones extends Admin {
   static color = "#000000ff";
   static rarity = 4;
   constructor() {
-    super(Bones.name, Bones.description, Bones.unicode, Bones.color, 5, 4, 'gameState', 'onPieceDestruction')
+    super(Bones.name, Bones.description, Bones.unicode, Bones.color, 4, 4, 'gameState', 'onPieceDestruction')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
       const idx = activePieces.findIndex(p => p.id === id);
@@ -586,7 +535,7 @@ class Frog extends Admin {
     static color = "#415800ff";
     static rarity = 5;
     constructor() {
-        super(Frog.name, Frog.description, Frog.unicode, Frog.color, 6, 5, 'gameState', 'onPlacement')
+        super(Frog.name, Frog.description, Frog.unicode, Frog.color, 5, 5, 'gameState', 'onPlacement')
     }
     async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
         const idx = activePieces.findIndex(p => p.id === id);
@@ -605,7 +554,7 @@ class Coral extends Admin {
     static color = "#415800ff";
     static rarity = 4;
     constructor() {
-        super(Coral.name, Coral.description, Coral.unicode, Coral.color, 6, 5, 'gameState', 'onPlacement')
+        super(Coral.name, Coral.description, Coral.unicode, Coral.color, 4, 4, 'gameState', 'onPlacement')
     }
     async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
         const idx = activePieces.findIndex(p => p.id === id);
@@ -615,24 +564,92 @@ class Coral extends Admin {
     }
 }
 
+/*class Tornado extends Admin {//unfinished, needs access to the whole tileset
+  static name = "Tornado";
+  static description = "All load points are randomised";
+  static unicode = "U+1F32A";
+  static color = "#790a0aff";
+  constructor() {
+    super(Tornado.name, Tornado.description, Tornado.unicode, Tornado.color, 5, 3, 'piecesAndBoard', 'onRoundStart')
+  }
+    async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+        const idx = activePieces.findIndex(p => p.id === id);
+    }
+}*/
+/*
+class Tsunami extends Admin { //coundown to round loss??
+  static name = "Tsunami";
+  static description = "Every piece takes 1 damage each turn after the first";//1 damage for security level?
+  static unicode = "U+1F30A";
+  static color = "#3eebd4ff";
+  constructor() {
+    super(Tsunami.name, Tsunami.description, Tsunami.unicode, Tsunami.color, 5, 9, 'all', 'onTurnEnd')
+  }
+    async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+        const playerPieces: Piece[] = []
+        activePieces.forEach(piece => {
+            if(piece.team === 'player'){
+                piece.takeDamage(1)
+                //piece.takeDamage(player.difficulty)
+            }
+        });
+    }
+}*/
+
 // BLACK LARGE SQUARE, U+2B1B
 //REDACTED - all enemy programs classes are hidden with black squares
+class REDACTED extends Admin { //coundown to round loss??
+    static name = "REDACTED";
+    static description = "All enemy programs information is hidden from you";//1 damage for security level?
+    static unicode = "U+1F30A";
+    static color = "#3eebd4ff";
+    static rarity = 6;
+  constructor() {
+    super(REDACTED.name, REDACTED.description, REDACTED.unicode, REDACTED.color, 6, 6, 'all', 'onTurnEnd')
+  }
+    async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+        activePieces.forEach(piece => {
+            if(piece.team === 'enemy'){
+                piece.redacted = true;
+            }
+        });
+    }
+}
+
+class Fog extends Admin {//unfinished
+    static name = "Fog of War";
+    static description = "All tiles outside your programs range are obscured";//handle in app
+    static unicode = "U+1F301";//cloud U+2601";
+    static color = "#575757ff";
+    static rarity = 6;
+    constructor() {
+        super(Fog.name, Fog.description, Fog.unicode, Fog.color, 6, 6, 'player', 'onRoundStart')
+    }
+    
+    async apply({ player }: { player: Player }) {
+        player.fogged = true
+    }
+    /*
+    onRoundEnd() {//no access to player
+        player.fogged = false
+    }
+    */
+}
+
+// BIOHAZARD SIGN, U+2623 -2 max size
 
 //fog //square //tornado tsunami
 // damage mult for enemy
-export const allBosses = [Mirror, Factory, NorthWind, Hook, Downturn, Wrath, Reaper, Volcano, Circus, Castle, Anchor, Jack, Lock, Eclipse, Battery, Customs, Shrine, Snowflake, Sun, Whale, Bones, Frog, Coral, Izakaya, Hammer, Omega]//22
+export const allBosses = [Mirror, Factory, NorthWind, Hook, Downturn, Wrath, Reaper, Volcano, Circus, Castle, Anchor, Jack, Lock, Eclipse, Battery, Customs, Shrine, Snowflake, Sun, Whale, Bones, Frog, Coral, Izakaya, Hammer, Omega, REDACTED, Fog]//22
+export const nonStackableBosses = [Mirror, Customs, Snowflake, Sun, Frog, Coral, Izakaya, REDACTED, Fog]//no disease
 //3
 
 //ROBOT HEAD "U+1F916"
-//YIN YANG, U+262F
-//modifiers:
-//JAPANESE CASTLE, U+1F3EF enemies def up +1, moves up +1
 
 //CLOUD WITH SNOW, U+1F328
 
 //EUROPEAN CASTLE, U+1F3F0 enemies def up +1, maxsize + 1
 //FIREWORKS, U+1F386 enemy splash damage
-//SMOKING SYMBOL, U+1F6AC
 //black book NOTEBOOK, U+1F4D3
 
 // LEDGER, U+1F4D2 all transactions
@@ -643,12 +660,6 @@ export const allBosses = [Mirror, Factory, NorthWind, Hook, Downturn, Wrath, Rea
 // ICE CUBE, U+1F9CA -1 max size each turn
 
 // BEER MUG, U+1F37A move buttons randomised
-
-//MIRROR BALL, U+1FAA9
-
-//BATHTUB, U+1F6C1
-
-//SHOWER, U+1F6BF
 
 //monarch  BUTTERFLY, U+1F98B
 

@@ -104,10 +104,19 @@ function decideEnemyIntent(
         return {type: 'special', target: (findAnyPiecesInRange(enemy, enemyPieces))}
       }
       if(enemy.targetType === 'piece'){
-        let ally = findWeakestPlayerInRange(enemy, enemyPieces)?.piece
+        const ally = findWeakestPlayerInRange(enemy, enemyPieces)?.piece
         if(ally){
           return {type: 'special', target: ally};
         } //else find and path to an ally and move there
+      }
+      if(enemy.targetType === 'trapPiece' && enemy.movesRemaining > 0){//frond
+        const allyPos = findWeakestPlayerInRange(enemy, enemyPieces)?.place
+        if(allyPos){
+          const path = findShortestPath(enemy.headPosition, allyPos, tileSet, activePieces)
+          if(path){
+            return {type: 'move', path: path}
+          }
+        }
       }
     }
   }
@@ -171,6 +180,14 @@ async function executeEnemyIntent(
           } 
         } else {
           enemy.moveTo(step);//cant move here if its occupied
+          if(enemy.targetType === 'trapPiece'){//frond logic
+            const otherPiece = activePieces.find(p =>
+              p.tiles.some(t => t.x === step.x && t.y === step.y)
+            );
+            if(otherPiece){
+              await enemy.special(otherPiece);
+            }
+          }
         }
         const trap = activePieces.find(p =>
           p.targetType == 'trapPiece' && p.tiles.some(t => t.x === step.x && t.y === step.y)
@@ -246,13 +263,10 @@ async function attackPiece(attacker: Piece, defender: Piece) {
   if(attacker.actions > 0 && attacker.canAttack){//!canAttack should do special
     const damage = attacker.attack;
     await defender.takeDamage(damage);
-    if(defender.willRetaliate){
+    if(defender.willRetaliate || defender.name === 'Hedgehog'){
       await attacker.takeDamage(defender.getStat('attack'));
       if(defender.name === 'Puffer' && !attacker.immunities.poisoned){
         attacker.statuses.poisoned = true;
-      }
-      if(defender.name === 'Hedgehog'){
-        attacker.takeDamage(defender.getStat('attack'))
       }
     }
     attacker.actions--;

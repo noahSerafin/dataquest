@@ -27,6 +27,7 @@ export abstract class Piece {
   isTakingDamage: boolean = false;
   hasFriendlySpecial: boolean = false;//use in enemyAI
   hasExposingSpecial: boolean = false;//use in enemyAI
+  redacted: boolean = false;//for boss
 
   specialName?: string;
   extraUnicode?: string;
@@ -506,7 +507,7 @@ class Firewall extends Piece {
 
 class Pitfall extends Piece {
   static name = "Pitfall";
-  static description = "A trap program that freezes programs that pass over it";
+  static description = "A trap program that loads hidden and freezes programs that pass over it";
   static unicode = "U+1F573";
   static color = "#5d3900";
   static rarity = 3;
@@ -679,14 +680,25 @@ class Nerf extends Piece {
 
 class Tank extends Piece {
   static name = "Tank";
-  static description = "A mobile ranged program with high defence"//that can damage multiple targets in a straight line";
+  static description = "A mobile ranged program with high defence that can damage multiple targets in a straight line";
   static unicode = "U+1F94C";
   static color = "#00470a";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Tank.name, Tank.description, Tank.unicode, 4, 2, 5, 3, 3, Tank.color, headPosition, [headPosition], team, Tank.rarity, removeCallback, id)//curling stone //cog "U+2699 U+FE0F",
+    this.specialName = 'Fire';
+    this.targetType = 'line'
   }
-  //line?
+
+  async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
+    for (const tile of line) {
+      const occupier = activePieces.find(p =>
+        p.tiles.some(t => t.x === tile.x && t.y === tile.y)
+      );
+      await occupier?.takeDamage(this.getStat('attack'));
+    }
+    this.actions--
+  }
 }
 
 class Dynamite extends Piece {
@@ -952,7 +964,7 @@ class Oil extends Piece {
 
 class Web extends Piece {
   static name = "Web";
-  static description = "A program that freezes enemies moving over it, removing itself";//immobilises
+  static description = "A program that loads hidden and freezes enemies moving over it, removing itself";//immobilises
   static unicode = "U+1F578";
   static color = "rgb(96, 96, 96)";
   static rarity = 8; //maybe it should be a low level trap piece?
@@ -1627,7 +1639,7 @@ class Ink extends Piece {
 
 class Squid extends Piece {
   static name = "Squid";
-  static description = "A program that can creat ink decoy tiles that blinds enemies, immune to being blinded itself";
+  static description = "A program that can creat ink decoy tiles that blind enemies, immune to being blinded itself";
   static unicode = "U+1F991";
   static color = "#08004dff";
   static rarity = 4;
@@ -1877,7 +1889,8 @@ class Cockroach extends Piece {
   static color = "#e09f79ff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Cockroach.name, Cockroach.description, Cockroach.unicode, 1, 6, 1, 3, 2, Cockroach.color, headPosition, [headPosition], team, Cockroach.rarity, removeCallback, id)
+   super(Cockroach.name, Cockroach.description, Cockroach.unicode, 2, 6, 1, 3, 2, Cockroach.color, headPosition, [headPosition], team, Cockroach.rarity, removeCallback, id)
+    this.immunities.diseased = true;
   }
 }
 
@@ -2063,7 +2076,7 @@ class Beetle extends Piece {
   static color = "#059411ff";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Beetle.name, Beetle.description, Beetle.unicode, 4, 2, 1, 1, 2, Beetle.color, headPosition, [headPosition], team, Beetle.rarity, removeCallback, id)
+   super(Beetle.name, Beetle.description, Beetle.unicode, 3, 2, 1, 1, 2, Beetle.color, headPosition, [headPosition], team, Beetle.rarity, removeCallback, id)
   }
 }
 
@@ -2336,7 +2349,7 @@ class Angel extends Piece {//not passive, same as fairy, remove?? unfinished
 // WATCH, U+231A
 class Stopwatch extends Piece {//not passive
   static name = "Stopwatch";
-  static description = "Can replenish another program's moves and actions";
+  static description = "Can replenish another program's moves and actions, or take away an enemy's moves and actions";
   static unicode = "U+231A";//U+23F1";
   static color = "#ff5555";
   static rarity = 4;
@@ -2347,8 +2360,13 @@ class Stopwatch extends Piece {//not passive
     this.hasFriendlySpecial = true;
   }
   async special(targetPiece: Piece):Promise<void>{
-    targetPiece.movesRemaining = targetPiece.getStat('moves');
-    targetPiece.actions = 1;
+    if(targetPiece.team === this.team){
+      targetPiece.movesRemaining = targetPiece.getStat('moves');
+      targetPiece.actions = 1;
+    } else {
+      targetPiece.movesRemaining = 0;
+      targetPiece.actions = 0;
+    }
     this.actions --
   }
 }
@@ -2418,7 +2436,7 @@ class Centipede extends Piece {
 
 class Helicopter extends Piece {//unfinished, handle in app
   static name = "Helicopter";
-  static description = "A program that can move over empty spaces - (unfinished)";
+  static description = "A program that can move 2 empty spaces in one move";
   static unicode = "U+1F681";
   static color = "#0d9effff";
   static rarity = 6;
@@ -3001,14 +3019,14 @@ class Alien extends Piece {
 }
 
 class Lightning extends Piece {
-  static name = "Juicer";
+  static name = "Charger";
   static description = "A program that can give an extra action to another";
   static unicode = "U+26A1";
   static color = "rgb(44, 125, 255)";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Lightning.name, Lightning.description, Lightning.unicode, 3, 2, 2, 3, 0, Lightning.color, headPosition, [headPosition], team, Lightning.rarity, removeCallback, id)
-   this.specialName = 'Juice'
+   super(Lightning.name, Lightning.description, Lightning.unicode, 3, 2, 2, 0, 0, Lightning.color, headPosition, [headPosition], team, Lightning.rarity, removeCallback, id)
+   this.specialName = 'Stim'
    this.targetType = 'piece';
    this.hasFriendlySpecial = true;
    this.canAttack = false;
@@ -3136,7 +3154,7 @@ class Bear extends Piece {
   static color = "rgb(1, 101, 8)";
   static rarity = 6;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Bear.name, Bear.description, Bear.unicode, 5, 1, 2, 8, 5, Bear.color, headPosition, [headPosition], team, Bear.rarity, removeCallback, id)
+   super(Bear.name, Bear.description, Bear.unicode, 5, 1, 2, 7, 4, Bear.color, headPosition, [headPosition], team, Bear.rarity, removeCallback, id)
    this.specialName = 'Pounce';
    //this.targetType = 'piece';
     this.targetType = 'line';
@@ -3295,7 +3313,27 @@ class Octopus extends Piece {
   }
 }
 
-//bush/frond trappiece that hides friendlies. do not include in enemy list? Should be visible itself
+//needs enemyai handling
+class Frond extends Piece {
+  static name = "Frond";
+  static description = "A piece that will hide another that passes over it.";
+  static unicode = "U+1FAB4";
+  static color = "#303030ff";
+  static rarity = 2;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Frond.name, Frond.description, Frond.unicode, 1, 0, 0, 0, 0, Frond.color, headPosition, [headPosition], team, Frond.rarity, removeCallback, id)
+   this.targetType = 'trapPiece';
+   this.statuses.negative = true;
+   this.hasFriendlySpecial = true;
+  }
+  async special(target: Piece): Promise<void> {
+    if(!target.immunities.hidden && !target.statuses.exposed){
+      target.statuses.hidden = true;
+    }
+    this.actions--
+    this.removeCallback?.(this);
+  }
+}
 
 //building castle? creates a wall around it of 8 tiles 
 
@@ -3347,6 +3385,8 @@ console.log("Pieces of rarity 6: ", adminLogs.rarity6)
 //VULTURE EGYPTIAN HIEROGLYPH G014, U+13150 special that increases stats if it can kill, - would need change in ai
 
 //UNICORN FACE, U+1F984
+
+//CIRCLED CROSS POMMEE, U+1F540 //circle cross shield 
 
 //WATER BUFFALO, U+1F403
 

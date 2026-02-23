@@ -34,7 +34,7 @@ import { computed } from 'vue';
 <template>
     <div class="container round-summary">
         <div class="if-won" v-if="hasWonRound">
-            <h1 v-if="player.bossesCleared >= 6">
+            <h1 v-if="player.hasWonGame">
                 You win!
             </h1>
             <h3>

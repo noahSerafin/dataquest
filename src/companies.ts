@@ -10,12 +10,14 @@ export const companies: Company[] = [
     { name: 'Sunrise Associates', abbr: 'SRA', unicode: "U+1F305" },
     { name: 'Saturn Solutions', abbr: 'SSL', unicode: "U+1FA90" },
     { name: 'Flyby Surveilance', abbr: 'FBS', unicode: "U+1FAB0" },
-    { name: 'Monarch Media', abbr: 'MMD', unicode: "U+1F98B" },
+    { name: 'Monkey Media', abbr: 'MMD', unicode: "U+1F435" },
     { name: 'Red Sky Dynamics', abbr: 'RSD', unicode: "U+1F3B4" },
     { name: 'Whiteflower Global', abbr: 'WFG', unicode: "U+1F4AE" },
     { name: 'Cook.io', abbr: 'CKI', unicode: "U+1F36A" },
     { name: 'Sakura Robotics', abbr: 'SRB', unicode: "U+1F338"}
 ]
+
+// PANDA FACE, U+1F43C
 //flavour of pieces 
 //NBC - standard, trap, and bomb pieces
 //export const NightbridgePieces = [Knife, Sling, Fence, Stonewall, Gate, Firewall, Pitfall, Cannon, Nerf, Dynamite, Bomb, Dataworm, Copycat, Trap, Trojan, Watchman, Highwayman, Fencer, Shark, Oni, Bug, Troll, Firebrand, Golem, Potato, Ghost, Helicopter, TP, UFO]
@@ -29,13 +31,13 @@ export const companies: Company[] = [
 
 //Zenith - large pieces, special move pieces
 
-//Starlane - high move pieces, high range pieces
+//Starlane - high range pieces
 
 //Sunrise - animal pieces.
 
-//FlyBy - watchman, ranged pieces, guard officer, bugs
+//FlyBy - exposers watchman, bug type pieces, small pieces
 
-//Monarch media - bug type pieces, small pieces
+//Monkey - high move pieces, 
 
 //Red Sky - high attack pieces, defensive pieces
 

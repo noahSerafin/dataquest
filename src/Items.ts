@@ -267,6 +267,8 @@ export class Formula extends Item<PieceBlueprint> {
     }
 }
 
+// OLIVE, U+1FAD2
+
 export class Blessing extends Item<PieceBlueprint> {
     static name = "Blessing";
     static description = "Increases all a program's stats by 1";
@@ -362,7 +364,22 @@ export class Bandage extends Item<Piece> {
     }
 }
 
-export class Soap extends Item<Piece> {
+class Cake extends Item<Piece> {
+    static name = "Cake";
+    static description = "Hide a non-exposed program";
+    static unicode = "U+1F382";
+    static color = "rgb(175, 145, 179)";
+    constructor(){
+        super(Cake.name, Cake.description, Cake.unicode, Cake.color, 2, 4, 'piece')
+    }
+    apply(target: Piece, _itemMult: number) {
+        if(!target.statuses.exposed){
+            target.statuses.hidden = true;
+        }
+    }
+}
+
+class Soap extends Item<Piece> {
     static name = "Soap";
     static description = "Removes all harmful status effects from a program";
     static unicode = "U+1F9FC";
@@ -575,6 +592,9 @@ class Hourglass extends Item<Piece[]> {//TODO test
     }
 }
 
+//heart
+//extra life
+
 //affect all programs
 ////KEY, U+1F511 keygen item
 
@@ -594,6 +614,26 @@ class Extinguisher extends Item<Piece[]> {
         });
     }
 }
+
+/*
+class Plunger extends Item<Piece[]> {//item remove??
+  static name = "Plunger";
+  static description = "A program that can remove the slow status effect";
+  static unicode = "U+1FAA0";
+  static color = "#82e2ffff";
+  static rarity = 2;
+  constructor(){
+   super(Plunger.name, Plunger.description, Plunger.unicode, Plunger.color, 2, 2, 'gameState')
+  }
+    apply(activePieces: Piece[], _itemMult: number) {//game state from app??
+        activePieces.forEach(piece => {
+            if(piece.team === 'player'){
+                piece.statuses.slowed = false;
+            }
+        });
+    }
+}
+*/
 
 class Keygen extends Item<Piece[]> {//TODO test, unfinished
   static name = "Keygen";
@@ -744,9 +784,25 @@ export class Update3 extends Item {
     }
 }
 
-//PIG, U+1F416 random money?
+class Life extends Item {
+    static name = "1-Up";
+    static description = "+1 extra life";
+    static unicode = "U+1F493";
+    static color = "rgb(164, 255, 103)";
+    constructor(){
+        super(Life.name, Life.description, Life.unicode, Life.color, 6, 10, 'player')
+        //name desc utf || maxsize moves range atk def
+    }
+    apply(player: Player) {
+        player.lives += 1;
+    }
+}
+
+
+//JAR, U+1FAD9 - piece? capture an enemy of size 1, turn into blueprint
+
 //update x3, hotline buoy bugle batteries pig 9
-export const allItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Supplement, Juice, Roids, Formula, Garlic, Coffee, Bandage, Soap, Voucher, Mushroom, Rations, Beans, Pandora, Box, Genie, Gift, Pinata, Extinguisher, Wand, Hourglass, Spanner, Makeover, ShootingStar, Keygen, Bugle, Megaphone, Battery, Floppy, Update2, Update3]
+export const allItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Supplement, Juice, Roids, Formula, Garlic, Coffee, Bandage, Soap, Voucher, Mushroom, Rations, Beans, Pandora, Box, Genie, Gift, Pinata, Extinguisher, Wand, Hourglass, Spanner, Makeover, ShootingStar, Keygen, Bugle, Megaphone, Battery, Floppy, Update2, Update3, Life, Cake]
 export const upgradeItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Roids, Formula]
 //export const activeItems = [Rations, Beans]
 

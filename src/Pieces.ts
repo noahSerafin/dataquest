@@ -123,8 +123,8 @@ export abstract class Piece {
   }
 
   resetTempModifiers() {
-  this.tempStatModifiers = {};
-}
+    this.tempStatModifiers = {};
+  }
 
   // --- Accessors for base / modifiers / total ---
   getBaseStat(stat: keyof StatModifier) {
@@ -240,21 +240,20 @@ export abstract class Piece {
     if(this.statuses.blinded){
       this.range = Math.max(0, this.getStat('range') - (1 * mult));
     }
-    if (this.statuses.burning) {//scale for multiple volatiles
-      this.tiles.pop()
-      if(mult > 1){
-        this.tiles.pop()
-      }
-      if(this.tiles.length <= 0){
-        this.removeCallback?.(this);
-      }
-    }
     if (this.statuses.poisoned) {
       this.defence = Math.max(0, this.getStat('defence') - (1 * mult));
     }
     if (this.statuses.frozen) {
       //this.moves = 0;
       this.movesRemaining = 0;
+    }
+    if (this.statuses.burning) {
+      for (let i = 0; i < mult; i++) {
+        this.tiles.pop();
+      }
+      if(this.tiles.length <= 0){
+        this.removeCallback?.(this);
+      }
     }
   }
 

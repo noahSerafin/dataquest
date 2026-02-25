@@ -16,7 +16,7 @@
   import type { Coordinate, PieceBlueprint, Level, OS } from "./types";
   import { runEnemyStateMachine } from "./Enemy";
   import WorldMap from "./components/WorldMap.vue";
-  import { addItemsUntilFull, applyVariant, findAnyPiecesInRange, getTilesInRange, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, rollVariant } from "./helperFunctions";
+  import { addItemsUntilFull, applyVariant, coordKey, findAnyPiecesInRange, getOccupiedTileSet, getTilesInRange, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, rollVariant } from "./helperFunctions";
   import Shop from "./components/Shop.vue";
   import BossView from "./components/BossView.vue";
   import RoundSummary from "./components/RoundSummary.vue";
@@ -453,11 +453,12 @@
     for (const admin of playerAdmins) {
       if(trigger === admin.triggerType){
         // sort through target types, decide what to pass
+        console.log(admin.name, 'trigger', trigger)
         if(admin.targetType === 'gameState'){
-          await admin.apply({id, activePieces: activePieces.value})
+          await admin.apply({id: id, activePieces: activePieces.value})
         }
         if(admin.targetType === 'playerAndGame'){
-          await admin.apply({id, activePieces: activePieces.value, player: player.value})
+          await admin.apply({id: id, activePieces: activePieces.value, player: player.value})
         }
         if(admin.targetType === 'player'){
           await admin.apply({player: player.value})
@@ -605,18 +606,18 @@
   }
 
   async function reloadLevel(){
-    player.value.admins.forEach(admin => {
+    for(const admin of player.value.admins){
       if(admin.onRoundEnd) admin.onRoundEnd();
-    });
-    bossAdmins.value.forEach(admin => {
+    };
+    for(const admin of bossAdmins.value){
       if(admin.onRoundEnd) admin.onRoundEnd();
-    });
+    };
     renewBlueprints();
     activePieces.value = originalPieces.value.map(p => p.clone());
     //if piece has no tiles, use headposition
     graveyard.value = [];
     lastTurnPieces.value = originalPieces.value.map(p => p.clone());
-    playerSpawns.value = [...originalSpawns.value];//not working, original spawn normally 1 coord is missing;
+    playerSpawns.value = [...originalSpawns.value];//not working, backdoor breaks this
     selectedPiece.value = null;
     isPlacing.value = true
     openSummary(false);
@@ -969,6 +970,12 @@
     if(isPlacing.value){
       isPlacing.value = false;
       pieceToPlace.value = null;
+      if(player.value.hasAdmin('Backdoor')){
+        const occupied = getOccupiedTileSet(activePieces.value);
+        playerSpawns.value = level.value.tiles?.filter(tile => 
+          !occupied.has(coordKey(tile))
+        );
+      }
     }
     selectedPiece.value = piece
     //highlight range
@@ -1293,12 +1300,6 @@
       300
     );
     checkForRoundEnd();
-    // Reset enemy actions/moves after their turn if needed
-    const enemyPieces = activePieces.value.filter(p => (p.team === 'enemy' && !p.statuses.charmed));//not refs so won't update
-    enemyPieces.forEach(p => {
-      p.actions = 1;
-      p.movesRemaining = p.moves;
-    });
     playerSpawns.value = newPlacementHighlights();
     hasFinishedTurn.value = false;
   }
@@ -1335,9 +1336,9 @@
       }
     });
     await enemyTurn();
-    await handleApplyAdmins('onEnemyTurnEnd', '');
     applyStatusEffects('enemy');
     //player piece tempstats reset
+    await handleApplyAdmins('onEnemyTurnEnd', '');
     activePieces.value.forEach(piece => {
       if(piece.team === 'enemy' ){
         piece.resetMoves();
@@ -1348,7 +1349,7 @@
         piece.resetTempModifiers();
         piece.willRetaliate = false;//
       }
-    })
+    });
     if(isFirstTurn){
       isFirstTurn.value = false;
     }

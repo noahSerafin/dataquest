@@ -4,11 +4,11 @@ import type { Player } from "./Player";
 import { STAT_MIN, PIECE_VARIANTS } from "./constants";
 import { upgradeItems } from "./Items";
 
-function coordKey(c: Coordinate): string {
+export function coordKey(c: Coordinate): string {
   return `${c.x},${c.y}`;
 }
 
-function getOccupiedTileSet(activePieces: Piece[]): Set<string> {
+export function getOccupiedTileSet(activePieces: Piece[]): Set<string> {
   const occupied = new Set<string>();
 
   for (const piece of activePieces) {

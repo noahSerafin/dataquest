@@ -1448,12 +1448,12 @@ export class Bank extends Admin {
   }
 
   async apply({ player }: { player: Player }) {
-    player.items.forEach(item => {
+    for (const item of player.items) {
       item.cost += 2;
-    });
-    player.admins.forEach(admin => {
+    };
+    for (const admin of player.admins) {
       admin.cost += 2;
-    });
+    };
     //progams too?
   }
 }
@@ -1470,7 +1470,7 @@ class Ballet extends Admin {//needs to reset
   private count = 0;
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     this.count += 1;
-    activePieces.forEach(piece => {
+    for (const piece of activePieces) {
       if(piece.team === 'player'){
         if(this.count <= 3 && !piece.statuses.exposed){
           piece.statuses.hidden = true
@@ -1478,7 +1478,7 @@ class Ballet extends Admin {//needs to reset
           piece.statuses.hidden = false;
         }
       }
-    });
+    };
   }
   onRoundEnd() {
     this.count = 0;
@@ -1523,9 +1523,9 @@ class Ace extends Admin {
 
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     let isLastBp = true;
-    player.programs.forEach(bp => {
+    for (const bp of player.programs) {
       if(!bp.isPlaced) isLastBp = false;
-    });
+    };
     if(isLastBp){
       const idx = activePieces.findIndex(p => p.id === id);
       //const bpIdx = player.programs.findIndex(bp => bp.id === activePieces[idx].id )
@@ -1582,11 +1582,11 @@ class Toilet extends Admin {
   }
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     let noOfCommons = 0;
-    player.admins.forEach(admin => {
+    for (const admin of player.admins) {
       if(admin.rarity === 1){
         noOfCommons += 1;
       }
-    });
+    };
     const idx = activePieces.findIndex(p => p.id === id);
     console.log('applying:', this.name)
     activePieces[idx].addModifier({
@@ -1612,11 +1612,11 @@ class Harvest extends Admin {
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     this.count += 1;
     if(this.count === 4){
-      activePieces.forEach(p => {
+      for (const p of activePieces) {
         if(p.team==='player'){
           p.addModifier({maxSize: 1})
         }
-      });
+      };
       this.count = 0;
     }
   }
@@ -1654,17 +1654,16 @@ class Taoism extends Admin {
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     const playerPieces: Piece[] = [];
     const enemyPieces = [];
-    activePieces.forEach(p => {
+    for (const p of activePieces) {
       if(p.team==='player'){
         playerPieces.push(p);
       }
       if(p.team==='enemy'){
         enemyPieces.push(p);
       }
-    });
+    };
     if(enemyPieces.length === playerPieces.length){
-
-      playerPieces.forEach(p => {
+      for (const p of playerPieces) {
         p.addModifier({
             attack: 1,
             defence: 1,
@@ -1672,7 +1671,7 @@ class Taoism extends Admin {
             moves: 1,
             range: 1
         });
-      });
+      };
     }
   }
 }
@@ -1826,11 +1825,11 @@ class AirSupport extends Admin {
     super(AirSupport.name, AirSupport.description, AirSupport.unicode, AirSupport.color, 10, AirSupport.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-    activePieces.forEach(piece => {
+    for (const piece of activePieces) {
       if(piece.team === 'enemy'){
         piece.takeDamage(1);
       }
-    });
+    };
   }
 }
 
@@ -2043,14 +2042,14 @@ class Bath extends Admin {
     super(Bath.name, Bath.description, Bath.unicode, Bath.color, 12, Bath.rarity, 'gameState', 'onTurnEnd')
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-    activePieces.forEach(p=> {
+    for (const p of activePieces) {
       p.statuses.exposed = false;
       p.statuses.burning = false;
       p.statuses.diseased = false;
       p.statuses.slowed = false;
       p.statuses.frozen = false;
       p.statuses.poisoned = false;
-    });
+    };
   }
 }
 
@@ -2116,7 +2115,7 @@ class Camp extends Admin {//needs reviewing
     //private count for shop reference?
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-    activePieces.forEach(piece => {
+    for (const piece of activePieces) {
       if(piece.team === 'player' && !piece.statuses.hidden){
         if(piece.movesRemaining === piece.getStat('moves')){
           piece.addModifier({range: 1});//encourages camping, seemingly only temporary. If so change to attack
@@ -2125,7 +2124,7 @@ class Camp extends Admin {//needs reviewing
           piece.addModifier({range: -1});//encourages campinga
         }
       }
-    });
+    };
   }
 }
 
@@ -2160,7 +2159,7 @@ class Bowling extends Admin {//test
       {x: targetTile.x, y: targetTile.y+1 },
       {x: targetTile.x, y: targetTile.y-1 }
     ];
-    activePieces.forEach((piece) => {
+    for (const piece of activePieces) {
       if(piece.id === id) return;//skip the piece being destroyed, continue?
       const isAdjacent = piece.tiles.some(t =>
         adjacent.some(c => c.x === t.x && c.y === t.y)
@@ -2168,7 +2167,7 @@ class Bowling extends Admin {//test
       if (isAdjacent && piece.team === 'enemy') {//only attacks enemies
         piece.takeDamage(1);
       }
-    });
+    };
   }
 }
 
@@ -2209,7 +2208,7 @@ class Disco extends Admin {
       {x: targetTile.x, y: targetTile.y+1 },
       {x: targetTile.x, y: targetTile.y-1 }
     ];
-    activePieces.forEach((piece) => {
+    for (const piece of activePieces) {
       if(piece.id === id || piece.team === 'player') return;//skip the attacker?, and only reflect damage to enemies
       const isAdjacent = piece.tiles.some(t =>
         adjacent.some(c => c.x === t.x && c.y === t.y)
@@ -2217,7 +2216,7 @@ class Disco extends Admin {
       if (isAdjacent) {
         piece.takeDamage(activePieces[idx].getStat('attack'));
       }
-    });
+    };
   }
 }
 
@@ -2247,9 +2246,9 @@ class Sled extends Admin {//test
 
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     let isLastBp = true;
-    player.programs.forEach(bp => {
+    for (const bp of player.programs) {
       if(!bp.isPlaced) isLastBp = false;
-    });
+    };
     if(isLastBp){
       const idx = activePieces.findIndex(p => p.id === id);
       if(activePieces[idx].team==='player'){
@@ -2271,12 +2270,12 @@ class Crash extends Admin {//test
     super(Crash.name, Crash.description, Crash.unicode, Crash.color, 7, Crash.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-    activePieces.forEach(piece => {
+    for (const piece of activePieces) {
       if(!piece.immunities.frozen){
         piece.statuses.frozen = true;
         piece.movesRemaining = 0;
       }
-    });
+    };
   }
 }
 
@@ -2291,12 +2290,12 @@ export class Skyscraper extends Admin {//test not working
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     //const idx = activePieces.findIndex(p => p.id === id);
-    activePieces.forEach((piece) => {
+    for (const piece of activePieces) {
       if(piece.team === 'player'){
         const noOfTwos = Math.floor(piece.tiles.length / 2);
         piece.addTempModifier({defence: noOfTwos});
       }
-    });
+    };
   }
 }
 
@@ -2312,7 +2311,7 @@ class School extends Admin {//test
   private count = 0;
   async apply({ player }: { player: Player }) {
     if(this.count < 7){
-      player.programs.forEach(bp => {
+      for (const bp of player.programs) {
         if(!bp.isPlaced){
           bp.maxSize += 1;
           bp.moves += 1;
@@ -2320,7 +2319,7 @@ class School extends Admin {//test
           bp.range += 1;
           bp.defence += 1;
         }
-      });
+      };
       this.count ++
     }
   }
@@ -2433,11 +2432,11 @@ class Evergreen extends Admin {
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     //this.count += 1;
     //if(this.count === 4){
-      activePieces.forEach(p => {
+      for (const p of activePieces) {
         if(p.team==='player'){
           p.addModifier({maxSize: 1})
         }
-      });
+      };
       //this.count = 0;
     //}
   }
@@ -2510,9 +2509,9 @@ class Juggler extends Admin {//test
   private firstId: string = '';
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     let placedBps = [];
-    player.programs.forEach(bp => {
+    for (const bp of player.programs) {
       if(bp.isPlaced) placedBps.push(bp.id)
-    });
+    };
     if(placedBps.length <= 1 && this.firstId !== id){
       const idx = activePieces.findIndex(p => p.id === id);
       activePieces[idx].addModifier({maxSize: 1, moves: 1, range: 1, attack: 1, defence: 1})
@@ -2533,7 +2532,7 @@ class Ice extends Admin {//needs to reset
   private count = 0;
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     this.count += 1;
-    activePieces.forEach(piece => {
+    for (const piece of activePieces) {
       //if(piece.team === 'player'){
         if(this.count <= 1 && !piece.immunities.frozen){
           piece.statuses.frozen = true
@@ -2541,7 +2540,7 @@ class Ice extends Admin {//needs to reset
           piece.statuses.frozen = false;
         }
       //}
-    });
+    };
   }
   onRoundEnd() {
     this.count = 0;
@@ -2580,13 +2579,13 @@ class Cherries extends Admin {//test
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     const idx = activePieces.findIndex(p => p.id === id);
     const matchingBps: PieceBlueprint[] = [];
-    player.programs.forEach(bp => {
+    for (const bp of player.programs) {
       if((bp.name === activePieces[idx].name) && !bp.isPlaced) matchingBps.push(bp)
-    });
-    matchingBps.forEach(bp => {
+    };
+    for (const bp of matchingBps) {
       activePieces[idx].addModifier({maxSize: bp.maxSize, moves: bp.moves, range: bp.range, attack: bp.attack, defence: bp.defence})
       //activePieces[idx].addModifier({maxSize: 1, moves: 1, range: 1, attack: 1, defence: 1})
-    });
+    };
   }
 }
 
@@ -2594,7 +2593,7 @@ class Coin extends Admin {
   static name = "Coin Toss";
   static description = "50% chance for +1 damage multiplyer on attacking";
   static unicode = "U+1FA99";
-  static color = "#d4a792";
+  static color = "#eb0909";
   static rarity = 2;
   constructor() {
     super(Coin.name, Coin.description, Coin.unicode, Coin.color, 5, Coin.rarity, 'piece', 'onDealDamage')
@@ -2750,11 +2749,11 @@ class Chime extends Admin {
     super(Chime.name, Chime.description, Chime.unicode, Chime.color, 3, Chime.rarity, 'gameState', 'onEnemyTurnEnd')
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-    activePieces.forEach(p => {
+    for (const p of activePieces) {
       if(p.team==='enemy' && p.movesRemaining < p.getStat('moves')){
         p.addTempModifier({defence: -1})
       }    
-    });
+    };
   }
 }
 
@@ -2768,18 +2767,18 @@ class Fuel extends Admin {
     super(Fuel.name, Fuel.description, Fuel.unicode, Fuel.color, 6, Fuel.rarity, 'gameState', 'onEnemyTurnEnd')
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-    activePieces.forEach(p => {
+    for (const p of activePieces) {
       if(p.team==='player'){
         p.movesRemaining += 1;
       }    
-    });
+    };
   }
 }
 
 //BRIEFCASE, U+1F4BC bribe $10 reduces defence
 class Briefcase extends Admin {
   static name = "Bribe";
-  static description = "If possible, spends $10 to lower the defences of all enemy progams by 1 at the start of a round";
+  static description = "If possible, spends $5 to lower the defences of all enemy progams by 1 at the start of a round";
   static unicode = "U+1F4BC";
   static color = "rgb(131, 131, 131)";
   static rarity = 2;
@@ -2788,13 +2787,13 @@ class Briefcase extends Admin {
   }
   
   async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
-    if(player.effectiveMoney >= 10){
+    if(player.effectiveMoney >= 5){
       for (const p of activePieces){
         if(p.team==='enemy'){
           p.addModifier({defence: -1})//enemy pieces only?
         }
       }
-      player.spend(10);
+      player.spend(5);
     }
   }
 }
@@ -2852,7 +2851,7 @@ export class Splash extends Admin {
       {x: targetTile.x, y: targetTile.y+1 },
       {x: targetTile.x, y: targetTile.y-1 }
     ];
-    activePieces.forEach((piece) => {
+    for (const piece of activePieces) {
       //if(piece.id === id || piece.team === 'player') return;//skip the receiver?
       const isAdjacent = piece.tiles.some(t =>
         adjacent.some(c => c.x === t.x && c.y === t.y)
@@ -2860,7 +2859,7 @@ export class Splash extends Admin {
       if (isAdjacent) {
         piece.takeDamage(activePieces[idx].getStat('attack'));
       }
-    });
+    };
   }
 }
   */

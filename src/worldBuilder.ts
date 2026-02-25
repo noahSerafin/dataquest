@@ -296,7 +296,7 @@ export function generateWorld(
     position: { x: 200, y: 0 },
     company: chooseRandomCompany(),
     difficultyMod: 0,
-    reward: 5 + Math.min(10, difficulty * 2)
+    reward: Math.min(10, difficulty * 2)// +5;
   };
 
 

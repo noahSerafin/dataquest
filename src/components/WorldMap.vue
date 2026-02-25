@@ -71,7 +71,7 @@
     function returnNewBoss() {
         skipsThisLevel.value = 0;
         const bossPool = props.player.difficulty > 6 ? allBosses : allBosses.filter(
-            boss => boss.rarity <= props.player.difficulty && boss.rarity >= props.player.difficulty - 2
+            boss => boss.rarity <= props.player.difficulty && boss.rarity >= props.player.difficulty - 1
         );
         const pool = bossPool.length > 0 ? bossPool : allBosses;
 

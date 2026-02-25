@@ -31,12 +31,12 @@ class NorthWind extends Admin {
     //type all, tileset and activePieces
     async apply({activePieces, board }: {activePieces: Piece[], board: Coordinate[] }) {
         const playerPieces: Piece[] = []
-        activePieces.forEach(piece => {
+        for(const piece of activePieces){
             if(piece.team === 'player'){
                 playerPieces.push(piece)
             }
-        });
-        playerPieces.forEach(piece => {
+        };
+        for(const piece of playerPieces){
             const spaceToCheck  = {x: piece.headPosition.x, y: piece.headPosition.y+1}
             //check space is unnocupied and on board
             const isOccupied = activePieces.some(p =>
@@ -47,7 +47,7 @@ class NorthWind extends Admin {
             if(!isOccupied && isOnBoard){
                 piece.moveTo(spaceToCheck);
             }
-        })
+        };
     }
   
 }
@@ -64,12 +64,12 @@ class Hook extends Admin {
 
     async apply({activePieces, board }: {activePieces: Piece[], board: Coordinate[] }) {
         const playerPieces: Piece[] = []
-        activePieces.forEach(piece => {
+        for(const piece of activePieces){
             if(piece.team === 'player'){
                 playerPieces.push(piece)
             }
-        });
-        playerPieces.forEach(piece => {
+        };
+        for(const piece of activePieces){
             const spaceToCheck  = {x: piece.headPosition.x, y: piece.headPosition.y-1}
             //check space is unnocupied and on board
             const isOccupied = activePieces.some(p =>
@@ -79,7 +79,7 @@ class Hook extends Admin {
             if(!isOccupied && isOnBoard){
                 piece.moveTo(spaceToCheck);
             }
-        })
+        };
     }
 }
 
@@ -95,12 +95,13 @@ class Mirror extends Admin {
 
     async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
         const enemyPieces: Piece[] = []
-        activePieces.forEach(piece => {
-        if(piece.team === 'enemy'){
+        for(const piece of activePieces){
             enemyPieces.push(piece)
-        }});
+            if(piece.team === 'enemy'){
+            }
+        };
 
-        enemyPieces.forEach(piece => {
+        for (const piece of enemyPieces){
             const enemyClassName = player.programs[Math.floor(Math.random() *player.programs.length)].name;//random name from player pieceBlueprints
             const EnemyClass = allPieces.find(p => p.name === enemyClassName);
             if(EnemyClass){
@@ -108,7 +109,7 @@ class Mirror extends Admin {
                 activePieces.push(enemyInstance);
                 piece.removeCallback?.(piece);
             }
-        })  //does this always end the round??
+        }  //does this always end the round??
     }
 }
 
@@ -177,11 +178,11 @@ class Wrath extends Admin {
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
         if(this.count >= 1){
             const playerPieces: Piece[] = []
-            activePieces.forEach(piece => {
+            for(const piece of activePieces){
                 if(piece.team === 'player'){
                     playerPieces.push(piece)
                 }
-            });
+            };
             const rand = Math.floor((Math.random() * playerPieces.length) + 1);
             const randId = playerPieces[rand].id
             const idx = activePieces.findIndex(p => p.id === randId);
@@ -230,11 +231,11 @@ class Volcano extends Admin {
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
         this.count += 1
         if(this.count >= 5){
-            activePieces.forEach(piece => {
+            for(const piece of activePieces){
                 if(piece.team === 'player' && !piece.immunities.burning){
                     piece.statuses.burning = true;
                 }
-            });
+            };
         }
     }
     onRoundEnd() {
@@ -252,11 +253,11 @@ class Circus extends Admin {
         super(Circus.name, Circus.description, Circus.unicode, Circus.color, 5, 1, 'gameState', 'onRoundStart')
     }
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-        activePieces.forEach(piece => {
+        for(const piece of activePieces){
             if(piece.team === 'enemy'){
                piece.addModifier({ moves: 1 })
             }
-        });
+        };
     }
 }
 
@@ -270,11 +271,11 @@ class Castle extends Admin {
         super(Castle.name, Castle.description, Castle.unicode, Castle.color, 5, 1, 'gameState', 'onRoundStart')
     }
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-        activePieces.forEach(piece => {
+        for(const piece of activePieces){
             if(piece.team === 'enemy'){
                piece.addModifier({ defence: 1 })
             }
-        });
+        };
     }
 }
 
@@ -303,11 +304,11 @@ class Jack extends Admin {
         super(Jack.name, Jack.description, Jack.unicode, Jack.color, 5, 1, 'gameState', 'onRoundStart')
     }
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-        activePieces.forEach(piece => {
+        for(const piece of activePieces){
             if(piece.team === 'enemy'){
                piece.addModifier({ range: 1 })
             }
-        });
+        };
     }
 }
 
@@ -321,11 +322,11 @@ class Lock extends Admin {
         super(Lock.name, Lock.description, Lock.unicode, Lock.color, 6, 3, 'gameState', 'onRoundStart')
     }
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-        activePieces.forEach(piece => {
+        for(const piece of activePieces){
             if(piece.team === 'enemy'){
                piece.addModifier({ defence: 2 })
             }
-        });
+        };
     }
 }
 
@@ -336,7 +337,7 @@ class Eclipse extends Admin {
     static color = "#000000ff";
     static rarity = 5;
     constructor() {
-        super(Eclipse.name, Eclipse.description, Eclipse.unicode, Eclipse.color, 1, 9, 'gameState', 'onPlacement')
+        super(Eclipse.name, Eclipse.description, Eclipse.unicode, Eclipse.color, 5, 5, 'gameState', 'onPlacement')
     }
     async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
         const idx = activePieces.findIndex(p => p.id === id);
@@ -453,11 +454,11 @@ class Whale extends Admin {
         super(Whale.name, Whale.description, Whale.unicode, Whale.color, 3, 2, 'gameState', 'onRoundStart')
     }
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-        activePieces.forEach(piece => {
+        for(const piece of activePieces){
             if(piece.team === 'enemy'){
                piece.addModifier({ maxSize: 2 })
             }
-        });
+        };
     }
 }
 
@@ -471,11 +472,11 @@ class Hammer extends Admin {
         super(Hammer.name, Hammer.description, Hammer.unicode, Hammer.color, 3, 3, 'gameState', 'onRoundStart')
     }
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-        activePieces.forEach(piece => {
+        for(const piece of activePieces){
             if(piece.team === 'enemy'){
                piece.addModifier({ maxSize: 2 })
             }
-        });
+        };
     }
 }
 
@@ -489,7 +490,7 @@ class Omega extends Admin {
         super(Omega.name, Omega.description, Omega.unicode, Omega.color, 6, 6, 'gameState', 'onRoundStart')
     }
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-        activePieces.forEach(piece => {
+        for(const piece of activePieces){
             if(piece.team === 'enemy'){
                piece.addModifier({ 
                 maxSize: 1,
@@ -499,7 +500,7 @@ class Omega extends Admin {
                 defence: 1
                 })
             }
-        });
+        };
     }
 }
 
@@ -587,12 +588,12 @@ class Tsunami extends Admin { //coundown to round loss??
   }
     async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
         const playerPieces: Piece[] = []
-        activePieces.forEach(piece => {
+        for(const piece of activePieces){
             if(piece.team === 'player'){
                 piece.takeDamage(1)
                 //piece.takeDamage(player.difficulty)
             }
-        });
+        };
     }
 }*/
 
@@ -601,18 +602,18 @@ class Tsunami extends Admin { //coundown to round loss??
 class REDACTED extends Admin { //coundown to round loss??
     static name = "REDACTED";
     static description = "All enemy programs information is hidden from you";//1 damage for security level?
-    static unicode = "U+1F30A";
-    static color = "#3eebd4ff";
+    static unicode = "U+2B1B";
+    static color = "rgb(255, 255, 255)";
     static rarity = 6;
   constructor() {
-    super(REDACTED.name, REDACTED.description, REDACTED.unicode, REDACTED.color, 6, 6, 'all', 'onTurnEnd')
+    super(REDACTED.name, REDACTED.description, REDACTED.unicode, REDACTED.color, 6, 6, 'all', 'onRoundStart')
   }
-    async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
-        activePieces.forEach(piece => {
+    async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+        for(const piece of activePieces){
             if(piece.team === 'enemy'){
                 piece.redacted = true;
             }
-        });
+        };
     }
 }
 

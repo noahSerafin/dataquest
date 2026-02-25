@@ -920,12 +920,12 @@
       isFirstTurn.value = false; //must set to false after to avoid a loop
       // If neither admin, end immediately
       if (!hasDove && !hasPalette) {
-        endTurn();
+        await endTurn();
       }
     } else {
       // Not first turn -> normal behaviour
       isPlacing.value = false;
-      endTurn();
+      await endTurn();
     }
   }
 
@@ -1013,7 +1013,9 @@
       const trapTarget = activePieces.value.find(p =>
         p.tiles.some(t => t.x === coord.x && t.y === coord.y)
       );
-      await selectedPiece.value.special(trapTarget);
+      if(trapTarget){
+        await selectedPiece.value.special(trapTarget);
+      }
     }
     if(selectedPiece.value.movesRemaining > 0){
       boardRef.value.highlightMoves(selectedPiece.value);
@@ -1304,14 +1306,14 @@
     hasFinishedTurn.value = false;
   }
 
-  const applyStatusEffects = (team: string) => {//async for animations?
-    activePieces.value.forEach(piece => {
+  async function applyStatusEffects (team: string) {//async for animations?
+    for(const piece of activePieces.value){
       //petri dish, spread statuses here
       if(piece.team === team){
         const statusMult = 1 + player.value.admins.filter(a => a.name === 'Volatile').length;
-        piece.applyStatusEffects(statusMult);
+        await piece.applyStatusEffects(statusMult);
       }
-    });
+    };
   }
 
   const endTurn = async () => {
@@ -1323,8 +1325,8 @@
     player.value.canMove = false;
     player.value.canAction = false;
     await handleApplyAdmins('onTurnEnd', '');//sprinkler
-    applyStatusEffects('player');
-    activePieces.value.forEach(piece => {
+    await applyStatusEffects('player');
+    for(const piece of activePieces.value){
       if(piece.team === 'player' ){
         piece.resetMoves();
         piece.resetDefence();
@@ -1334,12 +1336,12 @@
         piece.resetTempModifiers();
         piece.willRetaliate = false;//
       }
-    });
+    };
     await enemyTurn();
-    applyStatusEffects('enemy');
+    await applyStatusEffects('enemy');
     //player piece tempstats reset
     await handleApplyAdmins('onEnemyTurnEnd', '');
-    activePieces.value.forEach(piece => {
+    for(const piece of activePieces.value){
       if(piece.team === 'enemy' ){
         piece.resetMoves();
         piece.resetDefence();
@@ -1349,7 +1351,7 @@
         piece.resetTempModifiers();
         piece.willRetaliate = false;//
       }
-    });
+    };
     if(isFirstTurn){
       isFirstTurn.value = false;
     }
@@ -1446,7 +1448,9 @@
         break;
 
       case 'KeyS':
-        boardRef.value.highlightSpecials(selectedPiece.value);
+        if(selectedPiece.value?.specialName){
+          boardRef.value.highlightSpecials(selectedPiece.value);
+        }
         break;
     }
   }
@@ -1642,7 +1646,7 @@
       <!--<div v-if="!displayEditor && roundHasStarted" class="graveyard">
         <button>🪦</button>
       </div>-->
-      <button v-if="!displayEditor && roundHasStarted && player.lives > 1" class="retry-btn" v-on:click="retryLevel()">Retry</button>
+      <button :disabled="hasFinishedTurn" v-if="!displayEditor && roundHasStarted && player.lives > 1" class="retry-btn" v-on:click="retryLevel()">Retry</button>
     </div>
   </div>
   </div>

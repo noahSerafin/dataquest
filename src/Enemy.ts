@@ -180,6 +180,13 @@ async function executeEnemyIntent(
           } 
         } else {
           enemy.moveTo(step);//cant move here if its occupied
+          const trap = activePieces.find(p =>
+            p.targetType == 'trapPiece' && p.tiles.some(t => t.x === step.x && t.y === step.y)
+          );
+          if (trap && trap.id !== enemy.id) {
+            await trap.special(enemy);
+            //removePiece(trap);//shouldn't really be necessary
+          }
           if(enemy.targetType === 'trapPiece'){//frond logic
             const otherPiece = activePieces.find(p =>
               p.tiles.some(t => t.x === step.x && t.y === step.y)
@@ -188,13 +195,6 @@ async function executeEnemyIntent(
               await enemy.special(otherPiece);
             }
           }
-        }
-        const trap = activePieces.find(p =>
-          p.targetType == 'trapPiece' && p.tiles.some(t => t.x === step.x && t.y === step.y)
-        );
-        if (trap && trap.id !== enemy.id) {
-          await trap.special(enemy);
-          //removePiece(trap);//shouldn't really be necessary
         }
         helpers.clearHighlights();
       }

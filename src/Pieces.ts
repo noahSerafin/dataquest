@@ -182,8 +182,11 @@ export abstract class Piece {
     
     this.tiles.unshift(newPosition)//move below the pop for disease to shrink on move?
     // If exceeding maxSize, remove the oldest tile
-    if (this.tiles.length > this.getStat('maxSize')) {//>= ???
-      this.tiles.pop() // removes last element
+    // 4. Shrink the tail until the piece matches the current maxSize
+    // Using 'while' handles cases where maxSize dropped by more than 1
+    const currentMax = this.getStat('maxSize');
+    while (this.tiles.length > currentMax) {
+      this.tiles.pop();
     }
   }
 
@@ -230,18 +233,18 @@ export abstract class Piece {
   //drugged - moves - 1
   //oil range -1
 
-  applyStatusEffects(mult: number) {
+  async applyStatusEffects(mult: number) {
     if (this.statuses.diseased) {
-      this.maxSize = Math.max(1, this.getStat('maxSize') - (1 * mult));
+      this.maxSize = Math.max(1, this.getStat('maxSize') - (1 * Math.abs(mult)));
     }
     if (this.statuses.slowed) {
-      this.moves = Math.max(0, this.getStat('moves') - (1 * mult));
+      this.moves = Math.max(0, this.getStat('moves') - (1 * Math.abs(mult)));
     }
     if(this.statuses.blinded){
-      this.range = Math.max(0, this.getStat('range') - (1 * mult));
+      this.range = Math.max(0, this.getStat('range') - (1 * Math.abs(mult)));
     }
     if (this.statuses.poisoned) {
-      this.defence = Math.max(0, this.getStat('defence') - (1 * mult));
+      this.defence = Math.max(0, this.getStat('defence') - (1 * Math.abs(mult)));
     }
     if (this.statuses.frozen) {
       //this.moves = 0;
@@ -496,7 +499,7 @@ class Firewall extends Piece {
     //await target.takeDamage(this.getStat('attack'));
     if(target.statuses.burning){
       target.takeDamage(this.getStat('attack'));
-      if(target.willRetaliate) this.takeDamage(target.getStat('attack'))
+      if(target.willRetaliate) await this.takeDamage(target.getStat('attack'))
     } else if(!target.immunities.burning){
       target.statuses.burning = true;
     }
@@ -874,7 +877,7 @@ class Trap extends Piece {
     if(!target.immunities.poisoned){
       target.statuses.poisoned = true
     }
-    target.takeDamage(this.getStat('attack'))
+    await target.takeDamage(this.getStat('attack'))
     this.actions--
     this.statuses.hidden = false;
     //remove until selection of negative is sorted
@@ -899,8 +902,8 @@ class Tar extends Piece {
     if(!target.immunities.slowed){
       target.statuses.slowed = true
     } else if(target.statuses.slowed){
-      target.takeDamage(this.getStat('attack'));
-      if(target.willRetaliate) this.takeDamage(target.getStat('attack'))
+      await target.takeDamage(this.getStat('attack'));
+      if(target.willRetaliate) await this.takeDamage(target.getStat('attack'))
     }
     this.actions--
     this.statuses.hidden = false;
@@ -1025,8 +1028,8 @@ class Germ extends Piece {//up to here //TODO
       target.statuses.diseased = true
       this.actions --
     } else if(target.statuses.diseased){
-      target.takeDamage(this.getStat('attack'));
-      if(target.willRetaliate) this.takeDamage(target.getStat('attack'))
+      await target.takeDamage(this.getStat('attack'));
+      if(target.willRetaliate) await this.takeDamage(target.getStat('attack'))
     }
     this.actions --
   }
@@ -1052,8 +1055,8 @@ class Vice extends Piece {
       target.statuses.frozen = true
       target.movesRemaining = 0
     } else if(target.statuses.frozen){
-      target.takeDamage(this.getStat('attack'));
-      if(target.willRetaliate) this.takeDamage(target.getStat('attack'))
+      await target.takeDamage(this.getStat('attack'));
+      if(target.willRetaliate) await this.takeDamage(target.getStat('attack'))
     }
     this.actions--
   }
@@ -1293,7 +1296,7 @@ class Highwayman extends Piece {//not working
       this.ids.push(piece.id)
       this.actions--
     } else {
-      piece.takeDamage(this.getStat('attack'));
+      await piece.takeDamage(this.getStat('attack'));
     }
   }
 }
@@ -1550,7 +1553,7 @@ class LabRat extends Piece {
   async special(target: Piece): Promise<void> {
     if(target.statuses.diseased){
       target.takeDamage(this.getStat('attack'));
-      if(target.willRetaliate) this.takeDamage(target.getStat('attack'))
+      if(target.willRetaliate) await this.takeDamage(target.getStat('attack'))
     } else if(!target.immunities.diseased){
       target.statuses.diseased = true
       this.actions --
@@ -1603,7 +1606,7 @@ class Dragon extends Piece {//line?
   async special(targets: Piece[]):Promise<void>{
     for (const t of targets) {
       if(t.statuses.burning && t.team !== this.team){
-        t.takeDamage(this.getStat('attack'))
+        await t.takeDamage(this.getStat('attack'))
       } else if(!t.immunities.burning){
         //damage as well???
         t.statuses.burning = true
@@ -1660,7 +1663,7 @@ class Squid extends Piece {
         continue;
       }else{
         if(occupier.statuses.blinded){
-          occupier.takeDamage(this.getStat('attack'));
+          await occupier.takeDamage(this.getStat('attack'));
         }
         if(!occupier.immunities.blinded){
           occupier.statuses.blinded = true;
@@ -1822,7 +1825,7 @@ class Cupid extends Piece {
       targetPiece.statuses.charmed = true;
     } else if(targetPiece.statuses.charmed){
       targetPiece.takeDamage(this.getStat('attack'))
-      if(targetPiece.willRetaliate) this.takeDamage(targetPiece.getStat('attack'))
+      if(targetPiece.willRetaliate) await this.takeDamage(targetPiece.getStat('attack'))
     }
     this.actions--
   }
@@ -1843,7 +1846,7 @@ class Oni extends Piece {
       targetPiece.statuses.slowed = true
     } else if(targetPiece.statuses.slowed){
       targetPiece.takeDamage(this.getStat('attack'));
-      if(targetPiece.willRetaliate) this.takeDamage(targetPiece.getStat('attack'))
+      if(targetPiece.willRetaliate) await this.takeDamage(targetPiece.getStat('attack'))
     }
     this.actions--
   }
@@ -1875,7 +1878,7 @@ class Bug extends Piece {//ant - bug can be higher and cause slow
       targetPiece.statuses.slowed = true
     } else if(targetPiece.statuses.slowed){
       targetPiece.takeDamage(this.getStat('attack'));
-      if(targetPiece.willRetaliate) this.takeDamage(targetPiece.getStat('attack'))
+      if(targetPiece.willRetaliate) await this.takeDamage(targetPiece.getStat('attack'))
     }
     this.actions--
   }
@@ -1937,7 +1940,7 @@ class Scorpion extends Piece {
       targetPiece.statuses.poisoned = true;
     } else if(targetPiece.statuses.poisioned){
       targetPiece.takeDamage(this.getStat('attack'))
-      if(targetPiece.willRetaliate) this.takeDamage(targetPiece.getStat('attack'))
+      if(targetPiece.willRetaliate) await this.takeDamage(targetPiece.getStat('attack'))
     }
     this.actions--
   }
@@ -1960,7 +1963,7 @@ class Firebrand extends Piece {
     //await targetPiece.takeDamage(this.getStat('attack'));
     if(targetPiece.statuses.burning){
       targetPiece.takeDamage(this.getStat('attack'))
-      if(targetPiece.willRetaliate) this.takeDamage(targetPiece.getStat('attack'))
+      if(targetPiece.willRetaliate) await this.takeDamage(targetPiece.getStat('attack'))
     } else if(!targetPiece.immunities.burning){
       targetPiece.statuses.burning = true;
     }
@@ -2427,7 +2430,7 @@ class Centipede extends Piece {
     }
     if(targetPiece.statuses.poisioned){
       targetPiece.takeDamage(this.getStat('attack'))
-      if(targetPiece.willRetaliate) this.takeDamage(targetPiece.getStat('attack'))
+      if(targetPiece.willRetaliate) await this.takeDamage(targetPiece.getStat('attack'))
     }
     this.actions --
   }
@@ -2640,7 +2643,7 @@ class Camera extends Piece {
       target.statuses.blinded = true;
     } else if(target.statuses.blinded){
       target.takeDamage(this.getStat('attack'))
-      if(target.willRetaliate) this.takeDamage(target.getStat('attack'))
+      if(target.willRetaliate) await this.takeDamage(target.getStat('attack'))
     }
     this.actions--
   }
@@ -2682,7 +2685,7 @@ class Shrike extends Piece {
   async special(targetPiece: Piece):Promise<void>{
     if(!targetPiece.immunities.frozen){
       targetPiece.statuses.frozen = true;
-      targetPiece.takeDamage(this.getStat('attack'))
+      await targetPiece.takeDamage(this.getStat('attack'))
     }
     this.actions--
   }
@@ -2725,7 +2728,7 @@ class Daemon extends Piece {
       targetPiece.statuses.slowed = true
     } else if(targetPiece.statuses.slowed){
       targetPiece.takeDamage(this.getStat('attack'));
-      if(targetPiece.willRetaliate) this.takeDamage(targetPiece.getStat('attack'))
+      if(targetPiece.willRetaliate) await this.takeDamage(targetPiece.getStat('attack'))
     }
     this.actions--
   }
@@ -2777,12 +2780,11 @@ class Peacock extends Piece {
    this.specialName = 'Fan'
   }
   async special(targetPiece: Piece):Promise<void>{
-    if(!targetPiece.immunities.confused){
-      targetPiece.statuses.confused = true;
-    }
     if(targetPiece.statuses.confused = true){
       targetPiece.takeDamage(this.getStat('attack'))
-      if(targetPiece.willRetaliate) this.takeDamage(targetPiece.getStat('attack'))
+      if(targetPiece.willRetaliate) await this.takeDamage(targetPiece.getStat('attack'))
+    } else if(!targetPiece.immunities.confused){
+      targetPiece.statuses.confused = true;
     }
     this.actions--
   }
@@ -3260,7 +3262,7 @@ class Orangutan extends Piece {
    this.targetType = 'piece';
   }
   async special(targetPiece: Piece):Promise<void>{
-    targetPiece.takeDamage(this.getStat('attack'));
+    await targetPiece.takeDamage(this.getStat('attack'));
     targetPiece.defenceRemaining = 0;
     this.actions--
   }
@@ -3278,7 +3280,7 @@ class Gorilla extends Piece {
    this.targetType = 'piece';
   }
   async special(targetPiece: Piece):Promise<void>{
-    targetPiece.takeDamage(this.getStat('attack'));
+    await targetPiece.takeDamage(this.getStat('attack'));
     targetPiece.defenceRemaining = 0;
     this.actions--
   }

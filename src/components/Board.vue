@@ -537,6 +537,7 @@ function resolveMove(
     />
     <div
     v-for="(tile, index) in inRangeHighlights"
+    v-if="(selectedPiece?.team === 'player' && !selectedPiece?.statuses.charmed) || (selectedPiece?.statuses.charmed && selectedPiece?.team === 'enemy')"
     :key="index"
     :id="`atk-${tile.x}-${tile.y}`"
       class="highlight-tile red"
@@ -550,6 +551,7 @@ function resolveMove(
     />
     <div
     v-for="(tile, index) in specialHighlights"
+    v-if="(selectedPiece?.team === 'player' && !selectedPiece?.statuses.charmed) || (selectedPiece?.statuses.charmed && selectedPiece?.team === 'enemy')"
     :key="index"
     :id="`atk-${tile.x}-${tile.y}`"
       class="highlight-tile yellow"

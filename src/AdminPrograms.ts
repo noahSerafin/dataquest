@@ -59,7 +59,7 @@ class Meteor extends Admin {
 
   //onRoundStart
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-    for (const p of activePieces) p.takeDamage(2);
+    for (const p of activePieces) await p.takeDamage(2);
   }
 }
 
@@ -813,7 +813,7 @@ class Cactus extends Admin {
   //on receive damage
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].takeDamage(1);
+    await activePieces[idx].takeDamage(1);
   }
 }
 
@@ -1162,7 +1162,7 @@ class Broom extends Admin {
   static color = "#c7b07eff";
   static rarity = 4;
   constructor() {
-    super(Broom.name, Broom.description, Broom.unicode, Broom.color, 10, Broom.rarity, 'gameState', 'onTurnEnd')
+    super(Broom.name, Broom.description, Broom.unicode, Broom.color, 8, Broom.rarity, 'gameState', 'onTurnEnd')
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (let index = 0; index < activePieces.length; index++) {
@@ -1260,9 +1260,9 @@ class Vitamins extends Admin {
   static description = "Programs get +1 defence on load";
   static unicode = "U+1F34A";
   static color = "#df9d22ff";
-  static rarity = 3;
+  static rarity = 2;
   constructor() {
-    super(Vitamins.name, Vitamins.description, Vitamins.unicode, Vitamins.color, 5, Vitamins.rarity, 'gameState', 'onPlacement')
+    super(Vitamins.name, Vitamins.description, Vitamins.unicode, Vitamins.color, 4, Vitamins.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
@@ -1417,7 +1417,7 @@ class Barber extends Admin {
 
   //onRoundStart
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-    for (const p of activePieces) p.takeDamage(1); //enemy pieces only?
+    for (const p of activePieces) await p.takeDamage(1); //enemy pieces only?
   }
 }
 
@@ -1463,7 +1463,7 @@ class Ballet extends Admin {//needs to reset
   static description = "all your programs are hidden for the first 3 turns of a round";
   static unicode = "U+1FA70";
   static color = "#ebc0ffff";
-  static rarity = 4;
+  static rarity = 5;
   constructor() {
     super(Ballet.name, Ballet.description, Ballet.unicode, Ballet.color, 5, Ballet.rarity, 'gameState', 'onTurnEnd')
   }
@@ -1472,7 +1472,7 @@ class Ballet extends Admin {//needs to reset
     this.count += 1;
     for (const piece of activePieces) {
       if(piece.team === 'player'){
-        if(this.count <= 3 && !piece.statuses.exposed){
+        if(this.count <= 2 && !piece.statuses.exposed){
           piece.statuses.hidden = true
         } else {
           piece.statuses.hidden = false;
@@ -1827,7 +1827,7 @@ class AirSupport extends Admin {
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const piece of activePieces) {
       if(piece.team === 'enemy'){
-        piece.takeDamage(1);
+        await piece.takeDamage(1);
       }
     };
   }
@@ -1959,7 +1959,7 @@ class Pong extends Admin {
   //on receive damage
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].takeDamage(activePieces[idx].getStat('attack'));
+    await activePieces[idx].takeDamage(activePieces[idx].getStat('attack'));
   }
 }
 
@@ -2165,7 +2165,7 @@ class Bowling extends Admin {//test
         adjacent.some(c => c.x === t.x && c.y === t.y)
       );
       if (isAdjacent && piece.team === 'enemy') {//only attacks enemies
-        piece.takeDamage(1);
+        await piece.takeDamage(1);
       }
     };
   }
@@ -2214,7 +2214,7 @@ class Disco extends Admin {
         adjacent.some(c => c.x === t.x && c.y === t.y)
       );
       if (isAdjacent) {
-        piece.takeDamage(activePieces[idx].getStat('attack'));
+        await piece.takeDamage(activePieces[idx].getStat('attack'));
       }
     };
   }
@@ -2376,7 +2376,7 @@ class Medic extends Admin {
   static description = "+1 max size, +1 defence";
   static unicode = "U+1FA7A";// medic, + max Size/defence?
   static color = "rgb(255, 255, 255)";
-  static rarity = 2;
+  static rarity = 3;
   constructor() {
     super(Medic.name, Medic.description, Medic.unicode, Medic.color, 5, Medic.rarity, 'gameState', 'onPlacement')
   }
@@ -2611,9 +2611,9 @@ class Monarch extends Admin {
   static description = "Charm a random enemy at the start of a round";
   static unicode = "U+1F98B";
   static color = "rgb(40, 11, 167)";
-  static rarity = 3;
+  static rarity = 4;
   constructor() {
-    super(Monarch.name, Monarch.description, Monarch.unicode, Monarch.color, 6, Monarch.rarity, 'gameState', 'onRoundStart')
+    super(Monarch.name, Monarch.description, Monarch.unicode, Monarch.color, 8, Monarch.rarity, 'gameState', 'onRoundStart')
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     const enemyPieces = activePieces.filter(p => (p.team === 'enemy'));

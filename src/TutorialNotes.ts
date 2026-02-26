@@ -16,6 +16,7 @@ On each turn, you may either place a new program next to one of your own, or mov
 You can move by clicking a piece then a move arrow.
 Take an action with a piece by clicking the "A" for attack, or toggle to the "S" for a special move. Both attacks and special moves use that program's action for the turn.
 You can also use the keybindings A and S to highlight the possible attack/special. click a red highlight to attack, click a yellow highlight to use a special.
+Spacebar or clicking "end turn" will end your turn, and allow the enemy to take theirs.
 If you clear the node but the round doesn't finish, there's probably still a 'hidden' enemy program in play, which should be revealed if you destroy all other enemies.
 
 ROUND SUMMARY

@@ -13,6 +13,9 @@ Once entering a node, you will be able to see what enemy programs you are up aga
 Start by placing a program in the node, either by dragging into the green spawn point or using the place button then clicking on the spawn.
 Be aware, you won't be able to move your program until after the enemy's turn, so make sure you're not going to be destroyed straight away.
 On each turn, you may either place a new program next to one of your own, or move your already placed programs.
+You can move by clicking a piece then a move arrow.
+Take an action with a piece by clicking the "A" for attack, or toggle to the "S" for a special move. Both attacks and special moves use that program's action for the turn.
+You can also use the keybindings A and S to highlight the possible attack/special. click a red highlight to attack, click a yellow highlight to use a special.
 If you clear the node but the round doesn't finish, there's probably still a 'hidden' enemy program in play, which should be revealed if you destroy all other enemies.
 
 ROUND SUMMARY

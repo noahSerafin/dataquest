@@ -2805,14 +2805,11 @@ class Dog extends Piece {
   async special(targets: Piece[]):Promise<void>{
     for (const target of targets) {
       if(target.team !== this.team){
-        if(!target.immunities.exposed){
+        if(target.statuses.exposed){
+          await target.takeDamage(this.getStat('attack'))
+        } else if(!target.immunities.exposed){
           target.statuses.hidden = false;
           target.statuses.exposed = true;
-        }
-        if(target.getStat('defence') > 0){
-          target.defence -= 1
-        } else {
-          await target.takeDamage(this.getStat('attack'))
         }
       }
     }
@@ -2835,14 +2832,11 @@ class Wolf extends Piece {
   async special(targets: Piece[]):Promise<void>{
     for (const target of targets) {
       if(target.team !== this.team){
-        if(!target.immunities.exposed){
+        if(target.statuses.exposed){
+          await target.takeDamage(this.getStat('attack'))
+        } else if(!target.immunities.exposed){
           target.statuses.hidden = false;
           target.statuses.exposed = true;
-        }
-        if(target.getStat('defence') > 0){
-          target.defence -= 1
-        } else {
-          await target.takeDamage(this.getStat('attack'))
         }
       }
     }

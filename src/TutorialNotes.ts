@@ -4,7 +4,7 @@
 MAP
 Choose your path forward, there will always be an easy path to the left with two nodes(levels) at your currently security level(difficulty).
 Alternatively, there may also be a harder path with greater rewards, an option receive a free program/item followed by a harder level, or other hidden rewards on a harder path.
-Locks indicates difficulty of level. Rarer, higher level enemy programs spawn at higher difficulties.
+Number next to the padlock indicates the difficulty of the node. Rarer, higher level enemy programs spawn at higher difficulties.
 The preview will show you the layout of the level and the starting spawn points, red for enemies, blue for the player.
 
 NODES
@@ -13,12 +13,15 @@ Once entering a node, you will be able to see what enemy programs you are up aga
 Start by placing a program in the node, either by dragging into the green spawn point or using the place button then clicking on the spawn.
 Be aware, you won't be able to move your program until after the enemy's turn, so make sure you're not going to be destroyed straight away.
 On each turn, you may either place a new program next to one of your own, or move your already placed programs.
-If you clear the node but the round doesn't finish, there's probably still a 'hidden' enemy program in play, either a trap, or one that can hide itself such as a ghost or ninja. I might add something that reveals these if they're all that's left as it does get annoying on larger maps.
+If you clear the node but the round doesn't finish, there's probably still a 'hidden' enemy program in play, which should be revealed if you destroy all other enemies.
+
+ROUND SUMMARY
+After clearing a node, you will be given a summary of the rewards, as well as your earned interest in $. You earn $1 interest for every $5 held, up to $5 interest by default.
 
 SHOP
 At the shop, you can buy new programs (P), new Admin prgrams (A), or consumable items (I)
 There are 6 tiers of rarity, each becoming rarer in the shop the higher the tier.
-You can reroll the shop for a price, the cost will exponentially increase with each reroll, but resets at each shop.
+You can reroll the shop for a pric. The cost will exponentially increase with each reroll, but resets at the next shop.
 
 ADMINS
 Admins' effects are passive, and have different triggers. Admins with the same trigger will activate left to right in the order you place them in your admin panel, you can drag to move these around.
@@ -47,7 +50,10 @@ At higher security levels, rarer pieces will start spawning as enemies, and vari
 Harder boss admins may also appear at higher security levels.
 In endless mode, new bosses persist into following rounds, and enemy variants become commonplace.
 
-INFAMY (base difficulty)
+
+----
+
+INFAMY (base difficulty chosen at start)
 Adjust your Infamy level for an increased challenge
 lvl 2: Bosses accumulate from begining
 lvl 3: Enemies get +1 maxSize per security level
@@ -57,11 +63,11 @@ lvl 6: Enemies get +1 moves per security level
 lvl 7: Enemies get +1 range per security level
 
 //TIPS
-Always have a defensive program handy for nodes where you can be attacked immediately.
+Always have a defensive program handy for nodes where you can be attacked immediately at your spawn point.
 Special moves will not trigger a retaliation from other pieces, even damaging ones.
 Your damage mult will only apply to attacks, not to special moves that cause damage.
 Admin programs trigger left to right, so make sure you drag them into the optimum position.
-Special moves that target in a line can effect the same program more than once if the multiple tiles occupy the line.
+Special moves that target in a line can effect the same program more than once if the multiple tiles occupy the line. Eg. charging through one tile will let the program charge into the next space if you targeted the one furthest away.
 
 OTHER NOTES
 There are still some bugs and balancing issues to be fixed. Please let me know what you find, preferably with a screenshot.
@@ -72,5 +78,5 @@ If you want to browse for inspiration to contribute any ideas: http://xahlee.inf
 PLANNED CHANGES (notes for me really, you can ignore these)
 The nodes are decorated with fake 'companies', that at the moment have no effect on the game. But I plan to have them use specific pools of enemy programs/variants in future.
 The balance of attack/defence is still something I'm figuring out, in some rare situations its possible to get stuck if one enemy's defence is higher than your combined programs' attack.
-Maybe defence should not restore each turn, and add a 'fortify' action that restores a programs' defence...
+add a 'fortify' action that restores a programs' defence instead or it restoring each turn?
 */

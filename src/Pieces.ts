@@ -3315,7 +3315,7 @@ class Octopus extends Piece {
 }
 
 //needs enemyai handling
-class Frond extends Piece {
+export class Frond extends Piece {
   static name = "Frond";
   static description = "A piece that will hide another that passes over it.";
   static unicode = "U+1FAB4";

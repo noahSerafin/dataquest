@@ -739,7 +739,7 @@ export class Palette extends Admin {
 
 class Osiris extends Admin {
   static name = "Osiris";
-  static description = "+1 damage all your placed programs each time a program is destroyed";
+  static description = "+1 damage to all your placed programs each time a program is destroyed";
   static unicode = "U+13080";//horus: "U+1314A";
   static color = "#33073bff";
   static rarity = 6;
@@ -1120,17 +1120,17 @@ class Telescope extends Admin {
 
 class Microscope extends Admin {
   static name = "Microbiology";
-  static description = "Placed programs with a max size of 1 get +2 defence on load";//+2 temp defence on end of turn? 
+  static description = "Programs with a size of 1 get +1 defence at the end of your turn";//+2 temp defence on end of turn? 
   static unicode = "U+1F52C";
   static color = "#ff5555";
   static rarity = 2;
   constructor() {
-    super(Microscope.name, Microscope.description, Microscope.unicode, Microscope.color, 5, Microscope.rarity, 'gameState', 'onPlacement')
+    super(Microscope.name, Microscope.description, Microscope.unicode, Microscope.color, 5, Microscope.rarity, 'gameState', 'onTurnEnd')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    if(activePieces[idx].maxSize === 1){
-      activePieces[idx].addModifier({defence: 1})
+    if(activePieces[idx].tiles.length === 1){
+      activePieces[idx].addTempModifier({defence: 1})
     }
   }
 }

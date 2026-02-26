@@ -1011,7 +1011,7 @@
     if(selectedPiece.value.targetType === 'trapPiece'){
       //check for others
       const trapTarget = activePieces.value.find(p =>
-        p.tiles.some(t => t.x === coord.x && t.y === coord.y)
+        (p.tiles.some(t => t.x === coord.x && t.y === coord.y) && p.id !== selectedPiece.value?.id)
       );
       if(trapTarget){
         await selectedPiece.value.special(trapTarget);

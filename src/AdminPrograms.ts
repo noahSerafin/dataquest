@@ -993,7 +993,7 @@ class Sneakers extends Admin {//item???
   static color = "#36c723ff";
   static rarity = 1;
   constructor() {
-    super(Sneakers.name, Sneakers.description, Sneakers.unicode, Sneakers.color, 6, Sneakers.rarity, 'gameState', 'onPlacement')
+    super(Sneakers.name, Sneakers.description, Sneakers.unicode, Sneakers.color, 4, Sneakers.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);

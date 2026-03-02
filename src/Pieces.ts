@@ -28,6 +28,7 @@ export abstract class Piece {
   hasFriendlySpecial: boolean = false;//use in enemyAI
   hasExposingSpecial: boolean = false;//use in enemyAI
   redacted: boolean = false;//for boss
+  isBusy: boolean = false;//for AI
 
   specialName?: string;
   extraUnicode?: string;
@@ -374,6 +375,7 @@ class Aegis extends Piece {
    super(Aegis.name, Aegis.description, Aegis.unicode, 3, 2, 0, 1, 2, Aegis.color, headPosition, [headPosition], team, Aegis.rarity, removeCallback, id)
     this.specialName = 'Parry';
     this.targetType = 'self'
+    this.hasFriendlySpecial = true;
   }
   async special(_target: Coordinate):Promise<void>{
     this.willRetaliate = true;
@@ -1240,7 +1242,8 @@ class Puffer extends Piece {
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Puffer.name, Puffer.description, Puffer.unicode, 4, 2, 1, 2, 2, Puffer.color, headPosition, [headPosition], team, Puffer.rarity, removeCallback, id)
    this.specialName = 'Puffup';
-   this.targetType = 'self'
+   this.targetType = 'self';
+   this.hasFriendlySpecial = true;
    this.immunities.poisoned = true;
   }
   async special(_target: Coordinate):Promise<void>{
@@ -1675,8 +1678,6 @@ class Squid extends Piece {
   }
 }
 
-//OCTOPUS, U+1F419 ink and hide itself
-
 class Snail extends Piece {
   static name = "Snail";
   static description = "A slow program that can retract itself to double it's defence temporarily until the next turn";
@@ -1700,7 +1701,7 @@ class Snail extends Piece {
 
 class Shark extends Piece {
   static name = "Shark";
-  static description = "A fast program with high attack";
+  static description = "A fast program with high attack";//exposes pieces that take damage?
   static unicode = "U+1F988";
   static color = "#0061bdff";
   static rarity = 4;
@@ -1785,28 +1786,52 @@ class Ninja extends Piece {
   }
 }
 
-/*
 class Fairy extends Piece {//TODO test unfinished
-  static name = "Fairy";//ANGEL?? fairy consumable item???
-  static description = "A program that can ressurect the last destroyed program (unfinshed)";
+  static name = "Fairy";//ANGEL?? fairy consumable item for used blueprint???
+  static description = "Can bless a friendly program to give it bonus temporary defence equal to the fairy's attack";
   static unicode = "U+1F9DA";
   static color = "#cc5effff";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Fairy.name, Fairy.description, Fairy.unicode, 2, 3, 1, 0, 0, Fairy.color, headPosition, [headPosition], team, Fairy.rarity, removeCallback, id)
-    this.specialName='Ressurect'
-    this.targetType='graveyard'
+    super(Fairy.name, Fairy.description, Fairy.unicode, 2, 3, 3, 2, 0, Fairy.color, headPosition, [headPosition], team, Fairy.rarity, removeCallback, id)
+    this.specialName='Bless'
+    this.targetType='piece'
+    this.hasFriendlySpecial = true;
   }
-  async special({ target, activePieces, graveyard }: { target: Coordinate; activePieces: Piece[]; graveyard: Piece[]; }): Promise<void> {
-    if(graveyard.length > 0){
-      graveyard[0].headPosition = target;
-      graveyard[0].tiles = [target];
-      activePieces.push(graveyard[0])    
-      graveyard.splice(0, 1);
+  async special(targetPiece: Piece):Promise<void>{
+    if(targetPiece.team === this.team){ 
+      targetPiece.addTempModifier({defence: (this.getStat('attack'))})
+    } else {
+      targetPiece.takeDamage(this.getStat('attack'))
+      if(targetPiece.willRetaliate) await this.takeDamage(targetPiece.getStat('attack'))
     }
     this.actions--
   }
-}*/
+}
+
+class Doctor extends Piece {
+  static name = "Field Medic";
+  static description = "Can increase a friendly program's max size by 1";
+  static unicode = "U+1FA7A";
+  static color = "rgb(13, 255, 223)";
+  static rarity = 2;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+    super(Doctor.name, Doctor.description, Doctor.unicode, 2, 2, 2, 1, 2, Doctor.color, headPosition, [headPosition], team, Doctor.rarity, removeCallback, id)
+    this.specialName='Treat'
+    this.targetType='piece'
+    this.hasFriendlySpecial=true;
+  }
+
+  async special(targetPiece: Piece):Promise<void>{
+    if(targetPiece.team === this.team){ 
+      targetPiece.addModifier({maxSize: 1})
+    } else {
+      targetPiece.takeDamage(this.getStat('attack'))
+      if(targetPiece.willRetaliate) await this.takeDamage(targetPiece.getStat('attack'))
+    }
+    this.actions--
+  }
+}
 
 class Cupid extends Piece {
   static name = "Cupid";
@@ -2461,7 +2486,7 @@ export class Dolls extends Piece {//finished? test, will have to be handled in a
 
 class UFO extends Piece {
   static name = "UFO";
-  static description = "A strong ranged program";// that can move enemies away from itself";//without increasing size?? headposition = 
+  static description = "A strong ranged program";// that can move enemies away from itself";//without increasing size?? And traverse gaps?
   static unicode = "U+1F6F8";
   static color = "#000d47ff";
   static rarity = 4;
@@ -3209,8 +3234,9 @@ class Kite extends Piece {
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Kite.name, Kite.description, Kite.unicode, 8, 6, 1, 2, 0, Kite.color, headPosition, [headPosition], team, Kite.rarity, removeCallback, id)
-   this.targetType = 'self'
-   this.specialName = 'Reel'
+   this.targetType = 'self';
+   this.specialName = 'Reel';
+   this.hasFriendlySpecial = true;
   }
   async special(target: Coordinate):Promise<void>{
     const tileIndex = this.tiles.findIndex(t => t.x === target.x && t.y === target.y);
@@ -3292,6 +3318,7 @@ class Octopus extends Piece {
     super(Octopus.name, Octopus.description, Octopus.unicode, 4, 3, 3, 3, 0, Octopus.color, headPosition, [headPosition], team, Octopus.rarity, removeCallback, id)
     this.specialName = 'Morph'
     this.targetType = 'self'
+    this.hasFriendlySpecial = true;
   }
   //async special({piece, target} : {piece: Piece, target: Coordinate}):Promise<void>{
   async special(target: Coordinate):Promise<void>{
@@ -3333,7 +3360,7 @@ export class Frond extends Piece {
 //building castle? creates a wall around it of 8 tiles 
 
 //99 fairy
-export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, Ant, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Tar, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Larva, Wasp, Rat, Flute, LabRat, Bat, Dragon, Squid, Snail, Shark, Greatshield, Wizard, Ninja, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, UFO, TP, Saw, Croc, Lighthouse, Torch, Camera, Drum, Shrike, Eagle, Recurve, Daemon, Rex, Diplodocus, Hedgehog, Sol, Stopwatch, Bull, Rhino, Peacock, Gecko, Dog, Wolf, Oil, Yoyo, Alien, Lightning, Leopard, Tiger, Lion, Bear, Zebra, Giraffe, Kite, Scarab, Orangutan, Gorilla, Octopus];//Dolls //100 +2 (web, ink)
+export const allPieces = [Knife, Dagger, Arms, Shield, Aegis, Sling, Bow, Ant, SAM, Gate, Fence, Stonewall, Firewall, Pitfall, Lance, Trojan, Cannon, Nerf, Tank, Dynamite, Bomb, Dataworm, Snake, Copycat, Trap, Tar, Mine, Web, Spider, Germ, Vice, Watchman, Magnet, Turtle, Hopper, Sponge, Puffer, Nuke, Highwayman, Elephant, Mammoth, Snowman, Soldier, Fencer, Pawn, Larva, Wasp, Rat, Flute, LabRat, Bat, Dragon, Squid, Snail, Shark, Greatshield, Wizard, Ninja, Fairy, Doctor, Cupid, Oni, Bug, Cockroach, Mosquito, Scorpion, Firebrand, Golem, Gman, Guard, Officer, Troll, Potato, Ghost, Beetle, LadyBeetle, Yarn, Honeypot, Bee, Decoy, Donkey, Jellyfish, Screwdriver, Axe, Boomerang, Plunger, Vampire, Centipede, Helicopter, UFO, TP, Saw, Croc, Lighthouse, Torch, Camera, Drum, Shrike, Eagle, Recurve, Daemon, Rex, Diplodocus, Hedgehog, Sol, Stopwatch, Bull, Rhino, Peacock, Gecko, Dog, Wolf, Oil, Yoyo, Alien, Lightning, Leopard, Tiger, Lion, Bear, Zebra, Giraffe, Kite, Scarab, Orangutan, Gorilla, Octopus];//Dolls //100 +2 (web, ink)
 console.log('pieces length: ', allPieces.length)
 
 let adminLogs = {

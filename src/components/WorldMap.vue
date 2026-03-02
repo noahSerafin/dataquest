@@ -153,10 +153,14 @@
     }
 
     function enterNode(node: WorldNode) {
+        const current = world.value.nodes[currentNodeId.value];
+        const sameRow = node.position.y === current.position.y;
+        if(node.type === 'shop' && !sameRow){
+            emit('openDisabledShop')
+        }
         selectedPreviewNode.value = null;
         currentNodeId.value = node.id;
         node.visible = true;
-
         if(node.type === 'shop'){
             emit('openShop')
         }
@@ -481,7 +485,7 @@
             </button>
             <button 
             v-if="selectedPreviewNode && selectedPreviewNode?.type !== 'skip'"
-            :disabled="!canClick(selectedPreviewNode)"
+            :disabled="!canClick(selectedPreviewNode) && selectedPreviewNode.type !== 'shop'"
             @click="enterNode(selectedPreviewNode)"
             >Enter</button>
             <!--

@@ -1,16 +1,10 @@
 HOTKEYS
 GAME / BUGS
-boss min, boss max
-cave level1 possible to get stuck, gauntlet also if sling and knife spawn
-spare pair only works once
-pieces canbuy is true even when player does not have enough money? - testing
-round summary not appearing on win
+possible to get stuck on cave and gauntlet if sling/bee and knife spawn
 nerf rosebud - pieces can't stay exposed after a spcial?
 slots broken, and only applies before a shop, not on the same shop you buy it in
-hotkeys enabled whilst map is open(board needs to be open, and needs to be players turn)
-Admins appearing as items in shop (department store only???) and hasspace function not working
 Level loaded twice with same piece causes bug where it cannot be attacked is not in activepieces to be targeted - test
-visualise, retaliation, dmg + dmg mult, admin actions and counts, enemy movement distance (hide move buttons)
+visualise: retaliation, dmg + dmg mult, admin actions and counts
 variant should overide base piece color, (and tile colour???)
 pandora not giving 1 at full inventory
 checkforroundend after takedamage
@@ -20,73 +14,54 @@ Nerf Pandora by using allitems???
 self specials easy to accidentally auto click, move buttons z-index up
 variant tooltips
 fix ufo - make it a two click special???
-pawn can't promote to hybrids
-make charmedpieces not moveable-
-store ids/check statuses in special move pieces to prevent enemies using special mutliple times on the same player program
-enemies not walking over traps/enemy traps not walking over players
+make charmedpieces not moveable - test
+EnemyAI: store ids/check statuses in special move pieces to prevent enemies using special mutliple times on the same player program
+enemy traps not walking over players
 reveal hidden enemies before damage
 -level edits-
 level 3 siege change head of wall
-level4 lock, fort? - change
 'lockup' change
 ----low priority:
 display company/node name in board
-difficulty - add +1, +2 programs for variety, or make variants +- security level
-Ties currently count as wins - but player still loses a life?
-sort out graveyard 8
+Ties currently count as wins - but player still loses a life? Might be fine to leave
 
-MAP
-allow some randomised crossover points?
-Altar nodes - sacrifice a program for more money than selling - 8 - skippable
-Duplicator nodes - dupelicate a program
-Gladiator nodes - place only once in arena node for reward - skippable
+ADMINS
+crystal ball
+animate admins
 
-ITEMS/admins shortand descriptions eg. +1 attack instead of "increases"
-
-try out randomised levels 4
-no. of pieces range
-min + max width/height
-negatives some percentage, remain connected(no islands) or allow single islets of 1 tile with 1 gap
-
-AI 3
-enemies killed by admins still take moves despite not existing in activepieces, are the removed too late? admins not awaited?
-prioritise killable pieces
-
-VISUAL: 5
-show defence in lower left on pieces, - attack when selected?
-variant tooltip to show stat mods, use colored text
-add class to acting admins
--visualise traps - have credit pickups? disguise the cheese trap as one
--skipNode controller
-inventory needs 5 columns at least...
-color code stats, and status
-status tooltips
-
-3D ELEMENTS
-nodemap on a sphere with hexagons
-
-AI 6 nearly-done
-    handle onrecievedamage admins with specials that deal damage
-    maybe ignore statuses if already has a status??? or dont consume an action amd increase special count??
-
-BOSSES 7
-test damage all bosses
-hide sell button on bosses, move description down
-fog - edit board (fog layer)
-redacted - edit piece view
-
-ITEMS - clean up player items, add activePieces/gameState items 7
-item to duplicate an admin
+difficulty - add +1, +2 programs for variety, or make variants +- security level 7
 
 SAVE GAME STATE for bugs 7.5
 COOKIES - game progress permanence
 
-PIECES
-Fairy - graveyard interaction 8
-keep track of upgrades and display on piece 7
+MAP
+Altar nodes - sacrifice a program for more money than selling - 8 - skippable
+Duplicator nodes - duplicate a program - skippable
+Gladiator nodes - place only once in arena node for reward - skippable
 
-ADMINS
-Onion Icon
+ITEMS/admins shortand descriptions eg. +1 attack instead of "increases"
+
+AI 3
+enemies killed by admins still take moves despite not existing in activepieces, are the removed too late? admins not awaited?
+
+VISUAL: 5
+show attack when selected?
+variant tooltip to show stat mods, use colored text
+add class to acting admins
+-visualise traps - 
+-skipNode controller
+Onion Icon for life
+
+AI 6 nearly-done
+    maybe ignore statuses if already has a status??? or dont consume an action amd increase special count??
+
+ITEMS
+item to duplicate an admin CLINKING GLASSES, U+1F942
+fairy, cancel isplaced on bp?
+jar to capture piece of 1 size 
+
+PIECES
+keep track of upgrades and display on piece 7
 
 companies 8 - own list of programs/variants;
 

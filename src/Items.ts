@@ -798,11 +798,30 @@ class Life extends Item {
     }
 }
 
+export class Dupe extends Item {
+    static name = "Dupe";
+    static description = "Duplicate a random Admin, destroy all other admins";
+    static unicode = "U+1F942";
+    static color = "rgb(153, 4, 91)";
+    constructor(){
+        super(Dupe.name, Dupe.description, Dupe.unicode, Dupe.color, 5, 7, 'player')
+        //name desc utf || maxsize moves range atk def
+    }
+    apply() {
+    /*apply(player: Player) {
+      //player.admins
+        const randAdmin = player.admins[Math.floor(Math.random()*player.admins.length)]
+        const adminClass = allAdmins.find(a => a.name === randAdmin.name);
+        if(!adminClass) return;
+        player.admins = [randAdmin, new adminClass] //make a new 
+        */
+    }
+}
 
 //JAR, U+1FAD9 - piece? capture an enemy of size 1, turn into blueprint
 
 //update x3, hotline buoy bugle batteries pig 9
-export const allItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Supplement, Juice, Roids, Formula, Garlic, Coffee, Bandage, Soap, Voucher, Mushroom, Rations, Beans, Pandora, Box, Genie, Gift, Pinata, Extinguisher, Wand, Hourglass, Spanner, Makeover, ShootingStar, Keygen, Bugle, Megaphone, Battery, Floppy, Update2, Update3, Life, Cake]
+export const allItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Supplement, Juice, Roids, Formula, Garlic, Coffee, Bandage, Soap, Voucher, Mushroom, Rations, Beans, Pandora, Box, Genie, Gift, Pinata, Extinguisher, Wand, Hourglass, Spanner, Makeover, ShootingStar, Keygen, Bugle, Megaphone, Battery, Floppy, Update2, Update3, Life, Cake, Dupe];
 export const upgradeItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Roids, Formula]
 //export const activeItems = [Rations, Beans]
 

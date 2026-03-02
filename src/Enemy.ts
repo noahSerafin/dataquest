@@ -88,7 +88,8 @@ function decideEnemyIntent(
 
   if(enemy.actions > 0  && specialAttempts < 1){//still have an action? 
     if(enemy.targetType === 'self'){
-      return {type: 'special', target: enemy}
+      const randTile = enemy.tiles[Math.floor(Math.random()*enemy.tiles.length)]
+      return {type: 'special', target: randTile}
     }
     if(enemy.targetType === 'space'){
       const space = getAnySpaceInRange(enemy, activePieces, tileSet)
@@ -144,6 +145,8 @@ async function executeEnemyIntent(
     delay: number 
   }
 ) {
+  if(enemy.isBusy) return;
+  enemy.isBusy = true;
   console.log('enemyPiece: ', enemy.name, ' executing: ', intent.type)
   switch (intent.type) {
     case 'special':
@@ -217,6 +220,7 @@ async function executeEnemyIntent(
         break;
       }
   }
+  enemy.isBusy = false;
 }
 
 export async function runEnemyStateMachine(
@@ -415,45 +419,7 @@ function findShortestPath(
 
   return null; // No path found
 }
-/*
-function getNextStepTowards(
-  start: Coordinate,
-  end: Coordinate,
-  tileSet: Set<string>,
-  activePieces: Piece[]
-): Coordinate | null {
-  const directions: Coordinate[] = [
-    { x: start.x + 1, y: start.y },
-    { x: start.x - 1, y: start.y },
-    { x: start.x, y: start.y + 1 },
-    { x: start.x, y: start.y - 1 }
-  ];
 
-  const occupiedTiles = new Set<string>();
-  for (const p of activePieces) {
-    if(!p.statuses.negative){
-      for (const t of p.tiles) {
-        occupiedTiles.add(`${t.x},${t.y}`);
-      }
-    }
-  }
-
-  // Filter out invalid/occupied tiles
-  const validMoves = directions.filter(d => tileSet.has(`${d.x},${d.y}`) && !occupiedTiles.has(`${d.x},${d.y}`));
-
-  if (validMoves.length === 0) return null;
-
-  // Pick the move that minimizes Manhattan distance to the target
-  // if range is low, should really find a path to target around obstacles
-  validMoves.sort((a, b) => {
-    const distA = Math.abs(a.x - end.x) + Math.abs(a.y - end.y);
-    const distB = Math.abs(b.x - end.x) + Math.abs(b.y - end.y);
-    return distA - distB;
-  });
-
-  return validMoves[0];
-}
-*/
 function getAdjacentEmptySpaces(
   coord: Coordinate,
   activePieces: Piece[],
@@ -609,3 +575,43 @@ function findStrongestInRange(//for pawn
 
   return candidates[candidates.length-1];
 }
+
+/*
+function getNextStepTowards(
+  start: Coordinate,
+  end: Coordinate,
+  tileSet: Set<string>,
+  activePieces: Piece[]
+): Coordinate | null {
+  const directions: Coordinate[] = [
+    { x: start.x + 1, y: start.y },
+    { x: start.x - 1, y: start.y },
+    { x: start.x, y: start.y + 1 },
+    { x: start.x, y: start.y - 1 }
+  ];
+
+  const occupiedTiles = new Set<string>();
+  for (const p of activePieces) {
+    if(!p.statuses.negative){
+      for (const t of p.tiles) {
+        occupiedTiles.add(`${t.x},${t.y}`);
+      }
+    }
+  }
+
+  // Filter out invalid/occupied tiles
+  const validMoves = directions.filter(d => tileSet.has(`${d.x},${d.y}`) && !occupiedTiles.has(`${d.x},${d.y}`));
+
+  if (validMoves.length === 0) return null;
+
+  // Pick the move that minimizes Manhattan distance to the target
+  // if range is low, should really find a path to target around obstacles
+  validMoves.sort((a, b) => {
+    const distA = Math.abs(a.x - end.x) + Math.abs(a.y - end.y);
+    const distB = Math.abs(b.x - end.x) + Math.abs(b.y - end.y);
+    return distA - distB;
+  });
+
+  return validMoves[0];
+}
+*/

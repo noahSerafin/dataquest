@@ -541,3 +541,6 @@ steel
     hsl(303, 60%, 40%)
   );
 }
+.v_Holographic .piece-controller{
+  filter: unset; 
+}

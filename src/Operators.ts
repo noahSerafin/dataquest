@@ -1,5 +1,5 @@
 import type { OS } from "./types";
-import { Voucher, Mushroom, Garlic, Juice, Meat, Genie, Box, Pandora, Update2, Update3} from "./Items";
+import { Voucher, Mushroom, Garlic, Juice, Meat, Genie, Box, Pandora, Update2, Dupe} from "./Items";
 import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Compass} from "./AdminPrograms";
 
 /*
@@ -381,7 +381,7 @@ const Debugger : OS = {//lance //bug //screwdriver
     memory: 10,
     adminSlots: 6,
     blueprints: [aegis, superKnife, testhybrid, testPiece],
-    items: [new Genie, new Box, new Pandora, new Update2, new Update3],
+    items: [new Genie, new Box, new Pandora, new Update2, new Dupe],
     admins: [new Crystal, new Compass],
     lives: 9,
     description: 'FOR TESTING'

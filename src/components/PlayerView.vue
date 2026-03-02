@@ -28,6 +28,7 @@
 
     const selectedPiece = ref<PieceBlueprint | null>(null)
     const selectedItem = ref<Item | null>(null)
+    const selectedAdmin = ref<Item | null>(null)
     
     function openInventoryController(piece: PieceBlueprint) {///TODO SORT OUT IMPORTS
         selectedPiece.value = piece;
@@ -54,9 +55,8 @@
 
     function onUseItem(item: Item) {
         if(selectedPiece.value && item.targetType === 'blueprint'){
-            console.log('using: ', item.name, ' on ', selectedPiece.value?.name)
             emit("applyItem", { item, id: selectedPiece.value.id })  
-        } else {//not for a blueprint so no id needed
+        } else {//not for a blueprint so no id needed, may change later
             console.log('using: ', item.name)
             emit("applyItem", { item, id: '' })  
         }
@@ -72,6 +72,14 @@
     }
     function deselectItem(){
         selectedItem.value = null;
+        return;
+    }
+    function selectAdmin(item: Item){
+        selectedAdmin.value = item;
+        return;
+    }
+    function deselectAdmin(){
+        selectedAdmin.value = null;
         return;
     }
 
@@ -124,7 +132,7 @@
                 </div>
                 <ul class="admins">
                     <li v-for="(item, index) in props.player.admins"
-                        :class="{ 'z-top': selectedItem === item }"
+                        :class="{ 'z-top': selectedAdmin === item }"
                         :key="item.id"
                         draggable="true"
                         @dragstart="onDragStart(index)"
@@ -137,10 +145,10 @@
                             cssclass="inventory"
                             :tileSize="60"
                             :canBuy="false"
-                            :showController="(selectedItem === item)"
+                            :showController="(selectedAdmin === item)"
                             @sell="$emit('sellAdmin', item.id)"
-                            @select="selectItem"
-                            @deselect="deselectItem"
+                            @select="selectAdmin"
+                            @deselect="deselectAdmin"
                         />
                     </li>
                 </ul>

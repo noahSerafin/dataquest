@@ -25,7 +25,7 @@ const props = defineProps<{
   rerollCost: number;
   player: Player;
   target: Item | PieceBlueprint | null;
-  shopDisabled: boolean;
+  shopDisabled: boolean;//not updating with shop???
   canProceed: boolean;
   hasStolen: boolean;
 }>();
@@ -47,7 +47,7 @@ function handleBuyItem(item: Item) {
 //        @select="openItemController"
 
 const canReroll = computed(() => props.player.effectiveMoney >= props.rerollCost);
-const canSteal = computed(() => props.player.hasAdmin('Five Finger Discount') && !props.hasStolen);
+const canSteal = computed(() => props.player.hasAdmin('Five Finger Discount') && !props.hasStolen && !props.shopDisabled);
 
 const canBuyItem = ((item: Item) => {
   if(props.shopDisabled) return false;
@@ -129,7 +129,7 @@ const type = ((item: Item) => {
       mode="shop"
       :canBuy= "canBuyTargetPiece(props.target)"
       :defaultPosition="{ x: 0, y: 0 }"
-      :canSteal = canSteal
+      :canSteal = "canSteal"
       @buy="handleBuyBlueprint"
       @close="deselect"
     />

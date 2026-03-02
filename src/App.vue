@@ -81,7 +81,7 @@
     displayEditor.value = !displayEditor.value;//add map later, make shop an overlay?
   }
 
-  const stake = ref(1);
+  const stake = ref(1);//player
   const gameStarted = ref(false);
   
   const player = ref(new Player(
@@ -135,7 +135,7 @@
     showMap.value = true;
     gameStarted.value = true;
   }
-  const extraDifficulty=ref<number>(0)
+  const extraDifficulty=ref<number>(0)//player/seed
 
   function incrementMapProgress(){
     player.value.mapProgress++
@@ -201,7 +201,6 @@
       player.value.applyItemToPieceBlueprint(payload, itemMult);
       return;
     }
-    ////if targetType === Piece
     if (item.targetType === "piece" && selectedPiece.value) {
       const id = selectedPiece.value?.id;
       const piece = activePieces.value.find(p => p.id === id);
@@ -212,6 +211,13 @@
     }
     
     if (item.targetType === "player") {
+      if(item.name === 'Dupe'){
+        const randAdmin = player.value.admins[Math.floor(Math.random()*player.value.admins.length)]
+        const adminClass = allAdmins.find(a => a.name === randAdmin.name);
+        if(!adminClass) return;
+        player.value.admins = [randAdmin, new adminClass] //make a new 
+        player.value.removeItem(item);
+      }
       //some these items cannot be passed allItems/ Alladmins because they are declared in /Items.ts first
       const hasRoom = player.value.usedMemory <= player.value.memory;
       if(item.name === 'Gift Box' && hasRoom){
@@ -256,9 +262,6 @@
 
     if (item.targetType === "shopItem" && item.name === 'Voucher') {
       console.log('using voucher on ', shopTarget.value?.name)
-      //const shopBlueprints = ref<PieceBlueprint[]>([]);
-      //const shopItems = ref<Item[]>([]);
-      //selectedShopItem
       if(shopTarget.value?.id){
         const id = shopTarget.value.id;
         const shopBp = shopBlueprints.value.find(p => p.id === id);
@@ -347,17 +350,20 @@
 
   function refreshShop(isFree: boolean) {
     shopTarget.value = null;
-    if(!isFree) {//player is rerolling
+    if(!isFree && !player.value.hasAdmin('Wheel of Dharma')) {//player is rerolling
       player.value.spend(rerollCost.value);
       const nextFib = prevFib.value + currentFib.value;
       prevFib.value = currentFib.value;
       currentFib.value = nextFib;
-
-      rerollCost.value += currentFib.value;
+      if(player.value.hasAdmin('Wheel of Dharma')){
+        rerollCost.value = 0;
+      } else {
+        rerollCost.value += currentFib.value;
+      }
     } else { //boss/level has been defeated
       rerollCost.value = player.value.hasAdmin('Wheel of Dharma') ? 0 : 5;
       prevFib.value = 0;
-      currentFib.value = 1
+      currentFib.value = 1;
       hasStolenFromThisShop.value = false;
     }
     if(player.value.hasAdmin("Slots")){
@@ -434,7 +440,7 @@
   //--shop-----
 
   //round logic
-  const roundHasStarted = ref(false);
+  const roundHasStarted = ref(false);//player
   //pieceMap to track occupied spaces
   const activePieces = ref<InstanceType<typeof Piece>[]>([]);
   const graveyard = ref<InstanceType<typeof Piece>[]>([]);
@@ -492,16 +498,16 @@
 
   const selectedPiece = ref<Piece | null>(null)
   const playerSpawns = ref<Coordinate[]>([]);
-  const isPlacing = ref(false);
-  const isMoving = ref(false);
-  const hasFinishedTurn = ref(false);
-  const isFirstTurn = ref(true);
+  const isPlacing = ref(false);//player
+  const isMoving = ref(false);//player
+  const hasFinishedTurn = ref(false);//player
+  const isFirstTurn = ref(true);//player
   const pieceToPlace = ref<PieceBlueprint | null>(null);
   //world logic
-  const showSummary = ref(false);
+  const showSummary = ref(false);//player
   const level = ref(castled);//tiles
   const displayEditor = ref(false);
-  const foggedTiles = ref<Coordinate []>([]);
+  const foggedTiles = ref<Coordinate []>([]);//player
 
   function clearFog (){
     if(!player.value.fogged) return;
@@ -559,9 +565,9 @@
     });
   }
 
-  const lastTurnPieces = ref<InstanceType<typeof Piece>[]>([]);
-  const originalPieces = ref<InstanceType<typeof Piece>[]>([]);
-  const originalSpawns = ref<Coordinate[]>([]);
+  const lastTurnPieces = ref<InstanceType<typeof Piece>[]>([]);//player
+  const originalPieces = ref<InstanceType<typeof Piece>[]>([]);//player
+  const originalSpawns = ref<Coordinate[]>([]);//player
 
   async function selectLevel(newLevel: Level, difficultyMod: number, lReward: number) {//load level, start 
     pieceToPlace.value = null;
@@ -639,8 +645,9 @@
   //game loop
   const shopDisabled = ref<boolean>(false);
   const openDisabledShop = () => {
-    showShop.value = true;
+    console.log('shop disabled')
     shopDisabled.value = true;
+    showShop.value = true;
   }
   const toggleShop = () => {
     showShop.value = !showShop.value;

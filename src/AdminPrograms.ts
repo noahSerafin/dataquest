@@ -527,10 +527,8 @@ class Aesculapius extends Admin {
   //on placement
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    if(activePieces[idx].team==='player' && activePieces[idx].getStat('range') > 1){
-      activePieces[idx].immunities.poisoned = true
-      activePieces[idx].immunities.diseased = true
-    }
+    activePieces[idx].immunities.poisoned = true
+    activePieces[idx].immunities.diseased = true
   }
 }
 
@@ -538,7 +536,7 @@ class Heart extends Admin {//change
   static name = "Heart";
   static description = "+1 max size and +1 moves on placement";
   static unicode = "U+1FAC0";
-  static color = "#ff5555";
+  static color = "#750731";
   static rarity = 2;
   constructor() {
     super(Heart.name, Heart.description, Heart.unicode, Heart.color, 5, Heart.rarity, 'gameState', 'onPlacement')
@@ -790,7 +788,7 @@ class Crown extends Admin {
   static name = "Tithe";
   static description = "Gain $5 every round";
   static unicode = " U+1F451";
-  static color = "#e6c98bff";
+  static color = "rgb(119, 32, 122)";
   static rarity = 3;
   constructor() {
     super(Crown.name, Crown.description, Crown.unicode, Crown.color, 9, Crown.rarity, 'player', 'onRoundEnd')//maybe player
@@ -1008,7 +1006,7 @@ class Candle extends Admin {
   static name = "Candle";
   static description = "+1 range for all your programs on load";
   static unicode = "U+1F56F";
-  static color = "#f0aa13ff";
+  static color = "rgb(211, 124, 10)";
   static rarity = 1;
   constructor() {
     super(Candle.name, Candle.description, Candle.unicode, Candle.color, 4, Candle.rarity, 'gameState', 'onPlacement')
@@ -1331,9 +1329,7 @@ class Hermes extends Admin {//moves
   //on placement
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    if(activePieces[idx].team==='player' && activePieces[idx].getStat('range') > 1){
-      activePieces[idx].immunities.slowed = true;
-    }
+    activePieces[idx].immunities.slowed = true;
   }
 }
 
@@ -1350,9 +1346,7 @@ class Scarf extends Admin {
   //on placement
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    if(activePieces[idx].team==='player' && activePieces[idx].getStat('range') > 1){
-      activePieces[idx].immunities.frozen = true;
-    }
+    activePieces[idx].immunities.frozen = true;
   }
 }
 
@@ -1729,7 +1723,7 @@ class Liberty extends Admin {
   static name = "Liberty";
   static description = "Programs gain +1 range and +1 movement on load"
   static unicode = "U+1F5FD";
-  static color = "#72deecff";
+  static color = "rgb(103, 145, 194)";
   static rarity = 4;
   constructor() {
     super(Liberty.name, Liberty.description, Liberty.unicode, Liberty.color, 6, Liberty.rarity, 'gameState', 'onPlacement')
@@ -2329,7 +2323,7 @@ class Dharma extends Admin {//test
   static name = "Wheel of Dharma";
   static description = "Every kind of reroll is free"
   static unicode = "U+2638"; //every kind of reroll is free (shop, bosses(roulette) ---- nodes(ferris), skips(dice-already free), )
-  static color = "rgb(249, 213, 36)";
+  static color = "rgb(146, 100, 0)";
   static rarity = 5;
   constructor() {
     super(Dharma.name, Dharma.description, Dharma.unicode, Dharma.color, 2, Dharma.rarity, 'player', 'onRoundEnd')
@@ -2372,9 +2366,9 @@ class Smoker extends Admin {
 }
 
 class Medic extends Admin {
-  static name = "Field Medic";
+  static name = "Full Bodied";//Field Medic";
   static description = "+1 max size, +1 defence";
-  static unicode = "U+1FA7A";// medic, + max Size/defence?
+  static unicode = "U+1F377"; //"U+1FA7A";// medic, + max Size/defence?
   static color = "rgb(255, 255, 255)";
   static rarity = 3;
   constructor() {
@@ -2551,8 +2545,8 @@ class Ice extends Admin {//needs to reset
 class Howzat extends Admin {
   static name = "Howzat!";
   static description = "Clears all enemies with <= 2 size and 0 defence on the end of your turn";
-  static unicode = "U+1F9F9";
-  static color = "#c7b07eff";
+  static unicode = "U+1F3CF";
+  static color = "rgb(95, 158, 70)";
   static rarity = 5;
   constructor() {
     super(Howzat.name, Howzat.description, Howzat.unicode, Howzat.color, 11, Howzat.rarity, 'gameState', 'onTurnEnd')

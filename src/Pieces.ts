@@ -2400,7 +2400,7 @@ class Stopwatch extends Piece {//not passive
 
 class Sol extends Piece {//not passive
   static name = "Sol";
-  static description = "extreme range and damage";
+  static description = "Extreme range and damage";
   static unicode = "U+1F6F0";
   static color = "#000000ff";
   static rarity = 6;
@@ -3029,7 +3029,9 @@ class Alien extends Piece {
   async special(targets: Piece[]):Promise<void>{
     for (const t of targets) {
       if(t.team != this.team){
-        if(!t.immunities.confused){
+        if(t.statuses.confusef === true){
+          t.takeDamage(this.getStat('attack'));
+        } else if(!t.immunities.confused){
           t.statuses.confused = true;
         }
       }

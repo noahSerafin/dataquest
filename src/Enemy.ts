@@ -208,10 +208,10 @@ async function executeEnemyIntent(
         if(!enemy.statuses.hidden){
           helpers.highlightMoves(enemy);
         }
-        enemy.moveTo(intent.space)
-        const trap = activePieces.find(p =>
+        const trap = activePieces.find(p =>//might be finding itself
           p.targetType == 'trapPiece' && p.tiles.some(t => t.x === intent.space.x && t.y === intent.space.y)
         );
+        enemy.moveTo(intent.space)
         if (trap && trap.id !== enemy.id) {
           await trap.special(enemy);
           //removePiece(trap);//shouldn't really be necessary

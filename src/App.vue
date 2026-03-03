@@ -882,7 +882,8 @@
   async function placePieceOnBoardAt(coord: Coordinate) {
     if (!pieceToPlace.value) return
     
-    const bp = pieceToPlace.value
+    const bp = pieceToPlace.value;
+    pieceToPlace.value = null;
     
     const PieceInstance = instantiatePieceFromBlueprint(bp, coord, 'player', removePiece)
     if (!PieceInstance) return
@@ -901,7 +902,6 @@
     await handleApplyAdmins('onPlacement', PieceInstance.id)
     playerSpawns.value = newPlacementHighlights();
     clearFog();
-    pieceToPlace.value = null;
 
     //applyStatModifications()
     //if(player.value.hasAdmin('Copier')){}
@@ -949,6 +949,8 @@
   //mousemove func 'hoverPlacement'
 
   function placeAt(coord: Coordinate) {
+    const isOccupied = activePieces.value.some(p => coord.x === coord.x && coord.y === coord.y);
+    if (isOccupied) return; 
     if (!playerSpawns.value.some(
       s => s.x === coord.x && s.y === coord.y
     )) {

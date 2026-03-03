@@ -2718,7 +2718,7 @@ class Luggage extends Admin {
 
 class Reinforcement extends Admin {
   static name = "Reinforcement";
-  static description = "+1 max size, +1 defence, -2 moves";
+  static description = "+1 max size, +1 defence, -1 moves";
   static unicode = "U+1F529";
   static color = "rgb(41, 126, 224)";
   static rarity = 1;
@@ -2729,7 +2729,7 @@ class Reinforcement extends Admin {
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({defence: 1}) 
     activePieces[idx].addModifier({maxSize: +1}) 
-    activePieces[idx].addModifier({moves: -2}) 
+    activePieces[idx].addModifier({moves: -1}) 
   }
 }
 
@@ -2989,9 +2989,9 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //changes to movement/range
 //SHOVEL, U+1FA8F remove node memory -
 
-//SEE-NO-EVIL MONKEY, U+1F648
-//HEAR-NO-EVIL MONKEY, U+1F649
-//SPEAK-NO-EVIL MONKEY, U+1F64A
+//SEE-NO-EVIL MONKEY, U+1F648 -1 range
+//HEAR-NO-EVIL MONKEY, U+1F649 -1 defence
+//SPEAK-NO-EVIL MONKEY, U+1F64A -1 attack/actions?
 
 //FISHING POLE AND FISH, U+1F3A3 Bait, enemies attack player with highest defence?
 

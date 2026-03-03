@@ -949,7 +949,9 @@
   //mousemove func 'hoverPlacement'
 
   function placeAt(coord: Coordinate) {
-    const isOccupied = activePieces.value.some(p => coord.x === coord.x && coord.y === coord.y);
+    const isOccupied = activePieces.value.some(p =>
+      p.tiles.some(t => t.x === coord.x && t.y === coord.y)
+    );
     if (isOccupied) return; 
     if (!playerSpawns.value.some(
       s => s.x === coord.x && s.y === coord.y

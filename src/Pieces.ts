@@ -1462,8 +1462,8 @@ class Larva extends Piece {
       //replace this with a new wasp
       const wasp = new Wasp(this.headPosition, this.team, this.removeCallback, crypto.randomUUID());
       wasp.tiles = this.tiles;
-      wasp.actions = 0
-      wasp.movesRemaining = 0
+      wasp.actions = 0;
+      wasp.movesRemaining = 0;
       activePieces.push(wasp);
       this.actions--
       this.removeCallback?.(this)
@@ -1503,6 +1503,8 @@ class Wasp extends Piece {
 
     //Spawn larva at that position
     const larva = new Larva(target, this.team, this.removeCallback, crypto.randomUUID());
+    larva.actions = 0;
+    larva.movesRemaining = 0;
     activePieces.push(larva);
 
     this.actions--;
@@ -1534,6 +1536,8 @@ class Flute extends Piece {//not working
   }
   async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
     const newRat = new Rat(target, this.team, this.removeCallback, crypto.randomUUID());
+    newRat.actions = 0;
+    newRat.movesRemaining = 0;
     activePieces.push(newRat);
     this.actions--
   }
@@ -2171,6 +2175,8 @@ class Honeypot extends Piece {
 
   async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
     const newBee = new Bee(target, this.team, this.removeCallback, crypto.randomUUID());
+    newBee.actions = 0;
+    newBee.movesRemaining = 0;
     activePieces.push(newBee);
     this.actions--
   }
@@ -2238,7 +2244,7 @@ class Jellyfish extends Piece {
   static color = "#0d8affff";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Jellyfish.name, Jellyfish.description, Jellyfish.unicode, 2, 1, 1, 4, 0, Jellyfish.color, headPosition, [headPosition], team, Jellyfish.rarity, removeCallback, id)
+    super(Jellyfish.name, Jellyfish.description, Jellyfish.unicode, 3, 1, 1, 4, 0, Jellyfish.color, headPosition, [headPosition], team, Jellyfish.rarity, removeCallback, id)
     this.specialName='Shock';
     this.targetType='piece';
   }

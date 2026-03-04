@@ -2677,7 +2677,7 @@ class Bell extends Admin {//needs to reset
 //onPieceDestruction gain money
 class Violin extends Admin {//test
   static name = "Violin";
-  static description = "Gain $3 on destruction of your programs";//0 defence?
+  static description = "Gain $3 on destruction of your programs if they match one in your inventory (summons do not count)";//0 defence?
   static unicode = "U+1F3BB";
   static color = "rgb(68, 0, 77)";
   static rarity = 2;
@@ -2686,7 +2686,8 @@ class Violin extends Admin {//test
   }
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    if(activePieces[idx].team === 'player'){
+    const idbp = player.programs.findIndex(bp => bp.id === id);
+    if(idbp && activePieces[idx].team === 'player'){
       player.money += 3;
     }
   }

@@ -16,7 +16,7 @@
   import type { Coordinate, PieceBlueprint, Level, OS } from "./types";
   import { runEnemyStateMachine } from "./Enemy";
   import WorldMap from "./components/WorldMap.vue";
-  import { addItemsUntilFull, applyVariant, coordKey, findAnyPiecesInRange, getOccupiedTileSet, getTilesInRange, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, rollVariant } from "./helperFunctions";
+  import { addItemsUntilFull, applyVariant, coordKey, findAnyPiecesInRange, getOccupiedTileSet, getTilesInRange, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, rollVariant, isSoundEnabled } from "./helperFunctions";
   import Shop from "./components/Shop.vue";
   import BossView from "./components/BossView.vue";
   import RoundSummary from "./components/RoundSummary.vue";
@@ -1524,6 +1524,9 @@
     </div>
     <button class="phone-hide" @mousedown="toggleDebug()">
       Debug mode
+    </button>
+    <button class="phone-hide" @mousedown="isSoundEnabled = !isSoundEnabled">
+      Sound FX: {{ isSoundEnabled ? 'ON' : 'OFF' }}
     </button>
   </div>
   <div class="top-hud">

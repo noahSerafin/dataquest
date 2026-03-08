@@ -1455,7 +1455,9 @@
         break;
       //inside pieceview???
       case 'KeyA':
-        boardRef.value.highlightTargets(selectedPiece.value);
+        if(selectedPiece.value?.canAttack){
+          boardRef.value.highlightTargets(selectedPiece.value);
+        }
         break;
 
       case 'KeyS':

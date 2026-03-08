@@ -1,8 +1,30 @@
+import { ref } from "vue";
 import type { Coordinate, PieceBlueprint, PieceVariant, StatKey } from "./types";
 import { allPieces, type Piece } from "./Pieces";
 import type { Player } from "./Player";
 import { STAT_MIN, PIECE_VARIANTS } from "./constants";
 import { upgradeItems } from "./Items";
+
+export const isSoundEnabled = ref(false);
+
+export function playSoundFx(url: string, pieceName: string) {
+  if (!isSoundEnabled.value) return;
+  const audio = new Audio(url);
+  // Disable pitch preservation so changing rate changes pitch
+  (audio as any).preservesPitch = false;
+  (audio as any).mozPreservesPitch = false;
+  (audio as any).webkitPreservesPitch = false;
+  // Generate a simple deterministic hash from the piece's name
+  let hash = 0;
+  for (let i = 0; i < pieceName.length; i++) {
+    hash = pieceName.charCodeAt(i) + ((hash << 5) - hash);
+  }
+    
+  // Normalize hash to a playback rate between 0.2 and 2.5
+  const rate = 0.2 + (Math.abs(hash) % 100) / 100 * 2.3;
+  audio.playbackRate = rate;
+  audio.play().catch(e => console.warn("Audio play failed:", e));
+}
 
 export function coordKey(c: Coordinate): string {
   return `${c.x},${c.y}`;

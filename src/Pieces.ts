@@ -1,7 +1,8 @@
 import type { Coordinate, Immunities, StatModifier } from "./types"
 import { createDefaultStatuses } from "./types";
 import { Player } from "./Player";
-import damageSoundUrl from '../sfx/damage.wav';
+import damageSoundUrl from '../sfx/damage.ogg';
+import { playSoundFx } from "./helperFunctions";
 
 export abstract class Piece {
   removeCallback?: (piece: Piece) => void;
@@ -203,24 +204,7 @@ export abstract class Piece {
     // 1. Apply damage to defence
     this.defenceRemaining = Math.max(0, this.defenceRemaining - damage);
     
-    const audio = new Audio(damageSoundUrl);
-    
-    // Disable pitch preservation so changing rate changes pitch
-    (audio as any).preservesPitch = false;
-    (audio as any).mozPreservesPitch = false;
-    (audio as any).webkitPreservesPitch = false;
-
-    // Generate a simple deterministic hash from the piece's name
-    let hash = 0;
-    for (let i = 0; i < this.name.length; i++) {
-        hash = this.name.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    
-    // Normalize hash to a playback rate between 0.2 and 2.5
-    const rate = 0.2 + (Math.abs(hash) % 100) / 100 * 2.3;
-    audio.playbackRate = rate;
-
-    audio.play().catch(e => console.warn("Audio play failed:", e));
+    playSoundFx(damageSoundUrl, this.name);
 
     // 2. Calculate overflow damage
     const overflow = Math.max(0, damage - defenceBefore);

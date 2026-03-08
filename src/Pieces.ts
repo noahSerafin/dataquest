@@ -1,6 +1,7 @@
 import type { Coordinate, Immunities, StatModifier } from "./types"
 import { createDefaultStatuses } from "./types";
 import { Player } from "./Player";
+import damageSoundUrl from '../sfx/damage.wav';
 
 export abstract class Piece {
   removeCallback?: (piece: Piece) => void;
@@ -201,6 +202,10 @@ export abstract class Piece {
     const defenceBefore = this.defenceRemaining;
     // 1. Apply damage to defence
     this.defenceRemaining = Math.max(0, this.defenceRemaining - damage);
+    
+    const audio = new Audio(damageSoundUrl);
+    audio.play().catch(e => console.warn("Audio play failed:", e));
+
     // 2. Calculate overflow damage
     const overflow = Math.max(0, damage - defenceBefore);
     // 3. No overflow → no tile damage
@@ -1721,7 +1726,7 @@ class Greatshield extends Piece {//testt
   static color = "rgba(0, 82, 85, 1)";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Greatshield.name, Greatshield.description, Greatshield.unicode, 5, 1, 1, 1, 4, Greatshield.color, headPosition, [headPosition], team, Greatshield.rarity, removeCallback, id)
+    super(Greatshield.name, Greatshield.description, Greatshield.unicode, 5, 1, 1, 2, 4, Greatshield.color, headPosition, [headPosition], team, Greatshield.rarity, removeCallback, id)
     this.specialName = 'Charge';
     this.targetType = 'line'
   }

@@ -2353,24 +2353,6 @@ class Boomerang extends Piece {
   }
 }
 
-class Plunger extends Piece {//item remove??
-  static name = "Plunger";
-  static description = "A program that can remove the slow status effect";
-  static unicode = "U+1FAA0";
-  static color = "#82e2ffff";
-  static rarity = 2;
-  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Plunger.name, Plunger.description, Plunger.unicode, 2, 2, 1, 1, 0, Plunger.color, headPosition, [headPosition], team, Plunger.rarity, removeCallback, id)
-   this.targetType = 'piece'
-   this.specialName = 'Unclog'
-   this.hasFriendlySpecial = true;
-  }
-  async special(targetPiece: Piece):Promise<void>{
-    targetPiece.statuses.slowed = false;
-    this.actions--
-  }
-}
-
 /*
 class Angel extends Piece {//not passive, same as fairy, remove?? unfinished
   static name = "Angel";
@@ -3373,7 +3355,7 @@ export class Frond extends Piece {
 //building castle? creates a wall around it of 8 tiles 
 
 //99 fairy
-export const allPieces = [Ant, Knife, Potato, Rat, Shield, Sling, Snail, TP, Aegis, Bee, Beetle, Bow, Dagger, Decoy, Dog, Fence, Doctor, Gecko, Germ, Guard, Hedgehog, Hopper, Jellyfish, Larva, Plunger, Saw, Snake, Tar, Trap, Watchman, Yarn, Yoyo, Boomerang, Bug, Camera, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, LabRat, LadyBeetle, Lance, Magnet, Mine, Mosquito, Ninja, Octopus, Officer, Pawn, Peacock, Flute, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Torch, Trojan, Troll, Vice, Alien, Recurve, Arms, Axe, Bull, Cannon, Lightning, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Greatshield, Kite, Leopard, Lighthouse, Mammoth, Nerf, Oil, Wasp, Puffer, Scarab, Shark, Shrike, Snowman, Soldier, Squid, Stopwatch, Rex, Tiger, UFO, Bat, Wizard, Wolf, Zebra, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Gman, Giraffe, Lion, Oni, Orangutan, Rhino, Screwdriver, Tank, Vampire, Bear, Helicopter, Gorilla, Nuke, Sol, Sponge, Web];//Dolls //100 +2 (web, ink)
+export const allPieces = [Ant, Knife, Potato, Rat, Shield, Sling, Snail, TP, Aegis, Bee, Beetle, Bow, Dagger, Decoy, Dog, Fence, Doctor, Gecko, Germ, Guard, Hedgehog, Hopper, Jellyfish, Larva, Saw, Snake, Tar, Trap, Watchman, Yarn, Yoyo, Boomerang, Bug, Camera, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, LabRat, LadyBeetle, Lance, Magnet, Mine, Mosquito, Ninja, Octopus, Officer, Pawn, Peacock, Flute, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Torch, Trojan, Troll, Vice, Alien, Recurve, Arms, Axe, Bull, Cannon, Lightning, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Greatshield, Kite, Leopard, Lighthouse, Mammoth, Nerf, Oil, Wasp, Puffer, Scarab, Shark, Shrike, Snowman, Soldier, Squid, Stopwatch, Rex, Tiger, UFO, Bat, Wizard, Wolf, Zebra, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Gman, Giraffe, Lion, Oni, Orangutan, Rhino, Screwdriver, Tank, Vampire, Bear, Helicopter, Gorilla, Nuke, Sol, Sponge, Web];//Dolls //100 +2 (web, ink)
 console.log('pieces length: ', allPieces.length)
 
 let adminLogs = {

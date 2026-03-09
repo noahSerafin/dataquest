@@ -204,7 +204,11 @@ function handleApplyItem(payload: { item: Item, id: string }) {
   const item = payload.item;
   const itemMult = 1 + player.value.admins.filter(a => a.name === 'Chemistry').length;
   console.log('itemMult:', itemMult);
-
+  if (item.targetType === "piecesAndBoard") {
+    item.apply({activePieces: activePieces.value, board: level.value.tiles}, itemMult);
+    playerSpawns.value = newPlacementHighlights();
+    player.value.removeItem(item);
+  }
   //check it is to be applied to playerBlueprints
   if (item.targetType === "blueprint") {
     const id = payload.id;

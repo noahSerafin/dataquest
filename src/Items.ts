@@ -821,7 +821,7 @@ export class Dupe extends Item {
 //JAR, U+1FAD9 - piece? capture an enemy of size 1, turn into blueprint
 
 //update x3, hotline buoy bugle batteries pig 9
-export const allItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Supplement, Juice, Roids, Formula, Garlic, Coffee, Bandage, Soap, Voucher, Mushroom, Rations, Beans, Pandora, Box, Genie, Gift, Pinata, Extinguisher, Wand, Hourglass, Spanner, Makeover, ShootingStar, Keygen, Bugle, Megaphone, Battery, Floppy, Update2, Update3, Life, Cake, Dupe];
+export const allItems = [Mushroom, Meat, Iron, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Ginger, Blessing, Supplement, Roids, Formula, Garlic, Coffee, Bandage, Soap, Voucher, Rations, Beans, Pandora, Box, Genie, Gift, Pinata, Extinguisher, Wand, Hourglass, Spanner, Makeover, ShootingStar, Keygen, Bugle, Megaphone, Battery, Floppy, Update2, Update3, Life, Cake, Dupe];
 export const upgradeItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Roids, Formula]
 //export const activeItems = [Rations, Beans]
 

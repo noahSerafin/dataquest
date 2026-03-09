@@ -1,98 +1,129 @@
 <script setup lang="ts">
-  import { ref, onMounted, computed, watch } from "vue";
-  import Board from './components/Board.vue';
-  import Leveleditor from './components/Leveleditor.vue';
-  import { castled, level1Levels } from './level1Levels';
-  import { Player } from "./Player";
-  import { Item, Voucher, allItems} from "./Items";
-  import type { ItemConstructor } from "./Items";
-  import { allAdmins } from "./AdminPrograms";
-  import { Admin } from "./AdminPrograms";
-  import type { AdminTrigger } from "./AdminPrograms";
-  import PlayerView from "./components/PlayerView.vue";
-  import type { Piece } from "./Pieces"
-  import { Spawn, Dolls } from './Pieces';
-  import { allPieces } from "./Pieces"
-  import type { Coordinate, PieceBlueprint, Level, OS } from "./types";
-  import { runEnemyStateMachine } from "./Enemy";
-  import WorldMap from "./components/WorldMap.vue";
-  import { addItemsUntilFull, applyVariant, coordKey, findAnyPiecesInRange, getOccupiedTileSet, getTilesInRange, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, rollVariant, isSoundEnabled } from "./helperFunctions";
-  import Shop from "./components/Shop.vue";
-  import BossView from "./components/BossView.vue";
-  import RoundSummary from "./components/RoundSummary.vue";
-  import { DIFFICULTY_RARITY } from "./constants";
-  import BlueprintView from "./components/BlueprintView.vue";
-  import MainMenu from "./components/MainMenu.vue";
-  import PieceController from "./components/PieceController.vue";
-  import HybridCompiler from "./components/HybridCompiler.vue";
-  import { applyTutorialTooltips } from "./tutorial.ts";
-  import { allTips } from "./tutorialSteps.ts";
-  
-  const testSword = {
-    id: "274ec329-8c17-4265-8c12-e9a28bcf0833",
-    name: "Knife",
-    description: "A basic attack piece",
-    unicode: "U+1F52A",
-    maxSize: 3,
-    moves: 2,
-    range: 1,
-    attack: 2,
-    defence: 0,
-    rarity: 1,
-    color: "#2fc5ebff",
-    isPlaced: false,
-    cost: 1
-  }
-  const testShield = {
-    id: "274ec329-8c17-4265-8c12-e9a28bcf0111",
-    name: "Shield",
-    description: "A basic defensive piece",
-    unicode: "U+1F6E1",
-    maxSize: 3,
-    moves: 2,
-    range: 0,
-    attack: 0,
-    defence: 1,
-    rarity: 1,
-    color: "#2fc5ebff",
-    isPlaced: false,
-    cost: 1
-  }
-  const test = {
-    id: "274ec329-8c17-4265-8c12-e9a28bcf0112",
-    name: "Lance",
-    description: "A test piece",
-    unicode: "U+1F3A0",
-    maxSize: 3,
-    moves: 2,
-    range: 3,
-    attack: 2,
-    defence: 0,
-    rarity: 1,
-    color: "#2fc5ebff",
-    isPlaced: false,
-    cost: 1,
-    hybridName: 'LanceHog',
-    extraUnicode: 'U+1F994'
-  }
-  const testVoucher = new Voucher();
+import { ref, onMounted, computed, watch } from "vue";
+import Board from './components/Board.vue';
+import Leveleditor from './components/Leveleditor.vue';
+import { castled, level1Levels } from './level1Levels';
+import { Player } from "./Player";
+import { Item, Voucher, allItems } from "./Items";
+import type { ItemConstructor } from "./Items";
+import { allAdmins } from "./AdminPrograms";
+import { Admin } from "./AdminPrograms";
+import type { AdminTrigger } from "./AdminPrograms";
+import PlayerView from "./components/PlayerView.vue";
+import type { Piece } from "./Pieces"
+import { Spawn, Dolls } from './Pieces';
+import { allPieces } from "./Pieces"
+import type { Coordinate, PieceBlueprint, Level, OS } from "./types";
+import { runEnemyStateMachine } from "./Enemy";
+import WorldMap from "./components/WorldMap.vue";
+import { addItemsUntilFull, applyVariant, coordKey, findAnyPiecesInRange, getOccupiedTileSet, getTilesInRange, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, rollVariant, isSoundEnabled } from "./helperFunctions";
+import Shop from "./components/Shop.vue";
+import BossView from "./components/BossView.vue";
+import RoundSummary from "./components/RoundSummary.vue";
+import { DIFFICULTY_RARITY } from "./constants";
+import BlueprintView from "./components/BlueprintView.vue";
+import MainMenu from "./components/MainMenu.vue";
+import PieceController from "./components/PieceController.vue";
+import HybridCompiler from "./components/HybridCompiler.vue";
+import Collection from "./components/Collection.vue";
+import { applyTutorialTooltips } from "./tutorial.ts";
+import { allTips } from "./tutorialSteps.ts";
+import { StorageManager } from "./StorageManager";
 
-  const swapDisplay = () => {
-    displayEditor.value = !displayEditor.value;//add map later, make shop an overlay?
-  }
+const testSword = {
+  id: "274ec329-8c17-4265-8c12-e9a28bcf0833",
+  name: "Knife",
+  description: "A basic attack piece",
+  unicode: "U+1F52A",
+  maxSize: 3,
+  moves: 2,
+  range: 1,
+  attack: 2,
+  defence: 0,
+  rarity: 1,
+  color: "#2fc5ebff",
+  isPlaced: false,
+  cost: 1
+}
+const testShield = {
+  id: "274ec329-8c17-4265-8c12-e9a28bcf0111",
+  name: "Shield",
+  description: "A basic defensive piece",
+  unicode: "U+1F6E1",
+  maxSize: 3,
+  moves: 2,
+  range: 0,
+  attack: 0,
+  defence: 1,
+  rarity: 1,
+  color: "#2fc5ebff",
+  isPlaced: false,
+  cost: 1
+}
+const test = {
+  id: "274ec329-8c17-4265-8c12-e9a28bcf0112",
+  name: "Lance",
+  description: "A test piece",
+  unicode: "U+1F3A0",
+  maxSize: 3,
+  moves: 2,
+  range: 3,
+  attack: 2,
+  defence: 0,
+  rarity: 1,
+  color: "#2fc5ebff",
+  isPlaced: false,
+  cost: 1,
+  hybridName: 'LanceHog',
+  extraUnicode: 'U+1F994'
+}
+const testVoucher = new Voucher();
 
-  const stake = ref(1);//player
-  const gameStarted = ref(false);
-  
-  const player = ref(new Player(
-    'U+1F60A',
-    50, // starting money
-    5,  // memory limit
-    5, //admin slots
-    [testVoucher], // no items yet
-    [testSword, testShield, test],//, testShield] // starting pieces
-    [],//no admins yet
-    2,
+const swapDisplay = () => {
+  displayEditor.value = !displayEditor.value;//add map later, make shop an overlay?
+}
+
+const stake = ref(1);//player
+const gameStarted = ref(false);
+
+const player = ref(new Player(
+  'U+1F60A',
+  50, // starting money
+  5,  // memory limit
+  5, //admin slots
+  [testVoucher], // no items yet
+  [testSword, testShield, test],//, testShield] // starting pieces
+  [],//no admins yet
+  2,
+  5,
+  0,
+  0,
+  0,
+  0,
+  false,
+  false,
+  stake.value
+));
+const showInventory = ref(true);
+//function closeInventory(){
+//showInventory.value = false;
+//}
+function toggleInventory() {
+  showInventory.value = !showInventory.value;
+}
+const showMainMenu = ref(true);
+
+function createNewPlayer(os: OS) {
+  player.value.difficulty = 1
+  player.value = new Player(
+    os.unicode,
+    os.money,
+    os.memory,
+    os.adminSlots,
+    os.items,
+    os.blueprints,
+    os.admins,
+    os.lives,
     5,
     0,
     0,
@@ -101,1594 +132,1512 @@
     false,
     false,
     stake.value
-  ));
-  const showInventory = ref(true);
-  //function closeInventory(){
-    //showInventory.value = false;
-  //}
-  function toggleInventory(){
-    showInventory.value = !showInventory.value;
-  }
-  const showMainMenu = ref(true);
+  )
+  
+  // Track this OS as played
+  StorageManager.recordOS(os.unicode);
 
-  function createNewPlayer(os: OS){
-    player.value.difficulty = 1
-    player.value = new Player(
-      os.unicode,
-      os.money,
-      os.memory,
-      os.adminSlots,
-      os.items,
-      os.blueprints,
-      os.admins,
-      os.lives,
-      5,
-      0,
-      0,
-      0,
-      0,
-      false,
-      false,
-      stake.value
-    )
-    showMainMenu.value = false;
-    showMap.value = true;
-    gameStarted.value = true;
-  }
-  const extraDifficulty=ref<number>(0)//player/seed
+  // Unlock starting inventory in the collection
+  os.blueprints.forEach(bp => StorageManager.unlockPiece(bp.name));
+  os.admins.forEach(admin => StorageManager.unlockAdmin(admin.name));
+  os.items.forEach(item => StorageManager.unlockItem(item.name));
 
-  function incrementMapProgress(){
-    player.value.mapProgress++
-    //console.log('progress increased:', mapProgress.value)
+  showMainMenu.value = false;
+  showMap.value = true;
+  gameStarted.value = true;
+}
+const showCollection = ref(false);
+const extraDifficulty = ref<number>(0)//player/seed
+
+function incrementMapProgress() {
+  player.value.mapProgress++
+  //console.log('progress increased:', mapProgress.value)
+}
+
+function openMainMenu() {
+  showBoard.value = false;
+  showSummary.value = false;
+  showMainMenu.value = true;
+  //sessionStorage.clear();
+  //localStorage.clear(); // only if you aren't using it yet
+  window.location.reload();
+}
+const showFastControls = ref<boolean>(true);
+function toggleFastControls() {
+  showFastControls.value = !showFastControls.value
+}
+
+function sellBlueprint(pieceId: string) {
+  // find the index
+  const idx = player.value.programs.findIndex(p => p.id === pieceId);
+  if (idx === -1) return; // piece not found
+
+  const piece = player.value.programs[idx];
+
+  // remove from programs
+  player.value.programs.splice(idx, 1);
+  pieceToPlace.value = null;
+  // refund money (e.g., half cost or some formula)
+  player.value.money += piece.rarity;
+}
+
+function sellItem(itemId: string) {
+  const idx = player.value.items.findIndex(i => i.id === itemId);
+  if (idx === -1) return;
+  const item = player.value.items[idx];
+  player.value.items.splice(idx, 1);
+  player.value.money += Math.round(item.cost / 2);
+}
+
+function sellAdmin(itemId: string) {//TODO NEXT
+  const idx = player.value.admins.findIndex(i => i.id === itemId);
+  if (idx === -1) return;
+  const admin = player.value.admins[idx];
+  if (admin.triggerType === 'other' && admin.targetType === 'player') {
+    admin.remove({ player: player.value });
+  }
+  player.value.admins.splice(idx, 1);
+  player.value.money += Math.round(admin.cost / 2);
+}
+
+function handleApplyItem(payload: { item: Item, id: string }) {
+  const item = payload.item;
+  const itemMult = 1 + player.value.admins.filter(a => a.name === 'Chemistry').length;
+  console.log('itemMult:', itemMult);
+
+  //check it is to be applied to playerBlueprints
+  if (item.targetType === "blueprint") {
+    const id = payload.id;
+    const blueprint = player.value.programs.find(bp => bp.id === id);
+    if (!blueprint) return;
+    player.value.applyItemToPieceBlueprint(payload, itemMult);
+    return;
+  }
+  if (item.targetType === "piece" && selectedPiece.value) {
+    const id = selectedPiece.value?.id;
+    const piece = activePieces.value.find(p => p.id === id);
+    if (!piece) return;
+    item.apply(piece, itemMult);
+    player.value.removeItem(item)
+    return;
   }
 
-  function openMainMenu(){
-    showBoard.value = false;
-    showSummary.value = false;
-    showMainMenu.value = true;
-    //sessionStorage.clear();
-    //localStorage.clear(); // only if you aren't using it yet
-    window.location.reload();
-  }
-  const showFastControls = ref<boolean>(true);
-  function toggleFastControls(){
-    showFastControls.value = !showFastControls.value
-  }
-
-  function sellBlueprint(pieceId: string) {
-    // find the index
-    const idx = player.value.programs.findIndex(p => p.id === pieceId);
-    if (idx === -1) return; // piece not found
-
-    const piece = player.value.programs[idx];
-    
-    // remove from programs
-    player.value.programs.splice(idx, 1);
-    pieceToPlace.value = null;
-    // refund money (e.g., half cost or some formula)
-    player.value.money += piece.rarity;
-  }
-
-  function sellItem(itemId: string) {
-    const idx = player.value.items.findIndex(i => i.id === itemId);
-    if (idx === -1) return;
-    const item = player.value.items[idx];
-    player.value.items.splice(idx, 1);
-    player.value.money += Math.round(item.cost / 2);
-  }
-
-  function sellAdmin(itemId: string) {//TODO NEXT
-    const idx = player.value.admins.findIndex(i => i.id === itemId);
-    if (idx === -1) return;
-    const admin = player.value.admins[idx];
-    if(admin.triggerType === 'other' && admin.targetType==='player'){
-      admin.remove({player: player.value});
+  if (item.targetType === "player") {
+    if (item.name === 'Dupe') {
+      const randAdmin = player.value.admins[Math.floor(Math.random() * player.value.admins.length)]
+      const adminClass = allAdmins.find(a => a.name === randAdmin.name);
+      if (!adminClass) return;
+      player.value.admins = [randAdmin, new adminClass] //make a new 
+      player.value.removeItem(item);
     }
-    player.value.admins.splice(idx, 1);
-    player.value.money += Math.round(admin.cost / 2);
-  }
-
-  function handleApplyItem(payload: {item: Item, id:string}) {
-    const item = payload.item;
-    const itemMult = 1 + player.value.admins.filter(a => a.name === 'Chemistry').length;
-    console.log('itemMult:', itemMult);
-
-    //check it is to be applied to playerBlueprints
-    if (item.targetType === "blueprint") {
-      const id = payload.id;
-      const blueprint = player.value.programs.find(bp => bp.id === id);
-      if (!blueprint) return;
-      player.value.applyItemToPieceBlueprint(payload, itemMult);
-      return;
+    //some these items cannot be passed allItems/ Alladmins because they are declared in /Items.ts first
+    const hasRoom = player.value.usedMemory <= player.value.memory;
+    if (item.name === 'Gift Box' && hasRoom) {
+      const newProgram = pickWeightedRandom(allPieces, player.value);
+      player.value.programs.push(makeBlueprint(newProgram.class, newProgram.variant ?? undefined));
+      player.value.removeItem(item);
     }
-    if (item.targetType === "piece" && selectedPiece.value) {
-      const id = selectedPiece.value?.id;
-      const piece = activePieces.value.find(p => p.id === id);
-      if (!piece) return;
-      item.apply(piece, itemMult);
+    if (item.name === 'Genie' && (player.value.freeMemory >= 2 || player.value.hasToolbox && player.value.freeMemory >= 0.5)) {//check for toolbox
+      //addProgramsUntilFull(player.value, 3)
+      /*let attempts = 0
+      while ((player.value.freeMemory >=1 || player.value.hasToolbox && player.value.freeMemory >= 0.5) && attempts < 2) {
+        const PieceClass = pickWeightedRandom(allPieces, player.value)
+        const bp = makeBlueprint(PieceClass);
+        player.value.addProgram(bp);
+      }*/
+      const classes = [
+        pickWeightedRandom(allPieces, player.value),
+        pickWeightedRandom(allPieces, player.value),
+        pickWeightedRandom(allPieces, player.value),
+      ];
+      const bps = classes.map(c => makeBlueprint(c.class, c.variant ?? undefined));
+      player.value.programs.push(...bps);//do one by one
       player.value.removeItem(item)
-      return;
     }
-    
-    if (item.targetType === "player") {
-      if(item.name === 'Dupe'){
-        const randAdmin = player.value.admins[Math.floor(Math.random()*player.value.admins.length)]
-        const adminClass = allAdmins.find(a => a.name === randAdmin.name);
-        if(!adminClass) return;
-        player.value.admins = [randAdmin, new adminClass] //make a new 
-        player.value.removeItem(item);
-      }
-      //some these items cannot be passed allItems/ Alladmins because they are declared in /Items.ts first
-      const hasRoom = player.value.usedMemory <= player.value.memory;
-      if(item.name === 'Gift Box' && hasRoom){
-        const newProgram = pickWeightedRandom(allPieces, player.value);
-        player.value.programs.push(makeBlueprint(newProgram.class, newProgram.variant ?? undefined ));
-        player.value.removeItem(item);
-      }
-      if(item.name === 'Genie' && (player.value.freeMemory >= 2 || player.value.hasToolbox && player.value.freeMemory >= 0.5)){//check for toolbox
-        //addProgramsUntilFull(player.value, 3)
-        /*let attempts = 0
-        while ((player.value.freeMemory >=1 || player.value.hasToolbox && player.value.freeMemory >= 0.5) && attempts < 2) {
-          const PieceClass = pickWeightedRandom(allPieces, player.value)
-          const bp = makeBlueprint(PieceClass);
-          player.value.addProgram(bp);
-        }*/
-        const classes = [
-          pickWeightedRandom(allPieces, player.value),
-          pickWeightedRandom(allPieces, player.value),
-          pickWeightedRandom(allPieces, player.value),
-        ];
-        const bps = classes.map(c => makeBlueprint(c.class, c.variant ?? undefined));
-        player.value.programs.push(...bps);//do one by one
+    if (item.name === 'Mystery Box' && hasRoom) {
+      player.value.items.push(pickWeightedRandomItem(allItems, player.value))
+      player.value.removeItem(item)
+    }
+    if (item.name === 'Pandora' && player.value.freeMemory) {//check for trolley/schoolbag
+      player.value.removeItem(item)
+      addItemsUntilFull(player.value, 3);
+    }
+    if (item.name === 'Pinata' && hasRoom) {
+      player.value.admins.push(pickWeightedRandomItem(allAdmins, player.value))
+      player.value.removeItem(item)
+    }
+    if (!(item.name === 'Gift Box' || item.name === 'Genie' || item.name === 'Mystery Box' || item.name === 'Pinata')) {
+      item.apply(player.value, itemMult)
+      player.value.removeItem(item)
+    }
+  }
+
+  if (item.targetType === "shopItem" && item.name === 'Voucher') {
+    console.log('using voucher on ', shopTarget.value?.name)
+    if (shopTarget.value?.id) {
+      const id = shopTarget.value.id;
+      const shopBp = shopBlueprints.value.find(p => p.id === id);
+      const shopItem = shopItems.value.find(i => i.id === id);
+      if (shopBp) {
+        item.apply(shopBp, 1)
         player.value.removeItem(item)
       }
-      if(item.name === 'Mystery Box' &&  hasRoom){
-        player.value.items.push(pickWeightedRandomItem(allItems, player.value))
-        player.value.removeItem(item)
-      }
-      if(item.name === 'Pandora' && player.value.freeMemory){//check for trolley/schoolbag
-        player.value.removeItem(item)
-        addItemsUntilFull(player.value, 3);
-      }
-      if(item.name === 'Pinata' && hasRoom){
-        player.value.admins.push(pickWeightedRandomItem(allAdmins, player.value))
-        player.value.removeItem(item)
-      }
-      if(!(item.name === 'Gift Box' || item.name === 'Genie' || item.name === 'Mystery Box' || item.name === 'Pinata')) {
-        item.apply(player.value, itemMult)
+      if (shopItem) {
+        item.apply(shopItem, 1)
         player.value.removeItem(item)
       }
     }
-
-    if (item.targetType === "shopItem" && item.name === 'Voucher') {
-      console.log('using voucher on ', shopTarget.value?.name)
-      if(shopTarget.value?.id){
-        const id = shopTarget.value.id;
-        const shopBp = shopBlueprints.value.find(p => p.id === id);
-        const shopItem = shopItems.value.find(i => i.id === id);
-        if(shopBp){
-          item.apply(shopBp, 1)
-          player.value.removeItem(item)
-        }
-        if(shopItem){
-          item.apply(shopItem, 1)
-          player.value.removeItem(item)
-        }
-      }
-    }
-
-    if (item.targetType === 'gameState') {
-      if(item.name === 'Hourglass'){
-          reloadLevel();
-          player.value.removeItem(item);
-      }
-      if(item.name === 'Magic Wand'){
-          //if(player placed last turn, (there is an extra player piece in active not in lastturn) find the blueprint by piece name in player.programs and renew that blueprint if it exists)
-          //then:
-          const lastIds = new Set(lastTurnPieces.value.map(p => p.id));
-          const newPiece = activePieces.value.find(p => !lastIds.has(p.id)) || null;
-          if(newPiece){
-            const bp = player.value.programs.find(
-              bp => bp.name === newPiece.name
-            );
-            if (bp) {
-              bp.isPlaced = false; // or bp.reset(), if you have a helper
-            }
-          }
-          activePieces.value = lastTurnPieces.value.map(p => p.clone());
-          // pieces in lastTurn but NOT in activePieces
-          const diedThisTurn = lastTurnPieces.value.filter(
-            lp => !activePieces.value.some(ap => ap.id === lp.id)
-          );
-
-          diedThisTurn.forEach(dead => {
-            const idx = graveyard.value.findIndex(g => g.id === dead.id);
-            if (idx !== -1) {
-              graveyard.value.splice(idx, 1); // remove from graveyard
-            }
-          });
-          activePieces.value.forEach(piece => {
-            piece.movesRemaining = piece.moves;
-            piece.actions = 1
-          })
-          player.value.removeItem(item);
-          player.value.canMove = true;
-          player.value.canPlace = true;
-          player.value.canAction = true;
-      }
-      item.apply(activePieces.value, itemMult);
-      player.value.removeItem(item)// not working for keygen?
-    }
-
-    /*if(item.targetType === 'piecesAndBoard'){
-      item.apply(activePieces, level.value.tiles);//{activePieces, board }: {activePieces: Piece[], board: Coordinate[] }
-    }*/
-    
-    console.warn("Item has unknown target type:", item.targetType);
-    //selectedPiece.value =
-  }
-    //or gameState
-    //or shop/shop items
-
-
-  //SHOP functions
-  const shopTarget = ref<PieceBlueprint | Item | null>(null);
-  function clearShopTarget(){
-    shopTarget.value = null;
-  }
-  function selectShopTarget(target: Item | PieceBlueprint | null){
-    shopTarget.value=target;
   }
 
-  const shopBlueprints = ref<PieceBlueprint[]>([]);
-  const shopItems = ref<Item[]>([]);
-  const rerollCost = ref(player.value.hasAdmin('Wheel of Dharma') ? 0 : 5);//to be reset after shop
-  const prevFib = ref(0);//to be reset after shop
-  const currentFib = ref(1);//to be reset after shop
-  const canProceedFromShop = ref<boolean>(false);
-  const hasStolenFromThisShop = ref<boolean>(false);
-
-  function refreshShop(isFree: boolean) {
-    shopTarget.value = null;
-    if(!isFree && !player.value.hasAdmin('Wheel of Dharma')) {//player is rerolling
-      player.value.spend(rerollCost.value);
-      const nextFib = prevFib.value + currentFib.value;
-      prevFib.value = currentFib.value;
-      currentFib.value = nextFib;
-      if(player.value.hasAdmin('Wheel of Dharma')){
-        rerollCost.value = 0;
-      } else {
-        rerollCost.value += currentFib.value;
-      }
-    } else { //boss/level has been defeated
-      rerollCost.value = player.value.hasAdmin('Wheel of Dharma') ? 0 : 5;
-      prevFib.value = 0;
-      currentFib.value = 1;
-      hasStolenFromThisShop.value = false;
+  if (item.targetType === 'gameState') {
+    if (item.name === 'Hourglass') {
+      reloadLevel();
+      player.value.removeItem(item);
     }
-    if(player.value.hasAdmin("Slots")){
-      rerollCost.value = Math.max(0, rerollCost.value - 2);
-    }
-
-    const appraisalDiscount = 2* player.value.admins.filter(a => a.name === 'Appraisal').length;
-
-    const classes = [
-      pickWeightedRandom(allPieces, player.value),
-      pickWeightedRandom(allPieces, player.value),
-      pickWeightedRandom(allPieces, player.value),
-    ];
-    shopBlueprints.value = classes.map(c => makeBlueprint(c.class, c.variant ?? undefined, appraisalDiscount));
-
-    //no reappearing admins
-    const ownedAdmins = new Set(player.value.admins.map(a => a.name));
-    const availableAdmins = (player.value.hasAdmin('Bouquet')) ? allAdmins : allAdmins.filter(AdminClass => !ownedAdmins.has(AdminClass.name));
-
-    const allItemsAndAdmins: ItemConstructor[] = [...allItems, ...availableAdmins];
-    shopItems.value = [
-      pickWeightedRandomItem(allItemsAndAdmins, player.value, appraisalDiscount),
-      pickWeightedRandomItem(allItemsAndAdmins, player.value, appraisalDiscount),
-      pickWeightedRandomItem(allItemsAndAdmins, player.value, appraisalDiscount),
-    ];
-    if(player.value.hasAdmin('Department Store')){
-      const extraP = pickWeightedRandom(allPieces, player.value);
-      shopBlueprints.value.push(makeBlueprint(extraP.class, extraP.variant ?? undefined, appraisalDiscount));
-      const extraI = pickWeightedRandomItem(allItems, player.value, appraisalDiscount);
-      const extraA = pickWeightedRandomItem(availableAdmins, player.value, appraisalDiscount);
-      shopItems.value.push(extraI, extraA);
-    }
-    //if triggered by player
-  }
-
-  function buyBlueprint(bp: PieceBlueprint) {
-    shopBlueprints.value = shopBlueprints.value.filter(b => b.id !== bp.id);
-    if(player.value.hasAdmin('Five Finger Discount') && !hasStolenFromThisShop.value){
-      hasStolenFromThisShop.value = true;
-    } else {
-      player.value.spend(bp.cost);
-      if(player.value.hasAdmin('Piggy')){
-        player.value.money += 2;
-      }
-    }
-    player.value.programs.push(bp);
-    shopTarget.value = null;
-  }
-  async function buyItem(item: Item) {
-    shopItems.value = shopItems.value.filter(i => i.id !== item.id);
-    if(player.value.hasAdmin('Five Finger Discount') && !hasStolenFromThisShop.value){
-      hasStolenFromThisShop.value = true;
-    } else {
-      player.value.spend(item.cost);
-      if(player.value.hasAdmin('Piggy')){
-        player.value.money += 2;
-      }
-    }
-    // decide which inventory to place it in
-    if (item instanceof Admin) {
-      player.value.admins.push(item);
-      if(item.targetType === 'player' && item.triggerType == 'other'){
-        await item.apply({player: player.value})
-      }
-    } else {
-      player.value.items.push(item);
-    }
-    shopTarget.value = null;
-  }
-  const showShop = ref(false)
-  const showCompiler = ref(false)
-  const showMap = ref(false)
-  const showBoard = ref(false)
-  //--shop-----
-
-  //round logic
-  const roundHasStarted = ref(false);//player
-  //pieceMap to track occupied spaces
-  const activePieces = ref<InstanceType<typeof Piece>[]>([]);
-  const graveyard = ref<InstanceType<typeof Piece>[]>([]);
-  //Record: key ID, Modifier for piece with that ID
-  //stats should be applied to activePieces after select level
-  const bossAdmins = ref<Admin[]>([]);
-  function addBossAdmin(admin: Admin){
-    bossAdmins.value.push(admin)
-  }
-  function replaceBosses(admins: Admin[]){
-    bossAdmins.value = admins;
-  }
-
-  async function handleApplyAdmins(trigger: AdminTrigger, id:string){//admin and target
-    const playerAdmins = player.value.admins;
-    for (const admin of playerAdmins) {
-      if(trigger === admin.triggerType){
-        // sort through target types, decide what to pass
-        console.log(admin.name, 'trigger', trigger)
-        if(admin.targetType === 'gameState'){
-          await admin.apply({id: id, activePieces: activePieces.value})
-        }
-        if(admin.targetType === 'playerAndGame'){
-          await admin.apply({id: id, activePieces: activePieces.value, player: player.value})
-        }
-        if(admin.targetType === 'player'){
-          await admin.apply({player: player.value})
+    if (item.name === 'Magic Wand') {
+      //if(player placed last turn, (there is an extra player piece in active not in lastturn) find the blueprint by piece name in player.programs and renew that blueprint if it exists)
+      //then:
+      const lastIds = new Set(lastTurnPieces.value.map(p => p.id));
+      const newPiece = activePieces.value.find(p => !lastIds.has(p.id)) || null;
+      if (newPiece) {
+        const bp = player.value.programs.find(
+          bp => bp.name === newPiece.name
+        );
+        if (bp) {
+          bp.isPlaced = false; // or bp.reset(), if you have a helper
         }
       }
-    };
-    //we do bosses second for onPlacement immunities to take effect
-    if(!player.value.hasAdmin('Umbrella')){
-      for (const admin of bossAdmins.value) {
-        if(trigger === admin.triggerType){
-          // sort through target types, decide what to pass
-          if(admin.targetType === 'player'){
-            await admin.apply({player: player.value})
-          }
-          if(admin.targetType === 'gameState'){
-            await admin.apply({id, activePieces: activePieces.value})
-          }
-          if(admin.targetType === 'playerAndGame'){
-            await admin.apply({id, activePieces: activePieces.value, player: player.value})
-          }
-          if(admin.targetType === 'piecesAndBoard'){
-            await admin.apply({activePieces: activePieces.value, board: level.value.tiles})
-          }
-          if(admin.targetType === 'all'){
-            await admin.apply({id, activePieces: activePieces.value, removeCallback: removePiece, board: level.value.tiles, player: player.value });//, graveyard: graveyard.value})
-          }
+      activePieces.value = lastTurnPieces.value.map(p => p.clone());
+      // pieces in lastTurn but NOT in activePieces
+      const diedThisTurn = lastTurnPieces.value.filter(
+        lp => !activePieces.value.some(ap => ap.id === lp.id)
+      );
+
+      diedThisTurn.forEach(dead => {
+        const idx = graveyard.value.findIndex(g => g.id === dead.id);
+        if (idx !== -1) {
+          graveyard.value.splice(idx, 1); // remove from graveyard
         }
-      }
-    };
-  }
-
-  const selectedPiece = ref<Piece | null>(null)
-  const playerSpawns = ref<Coordinate[]>([]);
-  const isPlacing = ref(false);//player
-  const isMoving = ref(false);//player
-  const hasFinishedTurn = ref(false);//player
-  const isFirstTurn = ref(true);//player
-  const pieceToPlace = ref<PieceBlueprint | null>(null);
-  //world logic
-  const showSummary = ref(false);//player
-  const level = ref(castled);//tiles
-  const displayEditor = ref(false);
-  const foggedTiles = ref<Coordinate []>([]);//player
-
-  function clearFog (){
-    if(!player.value.fogged) return;
-    const revealKeys = new Set<string>();
-    playerSpawns.value.forEach(p => revealKeys.add(`${p.x},${p.y}`));
-
-    const levelSet = new Set(level.value.tiles.map(t => `${t.x},${t.y}`));
-    /*if (selectedPiece.value) {//for persistant clearance
-      const piece = selectedPiece.value;  
-      const rangeTiles = getTilesInRange(piece.headPosition, piece.range, levelSet);
-      rangeTiles.forEach(t => revealKeys.add(`${t.x},${t.y}`));
-    }*/
-
-    //for non persistent clearance - we need to do all active pieces every time
-    activePieces.value.forEach(pieceToCheck => {
-      if(pieceToCheck.team === 'player'){  
-        const rangeTiles = getTilesInRange(pieceToCheck.headPosition, pieceToCheck.range, levelSet);
-        rangeTiles.forEach(t => revealKeys.add(`${t.x},${t.y}`));
-        pieceToCheck.tiles.forEach(t => revealKeys.add(`${t.x},${t.y}`));
-      }
-    });
-
-    // 2. Filter the foggedTiles by checking if their key exists in the revealKeys Set
-    // This removes both spawns and piece-range in one go without overwriting
-    foggedTiles.value = foggedTiles.value.filter(tile => 
-      !revealKeys.has(`${tile.x},${tile.y}`)
-    );
-  }
-  
-  //map
-  const toggleMap = () => {
-    showMap.value = !showMap.value;
-  }
-  const openSummary = (state: boolean) => {
-    showSummary.value = state;
-  }
-
-  const renewBlueprints = () => {
-    if(player.value.hasAdmin('Ring')){
-      activePieces.value.forEach(piece => {
-        const id = piece.id;
-        player.value.programs.forEach(blueprint => {
-          if(blueprint.id === id){
-            blueprint.maxSize += (piece.getStat('maxSize'));
-            blueprint.moves += (piece.getStat('moves'));
-            blueprint.range += (piece.getStat('range'));
-            blueprint.attack += (piece.getStat('attack'));
-            blueprint.defence += (piece.getStat('defence'));
-          }
-        });
       });
+      activePieces.value.forEach(piece => {
+        piece.movesRemaining = piece.moves;
+        piece.actions = 1
+      })
+      player.value.removeItem(item);
+      player.value.canMove = true;
+      player.value.canPlace = true;
+      player.value.canAction = true;
     }
-    player.value.programs.forEach(blueprint => {
-      blueprint.isPlaced = false;
-    });
+    item.apply(activePieces.value, itemMult);
+    player.value.removeItem(item)// not working for keygen?
   }
 
-  const lastTurnPieces = ref<InstanceType<typeof Piece>[]>([]);//player
-  const originalPieces = ref<InstanceType<typeof Piece>[]>([]);//player
-  const originalSpawns = ref<Coordinate[]>([]);//player
+  /*if(item.targetType === 'piecesAndBoard'){
+    item.apply(activePieces, level.value.tiles);//{activePieces, board }: {activePieces: Piece[], board: Coordinate[] }
+  }*/
 
-  async function selectLevel(newLevel: Level, difficultyMod: number, lReward: number) {//load level, start 
-    pieceToPlace.value = null;
-    showBoard.value = true;
-    renewBlueprints()//shouldnt be needed in final;
-    hasFinishedTurn.value = false;
-    player.value.canPlace = true;
-    player.value.canMove = true;
-    player.value.canAction = true;
-    isFirstTurn.value = true;
-    activePieces.value = [];
-    graveyard.value = [];
-    level.value = newLevel;
-    player.value.nextReward = lReward;
-    const newPieces = rehydratePieces(newLevel.pieces);
-    extraDifficulty.value = difficultyMod;
-    activePieces.value = processSpawnPoints(newPieces , difficultyMod);
-    originalSpawns.value = [...playerSpawns.value];
-    originalPieces.value = activePieces.value.map(p => p.clone());
-    //originalSpawns.value = playerSpawns.value.map(s => ({ ...s }));
-    boardRef.value.clearHighlights();
-    await handleApplyAdmins('onRoundStart', '');
-    if(player.value.fogged){
-      foggedTiles.value = [...level.value.tiles];
-      clearFog();
+  console.warn("Item has unknown target type:", item.targetType);
+  //selectedPiece.value =
+}
+//or gameState
+//or shop/shop items
+
+
+//SHOP functions
+const shopTarget = ref<PieceBlueprint | Item | null>(null);
+function clearShopTarget() {
+  shopTarget.value = null;
+}
+function selectShopTarget(target: Item | PieceBlueprint | null) {
+  shopTarget.value = target;
+}
+
+const shopBlueprints = ref<PieceBlueprint[]>([]);
+const shopItems = ref<Item[]>([]);
+const rerollCost = ref(player.value.hasAdmin('Wheel of Dharma') ? 0 : 5);//to be reset after shop
+const prevFib = ref(0);//to be reset after shop
+const currentFib = ref(1);//to be reset after shop
+const canProceedFromShop = ref<boolean>(false);
+const hasStolenFromThisShop = ref<boolean>(false);
+
+function refreshShop(isFree: boolean) {
+  shopTarget.value = null;
+  if (!isFree && !player.value.hasAdmin('Wheel of Dharma')) {//player is rerolling
+    player.value.spend(rerollCost.value);
+    const nextFib = prevFib.value + currentFib.value;
+    prevFib.value = currentFib.value;
+    currentFib.value = nextFib;
+    if (player.value.hasAdmin('Wheel of Dharma')) {
+      rerollCost.value = 0;
+    } else {
+      rerollCost.value += currentFib.value;
     }
-    showMap.value = false;
-    roundHasStarted.value = true;
+  } else { //boss/level has been defeated
+    rerollCost.value = player.value.hasAdmin('Wheel of Dharma') ? 0 : 5;
+    prevFib.value = 0;
+    currentFib.value = 1;
+    hasStolenFromThisShop.value = false;
+  }
+  if (player.value.hasAdmin("Slots")) {
+    rerollCost.value = Math.max(0, rerollCost.value - 2);
   }
 
-  function handleProceed(){
-    openSummary(false);
-    incrementMapProgress();
-    if(player.value.mapProgress >= 3){
-      increaseDifficulty();
-      player.value.mapProgress = 0
-      if(player.value.bossesCleared === 6){
-        player.value.hasWonGame = false;
+  const appraisalDiscount = 2 * player.value.admins.filter(a => a.name === 'Appraisal').length;
+
+  const classes = [
+    pickWeightedRandom(allPieces, player.value),
+    pickWeightedRandom(allPieces, player.value),
+    pickWeightedRandom(allPieces, player.value),
+  ];
+  shopBlueprints.value = classes.map(c => makeBlueprint(c.class, c.variant ?? undefined, appraisalDiscount));
+
+  //no reappearing admins
+  const ownedAdmins = new Set(player.value.admins.map(a => a.name));
+  const availableAdmins = (player.value.hasAdmin('Bouquet')) ? allAdmins : allAdmins.filter(AdminClass => !ownedAdmins.has(AdminClass.name));
+
+  const allItemsAndAdmins: ItemConstructor[] = [...allItems, ...availableAdmins];
+  shopItems.value = [
+    pickWeightedRandomItem(allItemsAndAdmins, player.value, appraisalDiscount),
+    pickWeightedRandomItem(allItemsAndAdmins, player.value, appraisalDiscount),
+    pickWeightedRandomItem(allItemsAndAdmins, player.value, appraisalDiscount),
+  ];
+  if (player.value.hasAdmin('Department Store')) {
+    const extraP = pickWeightedRandom(allPieces, player.value);
+    shopBlueprints.value.push(makeBlueprint(extraP.class, extraP.variant ?? undefined, appraisalDiscount));
+    const extraI = pickWeightedRandomItem(allItems, player.value, appraisalDiscount);
+    const extraA = pickWeightedRandomItem(availableAdmins, player.value, appraisalDiscount);
+    shopItems.value.push(extraI, extraA);
+  }
+  //if triggered by player
+}
+
+function buyBlueprint(bp: PieceBlueprint) {
+  shopBlueprints.value = shopBlueprints.value.filter(b => b.id !== bp.id);
+  if (player.value.hasAdmin('Five Finger Discount') && !hasStolenFromThisShop.value) {
+    hasStolenFromThisShop.value = true;
+  } else {
+    player.value.spend(bp.cost);
+    if (player.value.hasAdmin('Piggy')) {
+      player.value.money += 2;
+    }
+  }
+  player.value.programs.push(bp);
+  StorageManager.unlockPiece(bp.name);
+  shopTarget.value = null;
+}
+async function buyItem(item: Item) {
+  shopItems.value = shopItems.value.filter(i => i.id !== item.id);
+  if (player.value.hasAdmin('Five Finger Discount') && !hasStolenFromThisShop.value) {
+    hasStolenFromThisShop.value = true;
+  } else {
+    player.value.spend(item.cost);
+    if (player.value.hasAdmin('Piggy')) {
+      player.value.money += 2;
+    }
+  }
+  // decide which inventory to place it in
+  if (item instanceof Admin) {
+    player.value.admins.push(item);
+    StorageManager.unlockAdmin(item.name);
+    if (item.targetType === 'player' && item.triggerType == 'other') {
+      await item.apply({ player: player.value })
+    }
+  } else {
+    player.value.items.push(item);
+    StorageManager.unlockItem(item.name);
+  }
+  shopTarget.value = null;
+}
+const showShop = ref(false)
+const showCompiler = ref(false)
+const showMap = ref(false)
+const showBoard = ref(false)
+//--shop-----
+
+//round logic
+const roundHasStarted = ref(false);//player
+//pieceMap to track occupied spaces
+const activePieces = ref<InstanceType<typeof Piece>[]>([]);
+const graveyard = ref<InstanceType<typeof Piece>[]>([]);
+//Record: key ID, Modifier for piece with that ID
+//stats should be applied to activePieces after select level
+const bossAdmins = ref<Admin[]>([]);
+function addBossAdmin(admin: Admin) {
+  bossAdmins.value.push(admin)
+}
+function replaceBosses(admins: Admin[]) {
+  bossAdmins.value = admins;
+}
+
+async function handleApplyAdmins(trigger: AdminTrigger, id: string) {//admin and target
+  const playerAdmins = player.value.admins;
+  for (const admin of playerAdmins) {
+    if (trigger === admin.triggerType) {
+      // sort through target types, decide what to pass
+      console.log(admin.name, 'trigger', trigger)
+      if (admin.targetType === 'gameState') {
+        await admin.apply({ id: id, activePieces: activePieces.value })
+      }
+      if (admin.targetType === 'playerAndGame') {
+        await admin.apply({ id: id, activePieces: activePieces.value, player: player.value })
+      }
+      if (admin.targetType === 'player') {
+        await admin.apply({ player: player.value })
       }
     }
-    showMap.value = true;
-  }
-
-  async function reloadLevel(){
-    for(const admin of player.value.admins){
-      if(admin.onRoundEnd) admin.onRoundEnd();
-    };
-    for(const admin of bossAdmins.value){
-      if(admin.onRoundEnd) admin.onRoundEnd();
-    };
-    renewBlueprints();
-    activePieces.value = originalPieces.value.map(p => p.clone());
-    //if piece has no tiles, use headposition
-    graveyard.value = [];
-    lastTurnPieces.value = originalPieces.value.map(p => p.clone());
-    playerSpawns.value = [...originalSpawns.value];//not working, backdoor breaks this
-    selectedPiece.value = null;
-    isPlacing.value = true
-    openSummary(false);
-    await handleApplyAdmins('onRoundStart', '');
-    roundHasStarted.value = true;
-    isFirstTurn.value = true;
-    if(player.value.fogged){
-      foggedTiles.value = [...level.value.tiles];
-      clearFog();
-    }
-  }
-
-  function retryLevel(){
-    if(player.value.lives<=1) return
-    player.value.lives --
-    reloadLevel();
-  }
-
-  //game loop
-  const shopDisabled = ref<boolean>(false);
-  const openDisabledShop = () => {
-    console.log('shop disabled')
-    shopDisabled.value = true;
-    showShop.value = true;
-  }
-  const toggleShop = () => {
-    showShop.value = !showShop.value;
-    shopDisabled.value = false;
-    canProceedFromShop.value = false;
-  }
-  const openShop = () => {
-    showShop.value = true;
-    refreshShop(true);
-    canProceedFromShop.value = true;
-    shopDisabled.value = false;
-  }
-  const closeShop = () => {
-    showShop.value = false;
-    canProceedFromShop.value = false;
-  }
-  const toggleCompiler = () => {
-    showCompiler.value = !showCompiler.value;
-  }
-  const openCompiler = () => {
-    showCompiler.value = true;
-  }
-
-  const newPlacementHighlights = (): Coordinate[] => {//board should only show these if isPlacing
-    const highlights: Coordinate[] = [];
-    const tileSet = new Set(level.value.tiles.map(t => `${t.x},${t.y}`));
-
-    activePieces.value.forEach(piece => {
-      if (piece.team === 'player') {
-        // For each tile of the piece, check the 4 orthogonal neighbors
-        piece.tiles.forEach(tile => {
-          const neighbors = [
-            { x: tile.x + 1, y: tile.y },
-            { x: tile.x - 1, y: tile.y },
-            { x: tile.x, y: tile.y + 1 },
-            { x: tile.x, y: tile.y - 1 },
-          ];
-
-          neighbors.forEach(n => {
-            // Skip tiles not on the board
-            if (!tileSet.has(`${n.x},${n.y}`)) return;
-            // Skip if tile is already occupied
-            const isOccupied = activePieces.value.some(p =>
-              p.tiles.some(t => t.x === n.x && t.y === n.y)
-            );
-
-            if (!isOccupied) highlights.push(n);
-          });
-        });
-      }
-    });
-    // Optional: remove duplicates
-    const uniqueHighlights = Array.from(
-      new Map(highlights.map(h => [`${h.x},${h.y}`, h])).values()
-    );
-    return uniqueHighlights;
   };
-
-  function processSpawnPoints(pieces: Piece[], mod: number) {
-    const processed: Piece[] = [];
-    const newPlayerSpawns: Coordinate[] = [];
-
-    for (const piece of pieces) {
-      if (piece instanceof Spawn) {
-          const spawnSize = piece.tiles.length;
-        // Enemy spawn → replace with random enemy piece
-        if (piece.team === 'enemy') {
-          //difficulty from constants ramp
-          let trueDifficulty = 0;
-          if(player.value.difficulty + mod > 6){
-            trueDifficulty = 6; //remove later when endless mode is done
-          } else if (player.value.difficulty + mod < 1){
-            trueDifficulty = 1;
-          } else{
-           trueDifficulty = player.value.difficulty + mod;
-          }
-          const { min, max } = DIFFICULTY_RARITY[trueDifficulty];
-
-          const validEnemies = allPieces.filter(EnemyClass => {
-            //p.rarity >= min && p.rarity <= max //old method for spawnsize 1 only
-            if(EnemyClass.name !== "Nuke" && EnemyClass.name !== "Highwayman"){// bomb too?
-              const temp = new EnemyClass(piece.headPosition, 'enemy', removePiece);
-              return (
-                temp.rarity >= min &&
-                temp.rarity <= max &&
-                temp.maxSize >= spawnSize //not working??? test
-              );
-            }
-          });
-          const pool = validEnemies.length > 0 ? validEnemies : allPieces;
-          //console.log('lengths:', min, max, allPieces.length, pool.length)
-
-          const EnemyClass = pool[Math.floor(Math.random() * pool.length)];
-          
-          const enemyInstance = new EnemyClass(piece.headPosition, 'enemy', removePiece);
-          enemyInstance.tiles = piece.tiles;
-          enemyInstance.defenceRemaining = enemyInstance.getStat('defence');//not working??
-
-          const variantChance = Math.min((0.1*trueDifficulty-0.1), 1)
-          const variant = rollVariant(variantChance, trueDifficulty);
-          if(variant){
-            applyVariant(enemyInstance, variant);
-          }
-          //add tiles here? if spawn.tiles.length <= enemy.getStat(maxsize){ enemy.tiles = spawn.tiles }
-
-          if(player.value.stake > 2) enemyInstance.maxSize+=player.value.difficulty;
-          if(player.value.stake > 3) enemyInstance.defence+=player.value.difficulty;
-          if(player.value.stake > 4) enemyInstance.moves+=player.value.difficulty;
-          if(player.value.stake > 5) enemyInstance.attack+=player.value.difficulty;
-          if(player.value.stake > 6) enemyInstance.range+=player.value.difficulty;
-
-          processed.push(enemyInstance);
-          continue;
+  //we do bosses second for onPlacement immunities to take effect
+  if (!player.value.hasAdmin('Umbrella')) {
+    for (const admin of bossAdmins.value) {
+      if (trigger === admin.triggerType) {
+        // sort through target types, decide what to pass
+        if (admin.targetType === 'player') {
+          await admin.apply({ player: player.value })
         }
-
-        if (piece.team === 'player') {
-          //placementHighlights.value.push(piece.headPosition);
-          newPlayerSpawns.push(piece.headPosition);
-          // Do *not* add Spawn to active pieces — it is a marker, not a unit
-          continue;
+        if (admin.targetType === 'gameState') {
+          await admin.apply({ id, activePieces: activePieces.value })
+        }
+        if (admin.targetType === 'playerAndGame') {
+          await admin.apply({ id, activePieces: activePieces.value, player: player.value })
+        }
+        if (admin.targetType === 'piecesAndBoard') {
+          await admin.apply({ activePieces: activePieces.value, board: level.value.tiles })
+        }
+        if (admin.targetType === 'all') {
+          await admin.apply({ id, activePieces: activePieces.value, removeCallback: removePiece, board: level.value.tiles, player: player.value });//, graveyard: graveyard.value})
         }
       }
-      //console.log("placementHighlights after:", playerSpawns.value);
-      processed.push(piece);
     }
-    playerSpawns.value = newPlayerSpawns;
-    originalSpawns.value = newPlayerSpawns;
+  };
+}
 
-    return processed;
-  }
+const selectedPiece = ref<Piece | null>(null)
+const playerSpawns = ref<Coordinate[]>([]);
+const isPlacing = ref(false);//player
+const isMoving = ref(false);//player
+const hasFinishedTurn = ref(false);//player
+const isFirstTurn = ref(true);//player
+const pieceToPlace = ref<PieceBlueprint | null>(null);
+//world logic
+const showSummary = ref(false);//player
+const level = ref(castled);//tiles
+const displayEditor = ref(false);
+const foggedTiles = ref<Coordinate[]>([]);//player
 
-  function rehydratePieces(rawPieces: any[]): InstanceType<typeof Piece>[] {
-    const pieceClasses = [...allPieces];
-    pieceClasses.unshift(Spawn);
-    return rawPieces.map(p => {
-      const PieceClass = pieceClasses.find(cls => cls.name === p.name)
-      return PieceClass ? Object.assign(new PieceClass(p.headPosition, p.team, removePiece), p) : p
-    })
-  }
-  
-  onMounted(() => {
-    const initPieces = rehydratePieces(level.value.pieces);
-    activePieces.value = processSpawnPoints(initPieces, 0); // sets placementHighlights internally
-    refreshShop(true)//handle in round, or don't for crystal ball
+function clearFog() {
+  if (!player.value.fogged) return;
+  const revealKeys = new Set<string>();
+  playerSpawns.value.forEach(p => revealKeys.add(`${p.x},${p.y}`));
+
+  const levelSet = new Set(level.value.tiles.map(t => `${t.x},${t.y}`));
+  /*if (selectedPiece.value) {//for persistant clearance
+    const piece = selectedPiece.value;  
+    const rangeTiles = getTilesInRange(piece.headPosition, piece.range, levelSet);
+    rangeTiles.forEach(t => revealKeys.add(`${t.x},${t.y}`));
+  }*/
+
+  //for non persistent clearance - we need to do all active pieces every time
+  activePieces.value.forEach(pieceToCheck => {
+    if (pieceToCheck.team === 'player') {
+      const rangeTiles = getTilesInRange(pieceToCheck.headPosition, pieceToCheck.range, levelSet);
+      rangeTiles.forEach(t => revealKeys.add(`${t.x},${t.y}`));
+      pieceToCheck.tiles.forEach(t => revealKeys.add(`${t.x},${t.y}`));
+    }
   });
 
-  //round state functions
-  function highlightPlacements(pieceBlueprint: PieceBlueprint) {
-    if(!roundHasStarted) return
-    boardRef.value.clearHighlights();
-    if(player.value.hasAdmin('Backdoor')){
-      const unnocupiedSpaces: Coordinate[] = [] ;
-      level.value.tiles.forEach(tile => {
-        const isOccupied = activePieces.value.some(p =>
-         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
-        );
-        if (!isOccupied) unnocupiedSpaces.push(tile); 
-      });
-      playerSpawns.value = unnocupiedSpaces;
-    }
-    else if(!isFirstTurn){
-      playerSpawns.value = newPlacementHighlights();
-    }
-    pieceToPlace.value = pieceBlueprint;
-    isPlacing.value = true;
-  }
+  // 2. Filter the foggedTiles by checking if their key exists in the revealKeys Set
+  // This removes both spawns and piece-range in one go without overwriting
+  foggedTiles.value = foggedTiles.value.filter(tile =>
+    !revealKeys.has(`${tile.x},${tile.y}`)
+  );
+}
 
-  async function removePiece(piece: Piece) {
-    if(player.value.hasAdmin('Parachute') && piece.team === 'player'){
-      piece.tiles = [piece.headPosition];
-      const index = player.value.admins.findIndex(a => a.name === 'Parachute');
-      if (index !== -1) player.value.admins.splice(index, 1);
-    } else {
-      await handleApplyAdmins('onPieceDestruction', piece.id);
-      activePieces.value = activePieces.value.filter(p => p.id !== piece.id);//removes the piece
-      //graveyard?
-      if (piece.name == 'Dolls') {//hybrids will need a flag other than name
-        if (piece.getStat('maxSize') > 1) {
-          const NewDoll = new Dolls(
-            piece.headPosition,
-            piece.team,
-            removePiece,
-            crypto.randomUUID()
-          );
-          NewDoll.maxSize = piece.getStat('maxSize') - 1;
-          activePieces.value.push(NewDoll);
+//map
+const toggleMap = () => {
+  showMap.value = !showMap.value;
+}
+const openSummary = (state: boolean) => {
+  showSummary.value = state;
+}
+
+const renewBlueprints = () => {
+  if (player.value.hasAdmin('Ring')) {
+    activePieces.value.forEach(piece => {
+      const id = piece.id;
+      player.value.programs.forEach(blueprint => {
+        if (blueprint.id === id) {
+          blueprint.maxSize += (piece.getStat('maxSize'));
+          blueprint.moves += (piece.getStat('moves'));
+          blueprint.range += (piece.getStat('range'));
+          blueprint.attack += (piece.getStat('attack'));
+          blueprint.defence += (piece.getStat('defence'));
         }
+      });
+    });
+  }
+  player.value.programs.forEach(blueprint => {
+    blueprint.isPlaced = false;
+  });
+}
+
+const lastTurnPieces = ref<InstanceType<typeof Piece>[]>([]);//player
+const originalPieces = ref<InstanceType<typeof Piece>[]>([]);//player
+const originalSpawns = ref<Coordinate[]>([]);//player
+
+async function selectLevel(newLevel: Level, difficultyMod: number, lReward: number) {//load level, start 
+  pieceToPlace.value = null;
+  showBoard.value = true;
+  renewBlueprints()//shouldnt be needed in final;
+  hasFinishedTurn.value = false;
+  player.value.canPlace = true;
+  player.value.canMove = true;
+  player.value.canAction = true;
+  isFirstTurn.value = true;
+  activePieces.value = [];
+  graveyard.value = [];
+  level.value = newLevel;
+  player.value.nextReward = lReward;
+  const newPieces = rehydratePieces(newLevel.pieces);
+  extraDifficulty.value = difficultyMod;
+  activePieces.value = processSpawnPoints(newPieces, difficultyMod);
+  originalSpawns.value = [...playerSpawns.value];
+  originalPieces.value = activePieces.value.map(p => p.clone());
+  //originalSpawns.value = playerSpawns.value.map(s => ({ ...s }));
+  boardRef.value.clearHighlights();
+  await handleApplyAdmins('onRoundStart', '');
+  if (player.value.fogged) {
+    foggedTiles.value = [...level.value.tiles];
+    clearFog();
+  }
+  showMap.value = false;
+  roundHasStarted.value = true;
+}
+
+function handleProceed() {
+  openSummary(false);
+  incrementMapProgress();
+  if (player.value.mapProgress >= 3) {
+    increaseDifficulty();
+    player.value.mapProgress = 0
+    if (player.value.bossesCleared === 6) {
+      player.value.hasWonGame = false;
+    }
+  }
+  showMap.value = true;
+}
+
+async function reloadLevel() {
+  for (const admin of player.value.admins) {
+    if (admin.onRoundEnd) admin.onRoundEnd();
+  };
+  for (const admin of bossAdmins.value) {
+    if (admin.onRoundEnd) admin.onRoundEnd();
+  };
+  renewBlueprints();
+  activePieces.value = originalPieces.value.map(p => p.clone());
+  //if piece has no tiles, use headposition
+  graveyard.value = [];
+  lastTurnPieces.value = originalPieces.value.map(p => p.clone());
+  playerSpawns.value = [...originalSpawns.value];//not working, backdoor breaks this
+  selectedPiece.value = null;
+  isPlacing.value = true
+  openSummary(false);
+  await handleApplyAdmins('onRoundStart', '');
+  roundHasStarted.value = true;
+  isFirstTurn.value = true;
+  if (player.value.fogged) {
+    foggedTiles.value = [...level.value.tiles];
+    clearFog();
+  }
+}
+
+function retryLevel() {
+  if (player.value.lives <= 1) return
+  player.value.lives--
+  reloadLevel();
+}
+
+//game loop
+const shopDisabled = ref<boolean>(false);
+const openDisabledShop = () => {
+  console.log('shop disabled')
+  shopDisabled.value = true;
+  showShop.value = true;
+}
+const toggleShop = () => {
+  showShop.value = !showShop.value;
+  shopDisabled.value = false;
+  canProceedFromShop.value = false;
+}
+const openShop = () => {
+  showShop.value = true;
+  refreshShop(true);
+  canProceedFromShop.value = true;
+  shopDisabled.value = false;
+}
+const closeShop = () => {
+  showShop.value = false;
+  canProceedFromShop.value = false;
+}
+const toggleCompiler = () => {
+  showCompiler.value = !showCompiler.value;
+}
+const openCompiler = () => {
+  showCompiler.value = true;
+}
+
+const newPlacementHighlights = (): Coordinate[] => {//board should only show these if isPlacing
+  const highlights: Coordinate[] = [];
+  const tileSet = new Set(level.value.tiles.map(t => `${t.x},${t.y}`));
+
+  activePieces.value.forEach(piece => {
+    if (piece.team === 'player') {
+      // For each tile of the piece, check the 4 orthogonal neighbors
+      piece.tiles.forEach(tile => {
+        const neighbors = [
+          { x: tile.x + 1, y: tile.y },
+          { x: tile.x - 1, y: tile.y },
+          { x: tile.x, y: tile.y + 1 },
+          { x: tile.x, y: tile.y - 1 },
+        ];
+
+        neighbors.forEach(n => {
+          // Skip tiles not on the board
+          if (!tileSet.has(`${n.x},${n.y}`)) return;
+          // Skip if tile is already occupied
+          const isOccupied = activePieces.value.some(p =>
+            p.tiles.some(t => t.x === n.x && t.y === n.y)
+          );
+
+          if (!isOccupied) highlights.push(n);
+        });
+      });
+    }
+  });
+  // Optional: remove duplicates
+  const uniqueHighlights = Array.from(
+    new Map(highlights.map(h => [`${h.x},${h.y}`, h])).values()
+  );
+  return uniqueHighlights;
+};
+
+function processSpawnPoints(pieces: Piece[], mod: number) {
+  const processed: Piece[] = [];
+  const newPlayerSpawns: Coordinate[] = [];
+
+  for (const piece of pieces) {
+    if (piece instanceof Spawn) {
+      const spawnSize = piece.tiles.length;
+      // Enemy spawn → replace with random enemy piece
+      if (piece.team === 'enemy') {
+        //difficulty from constants ramp
+        let trueDifficulty = 0;
+        if (player.value.difficulty + mod > 6) {
+          trueDifficulty = 6; //remove later when endless mode is done
+        } else if (player.value.difficulty + mod < 1) {
+          trueDifficulty = 1;
+        } else {
+          trueDifficulty = player.value.difficulty + mod;
+        }
+        const { min, max } = DIFFICULTY_RARITY[trueDifficulty];
+
+        const validEnemies = allPieces.filter(EnemyClass => {
+          //p.rarity >= min && p.rarity <= max //old method for spawnsize 1 only
+          if (EnemyClass.name !== "Nuke" && EnemyClass.name !== "Highwayman") {// bomb too?
+            const temp = new EnemyClass(piece.headPosition, 'enemy', removePiece);
+            return (
+              temp.rarity >= min &&
+              temp.rarity <= max &&
+              temp.maxSize >= spawnSize //not working??? test
+            );
+          }
+        });
+        const pool = validEnemies.length > 0 ? validEnemies : allPieces;
+        //console.log('lengths:', min, max, allPieces.length, pool.length)
+
+        const EnemyClass = pool[Math.floor(Math.random() * pool.length)];
+
+        const enemyInstance = new EnemyClass(piece.headPosition, 'enemy', removePiece);
+        enemyInstance.tiles = piece.tiles;
+        enemyInstance.defenceRemaining = enemyInstance.getStat('defence');//not working??
+
+        const variantChance = Math.min((0.1 * trueDifficulty - 0.1), 1)
+        const variant = rollVariant(variantChance, trueDifficulty);
+        if (variant) {
+          applyVariant(enemyInstance, variant);
+        }
+        //add tiles here? if spawn.tiles.length <= enemy.getStat(maxsize){ enemy.tiles = spawn.tiles }
+
+        if (player.value.stake > 2) enemyInstance.maxSize += player.value.difficulty;
+        if (player.value.stake > 3) enemyInstance.defence += player.value.difficulty;
+        if (player.value.stake > 4) enemyInstance.moves += player.value.difficulty;
+        if (player.value.stake > 5) enemyInstance.attack += player.value.difficulty;
+        if (player.value.stake > 6) enemyInstance.range += player.value.difficulty;
+
+        processed.push(enemyInstance);
+        continue;
+      }
+
+      if (piece.team === 'player') {
+        //placementHighlights.value.push(piece.headPosition);
+        newPlayerSpawns.push(piece.headPosition);
+        // Do *not* add Spawn to active pieces — it is a marker, not a unit
+        continue;
+      }
+    }
+    //console.log("placementHighlights after:", playerSpawns.value);
+    processed.push(piece);
+  }
+  playerSpawns.value = newPlayerSpawns;
+  originalSpawns.value = newPlayerSpawns;
+
+  return processed;
+}
+
+function rehydratePieces(rawPieces: any[]): InstanceType<typeof Piece>[] {
+  const pieceClasses = [...allPieces];
+  pieceClasses.unshift(Spawn);
+  return rawPieces.map(p => {
+    const PieceClass = pieceClasses.find(cls => cls.name === p.name)
+    return PieceClass ? Object.assign(new PieceClass(p.headPosition, p.team, removePiece), p) : p
+  })
+}
+
+onMounted(() => {
+  const initPieces = rehydratePieces(level.value.pieces);
+  activePieces.value = processSpawnPoints(initPieces, 0); // sets placementHighlights internally
+  refreshShop(true)//handle in round, or don't for crystal ball
+});
+
+//round state functions
+function highlightPlacements(pieceBlueprint: PieceBlueprint) {
+  if (!roundHasStarted) return
+  boardRef.value.clearHighlights();
+  if (player.value.hasAdmin('Backdoor')) {
+    const unnocupiedSpaces: Coordinate[] = [];
+    level.value.tiles.forEach(tile => {
+      const isOccupied = activePieces.value.some(p =>
+        p.tiles.some(t => t.x === tile.x && t.y === tile.y)
+      );
+      if (!isOccupied) unnocupiedSpaces.push(tile);
+    });
+    playerSpawns.value = unnocupiedSpaces;
+  }
+  else if (!isFirstTurn) {
+    playerSpawns.value = newPlacementHighlights();
+  }
+  pieceToPlace.value = pieceBlueprint;
+  isPlacing.value = true;
+}
+
+async function removePiece(piece: Piece) {
+  if (player.value.hasAdmin('Parachute') && piece.team === 'player') {
+    piece.tiles = [piece.headPosition];
+    const index = player.value.admins.findIndex(a => a.name === 'Parachute');
+    if (index !== -1) player.value.admins.splice(index, 1);
+  } else {
+    await handleApplyAdmins('onPieceDestruction', piece.id);
+    activePieces.value = activePieces.value.filter(p => p.id !== piece.id);//removes the piece
+    //graveyard?
+    if (piece.name == 'Dolls') {//hybrids will need a flag other than name
+      if (piece.getStat('maxSize') > 1) {
+        const NewDoll = new Dolls(
+          piece.headPosition,
+          piece.team,
+          removePiece,
+          crypto.randomUUID()
+        );
+        NewDoll.maxSize = piece.getStat('maxSize') - 1;
+        activePieces.value.push(NewDoll);
       }
     }
   }
+}
 
-  function instantiatePieceFromBlueprint(//this goes in app
-        bp: PieceBlueprint,
-        coord: Coordinate,
-        team: string,
-        removeCallback: (p: Piece) => void
-    ): Piece {
-      
-      /*const primaryName =
-      bp.hybridName ? bp.hybridName : bp.name*/
-      
-      // Step 1: always instantiate PRIMARY class
-      const PieceClass = allPieces.find(p => p.name === bp.name)
-      if (!PieceClass) {
-        throw new Error(`Unknown piece: ${bp.name}`)
-      }
+function instantiatePieceFromBlueprint(//this goes in app
+  bp: PieceBlueprint,
+  coord: Coordinate,
+  team: string,
+  removeCallback: (p: Piece) => void
+): Piece {
 
-      const piece = new PieceClass(coord, team, removeCallback, bp.id)
+  /*const primaryName =
+  bp.hybridName ? bp.hybridName : bp.name*/
 
-      piece.maxSize = bp.maxSize
-      piece.moves = bp.moves
-      piece.range = bp.range
-      piece.attack = bp.attack
-      piece.defence = bp.defence
-      piece.defenceRemaining = bp.defence
-
-
-      // Step 3: hybrid-specific augmentation
-      if (bp.hybridName) {
-        piece.hybridName = bp.hybridName;
-        piece.description = bp.description;
-        //piece.unicode = bp.unicode //should already be the case
-        piece.extraUnicode = bp.extraUnicode
-      }
-      if(bp.variantName){
-        piece.variantName = bp.variantName;
-      }
-
-    return piece//modified piece with new stats
+  // Step 1: always instantiate PRIMARY class
+  const PieceClass = allPieces.find(p => p.name === bp.name)
+  if (!PieceClass) {
+    throw new Error(`Unknown piece: ${bp.name}`)
   }
 
-  async function placePieceOnBoardAt(coord: Coordinate) {
-    if (!pieceToPlace.value) return
-    
-    const bp = pieceToPlace.value;
-    pieceToPlace.value = null;
-    
-    const PieceInstance = instantiatePieceFromBlueprint(bp, coord, 'player', removePiece)
-    if (!PieceInstance) return
+  const piece = new PieceClass(coord, team, removeCallback, bp.id)
 
-    //we're definitely making a move, so store pieces
-    lastTurnPieces.value = activePieces.value.map(p => p.clone());
+  piece.maxSize = bp.maxSize
+  piece.moves = bp.moves
+  piece.range = bp.range
+  piece.attack = bp.attack
+  piece.defence = bp.defence
+  piece.defenceRemaining = bp.defence
 
-    //pass admin modifiers to the piece
-    //PieceInstance.movesRemaining = PieceInstance.moves;
-    activePieces.value.push(PieceInstance);
 
-    // Mark blueprint as placed so it greys in inventory
-    bp.isPlaced = true
+  // Step 3: hybrid-specific augmentation
+  if (bp.hybridName) {
+    piece.hybridName = bp.hybridName;
+    piece.description = bp.description;
+    //piece.unicode = bp.unicode //should already be the case
+    piece.extraUnicode = bp.extraUnicode
+  }
+  if (bp.variantName) {
+    piece.variantName = bp.variantName;
+  }
 
-    // Reset placement state
-    await handleApplyAdmins('onPlacement', PieceInstance.id)
-    playerSpawns.value = newPlacementHighlights();
-    clearFog();
+  return piece//modified piece with new stats
+}
 
-    //applyStatModifications()
-    //if(player.value.hasAdmin('Copier')){}
+async function placePieceOnBoardAt(coord: Coordinate) {
+  if (!pieceToPlace.value) return
 
-    const hasDove = player.value.hasAdmin('Dove');
-    const hasPalette = player.value.hasAdmin('Palette');
+  const bp = pieceToPlace.value;
+  pieceToPlace.value = null;
 
-    // First-turn rules
-    if (isFirstTurn.value) {
-      player.value.canAction = false;//admin for attacking on first turn?
-      // palette: allow one extra placement
-      if (hasPalette) {
-        player.value.canPlace = true; // allow next placement
-      } else {
-        player.value.canPlace = false; // normally cannot place again
-      }
-      // dove: allow one move after placing
-      if (hasDove) {
-        player.value.canMove = true;
-      } else {
-        player.value.canMove = false;
-      }
-      isFirstTurn.value = false; //must set to false after to avoid a loop
-      // If neither admin, end immediately
-      if (!hasDove && !hasPalette) {
-        await endTurn();
-      }
+  const PieceInstance = instantiatePieceFromBlueprint(bp, coord, 'player', removePiece)
+  if (!PieceInstance) return
+
+  //we're definitely making a move, so store pieces
+  lastTurnPieces.value = activePieces.value.map(p => p.clone());
+
+  //pass admin modifiers to the piece
+  //PieceInstance.movesRemaining = PieceInstance.moves;
+  activePieces.value.push(PieceInstance);
+
+  // Mark blueprint as placed so it greys in inventory
+  bp.isPlaced = true
+
+  // Reset placement state
+  await handleApplyAdmins('onPlacement', PieceInstance.id)
+  playerSpawns.value = newPlacementHighlights();
+  clearFog();
+
+  //applyStatModifications()
+  //if(player.value.hasAdmin('Copier')){}
+
+  const hasDove = player.value.hasAdmin('Dove');
+  const hasPalette = player.value.hasAdmin('Palette');
+
+  // First-turn rules
+  if (isFirstTurn.value) {
+    player.value.canAction = false;//admin for attacking on first turn?
+    // palette: allow one extra placement
+    if (hasPalette) {
+      player.value.canPlace = true; // allow next placement
     } else {
-      // Not first turn -> normal behaviour
-      isPlacing.value = false;
+      player.value.canPlace = false; // normally cannot place again
+    }
+    // dove: allow one move after placing
+    if (hasDove) {
+      player.value.canMove = true;
+    } else {
+      player.value.canMove = false;
+    }
+    isFirstTurn.value = false; //must set to false after to avoid a loop
+    // If neither admin, end immediately
+    if (!hasDove && !hasPalette) {
       await endTurn();
     }
+  } else {
+    // Not first turn -> normal behaviour
+    isPlacing.value = false;
+    await endTurn();
   }
+}
 
-  const isDraggingPlacement = ref(false)
+const isDraggingPlacement = ref(false)
 
-  function startPlacementDrag(bp: PieceBlueprint) {
-    console.log('dragging')
-    pieceToPlace.value = bp
-    isPlacing.value = true
-    isDraggingPlacement.value = true
-    //debug here
-  }
+function startPlacementDrag(bp: PieceBlueprint) {
+  console.log('dragging')
+  pieceToPlace.value = bp
+  isPlacing.value = true
+  isDraggingPlacement.value = true
+  //debug here
+}
 
-  //mousemove func 'hoverPlacement'
+//mousemove func 'hoverPlacement'
 
-  function placeAt(coord: Coordinate) {
-    const isOccupied = activePieces.value.some(p =>
-      p.tiles.some(t => t.x === coord.x && t.y === coord.y)
-    );
-    if (isOccupied) return; 
-    if (!playerSpawns.value.some(
-      s => s.x === coord.x && s.y === coord.y
-    )) {
-      pieceToPlace.value = null;
-      isPlacing.value = false;
-      isDraggingPlacement.value = false;
-      boardRef.value.clearHighlights();
-      return
-    }
-
-    placePieceOnBoardAt(coord);
-    isDraggingPlacement.value = false;
-  }
-
-  function clearDrag(){//TODO reuse in board when we click normally
+function placeAt(coord: Coordinate) {
+  const isOccupied = activePieces.value.some(p =>
+    p.tiles.some(t => t.x === coord.x && t.y === coord.y)
+  );
+  if (isOccupied) return;
+  if (!playerSpawns.value.some(
+    s => s.x === coord.x && s.y === coord.y
+  )) {
     pieceToPlace.value = null;
     isPlacing.value = false;
     isDraggingPlacement.value = false;
-  }
-  //previous board functions
-  //highlight functions
-  const boardRef = ref();
-  
-  //selectedPiece functions
-  function handlePieceSelect(piece: Piece) {
-    if(isPlacing.value){
-      isPlacing.value = false;
-      pieceToPlace.value = null;
-      if(player.value.hasAdmin('Backdoor')){
-        const occupied = getOccupiedTileSet(activePieces.value);
-        playerSpawns.value = level.value.tiles?.filter(tile => 
-          !occupied.has(coordKey(tile))
-        );
-      }
-    }
-    selectedPiece.value = piece
-    //highlight range
-    if(piece.team === 'enemy'){
-      boardRef.value.highlightTargets(piece);
-    } else if(player.value.canMove){
-      boardRef.value.highlightMoves(piece);
-    }
-  }
-
-  const deselectPiece = () => {
-    selectedPiece.value = null;
     boardRef.value.clearHighlights();
+    return
   }
 
-  const movePiece = async (coord : Coordinate) => {
-    if(!selectedPiece.value || !player.value.canMove) return;
+  placePieceOnBoardAt(coord);
+  isDraggingPlacement.value = false;
+}
+
+function clearDrag() {//TODO reuse in board when we click normally
+  pieceToPlace.value = null;
+  isPlacing.value = false;
+  isDraggingPlacement.value = false;
+}
+//previous board functions
+//highlight functions
+const boardRef = ref();
+
+//selectedPiece functions
+function handlePieceSelect(piece: Piece) {
+  if (isPlacing.value) {
     isPlacing.value = false;
-    player.value.canPlace = false;
-    //we're definitely making a move, so store pieces
-    lastTurnPieces.value = activePieces.value.map(p => p.clone());
-
-    boardRef.value.clearHighlights();
-    selectedPiece.value.moveTo(coord);
-    //checkForTrap
-    const trap = activePieces.value.find(p =>
-      p.targetType == 'trapPiece' && p.tiles.some(t => t.x === coord.x && t.y === coord.y)
-    );
-    if (trap && trap.id !== selectedPiece.value.id) {
-      await trap.special(selectedPiece.value);
-      //removePiece(trap);//shouldn't really be necessary - testing without
-    }
-    if(selectedPiece.value.targetType === 'trapPiece'){
-      //check for others
-      const trapTarget = activePieces.value.find(p =>
-        (p.tiles.some(t => t.x === coord.x && t.y === coord.y) && p.id !== selectedPiece.value?.id)
+    pieceToPlace.value = null;
+    if (player.value.hasAdmin('Backdoor')) {
+      const occupied = getOccupiedTileSet(activePieces.value);
+      playerSpawns.value = level.value.tiles?.filter(tile =>
+        !occupied.has(coordKey(tile))
       );
-      if(trapTarget){
-        await selectedPiece.value.special(trapTarget);
-      }
-    }
-    if(selectedPiece.value.movesRemaining > 0){
-      boardRef.value.highlightMoves(selectedPiece.value);
-    }else {
-      boardRef.value.clearHighlights();
-    }
-    playerSpawns.value = newPlacementHighlights();
-    if(player.value.fogged){
-      foggedTiles.value = [...level.value.tiles];//non persistant clearance
-      clearFog();
     }
   }
+  selectedPiece.value = piece
+  //highlight range
+  if (piece.team === 'enemy') {
+    boardRef.value.highlightTargets(piece);
+  } else if (player.value.canMove) {
+    boardRef.value.highlightMoves(piece);
+  }
+}
 
-  function checkForRoundEnd(){
-    //console.log('checking for round end: ', activePieces.value)
-    const enemyPieces = activePieces.value.filter(p => p.team === 'enemy');
-    const playerPiecesRemaining = activePieces.value.filter(p => p.team === 'player');
-    if (enemyPieces.length === 0) {
-      console.log('round won!')
-      endRound(true);
+const deselectPiece = () => {
+  selectedPiece.value = null;
+  boardRef.value.clearHighlights();
+}
+
+const movePiece = async (coord: Coordinate) => {
+  if (!selectedPiece.value || !player.value.canMove) return;
+  isPlacing.value = false;
+  player.value.canPlace = false;
+  //we're definitely making a move, so store pieces
+  lastTurnPieces.value = activePieces.value.map(p => p.clone());
+
+  boardRef.value.clearHighlights();
+  selectedPiece.value.moveTo(coord);
+  //checkForTrap
+  const trap = activePieces.value.find(p =>
+    p.targetType == 'trapPiece' && p.tiles.some(t => t.x === coord.x && t.y === coord.y)
+  );
+  if (trap && trap.id !== selectedPiece.value.id) {
+    await trap.special(selectedPiece.value);
+    //removePiece(trap);//shouldn't really be necessary - testing without
+  }
+  if (selectedPiece.value.targetType === 'trapPiece') {
+    //check for others
+    const trapTarget = activePieces.value.find(p =>
+      (p.tiles.some(t => t.x === coord.x && t.y === coord.y) && p.id !== selectedPiece.value?.id)
+    );
+    if (trapTarget) {
+      await selectedPiece.value.special(trapTarget);
     }
-    
-    let hiddenEnemies = []
-    enemyPieces.forEach(enemy => {
-      if(enemy.statuses.hidden)
+  }
+  if (selectedPiece.value.movesRemaining > 0) {
+    boardRef.value.highlightMoves(selectedPiece.value);
+  } else {
+    boardRef.value.clearHighlights();
+  }
+  playerSpawns.value = newPlacementHighlights();
+  if (player.value.fogged) {
+    foggedTiles.value = [...level.value.tiles];//non persistant clearance
+    clearFog();
+  }
+}
+
+function checkForRoundEnd() {
+  //console.log('checking for round end: ', activePieces.value)
+  const enemyPieces = activePieces.value.filter(p => p.team === 'enemy');
+  const playerPiecesRemaining = activePieces.value.filter(p => p.team === 'player');
+  if (enemyPieces.length === 0) {
+    console.log('round won!')
+    endRound(true);
+  }
+
+  let hiddenEnemies = []
+  enemyPieces.forEach(enemy => {
+    if (enemy.statuses.hidden)
       hiddenEnemies.push(enemy)
+  });
+  if (hiddenEnemies.length === enemyPieces.length) {
+    activePieces.value.forEach(piece => {
+      if (piece.team === 'enemy') piece.statuses.hidden = false
     });
-    if(hiddenEnemies.length === enemyPieces.length){
-      activePieces.value.forEach(piece => {
-        if(piece.team === 'enemy') piece.statuses.hidden = false
-      });
-    }
-
-    // If no player pieces → round lost
-    if (playerPiecesRemaining.length === 0) {
-      console.log('round failed!')
-      endRound(false);
-    }
   }
 
-  const damagePieceAt = async (coord:Coordinate) => {
-    if (!selectedPiece.value) return
-    if((selectedPiece.value.team === 'enemy' && !selectedPiece.value.statuses.charmed)) return; //don't wan't control of enemies pieces
-    if (selectedPiece.value.actions <= 0) return
-    player.value.canPlace = false;
-    //if (selectedPiece.value.team !== 'player') return //damaging your own pieces is actually useful sometimes
-    const damageReceiver = activePieces.value.find(piece =>
-      piece.tiles.some(t => t.x === coord.x && t.y === coord.y)
-    );
-    if(!damageReceiver) return;
-    selectedPiece.value.actions --//prevent double clicking
-    //console.log('receiver: ', damageReceiver?.name)
-    //if (!damageReceiver || (damageReceiver.team === selectedPiece.value.team && !selectedPiece.value.statuses.charmed)) return;
-    //console.log("Damage call:", coord, damage)
-    const baseDamage = selectedPiece.value.getStat('attack');
-    await handleApplyAdmins('onDealDamage', selectedPiece.value.id);// damageReceiver.id)//attacker's id, (bug: blood tax will trigger even on no damage)
-    const damage = Math.floor(baseDamage * selectedPiece.value.damageMult);//mult should be applyed inside takeDamage for special moves
-    await damageReceiver.takeDamage(damage);
-    if(selectedPiece.value.statuses.hidden){
-      selectedPiece.value.statuses.hidden = false;
-    }
-    selectedPiece.value.damageMult = 1;
-    if(damageReceiver.willRetaliate){
-      await selectedPiece.value.takeDamage(damageReceiver.getStat('attack'));
-      if(damageReceiver.name === 'Puffer' && !selectedPiece.value.immunities.poisoned){
-        selectedPiece.value.statuses.poisoned = true;
-      }
-    }
-    selectedPiece.value.willRetaliate = false;//pieces that have enacted defensive option
-    //could trigger blood tax here using 'other'
-        selectedPiece.value.damageMult = 1;
-    //console.log(damageReceiver?.name, ' tiles afterdmg: ', damageReceiver.tiles)
-    boardRef.value.clearHighlights();
-    checkForRoundEnd();
+  // If no player pieces → round lost
+  if (playerPiecesRemaining.length === 0) {
+    console.log('round failed!')
+    endRound(false);
   }
+}
 
-  const handleSpecialActionAt = async (target: Coordinate) => {
-    //the enemy should also be able to use special moves, handle in enemy?
-    if(!selectedPiece.value || selectedPiece.value.actions <= 0) return
-    if((selectedPiece.value.team === 'enemy' && !selectedPiece.value.statuses.charmed) || selectedPiece.value.team === 'player' && selectedPiece.value.statuses.charmed) return
-    boardRef.value.clearHighlights();
-    // find piece at targeted coordinate
-    const targetPiece = activePieces.value.find(piece =>
-      piece.tiles.some(t => t.x === target.x && t.y === target.y)
-    );
-    // --- piece target ---
-    if (selectedPiece.value.targetType === 'piece') {
-      if (targetPiece) {
-        await selectedPiece.value.special(targetPiece);
-        playerSpawns.value = newPlacementHighlights();
-        selectedPiece.value = null;
-      }
-      return;
+const damagePieceAt = async (coord: Coordinate) => {
+  if (!selectedPiece.value) return
+  if ((selectedPiece.value.team === 'enemy' && !selectedPiece.value.statuses.charmed)) return; //don't wan't control of enemies pieces
+  if (selectedPiece.value.actions <= 0) return
+  player.value.canPlace = false;
+  //if (selectedPiece.value.team !== 'player') return //damaging your own pieces is actually useful sometimes
+  const damageReceiver = activePieces.value.find(piece =>
+    piece.tiles.some(t => t.x === coord.x && t.y === coord.y)
+  );
+  if (!damageReceiver) return;
+  selectedPiece.value.actions--//prevent double clicking
+  //console.log('receiver: ', damageReceiver?.name)
+  //if (!damageReceiver || (damageReceiver.team === selectedPiece.value.team && !selectedPiece.value.statuses.charmed)) return;
+  //console.log("Damage call:", coord, damage)
+  const baseDamage = selectedPiece.value.getStat('attack');
+  await handleApplyAdmins('onDealDamage', selectedPiece.value.id);// damageReceiver.id)//attacker's id, (bug: blood tax will trigger even on no damage)
+  const damage = Math.floor(baseDamage * selectedPiece.value.damageMult);//mult should be applyed inside takeDamage for special moves
+  await damageReceiver.takeDamage(damage);
+  if (selectedPiece.value.statuses.hidden) {
+    selectedPiece.value.statuses.hidden = false;
+  }
+  selectedPiece.value.damageMult = 1;
+  if (damageReceiver.willRetaliate) {
+    await selectedPiece.value.takeDamage(damageReceiver.getStat('attack'));
+    if (damageReceiver.name === 'Puffer' && !selectedPiece.value.immunities.poisoned) {
+      selectedPiece.value.statuses.poisoned = true;
     }
-    // --- piece + player payload ---
-    if (selectedPiece.value.targetType === 'pieceAndPlayer') {
-      if (targetPiece) {
-        await selectedPiece.value.special({
-          piece: targetPiece,
-          player: player.value
-        });
-        playerSpawns.value = newPlacementHighlights();
-        selectedPiece.value = null;
-      }
-      return;
-    }
-    if (selectedPiece.value.targetType === 'pieceAndPlace') {
-      if (targetPiece) {
-        await selectedPiece.value.special({
-          piece: targetPiece,
-          target: target
-        });
-        playerSpawns.value = newPlacementHighlights();
-        selectedPiece.value = null;
-      }
-      return;
-    }
-    if (selectedPiece.value.targetType === 'placeAndPieces') {
-      if (targetPiece) {
-        await selectedPiece.value.special({
-          target: target,
-          activePieces: activePieces.value
-        });
-        playerSpawns.value = newPlacementHighlights();
-        selectedPiece.value = null;
-      }
-      return;
-    }
-    // --- space target --- target must be a space
-    if (selectedPiece.value.targetType === 'space') {//test
-      if(!targetPiece){
-        await  selectedPiece.value.special({
-          target: target,
-          activePieces: activePieces.value
-        });
-      }
+  }
+  selectedPiece.value.willRetaliate = false;//pieces that have enacted defensive option
+  //could trigger blood tax here using 'other'
+  selectedPiece.value.damageMult = 1;
+  //console.log(damageReceiver?.name, ' tiles afterdmg: ', damageReceiver.tiles)
+  boardRef.value.clearHighlights();
+  checkForRoundEnd();
+}
+
+const handleSpecialActionAt = async (target: Coordinate) => {
+  //the enemy should also be able to use special moves, handle in enemy?
+  if (!selectedPiece.value || selectedPiece.value.actions <= 0) return
+  if ((selectedPiece.value.team === 'enemy' && !selectedPiece.value.statuses.charmed) || selectedPiece.value.team === 'player' && selectedPiece.value.statuses.charmed) return
+  boardRef.value.clearHighlights();
+  // find piece at targeted coordinate
+  const targetPiece = activePieces.value.find(piece =>
+    piece.tiles.some(t => t.x === target.x && t.y === target.y)
+  );
+  // --- piece target ---
+  if (selectedPiece.value.targetType === 'piece') {
+    if (targetPiece) {
+      await selectedPiece.value.special(targetPiece);
       playerSpawns.value = newPlacementHighlights();
       selectedPiece.value = null;
-      return;
     }
-     // --- one target but effects all --- target can be a piece
-    if (selectedPiece.value.targetType === 'all') {
+    return;
+  }
+  // --- piece + player payload ---
+  if (selectedPiece.value.targetType === 'pieceAndPlayer') {
+    if (targetPiece) {
+      await selectedPiece.value.special({
+        piece: targetPiece,
+        player: player.value
+      });
+      playerSpawns.value = newPlacementHighlights();
+      selectedPiece.value = null;
+    }
+    return;
+  }
+  if (selectedPiece.value.targetType === 'pieceAndPlace') {
+    if (targetPiece) {
+      await selectedPiece.value.special({
+        piece: targetPiece,
+        target: target
+      });
+      playerSpawns.value = newPlacementHighlights();
+      selectedPiece.value = null;
+    }
+    return;
+  }
+  if (selectedPiece.value.targetType === 'placeAndPieces') {
+    if (targetPiece) {
       await selectedPiece.value.special({
         target: target,
         activePieces: activePieces.value
       });
       playerSpawns.value = newPlacementHighlights();
       selectedPiece.value = null;
-      return;
     }
-    // --- group target (AOE) ---
-    if (selectedPiece.value.targetType === 'group') {
-      // get every piece inside selectedPiece.value.range
-      const inRange = findAnyPiecesInRange(selectedPiece.value, activePieces.value);
-      await selectedPiece.value.special(inRange);
-      playerSpawns.value = newPlacementHighlights();
-      selectedPiece.value = null;
-      return;
-    }
-    if (selectedPiece.value.targetType === 'line') {
-      const actor = selectedPiece.value;
-      const ax = actor.headPosition.x;
-      const ay = actor.headPosition.y;
-      const tx = target.x;
-      const ty = target.y;
-      if (ax !== tx && ay !== ty) {
-        // optional: warn player
-        selectedPiece.value = null;
-        return;
-      }
-      const dx = Math.sign(tx - ax);
-      const dy = Math.sign(ty - ay);
-      const tilesInLine: Coordinate[] = [];
-      // Step along the line *from actor towards target*
-      let x = ax + dx;
-      let y = ay + dy;
-      while (x !== tx || y !== ty) {
-        tilesInLine.push({x, y})    
-        x += dx;
-        y += dy;
-      }
-      tilesInLine.push(target);
-      await actor.special({
-        line: tilesInLine,
+    return;
+  }
+  // --- space target --- target must be a space
+  if (selectedPiece.value.targetType === 'space') {//test
+    if (!targetPiece) {
+      await selectedPiece.value.special({
+        target: target,
         activePieces: activePieces.value
       });
-      playerSpawns.value = newPlacementHighlights();
-      selectedPiece.value = null;
-      return;
     }
-    // --- self target ---
-    if (selectedPiece.value.targetType === 'self') {
-      await selectedPiece.value.special(target);
-      playerSpawns.value = newPlacementHighlights();
-      selectedPiece.value = null;
-      return;
-    };
-    if (selectedPiece.value.targetType === 'graveyard') {//test
-      if(!targetPiece){
-        await  selectedPiece.value.special({
-          target: target,
-          activePieces: activePieces.value,
-          graveyard: graveyard.value
-        });
-      }
-      playerSpawns.value = newPlacementHighlights();
-      selectedPiece.value = null;
-      return;
-    }
-    checkForRoundEnd();
-  };
-
-  const hasWonRound = ref<boolean>(false);
-  
-  const endRound = async (roundWon: boolean) => {
-    //reset counts
-    player.value.admins.forEach(admin => {
-      if(admin.onRoundEnd) admin.onRoundEnd();
-    });
-    bossAdmins.value.forEach(admin => {
-      if(admin.onRoundEnd) admin.onRoundEnd();
-    });
-    graveyard.value = [];
-    lastTurnPieces.value = [];
-    selectedPiece.value = null;    
-    if(roundWon){
-      hasWonRound.value = true;
-      await handleApplyAdmins('onRoundEnd', '');//await??--
-      activePieces.value = [];//for needle
-      originalPieces.value = [];
-      extraDifficulty.value = 0;
-      if(player.value.mapProgress >= 3){
-        player.value.bossesCleared += 1;
-        if(player.value.bossesCleared === 6){
-          player.value.hasWonGame = true;
-        }
-      }
-      openSummary(true);
-      //move to btn inside round summary
-    } else {
-      hasWonRound.value = false;
-      activePieces.value = [];
-      openSummary(true);
-      //check admins for onion
-      if(player.value.hasAdmin('Onion')){
-        const index = player.value.admins.findIndex(a => a.name === 'Onion');
-        if (index !== -1) player.value.admins.splice(index, 1);
-      }
-      else if(player.value.lives > 0){
-        player.value.lives -= 1
-      }else{
-        alert('game over!')
-      }
-    }
-    renewBlueprints();//after applyadmins for school
-    for (const admin of bossAdmins.value) {//only necessary if we keep boss admins
-      admin.onRoundEnd?.();
-    }
-    /*for (const admin of player.value.admins) {
-      admin.onRoundEnd?.();
-    }*/
-    player.value.fogged = false;
-    roundHasStarted.value = false;
-  }
-      
-  async function onReceiveDamage (id: string) {
-    await handleApplyAdmins("onReceiveDamage", id);
-  }
-
-  //enemy moves
-  async function enemyTurn() {
-
-    const tileSet = new Set(level.value.tiles.map(t => `${t.x},${t.y}`));
-
-    await runEnemyStateMachine(
-      activePieces.value,
-      //removePiece, // callback to remove dead pieces
-      boardRef.value.highlightMoves,
-      boardRef.value.highlightTargets,//highlightspecials?
-      boardRef.value.clearHighlights,
-      //handleSpecialActionAt,
-      tileSet,
-      onReceiveDamage,
-      300
-    );
-    checkForRoundEnd();
     playerSpawns.value = newPlacementHighlights();
-    hasFinishedTurn.value = false;
-  }
-
-  async function applyStatusEffects (team: string) {//async for animations?
-    for(const piece of activePieces.value){
-      //petri dish, spread statuses here
-      if(piece.team === team){
-        const statusMult = 1 + player.value.admins.filter(a => a.name === 'Volatile').length;
-        await piece.applyStatusEffects(statusMult);
-      }
-    };
-  }
-
-  const endTurn = async () => {
-    hasFinishedTurn.value = true;
     selectedPiece.value = null;
-    pieceToPlace.value = null;
-    //closeInventory();
-    player.value.canPlace = false;
-    player.value.canMove = false;
-    player.value.canAction = false;
-    await handleApplyAdmins('onTurnEnd', '');//sprinkler
-    await applyStatusEffects('player');
-    for(const piece of activePieces.value){
-      if(piece.team === 'player' ){
-        piece.resetMoves();
-        piece.resetDefence();
-        piece.actions = 1;
-      }
-      if(piece.team === 'enemy'){
-        piece.resetTempModifiers();
-        piece.willRetaliate = false;//
-      }
-    };
-    await enemyTurn();
-    await applyStatusEffects('enemy');
-    //player piece tempstats reset
-    await handleApplyAdmins('onEnemyTurnEnd', '');
-    for(const piece of activePieces.value){
-      if(piece.team === 'enemy' ){
-        piece.resetMoves();
-        piece.resetDefence();
-        piece.actions = 1;
-      }
-      if(piece.team === 'player' ){
-        piece.resetTempModifiers();
-        piece.willRetaliate = false;//
-      }
-    };
-    if(isFirstTurn){
-      isFirstTurn.value = false;
-    }
-    player.value.canPlace = true;
-    player.value.canMove = true;
-    player.value.canAction = true;
-    hasFinishedTurn.value = false;
+    return;
   }
-  
-  // When editor exports a new level, shouldn't be needed in final
-  const handleExport = (levelData: any) => {
-    level.value.tiles = levelData.tiles;
-    level.value.pieces = levelData.pieces;
-    // Hydrate pieces once
-    const initPieces = rehydratePieces(level.value.pieces);
-    activePieces.value = processSpawnPoints(initPieces, 0);
-    displayEditor.value = false; // swap to board view
+  // --- one target but effects all --- target can be a piece
+  if (selectedPiece.value.targetType === 'all') {
+    await selectedPiece.value.special({
+      target: target,
+      activePieces: activePieces.value
+    });
+    playerSpawns.value = newPlacementHighlights();
+    selectedPiece.value = null;
+    return;
+  }
+  // --- group target (AOE) ---
+  if (selectedPiece.value.targetType === 'group') {
+    // get every piece inside selectedPiece.value.range
+    const inRange = findAnyPiecesInRange(selectedPiece.value, activePieces.value);
+    await selectedPiece.value.special(inRange);
+    playerSpawns.value = newPlacementHighlights();
+    selectedPiece.value = null;
+    return;
+  }
+  if (selectedPiece.value.targetType === 'line') {
+    const actor = selectedPiece.value;
+    const ax = actor.headPosition.x;
+    const ay = actor.headPosition.y;
+    const tx = target.x;
+    const ty = target.y;
+    if (ax !== tx && ay !== ty) {
+      // optional: warn player
+      selectedPiece.value = null;
+      return;
+    }
+    const dx = Math.sign(tx - ax);
+    const dy = Math.sign(ty - ay);
+    const tilesInLine: Coordinate[] = [];
+    // Step along the line *from actor towards target*
+    let x = ax + dx;
+    let y = ay + dy;
+    while (x !== tx || y !== ty) {
+      tilesInLine.push({ x, y })
+      x += dx;
+      y += dy;
+    }
+    tilesInLine.push(target);
+    await actor.special({
+      line: tilesInLine,
+      activePieces: activePieces.value
+    });
+    playerSpawns.value = newPlacementHighlights();
+    selectedPiece.value = null;
+    return;
+  }
+  // --- self target ---
+  if (selectedPiece.value.targetType === 'self') {
+    await selectedPiece.value.special(target);
+    playerSpawns.value = newPlacementHighlights();
+    selectedPiece.value = null;
+    return;
   };
-
-  //css
-  const shopClass = computed(() => 
-    showShop.value ? 'visible' : 'collapsed'
-  )
-  const mapClass = computed(() => 
-    showMap.value ? 'visible' : 'collapsed'
-  )
-
-  const worldSeed = ref(0);
-  const increaseDifficulty = () => {
-    player.value.difficulty += 1;
-    if(player.value.difficulty<7 && player.value.stake === 1){//cumulate bosses in endless mode
-      bossAdmins.value = [];
+  if (selectedPiece.value.targetType === 'graveyard') {//test
+    if (!targetPiece) {
+      await selectedPiece.value.special({
+        target: target,
+        activePieces: activePieces.value,
+        graveyard: graveyard.value
+      });
     }
-    refreshShop(true);
-    worldSeed.value++
+    playerSpawns.value = newPlacementHighlights();
+    selectedPiece.value = null;
+    return;
   }
-  const decreaseDifficulty = () => {
-    player.value.difficulty -= 1;
-    worldSeed.value--
-  }
-  const increaseStake = () => {
-    if(stake.value < 6){
-      stake.value += 1;
-    }
-  }
-  const decreaseStake = () => {
-    if(stake.value > 1){
-      stake.value -= 1;
-    }
-  }
+  checkForRoundEnd();
+};
 
-  watch(
-    () => [
-      showBoard.value,
-      showMap.value,
-      roundHasStarted.value,
-      activePieces.value.length,
-    ],
-    () => {
-      if (player.value.hasAdmin("Clippy")) {
-        requestAnimationFrame(() => {
-          applyTutorialTooltips(allTips);
-        });
+const hasWonRound = ref<boolean>(false);
+
+const endRound = async (roundWon: boolean) => {
+  //reset counts
+  player.value.admins.forEach(admin => {
+    if (admin.onRoundEnd) admin.onRoundEnd();
+  });
+  bossAdmins.value.forEach(admin => {
+    if (admin.onRoundEnd) admin.onRoundEnd();
+  });
+  graveyard.value = [];
+  lastTurnPieces.value = [];
+  selectedPiece.value = null;
+  if (roundWon) {
+    hasWonRound.value = true;
+    await handleApplyAdmins('onRoundEnd', '');//await??--
+    activePieces.value = [];//for needle
+    originalPieces.value = [];
+    extraDifficulty.value = 0;
+    if (player.value.mapProgress >= 3) {
+      player.value.bossesCleared += 1;
+      if (player.value.bossesCleared === 6) {
+        player.value.hasWonGame = true;
+        StorageManager.recordWin(player.value.osunicode, player.value.stake);
       }
     }
-  );
-
-  //HOTKEYS
-  onMounted(() => {
-    window.addEventListener('keydown', onKeydown);
-  });
-
-  function onKeydown(e: KeyboardEvent) {
-    // ignore typing in inputs
-    if(hasFinishedTurn.value || !roundHasStarted.value) return;
-    const tag = (e.target as HTMLElement)?.tagName;
-    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
-    e.preventDefault();
-    switch (e.code) {
-      case 'Space':
-      case 'Enter':
-        e.preventDefault(); // stop page scroll
-        endTurn();
-        break;
-      case 'Tab':
-        //cycle thru activepieces
-        break;
-      case 'KeyI':
-        toggleInventory();
-        break;
-      //inside pieceview???
-      case 'KeyA':
-        if(selectedPiece.value?.canAttack){
-          boardRef.value.highlightTargets(selectedPiece.value);
-        }
-        break;
-
-      case 'KeyS':
-        if(selectedPiece.value?.specialName){
-          boardRef.value.highlightSpecials(selectedPiece.value);
-        }
-        break;
+    openSummary(true);
+    //move to btn inside round summary
+  } else {
+    hasWonRound.value = false;
+    activePieces.value = [];
+    openSummary(true);
+    //check admins for onion
+    if (player.value.hasAdmin('Onion')) {
+      const index = player.value.admins.findIndex(a => a.name === 'Onion');
+      if (index !== -1) player.value.admins.splice(index, 1);
+    }
+    else if (player.value.lives > 0) {
+      player.value.lives -= 1
+    } else {
+      alert('game over!')
     }
   }
-
-  const debugMode = ref<boolean>(false);
-  function toggleDebug(){
-    debugMode.value = !debugMode.value;
+  renewBlueprints();//after applyadmins for school
+  for (const admin of bossAdmins.value) {//only necessary if we keep boss admins
+    admin.onRoundEnd?.();
   }
+  /*for (const admin of player.value.admins) {
+    admin.onRoundEnd?.();
+  }*/
+  player.value.fogged = false;
+  roundHasStarted.value = false;
+}
+
+async function onReceiveDamage(id: string) {
+  await handleApplyAdmins("onReceiveDamage", id);
+}
+
+//enemy moves
+async function enemyTurn() {
+
+  const tileSet = new Set(level.value.tiles.map(t => `${t.x},${t.y}`));
+
+  await runEnemyStateMachine(
+    activePieces.value,
+    //removePiece, // callback to remove dead pieces
+    boardRef.value.highlightMoves,
+    boardRef.value.highlightTargets,//highlightspecials?
+    boardRef.value.clearHighlights,
+    //handleSpecialActionAt,
+    tileSet,
+    onReceiveDamage,
+    300
+  );
+  checkForRoundEnd();
+  playerSpawns.value = newPlacementHighlights();
+  hasFinishedTurn.value = false;
+}
+
+async function applyStatusEffects(team: string) {//async for animations?
+  for (const piece of activePieces.value) {
+    //petri dish, spread statuses here
+    if (piece.team === team) {
+      const statusMult = 1 + player.value.admins.filter(a => a.name === 'Volatile').length;
+      await piece.applyStatusEffects(statusMult);
+    }
+  };
+}
+
+const endTurn = async () => {
+  hasFinishedTurn.value = true;
+  selectedPiece.value = null;
+  pieceToPlace.value = null;
+  //closeInventory();
+  player.value.canPlace = false;
+  player.value.canMove = false;
+  player.value.canAction = false;
+  await handleApplyAdmins('onTurnEnd', '');//sprinkler
+  await applyStatusEffects('player');
+  for (const piece of activePieces.value) {
+    if (piece.team === 'player') {
+      piece.resetMoves();
+      piece.resetDefence();
+      piece.actions = 1;
+    }
+    if (piece.team === 'enemy') {
+      piece.resetTempModifiers();
+      piece.willRetaliate = false;//
+    }
+  };
+  await enemyTurn();
+  await applyStatusEffects('enemy');
+  //player piece tempstats reset
+  await handleApplyAdmins('onEnemyTurnEnd', '');
+  for (const piece of activePieces.value) {
+    if (piece.team === 'enemy') {
+      piece.resetMoves();
+      piece.resetDefence();
+      piece.actions = 1;
+    }
+    if (piece.team === 'player') {
+      piece.resetTempModifiers();
+      piece.willRetaliate = false;//
+    }
+  };
+  if (isFirstTurn) {
+    isFirstTurn.value = false;
+  }
+  player.value.canPlace = true;
+  player.value.canMove = true;
+  player.value.canAction = true;
+  hasFinishedTurn.value = false;
+}
+
+// When editor exports a new level, shouldn't be needed in final
+const handleExport = (levelData: any) => {
+  level.value.tiles = levelData.tiles;
+  level.value.pieces = levelData.pieces;
+  // Hydrate pieces once
+  const initPieces = rehydratePieces(level.value.pieces);
+  activePieces.value = processSpawnPoints(initPieces, 0);
+  displayEditor.value = false; // swap to board view
+};
+
+//css
+const shopClass = computed(() =>
+  showShop.value ? 'visible' : 'collapsed'
+)
+const mapClass = computed(() =>
+  showMap.value ? 'visible' : 'collapsed'
+)
+
+const worldSeed = ref(0);
+const increaseDifficulty = () => {
+  player.value.difficulty += 1;
+  if (player.value.difficulty < 7 && player.value.stake === 1) {//cumulate bosses in endless mode
+    bossAdmins.value = [];
+  }
+  refreshShop(true);
+  worldSeed.value++
+}
+const decreaseDifficulty = () => {
+  player.value.difficulty -= 1;
+  worldSeed.value--
+}
+const increaseStake = () => {
+  if (stake.value < 6) {
+    stake.value += 1;
+  }
+}
+const decreaseStake = () => {
+  if (stake.value > 1) {
+    stake.value -= 1;
+  }
+}
+
+watch(
+  () => [
+    showBoard.value,
+    showMap.value,
+    roundHasStarted.value,
+    activePieces.value.length,
+  ],
+  () => {
+    if (player.value.hasAdmin("Clippy")) {
+      requestAnimationFrame(() => {
+        applyTutorialTooltips(allTips);
+      });
+    }
+  }
+);
+
+//HOTKEYS
+onMounted(() => {
+  window.addEventListener('keydown', onKeydown);
+});
+
+function onKeydown(e: KeyboardEvent) {
+  // ignore typing in inputs
+  if (hasFinishedTurn.value || !roundHasStarted.value) return;
+  const tag = (e.target as HTMLElement)?.tagName;
+  if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+  e.preventDefault();
+  switch (e.code) {
+    case 'Space':
+    case 'Enter':
+      e.preventDefault(); // stop page scroll
+      endTurn();
+      break;
+    case 'Tab':
+      //cycle thru activepieces
+      break;
+    case 'KeyI':
+      toggleInventory();
+      break;
+    //inside pieceview???
+    case 'KeyA':
+      if (selectedPiece.value?.canAttack) {
+        boardRef.value.highlightTargets(selectedPiece.value);
+      }
+      break;
+
+    case 'KeyS':
+      if (selectedPiece.value?.specialName) {
+        boardRef.value.highlightSpecials(selectedPiece.value);
+      }
+      break;
+  }
+}
+
+const debugMode = ref<boolean>(false);
+function toggleDebug() {
+  debugMode.value = !debugMode.value;
+}
 </script>
 
 <template>
   <div class="app-root">
-  <div class="debug-controls">
-    <button v-if="debugMode === true" class="swap-display" @mousedown="swapDisplay()">
-      {{ displayEditor ? "Show Board" : "Show Editor" }}
-    </button>
-    <button v-if="debugMode === true" class="swap-display" @mousedown="renewBlueprints()">
-      Renew Blueprints
-    </button>
-    <button
-    v-if="player.hasAdmin('Convenience Store') || debugMode === true"
-    class="shop-toggle"
-    @mousedown="toggleShop()">
-    Toggle Shop
-    </button>
-    <button
-    v-if="player.hasAdmin('Gene Splicing') || debugMode === true"
-    class="compiler-toggle"
-    @mousedown="toggleCompiler()">
-    Toggle Compiler
-    </button>
-    <button v-if="debugMode === true" class="map-toggle" @mousedown="toggleMap()">
-      Toggle Map
-    </button>
-     <button
-     v-if="debugMode === true" class="board-toggle" @mousedown="showBoard = true">
-      Toggle Board
-    </button>
-    <button
-    v-if="debugMode === true" class="difficulty" @mousedown="increaseDifficulty()">
-      Increase Security
-    </button>
-    <button
-    v-if="debugMode === true" class="difficulty" @mousedown="decreaseDifficulty()">
-      Decrease Security
-    </button>
-    <button class="phone-hide" @mousedown="toggleFastControls()">
-      Fast Controls
-    </button>
-    <div v-if="!gameStarted" class="flex">
-      <button class="phone-hide" @mousedown="decreaseStake()">
-        -
+    <div class="debug-controls">
+      <button @click="showCollection = !showCollection">Collection</button>
+      <button v-if="debugMode === true" class="swap-display" @mousedown="swapDisplay()">
+        {{ displayEditor ? "Show Board" : "Show Editor" }}
       </button>
-      <span>Stake: {{ stake }}</span>
-      <button class="phone-hide" @mousedown="increaseStake()">
-        +
+      <button v-if="debugMode === true" class="swap-display" @mousedown="renewBlueprints()">
+        Renew Blueprints
       </button>
-    </div>
-    <button class="phone-hide" @mousedown="toggleDebug()">
-      Debug mode
-    </button>
-    <button class="phone-hide" @mousedown="isSoundEnabled = !isSoundEnabled">
-      Sound FX: {{ isSoundEnabled ? 'ON' : 'OFF' }}
-    </button>
-  </div>
-  <div class="top-hud">
-    <div class="enemy-info">
-      <p><strong>Security level: </strong>{{ player.difficulty + extraDifficulty }}</p>
-      <p><strong>Infamy: </strong>{{ stake }}</p>
-      <span>
-        <BossView v-if="bossAdmins.length> 0" :admins="bossAdmins"/>
-      </span>
-    </div>
-    <div v-if="!displayEditor && roundHasStarted" class="player-helper">
-      <div v-if="!hasFinishedTurn && !isPlacing" class="turn-info">Your turn</div>
-      <div v-if="isPlacing && pieceToPlace">
-        <p>Placing:</p>
-        <button @click="pieceToPlace=null">Cancel</button>
+      <button v-if="player.hasAdmin('Convenience Store') || debugMode === true" class="shop-toggle"
+        @mousedown="toggleShop()">
+        Toggle Shop
+      </button>
+      <button v-if="player.hasAdmin('Gene Splicing') || debugMode === true" class="compiler-toggle"
+        @mousedown="toggleCompiler()">
+        Toggle Compiler
+      </button>
+      <button v-if="debugMode === true" class="map-toggle" @mousedown="toggleMap()">
+        Toggle Map
+      </button>
+      <button v-if="debugMode === true" class="board-toggle" @mousedown="showBoard = true">
+        Toggle Board
+      </button>
+      <button v-if="debugMode === true" class="difficulty" @mousedown="increaseDifficulty()">
+        Increase Security
+      </button>
+      <button v-if="debugMode === true" class="difficulty" @mousedown="decreaseDifficulty()">
+        Decrease Security
+      </button>
+      <button class="phone-hide" @mousedown="toggleFastControls()">
+        Fast Controls
+      </button>
+      <div v-if="!gameStarted" class="flex">
+        <button class="phone-hide" @mousedown="decreaseStake()">
+          -
+        </button>
+        <span>Stake: {{ stake }}</span>
+        <button class="phone-hide" @mousedown="increaseStake()">
+          +
+        </button>
       </div>
-      <div v-if="isPlacing && pieceToPlace"
-        class="info">
-        <BlueprintView :blueprint="pieceToPlace"
-        :tileSize="60"
-        :cssclass="'placing'"
-        />
+      <button class="phone-hide" @mousedown="toggleDebug()">
+        Debug mode
+      </button>
+      <button class="phone-hide" @mousedown="isSoundEnabled = !isSoundEnabled">
+        Sound FX: {{ isSoundEnabled ? 'ON' : 'OFF' }}
+      </button>
+    </div>
+    <div class="top-hud">
+      <div class="enemy-info">
+        <p><strong>Security level: </strong>{{ player.difficulty + extraDifficulty }}</p>
+        <p><strong>Infamy: </strong>{{ stake }}</p>
+        <span>
+          <BossView v-if="bossAdmins.length > 0" :admins="bossAdmins" />
+        </span>
+      </div>
+      <div v-if="!displayEditor && roundHasStarted" class="player-helper">
+        <div v-if="!hasFinishedTurn && !isPlacing" class="turn-info">Your turn</div>
+        <div v-if="isPlacing && pieceToPlace">
+          <p>Placing:</p>
+          <button @click="pieceToPlace = null">Cancel</button>
+        </div>
+        <div v-if="isPlacing && pieceToPlace" class="info">
+          <BlueprintView :blueprint="pieceToPlace" :tileSize="60" :cssclass="'placing'" />
+        </div>
       </div>
     </div>
-  </div>
-  <div class="stage">
-    <MainMenu v-if="showMainMenu && !displayEditor" @createNewPlayer="createNewPlayer" class="stage-panel" :class="{ active: showMainMenu }"/>
-    <RoundSummary v-if="showSummary" class="stage-panel" :class="{ active: showSummary }"
-      :hasWonRound="hasWonRound"
-      :player="player"
-      :bosses="bossAdmins"
-      @proceedFromEndOfRound="handleProceed"
-      @reloadLevel="reloadLevel"
-      @mainMenu="openMainMenu"
-    />
-    <WorldMap v-if="!displayEditor" class="stage-panel" :class="{ active: showMap }"
-      :allLevels="level1Levels"
-      :player="player"
-      :seed="worldSeed"
-      :cssclass="mapClass"
-      :bosses="bossAdmins"
-      @select-level="selectLevel"
-      @openShop="openShop"
-      @openDisabledShop="openDisabledShop"
-      @openCompiler="openCompiler"
-      @incrementProgress="incrementMapProgress"
-      @addBoss="addBossAdmin"
-      @replaceBosses="replaceBosses"
-      @increaseDifficulty="increaseDifficulty"
-    />
-    <Shop v-if="!displayEditor" class="stage-panel" :class="{ active: showShop }"
-      :cssclass="shopClass"
-      :shopBlueprints="shopBlueprints"
-      :shopItems="shopItems"
-      :rerollCost="rerollCost"
-      :target="shopTarget"
-      :hasStolen="hasStolenFromThisShop"
-      @refresh-shop="refreshShop(false)"
-      @buy-blueprint="buyBlueprint"
-      @buy-item="buyItem"
-      @selectTarget="selectShopTarget"
-      @clearTarget="clearShopTarget"
-      @closeShop="closeShop"
-      :player="player"
-      :shop-disabled="shopDisabled"
-      :canProceed="canProceedFromShop"
-    />
-    <HybridCompiler v-if="!displayEditor" class="stage-panel" :class="{ active: showCompiler }"
-      :player="player"
-      :pieceToPlace="pieceToPlace"
-      :isDraggingPlacement="isDraggingPlacement"
-      @openCompiler="openCompiler"
-      @toggleCompiler="toggleCompiler"
-      @clear-drag="clearDrag"
-      @close="toggleCompiler"
-    />
-    <Board ref="boardRef" v-if="!displayEditor" class="stage-panel" :class="{ active: showBoard }"
-    :tiles="level.tiles"
-    :foggedTiles="foggedTiles"
-    :pieces="activePieces"
-    :selectedPiece="selectedPiece"
-    :placementHighlights="playerSpawns"
-    :isFirstTurn="isFirstTurn"
-    :placementMode="isPlacing"
-    :movementMode="isMoving"
-    :hasFinishedTurn="hasFinishedTurn"
-    :player="player"
-    :showFastControls="showFastControls"
-    :isDraggingPlacement="isDraggingPlacement"
-    :pieceToPlace="pieceToPlace"
-    @placeOnBoard="placePieceOnBoardAt"
-    @handlePieceSelect="handlePieceSelect"
-    @deselect="deselectPiece"
-    @movePiece="movePiece"
-    @damagePieceAt="damagePieceAt"
-    @specialActionAt="handleSpecialActionAt"
-    @placeAt="placeAt"
-    />  
-  </div>
-  <Leveleditor v-if="displayEditor" @export-level="handleExport"/>
-  <div class="player-area">
-    <!-- PlayerView + End Turn / Retry -->
-    <PlayerView v-if="!displayEditor"
-    :player="player"
-    :showInventory="showInventory"
-    @highlightPlacements="highlightPlacements"
-    @sellBlueprint="sellBlueprint"
-    @sellItem="sellItem"
-    @applyItem="handleApplyItem"
-    @sellAdmin="sellAdmin"
-    @reorderAdmins="player.admins = $event"
-    @startPlacementDrag="startPlacementDrag"
-    @closeInventory="toggleInventory"
-    @openInventory="toggleInventory"
-    />
-    <PieceController
-      v-if="selectedPiece && !hasFinishedTurn"
-      :piece="selectedPiece"
-      mode="action"
-      :hasFinishedTurn="hasFinishedTurn"
-      :canBuy="false"
-      :canMove="player.canMove"
-      :canAction="player.canAction"
-      :defaultPosition="{ x: 0, y: 0 }"
-      @highlightMoves="boardRef.highlightMoves"
-      @highlightTargets="boardRef.highlightTargets"
-      @highlightSpecials="boardRef.highlightSpecials"
-      @close="deselectPiece"
-      />
-    <div v-if="!displayEditor" class="player-actions">
-      <button v-if="(!displayEditor && roundHasStarted && !hasFinishedTurn) || debugMode" class="end-turn" v-on:click="endTurn()">End Turn</button>
-      <!--<button class="mt-2 px-2 py-1 bg-blue-500 text-white rounded" @click="showInventory = !showInventory">{{showInventory ? 'Hide Inventory' : 'Inventory' }}</button>-->
-      <!--<div v-if="!displayEditor && roundHasStarted" class="graveyard">
+    <div class="stage">
+      <MainMenu v-if="showMainMenu && !displayEditor" @createNewPlayer="createNewPlayer" class="stage-panel"
+        :class="{ active: showMainMenu }" />
+      <RoundSummary v-if="showSummary" class="stage-panel" :class="{ active: showSummary }" :hasWonRound="hasWonRound"
+        :player="player" :bosses="bossAdmins" @proceedFromEndOfRound="handleProceed" @reloadLevel="reloadLevel"
+        @mainMenu="openMainMenu" />
+      <WorldMap v-if="!displayEditor" class="stage-panel" :class="{ active: showMap }" :allLevels="level1Levels"
+        :player="player" :seed="worldSeed" :cssclass="mapClass" :bosses="bossAdmins" @select-level="selectLevel"
+        @openShop="openShop" @openDisabledShop="openDisabledShop" @openCompiler="openCompiler"
+        @incrementProgress="incrementMapProgress" @addBoss="addBossAdmin" @replaceBosses="replaceBosses"
+        @increaseDifficulty="increaseDifficulty" />
+      <Shop v-if="!displayEditor" class="stage-panel" :class="{ active: showShop }" :cssclass="shopClass"
+        :shopBlueprints="shopBlueprints" :shopItems="shopItems" :rerollCost="rerollCost" :target="shopTarget"
+        :hasStolen="hasStolenFromThisShop" @refresh-shop="refreshShop(false)" @buy-blueprint="buyBlueprint"
+        @buy-item="buyItem" @selectTarget="selectShopTarget" @clearTarget="clearShopTarget" @closeShop="closeShop"
+        :player="player" :shop-disabled="shopDisabled" :canProceed="canProceedFromShop" />
+      <HybridCompiler v-if="!displayEditor" class="stage-panel" :class="{ active: showCompiler }" :player="player"
+        :pieceToPlace="pieceToPlace" :isDraggingPlacement="isDraggingPlacement" @openCompiler="openCompiler"
+        @toggleCompiler="toggleCompiler" @clear-drag="clearDrag" @close="toggleCompiler" />
+      <Board ref="boardRef" v-if="!displayEditor" class="stage-panel" :class="{ active: showBoard }"
+        :tiles="level.tiles" :foggedTiles="foggedTiles" :pieces="activePieces" :selectedPiece="selectedPiece"
+        :placementHighlights="playerSpawns" :isFirstTurn="isFirstTurn" :placementMode="isPlacing"
+        :movementMode="isMoving" :hasFinishedTurn="hasFinishedTurn" :player="player"
+        :showFastControls="showFastControls" :isDraggingPlacement="isDraggingPlacement" :pieceToPlace="pieceToPlace"
+        @placeOnBoard="placePieceOnBoardAt" @handlePieceSelect="handlePieceSelect" @deselect="deselectPiece"
+        @movePiece="movePiece" @damagePieceAt="damagePieceAt" @specialActionAt="handleSpecialActionAt"
+        @placeAt="placeAt" gameStart="true" />
+      <Collection class="stage-panel" :class="{ active: showCollection }" @close="showCollection = false" />
+    </div>
+    <Leveleditor v-if="displayEditor" @export-level="handleExport" />
+    <div class="player-area">
+      <!-- PlayerView + End Turn / Retry -->
+      <PlayerView v-if="!displayEditor" :player="player" :showInventory="showInventory"
+        @highlightPlacements="highlightPlacements" @sellBlueprint="sellBlueprint" @sellItem="sellItem"
+        @applyItem="handleApplyItem" @sellAdmin="sellAdmin" @reorderAdmins="player.admins = $event"
+        @startPlacementDrag="startPlacementDrag" @closeInventory="toggleInventory" @openInventory="toggleInventory" />
+      <PieceController v-if="selectedPiece && !hasFinishedTurn" :piece="selectedPiece" mode="action"
+        :hasFinishedTurn="hasFinishedTurn" :canBuy="false" :canMove="player.canMove" :canAction="player.canAction"
+        :defaultPosition="{ x: 0, y: 0 }" @highlightMoves="boardRef.highlightMoves"
+        @highlightTargets="boardRef.highlightTargets" @highlightSpecials="boardRef.highlightSpecials"
+        @close="deselectPiece" />
+      <div v-if="!displayEditor" class="player-actions">
+        <button v-if="(!displayEditor && roundHasStarted && !hasFinishedTurn) || debugMode" class="end-turn"
+          v-on:click="endTurn()">End Turn</button>
+        <!--<button class="mt-2 px-2 py-1 bg-blue-500 text-white rounded" @click="showInventory = !showInventory">{{showInventory ? 'Hide Inventory' : 'Inventory' }}</button>-->
+        <!--<div v-if="!displayEditor && roundHasStarted" class="graveyard">
         <button>🪦</button>
       </div>-->
-      <button :disabled="hasFinishedTurn" v-if="!displayEditor && roundHasStarted && player.lives > 1" class="retry-btn" v-on:click="retryLevel()">Retry</button>
+        <button :disabled="hasFinishedTurn" v-if="!displayEditor && roundHasStarted && player.lives > 1"
+          class="retry-btn" v-on:click="retryLevel()">Retry</button>
+      </div>
     </div>
-  </div>
   </div>
 </template>
 
 <style scoped>
-.player-helper{
+.player-helper {
   position: absolute;
   top: 10px;
   right: 10px;
 }
-.turn-info{
+
+.turn-info {
   font-weight: bold;
   color: red;
 }
-.enemy-info{
+
+.enemy-info {
   display: flex;
   gap: 2rem;
 }
-.info{
+
+.info {
   position: relative;
   height: 60px;
   display: flex;
   justify-content: center;
 }
-.debug-controls{
+
+.debug-controls {
   position: absolute;
   background-color: transparent;
   color: white;
@@ -1701,50 +1650,62 @@
   gap: 1rem;
   padding: 1rem;
 }
-.end-turn, .retry-btn{
+
+.end-turn,
+.retry-btn {
   border: 1px solid white;
   z-index: 9999;
   margin-bottom: 0.5rem;
 }
+
 .logo {
   height: 6em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
 }
-.collapsed{
+
+.collapsed {
   top: 100%;
 }
+
 @media (max-width: 500px) {
-  .enemy-info{
+  .enemy-info {
     display: block;
   }
-  .debug-controls{
+
+  .debug-controls {
     left: unset;
     right: 2%;
     font-size: 0.9rem;
     padding: 0.5rem;
     border: unset;
   }
-  .top-hud p{
+
+  .top-hud p {
     margin: 0;
     min-height: 30px;
   }
-  .player-area{
-    p{
+
+  .player-area {
+    p {
       margin: 0;
     }
   }
-  .phone-hide{
+
+  .phone-hide {
     display: none;
   }
-  .overlay-route{
+
+  .overlay-route {
     left: 100%;
   }
 }

@@ -21,6 +21,7 @@
     import ItemView from "./ItemView.vue";
     import BlueprintController from "./BlueprintController.vue";
     import { level6Levels } from "../level6Levels";
+    import { StorageManager } from "../StorageManager";
 
     const props = defineProps<{
         player: Player;
@@ -276,10 +277,12 @@
         switch (node.skipReward.kind) {
             case "blueprint":
             props.player.addProgram(node.skipReward.value); //player functions return false if there is not enough inventory space, could use these to prevent proceeding?
+            StorageManager.unlockPiece(node.skipReward.value.name);
             break;
 
             case "admin":
             props.player.addAdmin(node.skipReward.value);
+            StorageManager.unlockAdmin(node.skipReward.value.name);
             if(node.skipReward.value.triggerType === 'other' && node.skipReward.value.targetType==='player'){
                 node.skipReward.value.apply({player: props.player});
             }
@@ -287,6 +290,7 @@
 
             case "item":
             props.player.addItem(node.skipReward.value);
+            StorageManager.unlockItem(node.skipReward.value.name);
             break;
         }
         currentNodeId.value = node.id

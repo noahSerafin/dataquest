@@ -629,7 +629,7 @@ function handleProceed() {
   if (player.value.mapProgress >= 3) {
     increaseDifficulty();
     player.value.mapProgress = 0
-    if (player.value.bossesCleared === 6) {
+    if (player.value.bossesCleared > 6) {
       player.value.hasWonGame = false;
     }
   }

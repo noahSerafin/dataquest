@@ -46,7 +46,7 @@ function handleBuyItem(item: Item) {
 }
 //        @select="openItemController"
 
-const canReroll = computed(() => props.player.effectiveMoney >= props.rerollCost);
+const canReroll = computed(() => props.player.effectiveMoney >= props.rerollCost && !props.shopDisabled);
 const canSteal = computed(() => props.player.hasAdmin('Five Finger Discount') && !props.hasStolen && !props.shopDisabled);
 
 const canBuyItem = ((item: Item) => {

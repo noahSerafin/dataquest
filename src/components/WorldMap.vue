@@ -155,14 +155,15 @@
 
     function enterNode(node: WorldNode) {
         const current = world.value.nodes[currentNodeId.value];
-        const sameRow = node.position.y === current.position.y;
-        if(node.type === 'shop' && !sameRow){
-            emit('openDisabledShop')
-        }
+        const shopisNext = node.id === current.next[0];
         selectedPreviewNode.value = null;
-        currentNodeId.value = node.id;
-        node.visible = true;
-        if(node.type === 'shop'){
+        if(node.type === 'shop' && !shopisNext){
+            emit('openDisabledShop')
+        } else {
+            currentNodeId.value = node.id;
+            node.visible = true;
+        }
+        if(node.type === 'shop' && shopisNext){
             emit('openShop')
         }
         if(node.type === 'hybrid compiler'){

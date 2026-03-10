@@ -544,3 +544,6 @@ steel
 .v_Holographic .piece-controller{
   filter: unset; 
 }
+.v_Glass .piece-controller{
+  opacity: 0.7;
+}

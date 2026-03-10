@@ -1,6 +1,6 @@
 import type { OS } from "./types";
-import { Voucher, Mushroom, Garlic, Juice, Meat, Genie, Pandora, Update2, Dupe} from "./Items";
-import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Compass} from "./AdminPrograms";
+import { Voucher, Mushroom, Garlic, Juice, Meat, Genie, Pandora, Update2, Dupe, Jar} from "./Items";
+import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Compass, Ambulance} from "./AdminPrograms";
 
 /*
 export function findPieceClassByName(name: string) {
@@ -44,14 +44,14 @@ export function blueprintFromPieceClass(piece: typeof Piece): PieceBlueprint {
     }
     const testPiece =  {
         id: crypto.randomUUID(),
-        name: "Pitfall",
+        name: "Pawn",
         description: '"testing this pieces special move"',
         unicode: 'U+1F47E',
-        maxSize: 4,
+        maxSize: 2,
         moves: 10,
         range: 2,
         attack: 2,
-        defence: 2,
+        defence: 0,
         rarity: 5,
         color: "#ee74eeff",
         // blueprint-only fields:
@@ -381,8 +381,8 @@ const Debugger : OS = {//lance //bug //screwdriver
     memory: 10,
     adminSlots: 6,
     blueprints: [aegis, superKnife, testhybrid, testPiece],
-    items: [new Genie, new Pandora, new Update2, new Dupe],
-    admins: [new Crystal, new Compass],
+    items: [new Genie, new Pandora, new Update2, new Jar],
+    admins: [new Crystal, new Compass, new Ambulance],
     lives: 9,
     description: 'FOR TESTING'
 }

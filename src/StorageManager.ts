@@ -1,6 +1,7 @@
 export interface PlayerCollection {
   pieces: string[];
   admins: string[];
+  bosses: string[];
   items: string[];
 }
 
@@ -16,12 +17,19 @@ export const StorageManager = {
     const data = localStorage.getItem(COLLECTION_KEY);
     if (data) {
       try {
-        return JSON.parse(data);
+        const parsed = JSON.parse(data);
+
+        return {
+          pieces: parsed.pieces ?? [],
+          admins: parsed.admins ?? [],
+          bosses: parsed.bosses ?? [],
+          items: parsed.items ?? []
+        };
       } catch (e) {
         console.error("Error parsing collection data", e);
       }
     }
-    return { pieces: [], admins: [], items: [] };
+    return { pieces: [], admins: [], bosses: [], items: [] };
   },
 
   saveCollection(collection: PlayerCollection) {
@@ -41,6 +49,15 @@ export const StorageManager = {
     const col = this.getCollection();
     if (!col.admins.includes(name)) {
       col.admins.push(name);
+      this.saveCollection(col);
+    }
+  },
+
+  unlockBoss(name: string) {
+    const col = this.getCollection();
+    if (!col.bosses) col.bosses = [];
+    if (!col.bosses.includes(name)) {
+      col.bosses.push(name);
       this.saveCollection(col);
     }
   },

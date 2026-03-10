@@ -147,7 +147,7 @@ class Onion extends Admin {
 //name desc utf || maxsize moves range atk def
 class Blood extends Admin {
   static name = "Blood Tax";
-  static description = "Each time damage is dealt earn $1";
+  static description = "Each time your attacks deal damage, earn $1";//overkills only?
   static unicode = "U+1FA78";
   static color = "#790000ff";
   static rarity = 3;
@@ -289,14 +289,13 @@ class Hamsa extends Admin {
   static name = "Hamsa";
   static description = "Your program's get +3 defence on placement";
   static unicode = "U+1FAAC";
-  static color = "#5560ffff";
+  static color = "rgb(41, 51, 192)";
   static rarity = 5;
   constructor() {
     super(Hamsa.name, Hamsa.description, Hamsa.unicode, Hamsa.color, 8, Hamsa.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    console.log('applying:', this.name)
     activePieces[idx].addModifier({defence: 3})
   }
 }
@@ -314,7 +313,6 @@ class Relay extends Admin {
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
     if(activePieces[idx].team==='player' && activePieces[idx].getStat('range') > 1){
-      console.log('applying:', this.name)
       activePieces[idx].addModifier({attack: 2})
     }
   }
@@ -555,7 +553,7 @@ class Bone extends Admin {//change
   static color = "#d33636ff";
   static rarity = 3;
   constructor() {
-    super(Bone.name, Bone.description, Bone.unicode, Bone.color, 6, Bone.rarity, 'gameState', 'onPlacement')
+    super(Bone.name, Bone.description, Bone.unicode, Bone.color, 5, Bone.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
@@ -624,7 +622,7 @@ class GoldenTicket extends Admin {
 class Dove extends Admin {// PEACE SYMBOL, U+262E // HERB, Olive branch U+1F33F
   static name = "Dove";
   static description = "1 free move after placing at the start of every round";
-  static unicode = "U+1F54A";////CHURCH, sanctuary U+26EA
+  static unicode = "U+1F54A";//🕊️ ////CHURCH, sanctuary U+26EA
   static color = "rgb(77, 156, 170)";
   static rarity = 4;
   constructor() {
@@ -711,7 +709,6 @@ class Communism extends Admin {
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     if(player.money<=4){
       const idx = activePieces.findIndex(p => p.id === id);
-      console.log('applying:', this.name)
       activePieces[idx].addModifier({
             attack: 1,
             defence: 1,
@@ -768,7 +765,7 @@ class Slots extends Admin {
 
 class Newspaper extends Admin {
   static name = "Millwall Brick";
-  static description = "+1 damage for programs with 1 range on load";
+  static description = "+1 damage for programs with a range of 1 on load";
   static unicode = "U+1F4F0";//"U+1F5DE";
   static color = "#eb1919ff";
   static rarity = 2;
@@ -778,7 +775,6 @@ class Newspaper extends Admin {
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
     if(activePieces[idx].team==='player' && activePieces[idx].getStat('range')===1){
-      console.log('applying:', this.name)
       activePieces[idx].addModifier({attack: 1})
     }
   }
@@ -995,7 +991,6 @@ class Sneakers extends Admin {//item???
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    console.log('applying:', this.name)
     activePieces[idx].addModifier({moves: 1});
     activePieces[idx].movesRemaining += 1;
   }
@@ -1013,7 +1008,6 @@ class Candle extends Admin {
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    console.log('applying:', this.name)
     activePieces[idx].addModifier({range: 1})
   }
 }
@@ -1029,7 +1023,6 @@ class Lightbulb extends Admin {
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    console.log('applying:', this.name)
     activePieces[idx].addModifier({range: 1})
   }
 }
@@ -1046,10 +1039,8 @@ class Feather extends Admin {
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    console.log('applying:', this.name)
     activePieces[idx].addModifier({moves: 1})
     activePieces[idx].movesRemaining += 1;
-    console.log('applying:', this.name)
     if(activePieces[idx].getStat("maxSize") < 1){
       activePieces[idx].addModifier({maxSize: -1})
     }
@@ -1248,7 +1239,6 @@ class Prayer extends Admin {
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    console.log('applying:', this.name)
     activePieces[idx].addModifier({defence: 2})
   }
 
@@ -1264,24 +1254,21 @@ class Vitamins extends Admin {
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    console.log('applying:', this.name)
     activePieces[idx].addModifier({defence: 1})
   }
 }
 
-// EGG, U+1F95A
 class Protein extends Admin {
   static name = "Protein";
   static description = "Programs get +1 max size on load";
-  static unicode = "U+1F95A";//steak "U+1F52C";
+  static unicode = "U+1F357";//steak "U+1F52C";
   static color = "#b0ff55ff";
   static rarity = 1;
   constructor() {
-    super(Protein.name, Protein.description, Protein.unicode, Protein.color, 4, Protein.rarity, 'gameState', 'onPlacement')
+    super(Protein.name, Protein.description, Protein.unicode, Protein.color, 2, Protein.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    console.log('applying:', this.name)
     activePieces[idx].addModifier({maxSize: 1})
   }
 }
@@ -1297,7 +1284,6 @@ class Fountain extends Admin {
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    console.log('applying:', this.name)
     activePieces[idx].addModifier({maxSize: 3})
   }
 }
@@ -1350,7 +1336,7 @@ class Scarf extends Admin {
   }
 }
 
-class Ambulance extends Admin {//test
+export class Ambulance extends Admin {//a promoted piece dying should recover the pawn, a 
   static name = "Ambulance";
   static description = "Recovers all your destroyed programs to your inventory, letting you reload them";
   static unicode = "U+1F691";
@@ -1360,9 +1346,25 @@ class Ambulance extends Admin {//test
     super(Ambulance.name, Ambulance.description, Ambulance.unicode, Ambulance.color, 5, Ambulance.rarity, 'playerAndGame', 'onPieceDestruction')
   }
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+    /*const promoted = activePieces.find(p => p.id === (id + 'prom1'));//filter as pawn will give 2 pieces
+    if(promoted){
+      console.log('promoted piece found, exiting', promoted.name)
+      console.log(promoted.name, promoted.id)
+      return;
+    }*/
     const idx = activePieces.findIndex(p => p.id === id);
+    //check for corresponding pawn in inventory
+    //const pawn = player.programs.findIndex(bp => bp.id === (activePieces[idx].id.substring(0, activePieces[idx].id.length - 1)) )
+    //const bpIdx = pawn ? pawn : player.programs.findIndex(bp => bp.id === activePieces[idx].id )
     const bpIdx = player.programs.findIndex(bp => bp.id === activePieces[idx].id )
     if(activePieces[idx].team==='player'){
+      if(activePieces[idx].name === 'Pawn'){
+        const promoted = activePieces.findIndex(p => p.id === id + '1');
+        if(promoted) {
+          console.log('promted piece found')
+          return;
+        }
+      }
       player.programs[bpIdx].isPlaced = false;
       activePieces.filter(p => p.id !== activePieces[idx].id);//we could splice, but this might be safer?
     }
@@ -1426,7 +1428,6 @@ class Umbrella extends Admin {
   }
   /*async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    console.log('applying:', this.name)
     activePieces[idx].addModifier({defence: 1})
   }*/
 }
@@ -1481,7 +1482,7 @@ class Ballet extends Admin {//needs to reset
 
 class Pants extends Admin {
   static name = "Spare Pair";
-  static description = "Your first destroyed program is moved back to your inventory";
+  static description = "Your first destroyed program each round is moved back into your inventory";
   static unicode = "U+1FA72";
   static color = "#f8f8f8ff";
   static rarity = 4;
@@ -1582,7 +1583,6 @@ class Toilet extends Admin {
       }
     };
     const idx = activePieces.findIndex(p => p.id === id);
-    console.log('applying:', this.name)
     activePieces[idx].addModifier({
             attack: noOfCommons,
             defence: noOfCommons,
@@ -1890,7 +1890,7 @@ class Minerva extends Admin {
   static name = "Minerva";
   static description = "+1 range for all your placed programs each time a program is destroyed";
   static unicode = "U+1F989";//horus: "U+1314A";
-  static color = "#d3761fff";
+  static color = "rgb(211, 169, 31)";
   static rarity = 6;
   constructor() {
     super(Minerva.name, Minerva.description, Minerva.unicode, Minerva.color, 9, Minerva.rarity, 'gameState', 'onPieceDestruction')
@@ -1984,7 +1984,7 @@ class Jammer extends Admin {
   static name = "Jammer";
   static description = "-1 range to all enemy programs with a range > 1";
   static unicode = "U+1F5FC";//no phones "U+1F4F5";
-  static color = "#e4884bff";
+  static color = "rgb(170, 170, 170)";
   static rarity = 3;
   constructor() {
     super(Jammer.name, Jammer.description, Jammer.unicode, Jammer.color, 6, Jammer.rarity, 'gameState', 'onRoundStart')
@@ -2100,8 +2100,8 @@ class Appraisal extends Admin {
 
 class Camp extends Admin {//needs reviewing
   static name = "Camper";
-  static description = "Your non-hidden Programs that don't move gain +1 range, ones that do move lose -1 range.";// to all stats on the end of your turn";
-  static unicode = "U+26FA";
+  static description = "Your non-hidden programs that don't move gain +1 range each turn, ones that do move lose -1 range.";// to all stats on the end of your turn";
+  static unicode = "U+26FA";//🏕️
   static color = "rgb(26, 2, 65)";
   static rarity = 3;//5 for all stats
   constructor() {
@@ -2136,7 +2136,7 @@ class Piggy extends Admin {
 
 class Bowling extends Admin {//test
   static name = "Strike";
-  static description = "Destroying a program deals 1 damage to each tile adjacent to it's head";
+  static description = "Destroying a program deals 1 damage to each enemy tile adjacent to it's head";
   static unicode = "U+1F3B3"; // damage adjacent tiles
   static color = "rgb(215, 44, 25)";
   static rarity = 2;//3?
@@ -2391,7 +2391,6 @@ class Medic extends Admin {
     }
     //Increases a program's maxSize by 1
     apply(target: PieceBlueprint, itemMult: number) {
-        console.log('target: ', target)
         target.maxSize += (2* itemMult);
     }
 }*/
@@ -2415,24 +2414,24 @@ export class Ferris extends Admin {
 // EVERGREEN TREE, U+1F332, cannot be frozen, scarf already does this
 class Evergreen extends Admin {
   static name = "Evergreen";
-  static description = "+1 max size to all your programs at the end of every turn";
+  static description = "+1 max size to all your programs at the every 2 turns";
   static unicode = "U+1F332";
-  static color = "#ff5555";
+  static color = "#042703";
   static rarity = 4;
   constructor() {
     super(Evergreen.name, Evergreen.description, Evergreen.unicode, Evergreen.color, 7, Evergreen.rarity, 'gameState', 'onTurnEnd')//playerandgame, we can +1 blueprints as well
   }
-  //private count = 0;
+  private count = 0;
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-    //this.count += 1;
-    //if(this.count === 4){
+    this.count += 1;
+    if(this.count === 2){
       for (const p of activePieces) {
         if(p.team==='player'){
           p.addModifier({maxSize: 1})
         }
       };
-      //this.count = 0;
-    //}
+      this.count = 0;
+    }
   }
 }
 
@@ -2516,7 +2515,7 @@ class Juggler extends Admin {//test
 
 class Ice extends Admin {//needs to reset
   static name = "Thaw";
-  static description = "Freezes all programs for on first turn of a round, then unfreezes them";
+  static description = "Freezes all programs on the first turn of a round, then unfreezes them";
   static unicode = "U+1F9CA";
   static color = "rgb(186, 255, 246)";
   static rarity = 5;
@@ -2605,9 +2604,9 @@ class Monarch extends Admin {
   static description = "Charm a random enemy at the start of a round";
   static unicode = "U+1F98B";
   static color = "rgb(40, 11, 167)";
-  static rarity = 4;
+  static rarity = 5;
   constructor() {
-    super(Monarch.name, Monarch.description, Monarch.unicode, Monarch.color, 8, Monarch.rarity, 'gameState', 'onRoundStart')
+    super(Monarch.name, Monarch.description, Monarch.unicode, Monarch.color, 9, Monarch.rarity, 'gameState', 'onRoundStart')
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     const enemyPieces = activePieces.filter(p => (p.team === 'enemy'));
@@ -2634,11 +2633,10 @@ class Tempura extends Admin {
   }
 }
 
-//MARTIAL ARTS UNIFORM, U+1F94B Black belt, +temp defence each turn with ab action left
 class BlackBelt extends Admin {
   static name = "Black Belt";
   static description = "Your programs with an action remaining on the end of your turn will retaliate with their attack on incoming damage";
-  static unicode = "U+1F9F9";
+  static unicode = "U+1F94B";
   static color = "rgb(0, 0, 0)";
   static rarity = 5;
   constructor() {
@@ -2905,7 +2903,7 @@ export class Clippy extends Admin {
   //handle in player
 }
 
-export const allAdmins = [Bank, Bucket, Candle, Cheese, Smoker, Compass, CreditCard, GoldenTicket, Harvest, Heart, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Seed, Slots, Sprinkler, Tempura, Sneakers, Chime, Abacus, Aesculapius, Appraisal, Balloon, Briefcase, Bubble, Cactus, Coin, Purse, Convenience, FireEngine, Hermes, Joker, Loot, Clover, Microscope, Newspaper, Pi, Pickup, Putter, Relay, Scarf, Trolley, Stiletto, Bowling, Tracker, Violin, Vitamins, AdminMap, Barber, Ace, AirSupport, Bone, Blood, Bouquet, Camp, Luggage, Communism, Department, Triangle, FakeID, Medic, HedgeFund, Dice, Jammer, Roger, Juggler, Ladder, Puzzle, Razor, Sled, Rune, Shades, Stonks, Telescope, Crown, Toolbox, Ambulance, Backdoor, BionicArm, BionicLeg, Crash, Broom, DartBoard, Dove, Evergreen, Eye, Disco, Discount, Fountain, Fuel, Spoon, Liberty, Lightbulb, Lotus, Monarch, Ollie, Palette, Pazzaz, PetriDish, Prayer, RollerBlades, Wheel, Pants, Bipolar, Variety, Volatile, Artic, BlackBelt, Lungs, Chemistry, Chivalry, Toilet, Copier, Diamond, Feather, Hamsa, Skyscraper, Howzat, Inheritance, Cherries, Brain, Meteor, Onion, PeaPod, Teddy, Pong, Bell, Ice, Ballet, Umbrella, Dharma, Bath, Cards, Minerva, Needle, Osiris, Ring, School, Taoism];
+export const allAdmins = [Bank, Bucket, Candle, Cheese, Smoker, Compass, CreditCard, Crystal, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Seed, Slots, Sprinkler, Tempura, Sneakers, Chime, Abacus, Aesculapius, Appraisal, Balloon, Briefcase, Bubble, Cactus, Coin, Purse, Convenience, FireEngine, Heart, Hermes, Joker, Loot, Clover, Microscope, Newspaper, Pi, Pickup, Putter, Relay, Scarf, Trolley, Stiletto, Bowling, Tracker, Violin, Vitamins, AdminMap, Barber, Ace, AirSupport, Bone, Blood, Bouquet, Camp, Luggage, Communism, Department, Triangle, FakeID, Medic, HedgeFund, Dice, Jammer, Roger, Juggler, Ladder, Puzzle, Razor, Sled, Rune, Shades, Stonks, Telescope, Crown, Toolbox, Ambulance, Backdoor, BionicArm, BionicLeg, Crash, Broom, DartBoard, Dove, Evergreen, Eye, Disco, Discount, Fountain, Fuel, Spoon, Liberty, Lightbulb, Lotus, Monarch, Ollie, Palette, Pazzaz, PetriDish, Prayer, RollerBlades, Wheel, Pants, Bipolar, Variety, Volatile, Artic, BlackBelt, Lungs, Chemistry, Chivalry, Toilet, Copier, Diamond, Feather, Hamsa, Skyscraper, Howzat, Inheritance, Cherries, Brain, Meteor, Onion, PeaPod, Teddy, Pong, Bell, Ice, Ballet, Umbrella, Dharma, Bath, Cards, Minerva, Needle, Osiris, Ring, School, Taoism];
 console.log('admins length: ', allAdmins.length)
 let adminLogs = {
   rarity1: 0,
@@ -2941,6 +2939,8 @@ console.log("Admins of rarity 5: ", adminLogs.rarity5)
 console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //make all immunity admins <= uncommon?
 
+//GOAT, U+1F410 charge line piece, or GOAT admin
+
 //splash damage- mult to group targets??
 //bomb bonuses -
 //gene hybrids appear in shop
@@ -2950,7 +2950,7 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //CLAPPER BOARD, U+1F3AC Action 
 // CRESCENT MOON, U+1F319
 
-
+// MOUNT FUJI, U+1F5FB
 //MEDIUM WHITE CIRCLE, U+26AA Pearl
 //ROLLER COASTER, U+1F3A2
 //TOOTHBRUSH, U+1FAA5
@@ -2962,6 +2962,7 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //LOLLIPOP, U+1F36D sweet tooth
 //CANDY, U+1F36C
 //PINCHED FINGERS, U+1F90C
+// FISH CAKE WITH SWIRL DESIGN, U+1F365
 
 //SOCKS, U+1F9E6
 // BILLED CAP, U+1F9E2
@@ -2969,6 +2970,9 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //POURING LIQUID, U+1FAD7, spillage
 //DUMPLING, U+1F95F Pierog
 //PEANUTS, U+1F95C
+//⛱️
+//🀄
+//🤍
 
 //GAMER  VIDEO GAME, U+1F3AE
 //Arevakhach LEFT-FACING ARMENIAN ETERNITY SIGN, U+58E
@@ -2983,6 +2987,8 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 // COFFIN, U+26B0
 //CLOSED MAILBOX WITH RAISED FLAG, U+1F4EB
 //OLD KEY, U+1F5DD
+//GOAL NET, U+1F945
+// CELTIC CROSS, U+1F548
 
 //complicated edits...
 //ROUND PUSHPIN, U+1F4CD trap's heads are marked with pin, doesn't reveal them though

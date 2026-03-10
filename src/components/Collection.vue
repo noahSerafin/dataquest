@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from "vue";
 import { allPieces, Spawn } from "../Pieces";
 import { allItems } from "../Items";
 import { allAdmins } from "../AdminPrograms";
+import { allBosses } from "../Bosses";
 import { StorageManager, type PlayerCollection, type PlayerStats } from "../StorageManager";
 import BlueprintView from "./BlueprintView.vue";
 import ItemView from "./ItemView.vue";
@@ -13,12 +14,13 @@ const emit = defineEmits<{
   (e: 'close'): void;
 }>();
 
-const collection = ref<PlayerCollection>({ pieces: [], admins: [], items: [] });
+const collection = ref<PlayerCollection>({ pieces: [], admins: [], bosses: [], items: [] });
 const stats = ref<PlayerStats>({ osStats: {} });
 
 onMounted(() => {
   collection.value = StorageManager.getCollection();
   stats.value = StorageManager.getStats();
+  console.log('Collection: ', collection.value)
 
   const handleCollectionUpdate = (e: Event) => {
     collection.value = (e as CustomEvent<PlayerCollection>).detail;
@@ -42,6 +44,10 @@ function isAdminUnlocked(name: string): boolean {
   return collection.value.admins.includes(name);
 }
 
+function isBossUnlocked(name: string): boolean {
+  return collection.value.bosses.includes(name);
+}
+
 function isItemUnlocked(name: string): boolean {
   return collection.value.items.includes(name);
 }
@@ -55,7 +61,7 @@ function getItemInstance(ItemClass: any) {
   return new ItemClass();
 }
 
-const activeTab = ref<'pieces' | 'admins' | 'items' | 'stats'>('pieces');
+const activeTab = ref<'pieces' | 'items' | 'admins' | 'bosses' | 'stats'>('pieces');
 </script>
 
 <template>
@@ -68,8 +74,9 @@ const activeTab = ref<'pieces' | 'admins' | 'items' | 'stats'>('pieces');
 
       <div class="tabs">
         <button :class="{ active: activeTab === 'pieces' }" @click="activeTab = 'pieces'">Programs</button>
-        <button :class="{ active: activeTab === 'admins' }" @click="activeTab = 'admins'">Admins</button>
         <button :class="{ active: activeTab === 'items' }" @click="activeTab = 'items'">Items</button>
+        <button :class="{ active: activeTab === 'admins' }" @click="activeTab = 'admins'">Admins</button>
+        <button :class="{ active: activeTab === 'bosses' }" @click="activeTab = 'bosses'">Bosses</button>
         <button :class="{ active: activeTab === 'stats' }" @click="activeTab = 'stats'">Stats</button>
       </div>
 
@@ -87,7 +94,21 @@ const activeTab = ref<'pieces' | 'admins' | 'items' | 'stats'>('pieces');
           </div>
         </div>
 
-        <!-- ADMINS TAB -->
+        <!-- ITEMS TAB -->
+        <div v-if="activeTab === 'items'" class="grid-layout">
+          <div v-for="ItemClass in allItems" :key="ItemClass.name" class="slot-container">
+            <template v-if="isItemUnlocked(ItemClass.name)">
+              <ItemView :item="getItemInstance(ItemClass)" type="consumable" cssclass="collection" :tileSize="60"
+                :canBuy="false" :showController="false" />
+              <div class="name-label">{{ ItemClass.name }}</div>
+            </template>
+            <div v-else class="locked-slot item-slot">
+              ?
+            </div>
+          </div>
+        </div>
+
+         <!-- ADMINS TAB -->
         <div v-if="activeTab === 'admins'" class="grid-layout">
           <div v-for="AdminClass in allAdmins" :key="AdminClass.name" class="slot-container">
             <template v-if="isAdminUnlocked(AdminClass.name)">
@@ -100,14 +121,14 @@ const activeTab = ref<'pieces' | 'admins' | 'items' | 'stats'>('pieces');
             </div>
           </div>
         </div>
-
-        <!-- ITEMS TAB -->
-        <div v-if="activeTab === 'items'" class="grid-layout">
-          <div v-for="ItemClass in allItems" :key="ItemClass.name" class="slot-container">
-            <template v-if="isItemUnlocked(ItemClass.name)">
-              <ItemView :item="getItemInstance(ItemClass)" type="consumable" cssclass="collection" :tileSize="60"
+        
+        <!-- BOSSES TAB -->
+        <div v-if="activeTab === 'bosses'" class="grid-layout">
+          <div v-for="AdminClass in allBosses" :key="AdminClass.name" class="slot-container">
+            <template v-if="isBossUnlocked(AdminClass.name)">
+              <ItemView :item="getItemInstance(AdminClass)" type="admin" cssclass="collection" :tileSize="60"
                 :canBuy="false" :showController="false" />
-              <div class="name-label">{{ ItemClass.name }}</div>
+              <div class="name-label">{{ AdminClass.name }}</div>
             </template>
             <div v-else class="locked-slot item-slot">
               ?

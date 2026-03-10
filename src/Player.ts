@@ -1,6 +1,7 @@
 import type { PieceBlueprint } from "./types";
 import { Item } from "./Items";
 import { Admin } from "./AdminPrograms";
+import { StorageManager } from "./StorageManager";
 
 export class Player {
     difficulty: number = 1;
@@ -117,6 +118,7 @@ export class Player {
 
   /** Add a program/piece if there's enough memory */
   addProgram(program: PieceBlueprint): boolean {
+    StorageManager.unlockPiece(program.name);
     if (this.hasMemorySpace) {
       this.programs.push(program);
       return true;

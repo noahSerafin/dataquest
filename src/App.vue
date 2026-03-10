@@ -204,7 +204,13 @@ function handleApplyItem(payload: { item: Item, id: string }) {
   const item = payload.item;
   const itemMult = 1 + player.value.admins.filter(a => a.name === 'Chemistry').length;
   console.log('itemMult:', itemMult);
-  if (item.targetType === "piecesAndBoard") {
+  if (item.targetType === 'playerAndGame'){
+    if(item.name === 'Jar' && selectedPiece.value && selectedPiece.value.team === 'enemy' && selectedPiece.value.defenceRemaining <= 0 && selectedPiece.value.tiles.length <= 1) {
+      item.apply({ id: selectedPiece.value.id, activePieces: activePieces.value, player: player.value }, itemMult);
+      player.value.removeItem(item);
+    }
+  }
+  if (item.targetType === 'piecesAndBoard') {
     item.apply({activePieces: activePieces.value, board: level.value.tiles}, itemMult);
     playerSpawns.value = newPlacementHighlights();
     player.value.removeItem(item);
@@ -425,8 +431,7 @@ function buyBlueprint(bp: PieceBlueprint) {
       player.value.money += 2;
     }
   }
-  player.value.programs.push(bp);
-  StorageManager.unlockPiece(bp.name);
+  player.value.addProgram(bp);
   shopTarget.value = null;
 }
 async function buyItem(item: Item) {
@@ -468,6 +473,7 @@ const graveyard = ref<InstanceType<typeof Piece>[]>([]);
 const bossAdmins = ref<Admin[]>([]);
 function addBossAdmin(admin: Admin) {
   bossAdmins.value.push(admin)
+  StorageManager.unlockBoss(admin.name);
 }
 function replaceBosses(admins: Admin[]) {
   bossAdmins.value = admins;
@@ -747,7 +753,7 @@ function processSpawnPoints(pieces: Piece[], mod: number) {
 
         const validEnemies = allPieces.filter(EnemyClass => {
           //p.rarity >= min && p.rarity <= max //old method for spawnsize 1 only
-          if (EnemyClass.name !== "Nuke" && EnemyClass.name !== "Highwayman") {// bomb too?
+          if (EnemyClass.name !== "Nuke"){// bomb too?
             const temp = new EnemyClass(piece.headPosition, 'enemy', removePiece);
             return (
               temp.rarity >= min &&
@@ -1277,10 +1283,13 @@ const endRound = async (roundWon: boolean) => {
     activePieces.value = [];//for needle
     originalPieces.value = [];
     extraDifficulty.value = 0;
+    console.log('player map progress: ', player.value.mapProgress)
     if (player.value.mapProgress >= 3) {
       player.value.bossesCleared += 1;
+      console.log('player bosses cleared: ', player.value.bossesCleared)
       if (player.value.bossesCleared === 6) {
         player.value.hasWonGame = true;
+        console.log('player has won game!!!')
         StorageManager.recordWin(player.value.osunicode, player.value.stake);
       }
     }
@@ -1483,6 +1492,13 @@ function onKeydown(e: KeyboardEvent) {
     case 'KeyS':
       if (selectedPiece.value?.specialName) {
         boardRef.value.highlightSpecials(selectedPiece.value);
+      }
+      break;
+    
+    case 'KeyD':
+      if (selectedPiece.value) {
+        selectedPiece.value = null;
+        boardRef.clearHighlights();
       }
       break;
   }

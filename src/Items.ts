@@ -377,7 +377,7 @@ class Soap extends Item<Piece> {
     constructor(){
         super(Soap.name, Soap.description, Soap.unicode, Soap.color, 3, Soap.rarity, 'piece')
     }
-    static harmfulStatuses = ['diseasd', 'slowed', 'blinded', 'burning', 'poisoned', 'frozen','charmed', 'confused', 'exposed']
+    static harmfulStatuses = ['diseased', 'slowed', 'blinded', 'burning', 'poisoned', 'frozen', 'charmed', 'confused', 'exposed']
     apply(target: Piece, _itemMult: number) {
         for (const key of Soap.harmfulStatuses) {
             target.statuses[key] = false;
@@ -494,7 +494,7 @@ export class Genie extends Item<Player> {
   static name = "Genie";
   static description = "Gifts 3 random programs (must have room)";
   static unicode = "U+1F9DE";
-  static color = "#0dbaffff";
+  static color = "rgb(108, 126, 230)";
   static rarity = 3;
   constructor() {
    super(Genie.name, Genie.description, Genie.unicode, Genie.color, 5, Genie.rarity, 'player')
@@ -595,12 +595,6 @@ class Hourglass extends Item<Piece[]> {//TODO test
     }
 }
 
-//heart
-//extra life
-
-//affect all programs
-////KEY, U+1F511 keygen item
-
 class Extinguisher extends Item<Piece[]> {
   static name = "Extinguisher";
   static description = "Removes burning from all your programs";
@@ -638,9 +632,9 @@ class Plunger extends Item<Piece[]> {//item remove??
 }
 
 
-class Keygen extends Item<Piece[]> {//TODO test, unfinished
+class Keygen extends Item<Piece[]> {//TODO test
     static name = "Keygen";
-    static description = "Lower the defence of all enemy programs in a node (not working)";
+    static description = "Lower the defence of all enemy programs in a node by 1";
     static unicode = "U+1F511";
     static color = "#89315aff";
     static rarity = 3;
@@ -651,6 +645,7 @@ class Keygen extends Item<Piece[]> {//TODO test, unfinished
         activePieces.forEach(piece => {
             if(piece.team === 'enemy' && piece.getStat('defence') > 0){
                 piece.addModifier({defence: 1*(-itemMult)})//test
+                piece.defenceRemaining -= (1*(-itemMult))//test
             }
         })
         //receive game state, and map
@@ -743,12 +738,6 @@ class Hotline extends Item {
 
 //RING BUOY, U+1F6DF restore the last destroyed program to hand /target a space? or give piece a wontDie bool?
 
-//target all Activeprogram's
-//megaphone U+1F4E3
-//Bugle, U+1F4EF, "+1 attack for all placed programs"
-
-///////////////////////////////////////////////////////////////////////////////////
-
 //target player
 export class Floppy extends Item {
     static name = "Update";
@@ -832,9 +821,39 @@ export class Dupe extends Item {
 }
 
 //JAR, U+1FAD9 - piece? capture an enemy of size 1, turn into blueprint
+export class Jar extends Item {//Pokeball?
+    static name = "Jar";
+    static description = "Use on an enemy with a size of 1 and defence of 0 to add it to your inventory";
+    static unicode = "U+1FAD9";
+    static color = "rgb(255, 37, 84)";
+    static rarity = 5;
+    constructor(){
+        super(Jar.name, Jar.description, Jar.unicode, Jar.color, 5, Jar.rarity, 'playerAndGame')
+        //name desc utf || maxsize moves range atk def
+    }
+    async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }, _itemMult: number) {
+        const idx = activePieces.findIndex(p => p.id === id);
+        if(activePieces[idx].team === 'enemy' && activePieces[idx].defenceRemaining <= 0 && activePieces[idx].tiles.length <= 1){
+            const bpClass = allPieces.find(p =>
+                p.name = activePieces[idx].name
+            )
+            console.log(bpClass)
+            const bp = makeBlueprint(bpClass);
+            console.log(bp)
+            bp.maxSize = activePieces[idx].getStat('maxSize');
+            bp.moves = activePieces[idx].getStat('moves');
+            bp.range = activePieces[idx].getStat('range');
+            bp.attack = activePieces[idx].getStat('attack');
+            bp.defence = activePieces[idx].getStat('defence');
+            //check for space?
+            player.addProgram(bp)
+            activePieces[idx].takeDamage(1);
+        }
+    }
+}
 
 //hotline buoy batteries pig 9
-export const allItems = [Mushroom, Meat, Iron, Blueberry, Melon, Pie, Pepper, Plunger, Carrot, Juice, Teapot, Coffee, Hotline, Ginger, Blessing, Supplement, Roids, Formula, Garlic, Coffee, Bandage, Soap, Voucher, Rations, Beans, Pandora, Box, Genie, Gift, Pinata, Extinguisher, Wand, Hourglass, Spanner, Makeover, ShootingStar, Keygen, Bugle, Megaphone, Battery, Floppy, Update2, Update3, Life, Cake, Dupe];
+export const allItems = [Blueberry, Battery, Iron, Juice, Mushroom, Pepper, Floppy, Voucher, Bandage, Extinguisher, Formula, Plunger, Roids, Teapot, Beans, Bugle, Genie, Gift, Keygen, Makeover, Melon, Box, Pandora, Megaphone, Pinata, Rations, ShootingStar, Spanner, Update2, Cake, Carrot, Coffee, Garlic, Hotline, Wand, Meat, Pie, Soap, Dupe, Hourglass, Jar, Supplement, Life, Blessing, Ginger, Update3];
 export const upgradeItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Roids, Formula]
 //export const activeItems = [Rations, Beans]
 

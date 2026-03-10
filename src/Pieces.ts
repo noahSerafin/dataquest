@@ -1202,7 +1202,7 @@ class Oil extends Piece {
 
 class Web extends Piece {
   static name = "Web";
-  static description = "A program that loads hidden and freezes enemies moving over it, removing itself";//immobilises
+  static description = "A program that loads hidden and freezes enemies moving over it, removing itself";
   static unicode = "U+1F578";
   static color = "rgb(96, 96, 96)";
   static rarity = 2; //maybe it should be a low level trap piece?

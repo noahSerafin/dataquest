@@ -1498,7 +1498,7 @@ function onKeydown(e: KeyboardEvent) {
     case 'KeyD':
       if (selectedPiece.value) {
         selectedPiece.value = null;
-        boardRef.clearHighlights();
+        boardRef.value.clearHighlights();
       }
       break;
   }

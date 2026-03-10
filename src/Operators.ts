@@ -1,5 +1,5 @@
 import type { OS } from "./types";
-import { Voucher, Mushroom, Garlic, Juice, Meat, Genie, Pandora, Update2, Dupe, Jar} from "./Items";
+import { Voucher, Mushroom, Garlic, Juice, Meat, Genie, Pandora, Update2, Jar} from "./Items";
 import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Compass, Ambulance} from "./AdminPrograms";
 
 /*

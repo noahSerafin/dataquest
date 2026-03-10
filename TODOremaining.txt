@@ -1,5 +1,6 @@
 HOTKEYS
 GAME / BUGS
+player hasWonGame - implement properly
 possible to get stuck on cave and gauntlet if sling/bee and knife spawn
 nerf rosebud - pieces can't stay exposed after a spcial?
 slots broken, and only applies before a shop, not on the same shop you buy it in

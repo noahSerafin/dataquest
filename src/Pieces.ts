@@ -345,7 +345,7 @@ class Paladin extends Piece {
   static color = "rgb(84, 160, 190)";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-  super(Paladin.name, Paladin.description, Paladin.unicode, 3, 2, 1, 0, 3, Paladin.color, headPosition, [headPosition], team, Paladin.rarity, removeCallback, id)
+  super(Paladin.name, Paladin.description, Paladin.unicode, 3, 2, 1, 2, 3, Paladin.color, headPosition, [headPosition], team, Paladin.rarity, removeCallback, id)
     this.targetType = 'piece';
     this.specialName = 'Bless';
     this.hasFriendlySpecial = true;
@@ -802,7 +802,7 @@ class Trojan extends Piece {//test more
   static description = "Can create clones of itself";
   static unicode = "U+1F434";
   static color = "#c51b1bff";
-  static rarity = 3;
+  static rarity = 3;//4? appears often in shop
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Trojan.name, Trojan.description, Trojan.unicode, 1, 1, 1, 1, 0, Trojan.color, headPosition, [headPosition], team, Trojan.rarity, removeCallback, id)//horse head atm //military helmet "U+1FA96"
     this.specialName = 'Copy';
@@ -820,6 +820,8 @@ class Trojan extends Piece {//test more
     newTrojan.statModifiers = this.statModifiers
     newTrojan.movesRemaining = 0;
     newTrojan.actions = 0;
+    newTrojan.hybridName = this.hybridName;
+    newTrojan.extraUnicode = this.extraUnicode;
     activePieces.push(newTrojan);
     this.actions --
   }
@@ -1129,7 +1131,7 @@ class Tar extends Piece {
   static color = "#686026";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Tar.name, Tar.description, Tar.unicode, 3, 1, 0, 0, 0, Tar.color, headPosition, [headPosition], team, Tar.rarity, removeCallback, id)
+   super(Tar.name, Tar.description, Tar.unicode, 4, 1, 0, 0, 0, Tar.color, headPosition, [headPosition], team, Tar.rarity, removeCallback, id)
    this.targetType = 'trapPiece';
    this.statuses.hidden = true
    this.statuses.negative = true;
@@ -2034,7 +2036,7 @@ class Greatshield extends Piece {//testt
   static color = "rgba(0, 82, 85, 1)";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Greatshield.name, Greatshield.description, Greatshield.unicode, 5, 1, 2, 3, 5, Greatshield.color, headPosition, [headPosition], team, Greatshield.rarity, removeCallback, id)
+    super(Greatshield.name, Greatshield.description, Greatshield.unicode, 5, 1, 2, 3, 6, Greatshield.color, headPosition, [headPosition], team, Greatshield.rarity, removeCallback, id)
     this.specialName = 'Charge';
     this.targetType = 'line';
     this.canAttack = false;
@@ -2224,8 +2226,8 @@ class Oni extends Piece {
   static color = "#9e0303ff";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Oni.name, Oni.description, Oni.unicode, 6, 1, 1, 5, 3, Oni.color, headPosition, [headPosition], team, Oni.rarity, removeCallback, id)
-    this.specialName = 'Curse'
+    super(Oni.name, Oni.description, Oni.unicode, 6, 1, 2, 5, 3, Oni.color, headPosition, [headPosition], team, Oni.rarity, removeCallback, id)
+    this.specialName = 'Curse';
   }
   async special(targetPiece: Piece):Promise<void>{
     if(!targetPiece.immunities.slowed){
@@ -3929,7 +3931,7 @@ class Unicorn extends Piece {
 //building castle? creates a wall around it of 8 tiles 
 
 //99 fairy //web?
-export const allPieces = [Ant, Banana, Bee, Egg, Knife, Potato, Rat, Shield, Sling, Snail, TP, Acorn, Aegis, Beetle, Bow, Chick, Chicken, Dagger, Decoy, Dog, Fence, Frond, Doctor, Gecko, Germ, Guard, Hedgehog, Hopper, Jellyfish, Larva, Paladin, Tree, Rooster, Saw, Snake, Tar, Vulture, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, LabRat, LadyBeetle, Lance, Magnet, Mine, Mosquito, Ninja, Octopus, Officer, Pawn, Peacock, Flute, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Alien, Recurve, Arms, Axe, Bull, Cannon, Lightning, Palm, Paragon, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Greatshield, Kite, Leopard, Lighthouse, Mammoth, Nerf, Oil, Wasp, Puffer, Rabbit, Scarab, Shark, Shrike, Snowman, Soldier, Squid, Stopwatch, Rex, Tiger, UFO, Bat, Wizard, Wolf, Zebra, Archdaemon, Bomb, Buffalo, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Gman, Giraffe, Hippo, Lion, Lovebomb, Oni, Orangutan, Rhino, Screwdriver, Shovel, Tank, Vampire, Bear, Bison, Helicopter, Gorilla, Nuke, Sol, Sponge, Unicorn];//Dolls //100 +2 (web, ink)
+export const allPieces = [Ant, Banana, Bee, Egg, Knife, Potato, Rat, Shield, Sling, Snail, TP, Acorn, Aegis, Beetle, Bow, Chick, Chicken, Dagger, Decoy, Dog, Fence, Frond, Doctor, Gecko, Germ, Guard, Hedgehog, Hopper, Jellyfish, Larva, Paladin, Tree, Rooster, Saw, Snake, Tar, Vulture, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, LabRat, LadyBeetle, Lance, Magnet, Mine, Mosquito, Ninja, Octopus, Officer, Pawn, Peacock, Flute, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Alien, Recurve, Arms, Axe, Bull, Cannon, Lightning, Palm, Paragon, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Greatshield, Kite, Leopard, Lighthouse, Mammoth, Nerf, Oil, Wasp, Puffer, Rabbit, Scarab, Shark, Shrike, Snowman, Soldier, Squid, Stopwatch, Tiger, UFO, Bat, Wizard, Wolf, Zebra, Archdaemon, Bomb, Buffalo, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Gman, Giraffe, Hippo, Lion, Lovebomb, Oni, Orangutan, Rhino, Screwdriver, Shovel, Tank, Vampire, Bear, Bison, Helicopter, Gorilla, Nuke, Sol, Sponge, Rex, Unicorn];//Dolls //100 +2 (web, ink)
 console.log('pieces length: ', allPieces.length)
 
 let adminLogs = {

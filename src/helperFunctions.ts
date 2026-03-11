@@ -4,6 +4,7 @@ import { allPieces, type Piece } from "./Pieces";
 import type { Player } from "./Player";
 import { STAT_MIN, PIECE_VARIANTS } from "./constants";
 import { upgradeItems } from "./Items";
+import { StorageManager } from "./StorageManager";
 
 export const isSoundEnabled = ref(false);
 
@@ -213,7 +214,7 @@ export function addItemsUntilFull(
   
   while ((freeMemory >= 1 || player.hasTrolley && freeMemory >= 0.5)&& attempts < maxAttempts) {
     const item = pickWeightedRandomItem(upgradeItems, player);
-
+    StorageManager.unlockItem(item);
     // If addProgram returns false when full, even better
     const added = player.addItem(item);
     if (!added) break;

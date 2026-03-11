@@ -23,7 +23,7 @@ function decideEnemyIntent(
   console.log('target: ', target)
   if (target && enemy.actions > 0 ){//target found
     console.log('target found');
-    if(enemy.canAttack && target.piece.defenceRemaining + target.piece.tiles.length <= enemy.getStat('attack')){//can we kill a player piece?
+    if(enemy.canAttack && enemy.getStat('attack') > 0 && target.piece.defenceRemaining + target.piece.tiles.length <= enemy.getStat('attack')){//can we kill a player piece?
       return {type: 'attack', target: target.piece}
     }
     if(enemy.specialName && !enemy.hasFriendlySpecial && enemy.targetType !== 'trapPiece'){
@@ -64,7 +64,7 @@ function decideEnemyIntent(
       console.log('no special moves');
       //if target is not attackable, is there one that is?
     }
-    if(enemy.canAttack && !enemy.hasFriendlySpecial){//no special to use, can we attack? //&&target.piece.getStat('defence') < enemy.getStat('attack')
+    if(enemy.canAttack && enemy.getStat('attack') > 0 && !enemy.hasFriendlySpecial){//no special to use, can we attack? //&&target.piece.getStat('defence') < enemy.getStat('attack')
       console.log('attacking target');
       return {type: 'attack', target: target.piece}
     }

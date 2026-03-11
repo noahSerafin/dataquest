@@ -1970,7 +1970,7 @@ class Knot extends Admin {//test
 
 class Rainbow extends Admin {
   static name = "Pot of Gold";
-  static description = "+$10 After beating a boss";
+  static description = "+$10 After beating a boss";//nerf to 5? 7?
   static unicode = "U+1F308";
   static color = "#77e9f1ff";
   static rarity = 1;

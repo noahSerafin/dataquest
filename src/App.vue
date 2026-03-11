@@ -245,6 +245,7 @@ function handleApplyItem(payload: { item: Item, id: string }) {
     if (item.name === 'Gift Box' && hasRoom) {
       const newProgram = pickWeightedRandom(allPieces, player.value);
       player.value.programs.push(makeBlueprint(newProgram.class, newProgram.variant ?? undefined));
+      StorageManager.unlockPiece(newProgram.class.name);
       player.value.removeItem(item);
     }
     if (item.name === 'Genie' && (player.value.freeMemory >= 2 || player.value.hasToolbox && player.value.freeMemory >= 0.5)) {//check for toolbox
@@ -261,11 +262,16 @@ function handleApplyItem(payload: { item: Item, id: string }) {
         pickWeightedRandom(allPieces, player.value),
       ];
       const bps = classes.map(c => makeBlueprint(c.class, c.variant ?? undefined));
+      bps.forEach(bp => {
+        StorageManager.unlockPiece(bp.name);
+      })
       player.value.programs.push(...bps);//do one by one
       player.value.removeItem(item)
     }
     if (item.name === 'Mystery Box' && hasRoom) {
-      player.value.items.push(pickWeightedRandomItem(allItems, player.value))
+      const newItem = pickWeightedRandomItem(allItems, player.value)
+      player.value.items.push(newItem)
+      StorageManager.unlockItem(newItem.name);
       player.value.removeItem(item)
     }
     if (item.name === 'Pandora' && player.value.freeMemory) {//check for trolley/schoolbag
@@ -273,8 +279,10 @@ function handleApplyItem(payload: { item: Item, id: string }) {
       addItemsUntilFull(player.value, 3);
     }
     if (item.name === 'Pinata' && hasRoom) {
-      player.value.admins.push(pickWeightedRandomItem(allAdmins, player.value))
-      player.value.removeItem(item)
+      const newAdmin = pickWeightedRandomItem(allAdmins, player.value);
+      StorageManager.unlockAdmin(newAdmin.name);
+      player.value.admins.push(newAdmin);
+      player.value.removeItem(item);
     }
     if (!(item.name === 'Gift Box' || item.name === 'Genie' || item.name === 'Mystery Box' || item.name === 'Pinata')) {
       item.apply(player.value, itemMult)
@@ -630,7 +638,7 @@ function handleProceed() {
     increaseDifficulty();
     player.value.mapProgress = 0
     if (player.value.bossesCleared > 6) {
-      player.value.hasWonGame = false;
+      //player.value.hasWonGame = false;
     }
   }
   showMap.value = true;
@@ -1284,9 +1292,10 @@ const endRound = async (roundWon: boolean) => {
     originalPieces.value = [];
     extraDifficulty.value = 0;
     console.log('player map progress: ', player.value.mapProgress)
-    if (player.value.mapProgress >= 3) {
+    console.log('player previous bosses cleared: ', player.value.bossesCleared)
+    if (player.value.mapProgress >= 2) {
       player.value.bossesCleared += 1;
-      console.log('player bosses cleared: ', player.value.bossesCleared)
+      console.log('boss defeated, new player bosses cleared: ', player.value.bossesCleared)
       if (player.value.bossesCleared === 6) {
         player.value.hasWonGame = true;
         console.log('player has won game!!!')

@@ -243,7 +243,7 @@ export class Coffee extends Item<PieceBlueprint> {
     static description = "Increases a program's moves by 3";
     static unicode = "U+2615";
     static color = "#e346f1ff";
-    static rarity = 4;
+    static rarity = 5;
     constructor(){
         super(Coffee.name, Coffee.description, Coffee.unicode, Coffee.color, 5, Coffee.rarity, 'blueprint')
     }
@@ -257,7 +257,7 @@ export class Roids extends Item<PieceBlueprint> {
     static description = "Increase a program's attack by 1, and moves by 1";
     static unicode = "U+1F489";
     static color = "#00e4b3ff";
-    static rarity = 2;
+    static rarity = 3;
     constructor(){
         super(Roids.name, Roids.description, Roids.unicode, Roids.color, 4, Roids.rarity, 'blueprint')
     }
@@ -462,7 +462,7 @@ export class Pandora extends Item<Player> {
     static description = "Grants 3 random upgrade items (must have room)";
     static unicode = "U+1F3FA";
     static color = "#e0b24fff";
-    static rarity = 3;
+    static rarity = 5;
     constructor(){
         super(Pandora.name, Pandora.description, Pandora.unicode, Pandora.color, 5, Pandora.rarity, 'player')
     }
@@ -479,7 +479,7 @@ export class Gift extends Item<Player> {
     static description = "Grants a random program (must have room)";
     static unicode = "U+1F381";
     static color = "#e9ab27ff";
-    static rarity = 3;
+    static rarity = 2;
     constructor(){
         super(Gift.name, Gift.description, Gift.unicode, Gift.color, 3, Gift.rarity, 'player')
     }
@@ -495,7 +495,7 @@ export class Genie extends Item<Player> {
   static description = "Gifts 3 random programs (must have room)";
   static unicode = "U+1F9DE";
   static color = "rgb(108, 126, 230)";
-  static rarity = 3;
+  static rarity = 4;
   constructor() {
    super(Genie.name, Genie.description, Genie.unicode, Genie.color, 5, Genie.rarity, 'player')
   }
@@ -513,7 +513,7 @@ export class Box extends Item<Player> {
     static description = "Grants a random consumable item";
     static unicode = "U+1F4E6";
     static color = "#926439ff";
-    static rarity = 3;
+    static rarity = 1;
     constructor(){
         super(Box.name, Box.description, Box.unicode, Box.color, 3, Box.rarity, 'player')
     }
@@ -717,8 +717,8 @@ class Hotline extends Item {
     static name = "Hotline";
     static description = "load a random friendly program into a node at a random position";
     static unicode = "U+1F4DE";
-    static color = "#ffb20dff";
-    static rarity = 4;
+    static color = "rgb(199, 13, 255)";
+    static rarity = 2;
     constructor(){
         super(Hotline.name, Hotline.description, Hotline.unicode, Hotline.color, 2, Hotline.rarity, 'piecesAndBoard')
         //name desc utf || maxsize moves range atk def
@@ -826,7 +826,7 @@ export class Jar extends Item {//Pokeball?
     static description = "Use on an enemy with a size of 1 and defence of 0 to add it to your inventory";
     static unicode = "U+1FAD9";
     static color = "rgb(255, 37, 84)";
-    static rarity = 5;
+    static rarity = 3;
     constructor(){
         super(Jar.name, Jar.description, Jar.unicode, Jar.color, 5, Jar.rarity, 'playerAndGame')
         //name desc utf || maxsize moves range atk def
@@ -852,9 +852,16 @@ export class Jar extends Item {//Pokeball?
     }
 }
 
+//U+1FAA8 rock
+
 //hotline buoy batteries pig 9
-export const allItems = [Blueberry, Battery, Iron, Juice, Mushroom, Pepper, Floppy, Voucher, Bandage, Extinguisher, Formula, Plunger, Roids, Teapot, Beans, Bugle, Genie, Gift, Keygen, Makeover, Melon, Box, Pandora, Megaphone, Pinata, Rations, ShootingStar, Spanner, Update2, Cake, Carrot, Coffee, Garlic, Hotline, Wand, Meat, Pie, Soap, Dupe, Hourglass, Jar, Supplement, Life, Blessing, Ginger, Update3];
+export const allItems = [Blueberry, Box, Battery, Iron, Juice, Mushroom, Pepper, Floppy, Voucher, Bandage, Extinguisher, Formula, Gift, Hotline, Plunger, Roids, Teapot, Beans, Bugle, Jar, Keygen, Makeover, Melon, Megaphone, Pinata, Rations, ShootingStar, Spanner, Update2, Cake, Carrot, Coffee, Garlic, Genie, Wand, Meat, Pandora, Pie, Soap, Dupe, Hourglass, Supplement, Life, Blessing, Ginger, Update3];
 export const upgradeItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Roids, Formula]
+
+/*Items.forEach(i => {
+    console.log('item name: ', i.name, 'rarity: ', i.rarity);
+})*/
+
 //export const activeItems = [Rations, Beans]
 
 export type ItemConstructor = new (...args: any[]) => Item<any>;
@@ -862,6 +869,7 @@ export type ItemConstructor = new (...args: any[]) => Item<any>;
 console.log('all items: ', allItems.length);
 
 //RING BUOY, U+1F6DF revive a dead program
+//lifeboat ROWBOAT, U+1F6A3
 // /SCROLL, U+1F4DC
 
 //PAGE WITH CURL, U+1F4C3
@@ -873,10 +881,6 @@ console.log('all items: ', allItems.length);
 
  // U+1F47A
 
-// / RING, U+1F48D
-
-//BOXING GLOVE, U+1F94A
-
 //RECEIPT, U+1F9FE
 
 //POSTAL HORN, U+1F4EF
@@ -884,5 +888,3 @@ console.log('all items: ', allItems.length);
 //djembe LONG DRUM, U+1FA98
 
 //BLACK HEART SUIT, U+2665
-
-//lifeboat ROWBOAT, U+1F6A3

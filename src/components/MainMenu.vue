@@ -8,7 +8,7 @@
     }>();
 
     function returnUnicode(unicode: String){
-        return  String.fromCodePoint(parseInt(unicode.replace('U+', ''), 16));
+        return  String.fromCodePoint(parseInt(unicode.replace('U+', ''), 16), 0xFE0F);
     }
 
  

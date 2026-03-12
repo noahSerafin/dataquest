@@ -116,7 +116,7 @@
             <!-- Money -->
             <div class="player-info">
                 <span class="os">
-                    {{ String.fromCodePoint(parseInt(player.osunicode.replace('U+', ''), 16)) }}
+                    {{ String.fromCodePoint(parseInt(player.osunicode.replace('U+', ''), 16), 0xFE0F) }}
                 </span>
                 <span style="text-align: left;"><strong class="text-yellow">$:</strong> {{ props.player.money }}</span>
                 <p>

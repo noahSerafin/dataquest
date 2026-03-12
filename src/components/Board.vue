@@ -581,7 +581,7 @@ function resolveMove(
       class="ghost-piece"
       :style="ghostStyle"
     >
-    {{ String.fromCodePoint(parseInt(pieceToPlace.unicode.replace("U+", ""), 16)) }}
+    {{ String.fromCodePoint(parseInt(pieceToPlace.unicode.replace("U+", ""), 16), 0xFE0F) }}
     </div>
   </div>
 </template>

@@ -618,7 +618,8 @@ async function selectLevel(newLevel: Level, difficultyMod: number, lReward: numb
   const newPieces = rehydratePieces(newLevel.pieces);
   extraDifficulty.value = difficultyMod;
   activePieces.value = processSpawnPoints(newPieces, difficultyMod);
-  originalSpawns.value = [...playerSpawns.value];
+  console.log(originalSpawns.value);
+  //originalSpawns.value = [...playerSpawns.value];
   originalPieces.value = activePieces.value.map(p => p.clone());
   //originalSpawns.value = playerSpawns.value.map(s => ({ ...s }));
   boardRef.value.clearHighlights();

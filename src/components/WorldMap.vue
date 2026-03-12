@@ -2,7 +2,7 @@
     import { computed, ref } from "vue";
     import MiniMap from "./MiniMap.vue";
     import { Admin } from "../AdminPrograms";
-    import { Item, Box, Genie, Gift, Pinata, Pandora } from "../Items";
+    import { Item, Box, Genie, Gift, Pinata, Pandora, Blessing, Voucher, upgradeItems } from "../Items";
     import { allBosses, nonStackableBosses } from "../Bosses";
     import { watch } from "vue";
     import { Player } from "../Player";
@@ -180,19 +180,19 @@
 
     function displayIcon(node: WorldNode) {
         if(node.id === currentNodeId.value){
-            return String.fromCodePoint(parseInt(props.player.osunicode.replace('U+', ''), 16));
+            return String.fromCodePoint(parseInt(props.player.osunicode.replace('U+', ''), 16), 0xFE0F);
         }
         if (node.type === 'skip' && node.skipReward) {
             return String.fromCodePoint(
-                parseInt(node.skipReward.value.unicode.replace('U+', ''), 16)
+                parseInt(node.skipReward.value.unicode.replace('U+', ''), 16), 0xFE0F
             );
         }
         switch (node.type) {
             case "start": return "⬤";
             case "shop": return "🛒";
-            case "hybrid compiler": return String.fromCodePoint(parseInt("U+1F9EC".replace('U+', ''), 16));
-            case "level": return String.fromCodePoint(parseInt(node.company.unicode.replace('U+', ''), 16));
-            case "boss": return  String.fromCodePoint(parseInt(boss.value.unicode.replace('U+', ''), 16));
+            case "hybrid compiler": return String.fromCodePoint(parseInt("U+1F9EC".replace('U+', ''), 16), 0xFE0F);
+            case "level": return String.fromCodePoint(parseInt(node.company.unicode.replace('U+', ''), 16), 0xFE0F);
+            case "boss": return  String.fromCodePoint(parseInt(boss.value.unicode.replace('U+', ''), 16), 0xFE0F);
             case "skip": return 
         }
     }
@@ -253,7 +253,7 @@
         }
         return {
             kind: "item",
-            value: pickWeightedRandomItem([Box, Gift, Genie, Pinata, Pandora], props.player),
+            value: pickWeightedRandomItem([Voucher, Box, Gift, Pinata, Pandora, Genie], props.player),
         };
     }
 
@@ -367,13 +367,13 @@
                 {{ node.company.abbr }}
             </div>
             <div>
-                {{ String.fromCodePoint(parseInt(node.company.unicode.replace('U+', ''), 16)) }}
+                {{ String.fromCodePoint(parseInt(node.company.unicode.replace('U+', ''), 16), 0xFE0F) }}
             </div>
             <div>
                 $ {{ node.reward }}
             </div>
             <div>
-                {{ String.fromCodePoint(parseInt("U+1F512".replace('U+', ''), 16)) }} : {{ node.difficultyMod + player.difficulty }}
+                {{ String.fromCodePoint(parseInt("U+1F512".replace('U+', ''), 16), 0xFE0F) }} : {{ node.difficultyMod + player.difficulty }}
             </div>
         </div>
             {{ displayIcon(node) }}

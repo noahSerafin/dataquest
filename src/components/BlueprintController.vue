@@ -93,7 +93,7 @@ defineEmits(["buy", "sell", "highlightPlacements", "close"])
     <div class="left">
       <div :class="`header ${piece.variantName ? ('variant-header v_'+piece.variantName) : ''}`" @mousedown="startDrag" @touchstart="startDrag">
         <span class="symbol">
-          {{ String.fromCodePoint(parseInt(piece.unicode.replace("U+", ""), 16)) }}
+          {{ String.fromCodePoint(parseInt(piece.unicode.replace("U+", ""), 16), 0xFE0F) }}
         </span>
         <span v-if="piece.variantName" class="variant">{{ piece.variantName }}</span>
         <span class="name">{{ piece.hybridName ? piece.hybridName : piece.name }}</span>

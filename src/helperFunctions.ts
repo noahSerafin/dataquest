@@ -131,19 +131,43 @@ export function applyVariant(piece: Piece, variant: PieceVariant) {
   piece.variantName = variant.name;
 }
 
-export function pickWeightedRandom(PieceClasses: any[], player: Player) {//clover edit
+function rollRarity(clovers:number) {
+
+  const base = [38,32,20,10,6,3];
+
+  // clover boosts higher rarities
+  const luck = 1 + clovers * 0.25;
+
+  const adjusted = base.map((chance, i) => {
+    const rarity = i + 1;
+    return chance * Math.pow(luck, rarity - 1);
+  });
+
+  const total = adjusted.reduce((a,b)=>a+b,0);
+
+  const roll = Math.random() * total;
+
+  let sum = 0;
+
+  for (let i=0;i<adjusted.length;i++) {
+    sum += adjusted[i];
+    if (roll < sum) return i+1;
+  }
+}
+
+/*export function pickWeightedRandom(PieceClasses: any[], player: Player) {//clover edit
     const weighted: any[] = [];
 
     //stacking
     const cloverCount = player.admins.filter(a => a.name === 'Clover').length;
-    const varCount = player.admins.filter(a => a.name === 'Variety Box').length;
     const cloverMultiplier = 1 + cloverCount * 0.3; // each clover +30%
+    const varCount = player.admins.filter(a => a.name === 'Variety Box').length;
     const variantMultiplier = BASE_VARIANT_CHANCE + varCount * 0.25; // each box +25%
 
     for (const PieceClass of PieceClasses) {
       const temp = new PieceClass({ x: -1, y: -1 }, "player"); 
       let weight = 7 - temp.rarity;
-      weight = Math.max(1, Math.floor(weight * cloverMultiplier));
+      weight = Math.max(1, Math.floor((7 - temp.rarity) / cloverMultiplier))
 
       for (let i = 0; i < weight; i++) {
         weighted.push(PieceClass);
@@ -156,16 +180,49 @@ export function pickWeightedRandom(PieceClasses: any[], player: Player) {//clove
       class: weighted[idx],
       variant: variant
     }
+}*/
+export function pickWeightedRandom(PieceClasses: any[], player: Player) {
+
+  const cloverCount = player.admins.filter(a => a.name === 'Clover').length;
+
+  const rarity = rollRarity(cloverCount);
+
+  const piecesOfRarity = PieceClasses.filter(PieceClass => {
+    const temp = new PieceClass({x:-1,y:-1}, "player");
+    return temp.rarity === rarity;
+  });
+
+  const selectedClass =
+    piecesOfRarity[Math.floor(Math.random() * piecesOfRarity.length)];
+
+  const varCount = player.admins.filter(a => a.name === 'Variety Box').length;
+  const variantMultiplier = BASE_VARIANT_CHANCE + varCount * 0.25; // each box +25%    const variant = rollVariant(variantMultiplier, 6);
+  const variant = rollVariant(variantMultiplier, 6);
+
+  return {
+    class: selectedClass,
+    variant: variant
+  }
 }
 
 export function pickWeightedRandomItem(itemClasses: any[], player: Player, costReduction?: number) {//move to items.ts?
+
+    const cloverCount = player.admins.filter(a => a.name === 'Clover').length;
+    const rarity = rollRarity(cloverCount);
+
+    const itemsOfRarity = itemClasses.filter(ItemClass => {
+      const temp = new ItemClass({x:-1,y:-1}, "player");
+      return temp.rarity === rarity;//add a gaurd for no result for lists with missing rarities
+    });
+
+    const SelectedClass = itemsOfRarity[Math.floor(Math.random() * itemsOfRarity.length)];
+    if(costReduction){
+      SelectedClass.cost = Math.max(0, (SelectedClass.cost - costReduction));
+    }
+
+    return new SelectedClass(); // RETURN INSTANCE
+  /*
     const weighted: any[] = [];
-
-    //non stacking
-    //const hasClover = playerHasAdmin('Lucky Clover');
-    //const cloverMultiplier = hasClover ? 1.5 : 1;
-
-    //stacking
     const cloverCount = player.admins.filter(a => a.name === 'Clover').length;
     const cloverMultiplier = 1 + cloverCount * 0.3; // each clover +30%
 
@@ -184,7 +241,7 @@ export function pickWeightedRandomItem(itemClasses: any[], player: Player, costR
     const PickedClass = weighted[idx];
     PickedClass.cost -= costReduction ? costReduction : 0;
 
-    return new PickedClass();  // RETURN INSTANCE
+    return new PickedClass();  // RETURN INSTANCE*/
   }
 
 export function addProgramsUntilFull(//not working, "PieceClass is not a constructor"

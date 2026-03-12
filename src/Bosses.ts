@@ -19,12 +19,12 @@ targetType: 'blueprint' | 'piece' | 'shopItem' | 'player' | 'gameState'  | 'play
 
 //lower difficulty of +1 bosses, more +2 bosses
 //have boss maximums before endless mode
-class NorthWind extends Admin {//🌬️
+class NorthWind extends Admin {//🌬️//dash U+1F4A8
     static rarity = 1;
   static name = "North Wind";
   static description = "All player pieces are moved down 1 space after every turn";
-  static unicode = "U+1F38F";//U+1F4A8 dash cloud//wind face "U+1F32C";
-  static color = "#969c9cff";
+  static unicode = "U+1F32C";//"U+1F38F";//carp windsock//U+1F4A8 dash cloud//wind face "U+1F32C";
+  static color = "rgb(207, 238, 238)";
   constructor() {
     super(NorthWind.name, NorthWind.description, NorthWind.unicode, NorthWind.color, 5, NorthWind.rarity, 'piecesAndBoard', 'onTurnEnd')
   }
@@ -618,7 +618,7 @@ class REDACTED extends Admin {
 class Fog extends Admin {//😶‍🌫️🌫️
     static name = "Fog of War";
     static description = "All tiles outside your programs range are obscured";//handle in app
-    static unicode = "U+1F301";//cloud U+2601";
+    static unicode =  "U+2601"; //"U+1F301";//fog //"U+1FAEF";//fight cloud
     static color = "#575757ff";
     static rarity = 6;
     constructor() {
@@ -670,6 +670,31 @@ class Biohazard extends Admin {
     }
 }
 
+/*class Nofun extends Admin {
+    static name = "No Fun Allowed";
+    static description = "Disables 1 random admin each turn";
+    static unicode = "U+1F6D1";
+    static color = "#00c41aff";
+    static rarity = 4;
+    constructor() {
+        super(Nofun.name, Nofun.description, Nofun.unicode, Nofun.color, 6, Nofun.rarity, 'player', 'onTurnEnd')
+    }
+    async apply({ player }: { player: Player }) {
+        for(const admin of player.admins){
+            admin.disabled = false;
+        }
+        player.admins[Math.floor(Math.random()*player.admins.length)].disabled = true;
+    }
+    
+    onRoundEnd() {//no access to player
+        for(const admin of player.admins){
+            admin.disabled = false;
+        }
+    }
+}*/
+
+//OCTAGONAL SIGN, U+1F6D1
+//NO ENTRY, U+26D4
 //FACE WITH LOOK OF TRIUMPH, U+1F624
 //EXPRESSIONLESS FACE, U+1F611 sleepy
 //1 admin disabled after each turn

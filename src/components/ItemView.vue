@@ -41,7 +41,7 @@ function rarityStyle(rarity: number) {
 
 const unicodeSymbol = computed(() =>
   props.item.unicode
-    ? String.fromCodePoint(parseInt(props.item.unicode.replace('U+', ''), 16))
+    ? String.fromCodePoint(parseInt(props.item.unicode.replace('U+', ''), 16), 0xFE0F)
     : ''
 )
   

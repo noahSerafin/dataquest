@@ -48,7 +48,7 @@ export abstract class Admin<
 }
 
 class Meteor extends Admin {
-  static name = "Meteor Shower";
+  static name = "Meteor";
   static description = "Deals 2 damage to every piece at the start of a round";
   static unicode = "U+2604";//"U+1F71A"
   static color = "#000000ff";
@@ -501,9 +501,9 @@ class Joker extends Admin {
 }
 
 export class Chemistry extends Admin {//test
-  static name = "Chemistry";
+  static name = "Chemistry"; //bon appetite U+1F37D
   static description = "Items that affect stats effects are doubled (+1 item effect mult)";
-  static unicode = "U+232C";//"U+2697";//BENZENE RING, U+232C
+  static unicode = "U+232C";//"U+2697";//BENZENE RING, U+232C  
   static color = "#4eb95cff";
   static rarity = 5;
   constructor() {
@@ -766,7 +766,7 @@ class Slots extends Admin {
 class Newspaper extends Admin {
   static name = "Millwall Brick";
   static description = "+1 damage for programs with a range of 1 on load";
-  static unicode = "U+1F4F0";//"U+1F5DE";
+  static unicode = " U+1F5DE";//U+1F4F0";
   static color = "#eb1919ff";
   static rarity = 2;
   constructor() {
@@ -782,7 +782,7 @@ class Newspaper extends Admin {
 
 class Crown extends Admin {
   static name = "Tithe";
-  static description = "Gain $5 every round";
+  static description = "Gain $5 every round";// U+1FA8E
   static unicode = " U+1F451";
   static color = "rgb(119, 32, 122)";
   static rarity = 3;
@@ -1001,7 +1001,7 @@ class Candle extends Admin {
   static name = "Candle";
   static description = "+1 range for all your programs on load";
   static unicode = "U+1F56F";
-  static color = "rgb(211, 124, 10)";
+  static color = "rgb(255, 168, 55)";
   static rarity = 1;
   constructor() {
     super(Candle.name, Candle.description, Candle.unicode, Candle.color, 4, Candle.rarity, 'gameState', 'onPlacement')
@@ -1111,15 +1111,16 @@ class Microscope extends Admin {
   static name = "Microbiology";
   static description = "Programs with a size of 1 get +1 defence at the end of your turn";//+2 temp defence on end of turn? 
   static unicode = "U+1F52C";
-  static color = "#ff5555";
+  static color = "#c6fcf3";
   static rarity = 2;
   constructor() {
     super(Microscope.name, Microscope.description, Microscope.unicode, Microscope.color, 5, Microscope.rarity, 'gameState', 'onTurnEnd')
   }
-  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
-    const idx = activePieces.findIndex(p => p.id === id);
-    if(activePieces[idx].tiles.length === 1){
-      activePieces[idx].addTempModifier({defence: 1})
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    for(const p of activePieces){
+      if(p.tiles.length === 1){
+        p.addTempModifier({defence: 1})
+      }
     }
   }
 }
@@ -1510,7 +1511,7 @@ class Ace extends Admin {
   static name = "Ace in the hole";
   static description = "Your last placed program gets +1 to all stats";
   static unicode = "U+2660";
-  static color = "#000000ff";
+  static color = "rgb(255, 255, 255)";
   static rarity = 3;
   constructor() {
     super(Ace.name, Ace.description, Ace.unicode, Ace.color, 7, Ace.rarity, 'playerAndGame', 'onPlacement')
@@ -1554,7 +1555,7 @@ class Pazzaz extends Admin {
   static name = "Pazzaz";
   static description = "Every $10 increases your program's movement by 1 on load";
   static unicode = "U+1F57A";
-  static color = "#ecda34d3";
+  static color = "#f943ff";
   static rarity = 4;
   constructor() {
     super(Pazzaz.name, Pazzaz.description, Pazzaz.unicode, Pazzaz.color, 7, Pazzaz.rarity, 'playerAndGame', 'onPlacement')
@@ -1683,6 +1684,21 @@ class Loot extends Admin {
     player.bonusReward += 4;
   }
 }
+
+/*
+class Booty extends Admin {
+  static name = "Booty";
+  static description = "Earn an extra $7 at the end of a round";
+  static unicode = "U+1FA8E";
+  static color = "rgb(85, 193, 255)";
+  static rarity = 2;
+  constructor() {
+    super(Booty.name, Booty.description, Booty.unicode, Booty.color, 7, Booty.rarity, 'player', 'onRoundEnd')
+  }
+  async apply({ player }: { player: Player }) {
+    player.bonusReward += 7;
+  }
+}*/
 
 class HedgeFund extends Admin {
   static name = "Hedge Fund";
@@ -2365,14 +2381,14 @@ class Smoker extends Admin {
   }
 }
 
-class Medic extends Admin {
-  static name = "Full Bodied";//Field Medic";
+class Wine extends Admin {
+  static name = "Full Bodied";//Field Wine";
   static description = "+1 max size, +1 defence";
-  static unicode = "U+1F377"; //"U+1FA7A";// medic, + max Size/defence?
+  static unicode = "U+1F377"; //"U+1FA7A";// Wine, + max Size/defence?
   static color = "rgb(255, 255, 255)";
   static rarity = 3;
   constructor() {
-    super(Medic.name, Medic.description, Medic.unicode, Medic.color, 5, Medic.rarity, 'gameState', 'onPlacement')
+    super(Wine.name, Wine.description, Wine.unicode, Wine.color, 5, Wine.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
@@ -2903,7 +2919,7 @@ export class Clippy extends Admin {
   //handle in player
 }
 
-export const allAdmins = [Bank, Bucket, Candle, Cheese, Smoker, Compass, CreditCard, Crystal, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Seed, Slots, Sprinkler, Tempura, Sneakers, Chime, Abacus, Aesculapius, Appraisal, Balloon, Briefcase, Bubble, Cactus, Coin, Purse, Convenience, FireEngine, Heart, Hermes, Joker, Loot, Clover, Microscope, Newspaper, Pi, Pickup, Putter, Relay, Scarf, Trolley, Stiletto, Bowling, Tracker, Violin, Vitamins, AdminMap, Barber, Ace, AirSupport, Bone, Blood, Bouquet, Camp, Luggage, Communism, Department, Triangle, FakeID, Medic, HedgeFund, Dice, Jammer, Roger, Juggler, Ladder, Puzzle, Razor, Sled, Rune, Shades, Stonks, Telescope, Crown, Toolbox, Ambulance, Backdoor, BionicArm, BionicLeg, Crash, Broom, DartBoard, Dove, Evergreen, Eye, Disco, Discount, Fountain, Fuel, Spoon, Liberty, Lightbulb, Lotus, Monarch, Ollie, Palette, Pazzaz, PetriDish, Prayer, RollerBlades, Wheel, Pants, Bipolar, Variety, Volatile, Artic, BlackBelt, Lungs, Chemistry, Chivalry, Toilet, Copier, Diamond, Feather, Hamsa, Skyscraper, Howzat, Inheritance, Cherries, Brain, Meteor, Onion, PeaPod, Teddy, Pong, Bell, Ice, Ballet, Umbrella, Dharma, Bath, Cards, Minerva, Needle, Osiris, Ring, School, Taoism];
+export const allAdmins = [Bank, Bucket, Candle, Cheese, Smoker, Compass, CreditCard, Crystal, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Seed, Slots, Sprinkler, Tempura, Sneakers, Chime, Abacus, Aesculapius, Appraisal, Balloon, Briefcase, Bubble, Cactus, Coin, Purse, Convenience, FireEngine, Heart, Hermes, Joker, Loot, Clover, Microscope, Newspaper, Pickup, Putter, Relay, Scarf, Trolley, Stiletto, Bowling, Tracker, Violin, Vitamins, AdminMap, Barber, Ace, AirSupport, Bone, Blood, Bouquet, Camp, Luggage, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Dice, Jammer, Roger, Juggler, Ladder, Puzzle, Razor, Sled, Rune, Shades, Stonks, Telescope, Crown, Toolbox, Ambulance, Backdoor, BionicArm, BionicLeg, Crash, Broom, DartBoard, Dove, Evergreen, Eye, Discount, Fountain, Fuel, Spoon, Liberty, Lightbulb, Lotus, Monarch, Ollie, Palette, Pazzaz, PetriDish, Prayer, RollerBlades, Wheel, Pants, Bipolar, Variety, Volatile, Artic, BlackBelt, Lungs, Chemistry, Chivalry, Toilet, Copier, Diamond, Feather, Hamsa, Skyscraper, Howzat, Inheritance, Cherries, Brain, Meteor, Onion, PeaPod, Teddy, Pong, Bell, Ice, Ballet, Umbrella, Dharma, Bath, Cards, Disco, Minerva, Needle, Pi, Osiris, Ring, School, Taoism];
 console.log('admins length: ', allAdmins.length)
 let adminLogs = {
   rarity1: 0,
@@ -2939,6 +2955,11 @@ console.log("Admins of rarity 5: ", adminLogs.rarity5)
 console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //make all immunity admins <= uncommon?
 
+
+//U+1F5BC Framed picture
+//U+26F0 mountain
+//landslide U+1F6D8
+
 //GOAT, U+1F410 charge line piece, or GOAT admin
 
 //splash damage- mult to group targets??
@@ -2954,6 +2975,7 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //MEDIUM WHITE CIRCLE, U+26AA Pearl
 //ROLLER COASTER, U+1F3A2
 //TOOTHBRUSH, U+1FAA5
+//TOOTH, U+1F9B7
 //HINDU TEMPLE, U+1F6D5 polytheism
 //KAABA, U+1F54B move in a circle
 //WATER WAVE, U+1F30A surf

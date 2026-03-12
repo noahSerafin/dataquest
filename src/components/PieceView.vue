@@ -50,12 +50,12 @@ function cycleAction(){
 //computed
 const unicodeSymbol = computed(() =>
   props.piece
-    ? String.fromCodePoint(parseInt(props.piece.unicode.replace('U+', ''), 16))
+    ? String.fromCodePoint(parseInt(props.piece.unicode.replace('U+', ''), 16), 0xFE0F)
     : ''
 )
 const ExtraUnicodeSymbol = computed(() =>
   props.piece.extraUnicode
-    ? String.fromCodePoint(parseInt(props.piece.extraUnicode.replace('U+', ''), 16))
+    ? String.fromCodePoint(parseInt(props.piece.extraUnicode.replace('U+', ''), 16), 0xFE0F)
     : ''
 )
 

@@ -69,10 +69,33 @@ function decideEnemyIntent(
       return {type: 'attack', target: target.piece}
     }
   }
+
   //no immediate attackable target, expose if possible
   if(enemy.actions > 0 && enemy.hasExposingSpecial && enemy.targetType === 'group'){//and group
     return {type: 'special', target: (findAnyPiecesInRange(enemy, activePieces))}
   }
+
+  //can we help another enemy?
+  const friendlyTarget = findWeakestPlayerInRange(enemy, enemyPieces);
+  if(friendlyTarget && enemy.hasFriendlySpecial && enemy.actions > 0){
+    if(enemy.targetType === 'group'){
+      return {type: 'special', target: (findAnyPiecesInRange(enemy, activePieces))}
+    } else {//piece
+      return {type: 'special', target: friendlyTarget.piece}
+    }
+  }
+
+  //is there a frond (friendly trap) to hide in?
+  const friendlyTrap = enemyPieces.find(p => {
+    p.name === 'Frond';// && p.hasFriendlySpecial && p.targetType === 'trapPiece';
+  })
+  if(friendlyTrap){
+    const pathToFrond = findShortestPath(enemy.headPosition, friendlyTrap.headPosition, tileSet, activePieces)
+    if(pathToFrond){
+      return { type: 'move', path: pathToFrond };
+    }
+  }
+
   //otherwise we look for another target
   let nearest = (enemy.specialName && !enemy.hasFriendlySpecial && enemy.targetType !== 'trapPiece') ? findNearestPieceCoordinate(enemy, playerPieces) : findNearestAttackableCoordinate(enemy, playerPieces);
 
@@ -82,7 +105,7 @@ function decideEnemyIntent(
     const path = findShortestPath(enemy.headPosition, nearest, tileSet, activePieces);//don't put this inside a loop
     if (path && path.length > 1) {//should really never get to path.length = 1, why is there no target if we are next to the goal of path?
       console.log('found a path to the player')
-      return { type: 'move', path };//move toward a target
+      return { type: 'move', path: path };//move toward a target
     }
   }
 
@@ -337,7 +360,7 @@ function findWeakestPlayerInRange(
   const candidates: { piece: Piece; place: Coordinate }[] = [];
 
   for (const player of playerPieces) {
-    if (player.statuses.hidden) continue;
+    if (player.statuses.hidden) continue;//will even ignore friendlies
 
     for (const tile of player.tiles) {
       const dist =

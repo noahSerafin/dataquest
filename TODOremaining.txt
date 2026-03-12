@@ -1,12 +1,13 @@
 HOTKEYS
 GAME / BUGS
 player hasWonGame - implement properly
+variants not reloading
+variant should overide base piece color, (and tile colour???)
 possible to get stuck on cave and gauntlet if sling/bee and knife spawn
 nerf rosebud - pieces can't stay exposed after a spcial?
 slots broken, and only applies before a shop, not on the same shop you buy it in
 Level loaded twice with same piece causes bug where it cannot be attacked is not in activepieces to be targeted - test
 visualise: retaliation, dmg + dmg mult, admin actions and counts
-variant should overide base piece color, (and tile colour???)
 pandora not giving 1 at full inventory
 checkforroundend after takedamage
 //move itemmult to player?

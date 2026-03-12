@@ -313,14 +313,14 @@ const boardHeight = computed(() => tileSize.value * height.value)
       pieceToExtend?: string 
       -->
           <button @click="setDropper({mode: 'tile'})">X</button>
-          <button @click="setDropper({mode: 'extend'})">{{ String.fromCodePoint(parseInt("U+25FC".replace('U+', ''), 16)) }}extend</button>
+          <button @click="setDropper({mode: 'extend'})">{{ String.fromCodePoint(parseInt("U+25FC".replace('U+', ''), 16), 0xFE0F) }}extend</button>
           <button
             v-for="p in pieceClasses"
             :key="p.name"
             class="piece-button for-player"
             :id="p.name+'-dropper-btn'"
             @click="setDropper({mode: 'piece', pieceName: p.name, })"          >
-            {{ String.fromCodePoint(parseInt(p.unicode.replace('U+', ''), 16)) }} {{ p.name }}
+            {{ String.fromCodePoint(parseInt(p.unicode.replace('U+', ''), 16), 0xFE0F) }} {{ p.name }}
           </button>
         </div>
     </div>

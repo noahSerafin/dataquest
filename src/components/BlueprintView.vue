@@ -26,12 +26,12 @@ const emit = defineEmits<{
 //computed
 const unicodeSymbol = computed(() =>
   props.blueprint
-    ? String.fromCodePoint(parseInt(props.blueprint.unicode.replace('U+', ''), 16))
+    ? String.fromCodePoint(parseInt(props.blueprint.unicode.replace('U+', ''), 16), 0xFE0F)
     : ''
 )
 const ExtraUnicodeSymbol = computed(() =>
   props.blueprint.extraUnicode
-    ? String.fromCodePoint(parseInt(props.blueprint.extraUnicode.replace('U+', ''), 16))
+    ? String.fromCodePoint(parseInt(props.blueprint.extraUnicode.replace('U+', ''), 16), 0xFE0F)
     : ''
 )
 

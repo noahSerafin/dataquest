@@ -39,6 +39,7 @@ function decideEnemyIntent(
              const key = `${tile.x},${tile.y}`;
             if (optionSet.has(key)) {
               newTarget = { piece: player, place: tile };
+              //most line pieces can attack, so add a check for friendlies including self between player and target, and don't return the special if it damages another enemy
               break;
             }
           }
@@ -64,7 +65,7 @@ function decideEnemyIntent(
       console.log('no special moves');
       //if target is not attackable, is there one that is?
     }
-    if(enemy.canAttack && enemy.getStat('attack') > 0 && !enemy.hasFriendlySpecial){//no special to use, can we attack? //&&target.piece.getStat('defence') < enemy.getStat('attack')
+    if(enemy.canAttack && enemy.getStat('attack') > 0){//no special to use, can we attack? //&&target.piece.getStat('defence') < enemy.getStat('attack')
       console.log('attacking target');
       return {type: 'attack', target: target.piece}
     }
@@ -77,10 +78,12 @@ function decideEnemyIntent(
 
   //can we help another enemy?
   const friendlyTarget = findWeakestPlayerInRange(enemy, enemyPieces);
-  if(friendlyTarget && enemy.hasFriendlySpecial && enemy.actions > 0){
+  if(friendlyTarget && (enemy.hasFriendlySpecial || enemy.hasNeutralSpecial) && enemy.actions > 0){
     if(enemy.targetType === 'group'){
       return {type: 'special', target: (findAnyPiecesInRange(enemy, activePieces))}
-    } else {//piece
+    } else if(enemy.targetType == 'placeAndPieces' && specialAttempts < 1){//rectify attempts later
+      return { type: 'special', target: {target: friendlyTarget.place, activePieces: activePieces}}
+    } else if(enemy.targetType === 'piece'){//piece
       return {type: 'special', target: friendlyTarget.piece}
     }
   }
@@ -90,9 +93,10 @@ function decideEnemyIntent(
     p.name === 'Frond';// && p.hasFriendlySpecial && p.targetType === 'trapPiece';
   })
   if(friendlyTrap){
-    const pathToFrond = findShortestPath(enemy.headPosition, friendlyTrap.headPosition, tileSet, activePieces)
+    const pathToFrond = findShortestPath(enemy.headPosition, friendlyTrap.headPosition, tileSet, activePieces); //won't include frond's position
     if(pathToFrond){
-      return { type: 'move', path: pathToFrond };
+    const pathToFollow = [...pathToFrond, friendlyTrap.headPosition]
+      return { type: 'move', path: pathToFollow };//find
     }
   }
 
@@ -361,6 +365,7 @@ function findWeakestPlayerInRange(
 
   for (const player of playerPieces) {
     if (player.statuses.hidden) continue;//will even ignore friendlies
+    if (player.id === enemy.id) continue;//don't target self
 
     for (const tile of player.tiles) {
       const dist =

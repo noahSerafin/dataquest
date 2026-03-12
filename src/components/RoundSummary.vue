@@ -76,6 +76,11 @@ import { computed } from 'vue';
                         ${{ Math.floor(3/player.difficulty) }}
                     </span>
                 </span>
+                <span v-if="player.hasAdmin('Punching')">+ Punching
+                    <span class="text-yellow">
+                        $5
+                    </span>
+                </span>
                 <span v-if="player.hasAdmin('Loot')">+ Loot 
                     <span class="text-yellow">
                         $4

@@ -666,7 +666,7 @@
         top: -30px;
     }
     .boss-info{
-        height: 110px;
+        height: fit-content;
         top: -35px;
         left: 175%;
     }

@@ -926,7 +926,7 @@ async function placePieceOnBoardAt(coord: Coordinate) {
   lastTurnPieces.value = activePieces.value.map(p => p.clone());
 
   //pass admin modifiers to the piece
-  //PieceInstance.movesRemaining = PieceInstance.moves;
+  PieceInstance.movesRemaining = PieceInstance.getStat('moves');
   activePieces.value.push(PieceInstance);
 
   // Mark blueprint as placed so it greys in inventory

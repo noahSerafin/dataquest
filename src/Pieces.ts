@@ -28,6 +28,7 @@ export abstract class Piece {
   willRetaliate: boolean = false;
   isTakingDamage: boolean = false;
   hasFriendlySpecial: boolean = false;//use in enemyAI
+  hasNeutralSpecial: boolean = false;//use in enemyAI
   hasExposingSpecial: boolean = false;//use in enemyAI
   redacted: boolean = false;//for boss
   isBusy: boolean = false;//for AI
@@ -538,7 +539,8 @@ class Chicken extends Piece {
   }
   async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
     const newEgg = new Egg(target, this.team, this.removeCallback, crypto.randomUUID());
-    newEgg.tiles.push(this.headPosition);
+    newEgg.actions = 0;
+    newEgg.movesRemaining = 0;
     activePieces.push(newEgg);
     this.actions --
   }
@@ -551,7 +553,7 @@ class Chick extends Piece {
   static color = "rgb(243, 242, 155)";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Chick.name, Chick.description, Chick.unicode, 3, 2, 1, 0, 0, Chick.color, headPosition, [headPosition], team, Chick.rarity, removeCallback, id)
+    super(Chick.name, Chick.description, Chick.unicode, 2, 1, 1, 0, 0, Chick.color, headPosition, [headPosition], team, Chick.rarity, removeCallback, id)
     this.specialName = 'Mature';
     this.targetType = 'space';
   }
@@ -559,6 +561,8 @@ class Chick extends Piece {
     if(this.tiles.length >= this.maxSize){
       const newPoultry = (Math.random() < 0.5) ? new Chicken(target, this.team, this.removeCallback, crypto.randomUUID()) : new Rooster(target, this.team, this.removeCallback, crypto.randomUUID());
       newPoultry.tiles.push(this.headPosition);
+      newPoultry.actions = 0;
+      newPoultry.movesRemaining = 0;
       activePieces.push(newPoultry);
       this.removeCallback?.(this);
     }
@@ -573,13 +577,14 @@ class Egg extends Piece {
   static color = "rgb(240, 232, 216)";
   static rarity = 1;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Egg.name, Egg.description, Egg.unicode, 0, 0, 1, 0, 1, Egg.color, headPosition, [headPosition], team, Egg.rarity, removeCallback, id)
+    super(Egg.name, Egg.description, Egg.unicode, 1, 0, 1, 0, 1, Egg.color, headPosition, [headPosition], team, Egg.rarity, removeCallback, id)
     this.specialName = 'Hatch';
     this.targetType = 'space';
   }
   async special({target: _target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
     const newChick = new Chick(this.headPosition, this.team, this.removeCallback, crypto.randomUUID())//removecallback might be wrong here
-    newChick.tiles.push(this.headPosition);
+    newChick.actions = 0;
+    newChick.movesRemaining = 0;
     activePieces.push(newChick);
     this.removeCallback?.(this);
     this.actions --
@@ -1287,7 +1292,7 @@ class Vice extends Piece {
   static color = "#f5d58d";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Vice.name, Vice.description, Vice.unicode, 1, 2, 1, 1, 1, Vice.color, headPosition, [headPosition], team, Vice.rarity, removeCallback, id)
+   super(Vice.name, Vice.description, Vice.unicode, 2, 2, 1, 1, 1, Vice.color, headPosition, [headPosition], team, Vice.rarity, removeCallback, id)
     this.targetType = 'piece'
     this.specialName = 'Freeze'
   }
@@ -1530,9 +1535,9 @@ class Highwayman extends Piece {//not working
   async special({piece, player} : {piece: Piece, player: Player}):Promise<void>{
     if(!this.ids.includes(piece.id)){
       //await piece.takeDamage(this.getStat('attack'))
-      if(piece.team === 'enemy' && this.team === 'player'){
+      if(piece.team === 'enemy'){
         player.money += piece.rarity;
-      } else if(piece.team === 'player' && this.team === 'enemy'){
+      } else if(piece.team === 'player'){
         player.money -= piece.rarity;
       }
       this.ids.push(piece.id)
@@ -1562,9 +1567,9 @@ class Tengu extends Piece {//not working
         piece.statuses.slowed = true; //confused = true;
       }
       //await piece.takeDamage(this.getStat('attack'))
-      if(piece.team === 'enemy' && this.team === 'player'){
+      if(piece.team === 'enemy'){
         player.money += piece.rarity;
-      } else if(piece.team === 'player' && this.team === 'enemy'){
+      } else if(piece.team === 'player'){
         player.money -= piece.rarity;
       }
       this.ids.push(piece.id)
@@ -1820,21 +1825,23 @@ class Flute extends Piece {//not working
 //RABBIT, U+1F407 high movement 1 atk 1 maxsize, special make more rabbits
 class Rabbit extends Piece {//not working
   static name = "Rabbit";
-  static description = "A fast program that can create more rabbits";
+  static description = "A fast program that can create more rabbits when at it's max size";
   static unicode = "U+1F407";
   static color = "rgb(47, 179, 106)";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Rabbit.name, Rabbit.description, Rabbit.unicode, 1, 4, 1, 1, 0, Rabbit.color, headPosition, [headPosition], team, Rabbit.rarity, removeCallback, id)
+   super(Rabbit.name, Rabbit.description, Rabbit.unicode, 2, 4, 1, 1, 0, Rabbit.color, headPosition, [headPosition], team, Rabbit.rarity, removeCallback, id)
    this.specialName='Breed'
    this.targetType='space'
    this.canAttack=false;
   }
   async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
-    const newRabbit = new Rabbit(target, this.team, this.removeCallback, crypto.randomUUID());
-    newRabbit.actions = 0;
-    newRabbit.movesRemaining = 0;
-    activePieces.push(newRabbit);
+    if(this.tiles.length >= this.getStat('maxSize')){
+      const newRabbit = new Rabbit(target, this.team, this.removeCallback, crypto.randomUUID());
+      newRabbit.actions = 0;
+      newRabbit.movesRemaining = 0;
+      activePieces.push(newRabbit);
+    }
     this.actions--
   }
 }
@@ -1922,7 +1929,7 @@ class Dragon extends Piece {//line?
   static color = "#5feb76ff";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Dragon.name, Dragon.description, Dragon.unicode, 6, 2, 2, 3, 2, Dragon.color, headPosition, [headPosition], team, Dragon.rarity, removeCallback, id)
+   super(Dragon.name, Dragon.description, Dragon.unicode, 6, 2, 2, 4, 2, Dragon.color, headPosition, [headPosition], team, Dragon.rarity, removeCallback, id)
    this.specialName = 'Fire Breath';
    this.targetType = 'group'
    this.immunities.burning = true;
@@ -2034,20 +2041,19 @@ class Shark extends Piece {
 
 class Greatshield extends Piece {//testt
   static name = "Greatshield";
-  static description = "A slow but highly defensive program, can share its defence temporarily with all firendlies in range";
+  static description = "A slow but highly defensive program, can share its defence temporarily with all friendlies in range";
   static unicode = "U+26C9";
   static color = "rgba(0, 82, 85, 1)";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Greatshield.name, Greatshield.description, Greatshield.unicode, 5, 2, 2, 3, 5, Greatshield.color, headPosition, [headPosition], team, Greatshield.rarity, removeCallback, id)
     this.specialName = 'Testudo';
-    this.canAttack = false;
     this.hasFriendlySpecial = true;
     this.targetType = 'group';
   }
   async special(targets: Piece[]):Promise<void>{
     for (const t of targets) {
-      if(t.team === this.team){ 
+      if(t.team === this.team && t.id !== this.id){//don't apply to self
         t.addTempModifier({defence: (this.getStat('defence'))})
       }
     }
@@ -2162,8 +2168,8 @@ class Doctor extends Piece {
 class Medic extends Piece {
   static name = "Field Medic";
   static description = "Can remove harmful statuses (except exposed) from friendlies.";
-  static unicode = "U+1FA7A";
-  static color = "rgb(13, 255, 223)";
+  static unicode = "U+26D1";
+  static color = "rgb(111, 247, 228)";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Medic.name, Medic.description, Medic.unicode, 3, 2, 2, 2, 1, 2, Medic.color, headPosition, [headPosition], team, Medic.rarity, removeCallback, id)
@@ -2747,9 +2753,9 @@ class Stopwatch extends Piece {//not passive
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Stopwatch.name, Stopwatch.description, Stopwatch.unicode, 4, 2, 1, 0, 0, Stopwatch.color, headPosition, [headPosition], team, Stopwatch.rarity, removeCallback, id)
-    this.targetType = 'piece'
-    this.specialName = 'Time Out'
-    this.hasFriendlySpecial = true;
+    this.targetType = 'piece';
+    this.specialName = 'Time Out';
+    this.hasNeutralSpecial = true;
   }
   async special(targetPiece: Piece):Promise<void>{
     if(targetPiece.team === this.team){
@@ -2789,12 +2795,12 @@ class Sol extends Piece {//not passive
 
 class Vampire extends Piece {
   static name = "Dracula";
-  static description = "Steals tiles of other programs, increasing its own max size, attack, and moves";
+  static description = "Removes tiles of other programs, increasing its own max size, attack, moves remaining, and providing defence equal to the target's for 1 turn";
   static unicode = "U+1F9DB";
   static color = "#000000ff";
   static rarity = 6;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Vampire.name, Vampire.description, Vampire.unicode, 4, 3, 1, 0, 1, Vampire.color, headPosition, [headPosition], team, Vampire.rarity, removeCallback, id)
+   super(Vampire.name, Vampire.description, Vampire.unicode, 4, 3, 1, 3, 1, Vampire.color, headPosition, [headPosition], team, Vampire.rarity, removeCallback, id)
    this.targetType = 'pieceAndPlace'
    this.specialName = 'Siphon'
   }
@@ -2807,10 +2813,11 @@ class Vampire extends Piece {
     // --- 3. Remove that tile from the piece ---
     if(piece.id === this.id) return;
     piece.tiles.splice(tileIndex, 1);
-    //this.maxSize += 1;
-    this.attack += 1;
-    this.moves += 1;
-    this.tiles.push(target);
+    this.addModifier({maxSize: 1});
+    this.addModifier({attack: 1});
+    this.addTempModifier({defence: piece.getStat('defence')})
+    this.movesRemaining += 1;
+    //this.tiles.push(target);
     this.actions --
   }
 }
@@ -3192,12 +3199,22 @@ class Vulture extends Piece {
 
 class Rex extends Piece {
   static name = "T-Rex";
-  static description = "A tough, large program with high attack";
+  static description = "A tough, large program with high attack, special attack deals double damage on pieces that have just moved.";
   static unicode = "U+1F996";
   static color = "#1e4419ff";
   static rarity = 6;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Rex.name, Rex.description, Rex.unicode, 5, 3, 1, 5, 3, Rex.color, headPosition, [headPosition], team, Rex.rarity, removeCallback, id)
+   super(Rex.name, Rex.description, Rex.unicode, 6, 3, 2, 5, 3, Rex.color, headPosition, [headPosition], team, Rex.rarity, removeCallback, id)
+    this.specialName = 'I see you'
+    this.targetType = 'piece';
+  }
+  async special(targetPiece: Piece):Promise<void>{
+    if(targetPiece.movesRemaining < targetPiece.getStat('moves')){
+      await targetPiece.takeDamage(this.getStat('attack') * 2);
+    } else {
+      await targetPiece.takeDamage(this.getStat('attack'));
+    }
+    this.actions--
   }
 }
 
@@ -3583,7 +3600,7 @@ class Alien extends Piece {
 class Lightning extends Piece {
   static name = "Charger";
   static description = "A program that can give an extra action to another";
-  static unicode = "U+26A1";
+  static unicode = "U+26A1";// ELECTRIC PLUG, U+1F50C
   static color = "rgb(44, 125, 255)";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
@@ -3716,7 +3733,7 @@ class Bear extends Piece {
   static color = "rgb(1, 101, 8)";
   static rarity = 6;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Bear.name, Bear.description, Bear.unicode, 5, 1, 2, 7, 4, Bear.color, headPosition, [headPosition], team, Bear.rarity, removeCallback, id)
+   super(Bear.name, Bear.description, Bear.unicode, 5, 1, 2, 7, 3, Bear.color, headPosition, [headPosition], team, Bear.rarity, removeCallback, id)
    this.specialName = 'Pounce';
    //this.targetType = 'piece';
     this.targetType = 'line';
@@ -3901,16 +3918,15 @@ export class Frond extends Piece {
 
 class Coat extends Piece {
   static name = "Turncoat";
-  static description = "A program that will flip the team of whatever passes over it, removing itself.";
+  static description = "A hidden trap program that will flip the team of whatever passes over it, removing itself.";
   static unicode = "U+1F9E5";
   static color = "rgb(0, 0, 0)";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Coat.name, Coat.description, Coat.unicode, 1, 1, 0, 0, 0, Coat.color, headPosition, [headPosition], team, Frond.rarity, removeCallback, id)
+   super(Coat.name, Coat.description, Coat.unicode, 1, 1, 0, 0, 0, Coat.color, headPosition, [headPosition], team, Coat.rarity, removeCallback, id)
    this.targetType = 'trapPiece';
    this.statuses.hidden = true;
    this.statuses.negative = true;
-   this.hasFriendlySpecial = true;
   }
   async special(target: Piece): Promise<void> {
     if(target.team === 'enemy'){
@@ -3934,18 +3950,18 @@ class Unicorn extends Piece {
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Unicorn.name, Unicorn.description, Unicorn.unicode, 2, 4, 3, 5, 1, Unicorn.color, headPosition, [headPosition], team, Unicorn.rarity, removeCallback, id)
     this.statuses.hidden = true;
-    this.specialName = 'Charge';
-    this.targetType = 'line';
-    //this.specialName = 'Hide'
-    this.targetType = 'self'
+    //this.specialName = 'Charge';
+    //this.targetType = 'line';
+    this.specialName = 'Hide';
+    this.targetType = 'self';
   }
-  /*async special(_target: Coordinate):Promise<void>{
+  async special(_target: Coordinate):Promise<void>{
     if(!this.statuses.exposed){
       this.statuses.hidden = true;
     }
     this.actions--
-  }*/
-  async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
+  }
+  /*async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
     for (const tile of line) {
       const occupier = activePieces.find(p =>
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
@@ -3967,14 +3983,14 @@ class Unicorn extends Piece {
       break;
     }
     this.actions--
-  }
+  }*/
 }
 
 //building castle? creates a wall around it of 8 tiles 
 //🏗 crane  U+1F3D7
 
 //99 fairy //web?
-export const allPieces = [Ant, Banana, Bee, Egg, Knife, Potato, Rat, Shield, Sling, Snail, TP, Acorn, Aegis, Beetle, Bow, Chick, Chicken, Dagger, Decoy, Dog, Fence, Frond, Doctor, Gecko, Germ, Guard, Hedgehog, Hopper, Jellyfish, Larva, Paladin, Tree, Rooster, Saw, Snake, Tar, Vulture, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, LabRat, LadyBeetle, Lance, Magnet, Mine, Medic, Mosquito, Ninja, Octopus, Officer, Pawn, Peacock, Flute, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Alien, Recurve, Arms, Axe, Bull, Cannon, Lightning, Palm, Paragon, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Greatshield, Kite, Leopard, Lighthouse, Mammoth, Nerf, Oil, Wasp, Puffer, Rabbit, Scarab, Shark, Shrike, Snowman, Soldier, Squid, Stopwatch, Tiger, UFO, Bat, Wizard, Wolf, Zebra, Archdaemon, Bomb, Buffalo, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Gman, Giraffe, Hippo, Lion, Lovebomb, Oni, Orangutan, Rhino, Screwdriver, Coat, Shovel, Tank, Vampire, Bear, Bison, Helicopter, Gorilla, Nuke, Sol, Sponge, Rex, Unicorn];//Dolls //100 +2 (web, ink)
+export const allPieces = [Ant, Banana, Bee, Egg, Knife, Potato, Rat, Shield, Sling, Snail, TP, Acorn, Aegis, Beetle, Bow, Chick, Chicken, Dagger, Decoy, Dog, Fence, Frond, Doctor, Gecko, Germ, Guard, Hedgehog, Hopper, Jellyfish, Larva, Paladin, Tree, Rooster, Saw, Snake, Tar, Vulture, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, LabRat, LadyBeetle, Lance, Magnet, Mine, Medic, Mosquito, Ninja, Octopus, Officer, Pawn, Peacock, Flute, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Alien, Recurve, Arms, Axe, Bull, Cannon, Lightning, Palm, Paragon, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Greatshield, Kite, Leopard, Lighthouse, Mammoth, Nerf, Oil, Wasp, Puffer, Rabbit, Scarab, Shark, Shrike, Snowman, Soldier, Squid, Stopwatch, Tiger, UFO, Bat, Wizard, Wolf, Zebra, Archdaemon, Bomb, Buffalo, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Gman, Giraffe, Hippo, Lion, Lovebomb, Oni, Orangutan, Rhino, Screwdriver, Shovel, Tank, Coat, Vampire, Bear, Bison, Helicopter, Gorilla, Nuke, Sol, Sponge, Rex, Unicorn];//Dolls //100 +2 (web, ink)
 console.log('pieces length: ', allPieces.length)
 
 let adminLogs = {

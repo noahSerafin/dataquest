@@ -71,6 +71,7 @@ Always have a defensive program handy for nodes where you can be attacked immedi
 Special moves will not trigger a retaliation from other pieces, even damaging ones.
 Your damage mult will only apply to attacks, not to special moves that cause damage.
 Admin programs trigger left to right, so make sure you drag them into the optimum position.
+'On load/placement' effects only apply to programs from your inventory. Not ones created on the board.
 Special moves that target in a line can effect the same program more than once if the multiple tiles occupy the line. Eg. charging through one tile will let the program charge into the next space if you targeted the one furthest away.
 
 OTHER NOTES

@@ -128,7 +128,7 @@ class Downturn extends Admin {
 }
 
 class Factory extends Admin {
-    static rarity = 3;
+static rarity = 4;
   static name = "Factory";
   static description = "Places a new enemy piece every 3 turns";
   static unicode = "U+1F3ED";
@@ -167,10 +167,10 @@ class Factory extends Admin {
 
 class Wrath extends Admin {//⛈️//🌩️
   static name = "Wrath";
-  static description = "A random player piece loses their defence and a tile each turn after the first";
+  static description = "A random player piece loses their remaining defence and a tile each turn after the first";
   static unicode = "U+1F329";
   static color = "rgb(9, 2, 107)";
-  static rarity = 5;
+  static rarity = 6;
   constructor() {
     super(Wrath.name, Wrath.description, Wrath.unicode, Wrath.color, 5, Wrath.rarity, 'gameState', 'onTurnEnd')
   }
@@ -185,7 +185,7 @@ class Wrath extends Admin {//⛈️//🌩️
             };
             const randId = playerPieces[Math.floor(Math.random() * playerPieces.length)].id
             const idx = activePieces.findIndex(p => p.id === randId);
-            activePieces[idx].takeDamage(1 + activePieces[idx].getStat('defence'));//should also remove a size 1 piece from the board
+            activePieces[idx].takeDamage(1 + activePieces[idx].defenceRemaining);//should also remove a size 1 piece from the board
         }
         this.count ++
     }
@@ -509,7 +509,7 @@ class Bones extends Admin {
   static description = "Destroyed player progams are revived as enemies";
   static unicode = "U+1FA7B";
   static color = "#000000ff";
-  static rarity = 4;
+  static rarity = 5;
   constructor() {
     super(Bones.name, Bones.description, Bones.unicode, Bones.color, 4, Bones.rarity, 'gameState', 'onPieceDestruction')
   }
@@ -552,7 +552,7 @@ class Coral extends Admin {
   static name = "Deep Water";
   static description = "Every player program is slowed";
     static unicode = "U+1FAB8";
-    static color = "#415800ff";
+    static color = "rgb(0, 59, 59)";
     static rarity = 4;
     constructor() {
         super(Coral.name, Coral.description, Coral.unicode, Coral.color, 4, Coral.rarity, 'gameState', 'onPlacement')
@@ -618,7 +618,7 @@ class REDACTED extends Admin {
 class Fog extends Admin {//😶‍🌫️🌫️
     static name = "Fog of War";
     static description = "All tiles outside your programs range are obscured";//handle in app
-    static unicode =  "U+2601"; //"U+1F301";//fog //"U+1FAEF";//fight cloud
+    static unicode =  "U+1F301";//fog //"U+1FAEF";//fight //"U+2601"; //cloud
     static color = "#575757ff";
     static rarity = 6;
     constructor() {
@@ -701,7 +701,7 @@ class Biohazard extends Admin {
 
 //fog //square //tornado tsunami
 // damage mult for enemy
-export const allBosses = [LowBattery, NorthWind, Downturn, Hook, Mirror, Shrine, Whale, Anchor, Circus, Customs, Factory, Hammer, Izakaya, Wilt, Biohazard, Bones, Castle, Snowflake, Coral, Jack, Lock, Frog, Sun, Wrath, Eclipse, Volcano, Fog, Omega, Reaper, REDACTED]
+export const allBosses = [LowBattery, NorthWind, Downturn, Hook, Mirror, Shrine, Whale, Anchor, Circus, Customs, Factory, Hammer, Izakaya, Wilt, Biohazard, Castle, Lock, Coral, Jack, Snowflake, Sun, Eclipse, Bones, Frog, Volcano, Fog, Omega, Reaper, REDACTED, Wrath,]
 export const nonStackableBosses = [Mirror, Customs, Snowflake, Sun, Frog, Biohazard, Coral, Izakaya, REDACTED, Fog]//no disease
 //3
 console.log('bosses length: ', allBosses.length)

@@ -1,6 +1,7 @@
 HOTKEYS
 GAME / BUGS
 player hasWonGame - implement properly
+spawn not reloading!
 variants not reloading
 variant should overide base piece color, (and tile colour???)
 possible to get stuck on cave and gauntlet if sling/bee and knife spawn

@@ -673,7 +673,7 @@ export class Toolbox extends Admin {
   static color = "#ff55c6ff";
   static rarity = 3;
   constructor() {
-    super(Toolbox.name, Toolbox.description, Toolbox.unicode, Toolbox.color, 7, Toolbox.rarity, 'player', 'other')//'player')??
+    super(Toolbox.name, Toolbox.description, Toolbox.unicode, Toolbox.color, 5, Toolbox.rarity, 'player', 'other')//'player')??
   }
   async apply({ player }: { player: Player }) {
    player.hasToolbox = true;
@@ -1391,7 +1391,7 @@ class Shades extends Admin {
   static name = "Shades";//GOGGLES, U+1F97D
   static description = "Your programs are immune to being blinded";
   static unicode = "U+1F60E";// U+1F576, GOGGLES, U+1F97D
-  static color = "#df7d22ff";
+  static color = "rgb(255, 244, 234)";
   static rarity = 3;
   constructor() {
     super(Shades.name, Shades.description, Shades.unicode, Shades.color, 5, Shades.rarity, 'gameState', 'onPlacement')

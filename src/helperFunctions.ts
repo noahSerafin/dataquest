@@ -133,7 +133,9 @@ export function applyVariant(piece: Piece, variant: PieceVariant) {
 
 function rollRarity(clovers:number) {
 
-  const base = [38,32,20,10,6,3];
+  const base = [40,30,14,9,5,2];
+  //36,27,18,10,6,3 balatro-esque
+  //40,30,16,8,4,2 doubling
 
   // clover boosts higher rarities
   const luck = 1 + clovers * 0.25;

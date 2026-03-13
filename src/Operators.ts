@@ -398,6 +398,60 @@ const Debugger : OS = {//lance //bug //screwdriver
 
 //U+1F403 GNU
 
+/*
+//Arch
 //GREEK CAPITAL LETTER DELTA, U+394
+[daemon, dataworm]
+
+//CP/M DESKTOP COMPUTER, U+1F5A5
+//Precursor to many PC operating systems including MS‑DOS
+//Huge ecosystem of early software (WordStar, dBase, etc.)
+[pandora, genie]
+
+//AmigaOS
+Advanced multitasking
+Built-in GUI (Workbench)
+Strong multimedia capabilities
+[copier, cherries]
+
+BeOS
+Designed for multimedia performance
+Symmetric multiprocessing
+64-bit journaling filesystem
+Very fast UI
+[rollers, palette]
+
+UNIX Variants (Non-Linux)
+---
+
+Solaris
+Developed by Sun Microsystems (later Oracle Corporation)
+Enterprise reliability
+ZFS filesystem
+DTrace performance tools
+Solaris powered many internet servers in the 1990s and 2000s.
+[fan, schoolbag]
+
+FreeBSD
+High-performance servers
+Networking appliances
+Parts of systems like PlayStation 4 system software
+[brain, toolbox]
+
+Palm OS
+Designed for PDAs (personal digital assistants)
+Stylus-based input
+Graffiti handwriting system
+was the dominant handheld computing platform before modern smartphones.
+
+Plan 9 from Bell Labs
+Plan 9 assumed you might have multiple machines working together.
+machines could be mounted into the same filesystem tree
+[ollie, ruler, knot]
+
+Inferno
+give programs that create their own other programs
+*/
+
 
 export const allOSes = [Steam, Window, Apple, Penguin, Temple, Fortran, Cobol, Debugger];

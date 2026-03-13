@@ -2,6 +2,7 @@
     import { onMounted } from 'vue';
     import type { OS } from '../types';
     import { allOSes } from '../Operators';
+    import { StorageManager } from '../StorageManager';
 
     const emit = defineEmits<{
         (e: 'createNewPlayer', os: OS): void;
@@ -9,6 +10,22 @@
 
     function returnUnicode(unicode: String){
         return  String.fromCodePoint(parseInt(unicode.replace('U+', ''), 16), 0xFE0F);
+    }
+
+    function getUnlockRule(osName: string): string | null {
+        if (osName === 'Penguin') {
+            if (!StorageManager.hasAnyWin()) return "Win with any operator";
+        }
+        if (osName === 'Temple') {
+            if (StorageManager.getUniqueWinsCount() < 3) return "Win with 3 different operators";
+        }
+        if (osName === 'Fortran') {
+            if (!StorageManager.hasStakeWin(2)) return "Win at stake 2";
+        }
+        if (osName === 'Cobol') {
+            if (StorageManager.getUniqueWinsCount() < 5) return "Win with 5 different operators";
+        }
+        return null;
     }
 
  
@@ -71,40 +88,53 @@
         <h2 class="mm-heading2">Choose your OS:</h2>
         <div class="oses" ref="oses">
             <div class="os"
-            v-for="os in allOSes">
+            v-for="os in allOSes"
+            :class="{ locked: getUnlockRule(os.name) }">
                 <h3>{{ os.name }}</h3>
                 <div class="logo">
                     {{ returnUnicode(os.unicode) }}
                 </div>
-                <p>
-                    {{ os.description }}
-                </p>
-                <div class="stats">
-                    <span>M:{{os.memory }}</span>
-                    <span>A:{{os.adminSlots }}</span>
-                    <span>$:{{os.money }}</span>
-                    <span>{{returnUnicode("U+1FA77")}}:{{os.lives }}</span>
-                </div>
-            <h5>Starts with:</h5>
-            <div class="bps">
-                <div class="logo" 
-                    v-for="bp in os.blueprints">
-                    {{ returnUnicode(bp.unicode) }}
-                </div>
-            </div>
-            <div class="bps">
-                <div class="logo" 
-                    v-for="bp in os.items">
-                    {{ returnUnicode(bp.unicode) }}
-                </div>
-            </div>
-            <div class="bps">
-                <div class="logo" 
-                    v-for="bp in os.admins">
-                    {{ returnUnicode(bp.unicode) }}
-                </div>
-            </div>
-            <button @click="emit('createNewPlayer', os)">Choose</button>
+                
+                <template v-if="!getUnlockRule(os.name)">
+                    <p>
+                        {{ os.description }}
+                    </p>
+                    <div class="stats">
+                        <span>M:{{os.memory }}</span>
+                        <span>A:{{os.adminSlots }}</span>
+                        <span>$:{{os.money }}</span>
+                        <span>{{returnUnicode("U+1FA77")}}:{{os.lives }}</span>
+                    </div>
+                    <h5>Starts with:</h5>
+                    <div class="bps">
+                        <div class="logo" 
+                            v-for="bp in os.blueprints">
+                            {{ returnUnicode(bp.unicode) }}
+                        </div>
+                    </div>
+                    <div class="bps">
+                        <div class="logo" 
+                            v-for="bp in os.items">
+                            {{ returnUnicode(bp.unicode) }}
+                        </div>
+                    </div>
+                    <div class="bps">
+                        <div class="logo" 
+                            v-for="bp in os.admins">
+                            {{ returnUnicode(bp.unicode) }}
+                        </div>
+                    </div>
+                </template>
+                <template v-else>
+                    <div class="unlock-rule">
+                        <p>LOCKED</p>
+                        <p>{{ getUnlockRule(os.name) }}</p>
+                    </div>
+                </template>
+
+                <button :disabled="!!getUnlockRule(os.name)" @click="emit('createNewPlayer', os)">
+                    {{ getUnlockRule(os.name) ? 'Locked' : 'Choose' }}
+                </button>
             </div>
         </div>
     </div>
@@ -173,5 +203,22 @@
                 margin: 0;
             }
         }
+    }
+
+    .os.locked {
+        opacity: 0.6;
+        filter: grayscale(0.8);
+        border-color: #444;
+    }
+    .unlock-rule {
+        text-align: center;
+        margin: 1rem 0;
+        font-weight: bold;
+        color: #ff4444;
+    }
+    .os.locked button {
+        cursor: not-allowed;
+        background-color: #333;
+        color: #777;
     }
 </style>

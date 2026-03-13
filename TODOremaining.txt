@@ -1,8 +1,7 @@
-HOTKEYS
+TUTORIAL - clippy
 GAME / BUGS
-player hasWonGame - implement properly
 spawn not reloading!
-variants not reloading
+variants stats reloading but not name/color etc.
 variant should overide base piece color, (and tile colour???)
 possible to get stuck on cave and gauntlet if sling/bee and knife spawn
 nerf rosebud - pieces can't stay exposed after a spcial?

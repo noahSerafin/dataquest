@@ -108,5 +108,20 @@ export const StorageManager = {
     stats.osStats[osunicode].winsByStake[stake]++;
 
     this.saveStats(stats);
+  },
+
+  hasAnyWin(): boolean {
+    const stats = this.getStats();
+    return Object.values(stats.osStats).some(os => os.totalWins > 0);
+  },
+
+  getUniqueWinsCount(): number {
+    const stats = this.getStats();
+    return Object.values(stats.osStats).filter(os => os.totalWins > 0).length;
+  },
+
+  hasStakeWin(stake: number): boolean {
+    const stats = this.getStats();
+    return Object.values(stats.osStats).some(os => (os.winsByStake[stake] || 0) > 0);
   }
 };

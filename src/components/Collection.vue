@@ -149,7 +149,7 @@ const activeTab = ref<'pieces' | 'items' | 'admins' | 'bosses' | 'stats'>('piece
                 <div class="total-wins">Total Wins: {{ osData.totalWins }}</div>
                 <div class="stake-wins" v-if="Object.keys(osData.winsByStake).length > 0">
                   <span v-for="(wins, stake) in osData.winsByStake" :key="stake" class="stake-pill">
-                    Stake {{ stake }}: {{ wins }}
+                    Infamy {{ stake }}: {{ wins }}
                   </span>
                 </div>
               </div>

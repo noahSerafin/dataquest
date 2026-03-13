@@ -2044,9 +2044,9 @@ class Greatshield extends Piece {//testt
   static description = "A slow but highly defensive program, can share its defence temporarily with all friendlies in range";
   static unicode = "U+26C9";
   static color = "rgba(0, 82, 85, 1)";
-  static rarity = 5;
+  static rarity = 6;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Greatshield.name, Greatshield.description, Greatshield.unicode, 5, 2, 2, 3, 5, Greatshield.color, headPosition, [headPosition], team, Greatshield.rarity, removeCallback, id)
+    super(Greatshield.name, Greatshield.description, Greatshield.unicode, 5, 2, 1, 3, 5, Greatshield.color, headPosition, [headPosition], team, Greatshield.rarity, removeCallback, id)
     this.specialName = 'Testudo';
     this.hasFriendlySpecial = true;
     this.targetType = 'group';
@@ -2194,29 +2194,31 @@ class Medic extends Piece {
 
 class Paragon extends Piece {
   static name = "Paragon";
-  static description = "A strong defensive piece that can remove any harmful statuses from friendlies, and give them a temporary defence equal to its own.";//a group of friendlies"
+  static description = "A strong defensive piece that can remove any harmful statuses from a group of friendlies"//, and give them a temporary defence equal to its own.";//a group of friendlies"
   static unicode = "U+26E8";
   static color = "rgb(14, 202, 177)";
-  static rarity = 4;//3?
+  static rarity = 5;//3?
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Paragon.name, Paragon.description, Paragon.unicode, 3, 3, 1, 2, 4, Paragon.color, headPosition, [headPosition], team, Paragon.rarity, removeCallback, id)
     this.specialName='Rally';
-    this.targetType='piece';
+    this.targetType='group';
     this.hasFriendlySpecial=true;
   }
   static harmfulStatuses = ['diseased', 'slowed', 'blinded', 'burning', 'poisoned', 'frozen','charmed', 'confused', 'exposed']
-  async special(targetPiece: Piece):Promise<void>{    
-    if(targetPiece.team === this.team){ 
-      for (const key of Paragon.harmfulStatuses) {
-        targetPiece.statuses[key] = false;
+  async special(targets: Piece[]):Promise<void>{
+    for(const targetPiece of targets){    i
+      if(targetPiece.team === this.team){ 
+        for (const key of Paragon.harmfulStatuses) {
+          targetPiece.statuses[key] = false;
+        }
+        targetPiece.addTempModifier({maxSize: 1})
+        targetPiece.addTempModifier({defence: 1})
+      } else {
+        targetPiece.takeDamage(this.getStat('attack'))
+        if(targetPiece.willRetaliate) await this.takeDamage(targetPiece.getStat('attack'))
       }
-      targetPiece.addTempModifier({maxSize: 1})
-      targetPiece.addTempModifier({defence: 1})
-    } else {
-      targetPiece.takeDamage(this.getStat('attack'))
-      if(targetPiece.willRetaliate) await this.takeDamage(targetPiece.getStat('attack'))
+      this.actions--
     }
-    this.actions--
   }
 }
 
@@ -2245,21 +2247,25 @@ class Cupid extends Piece {
 
 class Oni extends Piece {
   static name = "Oni";
-  static description = "A strong but slow program that can inflict the slow status";
+  static description = "A strong but slow program that can inflict the slow status on a group of enemies";
   static unicode = "U+1F479";
   static color = "#9e0303ff";
-  static rarity = 5;//6 target group
+  static rarity = 6;//6 target group
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Oni.name, Oni.description, Oni.unicode, 6, 1, 2, 5, 3, Oni.color, headPosition, [headPosition], team, Oni.rarity, removeCallback, id)
-    this.specialName = 'Curse';//Haunt
+    this.specialName = 'Haunt';//Haunt
+    this.targetType = 'group';
   }
-  async special(targetPiece: Piece):Promise<void>{
-    if(!targetPiece.immunities.slowed){
-      targetPiece.statuses.slowed = true
-    } else if(targetPiece.statuses.slowed){
-      targetPiece.takeDamage(this.getStat('attack'));
-      if(targetPiece.willRetaliate) await this.takeDamage(targetPiece.getStat('attack'))
-    }
+  //async special(targetPiece: Piece):Promise<void>{
+  async special(targets: Piece[]):Promise<void>{
+    for(const targetPiece of targets){
+      if(!targetPiece.immunities.slowed){
+        targetPiece.statuses.slowed = true
+      } else if(targetPiece.statuses.slowed){
+        targetPiece.takeDamage(this.getStat('attack'));
+        if(targetPiece.willRetaliate) await this.takeDamage(targetPiece.getStat('attack'))
+        }
+      }
     this.actions--
   }
 }

@@ -639,7 +639,7 @@ function handleProceed() {
     increaseDifficulty();
     player.value.mapProgress = 0
     if (player.value.bossesCleared > 6) {
-      //player.value.hasWonGame = false;
+      player.value.hasWonGame = false;
     }
   }
   showMap.value = true;
@@ -856,9 +856,13 @@ async function removePiece(piece: Piece) {
     if (index !== -1) player.value.admins.splice(index, 1);
   } else {
     await handleApplyAdmins('onPieceDestruction', piece.id);
-    activePieces.value = activePieces.value.filter(p => p.id !== piece.id);//removes the piece
+    const idx = activePieces.value.findIndex(p => p.id === piece.id);
+    if (idx !== -1) {
+      activePieces.value.splice(idx, 1);
+      activePieces.value = [...activePieces.value]; // Trigger Vue reactivity
+    }
     //graveyard?
-    if (piece.name == 'Dolls') {//hybrids will need a flag other than name
+    if (piece.name == 'Dolls') {
       if (piece.getStat('maxSize') > 1) {
         const NewDoll = new Dolls(
           piece.headPosition,
@@ -868,6 +872,7 @@ async function removePiece(piece: Piece) {
         );
         NewDoll.maxSize = piece.getStat('maxSize') - 1;
         activePieces.value.push(NewDoll);
+        activePieces.value = [...activePieces.value];
       }
     }
   }

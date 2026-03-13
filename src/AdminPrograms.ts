@@ -654,9 +654,9 @@ class Trolley extends Admin {
   static description = "Items only use 0.5 memory each";
   static unicode = "U+1F392";// "U+1F6D2";
   static color = "#55fff1ff";
-  static rarity = 2;
+  static rarity = 1;
   constructor() {
-    super(Trolley.name, Trolley.description, Trolley.unicode, Trolley.color, 5, Trolley.rarity, 'player', 'other')//'player')??
+    super(Trolley.name, Trolley.description, Trolley.unicode, Trolley.color, 3, Trolley.rarity, 'player', 'other')//'player')??
   }
   async apply({ player }: { player: Player }) {
    player.hasTrolley = true;
@@ -724,7 +724,7 @@ export class Palette extends Admin {
   static name = "Palette";
   static description = "Place twice at the start of a round";
   static unicode = "U+1F3A8";
-  static color = "#ff55f6ff";
+  static color = "rgb(255, 212, 131)";
   static rarity = 4;
   constructor() {
     super(Palette.name, Palette.description, Palette.unicode, Palette.color, 6, Palette.rarity, 'gameState', 'other')
@@ -1157,7 +1157,7 @@ class Broom extends Admin {
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (let index = 0; index < activePieces.length; index++) {
       const p = activePieces[index];
-      if(p.team==='enemy' && p.tiles.length === 1 && p.getStat('defence') === 0){
+      if(p.team==='enemy' && p.tiles.length === 1 && p.defenceRemaining === 0){
         activePieces.splice(index, 1);
       }    
     }
@@ -1510,7 +1510,7 @@ class Pants extends Admin {
 class Ace extends Admin {
   static name = "Ace in the hole";
   static description = "Your last placed program gets +1 to all stats";
-  static unicode = "U+2660";
+  static unicode = "U+1F0A1";//"U+2660";
   static color = "rgb(255, 255, 255)";
   static rarity = 3;
   constructor() {
@@ -2016,7 +2016,7 @@ class Jammer extends Admin {
 
 class Balloon extends Admin {
   static name = "Balloon";
-  static description = "+1 max size to all your programs after each round";
+  static description = "+1 max size to all your held programs after each round";
   static unicode = "U+1F388";
   static color = "#12b8b8ff";
   static rarity = 2;
@@ -2569,7 +2569,7 @@ class Howzat extends Admin {
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (let index = 0; index < activePieces.length; index++) {
       const p = activePieces[index];
-      if(p.team==='enemy' && p.tiles.length <= 2 && p.getStat('defence') === 0){
+      if(p.team==='enemy' && p.tiles.length <= 2 && p.defenceRemaining === 0){
         activePieces.splice(index, 1);
       }    
     }

@@ -200,7 +200,7 @@ async function executeEnemyIntent(
 
     case 'move': //moving over players?
       for (const step of intent.path.slice(1)) {//make sure a path is found once, and then stick to it
-        if (!enemy.movesRemaining || enemy.statuses.frozen) break;
+        if (!enemy.movesRemaining || enemy.statuses.frozen || !activePieces.includes(enemy)) break;
         if(!enemy.statuses.hidden){
           helpers.highlightMoves(enemy);
         }
@@ -233,7 +233,7 @@ async function executeEnemyIntent(
       break;
 
     case 'wander':
-      while (enemy.movesRemaining > 0 && !enemy.statuses.frozen) {
+      while (enemy.movesRemaining > 0 && !enemy.statuses.frozen && activePieces.includes(enemy)) {
         if(!enemy.statuses.hidden){
           helpers.highlightMoves(enemy);
         }
@@ -262,8 +262,7 @@ export async function runEnemyStateMachine(
   onReceiveDamage: (id: string) => void,
   delay = 200 // ms between moves for visibility
 ){
-  const enemyPieces = activePieces.filter(p => (p.team === 'enemy' && !p.statuses.charmed));//not refs so won't update?
-  const playerPieces = activePieces.filter(p => p.team === 'player' && !p.statuses.charmed);
+  const enemiesToProcess = activePieces.filter(p => (p.team === 'enemy' && !p.statuses.charmed));
 
   const helpers = {  
     highlightMoves,
@@ -272,16 +271,25 @@ export async function runEnemyStateMachine(
     onReceiveDamage,
     delay
   }
-  for (const enemy of enemyPieces) {
+
+  for (const enemy of enemiesToProcess) {
+    if (!activePieces.includes(enemy)) continue;
+    
     let specialAttempts = 0;
     while (enemy.movesRemaining > 0 || enemy.actions > 0) {
+      if (!activePieces.includes(enemy)) break;
+
+      const enemyPieces = activePieces.filter(p => (p.team === 'enemy' && !p.statuses.charmed));
+      const playerPieces = activePieces.filter(p => p.team === 'player' && !p.statuses.charmed);
+
       const intent = decideEnemyIntent(enemy, activePieces, playerPieces, enemyPieces, tileSet, specialAttempts);
+      if (intent.type === 'wait') break;
+
       if(intent.type === 'special'){
         specialAttempts += 1;
       }
       await executeEnemyIntent(enemy, activePieces, tileSet, intent, helpers);
       await sleep(helpers.delay);
-      if (intent.type === 'wait') break;
     } 
   }
 }

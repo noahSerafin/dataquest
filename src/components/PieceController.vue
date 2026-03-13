@@ -92,9 +92,14 @@ function toggleTooltip(key: string) {
     transform: `translate(${position.x}px, ${position.y}px)`
   }">
     <div :class="`header ${piece.variantName ? ('variant-header v_'+piece.variantName) : ''}`" @mousedown="startDrag" @touchstart="startDrag">
-      <span class="symbol">
-        {{ String.fromCodePoint(parseInt(piece.unicode.replace("U+", ""), 16), 0xFE0F) }}
-      </span>
+      <div class="symbol-container">
+        <span class="symbol">
+          {{ String.fromCodePoint(parseInt(piece.unicode.replace("U+", ""), 16), 0xFE0F) }}
+        </span>
+        <span class="extra-symbol">
+          {{ piece.extraUnicode ? String.fromCodePoint(parseInt(piece.extraUnicode.replace("U+", ""), 16), 0xFE0F) : '' }}
+        </span>
+      </div>
       <span v-if="piece.variantName" class="variant">{{ piece.variantName }}</span>
       <span class="name">{{ piece.hybridName ? piece.hybridName : piece.name }}</span>
       <button class="close" @click="$emit('close', piece)">X</button>
@@ -142,17 +147,20 @@ function toggleTooltip(key: string) {
 
     <div class="actions">
       <button
+        class="mv-btn"
         :disabled="!canMove || piece.moves <= 0" 
         v-if="((piece.team === 'player' && !piece.statuses.charmed) || (piece.team === 'enemy' && piece.statuses.charmed))" @click="$emit('highlightMoves', piece)">
         Move
       </button>
       <button
+        class="atk-btn"
         :disabled="!canAction || piece.actions <= 0"
         v-if="((piece.team === 'player' && !piece.statuses.charmed) || (piece.team === 'enemy' && piece.statuses.charmed)) && piece.canAttack"
         @click="$emit('highlightTargets', piece)">
         Attack
       </button>
       <button
+        class="special-btn"
         v-if="piece.specialName && ((piece.team === 'player' && !piece.statuses.charmed) || (piece.team === 'enemy' && piece.statuses.charmed))"
         :disabled="!canAction || piece.actions <= 0"
         @click="$emit('highlightSpecials', piece)">
@@ -160,6 +168,7 @@ function toggleTooltip(key: string) {
       </button>
 
       <button
+        class="atk-btn"
         v-if="piece.team === 'enemy'"
         @click="$emit('highlightTargets', piece)">
         Show Range
@@ -318,5 +327,23 @@ p{
   z-index: 3;
   top: 0;
   left: 0;
+}
+.mv-btn{
+  border-color: rgb(0, 162, 255);
+}
+.atk-btn{
+  border-color: #f32d2d;
+}
+.special-btn{
+  border-color: rgb(235, 190, 45);
+}
+.symbol-container{
+  position: relative;
+}
+.extra-symbol{
+  position: absolute;
+  left: 20%;
+  top: 10%;
+  z-index: 0;
 }
 </style>

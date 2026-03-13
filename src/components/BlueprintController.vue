@@ -92,9 +92,14 @@ defineEmits(["buy", "sell", "highlightPlacements", "close"])
   }">
     <div class="left">
       <div :class="`header ${piece.variantName ? ('variant-header v_'+piece.variantName) : ''}`" @mousedown="startDrag" @touchstart="startDrag">
-        <span class="symbol">
-          {{ String.fromCodePoint(parseInt(piece.unicode.replace("U+", ""), 16), 0xFE0F) }}
-        </span>
+        <div class="symbol-container">
+          <span class="symbol">
+            {{ String.fromCodePoint(parseInt(piece.unicode.replace("U+", ""), 16), 0xFE0F) }}
+          </span>
+          <span class="extra-symbol">
+            {{ piece.extraUnicode ? String.fromCodePoint(parseInt(piece.extraUnicode.replace("U+", ""), 16), 0xFE0F) : '' }}
+          </span>
+        </div>
         <span v-if="piece.variantName" class="variant">{{ piece.variantName }}</span>
         <span class="name">{{ piece.hybridName ? piece.hybridName : piece.name }}</span>
         <button class="close" @click="$emit('close', piece)">X</button>
@@ -259,5 +264,14 @@ p{
     width: 80%;
     top: 44vh;
   }
+}
+.symbol-container{
+  position: relative;
+}
+.extra-symbol{
+  position: absolute;
+  left: 20%;
+  top: 10%;
+  z-index: 0;
 }
 </style>

@@ -400,4 +400,4 @@ const Debugger : OS = {//lance //bug //screwdriver
 
 //GREEK CAPITAL LETTER DELTA, U+394
 
-export const allOSes = [Steam, Penguin, Window, Apple, Temple, Fortran, Cobol, Debugger];
+export const allOSes = [Steam, Window, Apple, Penguin, Temple, Fortran, Cobol, Debugger];

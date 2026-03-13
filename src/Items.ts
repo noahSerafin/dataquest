@@ -855,7 +855,7 @@ export class Jar extends Item {//Pokeball?
 //U+1FAA8 rock
 
 //hotline buoy batteries pig 9
-export const allItems = [Blueberry, Box, Battery, Iron, Juice, Mushroom, Pepper, Floppy, Voucher, Bandage, Extinguisher, Formula, Gift, Hotline, Plunger, Roids, Teapot, Beans, Bugle, Jar, Keygen, Makeover, Melon, Megaphone, Pinata, Rations, ShootingStar, Spanner, Update2, Cake, Carrot, Coffee, Garlic, Genie, Wand, Meat, Pandora, Pie, Soap, Dupe, Hourglass, Supplement, Life, Blessing, Ginger, Update3];
+export const allItems = [Blueberry, Box, Battery, Iron, Juice, Mushroom, Pepper, Floppy, Voucher, Bandage, Extinguisher, Formula, Gift, Hotline, Plunger, Roids, Teapot, Beans, Bugle, Jar, Keygen, Makeover, Melon, Megaphone, Pinata, Rations, ShootingStar, Spanner, Update2, Cake, Carrot, Coffee, Garlic, Genie, Wand, Meat, Pie, Soap, Dupe, Hourglass, Pandora, Supplement, Life, Blessing, Ginger, Update3];
 export const upgradeItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Roids, Formula]
 
 /*Items.forEach(i => {

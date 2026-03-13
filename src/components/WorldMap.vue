@@ -2,7 +2,7 @@
     import { computed, ref } from "vue";
     import MiniMap from "./MiniMap.vue";
     import { Admin } from "../AdminPrograms";
-    import { Item, Box, Genie, Gift, Pinata, Pandora, Blessing, Voucher, upgradeItems } from "../Items";
+    import { Item, Box, Genie, Gift, Pinata, Pandora, Voucher } from "../Items";
     import { allBosses, nonStackableBosses } from "../Bosses";
     import { watch } from "vue";
     import { Player } from "../Player";

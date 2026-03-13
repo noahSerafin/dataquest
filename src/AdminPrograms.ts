@@ -550,7 +550,7 @@ class Bone extends Admin {//change
   static name = "Big Boned";
   static description = "Programs all gain +2 max size on placement";
   static unicode = "U+1F9B4";
-  static color = "#d33636ff";
+  static color = "rgb(61, 17, 0)";
   static rarity = 3;
   constructor() {
     super(Bone.name, Bone.description, Bone.unicode, Bone.color, 5, Bone.rarity, 'gameState', 'onPlacement')
@@ -2385,7 +2385,7 @@ class Wine extends Admin {
   static name = "Full Bodied";//Field Wine";
   static description = "+1 max size, +1 defence";
   static unicode = "U+1F377"; //"U+1FA7A";// Wine, + max Size/defence?
-  static color = "rgb(255, 255, 255)";
+  static color = "rgb(226, 186, 99)";
   static rarity = 3;
   constructor() {
     super(Wine.name, Wine.description, Wine.unicode, Wine.color, 5, Wine.rarity, 'gameState', 'onPlacement')
@@ -2720,7 +2720,7 @@ class Luggage extends Admin {
 
   //noRoundend
   async apply({ player }: { player: Player }) {
-    if(player.mapProgress === 3){
+    if(player.mapProgress >= 2){
       player.memory += 1;
     }
   }

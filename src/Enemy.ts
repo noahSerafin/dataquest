@@ -60,7 +60,8 @@ function decideEnemyIntent(
         }
       }
       if(enemy.targetType === 'group'){//bomb type pieces
-        return { type: 'special', target: findAnyPiecesInRange(enemy, activePieces)}
+        const inRange = findAnyPiecesInRange(enemy, activePieces);
+        return { type: 'special', target: inRange ? inRange : []}
       }
       console.log('no special moves');
       //if target is not attackable, is there one that is?
@@ -73,7 +74,8 @@ function decideEnemyIntent(
 
   //no immediate attackable target, expose if possible
   if(enemy.actions > 0 && enemy.hasExposingSpecial && enemy.targetType === 'group'){//and group
-    return {type: 'special', target: (findAnyPiecesInRange(enemy, activePieces))}
+    const inRange = findAnyPiecesInRange(enemy, activePieces);
+    return {type: 'special', target: inRange ? inRange : []}
   }
 
   //can we help another enemy?

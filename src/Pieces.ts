@@ -1896,7 +1896,7 @@ class LabRat extends Piece {
 
 class Bat extends Piece {
   static name = "Vampire Bat";
-  static description = "A program that can steal body memory spaces from other programs, increasing it's max size";//spread statuess?
+  static description = "A program that can steal body memory spaces from other programs, increasing it's max size";//remove tile, +1 temp defence? spread statuess?
   static unicode = "U+1F987";
   static color = "#ff290dff";
   static rarity = 4;
@@ -2172,7 +2172,7 @@ class Medic extends Piece {
   static color = "rgb(111, 247, 228)";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Medic.name, Medic.description, Medic.unicode, 3, 2, 2, 2, 1, 2, Medic.color, headPosition, [headPosition], team, Medic.rarity, removeCallback, id)
+    super(Medic.name, Medic.description, Medic.unicode, 3, 2, 2, 2, 2, Medic.color, headPosition, [headPosition], team, Medic.rarity, removeCallback, id)
     this.specialName='Bandage';
     this.targetType='piece';
     this.hasFriendlySpecial=true;
@@ -2194,7 +2194,7 @@ class Medic extends Piece {
 
 class Paragon extends Piece {
   static name = "Paragon";
-  static description = "A strong defensive piece that can remove any harmful statuses from a friendly, and give them a temporary defence equal to its own.";
+  static description = "A strong defensive piece that can remove any harmful statuses from friendlies, and give them a temporary defence equal to its own.";//a group of friendlies"
   static unicode = "U+26E8";
   static color = "rgb(14, 202, 177)";
   static rarity = 4;//3?
@@ -2248,10 +2248,10 @@ class Oni extends Piece {
   static description = "A strong but slow program that can inflict the slow status";
   static unicode = "U+1F479";
   static color = "#9e0303ff";
-  static rarity = 5;
+  static rarity = 5;//6 target group
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Oni.name, Oni.description, Oni.unicode, 6, 1, 2, 5, 3, Oni.color, headPosition, [headPosition], team, Oni.rarity, removeCallback, id)
-    this.specialName = 'Curse';
+    this.specialName = 'Curse';//Haunt
   }
   async special(targetPiece: Piece):Promise<void>{
     if(!targetPiece.immunities.slowed){

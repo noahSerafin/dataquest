@@ -94,7 +94,7 @@ function decideEnemyIntent(
   const friendlyTrap = enemyPieces.find(p => 
     p.name === 'Frond'// && p.hasFriendlySpecial && p.targetType === 'trapPiece';
   )
-  if(friendlyTrap){
+  if(friendlyTrap && enemy.movesRemaining > 0){
     const pathToFrond = findShortestPath(enemy.headPosition, friendlyTrap.headPosition, tileSet, activePieces); //won't include frond's position
     if(pathToFrond){
     const pathToFollow = [...pathToFrond, friendlyTrap.headPosition]

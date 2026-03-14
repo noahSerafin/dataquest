@@ -1647,7 +1647,7 @@ class Taoism extends Admin {
     super(Taoism.name, Taoism.description, Taoism.unicode, Taoism.color, 5, Taoism.rarity, 'gameState', 'onTurnEnd')
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-    const playerPieces: Piece[] = [];
+    const playerPieces: Piece[] = [];//are these reset every apply?
     const enemyPieces = [];
     for (const p of activePieces) {
       if(p.team==='player'){
@@ -1658,14 +1658,16 @@ class Taoism extends Admin {
       }
     };
     if(enemyPieces.length === playerPieces.length){
-      for (const p of playerPieces) {
-        p.addModifier({
+      for (const p of activePieces) {
+        if(p.team === 'player'){
+          p.addModifier({
             attack: 1,
             defence: 1,
             maxSize: 1,
             moves: 1,
             range: 1
-        });
+          });
+        }
       };
     }
   }

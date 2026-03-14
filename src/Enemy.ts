@@ -91,9 +91,9 @@ function decideEnemyIntent(
   }
 
   //is there a frond (friendly trap) to hide in?
-  const friendlyTrap = enemyPieces.find(p => {
-    p.name === 'Frond';// && p.hasFriendlySpecial && p.targetType === 'trapPiece';
-  })
+  const friendlyTrap = enemyPieces.find(p => 
+    p.name === 'Frond'// && p.hasFriendlySpecial && p.targetType === 'trapPiece';
+  )
   if(friendlyTrap){
     const pathToFrond = findShortestPath(enemy.headPosition, friendlyTrap.headPosition, tileSet, activePieces); //won't include frond's position
     if(pathToFrond){
@@ -418,10 +418,10 @@ function findShortestPath(
 
   const occupiedTiles = new Set<string>();
   for (const p of activePieces) {
-    if(!p.statuses.negative || p.statuses.negative && p.team === 'enemy'){//add negative enemy pieces, these are traps so cannot be walked over by the enemy
-      for (const t of p.tiles) {
-        occupiedTiles.add(`${t.x},${t.y}`);
-      }
+    if (p.statuses.negative && p.team === 'enemy' && p.hasFriendlySpecial) continue;
+    
+    for (const t of p.tiles) {
+      occupiedTiles.add(`${t.x},${t.y}`);
     }
   }
 
@@ -474,6 +474,8 @@ function getAdjacentEmptySpaces(
   // Build a fast lookup of occupied tiles
   const occupied = new Set<string>();
   for (const piece of activePieces) {
+    if (piece.statuses.negative && piece.team === 'enemy' && piece.hasFriendlySpecial) continue;
+
     for (const t of piece.tiles) {
       occupied.add(`${t.x},${t.y}`);
     }

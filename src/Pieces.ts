@@ -2206,7 +2206,7 @@ class Paragon extends Piece {
   }
   static harmfulStatuses = ['diseased', 'slowed', 'blinded', 'burning', 'poisoned', 'frozen','charmed', 'confused', 'exposed']
   async special(targets: Piece[]):Promise<void>{
-    for(const targetPiece of targets){    i
+    for(const targetPiece of targets){ 
       if(targetPiece.team === this.team){ 
         for (const key of Paragon.harmfulStatuses) {
           targetPiece.statuses[key] = false;

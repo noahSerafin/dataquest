@@ -2194,7 +2194,7 @@ class Medic extends Piece {
 
 class Paragon extends Piece {
   static name = "Paragon";
-  static description = "A strong defensive piece that can remove any harmful statuses from a group of friendlies"//, and give them a temporary defence equal to its own.";//a group of friendlies"
+  static description = "A strong defensive piece that can remove any harmful statuses from a group of friendlies and give them a temporary +1 defence"//, and give them a temporary defence equal to its own.";//a group of friendlies"
   static unicode = "U+26E8";
   static color = "rgb(14, 202, 177)";
   static rarity = 5;//3?
@@ -2211,8 +2211,7 @@ class Paragon extends Piece {
         for (const key of Paragon.harmfulStatuses) {
           targetPiece.statuses[key] = false;
         }
-        targetPiece.addTempModifier({maxSize: 1})
-        targetPiece.addTempModifier({defence: 1})
+        targetPiece.addTempModifier({defence: 1});
       } else {
         targetPiece.takeDamage(this.getStat('attack'))
         if(targetPiece.willRetaliate) await this.takeDamage(targetPiece.getStat('attack'))

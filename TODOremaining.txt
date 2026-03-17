@@ -1,11 +1,14 @@
 TUTORIAL - clippy
 GAME / BUGS
 spawn not reloading!
+Some statuses not applying to player.
+line target enemies killing themselves/friendlies
 Investigate why taoism or highrise might be adding def every turn
+friendlyspecial pieces attempting specials on nothing//removed self
 variants stats reloading but not name/color etc.
 variant should overide base piece color, (and tile colour???)
 possible to get stuck on cave and gauntlet if sling/bee and knife spawn
-nerf rosebud - pieces can't stay exposed after a spcial?
+nerf rosebud - pieces can't stay exposed after a special?
 slots broken, and only applies before a shop, not on the same shop you buy it in
 Level loaded twice with same piece causes bug where it cannot be attacked is not in activepieces to be targeted - test
 visualise: retaliation, dmg + dmg mult, admin actions and counts

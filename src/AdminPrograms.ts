@@ -579,17 +579,22 @@ class RollerBlades extends Admin {
 
 class Lungs extends Admin {
   static name = "Cardio";
-  static description = "Programs all gain +4 moves on placement";
+  static description = "Programs all gain a temporary +3 moves after each turn";//+3 temp moves? would negate slowed
   static unicode = "U+1FAC1";
   static color = "rgb(146, 14, 158)";
   static rarity = 5;
   constructor() {
-    super(Lungs.name, Lungs.description, Lungs.unicode, Lungs.color, 10, Lungs.rarity, 'gameState', 'onPlacement')
+    super(Lungs.name, Lungs.description, Lungs.unicode, Lungs.color, 10, Lungs.rarity, 'gameState', 'onTurnEnd');//'onPlacement');
   }
-  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
-    const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({moves: 4})
-    activePieces[idx].movesRemaining += 4;
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    for(const piece of activePieces){
+      if(piece.team === 'player'){
+        piece.addTempModifier({moves: 4})
+      }
+    }
+    //const idx = activePieces.findIndex(p => p.id === id);
+    //activePieces[idx].addModifier({moves: 4})
+    //activePieces[idx].movesRemaining += 4;
   }
 }
 
@@ -1075,11 +1080,11 @@ export class Copier extends Admin {
       );
       if(!isOccupied){
         const copy = new PieceClass(newHead, 'player', activePieces[idx].removeCallback, crypto.randomUUID());
-        copy.maxSize = playerPieces[0].maxSize//getStat()???
-        copy.moves = playerPieces[0].moves
-        copy.range = playerPieces[0].range
-        copy.attack = playerPieces[0].attack
-        copy.defence = playerPieces[0].defence
+        copy.maxSize = playerPieces[0].getStat('maxSize');
+        copy.moves = playerPieces[0].getStat('moves');
+        copy.range = playerPieces[0].getStat('range');
+        copy.attack = playerPieces[0].getStat('attack');
+        copy.defence = playerPieces[0].getStat('defence');
         if(playerPieces[0].hybridName){
           copy.hybridName = playerPieces[0].hybridName;
           copy.description = playerPieces[0].description;
@@ -1109,7 +1114,7 @@ class Telescope extends Admin {
 
 class Microscope extends Admin {
   static name = "Microbiology";
-  static description = "Programs with a size of 1 get +1 defence at the end of your turn";//+2 temp defence on end of turn? 
+  static description = "Programs with a size of 1 temporarily get +1 defence at the end of your turn";//+2 temp defence on end of turn? 
   static unicode = "U+1F52C";
   static color = "#c6fcf3";
   static rarity = 2;

@@ -1128,7 +1128,7 @@ const damagePieceAt = async (coord: Coordinate) => {
     selectedPiece.value.statuses.hidden = false;
   }
   selectedPiece.value.damageMult = 1;
-  if (damageReceiver.willRetaliate) {
+  if (damageReceiver.willRetaliate || damageReceiver.name === 'Hedgehog') {
     await selectedPiece.value.takeDamage(damageReceiver.getStat('attack'));
     if (damageReceiver.name === 'Puffer' && !selectedPiece.value.immunities.poisoned) {
       selectedPiece.value.statuses.poisoned = true;

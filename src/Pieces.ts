@@ -354,7 +354,7 @@ class Paladin extends Piece {
   //async special(targets: Piece[]):Promise<void>{
     //for (const targetPiece of targets) {
   async special(targetPiece: Piece):Promise<void>{
-    if(targetPiece.team === this.team){ 
+    if(targetPiece.team === this.team && targetPiece.id !== this.id){ 
       targetPiece.addTempModifier({defence: (this.getStat('defence'))})
     //}
     }
@@ -468,6 +468,8 @@ class Tree extends Piece {
   async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
     if(this.tiles.length >= this.maxSize){
       const newAcorn = new Acorn(target, this.team, this.removeCallback, crypto.randomUUID())
+      newAcorn.actions = 0;
+      newAcorn.movesRemaining = 0;
       activePieces.push(newAcorn)
     }
     this.actions --
@@ -508,8 +510,10 @@ class Palm extends Piece {
   }
   async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
     if(this.tiles.length >= this.maxSize){
-      const newAcorn = new Coconut(target, this.team, this.removeCallback, crypto.randomUUID())
-      activePieces.push(newAcorn)
+      const newCoconut = new Coconut(target, this.team, this.removeCallback, crypto.randomUUID());
+      newCoconut.actions = 0;
+      newCoconut.movesRemaining = 0;
+      activePieces.push(newCoconut)
     }
     this.actions --
   }
@@ -1226,12 +1230,13 @@ class Web extends Piece {
     if(!target.immunities.frozen){
       target.movesRemaining = 0;
       target.statuses.frozen = true;//maybe
-      this.actions --
-      this.statuses.hidden = false;
-      //sleep for 200ms to show player
-      //remove until selection of negative is sorted
-      this.removeCallback?.(this);
     }
+    this.actions --
+    this.statuses.hidden = false;
+    //sleep for 200ms to show player
+    //remove until selection of negative is sorted
+    this.removeCallback?.(this);
+    
     //remove self?
   }
   //set movesRemaining of passing pieces to 0
@@ -2752,10 +2757,10 @@ class Angel extends Piece {//not passive, same as fairy, remove?? unfinished
 // WATCH, U+231A
 class Stopwatch extends Piece {//not passive
   static name = "Stopwatch";
-  static description = "Can replenish another program's moves and actions, or take away an enemy's moves and actions";
+  static description = "Can replenish another program's moves and actions remaining, or take away an enemy's moves and actions";
   static unicode = "U+231A";//U+23F1";
   static color = "#ff5555";
-  static rarity = 4;
+  static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Stopwatch.name, Stopwatch.description, Stopwatch.unicode, 4, 2, 1, 0, 0, Stopwatch.color, headPosition, [headPosition], team, Stopwatch.rarity, removeCallback, id)
     this.targetType = 'piece';
@@ -2763,7 +2768,7 @@ class Stopwatch extends Piece {//not passive
     this.hasNeutralSpecial = true;
   }
   async special(targetPiece: Piece):Promise<void>{
-    if(targetPiece.team === this.team){
+    if(targetPiece.team === this.team && targetPiece.id !== this.id){
       targetPiece.movesRemaining = targetPiece.getStat('moves');
       targetPiece.actions = 1;
     } else {
@@ -3327,9 +3332,9 @@ class Bull extends Piece {
   static description = "Can charge, damaging and moving forward";
   static unicode = "U+1F402";
   static color = "#be4414ff";
-  static rarity = 4;//3?
+  static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-  super(Bull.name, Bull.description, Bull.unicode, 4, 3, 1, 3, 2, Bull.color, headPosition, [headPosition], team, Bull.rarity, removeCallback, id)//horse carousel atm //cane: "U+1F9AF"
+  super(Bull.name, Bull.description, Bull.unicode, 4, 3, 1, 2, 2, Bull.color, headPosition, [headPosition], team, Bull.rarity, removeCallback, id)//horse carousel atm //cane: "U+1F9AF"
     this.specialName = 'Charge';
     this.targetType = 'line'
   }
@@ -3363,9 +3368,9 @@ class Buffalo extends Piece {
   static description = "A Sturdy program that can charge, damaging and moving forward";
   static unicode = "U+1F403"//BISON, U+1F9AC
   static color = "rgb(10, 12, 143)";
-  static rarity = 5;//3?
+  static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-  super(Buffalo.name, Buffalo.description, Buffalo.unicode, 4, 3, 1, 4, 3, Buffalo.color, headPosition, [headPosition], team, Buffalo.rarity, removeCallback, id)//horse carousel atm //cane: "U+1F9AF"
+  super(Buffalo.name, Buffalo.description, Buffalo.unicode, 4, 3, 1, 3, 3, Buffalo.color, headPosition, [headPosition], team, Buffalo.rarity, removeCallback, id)//horse carousel atm //cane: "U+1F9AF"
     this.specialName = 'Charge';
     this.targetType = 'line'
   }
@@ -3616,7 +3621,9 @@ class Lightning extends Piece {
    this.canAttack = false;
   }
   async special(targetPiece: Piece):Promise<void>{
-    targetPiece.actions ++
+    if(targetPiece.id !== this. id){
+      targetPiece.actions ++
+    }
     this.actions--
   }
 }

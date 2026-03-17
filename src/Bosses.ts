@@ -219,7 +219,7 @@ class Reaper extends Admin {
 
 class Volcano extends Admin {
   static name = "Volcano";
-  static description = "After 5 turns, burning is applied to every player program";//coundown to round loss??
+  static description = "After 5 turns, burning is applied to every player program at the end of every turn";//coundown to round loss??
   static unicode = "U+1F30B";
   static color = "#790a0aff";
   static rarity = 5;
@@ -701,7 +701,7 @@ class Biohazard extends Admin {
 
 //fog //square //tornado tsunami
 // damage mult for enemy
-export const allBosses = [LowBattery, NorthWind, Downturn, Hook, Mirror, Shrine, Whale, Anchor, Circus, Customs, Factory, Hammer, Izakaya, Wilt, Biohazard, Castle, Lock, Coral, Jack, Snowflake, Sun, Eclipse, Bones, Frog, Volcano, Fog, Omega, Reaper, REDACTED, Wrath,]
+export const allBosses = [LowBattery, NorthWind, Downturn, Hook, Mirror, Shrine, Whale, Anchor, Circus, Customs, Hammer, Izakaya, Wilt, Biohazard, Castle, Lock, Coral, Jack, Snowflake, Sun, Eclipse, Factory, Bones, Frog, Volcano, Fog, Omega, Reaper, REDACTED, Wrath,]
 export const nonStackableBosses = [Mirror, Customs, Snowflake, Sun, Frog, Biohazard, Coral, Izakaya, REDACTED, Fog]//no disease
 //3
 console.log('bosses length: ', allBosses.length)

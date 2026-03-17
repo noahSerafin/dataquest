@@ -20,7 +20,7 @@
             if (StorageManager.getUniqueWinsCount() < 3) return "Win with 3 different operators";
         }
         if (osName === 'Fortran') {
-            if (!StorageManager.hasStakeWin(2)) return "Win at stake 2";
+            if (!StorageManager.hasStakeWin(2)) return "Win with at least 2 infamy";
         }
         if (osName === 'Cobol') {
             if (StorageManager.getUniqueWinsCount() < 5) return "Win with 5 different operators";

@@ -1620,6 +1620,9 @@ class Harvest extends Admin {
       this.count = 0;
     }
   }
+  onRoundEnd() {
+    this.count = 0;
+  }
 }
 
 class Bipolar extends Admin {
@@ -1902,7 +1905,7 @@ export class Ring extends Admin {
   static name = "Ring";
   static description = "Stats changed inside a node persist across rounds";
   static unicode = "U+1F48D";
-  static color = "rgb(237, 210, 40)";
+  static color = "rgb(129, 40, 247)";
   static rarity = 6;
   constructor() {
     super(Ring.name, Ring.description, Ring.unicode, Ring.color, 15, Ring.rarity, 'playerAndGame', 'onRoundEnd')
@@ -2137,7 +2140,7 @@ class Appraisal extends Admin {
 
 export class Camp extends Admin {//needs reviewing
   static name = "Camper";
-  static description = "Your non-hidden programs that don't move gain +1 range each turn, ones that do move lose -1 range.";// to all stats on the end of your turn";
+  static description = "Your non-hidden programs that don't move gain +1 range every 2 turns, ones that do moev revert their range to their base range";// to all stats on the end of your turn";
   static unicode = "U+26FA";//🏕️
   static color = "rgb(26, 2, 65)";
   static rarity = 3;//5 for all stats
@@ -2145,17 +2148,27 @@ export class Camp extends Admin {//needs reviewing
     super(Camp.name, Camp.description,Camp.unicode, Camp.color, 6, Camp.rarity, 'gameState', 'onTurnEnd')
     //private count for shop reference?
   }
+  private count = 0;
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.count++;
     for (const piece of activePieces) {
       if(piece.team === 'player' && !piece.statuses.hidden){
         if(piece.movesRemaining === piece.getStat('moves')){
-          piece.addModifier({range: 1});//encourages camping, seemingly only temporary. If so change to attack
-          //piece.addTempModifier({defence : 1})
+          if(this.count === 2){
+            piece.addModifier({range: 1});//encourages camping, seemingly only temporary. If so change to attack
+            //piece.addTempModifier({defence : 1})
+          }
         } else {
-          piece.addModifier({range: -1});//encourages campinga
+          piece.addModifier({range: -(piece.getModifier('range'))});//encourages camping
         }
       }
     };
+    if(this.count === 2){
+      this.count = 0;
+    }
+  }
+  onRoundEnd() {
+    this.count = 0;
   }
 }
 
@@ -2469,6 +2482,9 @@ class Evergreen extends Admin {
       };
       this.count = 0;
     }
+  }
+  onRoundEnd() {
+    this.count = 0;
   }
 }
 

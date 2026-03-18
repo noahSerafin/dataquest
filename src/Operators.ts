@@ -1,6 +1,6 @@
 import type { OS } from "./types";
 import { Voucher, Mushroom, Garlic, Juice, Meat, Genie, Pandora, Update2, Jar} from "./Items";
-import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Compass, Ambulance, Ring, Camp} from "./AdminPrograms";
+import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Ambulance, Ring, Camp} from "./AdminPrograms";
 
 /*
 export function findPieceClassByName(name: string) {

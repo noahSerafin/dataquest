@@ -1069,13 +1069,14 @@ class Banana extends Piece {
   static color = "#2f724b";
   static rarity = 1;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Trap.name, Trap.description, Trap.unicode, 1, 1, 0, 0, 0, Trap.color, headPosition, [headPosition], team, Trap.rarity, removeCallback, id)
+   super(Banana.name, Banana.description, Banana.unicode, 1, 1, 0, 0, 0, Banana.color, headPosition, [headPosition], team, Banana.rarity, removeCallback, id)
    this.targetType = 'trapPiece';
    this.statuses.hidden = true
    this.statuses.negative = true;
   }
   async special(target: Piece): Promise<void> {
     target.movesRemaining = 0;
+    this.removeCallback?.(this);
   }
 }
 
@@ -1116,7 +1117,7 @@ class Lovebomb extends Piece {
   static color = "#686026";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Tar.name, Tar.description, Tar.unicode, 1, 1, 0, 0, 0, Tar.color, headPosition, [headPosition], team, Tar.rarity, removeCallback, id)
+   super(Lovebomb.name, Lovebomb.description, Lovebomb.unicode, 1, 1, 0, 0, 0, Lovebomb.color, headPosition, [headPosition], team, Lovebomb.rarity, removeCallback, id)
    this.targetType = 'trapPiece';
    this.statuses.hidden = true
    this.statuses.negative = true;
@@ -1131,7 +1132,7 @@ class Lovebomb extends Piece {
     this.actions--
     this.statuses.hidden = false;
     //remove until selection of negative is sorted
-    this.removeCallback?.(this);
+    this.removeCallback?.(this);//not removing on move?
   }
   //check for programs on top, make their movement 0
 }

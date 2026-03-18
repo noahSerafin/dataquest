@@ -578,24 +578,24 @@ const openSummary = (state: boolean) => {
   showSummary.value = state;
 }
 
-const renewBlueprints = () => {
-  if (player.value.hasAdmin('Ring')) {
-    activePieces.value.forEach(piece => {
+const renewBlueprints = async () => {
+  /*if (player.value.hasAdmin('Ring')) {
+    for(const piece of activePieces.value){
       const id = piece.id;
-      player.value.programs.forEach(blueprint => {
+      for(const blueprint of player.value.programs){
         if (blueprint.id === id) {
-          blueprint.maxSize += (piece.getStat('maxSize'));
-          blueprint.moves += (piece.getStat('moves'));
-          blueprint.range += (piece.getStat('range'));
-          blueprint.attack += (piece.getStat('attack'));
-          blueprint.defence += (piece.getStat('defence'));
+          blueprint.maxSize = (piece.getStat('maxSize'));
+          blueprint.moves = (piece.getStat('moves'));
+          blueprint.range = (piece.getStat('range'));
+          blueprint.attack = (piece.getStat('attack'));
+          blueprint.defence = (piece.getStat('defence'));
         }
-      });
-    });
-  }
-  player.value.programs.forEach(blueprint => {
+      };
+    };
+  }*/
+  for(const blueprint of player.value.programs){
     blueprint.isPlaced = false;
-  });
+  };
 }
 
 const lastTurnPieces = ref<InstanceType<typeof Piece>[]>([]);//player
@@ -1293,7 +1293,7 @@ const endRound = async (roundWon: boolean) => {
   selectedPiece.value = null;
   if (roundWon) {
     hasWonRound.value = true;
-    await handleApplyAdmins('onRoundEnd', '');//await??--
+    await handleApplyAdmins('onRoundEnd', '');
     activePieces.value = [];//for needle
     originalPieces.value = [];
     extraDifficulty.value = 0;

@@ -1898,16 +1898,30 @@ class Ribbon extends Admin {//change
   }
 }
 */
-class Ring extends Admin {
+export class Ring extends Admin {
   static name = "Ring";
   static description = "Stats changed inside a node persist across rounds";
   static unicode = "U+1F48D";
-  static color = "#ece942ff";
+  static color = "rgb(237, 210, 40)";
   static rarity = 6;
   constructor() {
-    super(Ring.name, Ring.description, Ring.unicode, Ring.color, 15, Ring.rarity, 'gameState', 'other')
+    super(Ring.name, Ring.description, Ring.unicode, Ring.color, 15, Ring.rarity, 'playerAndGame', 'onRoundEnd')
   }
-}
+  async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+    for(const piece of activePieces){
+      const id = piece.id;
+      for(const blueprint of player.programs){
+        if (blueprint.id === id) {
+          blueprint.maxSize = (piece.getStat('maxSize'));
+          blueprint.moves = (piece.getStat('moves'));
+          blueprint.range = (piece.getStat('range'));
+          blueprint.attack = (piece.getStat('attack'));
+          blueprint.defence = (piece.getStat('defence'));
+        };
+      };
+    };
+  };
+};
 
 class Minerva extends Admin {
   static name = "Minerva";
@@ -2121,7 +2135,7 @@ class Appraisal extends Admin {
   //handle in shop
 }
 
-class Camp extends Admin {//needs reviewing
+export class Camp extends Admin {//needs reviewing
   static name = "Camper";
   static description = "Your non-hidden programs that don't move gain +1 range each turn, ones that do move lose -1 range.";// to all stats on the end of your turn";
   static unicode = "U+26FA";//🏕️

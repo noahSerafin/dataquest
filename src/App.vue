@@ -579,20 +579,6 @@ const openSummary = (state: boolean) => {
 }
 
 const renewBlueprints = async () => {
-  /*if (player.value.hasAdmin('Ring')) {
-    for(const piece of activePieces.value){
-      const id = piece.id;
-      for(const blueprint of player.value.programs){
-        if (blueprint.id === id) {
-          blueprint.maxSize = (piece.getStat('maxSize'));
-          blueprint.moves = (piece.getStat('moves'));
-          blueprint.range = (piece.getStat('range'));
-          blueprint.attack = (piece.getStat('attack'));
-          blueprint.defence = (piece.getStat('defence'));
-        }
-      };
-    };
-  }*/
   for(const blueprint of player.value.programs){
     blueprint.isPlaced = false;
   };

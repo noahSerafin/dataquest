@@ -1,6 +1,7 @@
 import type { Company, Coordinate, SkipReward } from "./types";
 import type { Piece } from "./Pieces";
 import { companies } from "./companies";
+//import { generateNode } from "./nodeBuilder";
 
 interface Level {
   name: string;
@@ -118,6 +119,7 @@ export function generateWorld(
 ): WorldMap {
 
   const pick = () => levelPool[Math.floor(Math.random() * levelPool.length)];
+  //const pick = () => Math.random() > 0.5 ? levelPool[Math.floor(Math.random() * levelPool.length)] : generateNode(difficulty);
 
   const startId = "start";
   const shopId = "shop";

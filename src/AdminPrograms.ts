@@ -304,7 +304,7 @@ class Relay extends Admin {
   static name = "Relay";
   static description = "All placed programs with a range bigger than 1 on placement gain +1 attack";
   static unicode = "U+1F4E1";
-  static color = "#e4d26fff";
+  static color = "rgb(207, 66, 10)";
   static rarity = 2;
   constructor() {
     super(Relay.name, Relay.description, Relay.unicode, Relay.color, 5, Relay.rarity, 'gameState', 'onPlacement')
@@ -566,7 +566,7 @@ class RollerBlades extends Admin {
   static description = "Programs all gain +3 moves on placement";
   static unicode = "U+1F6FC";
   static color = "#0e409eff";
-  static rarity = 4;
+  static rarity = 5;
   constructor() {
     super(RollerBlades.name, RollerBlades.description, RollerBlades.unicode, RollerBlades.color, 8, RollerBlades.rarity, 'gameState', 'onPlacement')
   }
@@ -1037,8 +1037,8 @@ class Feather extends Admin {
   static name = "Feather";
   static description = "+3 moves, -1 maxSize for all placed programs";
   static unicode = "U+1FAB6";
-  static color = "#ff5555";
-  static rarity = 5;
+  static color = "#5590ff";
+  static rarity = 4;
   constructor() {
     super(Feather.name, Feather.description, Feather.unicode, Feather.color, 8, Feather.rarity, 'gameState', 'onPlacement')
   }
@@ -1100,7 +1100,7 @@ class Telescope extends Admin {
   static name = "Telescope";//tower
   static description = "+3 range, -2 moves for all your placed programs";
   static unicode = "U+1F52D";
-  static color = "#ff5555";
+  static color = "#000000";
   static rarity = 3;
   constructor() {
     super(Telescope.name, Telescope.description, Telescope.unicode, Telescope.color, 5, Telescope.rarity, 'gameState', 'onPlacement')
@@ -2721,6 +2721,7 @@ class Bell extends Admin {//needs to reset
     const dealer = activePieces[idx];
     if(playerPieces.length === 1 && dealer && !dealer.immunities.frozen){
       dealer.statuses.frozen = true;
+      dealer.movesRemaining = 0;
     }
   }
 }
@@ -2956,7 +2957,7 @@ export class Clippy extends Admin {
   //handle in player
 }
 
-export const allAdmins = [Bank, Bucket, Candle, Cheese, Smoker, Compass, CreditCard, Crystal, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Seed, Slots, Sprinkler, Tempura, Sneakers, Chime, Abacus, Aesculapius, Appraisal, Balloon, Briefcase, Bubble, Cactus, Coin, Purse, Convenience, FireEngine, Heart, Hermes, Joker, Loot, Clover, Microscope, Newspaper, Pickup, Putter, Relay, Scarf, Trolley, Stiletto, Bowling, Tracker, Violin, Vitamins, AdminMap, Barber, Ace, AirSupport, Bone, Blood, Bouquet, Camp, Luggage, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Dice, Jammer, Roger, Juggler, Ladder, Puzzle, Razor, Sled, Rune, Shades, Stonks, Telescope, Crown, Toolbox, Ambulance, Backdoor, BionicArm, BionicLeg, Crash, Broom, DartBoard, Dove, Evergreen, Eye, Discount, Fountain, Fuel, Spoon, Liberty, Lightbulb, Lotus, Monarch, Ollie, Palette, Pazzaz, PetriDish, Prayer, RollerBlades, Wheel, Pants, Bipolar, Variety, Volatile, Artic, BlackBelt, Lungs, Chemistry, Chivalry, Toilet, Copier, Diamond, Feather, Hamsa, Skyscraper, Howzat, Inheritance, Cherries, Brain, Meteor, Onion, PeaPod, Teddy, Pong, Bell, Ice, Ballet, Umbrella, Dharma, Bath, Cards, Disco, Minerva, Needle, Pi, Osiris, Ring, School, Taoism];
+export const allAdmins = [Bank, Bucket, Candle, Cheese, Smoker, Compass, CreditCard, Crystal, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Seed, Slots, Sprinkler, Tempura, Sneakers, Chime, Abacus, Aesculapius, Appraisal, Balloon, Briefcase, Bubble, Cactus, Coin, Purse, Convenience, FireEngine, Heart, Hermes, Joker, Loot, Clover, Microscope, Newspaper, Pickup, Putter, Relay, Scarf, Trolley, Stiletto, Bowling, Tracker, Violin, Vitamins, AdminMap, Barber, Ace, AirSupport, Bone, Blood, Bouquet, Camp, Luggage, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Dice, Jammer, Roger, Juggler, Ladder, Puzzle, Razor, Sled, Rune, Shades, Stonks, Telescope, Crown, Toolbox, Ambulance, Backdoor, BionicArm, BionicLeg, Crash, Broom, DartBoard, Dove, Evergreen, Eye, Discount, Fountain, Feather, Fuel, Spoon, Liberty, Lightbulb, Lotus, Monarch, Ollie, Palette, Pazzaz, PetriDish, Prayer, Wheel, Pants, Bipolar, Variety, Volatile, Artic, BlackBelt, Lungs, Chemistry, Chivalry, Toilet, Copier, Diamond, Hamsa, Skyscraper, Howzat, Inheritance, Cherries, Brain, Meteor, Onion, PeaPod, Teddy, Pong, RollerBlades, Bell, Ice, Ballet, Umbrella, Dharma, Bath, Cards, Disco, Minerva, Needle, Pi, Osiris, Ring, School, Taoism];
 console.log('admins length: ', allAdmins.length)
 let adminLogs = {
   rarity1: 0,

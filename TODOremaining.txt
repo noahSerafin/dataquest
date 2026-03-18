@@ -1,9 +1,9 @@
 TUTORIAL - clippy
 GAME / BUGS
 spawn not reloading!
-Some statuses not applying to player.
 line target enemies killing themselves/friendlies
 Investigate why taoism or highrise might be adding def every turn
+Some statuses not applying to player, can't replicate this?
 friendlyspecial pieces attempting specials on nothing//removed self
 variants stats reloading but not name/color etc.
 variant should overide base piece color, (and tile colour???)

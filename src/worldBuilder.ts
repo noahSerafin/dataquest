@@ -19,6 +19,7 @@ export interface WorldNode {
   reward: number;
   level?: Level;             // Only for type: level
   hiddenUntilVisited?: string; // node id that must be completed first
+  visited?: boolean;
   skipReward?: SkipReward; //get shop function into helpers to create these
   resolved?: boolean;          // skip nodes only
   visible?: boolean;

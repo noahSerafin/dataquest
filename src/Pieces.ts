@@ -242,16 +242,16 @@ export abstract class Piece {
 
   async applyStatusEffects(mult: number) {
     if (this.statuses.diseased) {
-      this.maxSize = Math.max(1, this.getStat('maxSize') - (1 * Math.abs(mult)));
+      this.addModifier({maxSize: -(1 * Math.abs(mult))});
     }
     if (this.statuses.slowed) {
-      this.moves = Math.max(0, this.getStat('moves') - (1 * Math.abs(mult)));
+      this.addModifier({moves: -(1 * Math.abs(mult))});
     }
     if(this.statuses.blinded){
-      this.range = Math.max(0, this.getStat('range') - (1 * Math.abs(mult)));
+      this.addModifier({range: -(1 * Math.abs(mult))});
     }
     if (this.statuses.poisoned) {
-      this.defence = Math.max(0, this.getStat('defence') - (1 * Math.abs(mult)));
+      this.addModifier({defence: -(1 * Math.abs(mult))});
     }
     if (this.statuses.frozen) {
       //this.moves = 0;
@@ -2051,7 +2051,7 @@ class Greatshield extends Piece {//testt
   static color = "rgba(0, 82, 85, 1)";
   static rarity = 6;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Greatshield.name, Greatshield.description, Greatshield.unicode, 5, 2, 1, 3, 5, Greatshield.color, headPosition, [headPosition], team, Greatshield.rarity, removeCallback, id)
+    super(Greatshield.name, Greatshield.description, Greatshield.unicode, 5, 2, 1, 2, 5, Greatshield.color, headPosition, [headPosition], team, Greatshield.rarity, removeCallback, id)
     this.specialName = 'Testudo';
     this.hasFriendlySpecial = true;
     this.targetType = 'group';
@@ -4002,7 +4002,7 @@ class Unicorn extends Piece {
 //🏗 crane  U+1F3D7
 
 //99 fairy //web?
-export const allPieces = [Ant, Banana, Bee, Egg, Knife, Potato, Rat, Shield, Sling, Snail, TP, Acorn, Aegis, Beetle, Bow, Chick, Chicken, Dagger, Decoy, Dog, Fence, Frond, Doctor, Gecko, Germ, Guard, Hedgehog, Hopper, Jellyfish, Larva, Paladin, Tree, Rooster, Saw, Snake, Tar, Vulture, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, LabRat, LadyBeetle, Lance, Magnet, Mine, Medic, Mosquito, Ninja, Octopus, Officer, Pawn, Peacock, Flute, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Alien, Recurve, Arms, Axe, Bull, Cannon, Lightning, Palm, Paragon, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Kite, Leopard, Lighthouse, Mammoth, Nerf, Oil, Wasp, Puffer, Rabbit, Scarab, Shark, Shrike, Snowman, Soldier, Squid, Stopwatch, Tiger, UFO, Bat, Wizard, Wolf, Zebra, Archdaemon, Bomb, Buffalo, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Gman, Giraffe, Hippo, Lion, Lovebomb, Oni, Orangutan, Rhino, Screwdriver, Shovel, Tank, Coat, Vampire, Bear, Bison, Helicopter, Gorilla, Greatshield, Nuke, Sol, Sponge, Rex, Unicorn];//Dolls //100 +2 (web, ink)
+export const allPieces = [Ant, Banana, Bee, Egg, Knife, Potato, Rat, Shield, Sling, Snail, TP, Acorn, Aegis, Beetle, Bow, Chick, Chicken, Dagger, Decoy, Dog, Fence, Frond, Doctor, Gecko, Germ, Guard, Hedgehog, Hopper, Jellyfish, Larva, Paladin, Tree, Rooster, Saw, Snake, Tar, Vulture, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Bull, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, LabRat, LadyBeetle, Lance, Magnet, Mine, Medic, Mosquito, Ninja, Octopus, Officer, Pawn, Peacock, Flute, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Alien, Arms, Axe, Cannon, Lightning, Palm, Buffalo, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Kite, Leopard, Lighthouse, Mammoth, Nerf, Oil, Wasp, Puffer, Rabbit, Scarab, Shark, Shrike, Snowman, Soldier, Squid, Stopwatch, Tiger, UFO, Bat, Wizard, Wolf, Zebra, Archdaemon, Recurve, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Gman, Giraffe, Hippo, Lion, Lovebomb, Oni, Orangutan, Paragon, Rhino, Screwdriver, Shovel, Tank, Coat, Vampire, Bear, Bison, Helicopter, Gorilla, Greatshield, Nuke, Sol, Sponge, Rex, Unicorn];//Dolls //100 +2 (web, ink)
 console.log('pieces length: ', allPieces.length)
 
 let adminLogs = {

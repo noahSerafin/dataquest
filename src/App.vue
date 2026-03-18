@@ -657,7 +657,7 @@ async function reloadLevel() {
   //if piece has no tiles, use headposition
   graveyard.value = [];
   lastTurnPieces.value = originalPieces.value.map(p => p.clone());
-  playerSpawns.value = [...originalSpawns.value];//not working, backdoor breaks this
+  playerSpawns.value = originalSpawns.value.map(s => ({ ...s }));//not working, backdoor breaks this
   selectedPiece.value = null;
   isPlacing.value = true
   openSummary(false);
@@ -808,7 +808,7 @@ function processSpawnPoints(pieces: Piece[], mod: number) {
     processed.push(piece);
   }
   playerSpawns.value = newPlayerSpawns;
-  originalSpawns.value = newPlayerSpawns;
+  originalSpawns.value = newPlayerSpawns.map(s => ({ ...s }));
 
   return processed;
 }

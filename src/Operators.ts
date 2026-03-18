@@ -44,7 +44,7 @@ export function blueprintFromPieceClass(piece: typeof Piece): PieceBlueprint {
     }
     const testPiece =  {
         id: crypto.randomUUID(),
-        name: "Pawn",
+        name: "Daemon",
         description: '"testing this pieces special move"',
         unicode: 'U+1F47E',
         maxSize: 2,

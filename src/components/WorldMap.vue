@@ -107,7 +107,7 @@
 
     function canClick(node: WorldNode): boolean {
         if (node.id === currentNodeId.value) return false;
-        if(props.player.hasAdmin('Off Roader')){
+        if(props.player.hasAdmin('Off Roader') && !node.visited){ //need to disable nodes after they are visited
             const current = world.value.nodes[currentNodeId.value];
             const sameRow = node.position.y === current.position.y;
             if (sameRow && node.type !== 'boss' && node.type !== 'start') {
@@ -294,6 +294,7 @@
             StorageManager.unlockItem(node.skipReward.value.name);
             break;
         }
+        node.visited = true;
         currentNodeId.value = node.id
         selectedPreviewNode.value = null;
         canReroll.value = true;

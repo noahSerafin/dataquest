@@ -1515,7 +1515,7 @@ class Pants extends Admin {
 class Ace extends Admin {
   static name = "Ace in the hole";
   static description = "Your last placed program gets +1 to all stats";
-  static unicode = "U+1F0A1";//"U+2660";
+  static unicode = "U+2660";//"U+1F0A1";
   static color = "rgb(255, 255, 255)";
   static rarity = 3;
   constructor() {

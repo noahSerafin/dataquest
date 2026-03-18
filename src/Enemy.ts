@@ -419,6 +419,7 @@ function findShortestPath(
   const occupiedTiles = new Set<string>();
   for (const p of activePieces) {
     if (p.statuses.negative && p.team === 'enemy' && p.hasFriendlySpecial) continue;
+    if (p.statuses.negative && p.statuses.hidden && p.team === 'player') continue;
     
     for (const t of p.tiles) {
       occupiedTiles.add(`${t.x},${t.y}`);

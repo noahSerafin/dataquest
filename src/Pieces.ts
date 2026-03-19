@@ -1298,7 +1298,7 @@ class Vice extends Piece {
   static color = "#f5d58d";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Vice.name, Vice.description, Vice.unicode, 2, 2, 1, 1, 1, Vice.color, headPosition, [headPosition], team, Vice.rarity, removeCallback, id)
+   super(Vice.name, Vice.description, Vice.unicode, 2, 2, 1, 2, 1, Vice.color, headPosition, [headPosition], team, Vice.rarity, removeCallback, id)
     this.targetType = 'piece'
     this.specialName = 'Freeze'
   }
@@ -2377,7 +2377,7 @@ class Firebrand extends Piece {
   static color = "#ff0d0dff";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Firebrand.name, Firebrand.description, Firebrand.unicode, 4, 3, 1, 3, 2, Firebrand.color, headPosition, [headPosition], team, Firebrand.rarity, removeCallback, id)
+    super(Firebrand.name, Firebrand.description, Firebrand.unicode, 4, 3, 1, 3, 3, Firebrand.color, headPosition, [headPosition], team, Firebrand.rarity, removeCallback, id)
     this.specialName='Brand'
     this.targetType='piece'
   }
@@ -3097,9 +3097,9 @@ class Shrike extends Piece {
   static description = "A fast high level program that can freeze and damage enemies";
   static unicode = "U+1F426";
   static color = "#bebebeff";
-  static rarity = 4;
+  static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Shrike.name, Shrike.description, Shrike.unicode, 2, 5, 1, 1, 2, Shrike.color, headPosition, [headPosition], team, Shrike.rarity, removeCallback, id)
+   super(Shrike.name, Shrike.description, Shrike.unicode, 2, 5, 1, 2, 2, Shrike.color, headPosition, [headPosition], team, Shrike.rarity, removeCallback, id)
    this.targetType = 'piece'
    this.specialName = 'Pierce'
   }
@@ -4003,7 +4003,7 @@ class Unicorn extends Piece {
 //🏗 crane  U+1F3D7
 
 //99 fairy //web?
-export const allPieces = [Ant, Banana, Bee, Egg, Knife, Potato, Rat, Shield, Sling, Snail, TP, Acorn, Aegis, Beetle, Bow, Chick, Chicken, Dagger, Decoy, Dog, Fence, Frond, Doctor, Gecko, Germ, Guard, Hedgehog, Hopper, Jellyfish, Larva, Paladin, Tree, Rooster, Saw, Snake, Tar, Vulture, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Bull, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, LabRat, LadyBeetle, Lance, Magnet, Mine, Medic, Mosquito, Ninja, Octopus, Officer, Pawn, Peacock, Flute, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Alien, Arms, Axe, Cannon, Lightning, Palm, Buffalo, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Kite, Leopard, Lighthouse, Mammoth, Nerf, Oil, Wasp, Puffer, Rabbit, Scarab, Shark, Shrike, Snowman, Soldier, Squid, Stopwatch, Tiger, UFO, Bat, Wizard, Wolf, Zebra, Archdaemon, Recurve, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Gman, Giraffe, Hippo, Lion, Lovebomb, Oni, Orangutan, Paragon, Rhino, Screwdriver, Shovel, Tank, Coat, Vampire, Bear, Bison, Helicopter, Gorilla, Greatshield, Nuke, Sol, Sponge, Rex, Unicorn];//Dolls //100 +2 (web, ink)
+export const allPieces = [Ant, Banana, Bee, Egg, Knife, Potato, Rat, Shield, Sling, Snail, TP, Acorn, Aegis, Beetle, Bow, Chick, Chicken, Dagger, Decoy, Dog, Fence, Frond, Doctor, Gecko, Germ, Guard, Hedgehog, Hopper, Jellyfish, Larva, Paladin, Tree, Rooster, Saw, Snake, Tar, Vulture, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Bull, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, LabRat, LadyBeetle, Lance, Magnet, Mine, Medic, Mosquito, Ninja, Octopus, Officer, Pawn, Peacock, Flute, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Alien, Arms, Axe, Cannon, Lightning, Palm, Buffalo, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Kite, Leopard, Lighthouse, Mammoth, Nerf, Oil, Wasp, Puffer, Rabbit, Scarab, Shark, Snowman, Soldier, Squid, Stopwatch, Tiger, UFO, Bat, Wizard, Wolf, Zebra, Archdaemon, Recurve, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Gman, Giraffe, Hippo, Lion, Lovebomb, Oni, Orangutan, Paragon, Rhino, Screwdriver, Shovel, Shrike, Tank, Coat, Vampire, Bear, Bison, Helicopter, Gorilla, Greatshield, Nuke, Sol, Sponge, Rex, Unicorn];//Dolls //100 +2 (web, ink)
 console.log('pieces length: ', allPieces.length)
 
 let adminLogs = {

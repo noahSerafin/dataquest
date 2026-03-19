@@ -69,7 +69,7 @@ class Hook extends Admin {
                 playerPieces.push(piece)
             }
         };
-        for(const piece of activePieces){
+        for(const piece of playerPieces){
             const spaceToCheck  = {x: piece.headPosition.x, y: piece.headPosition.y-1}
             //check space is unnocupied and on board
             const isOccupied = activePieces.some(p =>
@@ -265,7 +265,7 @@ class Castle extends Admin {
     static description = "Every enemy gains +1 defence at the start of the round";
     static unicode = "U+1F3EF";
     static color = "rgb(217, 255, 253)";
-    static rarity = 4;
+    static rarity = 3;
     constructor() {
         super(Castle.name, Castle.description, Castle.unicode, Castle.color, 5, Castle.rarity, 'gameState', 'onRoundStart')
     }
@@ -701,7 +701,7 @@ class Biohazard extends Admin {
 
 //fog //square //tornado tsunami
 // damage mult for enemy
-export const allBosses = [LowBattery, NorthWind, Downturn, Hook, Mirror, Shrine, Whale, Anchor, Circus, Customs, Hammer, Izakaya, Wilt, Biohazard, Castle, Lock, Coral, Jack, Snowflake, Sun, Eclipse, Factory, Bones, Frog, Volcano, Fog, Omega, Reaper, REDACTED, Wrath,]
+export const allBosses = [LowBattery, NorthWind, Downturn, Hook, Mirror, Shrine, Whale, Anchor, Castle, Circus, Customs, Hammer, Izakaya, Wilt, Biohazard, Lock, Coral, Jack, Snowflake, Sun, Eclipse, Factory, Bones, Frog, Volcano, Fog, Omega, Reaper, REDACTED, Wrath,]
 export const nonStackableBosses = [Mirror, Customs, Snowflake, Sun, Frog, Biohazard, Coral, Izakaya, REDACTED, Fog]//no disease
 //3
 console.log('bosses length: ', allBosses.length)

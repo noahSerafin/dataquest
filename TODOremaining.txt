@@ -7,6 +7,7 @@ Some statuses not applying to player, can't replicate this?
 friendlyspecial pieces attempting specials on nothing//removed self
 variants stats reloading but not name/color etc.
 variant should overide base piece color, (and tile colour???)
+non stacking bosses should cycle through (mirror becomes too predicatable)
 possible to get stuck on cave and gauntlet if sling/bee and knife spawn
 nerf rosebud - pieces can't stay exposed after a special?
 slots broken, and only applies before a shop, not on the same shop you buy it in

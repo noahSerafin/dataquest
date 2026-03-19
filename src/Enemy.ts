@@ -375,7 +375,7 @@ function findWeakestPlayerInRange(
 
   for (const player of playerPieces) {
     if (player.statuses.hidden) continue;//will even ignore friendlies
-    //if (player.id === enemy.id) continue;//don't target self
+    if (enemy.name === 'Pawn' && player.id === enemy.id) continue;//don't target self
 
     for (const tile of player.tiles) {
       const dist =

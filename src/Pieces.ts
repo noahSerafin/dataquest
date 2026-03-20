@@ -774,7 +774,7 @@ class Mole extends Piece {//unfinished - test negative
 
 class Lance extends Piece {
   static name = "Lance";
-  static description = "Can charge instead of attacking, damaging targets in a staight line and moving forward until stopped";
+  static description = "Can charge, damaging targets in a staight line and moving forward until stopped";
   static unicode = "U+1F3A0";
   static color = "#f9f9f9";
   static rarity = 3;
@@ -782,7 +782,6 @@ class Lance extends Piece {
   super(Lance.name, Lance.description, Lance.unicode, 3, 3, 3, 2, 0, Lance.color, headPosition, [headPosition], team, Lance.rarity, removeCallback, id)//horse carousel atm //cane: "U+1F9AF"
     this.specialName = 'Charge';
     this.targetType = 'line'
-    this.canAttack = false;
   }
 
   async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
@@ -799,7 +798,6 @@ class Lance extends Piece {
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
       );
       if (!stillOccupied) {
-        // The enemy died → Lance can move into the tile
         this.move(tile);
         continue;
       }
@@ -867,7 +865,7 @@ class Cannon extends Piece {
 
 class Nerf extends Piece {
   static name = "Nerf Gun";
-  static description = "a ranged program that can lower the stats of other programs";
+  static description = "a ranged program that can lower all the stats of other programs by -1";
   static unicode = "U+1F52B";
   static color = "#e7ff13ff";
   static rarity = 4;
@@ -959,7 +957,7 @@ class Bomb extends Piece {
 
 class Dataworm extends Piece {//test
   static name = "Dataworm";
-  static description = "A large program that can tunnel through adjacent programs, removing a piece of memory regardless of defence (head excluded)";
+  static description = "A large program that can tunnel through adjacent programs, removing a piece of memory regardless of defence (head excluded), increasing it's own size, decreasing the target's by 1, and applying disease";
   static unicode = "U+1FAB1";//"U+1F41B";
   static color = "#ee74eeff";
   static rarity = 5;
@@ -991,6 +989,11 @@ class Dataworm extends Piece {//test
     // --- 3. Remove that tile from the piece ---
     piece.tiles.splice(tileIndex, 1);
     // --- 4. Move Dataworm into that tile ---
+    this.addModifier({maxSize: 1});
+    piece.addModifier({maxSize: -1});
+    if(!piece.immunities.diseased){
+      piece.statuses.diseased = true;
+    }
     this.move(target);
     this.actions --
   }
@@ -1595,7 +1598,7 @@ class Elephant extends Piece {
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Elephant.name, Elephant.description, Elephant.unicode, 5, 2, 1, 2, 2, Elephant.color, headPosition, [headPosition], team, Elephant.rarity, removeCallback, id)
   }
-  //special - trample: similar to charge
+  //special - trample
 }
 
 class Mammoth extends Piece {
@@ -1902,7 +1905,7 @@ class LabRat extends Piece {
 
 class Bat extends Piece {
   static name = "Vampire Bat";
-  static description = "A program that can steal body memory spaces from other programs, increasing it's max size";//remove tile, +1 temp defence? spread statuess?
+  static description = "A program immune to disease. Can steal body memory spaces from other programs, increasing it's max size, and spread disease to them";//remove tile, +1 temp defence? spread statuess?
   static unicode = "U+1F987";
   static color = "#ff290dff";
   static rarity = 4;
@@ -1918,9 +1921,9 @@ class Bat extends Piece {
     if (tileIndex === 0) return;
     // --- 3. Remove that tile from the piece ---
     piece.tiles.splice(tileIndex, 1);
-    //if(this.tiles.length >= this.getStat('maxSize')){
-      //this.tiles.pop  
-    //}
+    if(!piece.immunities.diseased){
+      piece.statuses.diseased = true;
+    }
     this.actions--
     this.tiles.push(target);
     this.maxSize += 1;
@@ -2321,7 +2324,7 @@ class Cockroach extends Piece {
 
 class Mosquito extends Piece {
   static name = "Mosquito";
-  static description = "Can steal enemy body tiles";//spread statuses?
+  static description = "Can steal enemy body tiles and spread disease to them";//spread statuses?
   static unicode = "U+1F99F";
   static color = "#271f0dff";
   static rarity = 3;
@@ -2339,6 +2342,9 @@ class Mosquito extends Piece {
     piece.tiles.splice(tileIndex, 1);
     if(this.tiles.length >= this.getStat('maxSize')){
       this.tiles.pop  
+    }
+    if(!piece.immunities.diseased){
+      piece.statuses.diseased = true;
     }
     this.actions--
     this.tiles.push(target);
@@ -2835,7 +2841,7 @@ class Vampire extends Piece {
 
 class Centipede extends Piece {
   static name = "Centipede";
-  static description = "A large piece with a high attack that's bite can poision and inflict damage";
+  static description = "A large piece with a high attack that can bite inflicitng poision and damage";
   static unicode = "U+131A8";
   static color = "#3b2108ff";
   static rarity = 5;
@@ -3011,12 +3017,12 @@ class Lighthouse extends Piece {
 
 class Torch extends Piece {//remove from enemies for now
   static name = "Torch";
-  static description = "A program the can expose targets in range";
+  static description = "A long range program that can expose a group of targets";
   static unicode = "U+1F526";
   static color = "#000000ff";
    static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Torch.name, Torch.description, Torch.unicode, 2, 2, 3, 1, 0, Torch.color, headPosition, [headPosition], team, Torch.rarity, removeCallback, id)
+   super(Torch.name, Torch.description, Torch.unicode, 2, 2, 4, 0, 0, Torch.color, headPosition, [headPosition], team, Torch.rarity, removeCallback, id)
     this.specialName = 'Shine';
     this.targetType = 'group';//'line'
     this.canAttack = false;
@@ -3050,12 +3056,12 @@ class Torch extends Piece {//remove from enemies for now
 
 class Camera extends Piece {
   static name = "Camera";
-  static description = "A program that can flash and blind others";
+  static description = "A program that can flash and blind others";//store ids of targets for damage?
   static unicode = "U+1F4F8";
   static color = "#69c3f0ff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Camera.name, Camera.description, Camera.unicode, 4, 1, 3, 0, 0, Camera.color, headPosition, [headPosition], team, Camera.rarity, removeCallback, id)
+   super(Camera.name, Camera.description, Camera.unicode, 4, 1, 3, 1, 0, Camera.color, headPosition, [headPosition], team, Camera.rarity, removeCallback, id)
    this.specialName = 'Flash';
    this.targetType = 'piece'
   }
@@ -3170,7 +3176,7 @@ class Archdaemon extends Piece {
   static name = "Arch Daemon";
   static description = "A stronger Daemon that can apply slow to other programs";
   static unicode = "U+1F608"
-  static color = "rgb(46, 2, 44)";
+  static color = "rgb(78, 10, 6)";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Archdaemon.name, Archdaemon.description, Archdaemon.unicode, 4, 3, 3, 4, 3, Archdaemon.color, headPosition, [headPosition], team, Archdaemon.rarity, removeCallback, id)
@@ -3233,7 +3239,7 @@ class Diplodocus extends Piece {
   static name = "Diplodocus";
   static description = "A very large program with a large range";
   static unicode = "U+1F995";
-  static color = "#1e4419ff";
+  static color = "rgb(62, 101, 57)";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Diplodocus.name, Diplodocus.description, Diplodocus.unicode, 8, 2, 5, 3, 2, Diplodocus.color, headPosition, [headPosition], team, Diplodocus.rarity, removeCallback, id)
@@ -3330,14 +3336,15 @@ class Wolf extends Piece {
 
 class Bull extends Piece {
   static name = "Bull";
-  static description = "Can charge, damaging and moving forward";
+  static description = "Low movement. But can charge instead of attacking, damaging and moving forward";
   static unicode = "U+1F402";
   static color = "#be4414ff";
-  static rarity = 3;
+  static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-  super(Bull.name, Bull.description, Bull.unicode, 4, 3, 1, 2, 2, Bull.color, headPosition, [headPosition], team, Bull.rarity, removeCallback, id)//horse carousel atm //cane: "U+1F9AF"
+  super(Bull.name, Bull.description, Bull.unicode, 4, 0, 2, 2, 2, Bull.color, headPosition, [headPosition], team, Bull.rarity, removeCallback, id)//horse carousel atm //cane: "U+1F9AF"
     this.specialName = 'Charge';
     this.targetType = 'line'
+    this.canAttack = false;
   }
 
   async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
@@ -3354,7 +3361,6 @@ class Bull extends Piece {
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
       );
       if (!stillOccupied) {
-        // The enemy died → Lance can move into the tile
         this.move(tile);
         continue;
       }
@@ -3366,14 +3372,15 @@ class Bull extends Piece {
 
 class Buffalo extends Piece {
   static name = "Buffalo";
-  static description = "A Sturdy program that can charge, damaging and moving forward";
-  static unicode = "U+1F403"//BISON, U+1F9AC
+  static description = "A sturdy program that can charge instead of attacking, damaging and moving forward";
+  static unicode = "U+1F403"
   static color = "rgb(10, 12, 143)";
-  static rarity = 4;
+  static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-  super(Buffalo.name, Buffalo.description, Buffalo.unicode, 4, 3, 1, 3, 3, Buffalo.color, headPosition, [headPosition], team, Buffalo.rarity, removeCallback, id)//horse carousel atm //cane: "U+1F9AF"
+  super(Buffalo.name, Buffalo.description, Buffalo.unicode, 4, 1, 2, 3, 2, Buffalo.color, headPosition, [headPosition], team, Buffalo.rarity, removeCallback, id)//horse carousel atm //cane: "U+1F9AF"
     this.specialName = 'Charge';
-    this.targetType = 'line'
+    this.targetType = 'line';
+    this.canAttack = false;
   }
 
   async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
@@ -3390,7 +3397,6 @@ class Buffalo extends Piece {
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
       );
       if (!stillOccupied) {
-        // The enemy died → Lance can move into the tile
         this.move(tile);
         continue;
       }
@@ -3402,14 +3408,15 @@ class Buffalo extends Piece {
 
 class Bison extends Piece {
   static name = "Bison";
-  static description = "A Sturdy program that can charge, damaging and moving forward";
+  static description = "A Large and strong program that can charge instead of attacking, damaging and moving forward";
   static unicode = "U+1F9AC";
   static color = "rgb(0, 39, 10)";
-  static rarity = 6;//3?
+  static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-  super(Bison.name, Bison.description, Bison.unicode, 5, 3, 1, 5, 4, Bison.color, headPosition, [headPosition], team, Bison.rarity, removeCallback, id)//horse carousel atm //cane: "U+1F9AF"
+  super(Bison.name, Bison.description, Bison.unicode, 5, 1, 3, 4, 3, Bison.color, headPosition, [headPosition], team, Bison.rarity, removeCallback, id)//horse carousel atm //cane: "U+1F9AF"
     this.specialName = 'Charge';
     this.targetType = 'line'
+    this.canAttack = false;
   }
 
   async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
@@ -3426,7 +3433,6 @@ class Bison extends Piece {
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
       );
       if (!stillOccupied) {
-        // The enemy died → Lance can move into the tile
         this.move(tile);
         continue;
       }
@@ -3989,7 +3995,6 @@ class Unicorn extends Piece {
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
       );
       if (!stillOccupied) {
-        // The enemy died → Lance can move into the tile
         this.move(tile);
         continue;
       }
@@ -4003,7 +4008,7 @@ class Unicorn extends Piece {
 //🏗 crane  U+1F3D7
 
 //99 fairy //web?
-export const allPieces = [Ant, Banana, Bee, Egg, Knife, Potato, Rat, Shield, Sling, Snail, TP, Acorn, Aegis, Beetle, Bow, Chick, Chicken, Dagger, Decoy, Dog, Fence, Frond, Doctor, Gecko, Germ, Guard, Hedgehog, Hopper, Jellyfish, Larva, Paladin, Tree, Rooster, Saw, Snake, Tar, Vulture, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Bull, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, LabRat, LadyBeetle, Lance, Magnet, Mine, Medic, Mosquito, Ninja, Octopus, Officer, Pawn, Peacock, Flute, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Alien, Arms, Axe, Cannon, Lightning, Palm, Buffalo, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Kite, Leopard, Lighthouse, Mammoth, Nerf, Oil, Wasp, Puffer, Rabbit, Scarab, Shark, Snowman, Soldier, Squid, Stopwatch, Tiger, UFO, Bat, Wizard, Wolf, Zebra, Archdaemon, Recurve, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Gman, Giraffe, Hippo, Lion, Lovebomb, Oni, Orangutan, Paragon, Rhino, Screwdriver, Shovel, Shrike, Tank, Coat, Vampire, Bear, Bison, Helicopter, Gorilla, Greatshield, Nuke, Sol, Sponge, Rex, Unicorn];//Dolls //100 +2 (web, ink)
+export const allPieces = [Ant, Acorn, Banana, Bee, Egg, Knife, Potato, Rat, Shield, Sling, Snail, TP, Aegis, Beetle, Bow, Bull, Chick, Chicken, Dagger, Decoy, Dog, Fence, Frond, Doctor, Gecko, Germ, Guard, Hedgehog, Hopper, Jellyfish, Larva, Paladin, Tree, Rooster, Saw, Snake, Tar, Vulture, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Buffalo, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, LabRat, LadyBeetle, Lance, Magnet, Mine, Medic, Mosquito, Ninja, Octopus, Officer, Pawn, Peacock, Flute, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Alien, Arms, Axe, Cannon, Lightning, Palm, Bison, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Kite, Leopard, Lighthouse, Mammoth, Nerf, Oil, Wasp, Puffer, Rabbit, Scarab, Shark, Snowman, Soldier, Squid, Stopwatch, Tiger, UFO, Bat, Wizard, Wolf, Zebra, Archdaemon, Recurve, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Gman, Giraffe, Hippo, Lion, Lovebomb, Oni, Orangutan, Paragon, Rhino, Screwdriver, Shovel, Shrike, Tank, Coat, Vampire, Bear, Helicopter, Gorilla, Greatshield, Nuke, Sol, Sponge, Rex, Unicorn];//Dolls //100 +2 (web, ink)
 console.log('pieces length: ', allPieces.length)
 
 let adminLogs = {

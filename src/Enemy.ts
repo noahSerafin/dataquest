@@ -38,11 +38,18 @@ function decideEnemyIntent(
           for (const tile of player.tiles) {
              const key = `${tile.x},${tile.y}`;
             if (optionSet.has(key)) {
-              newTarget = { piece: player, place: tile };
-              //most line pieces can attack, so add a check for friendlies including self between player and target, and don't return the special if it damages another enemy
-              break;
+              const lineTiles = getTilesInLine(enemy, tile);
+              const hitsFriendly = enemyPieces.some(p => 
+                p.id !== enemy.id && 
+                p.tiles.some(pt => lineTiles.some(lt => lt.x === pt.x && lt.y === pt.y))
+              );
+              if (!hitsFriendly) {
+                newTarget = { piece: player, place: tile };
+                break;
+              }
             }
           }
+          if (newTarget) break;
         }
         if (newTarget)  return { type: 'special', target: {line: getTilesInLine(enemy, newTarget.place), activePieces: activePieces} }
       }
@@ -116,6 +123,48 @@ function decideEnemyIntent(
   }
 
   if(enemy.actions > 0  && specialAttempts < 1){//still have an action? 
+    if (enemy.specialName === 'Charge') {
+      const targetCoord = nearest || target?.piece.headPosition;
+      if (targetCoord) {
+        const directions = [
+          { dx: 1, dy: 0 },
+          { dx: -1, dy: 0 },
+          { dx: 0, dy: 1 },
+          { dx: 0, dy: -1 },
+        ];
+        let bestScore = Math.abs(enemy.headPosition.x - targetCoord.x) + Math.abs(enemy.headPosition.y - targetCoord.y);
+        let bestLine: Coordinate[] | null = null;
+        for (const { dx, dy } of directions) {
+          let currentLine: Coordinate[] = [];
+          let validEnd: Coordinate | null = null;
+          let blockedByFriendly = false;
+          for (let step = 1; step <= enemy.getStat('range'); step++) {
+            const tx = enemy.headPosition.x + dx * step;
+            const ty = enemy.headPosition.y + dy * step;
+            const key = `${tx},${ty}`;
+            if (!tileSet.has(key)) break;
+            currentLine.push({ x: tx, y: ty });
+            const occupier = activePieces.find(p => p.tiles.some(t => t.x === tx && t.y === ty));
+            if (occupier) {
+              if (occupier.team === enemy.team && occupier.id !== enemy.id) {
+                blockedByFriendly = true;
+              }
+              break;
+            }
+            validEnd = { x: tx, y: ty };
+          }
+          if (blockedByFriendly || !validEnd) continue;
+          const dist = Math.abs(validEnd.x - targetCoord.x) + Math.abs(validEnd.y - targetCoord.y);
+          if (dist < bestScore) {
+            bestScore = dist;
+            bestLine = [...currentLine];
+          }
+        }
+        if (bestLine && bestLine.length > 0) {
+          return { type: 'special', target: { line: bestLine, activePieces: activePieces } };
+        }
+      }
+    }
     if(enemy.targetType === 'self'){
       const randTile = enemy.tiles[Math.floor(Math.random()*enemy.tiles.length)]
       return {type: 'special', target: randTile}

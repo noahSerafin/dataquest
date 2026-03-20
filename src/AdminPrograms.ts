@@ -2980,7 +2980,6 @@ console.log("Admins of rarity 5: ", adminLogs.rarity5)
 console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //make all immunity admins <= uncommon?
 
-
 //U+1F5BC Framed picture
 //U+26F0 mountain
 //landslide U+1F6D8
@@ -3010,6 +3009,11 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //CANDY, U+1F36C
 //PINCHED FINGERS, U+1F90C
 // FISH CAKE WITH SWIRL DESIGN, U+1F365
+
+//Helm Symbol ⎈ U+2388
+// ♱ U+2671
+// benzene ring ⏣
+//fleur de lis U+269C
 
 //SOCKS, U+1F9E6
 // BILLED CAP, U+1F9E2

@@ -168,7 +168,7 @@ export function blueprintFromPieceClass(piece: typeof Piece): PieceBlueprint {
         range: 1,
         attack: 2,
         defence: 0,
-        rarity: 2,
+        rarity: 3,
         // blueprint-only fields:
         isPlaced: false,
         cost: 1 // or whatever cost formula you want

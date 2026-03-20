@@ -304,7 +304,7 @@ class Relay extends Admin {
   static name = "Relay";
   static description = "All placed programs with a range bigger than 1 on placement gain +1 attack";
   static unicode = "U+1F4E1";
-  static color = "rgb(207, 66, 10)";
+  static color = "rgb(226, 94, 42)";
   static rarity = 2;
   constructor() {
     super(Relay.name, Relay.description, Relay.unicode, Relay.color, 5, Relay.rarity, 'gameState', 'onPlacement')
@@ -1346,33 +1346,23 @@ export class Ambulance extends Admin {//a promoted piece dying should recover th
   static name = "Ambulance";
   static description = "Recovers all your destroyed programs to your inventory, letting you reload them";
   static unicode = "U+1F691";
-  static color = "#ff5555";
+  static color = "#a2cbc7";
   static rarity = 4;
   constructor() {
     super(Ambulance.name, Ambulance.description, Ambulance.unicode, Ambulance.color, 5, Ambulance.rarity, 'playerAndGame', 'onPieceDestruction')
   }
-  async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
-    /*const promoted = activePieces.find(p => p.id === (id + 'prom1'));//filter as pawn will give 2 pieces
-    if(promoted){
-      console.log('promoted piece found, exiting', promoted.name)
-      console.log(promoted.name, promoted.id)
-      return;
-    }*/
-    const idx = activePieces.findIndex(p => p.id === id);
-    //check for corresponding pawn in inventory
-    //const pawn = player.programs.findIndex(bp => bp.id === (activePieces[idx].id.substring(0, activePieces[idx].id.length - 1)) )
-    //const bpIdx = pawn ? pawn : player.programs.findIndex(bp => bp.id === activePieces[idx].id )
-    const bpIdx = player.programs.findIndex(bp => bp.id === activePieces[idx].id )
-    if(activePieces[idx].team==='player'){
-      if(activePieces[idx].name === 'Pawn'){
-        const promoted = activePieces.findIndex(p => p.id === id + '1');
-        if(promoted) {
-          console.log('promted piece found')
+  async apply({ activePieces, player, piece }: { activePieces: Piece[], player: Player, piece?: Piece }) {
+    if (!piece) return;
+    const bpIdx = player.programs.findIndex(bp => bp.id === piece.id )
+    if(piece.team==='player'){
+      if(piece.name === 'Pawn'){
+        const promoted = activePieces.findIndex(p => p.id === piece.id + '1');
+        if(promoted !== -1) {
+          console.log('promoted piece found')
           return;
         }
       }
-      player.programs[bpIdx].isPlaced = false;
-      activePieces.filter(p => p.id !== activePieces[idx].id);//we could splice, but this might be safer?
+      if (bpIdx !== -1) player.programs[bpIdx].isPlaced = false;
     }
   }
 }
@@ -1496,13 +1486,12 @@ class Pants extends Admin {
     super(Pants.name, Pants.description, Pants.unicode, Pants.color, 5, Pants.rarity, 'playerAndGame', 'onPieceDestruction')
   }
   private count = 0;
-  async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+  async apply({ player, piece }: { activePieces?: Piece[], player: Player, piece?: Piece }) {
+    if (!piece) return;
     if(this.count === 0){
-      const idx = activePieces.findIndex(p => p.id === id);
-      const bpIdx = player.programs.findIndex(bp => bp.id === id )
-      if(activePieces[idx].team==='player'){
-        player.programs[bpIdx].isPlaced = false;
-        activePieces.filter(p => p.id !== activePieces[idx].id);//we could splice, but this might be safer?
+      const bpIdx = player.programs.findIndex(bp => bp.id === piece.id )
+      if(piece.team==='player'){
+        if (bpIdx !== -1) player.programs[bpIdx].isPlaced = false;
       }
       this.count += 1;//must be reset at end of round;
     }
@@ -1634,12 +1623,12 @@ class Bipolar extends Admin {
   constructor() {
     super(Bipolar.name, Bipolar.description, Bipolar.unicode, Bipolar.color, 5, Bipolar.rarity, 'playerAndGame', 'onPieceDestruction')
   }
-  async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
-    const idx = activePieces.findIndex(p => p.id === id);
-    if(activePieces[idx].team === 'enemy'){
+  async apply({ player, piece }: { activePieces?: Piece[], player: Player, piece?: Piece }) {
+    if (!piece) return;
+    if(piece.team === 'enemy'){
       player.money += 1
     }
-    if(activePieces[idx].team === 'player'){
+    if(piece.team === 'player'){
       player.money -= 5
     }
   }
@@ -2193,10 +2182,9 @@ class Bowling extends Admin {//test
   constructor() {
     super(Bowling.name, Bowling.description, Bowling.unicode, Bowling.color, 4, Bowling.rarity, 'gameState', 'onPieceDestruction')
   }
-  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
-    const idx = activePieces.findIndex(p => p.id === id);//gets called just before removal, so piece hasn't been removed yet
-    if (idx === -1) return;
-    const targetTile = activePieces[idx].headPosition
+  async apply({ activePieces, piece }: { activePieces: Piece[], piece?: Piece }) {
+    if (!piece) return;
+    const targetTile = piece.headPosition
     const adjacent : Coordinate[] = [
       {x: targetTile.x+1, y: targetTile.y },
       {x: targetTile.x-1, y: targetTile.y },
@@ -2204,7 +2192,6 @@ class Bowling extends Admin {//test
       {x: targetTile.x, y: targetTile.y-1 }
     ];
     for (const piece of activePieces) {
-      if(piece.id === id) return;//skip the piece being destroyed, continue?
       const isAdjacent = piece.tiles.some(t =>
         adjacent.some(c => c.x === t.x && c.y === t.y)
       );
@@ -2389,12 +2376,12 @@ class Putter extends Admin {//test
   constructor() {
     super(Putter.name, Putter.description, Putter.unicode, Putter.color, 2, Putter.rarity, 'gameState', 'onPieceDestruction')
   }
-  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
-
-    const enemiesLeft = activePieces.filter(p => p.team === 'enemy' && p.id !== id);//tile check because piece will not have been removed yet
+  async apply({ activePieces, piece }: { activePieces: Piece[], piece?: Piece }) {
+    if (piece?.team !== 'enemy') return;
+    const enemiesLeft = activePieces.filter(p => p.team === 'enemy');
     if(enemiesLeft.length === 1){
       const idx = activePieces.findIndex(p => p.id === enemiesLeft[0].id); 
-      activePieces[idx].addModifier({maxSize: -1, moves: -1, range: -1, attack: -1, defence: -1})
+      if (idx !== -1) activePieces[idx].addModifier({maxSize: -1, moves: -1, range: -1, attack: -1, defence: -1})
     }
   }
 }
@@ -2736,10 +2723,10 @@ class Violin extends Admin {//test
   constructor() {
     super(Violin.name, Violin.description, Violin.unicode, Violin.color, 3, Violin.rarity, 'playerAndGame', 'onPieceDestruction')
   }
-  async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
-    const idx = activePieces.findIndex(p => p.id === id);
-    const idbp = player.programs.findIndex(bp => bp.id === id);
-    if(idbp && activePieces[idx].team === 'player'){
+  async apply({ player, piece }: { activePieces?: Piece[], player: Player, piece?: Piece }) {
+    if (!piece) return;
+    const idbp = player.programs.findIndex(bp => bp.id === piece.id);
+    if(idbp !== -1 && piece.team === 'player'){
       player.money += 3;
     }
   }

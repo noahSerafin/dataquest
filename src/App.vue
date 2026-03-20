@@ -487,20 +487,20 @@ function replaceBosses(admins: Admin[]) {
   bossAdmins.value = admins;
 }
 
-async function handleApplyAdmins(trigger: AdminTrigger, id: string) {//admin and target
+async function handleApplyAdmins(trigger: AdminTrigger, id: string, piece?: Piece) {//admin and target
   const playerAdmins = player.value.admins;
   for (const admin of playerAdmins) {
     if (trigger === admin.triggerType) {
       // sort through target types, decide what to pass
       console.log(admin.name, 'trigger', trigger)
       if (admin.targetType === 'gameState') {
-        await admin.apply({ id: id, activePieces: activePieces.value })
+        await admin.apply({ id: id, activePieces: activePieces.value, piece })
       }
       if (admin.targetType === 'playerAndGame') {
-        await admin.apply({ id: id, activePieces: activePieces.value, player: player.value })
+        await admin.apply({ id: id, activePieces: activePieces.value, player: player.value, piece })
       }
       if (admin.targetType === 'player') {
-        await admin.apply({ player: player.value })
+        await admin.apply({ player: player.value, piece })
       }
     }
   };
@@ -510,13 +510,13 @@ async function handleApplyAdmins(trigger: AdminTrigger, id: string) {//admin and
       if (trigger === admin.triggerType) {
         // sort through target types, decide what to pass
         if (admin.targetType === 'player') {
-          await admin.apply({ player: player.value })
+          await admin.apply({ player: player.value, piece })
         }
         if (admin.targetType === 'gameState') {
-          await admin.apply({ id, activePieces: activePieces.value })
+          await admin.apply({ id, activePieces: activePieces.value, piece })
         }
         if (admin.targetType === 'playerAndGame') {
-          await admin.apply({ id, activePieces: activePieces.value, player: player.value })
+          await admin.apply({ id, activePieces: activePieces.value, player: player.value, piece })
         }
         if (admin.targetType === 'piecesAndBoard') {
           await admin.apply({ activePieces: activePieces.value, board: level.value.tiles })
@@ -841,12 +841,11 @@ async function removePiece(piece: Piece) {
     const index = player.value.admins.findIndex(a => a.name === 'Parachute');
     if (index !== -1) player.value.admins.splice(index, 1);
   } else {
-    await handleApplyAdmins('onPieceDestruction', piece.id);
     const idx = activePieces.value.findIndex(p => p.id === piece.id);
     if (idx !== -1) {
       activePieces.value.splice(idx, 1);
-      activePieces.value = [...activePieces.value]; // Trigger Vue reactivity
     }
+    await handleApplyAdmins('onPieceDestruction', piece.id, piece);
     //graveyard?
     if (piece.name == 'Dolls') {
       if (piece.getStat('maxSize') > 1) {
@@ -858,7 +857,6 @@ async function removePiece(piece: Piece) {
         );
         NewDoll.maxSize = piece.getStat('maxSize') - 1;
         activePieces.value.push(NewDoll);
-        activePieces.value = [...activePieces.value];
       }
     }
   }

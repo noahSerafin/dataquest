@@ -396,7 +396,7 @@ class Shield extends Piece {
 
 class Aegis extends Piece {
   static name = "Aegis";
-  static description = "An advanced defensive piece that can retaliate against attacks";
+  static description = "An advanced defensive piece that can use it's special to retaliate against attacks";//damaging special? buckler for parry?
   static unicode = "U+26FB";
   static color = "#06789bff";
   static rarity = 2;
@@ -458,7 +458,7 @@ class Tree extends Piece {
   static name = "Oak";
   static description = "A program that can spawn Acorns upon reaching it's max size";
   static unicode = "U+1F333";
-  static color = "rgb(41, 252, 21)";
+  static color = "rgb(45, 162, 34)";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Tree.name, Tree.description, Tree.unicode, 4, 1, 1, 0, 2, Tree.color, headPosition, [headPosition], team, Tree.rarity, removeCallback, id)
@@ -1652,7 +1652,7 @@ class Fencer extends Piece {
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Fencer.name, Fencer.description, Fencer.unicode, 3, 2, 1, 2, 1, Fencer.color, headPosition, [headPosition], team, Fencer.rarity, removeCallback, id)
-   this.specialName = 'Riposte';
+   this.specialName = 'En garde';
    this.targetType = 'self'
   }
   async special(_target: Coordinate):Promise<void>{
@@ -1811,7 +1811,7 @@ class Flute extends Piece {//not working
   static name = "Piper";
   static description = "A program that can summon rats";
   static unicode = "U+1FA88";
-  static color = "#6ea1caff";
+  static color = "rgb(96, 197, 157)";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Flute.name, Flute.description, Flute.unicode, 1, 1, 1, 0, 0, Flute.color, headPosition, [headPosition], team, Flute.rarity, removeCallback, id)
@@ -4008,7 +4008,7 @@ class Unicorn extends Piece {
 //🏗 crane  U+1F3D7
 
 //99 fairy //web?
-export const allPieces = [Ant, Acorn, Banana, Bee, Egg, Knife, Potato, Rat, Shield, Sling, Snail, TP, Aegis, Beetle, Bow, Bull, Chick, Chicken, Dagger, Decoy, Dog, Fence, Frond, Doctor, Gecko, Germ, Guard, Hedgehog, Hopper, Jellyfish, Larva, Paladin, Tree, Rooster, Saw, Snake, Tar, Vulture, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Buffalo, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, LabRat, LadyBeetle, Lance, Magnet, Mine, Medic, Mosquito, Ninja, Octopus, Officer, Pawn, Peacock, Flute, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Alien, Arms, Axe, Cannon, Lightning, Palm, Bison, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Kite, Leopard, Lighthouse, Mammoth, Nerf, Oil, Wasp, Puffer, Rabbit, Scarab, Shark, Snowman, Soldier, Squid, Stopwatch, Tiger, UFO, Bat, Wizard, Wolf, Zebra, Archdaemon, Recurve, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Gman, Giraffe, Hippo, Lion, Lovebomb, Oni, Orangutan, Paragon, Rhino, Screwdriver, Shovel, Shrike, Tank, Coat, Vampire, Bear, Helicopter, Gorilla, Greatshield, Nuke, Sol, Sponge, Rex, Unicorn];//Dolls //100 +2 (web, ink)
+export const allPieces = [Ant, Acorn, Banana, Bee, Egg, Knife, Potato, Rat, Shield, Sling, Snail, TP, Aegis, Beetle, Bow, Bull, Chick, Chicken, Dagger, Decoy, Dog, Fence, Frond, Doctor, Gecko, Germ, Guard, Hedgehog, Hopper, Jellyfish, Larva, Tree, Flute, Rooster, Saw, Snake, Tar, Vulture, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Buffalo, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, LabRat, LadyBeetle, Lance, Magnet, Mine, Medic, Mosquito, Ninja, Octopus, Officer, Paladin, Pawn, Peacock, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Alien, Arms, Axe, Cannon, Lightning, Palm, Bison, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Kite, Leopard, Lighthouse, Mammoth, Nerf, Oil, Wasp, Puffer, Rabbit, Scarab, Shark, Snowman, Soldier, Squid, Stopwatch, Tiger, UFO, Bat, Wizard, Wolf, Zebra, Archdaemon, Recurve, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Gman, Giraffe, Hippo, Lion, Lovebomb, Oni, Orangutan, Paragon, Rhino, Screwdriver, Shovel, Shrike, Tank, Coat, Vampire, Bear, Helicopter, Gorilla, Greatshield, Nuke, Sol, Sponge, Rex, Unicorn];//Dolls //100 +2 (web, ink)
 console.log('pieces length: ', allPieces.length)
 
 let adminLogs = {

@@ -1311,7 +1311,7 @@ class Spoon extends Admin {
 class Hermes extends Admin {//moves
   static name = "Hermes Wings";
   static description = "All placed programs are immune to being slowed";
-  static unicode = "U+1FABD";//wing, icarus?
+  static unicode = "U+269A";//"U+1FABD";//wing, icarus?
   static color = "#083546ff";
   static rarity = 2;
   constructor() {
@@ -3014,6 +3014,10 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 // ♱ U+2671
 // benzene ring ⏣
 //fleur de lis U+269C
+//۩ U+06E9 Arabic Place of Sajdah. Prayer
+// U+1F3C4 surfing
+// U+16B9 rune P
+//rune bloodborne  U+16C9
 
 //SOCKS, U+1F9E6
 // BILLED CAP, U+1F9E2

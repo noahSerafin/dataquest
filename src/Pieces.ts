@@ -2073,7 +2073,7 @@ class Greatshield extends Piece {//testt
 
 class Wizard extends Piece {
   static name = "Wizard";
-  static description = "A program that can telport to unnoccupied spaces";//load other programs without ending a turn?
+  static description = "A program that can telport to unnoccupied spaces";//hopper does this //Enchant: buff friendlies? //Summon: load other programs without ending a turn?
   static unicode = "U+1F9D9";
   static color = "#7600c5ff";
   static rarity = 4;
@@ -4044,6 +4044,7 @@ console.log("Pieces of rarity 4: ", adminLogs.rarity4)
 console.log("Pieces of rarity 5: ", adminLogs.rarity5)
 console.log("Pieces of rarity 6: ", adminLogs.rarity6)
 
+//U+1F6A9 Triangular flag - Banner: boost group of friendly's attack
 
 //SWAN, U+1F9A2 - break a man's arm /reduce range?
 

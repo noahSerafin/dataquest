@@ -144,7 +144,7 @@ const activeTab = ref<'pieces' | 'items' | 'admins' | 'bosses' | 'stats'>('piece
           </div>
           <div v-else class="os-stats-list">
             <div v-for="(osData, osunicode) in stats.osStats" :key="osunicode" class="os-stat-card">
-              <div class="os-icon">{{ String.fromCodePoint(parseInt(String(osunicode).replace('U+', ''), 16)) }}</div>
+              <div class="os-icon">{{ String.fromCodePoint(parseInt(String(osunicode).replace('U+', ''), 16), 0xFE0F) }}</div>
               <div class="os-details">
                 <div class="total-wins">Total Wins: {{ osData.totalWins }}</div>
                 <div class="stake-wins" v-if="Object.keys(osData.winsByStake).length > 0">

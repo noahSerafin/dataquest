@@ -383,7 +383,7 @@ class Shrine extends Admin {
     static name = "Shrine";
     static description = "Every player program loses -1 attack";
     static unicode = "U+26E9";
-    static color = "#7a1217ff";
+    static color = "rgb(255, 255, 255)";
     static rarity = 2;
     constructor() {
         super(Shrine.name, Shrine.description, Shrine.unicode, Shrine.color, 4, Shrine.rarity, 'gameState', 'onPlacement')

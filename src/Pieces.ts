@@ -774,12 +774,12 @@ class Mole extends Piece {//unfinished - test negative
 
 class Lance extends Piece {
   static name = "Lance";
-  static description = "Can charge, damaging targets in a staight line and moving forward until stopped";
+  static description = "An taccking piece that can charge, damaging targets in a staight line and moving forward until stopped";
   static unicode = "U+1F3A0";
   static color = "#f9f9f9";
-  static rarity = 3;
+  static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-  super(Lance.name, Lance.description, Lance.unicode, 3, 3, 3, 2, 0, Lance.color, headPosition, [headPosition], team, Lance.rarity, removeCallback, id)//horse carousel atm //cane: "U+1F9AF"
+  super(Lance.name, Lance.description, Lance.unicode, 3, 2, 3, 2, 0, Lance.color, headPosition, [headPosition], team, Lance.rarity, removeCallback, id)//horse carousel atm //cane: "U+1F9AF"
     this.specialName = 'Charge';
     this.targetType = 'line'
   }
@@ -1117,7 +1117,7 @@ class Lovebomb extends Piece {
   static name = "Love Bomb";
   static description = "A program invisble to the enemy that applies charmed to programs moving over it, removing itself";
   static unicode = "U+1F498";
-  static color = "#686026";
+  static color = "#682646";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Lovebomb.name, Lovebomb.description, Lovebomb.unicode, 1, 1, 0, 0, 0, Lovebomb.color, headPosition, [headPosition], team, Lovebomb.rarity, removeCallback, id)
@@ -1172,7 +1172,7 @@ class Mine extends Piece {
   static description = "A program invisble to the enemy that damages programs moving over it, removing itself";
   static unicode = "U+1F4A5";
   static color = "#ff9d00";
-  static rarity = 3;
+  static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Mine.name, Mine.description, Mine.unicode, 1, 1, 0, 5, 0, Mine.color, headPosition, [headPosition], team, Mine.rarity, removeCallback, id)
     this.targetType = 'trapPiece';
@@ -1761,9 +1761,9 @@ class Wasp extends Piece {
   static description = "A program that can replace an enemy body piece with a larva";
   static unicode = "U+131A4";
   static color = "#802f00ff";
-  static rarity = 4;
+  static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Wasp.name, Wasp.description, Wasp.unicode, 3, 3, 1, 3, 1, Wasp.color, headPosition, [headPosition], team, Wasp.rarity, removeCallback, id)
+   super(Wasp.name, Wasp.description, Wasp.unicode, 3, 2, 1, 3, 1, Wasp.color, headPosition, [headPosition], team, Wasp.rarity, removeCallback, id)
    this.specialName = 'Inject';
    this.targetType = 'placeAndPieces';
    this.hasFriendlySpecial = false;
@@ -3481,7 +3481,7 @@ class Hippo extends Piece {
   static name = "Hippo";
   static description = "A tough program that can charge, damaging targets in a staight line and moving forward until stopped";
   static unicode = "U+1F99B";
-  static color = "rgb(90, 74, 208)";
+  static color = "rgb(98, 90, 162)";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
   super(Hippo.name, Hippo.description, Hippo.unicode, 5, 1, 2, 4, 3, Hippo.color, headPosition, [headPosition], team, Hippo.rarity, removeCallback, id)//horse carousel atm //cane: "U+1F9AF"
@@ -3936,7 +3936,7 @@ class Coat extends Piece {
   static name = "Turncoat";
   static description = "A hidden trap program that will flip the team of whatever passes over it, removing itself.";
   static unicode = "U+1F9E5";
-  static color = "rgb(0, 0, 0)";
+  static color = "rgb(34, 34, 34)";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Coat.name, Coat.description, Coat.unicode, 1, 1, 0, 0, 0, Coat.color, headPosition, [headPosition], team, Coat.rarity, removeCallback, id)
@@ -4005,7 +4005,7 @@ class Unicorn extends Piece {
 //🏗 crane  U+1F3D7
 
 //99 fairy //web?
-export const allPieces = [Ant, Acorn, Banana, Bee, Egg, Knife, Potato, Rat, Shield, Sling, Snail, TP, Aegis, Beetle, Bow, Bull, Chick, Chicken, Dagger, Decoy, Dog, Fence, Frond, Doctor, Gecko, Germ, Guard, Hedgehog, Jellyfish, Larva, Tree, Flute, Rooster, Saw, Snake, Tar, Vulture, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Buffalo, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, Hopper, LabRat, LadyBeetle, Lance, Magnet, Mine, Medic, Mosquito, Ninja, Octopus, Officer, Paladin, Pawn, Peacock, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Alien, Arms, Axe, Cannon, Lightning, Palm, Bison, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Kite, Leopard, Lighthouse, Mammoth, Nerf, Oil, Wasp, Puffer, Rabbit, Scarab, Shark, Snowman, Soldier, Squid, Stopwatch, Tiger, Bat, Wizard, Wolf, Zebra, Archdaemon, Recurve, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Gman, Giraffe, Hippo, Lion, Lovebomb, Oni, Orangutan, Paragon, Rhino, Screwdriver, Shovel, Shrike, Tank, Coat, UFO, Vampire, Bear, Helicopter, Gorilla, Greatshield, Nuke, Sol, Sponge, Rex, Unicorn];//Dolls //100 +2 (web, ink)
+export const allPieces = [Ant, Acorn, Banana, Bee, Egg, Knife, Potato, Rat, Shield, Sling, Snail, TP, Aegis, Beetle, Bow, Bull, Chick, Chicken, Dagger, Decoy, Dog, Fence, Frond, Doctor, Gecko, Germ, Guard, Hedgehog, Jellyfish, Larva, Lance, Tree, Flute, Rooster, Saw, Snake, Tar, Vulture, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Buffalo, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, Hopper, LabRat, LadyBeetle, Magnet, Medic, Mosquito, Ninja, Octopus, Officer, Paladin, Wasp, Pawn, Peacock, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Alien, Arms, Axe, Cannon, Lightning, Palm, Bison, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Kite, Leopard, Lighthouse, Mammoth, Mine, Nerf, Oil, Puffer, Rabbit, Scarab, Shark, Snowman, Soldier, Squid, Stopwatch, Tiger, Bat, Wizard, Wolf, Zebra, Archdaemon, Recurve, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Gman, Giraffe, Hippo, Lion, Lovebomb, Oni, Orangutan, Paragon, Rhino, Screwdriver, Shovel, Shrike, Tank, Coat, UFO, Vampire, Bear, Helicopter, Gorilla, Greatshield, Nuke, Sol, Sponge, Rex, Unicorn];//Dolls //100 +2 (web, ink)
 console.log('pieces length: ', allPieces.length)
 
 let adminLogs = {
@@ -4044,9 +4044,12 @@ console.log("Pieces of rarity 6: ", adminLogs.rarity6)
 //chequered flag U+1F3C1
 //U+1F6A9 Triangular flag - Banner: boost group of friendly's attack
 
+//Invisible wall - hi defence hidden piece
+//FISHING POLE AND FISH, U+1F3A3 long range - move a piece toward it
+//PLAYGROUND SLIDE, U+1F6DD like gate but with more range? line target??
+
 //SWAN, U+1F9A2 - break a man's arm /reduce range?
 
-//PLAYGROUND SLIDE, U+1F6DD like gate but with more range? line target??
 
 //FROG FACE, U+1F438 //range 3 low atk //poison/hop ability? FROG EGYPTIAN HIEROGLYPH I007, U+1318F
 

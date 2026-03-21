@@ -10,7 +10,7 @@ export const companies: Company[] = [
     { name: 'Sunrise Associates', abbr: 'SRA', unicode: "U+1F305" },
     { name: 'Saturn Solutions', abbr: 'SSL', unicode: "U+1FA90" },
     { name: 'Flyby Surveilance', abbr: 'FBS', unicode: "U+1FAB0" },
-    { name: 'Monkey Media', abbr: 'MMD', unicode: "U+1F435" },
+    { name: 'Monkey Media', abbr: 'MMD', unicode: "U+1F412"},//"U+1F435" },
     { name: 'Red Sky Dynamics', abbr: 'RSD', unicode: "U+1F3B4" },
     { name: 'Whiteflower Global', abbr: 'WFG', unicode: "U+1F4AE" },
     { name: 'Cook.io', abbr: 'CKI', unicode: "U+1F36A" },

@@ -1,30 +1,6 @@
 import type { OS } from "./types";
 import { Voucher, Mushroom, Garlic, Juice, Meat, Genie, Pandora, Update2, Jar} from "./Items";
-import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Clippy} from "./AdminPrograms";
-
-/*
-export function findPieceClassByName(name: string) {
-  return allPieces.find(p => p.name.toLowerCase() === name.toLowerCase()) || null;
-}
-export function blueprintFromPieceClass(piece: typeof Piece): PieceBlueprint {
-    return {
-        id: crypto.randomUUID(),
-        name: piece.name,
-        description: piece.description,
-        unicode: piece.unicode,
-        maxSize: piece.maxSize,
-        moves: piece.moves,
-        range: piece.range,
-        attack: piece.attack,
-        defence: piece.defence,
-        rarity: piece.rarity,
-        color: piece.color,
-
-        // blueprint-only fields:
-        isPlaced: false,
-        cost: piece.rarity * 10 // or whatever cost formula you want
-    };
-}*/
+import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Clippy, Notepad} from "./AdminPrograms";
 
     const knife =  {
         id: crypto.randomUUID(),
@@ -253,33 +229,81 @@ export function blueprintFromPieceClass(piece: typeof Piece): PieceBlueprint {
         isPlaced: false,
         cost: 1 // or whatever cost formula you want
     }
+    const lance = {
+        id: crypto.randomUUID(),
+        name: "Lance",
+        description: "A test piece",
+        unicode: "U+1F3A0",
+        maxSize: 3,
+        moves: 2,
+        range: 3,
+        attack: 2,
+        defence: 0,
+        rarity: 1,
+        color: "#2fc5ebff",
+        isPlaced: false,
+        cost: 2,
+    }
+    const banana = {
+        id: crypto.randomUUID(),
+        name: "Banana Peel",
+        description: "A test piece",
+        unicode: "U+1F34C",
+        maxSize: 1,
+        moves: 1,
+        range: 0,
+        attack: 0,
+        defence: 0,
+        rarity: 1,
+        color: "#2f724b",
+        isPlaced: false,
+        cost: 1,
+    }
+    //1, 1, 0, 0, 0,
+
     const testhybrid = {
-    id: "274ec329-8c17-4265-8c12-e9a28bcf0112",
-    name: "Lance",
-    description: "A test piece",
-    unicode: "U+1F3A0",
-    maxSize: 3,
-    moves: 2,
-    range: 3,
-    attack: 2,
-    defence: 0,
-    rarity: 1,
-    color: "#2fc5ebff",
-    isPlaced: false,
-    cost: 1,
-    hybridName: 'LanceHog',
-    extraUnicode: 'U+1F994'
-  }
+        id: "274ec329-8c17-4265-8c12-e9a28bcf0112",
+        name: "Lance",
+        description: "A test piece",
+        unicode: "U+1F3A0",
+        maxSize: 3,
+        moves: 2,
+        range: 3,
+        attack: 2,
+        defence: 0,
+        rarity: 1,
+        color: "#2fc5ebff",
+        isPlaced: false,
+        cost: 1,
+        hybridName: 'LanceHog',
+        extraUnicode: 'U+1F994'
+    }
 
     //guard, snail, TP, Lance, Bug, Screwdriver
 
 /*
-        this.interestCap = interestCap;
-        this.bonusInterest = bonusInterest;
-        this.hasTrolley = hasTrolley;
-        this.hasToolbox = hasToolbox;
-        */
-const Steam : OS = {//knife //shield //sling
+    this.interestCap = interestCap;
+    this.bonusInterest = bonusInterest;
+    this.hasTrolley = hasTrolley;
+    this.hasToolbox = hasToolbox;
+*/
+
+//MINUS WHITE X, U+2756
+//
+
+const Window95 : OS = {
+    name: 'Classic95',
+    unicode: 'U+229E',
+    money: 5,
+    memory: 5,
+    adminSlots: 5,
+    blueprints: [lance, shield, banana],
+    items: [new Voucher, new Mushroom],
+    admins: [new Clippy, new Notepad],
+    lives: 3,
+    description: 'The intro to cyberspace, comes with a helpful assistant'
+}
+const Steam : OS = {
     name: 'Steam',
     unicode: 'U+1F682',
     money: 3,
@@ -352,7 +376,7 @@ const Fortran : OS = {//lance //bug //screwdriver
     adminSlots: 3,
     blueprints: [labrat],
     items: [new Pandora],
-    admins: [new Chemistry, new Volatile, new PetriDish],
+    admins: [new Chemistry, new Volatile, new PetriDish],//Microscope?
     lives: 2,
     description: "Ancient alchemical technology, heavily focused on statuses."
 }
@@ -374,18 +398,6 @@ const Cobol : OS = {//lance //bug //screwdriver
 //explorer - map, compass, offroader
 //Fleet - vehicles: offroader, pickup, van, artic, ambulance, firetruck
 
-const Debugger : OS = {//lance //bug //screwdriver
-    name: 'Debugger',
-    unicode: 'U+1F41B',
-    money: 50,
-    memory: 10,
-    adminSlots: 6,
-    blueprints: [aegis, superKnife, testhybrid, testPiece],
-    items: [new Genie, new Pandora, new Update2, new Jar],
-    admins: [new Clippy, new Crystal],
-    lives: 9,
-    description: 'FOR TESTING'
-}
 // SCALES, U+2696 --- CROSSED SWORDS, U+2694
 //scales: EGYPTIAN HIEROGLYPH U038, U+1335D
 //temple - +1 admin +1 memory -1 interest
@@ -399,20 +411,23 @@ const Debugger : OS = {//lance //bug //screwdriver
 //U+1F403 GNU
 
 /*
-//Arch
+//Arch /Kali - dragon head
 //GREEK CAPITAL LETTER DELTA, U+394
 [daemon, dataworm]
+[backdoor]
 
 //CP/M DESKTOP COMPUTER, U+1F5A5
 //Precursor to many PC operating systems including MS‑DOS
 //Huge ecosystem of early software (WordStar, dBase, etc.)
-[pandora, genie]
+[pandora, genie,]
+[notepad]
 
 //AmigaOS
 Advanced multitasking
 Built-in GUI (Workbench)
 Strong multimedia capabilities
 [copier, cherries]
+[Jar]
 
 BeOS
 Designed for multimedia performance
@@ -443,6 +458,7 @@ Designed for PDAs (personal digital assistants)
 Stylus-based input
 Graffiti handwriting system
 was the dominant handheld computing platform before modern smartphones.
+//pallette //notepad // // LOWER LEFT PAINTBRUSH, U+1F58C
 
 Plan 9 from Bell Labs
 Plan 9 assumed you might have multiple machines working together.
@@ -453,5 +469,18 @@ Inferno
 give programs that create their own other programs
 */
 
+const Debugger : OS = {//lance //bug //screwdriver
+    name: 'Debugger',
+    unicode: 'U+1F41B',
+    money: 50,
+    memory: 10,
+    adminSlots: 6,
+    blueprints: [aegis, superKnife, testhybrid, testPiece],
+    items: [new Genie, new Pandora, new Update2, new Jar],
+    admins: [new Clippy, new Crystal],
+    lives: 9,
+    description: 'FOR TESTING'
+}
 
-export const allOSes = [Steam, Window, Apple, Penguin, Temple, Fortran, Cobol, Debugger];
+
+export const allOSes = [Window95, Steam, Window, Apple, Penguin, Temple, Fortran, Cobol, Debugger];

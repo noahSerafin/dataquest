@@ -329,7 +329,7 @@ class Parachute extends Admin {
   }
 }
 
-class Notepad extends Admin {
+export class Notepad extends Admin {
   static name = "Notepad";
   static description = "Increases memory by 1";
   static unicode = "U+1F4DD";//"U+1F4C4";//"U+1F5C7";
@@ -1309,9 +1309,9 @@ class Spoon extends Admin {
 }
 
 class Hermes extends Admin {//moves
-  static name = "Hermes Wings";
+  static name = "Hermes";// Wings";
   static description = "All placed programs are immune to being slowed";
-  static unicode = "U+269A";//"U+1FABD";//wing, icarus?
+  static unicode = "U+269A";//"U+1FABD";
   static color = "#083546ff";
   static rarity = 2;
   constructor() {
@@ -2980,6 +2980,15 @@ console.log("Admins of rarity 5: ", adminLogs.rarity5)
 console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //make all immunity admins <= uncommon?
 
+//"U+1FABD";//wing, icarus? - flight immmune to traps?
+//fleur de lis U+269C scout, lay traps?
+
+// ROUNDED SYMBOL FOR CAI, U+1F265 wealth
+// ROUNDED SYMBOL FOR FU, U+1F260 luck
+//ROUNDED SYMBOL FOR LU, U+1F261 prosperity
+//ROUNDED SYMBOL FOR SHOU, U+1F262 logevity
+//ROUNDED SYMBOL FOR XI, U+1F263 happiness
+
 //U+1F5BC Framed picture
 //U+26F0 mountain
 //landslide U+1F6D8
@@ -2996,6 +3005,7 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 // CRESCENT MOON, U+1F319
 
 // MOUNT FUJI, U+1F5FB
+//PAGER, U+1F4DF
 //MEDIUM WHITE CIRCLE, U+26AA Pearl
 //ROLLER COASTER, U+1F3A2
 //TOOTHBRUSH, U+1FAA5
@@ -3013,7 +3023,6 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //Helm Symbol ⎈ U+2388
 // ♱ U+2671
 // benzene ring ⏣
-//fleur de lis U+269C
 //۩ U+06E9 Arabic Place of Sajdah. Prayer
 // U+1F3C4 surfing
 // U+16B9 rune P
@@ -3049,13 +3058,11 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //ROUND PUSHPIN, U+1F4CD trap's heads are marked with pin, doesn't reveal them though
 //NEST WITH EGGS, U+1FABA after placing last program, buff all pieces but make their deaths permanent?
 //changes to movement/range
-//SHOVEL, U+1FA8F remove node memory -
+//TAKEOUT BOX, U+1F961
 
 //SEE-NO-EVIL MONKEY, U+1F648 -1 range
 //HEAR-NO-EVIL MONKEY, U+1F649 -1 defence
 //SPEAK-NO-EVIL MONKEY, U+1F64A -1 attack/actions?
-
-//FISHING POLE AND FISH, U+1F3A3 Bait, enemies attack player with highest defence?
 
 //AMPERSAND, U+26
 

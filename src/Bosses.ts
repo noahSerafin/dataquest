@@ -86,7 +86,7 @@ class Hook extends Admin {
 class Mirror extends Admin {
     static rarity = 2;
   static name = "Mirror";
-  static description = "Enemy Programs are chosen from blueprints in your inventory";
+  static description = "Enemy programs classes are chosen from blueprints in your inventory";
   static unicode = "U+1FA9E";
   static color = "rgb(30, 0, 112)";
   constructor() {
@@ -565,38 +565,6 @@ class Coral extends Admin {
     }
 }
 
-/*class Tornado extends Admin {//unfinished, needs access to the whole tileset
-  static name = "Tornado";
-  static description = "All load points are randomised";
-  static unicode = "U+1F32A";
-  static color = "#790a0aff";
-  constructor() {
-    super(Tornado.name, Tornado.description, Tornado.unicode, Tornado.color, 5, 3, 'piecesAndBoard', 'onRoundStart')
-  }
-    async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
-        const idx = activePieces.findIndex(p => p.id === id);
-    }
-}*/
-/*
-class Tsunami extends Admin { //coundown to round loss??
-  static name = "Tsunami";
-  static description = "Every piece takes 1 damage each turn after the first";//1 damage for security level?
-  static unicode = "U+1F30A";
-  static color = "#3eebd4ff";
-  constructor() {
-    super(Tsunami.name, Tsunami.description, Tsunami.unicode, Tsunami.color, 5, 9, 'all', 'onTurnEnd')
-  }
-    async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
-        const playerPieces: Piece[] = []
-        for(const piece of activePieces){
-            if(piece.team === 'player'){
-                piece.takeDamage(1)
-                //piece.takeDamage(player.difficulty)
-            }
-        };
-    }
-}*/
-
 class REDACTED extends Admin {
     static name = "REDACTED";
     static description = "All enemy programs information is hidden from you";//1 damage for security level?
@@ -673,9 +641,9 @@ class Biohazard extends Admin {
 /*class Nofun extends Admin {
     static name = "No Fun Allowed";
     static description = "Disables 1 random admin each turn";
-    static unicode = "U+1F6D1";
-    static color = "#00c41aff";
-    static rarity = 4;
+    static unicode = "U+1F6D1"; //NO ENTRY, U+26D4
+    static color = "rgb(244, 152, 16)";
+    static rarity = 6;
     constructor() {
         super(Nofun.name, Nofun.description, Nofun.unicode, Nofun.color, 6, Nofun.rarity, 'player', 'onTurnEnd')
     }
@@ -693,17 +661,49 @@ class Biohazard extends Admin {
     }
 }*/
 
-//OCTAGONAL SIGN, U+1F6D1
-//NO ENTRY, U+26D4
+/*class Tornado extends Admin {//unfinished, needs access to the whole tileset
+  static name = "Tornado";
+  static description = "All load points are randomised";
+  static unicode = "U+1F6D1";//"U+1F32A";
+  static color = "rgb(84, 139, 138)";
+  static rarity = 5;
+  constructor() {
+    super(Tornado.name, Tornado.description, Tornado.unicode, Tornado.color, 5, 3, 'piecesAndBoard', 'onRoundStart')
+  }
+    async apply({activePieces, board }: {activePieces: Piece[], board: Coordinate[] }) {
+        const idx = activePieces.findIndex(p => p.id === id);
+    }
+}*/
+
+/*
+class Tsunami extends Admin {
+  static name = "Tsunami";
+  static description = "Every piece takes 1 + security level damage each turn after the first";//1 damage for security level?
+  static unicode = "U+1F30A";
+  static color = "#3eebd4ff";
+  static rarity = 3;
+  constructor() {
+    super(Tsunami.name, Tsunami.description, Tsunami.unicode, Tsunami.color, 5, 9, 'all', 'onTurnEnd')
+  }
+    async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+        const playerPieces: Piece[] = []
+        for(const piece of activePieces){
+            if(piece.team === 'player'){
+                piece.takeDamage(1)
+                //piece.takeDamage(player.difficulty)
+            }
+        };
+    }
+}*/
+
 //FACE WITH LOOK OF TRIUMPH, U+1F624
 //EXPRESSIONLESS FACE, U+1F611 sleepy
 //1 admin disabled after each turn
 
-//fog //square //tornado tsunami
-// damage mult for enemy
+// damage mult for enemy?
 export const allBosses = [LowBattery, NorthWind, Downturn, Hook, Mirror, Shrine, Whale, Anchor, Castle, Circus, Customs, Hammer, Izakaya, Wilt, Biohazard, Lock, Coral, Jack, Snowflake, Sun, Eclipse, Factory, Bones, Frog, Volcano, Fog, Omega, Reaper, REDACTED, Wrath,]
-export const nonStackableBosses = [Mirror, Customs, Snowflake, Sun, Frog, Biohazard, Coral, Izakaya, REDACTED, Fog]//no disease
-//3
+export const nonStackableBosses = [Mirror, Customs, Snowflake, Sun, Frog, Biohazard, Coral, Izakaya, REDACTED, Fog]
+
 console.log('bosses length: ', allBosses.length)
 let adminLogs = {
   rarity1: 0,

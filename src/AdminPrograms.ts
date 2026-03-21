@@ -2223,7 +2223,7 @@ class Disco extends Admin {
   static name = "Disco Ball";
   static description = "Damage received from enemies also applies to enemies adjacent to the attacker's head";
   static unicode = "U+1FAA9";
-  static color = "rgb(255, 36, 182)";
+  static color = "rgb(59, 8, 92)";
   static rarity = 6;
   constructor() {
     super(Disco.name, Disco.description, Disco.unicode, Disco.color, 7, Disco.rarity, 'gameState', 'onReceiveDamage')//pieces?

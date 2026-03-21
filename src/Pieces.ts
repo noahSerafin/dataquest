@@ -4041,6 +4041,7 @@ console.log("Pieces of rarity 4: ", adminLogs.rarity4)
 console.log("Pieces of rarity 5: ", adminLogs.rarity5)
 console.log("Pieces of rarity 6: ", adminLogs.rarity6)
 
+//chequered flag U+1F3C1
 //U+1F6A9 Triangular flag - Banner: boost group of friendly's attack
 
 //SWAN, U+1F9A2 - break a man's arm /reduce range?

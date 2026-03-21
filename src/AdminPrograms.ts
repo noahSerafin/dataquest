@@ -1890,7 +1890,7 @@ class Ribbon extends Admin {//change
   }
 }
 */
-export class Ring extends Admin {
+class Ring extends Admin {
   static name = "Ring";
   static description = "Stats changed inside a node persist across rounds";
   static unicode = "U+1F48D";
@@ -2127,9 +2127,9 @@ class Appraisal extends Admin {
   //handle in shop
 }
 
-export class Camp extends Admin {//needs reviewing
+class Camp extends Admin {//needs reviewing
   static name = "Camper";
-  static description = "Your non-hidden programs that don't move gain +1 range every 2 turns, ones that do moev revert their range to their base range";// to all stats on the end of your turn";
+  static description = "Your non-hidden programs that don't move gain +1 range every 2 turns, ones that do revert their range to their base range";// to all stats on the end of your turn";
   static unicode = "U+26FA";//🏕️
   static color = "rgb(26, 2, 65)";
   static rarity = 3;//5 for all stats

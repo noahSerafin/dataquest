@@ -510,13 +510,13 @@ async function handleApplyAdmins(trigger: AdminTrigger, id: string, piece?: Piec
       if (trigger === admin.triggerType) {
         // sort through target types, decide what to pass
         if (admin.targetType === 'player') {
-          await admin.apply({ player: player.value, piece })
+          await admin.apply({ player: player.value })
         }
         if (admin.targetType === 'gameState') {
-          await admin.apply({ id, activePieces: activePieces.value, piece })
+          await admin.apply({ id, activePieces: activePieces.value })
         }
         if (admin.targetType === 'playerAndGame') {
-          await admin.apply({ id, activePieces: activePieces.value, player: player.value, piece })
+          await admin.apply({ id, activePieces: activePieces.value, player: player.value })
         }
         if (admin.targetType === 'piecesAndBoard') {
           await admin.apply({ activePieces: activePieces.value, board: level.value.tiles })

@@ -1178,12 +1178,13 @@ const handleSpecialActionAt = async (target: Coordinate) => {
     }
     return;
   }
-  // --- space target --- target must be a space
-  if (selectedPiece.value.targetType === 'space') {//test
+  // --- space target --- target must be// --- space target
+  if (selectedPiece.value.targetType === 'space') {
     if (!targetPiece) {
       await selectedPiece.value.special({
         target: target,
-        activePieces: activePieces.value
+        activePieces: activePieces.value,
+        player: player.value
       });
     }
     playerSpawns.value = newPlacementHighlights();
@@ -1338,6 +1339,7 @@ async function enemyTurn() {
     //handleSpecialActionAt,
     tileSet,
     onReceiveDamage,
+    player.value,
     300
   );
   checkForRoundEnd();
@@ -1533,12 +1535,15 @@ function toggleDebug() {
       <button v-if="debugMode === true" class="board-toggle" @mousedown="showBoard = true">
         Toggle Board
       </button>
-      <button v-if="debugMode === true" class="difficulty" @mousedown="increaseDifficulty()">
-        Increase Security
-      </button>
-      <button v-if="debugMode === true" class="difficulty" @mousedown="decreaseDifficulty()">
-        Decrease Security
-      </button>
+      <div v-if="debugMode === true" class="flex">
+        <button class="phone-hide" @mousedown="decreaseDifficulty()">
+          -
+        </button>
+        <span>Security</span>
+        <button class="phone-hide" @mousedown="increaseDifficulty()">
+          +
+        </button>
+      </div>
       <button class="phone-hide" @mousedown="toggleFastControls()">
         Fast Controls
       </button>
@@ -1546,7 +1551,7 @@ function toggleDebug() {
         <button class="phone-hide" @mousedown="decreaseStake()">
           -
         </button>
-        <span>Stake: {{ stake }}</span>
+        <span>Infamy: {{ stake }}</span>
         <button class="phone-hide" @mousedown="increaseStake()">
           +
         </button>

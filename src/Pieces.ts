@@ -2073,23 +2073,46 @@ class Greatshield extends Piece {//testt
 
 class Wizard extends Piece {
   static name = "Wizard";
-  static description = "A program that can telport to unnoccupied spaces";//Summon: load other programs without ending a turn?
+  static description = "A program that can summon random programs from the player's inventory, or programs equal to or -1 relative to the player's security level if no inventory pieces are available.";
   static unicode = "U+1F9D9";
   static color = "#7600c5ff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Wizard.name, Wizard.description, Wizard.unicode, 3, 2, 3, 2, 2, Wizard.color, headPosition, [headPosition], team, Wizard.rarity, removeCallback, id)
-    this.specialName='Teleport'
+    this.specialName='Summon'
     this.targetType='space'
   }
-  async special({target, activePieces: _activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
-    //this.moveTo(target)
-    this.headPosition = target;
-    this.tiles.splice(0, 1);
-    this.tiles.unshift(this.headPosition)
+  async special({target, activePieces, player} : {target: Coordinate, activePieces: Piece[], player?: Player}):Promise<void>{
+    const difficulty = player ? player.difficulty : 1;
+    const targetRarity1 = difficulty;
+    const targetRarity2 = Math.max(1, difficulty - 1);
+    const validPieces = allPieces.filter(PieceClass => {
+    if(this.team === 'enemy' && PieceClass.name === 'Nuke') return false;//don't let enemies summon nukes
+      const temp = new PieceClass({x:-1,y:-1}, 'enemy', undefined);
+      return temp.rarity === targetRarity1 || temp.rarity === targetRarity2;
+    });
+    if(this.team === 'player' && player && player.programs.length > 0) {
+      const availableBlueprints = player.programs.filter(bp => !bp.isPlaced);
+      const randBlueprint = availableBlueprints[Math.floor(Math.random() * availableBlueprints.length)];
+      const PieceClass = randBlueprint ? allPieces.find(p => p.name === randBlueprint.name) : validPieces[Math.floor(Math.random() * validPieces.length)];
+      if (PieceClass) {
+        const summonedPiece = new PieceClass(target, 'player', this.removeCallback, crypto.randomUUID());
+        summonedPiece.actions = 0;
+        summonedPiece.movesRemaining = 0;
+        activePieces.push(summonedPiece);
+        randBlueprint.isPlaced = true;
+      }
+    } else if (this.team === 'enemy') {
+      if (validPieces.length > 0) {
+        const EnemyClass = validPieces[Math.floor(Math.random() * validPieces.length)];
+        const summonedPiece = new EnemyClass(target, 'enemy', this.removeCallback, crypto.randomUUID());
+        summonedPiece.actions = 0;
+        summonedPiece.movesRemaining = 0;
+        activePieces.push(summonedPiece);
+      }
+    }
     this.actions--
   }
-  //teleport
 }
 
 class Ninja extends Piece {
@@ -2888,48 +2911,23 @@ export class Dolls extends Piece {//finished? test, will have to be handled in a
 
 class UFO extends Piece {
   static name = "UFO";
-  static description = "A strong ranged program";// that can move enemies away from itself";//without increasing size?? And traverse gaps?
+  static description = "A strong ranged program that can damage and confuse enemies";// that can move enemies away from itself";//without increasing size?? And traverse gaps?
   static unicode = "U+1F6F8";
   static color = "#000d47ff";
-  static rarity = 4;
+  static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(UFO.name, UFO.description, UFO.unicode, 4, 3, 3, 3, 2, UFO.color, headPosition, [headPosition], team, UFO.rarity, removeCallback, id)
-    //this.targetType = 'line'//piecesInLine
-    //this.specialName = 'Tractor Beam'
+    this.specialName = 'abduct'
+    this.targetType = 'piece'
   }
-
-  //pushing pieces off board, needs tileset also
-  /*async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
-
-    const origin = this.headPosition;
-    for (let i = 0; i < line.length; i++) {
-      const tile = line[i];
-      // Find piece on this tile
-      const occupier = activePieces.find(p =>
-        p.tiles.some(t => t.x === tile.x && t.y === tile.y)
-      );
-      if (!occupier) continue;
-      // Determine push direction: from THIS piece outward
-      const dx = tile.x - origin.x;
-      const dy = tile.y - origin.y;
-
-      const targetTile: Coordinate = {
-        x: tile.x + Math.sign(dx),
-        y: tile.y + Math.sign(dy)
-      };
-
-      const blocked = activePieces.some(p =>
-        p.tiles.some(t => t.x === targetTile.x && t.y === targetTile.y)
-      );
-      if (blocked) {
-        // Can't push further after this point
-        break;
-      }
-      // Move the occupier away from the pusher
-      occupier.moveTo(targetTile);
+  async special(targetPiece: Piece):Promise<void>{  
+    if(targetPiece.statuses.confused === true){
+      targetPiece.takeDamage(this.getStat('attack'));
+    } else if(!targetPiece.immunities.confused){
+      targetPiece.statuses.confused = true;
     }
-    this.actions--;
-  }*/
+    this.actions--
+  }
 }
 
 class TP extends Piece {
@@ -3483,13 +3481,12 @@ class Hippo extends Piece {
   static name = "Hippo";
   static description = "A tough program that can charge, damaging targets in a staight line and moving forward until stopped";
   static unicode = "U+1F99B";
-  static color = "#c7ac53ff";
+  static color = "rgb(90, 74, 208)";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-  super(Hippo.name, Hippo.description, Hippo.unicode, 5, 2, 2, 4, 3, Hippo.color, headPosition, [headPosition], team, Hippo.rarity, removeCallback, id)//horse carousel atm //cane: "U+1F9AF"
+  super(Hippo.name, Hippo.description, Hippo.unicode, 5, 1, 2, 4, 3, Hippo.color, headPosition, [headPosition], team, Hippo.rarity, removeCallback, id)//horse carousel atm //cane: "U+1F9AF"
     this.specialName = 'Charge';
     this.targetType = 'line'
-
   }
 
   async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
@@ -3603,7 +3600,7 @@ class Alien extends Piece {
   async special(targets: Piece[]):Promise<void>{
     for (const t of targets) {
       if(t.team != this.team){
-        if(t.statuses.confusef === true){
+        if(t.statuses.confused === true){
           t.takeDamage(this.getStat('attack'));
         } else if(!t.immunities.confused){
           t.statuses.confused = true;
@@ -4008,7 +4005,7 @@ class Unicorn extends Piece {
 //🏗 crane  U+1F3D7
 
 //99 fairy //web?
-export const allPieces = [Ant, Acorn, Banana, Bee, Egg, Knife, Potato, Rat, Shield, Sling, Snail, TP, Aegis, Beetle, Bow, Bull, Chick, Chicken, Dagger, Decoy, Dog, Fence, Frond, Doctor, Gecko, Germ, Guard, Hedgehog, Jellyfish, Larva, Tree, Flute, Rooster, Saw, Snake, Tar, Vulture, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Buffalo, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, Hopper, LabRat, LadyBeetle, Lance, Magnet, Mine, Medic, Mosquito, Ninja, Octopus, Officer, Paladin, Pawn, Peacock, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Alien, Arms, Axe, Cannon, Lightning, Palm, Bison, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Kite, Leopard, Lighthouse, Mammoth, Nerf, Oil, Wasp, Puffer, Rabbit, Scarab, Shark, Snowman, Soldier, Squid, Stopwatch, Tiger, UFO, Bat, Wizard, Wolf, Zebra, Archdaemon, Recurve, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Gman, Giraffe, Hippo, Lion, Lovebomb, Oni, Orangutan, Paragon, Rhino, Screwdriver, Shovel, Shrike, Tank, Coat, Vampire, Bear, Helicopter, Gorilla, Greatshield, Nuke, Sol, Sponge, Rex, Unicorn];//Dolls //100 +2 (web, ink)
+export const allPieces = [Ant, Acorn, Banana, Bee, Egg, Knife, Potato, Rat, Shield, Sling, Snail, TP, Aegis, Beetle, Bow, Bull, Chick, Chicken, Dagger, Decoy, Dog, Fence, Frond, Doctor, Gecko, Germ, Guard, Hedgehog, Jellyfish, Larva, Tree, Flute, Rooster, Saw, Snake, Tar, Vulture, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Buffalo, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, Hopper, LabRat, LadyBeetle, Lance, Magnet, Mine, Medic, Mosquito, Ninja, Octopus, Officer, Paladin, Pawn, Peacock, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Alien, Arms, Axe, Cannon, Lightning, Palm, Bison, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Kite, Leopard, Lighthouse, Mammoth, Nerf, Oil, Wasp, Puffer, Rabbit, Scarab, Shark, Snowman, Soldier, Squid, Stopwatch, Tiger, Bat, Wizard, Wolf, Zebra, Archdaemon, Recurve, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Gman, Giraffe, Hippo, Lion, Lovebomb, Oni, Orangutan, Paragon, Rhino, Screwdriver, Shovel, Shrike, Tank, Coat, UFO, Vampire, Bear, Helicopter, Gorilla, Greatshield, Nuke, Sol, Sponge, Rex, Unicorn];//Dolls //100 +2 (web, ink)
 console.log('pieces length: ', allPieces.length)
 
 let adminLogs = {

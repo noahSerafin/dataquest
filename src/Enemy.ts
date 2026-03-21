@@ -1,10 +1,11 @@
 import type { Piece } from "./Pieces";
 import type { Coordinate } from "./types";
 import { findAnyPiecesInRange } from "./helperFunctions";
+import type { Player } from "./Player";
 
 type EnemyIntent =
   | { type: 'attack'; target: Piece }
-  | { type: 'special'; target: Piece | Coordinate | Piece[] | {piece: Piece, target: Coordinate} | {line: Coordinate[], activePieces: Piece[]} | {target: Coordinate, activePieces: Piece[]} | null }
+  | { type: 'special'; target: Piece | Coordinate | Piece[] | {piece: Piece, target: Coordinate} | {line: Coordinate[], activePieces: Piece[]} | {target: Coordinate, activePieces: Piece[], player?: Player} | null }
   | { type: 'move'; path: Coordinate[] }
   | { type: 'wander'; space: Coordinate }
   | { type: 'wait' };
@@ -15,7 +16,8 @@ function decideEnemyIntent(
   playerPieces: Piece[],
   enemyPieces: Piece[],
   tileSet: Set<string>,
-  specialAttempts: number
+  specialAttempts: number,
+  player: Player
 ): EnemyIntent {
   //first look for a player to attack or use special on
   const target = findWeakestPlayerInRange(enemy, playerPieces);//returning null even when there is a piece??!!!
@@ -171,7 +173,7 @@ function decideEnemyIntent(
     }
     if(enemy.targetType === 'space'){
       const space = getAnySpaceInRange(enemy, activePieces, tileSet)
-      if(space) return {type: 'special', target: {target: space, activePieces: activePieces}}
+      if(space) return {type: 'special', target: {target: space, activePieces: activePieces, player: player}}
     }
     if(enemy.hasFriendlySpecial){
       if(enemy.targetType === 'placeAndPieces'){//pawn
@@ -309,6 +311,7 @@ export async function runEnemyStateMachine(
   clearHighlights: () => void,
   tileSet: Set<string>,
   onReceiveDamage: (id: string) => void,
+  player: Player,
   delay = 200 // ms between moves for visibility
 ){
   const enemiesToProcess = activePieces.filter(p => (p.team === 'enemy' && !p.statuses.charmed));
@@ -331,7 +334,7 @@ export async function runEnemyStateMachine(
       const enemyPieces = activePieces.filter(p => (p.team === 'enemy' && !p.statuses.charmed));
       const playerPieces = activePieces.filter(p => p.team === 'player' && !p.statuses.charmed);
 
-      const intent = decideEnemyIntent(enemy, activePieces, playerPieces, enemyPieces, tileSet, specialAttempts);
+      const intent = decideEnemyIntent(enemy, activePieces, playerPieces, enemyPieces, tileSet, specialAttempts, player);
       if (intent.type === 'wait') break;
 
       if(intent.type === 'special'){

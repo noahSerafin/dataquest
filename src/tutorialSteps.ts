@@ -4,19 +4,39 @@ export type TutorialStep = {
 }
 const welcomeTip: TutorialStep = {
     id: "welcome",
-    tooltip: "Welcome to cyberspace! I'll be here to guide you through the basics of hacking. Just click anywhere you see my tag for a hint.",
+    tooltip: "Welcome to cyberspace! I'll be here to guide you through the basics of hacking. Click on different things and I will keep you informed as we go.",
 }
 const mapTip: TutorialStep = {
-    id: 'worldMap',
+    id: 'world-map',
     tooltip: 'This is the Node map. Choose your path forward, there will always be an easier path to the left with two nodes at your currently security level(difficulty). Alternatively, there may also be a harder path with greater rewards, an option receive a free program or item followed by a harder level, or other hidden rewards along it.'
 }
-const nodeTip: TutorialStep = {
-    id: 'node',
-    tooltip: 'the lock indicates security level of a Node. Rarer, higher level enemy programs appear at higher difficulties. The preview will show you the layout of the level and the starting spawn points, red for enemies, blue for the player.'
+const currentNodeTip: TutorialStep = {
+    id: 'current',
+    tooltip: 'Your current position in cyberspace.'
+}
+const levelNodeTip: TutorialStep = {
+    id: 'levelNode',
+    tooltip: 'This is a privately controlled node, the title and picture show us what company it is owned by. The dollar amount below is the reward for clearing this node. The lock number indicates security level of a Node. Rarer, higher level enemy programs appear at higher difficulties. Click to see the preview.'
+}
+const previewTip: TutorialStep = {
+    id: 'preview-modal',
+    tooltip: 'The preview shows you the layout of the level and the starting spawn points, red for enemies, blue for the player.'
+}
+const skipNodeTip: TutorialStep = {
+    id: 'skipNode',
+    tooltip: 'Choosing this node will reward you with the pictured program/item. Click to see the details.'
+}
+const shopNodeTip: TutorialStep = {
+    id: 'shopNode',
+    tooltip: 'This node is a shop where you can purchase new programs, admins, and consumable items.'
+}
+const bossNodeTip: TutorialStep = {
+    id: 'bossNode',
+    tooltip: "This is the boss for this security level, it's effects are described on the right. Bosses act like admins for the enemy, they may boost enemy stats, nerf yours, or add some other challenging effect to a node. Beating it will load a new node map, and raise the security level of all future nodes by one."
 }
 const boardTip: TutorialStep = {
     id: "board",
-    tooltip: "Now we're inside a Node. Your job is to clear all the enemy programs from it using your own programs. You may load your programs into the green tiles initially. Once you have a program down, you may load in next to any tile it occupies. Be careful, once you load a program in, the enemy programs will take their move. So don't place anything vunerable too close to an enemy. Each turn, you may either load a new program or move your programs already inside the node. If all your loaded programs are cleared from a node, you will lose a life. If you clear the node but the round doesn't finish, there's probably still a 'hidden' enemy program in play, either a trap, or one that can hide itself.",
+    tooltip: "Now we're inside a Node. Your job is to clear all the enemy programs from it using your own programs. You may load your programs into the green tiles initially. Once you have a program down, you may load in next to any tile it occupies. Be careful, once you load a program in, the enemy programs will take their move, so don't place anything vunerable too close to an enemy. Each turn, you may either load a new program or move your programs already inside the node. If all your loaded programs are cleared from a node, you will lose a life."
 }
 const programTip: TutorialStep = {
     id: 'piece',
@@ -27,55 +47,55 @@ const bpTip: TutorialStep = {
     tooltip: "You own this program, select or drag it into a node to load it."
 }
 const controllerTip: TutorialStep = {
-    id: 'controller',
+    id: 'piece-controller',
     tooltip: "This panel shows you details about a program."
 }
 const maxsizeTip: TutorialStep = {
-    id: 'maxsize',
+    id: 'stat-maxsize',
     tooltip: "Max size: Maximum size  a program can reach, essentially it's max HP."
 }
 const movesTip: TutorialStep = {
-    id: 'moves',
+    id: 'stat-moves',
     tooltip: "Moves: How many spaces a program can move each turn."
 }
 const rangeTip: TutorialStep = {
-    id: 'range',
+    id: 'stat-range',
     tooltip: "Range: The orthagonal distance a program can target attacks or it's special move."
 }
 const attackTip: TutorialStep = {
-    id: 'attack',
+    id: 'stat-attack',
     tooltip: "Attack: How much damage a program will do to another on attacking."
 }
 const defenceTip: TutorialStep = {
-    id: 'defence',
+    id: 'stat-defence',
     tooltip: "Defence: How much damage a program can take before losing tiles. Like moves, this resets each turn."
 }
+const actionsTip: TutorialStep = {
+    id: 'stat-actions',
+    tooltip: "Actions: How many attacks or special moves this program can do this turn, usually 1 unless boosted."
+}
 const moveBtnTip: TutorialStep = {
-    id: 'movebtn',
+    id: 'mv-btn',
     tooltip: 'Click here to move this program, use the arrows to choose a direction'
 }
 const atkBtnTip: TutorialStep = {
-    id: 'attackbtn',
+    id: 'atk-btn',
     tooltip: 'Click here to attack with this program, you can damage any other program in range'
 }
 const specialBtnTip: TutorialStep = {
-    id: 'specialbtn',
+    id: 'special-btn',
     tooltip: "Click here to use this program's special, read the program description to find out what you can target."
 }
 const securityTip: TutorialStep = {
     id: 'security',
     tooltip: "At higher security levels, rarer pieces will start spawning as enemies, and variants are more likely to appear, as well as more powerful variants, and harder bosses."
 }
-const bossTip: TutorialStep = {
-    id: 'bossNode',
-    tooltip: "Bosses act like admins for the enemy, they may boost enemy stats, nerf yours, or add some other challenging effect to a node. Defeating aboss will raise the security level of all future nodes by one."
-}
 const summaryTip: TutorialStep = {
     id: 'roundSummary',
     tooltip: 'At the end of each round, you earn interest on currently held $, +$1 for every $5 you hold up to $25. You may also collect any extra money generated by your admins.',
 }
 const shopTip: TutorialStep = {
-    id: 'shop',
+    id: 'shop-container',
     tooltip: "At the shop, you can buy new programs (P), new Admin prgrams (A), or consumable items (I). There are 6 tiers of rarity, each becoming rarer in the shop the higher the tier. You can reroll the shop for a price, the cost will exponentially increase with each reroll, but resets at each shop.",
 }
 const shopbpTip: TutorialStep = {
@@ -83,19 +103,19 @@ const shopbpTip: TutorialStep = {
     tooltip: 'Purchase this program to add it to your inventory if you have 1 free space of memory.',
 }
 const itemTip: TutorialStep = {
-    id: 'item',
+    id: 'item-item',
     tooltip: 'This is a consumable item, purcahse it to add it to your inventory if you have 1 free space of memory.',
 }
 const adminTip: TutorialStep = {
-    id: 'admin',
-    tooltip: 'This is and admin, it takes up an admin slot and will provide passive benefits when it is triggered.',
+    id: 'item-admin',
+    tooltip: 'This is an admin, it takes up an admin slot and will provide passive benefits when it is triggered.',
 }
 const adminsTip: TutorialStep = {
     id: 'admins',
     tooltip: 'Admins with the same trigger will execute their effects left to right, you can drag the order around here.',
 }
 
-export const allTips: TutorialStep[] = [welcomeTip, mapTip, nodeTip, boardTip, programTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, bossTip, summaryTip, shopTip, shopbpTip, itemTip, adminTip, adminsTip];
+export const allTips: TutorialStep[] = [welcomeTip, mapTip, currentNodeTip, levelNodeTip, previewTip, skipNodeTip, shopNodeTip, bossNodeTip, boardTip, programTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, summaryTip, shopTip, shopbpTip, itemTip, adminTip, adminsTip];
 /*
 const Tip: TutorialStep = {
     id: '',

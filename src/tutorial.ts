@@ -1,6 +1,14 @@
 
 import type { TutorialStep } from "./tutorialSteps";
 import { allTips } from "./tutorialSteps";
+import { reactive } from "vue";
+
+export const tutorialState = reactive({
+  message: "",
+  collapsed: true, // starts collapsed or hidden until a message is hovered
+  activeId: "",
+  hasSeenFirst: false
+});
 
 
 for (const tip of allTips){//but do this every time the enviroment change
@@ -29,23 +37,22 @@ export function highlightElement(el: HTMLElement) {
 }*/
 
 export function applyTutorialTooltips(steps: TutorialStep[]) {
-  // clean up old tooltips first
-  document.querySelectorAll('.tutorial-tooltip').forEach(t => t.remove());
-
   for (const step of steps) {
     const targets = document.querySelectorAll(`.${step.id}`);
 
     targets.forEach(target => {
-      const tooltip = document.createElement("div");
-      tooltip.className = "tutorial-tooltip";
-      tooltip.innerHTML = step.tooltip;
-
-      // attach tooltip to the element, not body
-      target.appendChild(tooltip);
+      // attach hover listeners instead of tooltip elements
+      target.addEventListener('mouseenter', () => {
+        tutorialState.message = step.tooltip;
+        tutorialState.activeId = step.id;
+        
+        if (!tutorialState.hasSeenFirst && tutorialState.collapsed) {
+           tutorialState.collapsed = false;
+           tutorialState.hasSeenFirst = true;
+        }
+      });
 
       target.classList.add("has-tutorial");
-
-      //positionTooltip(target as HTMLElement, tooltip, step.position);
     });
   }
 }

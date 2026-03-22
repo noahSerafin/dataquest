@@ -127,12 +127,12 @@ function toggleTooltip(key: string) {
     </div>
 
     <div class="stats">
-      <p class="text-green">Max Size: <span class='stat'>{{ piece.getStat('maxSize') }}</span> Current: {{ piece.tiles.length }}</p>
-      <p class="text-blue">Moves: <span class='stat'>{{ piece.getStat('moves') }}</span> <span>Left: <span class='stat'>{{ piece.movesRemaining }}</span></span></p>
-      <p class="text-orange">Range: <span class='stat'>{{ piece.getStat('range') }}</span></p>
-      <p class="text-red">Attack: <span class='stat'>{{ piece.getStat('attack') }}</span></p>
-      <p class="text-cyan">Defence: <span class='stat'>{{ piece.getStat('defence') }}</span> <span>Left: <span class="stat">{{ piece.defenceRemaining }}</span></span></p>
-      <p class="text-yellow">Actions: <span class='stat'>{{ piece.getStat('actions') }}</span></p>
+      <p class="stat-maxsize text-green">Max Size: <span class='stat'>{{ piece.getStat('maxSize') }}</span> Current: {{ piece.tiles.length }}</p>
+      <p class="stat-moves text-blue">Moves: <span class='stat'>{{ piece.getStat('moves') }}</span> <span>Left: <span class='stat'>{{ piece.movesRemaining }}</span></span></p>
+      <p class="stat-range text-orange">Range: <span class='stat'>{{ piece.getStat('range') }}</span></p>
+      <p class="stat-attack text-red">Attack: <span class='stat'>{{ piece.getStat('attack') }}</span></p>
+      <p class="stat-defence text-cyan">Defence: <span class='stat'>{{ piece.getStat('defence') }}</span> <span>Left: <span class="stat">{{ piece.defenceRemaining }}</span></span></p>
+      <p class="stat-actions text-yellow">Actions: <span class='stat'>{{ piece.getStat('actions') }}</span></p>
       <p v-if="activeImmunities.length > 0">Immune to:
         <span
         v-for="([key]) in activeImmunities"

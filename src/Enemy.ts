@@ -125,7 +125,7 @@ function decideEnemyIntent(
   }
 
   if(enemy.actions > 0  && specialAttempts < 1){//still have an action? 
-    if (enemy.specialName === 'Charge') {
+    if (enemy.specialName === 'Charge' || enemy.specialName === 'Pounce') {
       const targetCoord = nearest || target?.piece.headPosition;
       if (targetCoord) {
         const directions = [

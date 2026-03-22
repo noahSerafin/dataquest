@@ -696,6 +696,13 @@ class Tsunami extends Admin {
     }
 }*/
 
+//ROBOT HEAD "U+1F916" Singularity - enemies get 2 actions
+
+//FIREWORKS, U+1F386 enemy splash damage
+
+//monarch  BUTTERFLY, U+1F98B - remove admin???
+
+
 //FACE WITH LOOK OF TRIUMPH, U+1F624
 //EXPRESSIONLESS FACE, U+1F611 sleepy
 //1 admin disabled after each turn
@@ -728,12 +735,11 @@ console.log("Bosses of rarity 4: ", adminLogs.rarity4)
 console.log("Bosses of rarity 5: ", adminLogs.rarity5)
 console.log("Bosses of rarity 6: ", adminLogs.rarity6)
 
-//ROBOT HEAD "U+1F916"
 
 //CLOUD WITH SNOW, U+1F328
 
 //EUROPEAN CASTLE, U+1F3F0 enemies def up +1, maxsize + 1
-//FIREWORKS, U+1F386 enemy splash damage
+
 //black book NOTEBOOK, U+1F4D3
 
 // LEDGER, U+1F4D2 all transactions
@@ -741,11 +747,7 @@ console.log("Bosses of rarity 6: ", adminLogs.rarity6)
 
 //RIBBON, U+1F380
 
-// ICE CUBE, U+1F9CA -1 max size each turn
-
 // BEER MUG, U+1F37A move buttons randomised
-
-//monarch  BUTTERFLY, U+1F98B
 
 // CHERRY BLOSSOM, U+1F338
 //WILTED FLOWER, U+1F940

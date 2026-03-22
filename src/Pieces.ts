@@ -774,7 +774,7 @@ class Mole extends Piece {//unfinished - test negative
 
 class Lance extends Piece {
   static name = "Lance";
-  static description = "An taccking piece that can charge, damaging targets in a staight line and moving forward until stopped";
+  static description = "An attacking piece that can charge, damaging targets in a staight line and moving forward until stopped";
   static unicode = "U+1F3A0";
   static color = "#f9f9f9";
   static rarity = 2;
@@ -4044,18 +4044,18 @@ console.log("Pieces of rarity 6: ", adminLogs.rarity6)
 //chequered flag U+1F3C1
 //U+1F6A9 Triangular flag - Banner: boost group of friendly's attack
 
+//U+1FAA8 rock boulder pivk up speed not maxsize (worse snowman)
+//fix dolls
+
 //Invisible wall - hi defence hidden piece
 //FISHING POLE AND FISH, U+1F3A3 long range - move a piece toward it
 //PLAYGROUND SLIDE, U+1F6DD like gate but with more range? line target??
 
 //SWAN, U+1F9A2 - break a man's arm /reduce range?
 
-
 //FROG FACE, U+1F438 //range 3 low atk //poison/hop ability? FROG EGYPTIAN HIEROGLYPH I007, U+1318F
-
-//OCTAGONAL SIGN, U+1F6D1 stop sign
-
 // KANGAROO, U+1F998 hop
+
 //chess knight special move L shape
 
 //DANCER, U+1F483 //high movement no damage

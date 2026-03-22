@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { Item } from "../Items"; // adjust path
+import { tutorialState } from "../tutorial";
 //import type { PieceVariant } from "../types";
 
 const props = defineProps<{
@@ -71,13 +72,24 @@ const handleUse = () => {
   <div
     :id="item.id"
     class="item"
-    :class="`item-${cssclass} item-${type} itemName-${item.name}`"
+    :class="[`item-${cssclass}`, `item-${type}`, `itemName-${item.name.replace(/\s+/g, '')}`, {'is-clippy': item.name === 'Clippy'}]"
     @click="handleSelect"
     :style="itemStyle"
   >
     <p class='top-left' v-if="cssclass==='shop' && type == 'consumable'" :style="`top: -${((props.tileSize-10)/2 -24)}px`">I</p>
     <p class='top-left' v-if="cssclass==='shop' && type == 'admin'" :style="`top: -${((props.tileSize-10)/2 -24)}px`">A</p>
     <div class="icon">{{ unicodeSymbol }}</div>
+
+    <!-- Speech bubble for Clippy admin -->
+    <div v-if="item.name === 'Clippy' && tutorialState.message" class="clippy-speech-bubble-container" @click.stop>
+      <div v-if="!tutorialState.collapsed" class="clippy-speech-bubble">
+        <button class="clippy-toggle" @click="tutorialState.collapsed = true">_</button>
+        <div class="clippy-message" v-html="tutorialState.message"></div>
+      </div>
+      <div v-else class="clippy-collapsed-icon" @click="tutorialState.collapsed = false">
+        ?
+      </div>
+    </div>
     <!--<Teleport to="body">-->
       <div v-if="props.showController" class="info" @click.stop >
         <button @click="emit('deselect')" class="close">X</button>
@@ -201,5 +213,81 @@ button:disabled {
 .enemy-info .info{
   top: 0;
   height: fit-content;
+}
+
+.clippy-speech-bubble-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10000;
+}
+
+.clippy-speech-bubble {
+  position: absolute;
+  bottom: 120%;
+  right: -50px;
+  background: white;
+  color: black;
+  border-radius: 8px;
+  padding: 10px 14px;
+  width: 180px;
+  font-size: 13px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  text-align: left;
+  line-height: normal;
+}
+
+.clippy-speech-bubble::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  right: 60px;
+  border-width: 8px;
+  border-style: solid;
+  border-color: white transparent transparent transparent;
+}
+
+.clippy-message {
+  margin-top: 4px;
+}
+
+.clippy-toggle {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 2px;
+  cursor: pointer;
+  color: #333;
+  line-height: 10px;
+}
+.clippy-toggle:hover {
+  color: #000;
+}
+
+.clippy-collapsed-icon {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: #3b82f6;
+  color: white;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  line-height: 20px;
+}
+
+.clippy-collapsed-icon:hover {
+  background: #2563eb;
 }
 </style>

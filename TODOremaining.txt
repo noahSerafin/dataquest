@@ -1,27 +1,26 @@
 TUTORIAL - clippy
+finish TUTORIAL
+variant tooltips
+-
 GAME / BUGS
-spawn not reloading!
-line target enemies killing themselves/friendlies
+fix jar, add new items
+add new bosses
+-visualise traps - 
+visualise: retaliation, dmg + dmg mult, admin actions and counts
+//sort out trolley/toolbox
 Investigate why taoism or highrise might be adding def every turn
-Some statuses not applying to player, can't replicate this?
-friendlyspecial pieces attempting specials on nothing//removed self
 variants stats reloading but not name/color etc.
 variant should overide base piece color, (and tile colour???)
 non stacking bosses should cycle through (mirror becomes too predicatable)
 possible to get stuck on cave and gauntlet if sling/bee and knife spawn
 nerf rosebud - pieces can't stay exposed after a special?
-slots broken, and only applies before a shop, not on the same shop you buy it in
 Level loaded twice with same piece causes bug where it cannot be attacked is not in activepieces to be targeted - test
-visualise: retaliation, dmg + dmg mult, admin actions and counts
 pandora not giving 1 at full inventory
 checkforroundend after takedamage
 //move itemmult to player?
-//sort out trolley/toolbox
 Nerf Pandora by using allitems???
 self specials easy to accidentally auto click, move buttons z-index up
-variant tooltips
-fix ufo - make it a two click special???
-make charmedpieces not moveable - test
+-
 EnemyAI: store ids/check statuses in special move pieces to prevent enemies using special mutliple times on the same player program
 enemy traps not walking over players
 reveal hidden enemies before damage
@@ -33,39 +32,35 @@ display company/node name in board
 Ties currently count as wins - but player still loses a life? Might be fine to leave
 
 ADMINS
-crystal ball
 animate admins
 
 difficulty - add +1, +2 programs for variety, or make variants +- security level 7
 
 SAVE GAME STATE for bugs 7.5
-COOKIES - game progress permanence
+SEEDED RANDOMNESS - save seed funcionality
 
 MAP
 Altar nodes - sacrifice a program for more money than selling - 8 - skippable
 Duplicator nodes - duplicate a program - skippable
-Gladiator nodes - place only once in arena node for reward - skippable
+Node to nerf stats - workbench? -1 stat +another etc.
+Gladiator nodes - +3 security, place only once in arena node for reward - skippable
+Other challenge nodes - challenge node file with custom maps of fixed pieces? - deforester, wizard battle, trojan army, etc.
 
 ITEMS/admins shortand descriptions eg. +1 attack instead of "increases"
-
-AI 3
-enemies killed by admins still take moves despite not existing in activepieces, are the removed too late? admins not awaited?
 
 VISUAL: 5
 show attack when selected?
 variant tooltip to show stat mods, use colored text
 add class to acting admins
--visualise traps - 
 -skipNode controller
 Onion Icon for life
+vary map design for harder difficulties
 
 AI 6 nearly-done
-    maybe ignore statuses if already has a status??? or dont consume an action amd increase special count??
+    maybe ignore statuses if already has a status??? or dont consume an action amd increase special count?? -- sortof done
 
 ITEMS
-item to duplicate an admin CLINKING GLASSES, U+1F942
-fairy, cancel isplaced on bp?
-jar to capture piece of 1 size 
+jar to capture piece of 1 size -- testing
 
 PIECES
 keep track of upgrades and display on piece 7
@@ -79,10 +74,6 @@ piece packs/item packs/admin packs?
 EXPERIMENT:
 Spawn all enemies at all difficulties, but do not weight selection,
 enemies of lower rank get +1 to all stats for every rarity below the current security level
-Altar - sacrifice pieces, nerf pieces?
-Node to nerf stats
-
-COLLECTION 9
 
 CLEANUP 8
 sort out player inv items - genie + gift: Piececlass is not a constructor - don't use any type

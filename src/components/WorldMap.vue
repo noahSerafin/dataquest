@@ -349,6 +349,7 @@
                 bossNode: node.type === 'boss',
                 shopNode: node.type === 'shop',
                 skipNode: node.type === 'skip',
+                levelNode: node.type === 'level'
             }"
             :style="{
                 left: node.position.x + 'px',

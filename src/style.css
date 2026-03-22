@@ -256,11 +256,6 @@ html, body, #app {
   color: #dd770a;;
 }
 
-
-.has-tutorial {
-  position: relative;
-}
-
 .tutorial-tooltip {
   position: absolute;
   top: 0;
@@ -276,10 +271,6 @@ html, body, #app {
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.15s ease;
-}
-
-.has-tutorial:hover .tutorial-tooltip {
-  opacity: 1;
 }
 
 @media (max-width: 500px) {

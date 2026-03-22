@@ -949,7 +949,7 @@ class Diamond extends Admin {
   static name = "Diamond";//payroll
   static description = "Every $10 you have increases your program's defence by 1 on load";
   static unicode = "U+1F48E";
-  static color = "#ff5555";
+  static color = "#627681";
   static rarity = 5;
   constructor() {
     super(Diamond.name, Diamond.description, Diamond.unicode, Diamond.color, 8, Diamond.rarity, 'playerAndGame', 'onPlacement')
@@ -2944,7 +2944,7 @@ export class Clippy extends Admin {
   //handle in player
 }
 
-export const allAdmins = [Bank, Bucket, Candle, Cheese, Smoker, Compass, CreditCard, Crystal, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Trolley, Seed, Slots, Sprinkler, Tempura, Sneakers, Chime, Abacus, Aesculapius, Appraisal, Balloon, Briefcase, Bubble, Cactus, Coin, Purse, Convenience, FireEngine, Heart, Hermes, Joker, Loot, Clover, Microscope, Newspaper, Pickup, Putter, Relay, Scarf, Stiletto, Bowling, Tracker, Violin, Vitamins, AdminMap, Barber, Ace, AirSupport, Bone, Blood, Bouquet, Camp, Luggage, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Dice, Jammer, Roger, Juggler, Ladder, Puzzle, Razor, Sled, Rune, Shades, Stonks, Telescope, Crown, Toolbox, Ambulance, Backdoor, BionicArm, BionicLeg, Crash, Broom, DartBoard, Dove, Evergreen, Eye, Discount, Fountain, Feather, Fuel, Spoon, Liberty, Lightbulb, Lotus, Monarch, Ollie, Palette, Pazzaz, PetriDish, Prayer, Wheel, Pants, Bipolar, Variety, Volatile, Artic, BlackBelt, Lungs, Chemistry, Chivalry, Toilet, Copier, Diamond, Hamsa, Skyscraper, Howzat, Inheritance, Cherries, Brain, Meteor, Onion, PeaPod, Teddy, Pong, RollerBlades, Bell, Ice, Ballet, Umbrella, Dharma, Bath, Cards, Disco, Minerva, Needle, Pi, Osiris, Ring, School, Taoism];
+export const allAdmins = [Bank, Bucket, Candle, Cheese, Smoker, Compass, CreditCard, Crystal, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Trolley, Seed, Slots, Sprinkler, Tempura, Sneakers, Chime, Abacus, Aesculapius, Appraisal, Balloon, Briefcase, Bubble, Cactus, Coin, Purse, Convenience, FireEngine, Heart, Hermes, Joker, Loot, Clover, Microscope, Newspaper, Pickup, Putter, Relay, Scarf, Stiletto, Bowling, Tracker, Violin, Vitamins, AdminMap, Barber, Ace, AirSupport, Bone, Blood, Bouquet, Camp, Luggage, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Dice, Jammer, Roger, Juggler, Ladder, Puzzle, Razor, Sled, Rune, Shades, Stonks, Telescope, Crown, Toolbox, Ambulance, Backdoor, BionicArm, BionicLeg, Crash, Broom, DartBoard, Dove, Evergreen, Eye, Discount, Fountain, Feather, Fuel, Spoon, Liberty, Lightbulb, Lotus, Ollie, Palette, Pazzaz, PetriDish, Prayer, Wheel, Pants, Bipolar, Variety, Volatile, Artic, BlackBelt, Lungs, Chemistry, Chivalry, Toilet, Copier, Diamond, Hamsa, Skyscraper, Howzat, Inheritance, Cherries, Brain, Meteor, Monarch, Onion, PeaPod, Teddy, Pong, RollerBlades, Bell, Ice, Ballet, Umbrella, Dharma, Bath, Cards, Disco, Minerva, Needle, Pi, Osiris, Ring, School, Taoism];
 console.log('admins length: ', allAdmins.length)
 let adminLogs = {
   rarity1: 0,

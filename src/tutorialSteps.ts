@@ -99,11 +99,11 @@ const shopTip: TutorialStep = {
     tooltip: "At the shop, you can buy new programs (P), new Admin prgrams (A), or consumable items (I). There are 6 tiers of rarity, each becoming rarer in the shop the higher the tier. You can reroll the shop for a price, the cost will exponentially increase with each reroll, but resets at each shop.",
 }
 const shopbpTip: TutorialStep = {
-    id: 'shopbp',
+    id: 'shop-piece',
     tooltip: 'Purchase this program to add it to your inventory if you have 1 free space of memory.',
 }
 const itemTip: TutorialStep = {
-    id: 'item-item',
+    id: 'item-inventory',
     tooltip: 'This is a consumable item, purcahse it to add it to your inventory if you have 1 free space of memory.',
 }
 const adminTip: TutorialStep = {
@@ -112,10 +112,14 @@ const adminTip: TutorialStep = {
 }
 const adminsTip: TutorialStep = {
     id: 'admins',
-    tooltip: 'Admins with the same trigger will execute their effects left to right, you can drag the order around here.',
+    tooltip: 'This is where your admins are kept. Admins with the same trigger will execute their effects left to right, you can drag the order around here.',
+}
+const playerInfoTip: TutorialStep = {
+    id: 'player-info',
+    tooltip: "This section shows your current money and remaining lives.",
 }
 
-export const allTips: TutorialStep[] = [welcomeTip, mapTip, currentNodeTip, levelNodeTip, previewTip, skipNodeTip, shopNodeTip, bossNodeTip, boardTip, programTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, summaryTip, shopTip, shopbpTip, itemTip, adminTip, adminsTip];
+export const allTips: TutorialStep[] = [welcomeTip, mapTip, levelNodeTip, currentNodeTip, previewTip, skipNodeTip, shopNodeTip, bossNodeTip, boardTip, programTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, summaryTip, shopTip, shopbpTip, itemTip, adminTip, adminsTip];
 /*
 const Tip: TutorialStep = {
     id: '',

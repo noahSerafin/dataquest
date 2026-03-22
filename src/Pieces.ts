@@ -461,7 +461,7 @@ class Tree extends Piece {
   static color = "rgb(45, 162, 34)";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Tree.name, Tree.description, Tree.unicode, 4, 1, 1, 0, 2, Tree.color, headPosition, [headPosition], team, Tree.rarity, removeCallback, id)
+   super(Tree.name, Tree.description, Tree.unicode, 5, 1, 1, 0, 1, Tree.color, headPosition, [headPosition], team, Tree.rarity, removeCallback, id)
    this.specialName = 'Seed';
     this.targetType = 'space';
   }
@@ -1905,7 +1905,7 @@ class LabRat extends Piece {
 
 class Bat extends Piece {
   static name = "Vampire Bat";
-  static description = "A program immune to disease. Can steal body memory spaces from other programs, increasing it's max size, and spread disease to them";//remove tile, +1 temp defence? spread statuess?
+  static description = "A program immune to disease. Can steal body memory spaces from other programs spread disease to them, and increasing it's max size";//remove tile, +1 temp defence? spread statuess?
   static unicode = "U+1F987";
   static color = "#ff290dff";
   static rarity = 4;
@@ -2136,7 +2136,7 @@ class Ninja extends Piece {
 
 class Fairy extends Piece {//TODO test unfinished
   static name = "Fairy";//ANGEL?? fairy consumable item for used blueprint???
-  static description = "Immune to all statuses. Can bless a friendly program to remove harmful statuses, give it +1 max size, and give bonus temporary defence equal to the it's attack";
+  static description = "Immune to all statuses. Can bless a friendly program to remove harmful statuses, give it +1 max size, and give bonus temporary defence equal to the fairy's attack";
   static unicode = "U+1F9DA";
   static color = "rgb(123, 176, 245)";
   static rarity = 5;
@@ -2286,6 +2286,7 @@ class Oni extends Piece {
     super(Oni.name, Oni.description, Oni.unicode, 6, 1, 2, 5, 3, Oni.color, headPosition, [headPosition], team, Oni.rarity, removeCallback, id)
     this.specialName = 'Haunt';//Haunt
     this.targetType = 'group';
+    this.immunities.slowed = true;
   }
   //async special(targetPiece: Piece):Promise<void>{
   async special(targets: Piece[]):Promise<void>{
@@ -3959,12 +3960,12 @@ class Coat extends Piece {
 //UNICORN FACE, U+1F984
 class Unicorn extends Piece {
   static name = "Unicorn";
-  static description = "Loads hidden, can charge to damage multiple tiles at once"; //can hide itself from enemies until attacking";
+  static description = "High attack. Loads hidden, and can hide itself."; //can hide itself from enemies until attacking";
   static unicode = "U+1F984";
   static color = "rgb(250, 200, 255)";
   static rarity = 6;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Unicorn.name, Unicorn.description, Unicorn.unicode, 2, 4, 3, 5, 1, Unicorn.color, headPosition, [headPosition], team, Unicorn.rarity, removeCallback, id)
+    super(Unicorn.name, Unicorn.description, Unicorn.unicode, 2, 4, 3, 5, 3, Unicorn.color, headPosition, [headPosition], team, Unicorn.rarity, removeCallback, id)
     this.statuses.hidden = true;
     //this.specialName = 'Charge';
     //this.targetType = 'line';

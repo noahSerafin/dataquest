@@ -1565,9 +1565,9 @@ function toggleDebug() {
     </div>
     <div class="top-hud">
       <div class="enemy-info">
-        <p><strong>Security level: </strong>{{ player.difficulty + extraDifficulty }}</p>
-        <p><strong>Infamy: </strong>{{ stake }}</p>
-        <span>
+        <p class="security"><strong>Security level: </strong>{{ player.difficulty + extraDifficulty }}</p>
+        <p class="infamy"><strong>Infamy: </strong>{{ stake }}</p>
+        <span class="enemy-bosses">
           <BossView v-if="bossAdmins.length > 0" :admins="bossAdmins" />
         </span>
       </div>

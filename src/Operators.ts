@@ -299,7 +299,7 @@ const Window95 : OS = {
     adminSlots: 5,
     blueprints: [lance, shield, banana],
     items: [new Voucher, new Mushroom],
-    admins: [new Clippy, new Notepad],
+    admins: [new Notepad, new Clippy],
     lives: 3,
     description: 'The intro to cyberspace, comes with a helpful assistant'
 }

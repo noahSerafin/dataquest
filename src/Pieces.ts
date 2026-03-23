@@ -466,7 +466,7 @@ class Tree extends Piece {
     this.targetType = 'space';
   }
   async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
-    if(this.tiles.length >= this.maxSize){
+    if(this.tiles.length >= this.getStat('maxSize')){
       const newAcorn = new Acorn(target, this.team, this.removeCallback, crypto.randomUUID())
       newAcorn.actions = 0;
       newAcorn.movesRemaining = 0;
@@ -509,7 +509,7 @@ class Palm extends Piece {
     this.targetType = 'space';
   }
   async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
-    if(this.tiles.length >= this.maxSize){
+    if(this.tiles.length >= this.getStat('maxSize')){
       const newCoconut = new Coconut(target, this.team, this.removeCallback, crypto.randomUUID());
       newCoconut.actions = 0;
       newCoconut.movesRemaining = 0;

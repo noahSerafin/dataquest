@@ -83,7 +83,7 @@ const handleUse = () => {
     <!-- Speech bubble for Clippy admin -->
     <div v-if="item.name === 'Clippy' && tutorialState.message" class="clippy-speech-bubble-container" @click.stop>
       <div v-if="!tutorialState.collapsed" class="clippy-speech-bubble">
-        <button class="clippy-toggle" @click="tutorialState.collapsed = true">_</button>
+        <button class="clippy-toggle" @click="tutorialState.collapsed = true">X</button>
         <div class="clippy-message" v-html="tutorialState.message"></div>
       </div>
       <div v-else class="clippy-collapsed-icon" @click="tutorialState.collapsed = false">
@@ -259,13 +259,16 @@ button:disabled {
   border: none;
   font-size: 14px;
   font-weight: bold;
-  padding: 2px;
-  cursor: pointer;
+  padding: 3px;
   color: #333;
   line-height: 10px;
+  border: 1px solid black;
+  border-radius: 1px;
 }
 .clippy-toggle:hover {
   color: #000;
+  cursor: pointer;
+  background-color: blue;
 }
 
 .clippy-collapsed-icon {

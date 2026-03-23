@@ -135,7 +135,7 @@ const playerInfoTip: TutorialStep = {
     tooltip: "This section shows your current money and remaining lives.",
 }
 
-export const allTips: TutorialStep[] = [welcomeTip, mapTip, levelNodeTip, currentNodeTip, previewTip, skipNodeTip, shopNodeTip, bossNodeTip, boardTip, programTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, actionsTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, infamyTip, bossesTip, summaryTip, shopTip, shopbpTip, shopItemTip, itemTip, adminTip, adminsTip];
+export const allTips: TutorialStep[] = [welcomeTip, mapTip, levelNodeTip, currentNodeTip, previewTip, skipNodeTip, shopNodeTip, bossNodeTip, boardTip, programTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, actionsTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, infamyTip, bossesTip, summaryTip, shopTip, shopbpTip, shopItemTip, itemTip, adminTip, adminsTip, playerInfoTip];
 /*
 const Tip: TutorialStep = {
     id: '',

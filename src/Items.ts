@@ -672,6 +672,26 @@ class Bugle extends Item<Piece[]> {
     }
 }
 
+class Djembe extends Item<Piece[]> {
+    static name = "Drums of War";
+    static description = "All placed player programs gain +1 attack and +1 moves";
+    static unicode = "U+1FA98";//djembe LONG DRUM,
+    static color = "rgb(111, 32, 8)";
+    static rarity = 4;
+    constructor(){
+        super(Djembe.name, Djembe.description, Djembe.unicode, Djembe.color, 3, Djembe.rarity, 'gameState');
+        //name desc utf || maxsize moves range atk def
+    }
+    apply(activePieces: Piece[], itemMult: number) {
+         activePieces.forEach(piece => {
+            if(piece.team === 'player'){
+                piece.addModifier({attack: 1 * itemMult})//test
+                piece.addModifier({moves: 1 * itemMult})//test
+            }
+        })
+    }
+}
+
 class Megaphone extends Item<Piece[]> {
     static name = "Pep Talk";
     static description = "All placed player programs gain +1 moves";
@@ -711,6 +731,24 @@ class Battery extends Item<Piece[]> {
 }
 
 //SANDWICH, U+1F96A, all rounder? random stat?
+export class Sandwich extends Item<Piece> {
+    static name = "Sandwich";
+    static description = "Increases all a placed program's stats by 2 for one round";
+    static unicode = "U+1F96A";
+    static color = "rgb(202, 186, 15)";
+    static rarity = 6;
+    constructor(){
+        super(Sandwich.name, Sandwich.description, Sandwich.unicode, Sandwich.color, 5, Sandwich.rarity, 'piece')
+    }
+    apply(target: Piece, itemMult: number) {
+        target.maxSize += (2* itemMult);
+        target.moves += (2* itemMult);
+        target.movesRemaining += (2* itemMult);
+        target.range += (2* itemMult);
+        target.attack += (2* itemMult);
+        target.defence += (2* itemMult);
+    }
+}
 
 
 class Hotline extends Item {
@@ -735,8 +773,6 @@ class Hotline extends Item {
         }
     }
 }
-
-//RING BUOY, U+1F6DF restore the last destroyed program to hand /target a space? or give piece a wontDie bool?
 
 //target player
 export class Floppy extends Item {
@@ -855,11 +891,14 @@ export class Jar extends Item {//Pokeball?
 }
 
 //lighting remove 1 tile from all enemy pieces
-
+//toothbrush - single use broom?
+// POT OF FOOD, U+1F372 - Feast +1 moves and max size for all pieces?
+//HOT PEPPER, U+1F336 - moves +1 range +1
 //buoy revive last destroyed piece
+//RING BUOY, U+1F6DF restore the last destroyed program to hand /target a space? or give piece a wontDie bool?
 
 //U+1FAA8 rock damage selected piece
-export const allItems = [Blueberry, Box, Battery, Iron, Juice, Mushroom, Pepper, Floppy, Voucher, Bandage, Extinguisher, Formula, Gift, Hotline, Plunger, Roids, Teapot, Beans, Bugle, Jar, Keygen, Makeover, Melon, Megaphone, Pinata, Rations, ShootingStar, Spanner, Update2, Cake, Carrot, Coffee, Garlic, Genie, Wand, Meat, Pie, Soap, Dupe, Hourglass, Pandora, Supplement, Life, Blessing, Ginger, Update3];
+export const allItems = [Blueberry, Box, Battery, Iron, Juice, Mushroom, Pepper, Floppy, Voucher, Bandage, Extinguisher, Formula, Gift, Hotline, Plunger, Roids, Teapot, Beans, Bugle, Jar, Keygen, Makeover, Melon, Megaphone, Pinata, Rations, ShootingStar, Spanner, Update2, Cake, Carrot, Coffee, Djembe, Garlic, Genie, Wand, Meat, Pie, Soap, Dupe, Hourglass, Pandora, Supplement, Life, Blessing, Sandwich, Ginger, Update3];
 export const upgradeItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Roids, Formula]
 
 /*Items.forEach(i => {
@@ -877,18 +916,10 @@ console.log('all items: ', allItems.length);
 // /SCROLL, U+1F4DC
 
 //PAGE WITH CURL, U+1F4C3
-// POT OF FOOD, U+1F372
-
-// / HOT PEPPER, U+1F336
-
- //GINGER ROOT, U+1FADA
 
  // U+1F47A
 
-//RECEIPT, U+1F9FE
 
-//POSTAL HORN, U+1F4EF
 
-//djembe LONG DRUM, U+1FA98
 
 //BLACK HEART SUIT, U+2665

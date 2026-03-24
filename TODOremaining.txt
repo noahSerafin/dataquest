@@ -3,9 +3,9 @@ finish TUTORIAL
 variant tooltips
 -
 GAME / BUGS
-fix jar, add new items
-add new bosses
 -visualise traps - 
+add new items, toothbrush? - single use broom, 
+add new bosses
 visualise: retaliation, dmg + dmg mult, admin actions and counts
 //sort out trolley/toolbox
 Investigate why taoism or highrise might be adding def every turn

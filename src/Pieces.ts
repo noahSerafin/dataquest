@@ -3076,7 +3076,7 @@ class Camera extends Piece {
 }
 
 class Drum extends Piece {
-  static name = "Drum";
+  static name = "Drum";//Marching Drum
   static description = "A program that gives +1 moves remaining to all firendlies in range";
   static unicode = "U+1F941";
   static color = "#57b92eff";

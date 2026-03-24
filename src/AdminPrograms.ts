@@ -2692,7 +2692,7 @@ class BlackBelt extends Admin {
   }
 }
 
-class Bell extends Admin {//needs to reset
+class Bell extends Admin {//test
   static name = "Saved by the Bell";
   static description = "Freezes programs attacking yours when there is only 1 player program in a node";
   static unicode = "U+1F514";
@@ -2703,10 +2703,12 @@ class Bell extends Admin {//needs to reset
   }
   
   async apply({ id: id, activePieces }: { id: string, activePieces: Piece[] }) {
-    const playerPieces = activePieces.filter(p => (p.team === 'player'));
-    const idx = activePieces.findIndex(p => p.id === id);
-    const dealer = activePieces[idx];
-    if(playerPieces.length === 1 && dealer && !dealer.immunities.frozen){
+    const dealer = activePieces.find(p => p.id === id);
+    // Guard clause: if dealer doesn't exist or is already frozen, exit early
+    if (!dealer || dealer.statuses.frozen || dealer.immunities.frozen) return;
+    // Only filter if we actually need to check the win/trigger condition
+    const playerPieces = activePieces.filter(p => p.team === 'player');
+    if (playerPieces.length === 1) {
       dealer.statuses.frozen = true;
       dealer.movesRemaining = 0;
     }

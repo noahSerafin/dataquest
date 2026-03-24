@@ -835,7 +835,7 @@ export class Jar extends Item {//Pokeball?
         const idx = activePieces.findIndex(p => p.id === id);
         if(activePieces[idx].team === 'enemy' && activePieces[idx].defenceRemaining <= 0 && activePieces[idx].tiles.length <= 1){
             const bpClass = allPieces.find(p =>
-                p.name = activePieces[idx].name
+                p.name === activePieces[idx].name
             )
             console.log(bpClass)
             const bp = makeBlueprint(bpClass);
@@ -845,6 +845,8 @@ export class Jar extends Item {//Pokeball?
             bp.range = activePieces[idx].getStat('range');
             bp.attack = activePieces[idx].getStat('attack');
             bp.defence = activePieces[idx].getStat('defence');
+            bp.variantName = activePieces[idx].variantName;
+            bp.extraUnicode = activePieces[idx].extraUnicode;
             //check for space?
             player.addProgram(bp)
             activePieces[idx].takeDamage(1);

@@ -208,6 +208,7 @@ function handleApplyItem(payload: { item: Item, id: string }) {
     if(item.name === 'Jar' && selectedPiece.value && selectedPiece.value.team === 'enemy' && selectedPiece.value.defenceRemaining <= 0 && selectedPiece.value.tiles.length <= 1) {
       item.apply({ id: selectedPiece.value.id, activePieces: activePieces.value, player: player.value }, itemMult);
       player.value.removeItem(item);
+      deselectPiece();
     }
   }
   if (item.targetType === 'piecesAndBoard') {

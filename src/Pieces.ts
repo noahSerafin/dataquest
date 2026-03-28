@@ -526,7 +526,7 @@ class Rooster extends Piece {
   static color = "rgb(253, 214, 141)";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Rooster.name, Rooster.description, Rooster.unicode, 3, 2, 1, 2, 1, Rooster.color, headPosition, [headPosition], team, Rooster.rarity, removeCallback, id)
+    super(Rooster.name, Rooster.description, Rooster.unicode, 2, 2, 1, 2, 0, Rooster.color, headPosition, [headPosition], team, Rooster.rarity, removeCallback, id)
   }
 }
 

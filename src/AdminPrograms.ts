@@ -2991,7 +2991,7 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //ROUNDED SYMBOL FOR SHOU, U+1F262 logevity
 //ROUNDED SYMBOL FOR XI, U+1F263 happiness
 
-//U+1F5BC Framed picture
+//U+1F5BC Framed picture - copy items?
 //U+26F0 mountain
 //landslide U+1F6D8
 

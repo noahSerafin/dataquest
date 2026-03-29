@@ -605,7 +605,7 @@ async function selectLevel(newLevel: Level, difficultyMod: number, lReward: numb
   const newPieces = rehydratePieces(newLevel.pieces);
   extraDifficulty.value = difficultyMod;
   activePieces.value = processSpawnPoints(newPieces, difficultyMod);
-  console.log(originalSpawns.value);
+  console.log('originalSpawns: ', originalSpawns.value);
   //originalSpawns.value = [...playerSpawns.value];
   originalPieces.value = activePieces.value.map(p => p.clone());
   //originalSpawns.value = playerSpawns.value.map(s => ({ ...s }));
@@ -644,7 +644,9 @@ async function reloadLevel() {
   //if piece has no tiles, use headposition
   graveyard.value = [];
   lastTurnPieces.value = originalPieces.value.map(p => p.clone());
-  playerSpawns.value = originalSpawns.value.map(s => ({ ...s }));//not working, backdoor breaks this
+  console.log('originalspawns:', originalSpawns.value);
+  playerSpawns.value = originalSpawns.value.map(s => ({ ...s }));//not working?
+  console.log('playerSpawns:', playerSpawns.value);
   selectedPiece.value = null;
   isPlacing.value = true
   openSummary(false);
@@ -829,7 +831,7 @@ function highlightPlacements(pieceBlueprint: PieceBlueprint) {
     });
     playerSpawns.value = unnocupiedSpaces;
   }
-  else if (!isFirstTurn) {
+  else if (!isFirstTurn.value) {
     playerSpawns.value = newPlacementHighlights();
   }
   pieceToPlace.value = pieceBlueprint;

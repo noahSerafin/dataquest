@@ -537,7 +537,7 @@ class Chicken extends Piece {
   static color = "rgb(253, 214, 141)";
   static rarity = 2;;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Chicken.name, Chicken.description, Chicken.unicode, 3, 2, 1, 1, 0, Chicken.color, headPosition, [headPosition], team, Chicken.rarity, removeCallback, id)
+    super(Chicken.name, Chicken.description, Chicken.unicode, 2, 2, 1, 1, 0, Chicken.color, headPosition, [headPosition], team, Chicken.rarity, removeCallback, id)
     this.specialName = 'Lay Egg';
     this.targetType = 'space';
   }

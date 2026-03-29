@@ -414,7 +414,7 @@ class Snowflake extends Admin {//LEAFLESS TREE, U+1FABE
     static name = "Cold Snap";
     static description = "Every player program is frozen";
     static unicode = "U+2744";
-    static color = "#0d9adbff";
+    static color = "rgb(184, 218, 234)";
     static rarity = 5;
     constructor() {
         super(Snowflake.name, Snowflake.description, Snowflake.unicode, Snowflake.color, 6, Snowflake.rarity, 'gameState', 'onPlacement')
@@ -432,7 +432,7 @@ class Sun extends Admin {
     static description = "Every player program is blinded";
     static unicode = "U+1F31E";
     static color = "#f0fd33ff";
-    static rarity = 5;
+    static rarity = 6;
     constructor() {
         super(Sun.name, Sun.description, Sun.unicode, Sun.color, 6, Sun.rarity, 'gameState', 'onPlacement')
     }
@@ -708,7 +708,7 @@ class Tsunami extends Admin {
 //1 admin disabled after each turn
 
 // damage mult for enemy?
-export const allBosses = [LowBattery, NorthWind, Downturn, Hook, Mirror, Shrine, Whale, Anchor, Castle, Circus, Customs, Hammer, Izakaya, Wilt, Biohazard, Lock, Coral, Jack, Snowflake, Sun, Eclipse, Factory, Bones, Frog, Volcano, Fog, Omega, Reaper, REDACTED, Wrath,]
+export const allBosses = [LowBattery, NorthWind, Downturn, Hook, Mirror, Shrine, Whale, Anchor, Castle, Circus, Customs, Hammer, Izakaya, Wilt, Biohazard, Lock, Coral, Jack, Snowflake, Eclipse, Factory, Bones, Frog, Volcano, Sun, Fog, Omega, Reaper, REDACTED, Wrath,]
 export const nonStackableBosses = [Mirror, Customs, Snowflake, Sun, Frog, Biohazard, Coral, Izakaya, REDACTED, Fog]
 
 console.log('bosses length: ', allBosses.length)

@@ -2,7 +2,7 @@
     import { computed, ref } from "vue";
     import MiniMap from "./MiniMap.vue";
     import { Admin } from "../AdminPrograms";
-    import { Item, Box, Genie, Gift, Pinata, Pandora, Voucher } from "../Items";
+    import { Item, Box, Genie, Gift, Pinata, Pandora, Voucher, Jar, Update2, Update3, Floppy, Life, Cake, Wand, Hourglass, Dupe } from "../Items";
     import { allBosses, nonStackableBosses } from "../Bosses";
     import { watch } from "vue";
     import { Player } from "../Player";
@@ -253,7 +253,7 @@
         }
         return {
             kind: "item",
-            value: pickWeightedRandomItem([Voucher, Box, Gift, Pinata, Pandora, Genie], props.player),
+            value: pickWeightedRandomItem([Voucher, Box, Gift, Jar, Pinata, Cake, Wand, Dupe, Genie, Pandora, Floppy, Update2, Update3, Hourglass, Life], props.player),
         };
     }
 

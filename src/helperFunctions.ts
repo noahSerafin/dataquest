@@ -212,7 +212,7 @@ export function pickWeightedRandomItem(itemClasses: any[], player: Player, costR
     const cloverCount = player.admins.filter(a => a.name === 'Clover').length;
     const rarity = rollRarity(cloverCount);
 
-    const itemsOfRarity = itemClasses.filter(ItemClass => {
+    const itemsOfRarity = itemClasses.filter(ItemClass => {//can be empty, needs a guard
       const temp = new ItemClass({x:-1,y:-1}, "player");
       return temp.rarity === rarity;//add a gaurd for no result for lists with missing rarities
     });

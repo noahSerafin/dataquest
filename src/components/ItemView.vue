@@ -145,6 +145,7 @@ const handleUse = () => {
 }
 .type, .name{
   margin-bottom: 5px;
+  font-weight: bold;
 }
 .icon {
   font-size: 36px;

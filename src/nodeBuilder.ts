@@ -289,6 +289,13 @@ export function generateNode(difficulty: number): Level {
     const availableTiles = new Set(carvedTiles);
     availableTiles.delete(key(playerTile.x, playerTile.y));//remove player spawn from set
 
+    // Remove 'safe' tiles (< 5 distance from player) so enemies don't grow path-blocking
+    for (const [k, d] of distances.entries()) {
+        if (d < 5) {
+            availableTiles.delete(k);
+        }
+    }
+
     enemySpawns.forEach(enemy => {
       if(enemy.headPosition){
         availableTiles.delete(key(enemy.headPosition.x,enemy.headPosition.y));//remove from avialable to grow into, //stops growth entirely for some reason???

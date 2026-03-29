@@ -479,7 +479,7 @@ class Tree extends Piece {
 //COCONUT, U+1F965
 class Coconut extends Piece {
   static name = "Coconut";
-  static description = "A program that turns into an Palm tree";
+  static description = "A program that turns into a Palm tree";
   static unicode = "U+1F965";
   static color = "rgb(224, 207, 108)";
   static rarity = 3;
@@ -1267,7 +1267,7 @@ class Spider extends Piece {
 
 //	U+1F9A0 microbe
 class Germ extends Piece {//up to here //TODO
-  static name = "Germ";
+  static name = "Virus";//"Virus"
   static description = "A program that infects other programs, draining their max size over time";
   static unicode = "U+1F9A0";
   static color = "#27ff00";
@@ -1798,12 +1798,12 @@ class Wasp extends Piece {
 
 class Rat extends Piece {
   static name = "Rat";
-  static description = "A small but fast program"
+  static description = "A small and fast program"
   static unicode = "U+1F400";
   static color = "#6e6e6eff";
   static rarity = 1;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Rat.name, Rat.description, Rat.unicode, 1, 3, 1, 1, 0, Rat.color, headPosition, [headPosition], team, Rat.rarity, removeCallback, id)
+    super(Rat.name, Rat.description, Rat.unicode, 2, 3, 1, 1, 0, Rat.color, headPosition, [headPosition], team, Rat.rarity, removeCallback, id)
   }
 }
 
@@ -1881,12 +1881,12 @@ class Rabbit extends Piece {//not working
 
 class LabRat extends Piece {
   static name = "Lab Rat";
-  static description = "A small but fast program that can spread disease, reducing max size"
+  static description = "A small and fast program that can spread disease, reducing max size"
   static unicode = "U+1F401";
   static color = "rgb(174, 255, 171)";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(LabRat.name, LabRat.description, LabRat.unicode, 1, 3, 1, 2, 0, LabRat.color, headPosition, [headPosition], team, LabRat.rarity, removeCallback, id)
+    super(LabRat.name, LabRat.description, LabRat.unicode, 2, 3, 1, 2, 0, LabRat.color, headPosition, [headPosition], team, LabRat.rarity, removeCallback, id)
     this.specialName = 'Fleas'
     this.targetType = 'piece'
   }
@@ -2085,7 +2085,7 @@ class Wizard extends Piece {
   async special({target, activePieces, player} : {target: Coordinate, activePieces: Piece[], player?: Player}):Promise<void>{
     const difficulty = player ? player.difficulty : 1;
     const targetRarity1 = difficulty;
-    const targetRarity2 = Math.max(1, difficulty - 1);
+    const targetRarity2 = Math.max(1, Math.min(6, difficulty - 1));
     const validPieces = allPieces.filter(PieceClass => {
     if(this.team === 'enemy' && PieceClass.name === 'Nuke') return false;//don't let enemies summon nukes
       const temp = new PieceClass({x:-1,y:-1}, 'enemy', undefined);
@@ -2304,7 +2304,7 @@ class Oni extends Piece {
 
 class Ant extends Piece {//ant - bug can be higher and cause slow
   static name = "Ant";
-  static description = "A fast but small program";
+  static description = "A very fast but small program";
   static unicode = "U+1F41C"; //high movement - lvl 2 bug
   static color = "rgb(4, 156, 202)";
   static rarity = 1;
@@ -4006,7 +4006,7 @@ class Unicorn extends Piece {
 //🏗 crane  U+1F3D7
 
 //99 fairy //web?
-export const allPieces = [Ant, Acorn, Banana, Bee, Egg, Knife, Potato, Rat, Shield, Sling, Snail, TP, Aegis, Beetle, Bow, Bull, Chick, Chicken, Dagger, Decoy, Dog, Fence, Frond, Doctor, Gecko, Germ, Guard, Hedgehog, Jellyfish, Larva, Lance, Tree, Flute, Rooster, Saw, Snake, Tar, Vulture, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Buffalo, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, Hopper, LabRat, LadyBeetle, Magnet, Medic, Mosquito, Ninja, Octopus, Officer, Paladin, Wasp, Pawn, Peacock, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Alien, Arms, Axe, Cannon, Lightning, Palm, Bison, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Kite, Leopard, Lighthouse, Mammoth, Mine, Nerf, Oil, Puffer, Rabbit, Scarab, Shark, Snowman, Soldier, Squid, Stopwatch, Tiger, Bat, Wizard, Wolf, Zebra, Archdaemon, Recurve, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Gman, Giraffe, Hippo, Lion, Lovebomb, Oni, Orangutan, Paragon, Rhino, Screwdriver, Shovel, Shrike, Tank, Coat, UFO, Vampire, Bear, Helicopter, Gorilla, Greatshield, Nuke, Sol, Sponge, Rex, Unicorn];//Dolls //100 +2 (web, ink)
+export const allPieces = [Ant, Acorn, Banana, Bee, Egg, Knife, Potato, Rat, Shield, Sling, Snail, TP, Aegis, Beetle, Bow, Bull, Chick, Chicken, Dagger, Decoy, Dog, Fence, Frond, Doctor, Gecko, Guard, Hedgehog, Jellyfish, Larva, Lance, Tree, Flute, Rooster, Saw, Snake, Tar, Vulture, Germ, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Buffalo, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, Hopper, LabRat, LadyBeetle, Magnet, Medic, Mosquito, Ninja, Octopus, Officer, Paladin, Wasp, Pawn, Peacock, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Alien, Arms, Axe, Cannon, Lightning, Palm, Bison, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Kite, Leopard, Lighthouse, Mammoth, Mine, Nerf, Oil, Puffer, Rabbit, Scarab, Shark, Snowman, Soldier, Squid, Stopwatch, Tiger, Bat, Wizard, Wolf, Zebra, Archdaemon, Recurve, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Gman, Giraffe, Hippo, Lion, Lovebomb, Oni, Orangutan, Paragon, Rhino, Screwdriver, Shovel, Shrike, Tank, Coat, UFO, Vampire, Bear, Helicopter, Gorilla, Greatshield, Nuke, Sol, Sponge, Rex, Unicorn];//Dolls //100 +2 (web, ink)
 console.log('pieces length: ', allPieces.length)
 
 let adminLogs = {

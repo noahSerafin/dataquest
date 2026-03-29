@@ -254,7 +254,7 @@ export class Coffee extends Item<PieceBlueprint> {
 
 export class Roids extends Item<PieceBlueprint> {
     static name = "Roids";
-    static description = "Increase a program's attack by 1, and moves by 1";
+    static description = "Increase a program's attack by 1, and moves by 1";//make a program?
     static unicode = "U+1F489";
     static color = "#00e4b3ff";
     static rarity = 3;
@@ -352,7 +352,7 @@ export class Bandage extends Item<Piece> {
     }
 }
 
-class Cake extends Item<Piece> {
+export class Cake extends Item<Piece> {
     static name = "Cake";
     static description = "Hide a non-exposed program";
     static unicode = "U+1F382";
@@ -373,7 +373,7 @@ class Soap extends Item<Piece> {
     static description = "Removes all harmful status effects from a program";
     static unicode = "U+1F9FC";
     static color = "#821391ff";
-    static rarity = 4;
+    static rarity = 2;
     constructor(){
         super(Soap.name, Soap.description, Soap.unicode, Soap.color, 3, Soap.rarity, 'piece')
     }
@@ -462,9 +462,9 @@ export class Pandora extends Item<Player> {
     static description = "Grants 3 random upgrade items (must have room)";
     static unicode = "U+1F3FA";
     static color = "#e0b24fff";
-    static rarity = 5;
+    static rarity = 6;
     constructor(){
-        super(Pandora.name, Pandora.description, Pandora.unicode, Pandora.color, 5, Pandora.rarity, 'player')
+        super(Pandora.name, Pandora.description, Pandora.unicode, Pandora.color, 6, Pandora.rarity, 'player')
     }
     apply(_player: Player, _itemMult: number) {
     }
@@ -495,7 +495,7 @@ export class Genie extends Item<Player> {
   static description = "Gifts 3 random programs (must have room)";
   static unicode = "U+1F9DE";
   static color = "rgb(108, 126, 230)";
-  static rarity = 4;
+  static rarity = 5;
   constructor() {
    super(Genie.name, Genie.description, Genie.unicode, Genie.color, 5, Genie.rarity, 'player')
   }
@@ -580,7 +580,7 @@ export class Wand extends Item<Piece[]> {//TODO test
     }
 }
 
-class Hourglass extends Item<Piece[]> {//TODO test
+export class Hourglass extends Item<Piece[]> {//TODO test
   static name = "Hourglass";
   static description = "Retry a node without losing a life";
   static unicode = "U+231B";
@@ -820,7 +820,7 @@ export class Update3 extends Item {
     }
 }
 
-class Life extends Item {
+export class Life extends Item {
     static name = "1-Up";
     static description = "+1 extra life";
     static unicode = "U+1F493";
@@ -898,7 +898,7 @@ export class Jar extends Item {//Pokeball?
 //RING BUOY, U+1F6DF restore the last destroyed program to hand /target a space? or give piece a wontDie bool?
 
 //U+1FAA8 rock damage selected piece
-export const allItems = [Blueberry, Box, Battery, Iron, Juice, Mushroom, Pepper, Floppy, Voucher, Bandage, Extinguisher, Formula, Gift, Hotline, Plunger, Roids, Teapot, Beans, Bugle, Jar, Keygen, Makeover, Melon, Megaphone, Pinata, Rations, ShootingStar, Spanner, Update2, Cake, Carrot, Coffee, Djembe, Garlic, Genie, Wand, Meat, Pie, Soap, Dupe, Hourglass, Pandora, Supplement, Life, Blessing, Sandwich, Ginger, Update3];
+export const allItems = [Blueberry, Box, Battery, Iron, Juice, Mushroom, Pepper, Floppy, Voucher, Bandage, Extinguisher, Formula, Gift, Hotline, Plunger, Roids, Teapot, Beans, Bugle, Jar, Keygen, Makeover, Melon, Megaphone, Pinata, Rations, ShootingStar, Spanner, Update2, Cake, Carrot, Coffee, Djembe, Garlic, Wand, Meat, Pie, Soap, Dupe, Genie, Hourglass, Supplement, Life, Blessing, Pandora, Sandwich, Ginger, Update3];
 export const upgradeItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Roids, Formula]
 
 /*Items.forEach(i => {

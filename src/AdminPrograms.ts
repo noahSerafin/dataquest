@@ -947,7 +947,7 @@ class Bucket extends Admin {
 
 class Diamond extends Admin {
   static name = "Diamond";//payroll
-  static description = "Every $10 you have increases your program's defence by 1 on load";
+  static description = "Every $20 you have increases your program's defence by 1 on load";
   static unicode = "U+1F48E";
   static color = "#627681";
   static rarity = 5;
@@ -958,8 +958,8 @@ class Diamond extends Admin {
     for (const p of activePieces){
       if(p.team==='player'){
         //from the headposition, look for adjacent player tiles
-        const noOfTens = Math.max(0, Math.floor(player.money / 10)); //rounded down
-        p.addModifier({defence: noOfTens})
+        const noOfTwentys = Math.max(0, Math.floor(player.money / 20)); //rounded down
+        p.addModifier({defence: noOfTwentys})
         //else no buff
       }
     }
@@ -2334,7 +2334,7 @@ class School extends Admin {//test
   static name = "Staying in School";
   static description = "Each unplaced program in your inventory gains +1 to all stats at the end of a round, up to a max of +7"
   static unicode = "U+1F3EB";
-  static color = "rgb(193, 193, 193)";
+  static color = "rgb(180, 210, 243)";
   static rarity = 6;
   constructor() {
     super(School.name, School.description, School.unicode, School.color, 12, School.rarity, 'player', 'onRoundEnd')

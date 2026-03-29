@@ -4,10 +4,12 @@ variant tooltips
 -
 GAME / BUGS
 -visualise traps - 
+hidden enemies/Traps are still selectable
 add new items, toothbrush? - single use broom, 
 add new bosses
 visualise: retaliation, dmg + dmg mult, admin actions and counts
 //sort out trolley/toolbox
+allow burning to remove freezing? and vice versa?
 Investigate why taoism or highrise might be adding def every turn
 variants stats reloading but not name/color etc.
 variant should overide base piece color, (and tile colour???)

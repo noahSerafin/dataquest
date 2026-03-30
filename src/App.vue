@@ -152,7 +152,9 @@ const extraDifficulty = ref<number>(0)//player/seed
 function incrementMapProgress() {
   player.value.mapProgress++
   //console.log('progress increased:', mapProgress.value)
-  reapplyTutorialTooltips(200);
+  if(player.value.hasAdmin('Clippy')){
+    reapplyTutorialTooltips(200);
+  }
 }
 
 function openMainMenu() {
@@ -975,7 +977,9 @@ function handlePieceSelect(piece: Piece) {
   } else if (player.value.canMove) {
     boardRef.value.highlightMoves(piece);
   }
-  reapplyTutorialTooltips(200);
+  if(player.value.hasAdmin('Clippy')){
+    reapplyTutorialTooltips(200);
+  }
 }
 
 const deselectPiece = () => {

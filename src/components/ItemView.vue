@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { Item } from "../Items"; // adjust path
-import { tutorialState } from "../tutorial";
+import { tutorialState, clearTooltips } from "../tutorial";
 import { proTips, proTipSuggestion } from "../tutorialSteps";
 //import type { PieceVariant } from "../types";
 
@@ -66,6 +66,13 @@ const itemStyle = computed(() => {
 const handleUse = () => {
   emit('use', props.item);
 }
+
+const handleSell = () => {
+  emit('sell', props.item);
+  if (props.item.name === 'Clippy') {
+    clearTooltips();
+  }
+}
 // /<!-- v_${item.variantName}`
 
 const isProTip = computed(() => {
@@ -129,7 +136,7 @@ function getRandomProTip() {
               Use
             </button>
             <button v-if="(cssclass == 'inventory')"
-            @click="$emit('sell', item)"
+            @click="handleSell"
             >
             Sell ${{ Math.round(item.cost / 2) }}
           </button>

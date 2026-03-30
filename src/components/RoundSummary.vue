@@ -20,7 +20,9 @@ import { reapplyTutorialTooltips } from '../tutorial';
     props.player.calcInterest(); //await?? for html
 
     onMounted(() => {
-        reapplyTutorialTooltips(200);
+        if(props.player.hasAdmin('Clippy')){
+            reapplyTutorialTooltips(200);
+        }
     });
 
     const bonus = computed(() => 

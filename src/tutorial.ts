@@ -103,6 +103,23 @@ export function showTutorialTip(stepId: string) {
   }
 }
 
+export function clearTooltips() {
+  tutorialState.message = "";
+  tutorialState.activeId = "";
+  tutorialState.collapsed = true;
+
+  const existingButtons = document.querySelectorAll('.tutorial-help-btn');
+  existingButtons.forEach(btn => {
+    const target = btn.parentElement;
+    if (target) {
+      btn.remove();
+      if (!target.querySelector('.tutorial-help-btn')) {
+        target.classList.remove('has-tutorial');
+      }
+    }
+  });
+}
+
 
 /*tutorial css
 .tutorial-highlight {

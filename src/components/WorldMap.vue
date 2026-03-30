@@ -128,7 +128,9 @@
             emit('openDisabledShop')
         } else {    
             selectedPreviewNode.value = node;
-            reapplyTutorialTooltips(200);
+            if(props.player.hasAdmin('Clippy')){
+                reapplyTutorialTooltips(200);
+            }
         }
     }
 
@@ -305,7 +307,9 @@
         canReroll.value = true;
         node.visible = true;
         emit('incrementProgress');
-        reapplyTutorialTooltips(200);
+        if(props.player.hasAdmin('Clippy')){
+            reapplyTutorialTooltips(200);
+        }
     }
 
     const skipTarget = ref<PieceBlueprint | Item | null>(null);

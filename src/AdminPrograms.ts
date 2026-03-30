@@ -45,7 +45,7 @@ export abstract class Admin<
     return {}
   }
 
-  onRoundEnd?(): void | Promise<void>;
+  onRoundEnd?(params?: any): void | Promise<void>;
 }
 
 class Meteor extends Admin {

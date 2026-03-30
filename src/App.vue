@@ -478,7 +478,7 @@ async function handleApplyAdmins(trigger: AdminTrigger, id: string, piece?: Piec
           await admin.apply({ activePieces: activePieces.value, board: level.value.tiles })
         }
         if (admin.targetType === 'all') {
-          await admin.apply({ id, activePieces: activePieces.value, removeCallback: removePiece, board: level.value.tiles, player: player.value, playerSpawns: playerSpawns.value });//, graveyard: graveyard.value})
+          await admin.apply({ id, activePieces: activePieces.value, removeCallback: removePiece, board: level.value.tiles, player: player.value, playerSpawns: playerSpawns.value, bosses: bossAdmins.value });//, graveyard: graveyard.value})
         }
       }
     }
@@ -578,6 +578,14 @@ async function selectLevel(newLevel: Level, difficultyMod: number, lReward: numb
 }
 
 function handleProceed() {
+  for (const admin of player.value.admins) {
+    if (admin.onRoundEnd) admin.onRoundEnd();
+  };
+  const currentBossAdmins = [...bossAdmins.value];
+  for (const admin of currentBossAdmins) {
+    if (admin.onRoundEnd) admin.onRoundEnd(bossAdmins.value);
+  };
+  
   openSummary(false);
   incrementMapProgress();
   if (player.value.mapProgress >= 3) {
@@ -595,8 +603,9 @@ async function reloadLevel() {
     admin.disabled = false;
     if (admin.onRoundEnd) admin.onRoundEnd();
   };
-  for (const admin of bossAdmins.value) {
-    if (admin.onRoundEnd) admin.onRoundEnd();
+  const currentBossAdmins = [...bossAdmins.value];
+  for (const admin of currentBossAdmins) {
+    if (admin.onRoundEnd) admin.onRoundEnd(bossAdmins.value);
   };
   renewBlueprints();
   activePieces.value = originalPieces.value.map(p => p.clone());

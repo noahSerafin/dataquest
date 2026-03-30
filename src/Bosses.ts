@@ -379,6 +379,7 @@ class Customs extends Admin {//remove
         //activePieces[idx].addModifier({moves: -1})
     }
 }
+
 class Shrine extends Admin {
     static name = "Shrine";
     static description = "Every player program loses -1 attack";
@@ -393,6 +394,7 @@ class Shrine extends Admin {
         activePieces[idx].addModifier({ attack: -1 })
     }
 }
+
 class Izakaya extends Admin {
     static name = "Izakaya";
     static description = "Every player program is confused";
@@ -648,11 +650,11 @@ class Nofun extends Admin {
         super(Nofun.name, Nofun.description, Nofun.unicode, Nofun.color, 6, Nofun.rarity, 'player', 'onTurnEnd')
     }
     async apply({ player }: { player: Player }) {
-        for(const admin of player.admins){
+        for (const admin of player.admins) {
             admin.disabled = false;
         }
         if (player.admins.length > 0) {
-            player.admins[Math.floor(Math.random()*player.admins.length)].disabled = true;
+            player.admins[Math.floor(Math.random() * player.admins.length)].disabled = true;
         }
     }
 }
@@ -669,7 +671,7 @@ class Tornado extends Admin {
     async apply({ activePieces, board, playerSpawns }: { activePieces: Piece[], board: Coordinate[], playerSpawns?: Coordinate[] }) {
         if (!playerSpawns) return;
         const unoccupiedTiles = board.filter(t => !activePieces.some(p => p.tiles.some(pt => pt.x === t.x && pt.y === t.y)));
-        
+
         const newSpawns: Coordinate[] = [];
         for (let i = 0; i < playerSpawns.length; i++) {
             if (unoccupiedTiles.length === 0) break;
@@ -773,6 +775,49 @@ class Singularity extends Admin {
     }
 }
 
+class Cocktail extends Admin {
+    static name = "Deadly Cocktail";
+    static description = "Loads 2 random Bosses of lower security levels";//do not weight the pick
+    static unicode = "U+1F378";
+    static color = "rgb(85, 0, 102)";
+    static rarity = 4;
+    private addedBosses: Admin[] = [];
+
+    constructor() {
+        super(Cocktail.name, Cocktail.description, Cocktail.unicode, Cocktail.color, 5, Cocktail.rarity, 'all', 'onRoundStart')
+    }
+    async apply({ player, bosses }: { player: Player, bosses?: Admin[] }) {
+        if (!bosses) return;
+        this.onRoundEnd(bosses); // in case previous bosses were not cleared
+
+        const possibleBosses = allBosses.filter(b => b.rarity < player.difficulty && b.name !== Cocktail.name);
+        if (possibleBosses.length === 0) return;
+
+        const Boss1 = possibleBosses[Math.floor(Math.random() * possibleBosses.length)];
+        const Boss2 = possibleBosses[Math.floor(Math.random() * possibleBosses.length)];
+        
+        const b1 = new Boss1();
+        const b2 = new Boss2();
+        
+        this.addedBosses.push(b1, b2);
+
+        const cocktailIndex = bosses.indexOf(this);
+        if (cocktailIndex !== -1) {
+            bosses.splice(cocktailIndex + 1, 0, b1, b2);
+        } else {
+            bosses.push(b1, b2);
+        }
+    }
+    onRoundEnd(bosses?: Admin[]) {
+        if (!bosses || this.addedBosses.length === 0) return;
+        this.addedBosses.forEach(b => {
+             const idx = bosses.indexOf(b);
+             if (idx !== -1) bosses.splice(idx, 1);
+        });
+        this.addedBosses = [];
+    }
+}
+
 //FIREWORKS, U+1F386 enemy splash damage
 
 //FACE WITH LOOK OF TRIUMPH, U+1F624
@@ -780,8 +825,8 @@ class Singularity extends Admin {
 //1 admin disabled after each turn
 
 // damage mult for enemy?
-export const allBosses = [LowBattery, NorthWind, Customs, Downturn, Hook, Mirror, Shrine, Whale, Anchor, Castle, Circus, Hammer, Izakaya, Tsunami, Wilt, Biohazard, Coral, Lock, Factory, Jack, Coaster, Snowflake, Tornado, Eclipse, Bones, Frog, Singularity, Volcano, Sun, Fog, Nofun, Omega, Reaper, REDACTED, Wrath]
-export const nonStackableBosses = [Mirror, Customs, Snowflake, Sun, Frog, Biohazard, Coral, Izakaya, REDACTED, Fog, Singularity, Tornado]
+export const allBosses = [LowBattery, NorthWind, Customs, Downturn, Hook, Mirror, Shrine, Whale, Anchor, Castle, Circus, Hammer, Izakaya, Tsunami, Wilt, Biohazard, Coral, Lock, Factory, Jack, Coaster, Cocktail, Snowflake, Tornado, Eclipse, Bones, Frog, Singularity, Volcano, Sun, Fog, Nofun, Omega, Reaper, REDACTED, Wrath]
+export const nonStackableBosses = [Mirror, Customs, Snowflake, Sun, Frog, Biohazard, Coral, Izakaya, REDACTED, Fog, Singularity, Tornado, Cocktail]
 
 console.log('bosses length: ', allBosses.length)
 let adminLogs = {

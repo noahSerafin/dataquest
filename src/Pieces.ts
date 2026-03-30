@@ -562,7 +562,7 @@ class Chick extends Piece {
     this.targetType = 'space';
   }
   async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
-    if(this.tiles.length >= this.maxSize){
+    if(this.tiles.length >= this.getStat('maxSize')){
       const newPoultry = (Math.random() < 0.5) ? new Chicken(target, this.team, this.removeCallback, crypto.randomUUID()) : new Rooster(target, this.team, this.removeCallback, crypto.randomUUID());
       newPoultry.tiles.push(this.headPosition);
       newPoultry.actions = 0;
@@ -733,10 +733,8 @@ class Shovel extends Piece {
     this.targetType = 'space';
   }
   async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
-    if(this.tiles.length===this.maxSize){
-      const newAcorn = new Pitfall(target, this.team, this.removeCallback, crypto.randomUUID())//removecallback might be wrong here
-      activePieces.push(newAcorn)
-    }
+    const newAcorn = new Pitfall(target, this.team, this.removeCallback, crypto.randomUUID())//removecallback might be wrong here
+    activePieces.push(newAcorn)
     this.actions --
   }
 }
@@ -821,13 +819,13 @@ class Trojan extends Piece {//test more
   async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
     const newTrojan = new Trojan(target, this.team, this.removeCallback, crypto.randomUUID())
     //should we allow copying of stats also?
-    newTrojan.maxSize = this.maxSize
-    newTrojan.moves = this.moves
-    newTrojan.range = this.range
-    newTrojan.attack = this.attack
-    newTrojan.defence = this.defence
-    newTrojan.defenceRemaining = this.defence
-    newTrojan.statModifiers = this.statModifiers
+    newTrojan.maxSize = this.maxSize;
+    newTrojan.moves = this.moves;
+    newTrojan.range = this.range;
+    newTrojan.attack = this.attack;
+    newTrojan.defence = this.defence;
+    newTrojan.defenceRemaining = this.getStat('defence');
+    newTrojan.statModifiers = this.statModifiers;//this copies modifiers
     newTrojan.movesRemaining = 0;
     newTrojan.actions = 0;
     newTrojan.hybridName = this.hybridName;
@@ -1029,7 +1027,7 @@ class Snake extends Piece {//test
     } 
     // --- 3. Remove that tile from the piece ---
     piece.tiles.splice(tileIndex, 1);
-    this.maxSize += 1;
+    this.addModifier({maxSize: 1});
     // --- 4. Move Snake into that tile ---
     this.move(target);
     this.actions --
@@ -1625,7 +1623,7 @@ class Snowman extends Piece {
     //this.canMove = false;
   }
   async special({target, activePieces: _activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
-    this.maxSize+=1;
+    this.addModifier({maxSize: 1});
     this.addModifier({moves: 1})
     this.move(target);
     this.actions --
@@ -1926,7 +1924,7 @@ class Bat extends Piece {
     }
     this.actions--
     this.tiles.push(target);
-    this.maxSize += 1;
+    this.addModifier({maxSize: 1});
   }
   //raise defence +1 if total dmg > 0
 }

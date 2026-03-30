@@ -1015,7 +1015,9 @@ function handlePieceSelect(piece: Piece) {
       );
     }
   }
-  selectedPiece.value = piece
+  if(!(piece.statuses.hidden && piece.team === 'enemy')){
+    selectedPiece.value = piece
+  }
   //highlight range
   if (piece.team === 'enemy') {
     boardRef.value.highlightTargets(piece);

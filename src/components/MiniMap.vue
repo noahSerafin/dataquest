@@ -108,6 +108,7 @@
     }
 
     .map-wrapper {
+        position: relative;
         cursor: pointer;
         border: 1px solid #666;
         padding: 6px;

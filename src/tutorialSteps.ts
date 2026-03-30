@@ -24,7 +24,7 @@ const levelNodeTip: TutorialStep = {
 }
 const previewTip: TutorialStep = {
     id: 'preview-modal',
-    tooltip: 'The preview shows you the layout of the level and the starting spawn points, red for enemies, blue for the player.'
+    tooltip: 'The preview panel shows more detailed information about a node.'
 }
 const skipNodeTip: TutorialStep = {
     id: 'skipNode',
@@ -108,7 +108,7 @@ const securityTip: TutorialStep = {
 }
 const infamyTip: TutorialStep = {
     id: 'infamy',
-    tooltip: "Higher infamy will add extra challenges on top of your security, you raise this before starting a run."
+    tooltip: "Higher infamy will add extra challenges on top of your security, you raise this before starting a run. <strong>lvl 2:</strong> Bosses accumulate from begining, <strong>lvl 3:</strong> Enemies get +1 maxSize per security level, <strong>lvl 4:</strong> Enemies get +1 defence per security level, <strong>lvl 5:</strong> Enemies get +1 attack per security level, <strong>lvl 6:</strong> Enemies get +1 moves per security level, <strong>lvl 7:</strong> Enemies get +1 range per security level"
 }
 const bossesTip: TutorialStep = {
     id: 'enemy-bosses',
@@ -143,7 +143,7 @@ const adminTip: TutorialStep = {
     tooltip: 'This is an admin, it takes up an admin slot and will provide passive benefits when it is triggered.',
 }
 const adminsTip: TutorialStep = {
-    id: 'admins',
+    id: 'admin-header',
     tooltip: 'This is where your admins are kept. Admins with the same trigger will execute their effects left to right, you can drag the order around here.',
 }
 const playerInfoTip: TutorialStep = {
@@ -160,7 +160,7 @@ const inventoryTip: TutorialStep = {
 }
 const nodePreviewTip: TutorialStep = {
     id: 'map-wrapper',
-    tooltip: "This preview shows your starting load point in green, and the enemies in red.",
+    tooltip: "The node preview shows your starting load point in green, and the enemies in red.",
 }
 const interestTip: TutorialStep = {
     id: 'interest-summary',

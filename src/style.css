@@ -12,7 +12,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-   user-select: none;
+  user-select: none;
 }
 
 a {
@@ -20,6 +20,7 @@ a {
   color: #646cff;
   text-decoration: inherit;
 }
+
 a:hover {
   color: #535bf2;
 }
@@ -51,9 +52,11 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:hover {
   border-color: #646cff;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
@@ -68,15 +71,19 @@ button:focus-visible {
     color: #213547;
     background-color: #ffffff;
   }
+
   a:hover {
     color: #747bff;
   }
+
   button {
     background-color: #f9f9f9;
   }
 }
 
-html, body, #app {
+html,
+body,
+#app {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -107,10 +114,12 @@ html, body, #app {
   padding: 0px 16px;
   display: flex;
   justify-content: space-between;
-  pointer-events: none; /* avoids blocking board */
+  pointer-events: none;
+  /* avoids blocking board */
   background-color: black;
 }
-.top-hud > * {
+
+.top-hud>* {
   pointer-events: auto;
 }
 
@@ -135,7 +144,7 @@ html, body, #app {
   pointer-events: none;
 
   transition:
-    transform 0.45s cubic-bezier(.4,0,.2,1),
+    transform 0.45s cubic-bezier(.4, 0, .2, 1),
     opacity 0.3s ease;
 }
 
@@ -147,9 +156,10 @@ html, body, #app {
 
 /* Tablet & down → full width */
 @media (max-width: 768px) {
-  .stage{
+  .stage {
     width: 100vw;
   }
+
   .stage-panel {
     width: 100%;
     height: 100%;
@@ -161,17 +171,20 @@ html, body, #app {
 .container {
   width: min(92vw, 720px);
   aspect-ratio: 1 / 1;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
   overflow: hidden;
 }
+
 @media (max-width: 768px) {
-  #app{
+  #app {
     padding: 0;
     justify-content: space-between;
   }
+
   .stage {
     margin: 0;
   }
+
   .container {
     width: 100vw;
     border-radius: 0;
@@ -188,14 +201,16 @@ html, body, #app {
   left: 0.3rem;
   bottom: 0.3rem;
 }
+
 .player-actions {
   display: flex;
   justify-content: center;
   flex-direction: column;
   gap: 2px;
-  
+
 }
-.player-actions button{
+
+.player-actions button {
   font-size: 14px;
   padding: 0.1rem;
   margin: 0;
@@ -223,37 +238,50 @@ html, body, #app {
   width: min(100%, 720px);
   background: #020617;
   border-radius: 12px 12px 0 0;
-  box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
   z-index: 20;
 }
 
-#overlay-root{
+#overlay-root {
   position: absolute;
   top: 20%;
   right: 2%;
   width: 18%;
   height: 80%;
 }
-#overlay-root.piece-controller{
+
+#overlay-root.piece-controller {
   width: 100%;
 }
-.text-yellow{
-  color: #ebeb1b;;
+
+.text-yellow {
+  color: #ebeb1b;
+  ;
 }
-.text-blue{
-  color: #1b4ceb;;
+
+.text-blue {
+  color: #1b4ceb;
+  ;
 }
-.text-red{
-  color: #b80000;;
+
+.text-red {
+  color: #b80000;
+  ;
 }
-.text-green{
-  color: #1fc50c;;
+
+.text-green {
+  color: #1fc50c;
+  ;
 }
-.text-cyan{
-  color: #1bc1eb;;
+
+.text-cyan {
+  color: #1bc1eb;
+  ;
 }
-.text-orange{
-  color: #dd770a;;
+
+.text-orange {
+  color: #dd770a;
+  ;
 }
 
 .tutorial-tooltip {
@@ -291,23 +319,37 @@ html, body, #app {
   align-items: center;
   justify-content: center;
   z-index: 100;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   line-height: 20px;
 }
 
-.shop-container .tutorial-help-btn, .board .tutorial-help-btn {
+.shop-container .tutorial-help-btn,
+.board .tutorial-help-btn {
   top: 0;
   right: 0;
 }
-.enemy-info .tutorial-help-btn, .board-piece .tutorial-help-btn, .piece-controller .tutorial-help-btn {
+
+.enemy-info .tutorial-help-btn,
+.board-piece .tutorial-help-btn,
+.piece-controller .tutorial-help-btn {
   top: 0;
   right: unset;
   left: 0;
 }
-.enemy-info .security .tutorial-help-btn, .enemy-info .infamy .tutorial-help-btn{
+
+.admin-header .tutorial-help-btn {
+  top: -8px;
+  right: unset;
+  left: -8px;
+}
+
+.enemy-info .security .tutorial-help-btn,
+.enemy-info .infamy .tutorial-help-btn {
   top: -14px;
 }
-.piece-controller .stat .tutorial-help-btn, .blueprint-controller .stat .tutorial-help-btn{
+
+.piece-controller .stat .tutorial-help-btn,
+.blueprint-controller .stat .tutorial-help-btn {
   top: 0;
   left: unset;
   right: 0;
@@ -318,24 +360,26 @@ html, body, #app {
 }
 
 @media (max-width: 500px) {
-  .debug-controls{
+  .debug-controls {
     left: unset;
     right: 2%;
     font-size: 0.9rem;
     padding: 0.5rem;
   }
-  .top-hud p{
+
+  .top-hud p {
     margin: 0;
   }
-  .stage{
-    
-  }
-  .player-area{
-    p{
+
+  .stage {}
+
+  .player-area {
+    p {
       margin: 0;
     }
   }
-  #overlay-root{
+
+  #overlay-root {
     right: 100%;
   }
 }
@@ -349,7 +393,8 @@ steel
 .shader {
   position: relative;
   overflow: hidden;
-  backface-visibility: hidden; /* Forces GPU */
+  backface-visibility: hidden;
+  /* Forces GPU */
 }
 
 .shader-layer {
@@ -373,12 +418,15 @@ steel
   /* background-image: url(sparrow_mask.png); */
 }
 
-.variant-program, .variant-item, .variant-header{
+.variant-program,
+.variant-item,
+.variant-header {
   background-color: unset;
   background: linear-gradient(to left, rgb(226, 226, 226), rgba(255, 255, 255, 0));
   overflow: hidden;
 }
-.variant-header{
+
+.variant-header {
   position: relative;
   left: -1rem;
   overflow: hidden;
@@ -386,199 +434,256 @@ steel
   padding-right: 1rem;
   width: 120%;
 }
-.variant-header .close{
-  right: 20%!important;
+
+.variant-header .close {
+  right: 20% !important;
 }
-.piece-controller, .shop-controller, .blueprint-controller{
+
+.piece-controller,
+.shop-controller,
+.blueprint-controller {
   overflow: hidden;
 }
-.variant-program:hover::before, .variant-item:hover::before, .variant-header:hover::before{
+
+.variant-program:hover::before,
+.variant-item:hover::before,
+.variant-header:hover::before {
   content: '';
   position: absolute;
   width: 100px;
   height: 100%;
-  background-image: linear-gradient(
-    120deg,
-    rgba(255,255,2555,0)20%,
-    rgba(255,255,2555,0.9),
-    rgba(255,255,2555,0)80%
-  );
+  background-image: linear-gradient(120deg,
+      rgba(255, 255, 2555, 0)20%,
+      rgba(255, 255, 2555, 0.9),
+      rgba(255, 255, 2555, 0)80%);
   top: 0;
   left: -100px;
   animation: shine 3s infinite linear;
 }
-@keyframes shine {/*not-triggering*/
-  0% {left: -100px}
-  20% {left: 100%}
-  100% {left: 100%}
+
+@keyframes shine {
+
+  /*not-triggering*/
+  0% {
+    left: -100px
+  }
+
+  20% {
+    left: 100%
+  }
+
+  100% {
+    left: 100%
+  }
 }
-.v_Bronze{
+
+.v_Bronze {
   box-shadow: inset 0 0 10px #2f1606, inset 0 3px 30px #87442b, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
 }
-.v_Bronze .variant{
+
+.v_Bronze .variant {
   color: #b75d3c;
 }
-.v_Steel{
+
+.v_Steel {
   box-shadow: inset 0 0 10px #464646, inset 0 3px 30px #838489, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
 }
-.v_Steel .variant{
+
+.v_Steel .variant {
   color: #c4c4c4;
 }
-.v_Longshot{
+
+.v_Longshot {
   box-shadow: inset 0 0 10px #704001, inset 0 3px 30px #ff6f00, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
 }
-.v_Longshot .variant{
+
+.v_Longshot .variant {
   color: #ff6f00;
 }
-.v_Gold{
+
+.v_Gold {
   box-shadow: inset 0 0 10px #b36806, inset 0 3px 30px #ffd046, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
 }
-.v_Gold .variant{
+
+.v_Gold .variant {
   color: #e3af12;
 }
-.v_Sharp{
+
+.v_Sharp {
   box-shadow: inset 0 0 10px #561002, inset 0 3px 30px #ff716c, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
 }
-.v_Sharp .variant{
+
+.v_Sharp .variant {
   color: rgb(244, 53, 20);
 }
-.v_Speedy{
+
+.v_Speedy {
   box-shadow: inset 0 0 10px #180a55, inset 0 3px 30px #12add9, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
 }
-.v_Speedy .variant{
+
+.v_Speedy .variant {
   color: #12add9;
 }
-.v_Lead{
+
+.v_Lead {
   box-shadow: inset 0 0 10px #201638, inset 0 3px 30px #323577, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
 }
-.v_Lead .variant{
+
+.v_Lead .variant {
   color: #323577;
 }
-.v_Stone{
+
+.v_Stone {
   box-shadow: inset 0 0 10px #1c1b1e, inset 0 3px 30px #515369, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
 }
-.v_Stone .variant{
+
+.v_Stone .variant {
   color: #515369;
 }
-.v_Fast{
+
+.v_Fast {
   box-shadow: inset 0 0 10px #290464, inset 0 3px 30px #002de0, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
 }
-.v_Fast  .variant{
+
+.v_Fast .variant {
   color: #002de0;
 }
-.v_Bloated{
+
+.v_Bloated {
   box-shadow: inset 0 0 10px #060725, inset 0 3px 30px #2cc899, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
 }
-.v_Bloated .variant{
+
+.v_Bloated .variant {
   color: #2cc899;
 }
-.v_Giant{
+
+.v_Giant {
   box-shadow: inset 0 0 10px #06250c, inset 0 3px 30px #024a19, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
 }
-.v_Giant .variant{
+
+.v_Giant .variant {
   color: #024a19;
 }
-.v_Large{
+
+.v_Large {
   box-shadow: inset 0 0 10px #115802, inset 0 3px 30px #0ab342, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
 }
-.v_Large  .variant{
+
+.v_Large .variant {
   color: #0ab342;
 }
-.v_Reaching{
+
+.v_Reaching {
   box-shadow: inset 0 0 10px #381e16, inset 0 3px 30px #ff9d00, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
 }
-.v_Reaching .variant{
+
+.v_Reaching .variant {
   color: #d46600;
 }
-.v_Towering, .v_Phosphoric{
+
+.v_Towering,
+.v_Phosphoric {
   box-shadow: inset 0 0 10px #381e16, inset 0 3px 30px #ff9d00, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
 }
-.v_Towering .variant{
+
+.v_Towering .variant {
   color: #cf6609;
 }
-.v_Cautious{
+
+.v_Cautious {
   box-shadow: inset 0 0 10px #043a54, inset 0 3px 30px #00ffdd, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
 }
-.v_Cautious .variant{
+
+.v_Cautious .variant {
   color: #00ffdd;
 }
-.v_Beserker{
+
+.v_Beserker {
   box-shadow: inset 0 0 10px #1d0101, inset 0 3px 30px #a00303, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
 }
-.v_Beserker  .variant{
+
+.v_Beserker .variant {
   color: #a00303;
 }
-.v_Savage{
+
+.v_Savage {
   box-shadow: inset 0 0 10px #571532, inset 0 3px 30px #ff005d, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
 }
-.v_Savage  .variant{
+
+.v_Savage .variant {
   color: #c40505;
 }
-.v_Vicious{
+
+.v_Vicious {
   box-shadow: inset 0 0 10px #3c0b0b, inset 0 3px 30px #d21515, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
 }
-.v_Vicious  .variant{
+
+.v_Vicious .variant {
   color: #d21515;
 }
-.v_Overclocked{
+
+.v_Overclocked {
   box-shadow: inset 0 0 10px #370334, inset 0 3px 30px #ff00f2, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
 }
-.v_Overclocked .variant{
 
-}
-.v_Lightweight{
+.v_Overclocked .variant {}
+
+.v_Lightweight {
   box-shadow: inset 0 0 10px #453a0d, inset 0 3px 30px #ffdc69, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
 }
-.v_Lightweight .variant{
+
+.v_Lightweight .variant {
   color: #ffdc69;
 }
-.v_Glass{
+
+.v_Glass {
   box-shadow: inset 0 0 10px #0f2c49, inset 0 3px 30px #69fff5, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
   opacity: 0.7;
 }
-.v_Glass .variant{
+
+.v_Glass .variant {
   color: #8b0909;
 }
-.v_stone{
-  
-}
-.v_plated{
+
+.v_stone {}
+
+.v_plated {
   /* thick border */
 }
-.v_stilted{
-  
-}
-.v_Exec{
 
-}
-.v_negative{
+.v_stilted {}
+
+.v_Exec {}
+
+.v_negative {
   box-shadow: inset 0 0 10px #000000, inset 0 3px 30px #4b4b4b, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
   filter: invert(1);
-  background-color: white!important;
+  background-color: white !important;
 }
-.v_Holographic{
+
+.v_Holographic {
   filter: invert(1);
   background: linear-gradient(to left, black, rgba(255, 255, 255, 0));
-  background-image: linear-gradient(
-    0deg,
-    hsl(359, 60%, 40%),
-    hsl(16, 60%, 45%),
-    hsl(33, 60%, 50%),
-    hsl(45, 60%, 55%),
-    hsl(58, 60%, 60%),
-    hsl(58, 60%, 65%),
-    hsl(58, 60%, 70%),
-    hsl(96, 60%, 65%),
-    hsl(146, 60%, 60%),
-    hsl(183, 60%, 55%),
-    hsl(225, 60%, 50%),
-    hsl(265, 60%, 45%),
-    hsl(303, 60%, 40%)
-  );
+  background-image: linear-gradient(0deg,
+      hsl(359, 60%, 40%),
+      hsl(16, 60%, 45%),
+      hsl(33, 60%, 50%),
+      hsl(45, 60%, 55%),
+      hsl(58, 60%, 60%),
+      hsl(58, 60%, 65%),
+      hsl(58, 60%, 70%),
+      hsl(96, 60%, 65%),
+      hsl(146, 60%, 60%),
+      hsl(183, 60%, 55%),
+      hsl(225, 60%, 50%),
+      hsl(265, 60%, 45%),
+      hsl(303, 60%, 40%));
 }
-.v_Holographic .piece-controller{
-  filter: unset; 
+
+.v_Holographic .piece-controller {
+  filter: unset;
 }
-.v_Glass .piece-controller{
+
+.v_Glass .piece-controller {
   opacity: 0.7;
 }

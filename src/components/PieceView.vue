@@ -197,7 +197,7 @@ const shieldIcon = String.fromCodePoint(
 .team-enemy{
   border: outset red;
 }
-.piece:hover{
+.piece:not(.team-enemy.hidden-true):hover{
   cursor: pointer;
 }
 

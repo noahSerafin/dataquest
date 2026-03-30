@@ -281,7 +281,7 @@ async function executeEnemyIntent(
             p.targetType == 'trapPiece' && p.tiles.some(t => t.x === step.x && t.y === step.y)
           );
           if (trap && trap.id !== enemy.id) {
-            await trap.special(enemy);
+            await trap.triggerTrap(enemy);
             //removePiece(trap);//shouldn't really be necessary
           }
           if(enemy.targetType === 'trapPiece'){//frond logic
@@ -289,7 +289,7 @@ async function executeEnemyIntent(
               p.tiles.some(t => t.x === step.x && t.y === step.y)
             );
             if(otherPiece){
-              await enemy.special(otherPiece);
+              await enemy.triggerTrap(otherPiece);
             }
           }
         }
@@ -307,7 +307,7 @@ async function executeEnemyIntent(
         );
         enemy.moveTo(intent.space)
         if (trap && trap.id !== enemy.id) {
-          await trap.special(enemy);
+          await trap.triggerTrap(enemy);
           //removePiece(trap);//shouldn't really be necessary
         }
         helpers.clearHighlights();

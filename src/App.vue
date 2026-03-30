@@ -1042,7 +1042,7 @@ const movePiece = async (coord: Coordinate) => {
     p.targetType == 'trapPiece' && p.tiles.some(t => t.x === coord.x && t.y === coord.y)
   );
   if (trap && trap.id !== selectedPiece.value.id) {
-    await trap.special(selectedPiece.value);
+    await trap.triggerTrap(selectedPiece.value);
     //removePiece(trap);//shouldn't really be necessary - testing without
   }
   if (selectedPiece.value.targetType === 'trapPiece') {
@@ -1051,7 +1051,7 @@ const movePiece = async (coord: Coordinate) => {
       (p.tiles.some(t => t.x === coord.x && t.y === coord.y) && p.id !== selectedPiece.value?.id)
     );
     if (trapTarget) {
-      await selectedPiece.value.special(trapTarget);
+      await selectedPiece.value.triggerTrap(trapTarget);
     }
   }
   if (selectedPiece.value.movesRemaining > 0) {

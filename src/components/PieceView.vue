@@ -139,7 +139,7 @@ const shieldIcon = String.fromCodePoint(
 
 <template>
   <div
-  :class="`piece ${piece.headPosition.x}-${piece.headPosition.y} ${cssclass}-piece ${props.piece.variantName ? ('variant-program v_'+piece.variantName) : ''} ${props.piece.extraUnicode ? 'hybrid' : ''} team-${piece.team} taking-damage-${piece.isTakingDamage} hidden-${piece.statuses.hidden} tiles:(${piece.tiles.toString()}) redacted-${piece.redacted}`"
+  :class="`piece ${piece.headPosition.x}-${piece.headPosition.y} ${cssclass}-piece ${props.piece.variantName ? ('variant-program v_'+piece.variantName) : ''} ${props.piece.extraUnicode ? 'hybrid' : ''} team-${piece.team} taking-damage-${piece.isTakingDamage} triggering-${piece.isTriggering} hidden-${piece.statuses.hidden} tiles:(${piece.tiles.toString()}) redacted-${piece.redacted}`"
     :name="piece?.hybridName? piece.hybridName : piece?.name"
     :id="piece?.id"
     :style="pieceStyle"
@@ -295,6 +295,15 @@ const shieldIcon = String.fromCodePoint(
   top: 0%;
   left: 0%;
   animation: shake 0.25s ease;
+}
+@keyframes trapTrigger {
+  0% { transform: scale(1); filter: brightness(1) drop-shadow(0 0 0px yellow); }
+  50% { transform: scale(1.2); filter: brightness(1.5) drop-shadow(0 0 10px yellow); }
+  100% { transform: scale(1); filter: brightness(1) drop-shadow(0 0 0px yellow); }
+}
+.triggering-true {
+  z-index: 9999 !important;
+  animation: trapTrigger 0.5s ease-in-out;
 }
 .team-enemy.hidden-true{
   opacity: 0;

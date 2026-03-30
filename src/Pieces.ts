@@ -32,6 +32,7 @@ export abstract class Piece {
   hasExposingSpecial: boolean = false;//use in enemyAI
   redacted: boolean = false;//for boss
   isBusy: boolean = false;//for AI
+  isTriggering: boolean = false; //for trap animations
 
   specialName?: string;
   extraUnicode?: string;
@@ -230,6 +231,14 @@ export abstract class Piece {
   }
   async special(_target: any):Promise<void>{
     
+  }
+
+  async triggerTrap(target: any): Promise<void> {
+    this.isTriggering = true;
+    this.statuses.hidden = false;
+    await new Promise(resolve => setTimeout(resolve, 500));
+    await this.special(target);
+    this.isTriggering = false;
   }
 
   //cloaked

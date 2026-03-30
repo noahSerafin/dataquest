@@ -1022,6 +1022,7 @@ function handlePieceSelect(piece: Piece) {
   } else if (player.value.canMove) {
     boardRef.value.highlightMoves(piece);
   }
+  reapplyTutorialTooltips(200);
 }
 
 const deselectPiece = () => {

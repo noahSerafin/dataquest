@@ -7,6 +7,7 @@
     import ItemView from "./ItemView.vue";
     import BlueprintView from "./BlueprintView.vue";
     import BlueprintController from "./BlueprintController.vue";
+import { reapplyTutorialTooltips } from "../tutorial";
 
     const props = defineProps<{
         player: Player,
@@ -32,6 +33,7 @@
     
     function openInventoryController(piece: PieceBlueprint) {///TODO SORT OUT IMPORTS
         selectedPiece.value = piece;
+        reapplyTutorialTooltips(200);
     }
 
     // Derived/computed properties

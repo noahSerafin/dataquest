@@ -299,10 +299,15 @@ html, body, #app {
   top: 0;
   right: 0;
 }
-.enemy-info .tutorial-help-btn, .board-piece .tutorial-help-btn, .piece-controller .tutorial-help-btn {
+.enemy- .tutorial-help-btn, .board-piece .tutorial-help-btn, .piece-controller .tutorial-help-btn {
   top: 0;
   right: unset;
-  left: 0px;
+  left: 0;
+}
+.piece-controller .stat .tutorial-help-btn, .blueprint-controller .stat .tutorial-help-btn{
+  top: 0;
+  left: unset;
+  right: 0;
 }
 
 .tutorial-help-btn:hover {

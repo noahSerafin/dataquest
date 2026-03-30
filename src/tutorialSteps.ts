@@ -171,14 +171,29 @@ const rewardTip: TutorialStep = {
     tooltip: "You have earned a reward for completing this node. Plus any bonus rewards granted from your admin programs",
 }
 export const allTips: TutorialStep[] = [welcomeTip, mapTip, bossTip, visitedNodeTip, currentNodeTip, levelNodeTip, previewTip, skipNodeTip, shopNodeTip, bossNodeTip, boardTip, programTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, actionsTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, infamyTip, bossesTip, summaryTip, lossTip, shopTip, rerollTip, shopbpTip, shopItemTip, adminTip, adminsTip, itemTip, playerInfoTip, nodePreviewTip, interestTip, rewardTip, inventoryTip, invBtnTip];
-/*
-const Tip: TutorialStep = {
-    id: '',
-    tooltip: '',
+
+const proTipsuggestion: TutorialStep = {
+    id: 'proTip',
+    tooltip: 'Want some general gameplay hints?'
 }
-Always have a defensive program handy for nodes where you can be attacked immediately.
-Special moves will not trigger a retaliation from other pieces, even damaging ones.
-Your damage mult will only apply to attacks, not to special moves that cause damage.
-Admin programs trigger left to right, so make sure you drag them into the optimum position.
-Special moves that target in a line can effect the same program more than once if the multiple tiles occupy the line.
-*/
+const defenderTip: TutorialStep = {
+    id: 'defenderTip',
+    tooltip: 'Always have a defensive or hidden program handy for nodes where you can be attacked immediately.'
+}
+const specialTip: TutorialStep = {
+    id: 'specialTip',
+    tooltip: 'Special moves will not trigger a retaliation from other pieces, even damaging ones.'
+}
+const damageMultTip: TutorialStep = {
+    id: 'dmgmultTip',
+    tooltip: 'Your damage mult will only apply to attacks, not to special moves that cause damage.'
+}
+const adminOrderTip: TutorialStep = {
+    id: 'adminordertip',
+    tooltip: 'Admin programs trigger left to right, so make sure you drag them into the optimum position.'
+}
+const lineSpecialsTipTip: TutorialStep = {
+    id: 'lineSpecialsTip',
+    tooltip: 'Special moves that target in a line can effect the same program more than once if the multiple tiles occupy the line.'
+}
+export const proTips: TutorialStep[] = [proTipsuggestion, defenderTip, specialTip, damageMultTip, adminOrderTip, lineSpecialsTipTip];

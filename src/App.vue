@@ -1738,7 +1738,7 @@ function toggleDebug() {
     left: 100%;
   }
 }
-.enemy-bosses{
+.enemy-bosses, .security, .infamy{
   position: relative;
 }
 </style>

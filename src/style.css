@@ -299,10 +299,13 @@ html, body, #app {
   top: 0;
   right: 0;
 }
-.enemy- .tutorial-help-btn, .board-piece .tutorial-help-btn, .piece-controller .tutorial-help-btn {
+.enemy-info .tutorial-help-btn, .board-piece .tutorial-help-btn, .piece-controller .tutorial-help-btn {
   top: 0;
   right: unset;
   left: 0;
+}
+.enemy-info .security .tutorial-help-btn, .enemy-info .infamy .tutorial-help-btn{
+  top: -14px;
 }
 .piece-controller .stat .tutorial-help-btn, .blueprint-controller .stat .tutorial-help-btn{
   top: 0;

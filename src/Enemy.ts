@@ -286,7 +286,7 @@ async function executeEnemyIntent(
           }
           if(enemy.targetType === 'trapPiece'){//frond logic
             const otherPiece = activePieces.find(p =>
-              p.tiles.some(t => t.x === step.x && t.y === step.y)
+              p.id !== enemy.id && p.tiles.some(t => t.x === step.x && t.y === step.y)
             );
             if(otherPiece){
               await enemy.triggerTrap(otherPiece);

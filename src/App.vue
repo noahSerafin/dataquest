@@ -477,7 +477,7 @@ async function handleApplyAdmins(trigger: AdminTrigger, id: string, piece?: Piec
           await admin.apply({ activePieces: activePieces.value, board: level.value.tiles })
         }
         if (admin.targetType === 'all') {
-          await admin.apply({ id, activePieces: activePieces.value, removeCallback: removePiece, board: level.value.tiles, player: player.value });//, graveyard: graveyard.value})
+          await admin.apply({ id, activePieces: activePieces.value, removeCallback: removePiece, board: level.value.tiles, player: player.value, playerSpawns: playerSpawns.value });//, graveyard: graveyard.value})
         }
       }
     }

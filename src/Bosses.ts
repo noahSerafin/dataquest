@@ -21,62 +21,62 @@ targetType: 'blueprint' | 'piece' | 'shopItem' | 'player' | 'gameState'  | 'play
 //have boss maximums before endless mode
 class NorthWind extends Admin {//🌬️//dash U+1F4A8
     static rarity = 1;
-  static name = "North Wind";
-  static description = "All player pieces are moved down 1 space after every turn";
-  static unicode = "U+1F32C";//"U+1F38F";//carp windsock//U+1F4A8 dash cloud//wind face "U+1F32C";
-  static color = "rgb(207, 238, 238)";
-  constructor() {
-    super(NorthWind.name, NorthWind.description, NorthWind.unicode, NorthWind.color, 5, NorthWind.rarity, 'piecesAndBoard', 'onTurnEnd')
-  }
+    static name = "North Wind";
+    static description = "All player pieces are moved down 1 space after every turn";
+    static unicode = "U+1F32C";//"U+1F38F";//carp windsock//U+1F4A8 dash cloud//wind face "U+1F32C";
+    static color = "rgb(207, 238, 238)";
+    constructor() {
+        super(NorthWind.name, NorthWind.description, NorthWind.unicode, NorthWind.color, 5, NorthWind.rarity, 'piecesAndBoard', 'onTurnEnd')
+    }
     //type all, tileset and activePieces
-    async apply({activePieces, board }: {activePieces: Piece[], board: Coordinate[] }) {
+    async apply({ activePieces, board }: { activePieces: Piece[], board: Coordinate[] }) {
         const playerPieces: Piece[] = []
-        for(const piece of activePieces){
-            if(piece.team === 'player'){
+        for (const piece of activePieces) {
+            if (piece.team === 'player') {
                 playerPieces.push(piece)
             }
         };
-        for(const piece of playerPieces){
-            const spaceToCheck  = {x: piece.headPosition.x, y: piece.headPosition.y+1}
+        for (const piece of playerPieces) {
+            const spaceToCheck = { x: piece.headPosition.x, y: piece.headPosition.y + 1 }
             //check space is unnocupied and on board
             const isOccupied = activePieces.some(p =>
                 p.tiles.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)
             );
             const isOnBoard = board.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)
             //if(!isOccupied && isOnBoard){
-            if(!isOccupied && isOnBoard){
+            if (!isOccupied && isOnBoard) {
                 piece.moveTo(spaceToCheck);
             }
         };
     }
-  
+
 }
 
 class Hook extends Admin {
     static rarity = 2;
-  static name = "Hook";
-  static description = "All player pieces are moved up 1 space after every turn";
-  static unicode = "U+1FA9D";
-  static color = "#0a1179ff";
-  constructor() {
-    super(Hook.name, Hook.description, Hook.unicode, Hook.color, 5, Hook.rarity, 'piecesAndBoard', 'onTurnEnd')
-  }
+    static name = "Hook";
+    static description = "All player pieces are moved up 1 space after every turn";
+    static unicode = "U+1FA9D";
+    static color = "#0a1179ff";
+    constructor() {
+        super(Hook.name, Hook.description, Hook.unicode, Hook.color, 5, Hook.rarity, 'piecesAndBoard', 'onTurnEnd')
+    }
 
-    async apply({activePieces, board }: {activePieces: Piece[], board: Coordinate[] }) {
+    async apply({ activePieces, board }: { activePieces: Piece[], board: Coordinate[] }) {
         const playerPieces: Piece[] = []
-        for(const piece of activePieces){
-            if(piece.team === 'player'){
+        for (const piece of activePieces) {
+            if (piece.team === 'player') {
                 playerPieces.push(piece)
             }
         };
-        for(const piece of playerPieces){
-            const spaceToCheck  = {x: piece.headPosition.x, y: piece.headPosition.y-1}
+        for (const piece of playerPieces) {
+            const spaceToCheck = { x: piece.headPosition.x, y: piece.headPosition.y - 1 }
             //check space is unnocupied and on board
             const isOccupied = activePieces.some(p =>
                 p.tiles.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)
             );
             const isOnBoard = board.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)
-            if(!isOccupied && isOnBoard){
+            if (!isOccupied && isOnBoard) {
                 piece.moveTo(spaceToCheck);
             }
         };
@@ -85,26 +85,26 @@ class Hook extends Admin {
 
 class Mirror extends Admin {
     static rarity = 2;
-  static name = "Mirror";
-  static description = "Enemy programs classes are chosen from blueprints in your inventory";
-  static unicode = "U+1FA9E";
-  static color = "rgb(30, 0, 112)";
-  constructor() {
-    super(Mirror.name, Mirror.description, Mirror.unicode, Mirror.color, 5, Mirror.rarity, 'playerAndGame', 'onRoundStart')
-  }
+    static name = "Mirror";
+    static description = "Enemy programs classes are chosen from blueprints in your inventory";
+    static unicode = "U+1FA9E";
+    static color = "rgb(30, 0, 112)";
+    constructor() {
+        super(Mirror.name, Mirror.description, Mirror.unicode, Mirror.color, 5, Mirror.rarity, 'playerAndGame', 'onRoundStart')
+    }
 
     async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
         const enemyPieces: Piece[] = []
-        for(const piece of activePieces){
+        for (const piece of activePieces) {
             enemyPieces.push(piece)
-            if(piece.team === 'enemy'){
+            if (piece.team === 'enemy') {
             }
         };
 
-        for (const piece of enemyPieces){
-            const enemyClassName = player.programs[Math.floor(Math.random() *player.programs.length)].name;//random name from player pieceBlueprints
+        for (const piece of enemyPieces) {
+            const enemyClassName = player.programs[Math.floor(Math.random() * player.programs.length)].name;//random name from player pieceBlueprints
             const EnemyClass = allPieces.find(p => p.name === enemyClassName);
-            if(EnemyClass){
+            if (EnemyClass) {
                 const enemyInstance = new EnemyClass(piece.headPosition, 'enemy', piece.removeCallback, crypto.randomUUID());//check later
                 activePieces.push(enemyInstance);
                 piece.removeCallback?.(piece);
@@ -123,27 +123,27 @@ class Downturn extends Admin {
         super(Downturn.name, Downturn.description, Downturn.unicode, Downturn.color, 5, Downturn.rarity, 'player', 'onTurnEnd')
     }
     async apply({ player }: { player: Player }) {
-       player.money --
+        player.money--
     }
 }
 
 class Factory extends Admin {
-static rarity = 4;
-  static name = "Factory";
-  static description = "Places a new enemy piece every 3 turns";
-  static unicode = "U+1F3ED";
-  static color = "#790a0aff";
-  constructor() {
-    super(Factory.name, Factory.description, Factory.unicode, Factory.color, 5, Factory.rarity, 'all', 'onTurnEnd')
-  }
+    static rarity = 4;
+    static name = "Factory";
+    static description = "Places a new enemy piece every 3 turns";
+    static unicode = "U+1F3ED";
+    static color = "#790a0aff";
+    constructor() {
+        super(Factory.name, Factory.description, Factory.unicode, Factory.color, 5, Factory.rarity, 'all', 'onTurnEnd')
+    }
     private count: number = 0
-    async apply({activePieces, board, player }: {activePieces: Piece[], board: Coordinate[], player: Player}) {
+    async apply({ activePieces, board, player }: { activePieces: Piece[], board: Coordinate[], player: Player }) {
         this.count += 1;
-        if(this.count%3 === 0){
+        if (this.count % 3 === 0) {
             //random piece in all pieces using player difficulty level
             const { min, max } = DIFFICULTY_RARITY[player.difficulty];
             const validEnemies = allPieces.filter(p =>
-                p.rarity >= min && p.rarity <= max && p.name !== 'Nuke' && p.name !== 'Trap' &&  p.name !== 'Tar' && p.name !== 'Pitfall' && p.name !== 'Web' && p.name !== 'Mine'
+                p.rarity >= min && p.rarity <= max && p.name !== 'Nuke' && p.name !== 'Trap' && p.name !== 'Tar' && p.name !== 'Pitfall' && p.name !== 'Web' && p.name !== 'Mine'
             );
             const pool = validEnemies.length > 0 ? validEnemies : allPieces;
             const EnemyClass = pool[Math.floor(Math.random() * pool.length)];//random piece ranked for diificulty
@@ -151,7 +151,7 @@ static rarity = 4;
             //get a random unnoccupied space
             const space = getRandomUnoccupiedTile(board, activePieces);//removeCallback
 
-            if(space){
+            if (space) {
                 const enemyInstance = new EnemyClass(space, 'enemy', activePieces[0].removeCallback, crypto.randomUUID());//check later
                 enemyInstance.movesRemaining = 0;
                 enemyInstance.actions = 0;
@@ -166,20 +166,20 @@ static rarity = 4;
 }
 
 class Wrath extends Admin {//⛈️//🌩️
-  static name = "Wrath";
-  static description = "A random player piece loses their remaining defence and a tile each turn after the first";
-  static unicode = "U+1F329";
-  static color = "rgb(9, 2, 107)";
-  static rarity = 6;
-  constructor() {
-    super(Wrath.name, Wrath.description, Wrath.unicode, Wrath.color, 5, Wrath.rarity, 'gameState', 'onTurnEnd')
-  }
+    static name = "Wrath";
+    static description = "A random player piece loses their remaining defence and a tile each turn after the first";
+    static unicode = "U+1F329";
+    static color = "rgb(9, 2, 107)";
+    static rarity = 6;
+    constructor() {
+        super(Wrath.name, Wrath.description, Wrath.unicode, Wrath.color, 5, Wrath.rarity, 'gameState', 'onTurnEnd')
+    }
     private count: number = 0
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-        if(this.count >= 1){
+        if (this.count >= 1) {
             const playerPieces: Piece[] = []
-            for(const piece of activePieces){
-                if(piece.team === 'player'){
+            for (const piece of activePieces) {
+                if (piece.team === 'player') {
                     playerPieces.push(piece)
                 }
             };
@@ -187,7 +187,7 @@ class Wrath extends Admin {//⛈️//🌩️
             const idx = activePieces.findIndex(p => p.id === randId);
             activePieces[idx].takeDamage(1 + activePieces[idx].defenceRemaining);//should also remove a size 1 piece from the board
         }
-        this.count ++
+        this.count++
     }
     onRoundEnd() {
         this.count = 0;
@@ -195,19 +195,19 @@ class Wrath extends Admin {//⛈️//🌩️
 }
 
 class Reaper extends Admin {
-  static name = "Reaper";
-  static description = "Takes a life every 10 turns";
-  static unicode = "U+1F480";
-  static color = "#790a0aff";
-  static rarity = 6;
-  constructor() {
-    super(Reaper.name, Reaper.description, Reaper.unicode, Reaper.color, 5, Reaper.rarity, 'player', 'onTurnEnd')
-  }
+    static name = "Reaper";
+    static description = "Takes a life every 10 turns";
+    static unicode = "U+1F480";
+    static color = "#790a0aff";
+    static rarity = 6;
+    constructor() {
+        super(Reaper.name, Reaper.description, Reaper.unicode, Reaper.color, 5, Reaper.rarity, 'player', 'onTurnEnd')
+    }
     private count: number = 0
-    async apply({ player }: { player : Player }) {
+    async apply({ player }: { player: Player }) {
         this.count += 1
-        if(this.count === 10){
-            player.lives --
+        if (this.count === 10) {
+            player.lives--
             this.count = 0;
         }
 
@@ -218,20 +218,20 @@ class Reaper extends Admin {
 }
 
 class Volcano extends Admin {
-  static name = "Volcano";
-  static description = "After 5 turns, burning is applied to every player program at the end of every turn";//coundown to round loss??
-  static unicode = "U+1F30B";
-  static color = "#790a0aff";
-  static rarity = 5;
-  constructor() {
-    super(Volcano.name, Volcano.description, Volcano.unicode, Volcano.color, 5, Volcano.rarity, 'gameState', 'onTurnEnd')
-  }
+    static name = "Volcano";
+    static description = "After 5 turns, burning is applied to every player program at the end of every turn";//coundown to round loss??
+    static unicode = "U+1F30B";
+    static color = "#790a0aff";
+    static rarity = 5;
+    constructor() {
+        super(Volcano.name, Volcano.description, Volcano.unicode, Volcano.color, 5, Volcano.rarity, 'gameState', 'onTurnEnd')
+    }
     private count: number = 0
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
         this.count += 1
-        if(this.count >= 5){
-            for(const piece of activePieces){
-                if(piece.team === 'player' && !piece.immunities.burning){
+        if (this.count >= 5) {
+            for (const piece of activePieces) {
+                if (piece.team === 'player' && !piece.immunities.burning) {
                     piece.statuses.burning = true;
                 }
             };
@@ -252,9 +252,9 @@ class Circus extends Admin {
         super(Circus.name, Circus.description, Circus.unicode, Circus.color, 5, Circus.rarity, 'gameState', 'onRoundStart')
     }
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-        for(const piece of activePieces){
-            if(piece.team === 'enemy'){
-               piece.addModifier({ moves: 1 })
+        for (const piece of activePieces) {
+            if (piece.team === 'enemy') {
+                piece.addModifier({ moves: 1 })
             }
         };
     }
@@ -270,9 +270,9 @@ class Castle extends Admin {
         super(Castle.name, Castle.description, Castle.unicode, Castle.color, 5, Castle.rarity, 'gameState', 'onRoundStart')
     }
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-        for(const piece of activePieces){
-            if(piece.team === 'enemy'){
-               piece.addModifier({ defence: 1 })
+        for (const piece of activePieces) {
+            if (piece.team === 'enemy') {
+                piece.addModifier({ defence: 1 })
             }
         };
     }
@@ -289,7 +289,7 @@ class Anchor extends Admin {
     }
     async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
         const idx = activePieces.findIndex(p => p.id === id);
-        activePieces[idx].addModifier({moves: -1})
+        activePieces[idx].addModifier({ moves: -1 })
     }
 }
 
@@ -303,9 +303,9 @@ class Jack extends Admin {
         super(Jack.name, Jack.description, Jack.unicode, Jack.color, 5, Jack.rarity, 'gameState', 'onRoundStart')
     }
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-        for(const piece of activePieces){
-            if(piece.team === 'enemy'){
-               piece.addModifier({ range: 1 })
+        for (const piece of activePieces) {
+            if (piece.team === 'enemy') {
+                piece.addModifier({ range: 1 })
             }
         };
     }
@@ -321,9 +321,9 @@ class Lock extends Admin {
         super(Lock.name, Lock.description, Lock.unicode, Lock.color, 6, Lock.rarity, 'gameState', 'onRoundStart')
     }
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-        for(const piece of activePieces){
-            if(piece.team === 'enemy'){
-               piece.addModifier({ defence: 2 })
+        for (const piece of activePieces) {
+            if (piece.team === 'enemy') {
+                piece.addModifier({ defence: 2 })
             }
         };
     }
@@ -340,7 +340,7 @@ class Eclipse extends Admin {
     }
     async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
         const idx = activePieces.findIndex(p => p.id === id);
-        activePieces[idx].addModifier({range: -1})
+        activePieces[idx].addModifier({ range: -1 })
     }
 }
 
@@ -355,8 +355,8 @@ class LowBattery extends Admin {
     }
     async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
         const idx = activePieces.findIndex(p => p.id === id);
-        if(activePieces[idx].getStat('maxSize') > 1){
-            activePieces[idx].addModifier({maxSize: -1})
+        if (activePieces[idx].getStat('maxSize') > 1) {
+            activePieces[idx].addModifier({ maxSize: -1 })
         }
     }
 }
@@ -372,7 +372,7 @@ class Customs extends Admin {//remove
     }
     async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
         const idx = activePieces.findIndex(p => p.id === id);
-        if(!activePieces[idx].immunities.exposed){
+        if (!activePieces[idx].immunities.exposed) {
             activePieces[idx].statuses.exposed = true;
             activePieces[idx].statuses.hidden = false;
         }
@@ -390,7 +390,7 @@ class Shrine extends Admin {
     }
     async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
         const idx = activePieces.findIndex(p => p.id === id);
-        activePieces[idx].addModifier({attack: -1})
+        activePieces[idx].addModifier({ attack: -1 })
     }
 }
 class Izakaya extends Admin {
@@ -404,7 +404,7 @@ class Izakaya extends Admin {
     }
     async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
         const idx = activePieces.findIndex(p => p.id === id);
-        if(!activePieces[idx].immunities.confused){
+        if (!activePieces[idx].immunities.confused) {
             activePieces[idx].statuses.confused = true;
         }
     }
@@ -421,7 +421,7 @@ class Snowflake extends Admin {//LEAFLESS TREE, U+1FABE
     }
     async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
         const idx = activePieces.findIndex(p => p.id === id);
-        if(!activePieces[idx].immunities.frozen){
+        if (!activePieces[idx].immunities.frozen) {
             activePieces[idx].statuses.frozen = true;
         }
     }
@@ -438,7 +438,7 @@ class Sun extends Admin {
     }
     async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
         const idx = activePieces.findIndex(p => p.id === id);
-        if(!activePieces[idx].immunities.blinded){
+        if (!activePieces[idx].immunities.blinded) {
             activePieces[idx].statuses.blinded = true;
         }
     }
@@ -454,9 +454,9 @@ class Whale extends Admin {
         super(Whale.name, Whale.description, Whale.unicode, Whale.color, 3, Whale.rarity, 'gameState', 'onRoundStart')
     }
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-        for(const piece of activePieces){
-            if(piece.team === 'enemy'){
-               piece.addModifier({ maxSize: 2 })
+        for (const piece of activePieces) {
+            if (piece.team === 'enemy') {
+                piece.addModifier({ maxSize: 2 })
             }
         };
     }
@@ -472,9 +472,9 @@ class Hammer extends Admin {
         super(Hammer.name, Hammer.description, Hammer.unicode, Hammer.color, 3, Hammer.rarity, 'gameState', 'onRoundStart')
     }
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-        for(const piece of activePieces){
-            if(piece.team === 'enemy'){
-               piece.addModifier({ maxSize: 2 })
+        for (const piece of activePieces) {
+            if (piece.team === 'enemy') {
+                piece.addModifier({ maxSize: 2 })
             }
         };
     }
@@ -490,14 +490,14 @@ class Omega extends Admin {
         super(Omega.name, Omega.description, Omega.unicode, Omega.color, 6, Omega.rarity, 'gameState', 'onRoundStart')
     }
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-        for(const piece of activePieces){
-            if(piece.team === 'enemy'){
-               piece.addModifier({ 
-                maxSize: 1,
-                moves: 1,
-                range: 1,
-                attack: 1,
-                defence: 1
+        for (const piece of activePieces) {
+            if (piece.team === 'enemy') {
+                piece.addModifier({
+                    maxSize: 1,
+                    moves: 1,
+                    range: 1,
+                    attack: 1,
+                    defence: 1
                 })
             }
         };
@@ -505,33 +505,33 @@ class Omega extends Admin {
 }
 
 class Bones extends Admin {
-  static name = "Mr Bones";
-  static description = "Destroyed player progams are revived as enemies";
-  static unicode = "U+1FA7B";
-  static color = "#000000ff";
-  static rarity = 5;
-  constructor() {
-    super(Bones.name, Bones.description, Bones.unicode, Bones.color, 4, Bones.rarity, 'gameState', 'onPieceDestruction')
-  }
-  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
-      const idx = activePieces.findIndex(p => p.id === id);
-      if(activePieces[idx].team === 'player'){
-        const piece = activePieces[idx];
-        const EnemyClass = allPieces.find(p => p.name === piece.name);
-        if(EnemyClass){
-            const enemyInstance = new EnemyClass(piece.headPosition, 'enemy', piece.removeCallback, crypto.randomUUID());//check later
-            activePieces.push(enemyInstance);
-            //original pieces destruction happens in app, but we do it here to stop the piece entering the graveyard
-            activePieces.filter(p => p.id !== piece.id);
-            //activePieces.splice(idx, 1);
+    static name = "Mr Bones";
+    static description = "Destroyed player progams are revived as enemies";
+    static unicode = "U+1FA7B";
+    static color = "#000000ff";
+    static rarity = 5;
+    constructor() {
+        super(Bones.name, Bones.description, Bones.unicode, Bones.color, 4, Bones.rarity, 'gameState', 'onPieceDestruction')
+    }
+    async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+        const idx = activePieces.findIndex(p => p.id === id);
+        if (activePieces[idx].team === 'player') {
+            const piece = activePieces[idx];
+            const EnemyClass = allPieces.find(p => p.name === piece.name);
+            if (EnemyClass) {
+                const enemyInstance = new EnemyClass(piece.headPosition, 'enemy', piece.removeCallback, crypto.randomUUID());//check later
+                activePieces.push(enemyInstance);
+                //original pieces destruction happens in app, but we do it here to stop the piece entering the graveyard
+                activePieces.filter(p => p.id !== piece.id);
+                //activePieces.splice(idx, 1);
+            }
         }
     }
-  }
 }
 
 class Frog extends Admin {
-  static name = "Poison Swamp";
-  static description = "Every player program is poisoned";
+    static name = "Poison Swamp";
+    static description = "Every player program is poisoned";
     static unicode = "U+1F438";
     static color = "#415800ff";
     static rarity = 5;
@@ -540,7 +540,7 @@ class Frog extends Admin {
     }
     async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
         const idx = activePieces.findIndex(p => p.id === id);
-        if(!activePieces[idx].immunities.poisoned){
+        if (!activePieces[idx].immunities.poisoned) {
             activePieces[idx].statuses.poisoned = true;
         }
     }
@@ -549,8 +549,8 @@ class Frog extends Admin {
 //THONG SANDAL, U+1FA74
 //HOURGLASS WITH FLOWING SAND, U+23F3
 class Coral extends Admin {
-  static name = "Deep Water";
-  static description = "Every player program is slowed";
+    static name = "Deep Water";
+    static description = "Every player program is slowed";
     static unicode = "U+1FAB8";
     static color = "rgb(0, 59, 59)";
     static rarity = 4;
@@ -559,7 +559,7 @@ class Coral extends Admin {
     }
     async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
         const idx = activePieces.findIndex(p => p.id === id);
-        if(!activePieces[idx].immunities.slowed){
+        if (!activePieces[idx].immunities.slowed) {
             activePieces[idx].statuses.slowed = true;
         }
     }
@@ -571,12 +571,12 @@ class REDACTED extends Admin {
     static unicode = "U+2B1B";
     static color = "rgb(255, 255, 255)";
     static rarity = 6;
-  constructor() {
-    super(REDACTED.name, REDACTED.description, REDACTED.unicode, REDACTED.color, 6, REDACTED.rarity, 'all', 'onRoundStart')
-  }
+    constructor() {
+        super(REDACTED.name, REDACTED.description, REDACTED.unicode, REDACTED.color, 6, REDACTED.rarity, 'all', 'onRoundStart')
+    }
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-        for(const piece of activePieces){
-            if(piece.team === 'enemy'){
+        for (const piece of activePieces) {
+            if (piece.team === 'enemy') {
                 piece.redacted = true;
             }
         };
@@ -586,13 +586,13 @@ class REDACTED extends Admin {
 class Fog extends Admin {//😶‍🌫️🌫️
     static name = "Fog of War";
     static description = "All tiles outside your programs range are obscured";//handle in app
-    static unicode =  "U+1F301";//fog //"U+1FAEF";//fight //"U+2601"; //cloud
+    static unicode = "U+1F301";//fog //"U+1FAEF";//fight //"U+2601"; //cloud
     static color = "#575757ff";
     static rarity = 6;
     constructor() {
         super(Fog.name, Fog.description, Fog.unicode, Fog.color, 6, Fog.rarity, 'player', 'onRoundStart')
     }
-    
+
     async apply({ player }: { player: Player }) {
         player.fogged = true
     }
@@ -614,8 +614,8 @@ class Wilt extends Admin {
     }
     async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
         const idx = activePieces.findIndex(p => p.id === id);
-        if(activePieces[idx].getStat('maxSize') > 1){
-            activePieces[idx].addModifier({maxSize: -2})
+        if (activePieces[idx].getStat('maxSize') > 1) {
+            activePieces[idx].addModifier({ maxSize: -2 })
         }
     }
 }
@@ -632,7 +632,7 @@ class Biohazard extends Admin {
     }
     async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
         const idx = activePieces.findIndex(p => p.id === id);
-        if(!activePieces[idx].immunities.diseased){
+        if (!activePieces[idx].immunities.diseased) {
             activePieces[idx].statuses.diseased = true;
         }
     }
@@ -661,48 +661,58 @@ class Biohazard extends Admin {
     }
 }*/
 
-/*class Tornado extends Admin {//unfinished, needs access to the whole tileset
-  static name = "Tornado";
-  static description = "Player load points are randomised";
-  static unicode = "U+1F6D1";//"U+1F32A";
-  static color = "rgb(84, 139, 138)";
-  static rarity = 5;
-  constructor() {
-    super(Tornado.name, Tornado.description, Tornado.unicode, Tornado.color, 5, 3, 'piecesAndBoard', 'onRoundStart')
-  }
-    async apply({activePieces, board }: {activePieces: Piece[], board: Coordinate[] }) {
-        const idx = activePieces.findIndex(p => p.id === id);
+class Tornado extends Admin {
+    static name = "Tornado";
+    static description = "Player load points are randomised";
+    static unicode = "U+1F32A";
+    static color = "rgb(84, 139, 138)";
+    static rarity = 5;
+    constructor() {
+        super(Tornado.name, Tornado.description, Tornado.unicode, Tornado.color, 5, Tornado.rarity, 'all', 'onRoundStart')
     }
-}*/
+    async apply({ activePieces, board, playerSpawns }: { activePieces: Piece[], board: Coordinate[], playerSpawns?: Coordinate[] }) {
+        if (!playerSpawns) return;
+        const unoccupiedTiles = board.filter(t => !activePieces.some(p => p.tiles.some(pt => pt.x === t.x && pt.y === t.y)));
+        
+        const newSpawns: Coordinate[] = [];
+        for (let i = 0; i < playerSpawns.length; i++) {
+            if (unoccupiedTiles.length === 0) break;
+            const randIdx = Math.floor(Math.random() * unoccupiedTiles.length);
+            newSpawns.push(unoccupiedTiles[randIdx]);
+            unoccupiedTiles.splice(randIdx, 1);
+        }
+        playerSpawns.splice(0, playerSpawns.length, ...newSpawns);
+    }
+}
 
 class Tsunami extends Admin {
-  static name = "Tsunami";
-  static description = "Every piece is moved left 3 spaces each turn after the first";//the player's current security level no.?
-  static unicode = "U+1F30A";
-  static color = "#3eebd4ff";
-  static rarity = 3;
-  constructor() {
-    super(Tsunami.name, Tsunami.description, Tsunami.unicode, Tsunami.color, 5, 9, 'piecesAndBoard', 'onTurnEnd')
-  }
+    static name = "Tsunami";
+    static description = "Every piece is moved left 3 spaces each turn after the first";//the player's current security level no.?
+    static unicode = "U+1F30A";
+    static color = "#3eebd4ff";
+    static rarity = 3;
+    constructor() {
+        super(Tsunami.name, Tsunami.description, Tsunami.unicode, Tsunami.color, 5, 9, 'piecesAndBoard', 'onTurnEnd')
+    }
     private count: number = 0
-    async apply({activePieces, board }: {activePieces: Piece[], board: Coordinate[] }) {
-        if(this.count >= 1){
+    async apply({ activePieces, board }: { activePieces: Piece[], board: Coordinate[] }) {
+        if (this.count >= 1) {
             const playerPieces: Piece[] = []
-            for(const piece of activePieces){
-                if(piece.team === 'player'){
+            for (const piece of activePieces) {
+                if (piece.team === 'player') {
                     playerPieces.push(piece)
                 }
             };
             //do 3 times
-            for(const piece of playerPieces){
+            for (const piece of playerPieces) {
                 for (let i = 0; i < 3; i++) {
-                    const spaceToCheck  = {x: piece.headPosition.x-1, y: piece.headPosition.y}
+                    const spaceToCheck = { x: piece.headPosition.x - 1, y: piece.headPosition.y }
                     //check space is unoccupied and on board
                     const isOccupied = activePieces.some(p =>
                         p.tiles.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)
                     );
                     const isOnBoard = board.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)
-                    if(!isOccupied && isOnBoard){
+                    if (!isOccupied && isOnBoard) {
                         piece.moveTo(spaceToCheck);
                     } else {
                         break;
@@ -718,24 +728,24 @@ class Tsunami extends Admin {
 }
 
 class Coaster extends Admin {
-  static name = "Up and Up";
-  static description = "Every player piece takes damage equal to the player's current security level each turn after the first";
-  static unicode = "U+1F3D4";//roller coaster"U+1F3A2";
-  static color = "rgb(212, 201, 187)";
-  static rarity = 4;
-  constructor() {
-    super(Coaster.name, Coaster.description, Coaster.unicode, Coaster.color, 5, 9, 'playerAndGame', 'onTurnEnd')
-  }
+    static name = "Up and Up";
+    static description = "Every player piece takes damage equal to the player's current security level each turn after the first";
+    static unicode = "U+1F3D4";//roller coaster"U+1F3A2";
+    static color = "rgb(212, 201, 187)";
+    static rarity = 4;
+    constructor() {
+        super(Coaster.name, Coaster.description, Coaster.unicode, Coaster.color, 5, 9, 'playerAndGame', 'onTurnEnd')
+    }
     private count: number = 0
     async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
-        if(this.count >= 1){
-            for(const piece of activePieces){
-                if(piece.team === 'player'){
+        if (this.count >= 1) {
+            for (const piece of activePieces) {
+                if (piece.team === 'player') {
                     piece.takeDamage(player.difficulty);
                 }
             };
         }
-        this.count ++
+        this.count++
     }
     onRoundEnd() {
         this.count = 0;
@@ -743,24 +753,24 @@ class Coaster extends Admin {
 }
 
 class Singularity extends Admin {
-  static name = "Singularity";
-  static description = "After 3 turns, all enemies' actions are doubled";
-  static unicode = "U+1F916";
-  static color = "rgb(59, 59, 59)";
-  static rarity = 5;
-  constructor() {
-    super(Singularity.name, Singularity.description, Singularity.unicode, Singularity.color, 5, 9, 'all', 'onTurnEnd')
-  }
+    static name = "Singularity";
+    static description = "After 3 turns, all enemies' actions are doubled";
+    static unicode = "U+1F916";
+    static color = "rgb(59, 59, 59)";
+    static rarity = 5;
+    constructor() {
+        super(Singularity.name, Singularity.description, Singularity.unicode, Singularity.color, 5, 9, 'all', 'onTurnEnd')
+    }
     private count: number = 0
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-        if(this.count >= 3){
-            for(const piece of activePieces){
-                if(piece.team === 'enemy'){
+        if (this.count >= 3) {
+            for (const piece of activePieces) {
+                if (piece.team === 'enemy') {
                     piece.actions = 2;
                 }
             };
         }
-        this.count ++
+        this.count++
     }
     onRoundEnd() {
         this.count = 0;
@@ -774,25 +784,25 @@ class Singularity extends Admin {
 //1 admin disabled after each turn
 
 // damage mult for enemy?
-export const allBosses = [LowBattery, NorthWind, Downturn, Hook, Mirror, Shrine, Whale, Anchor, Castle, Circus, Customs, Hammer, Izakaya, Tsunami, Wilt, Biohazard, Coral, Lock, Factory, Jack, Coaster, Snowflake, Eclipse, Bones, Frog, Singularity, Volcano, Sun, Fog, Omega, Reaper, REDACTED, Wrath]
-export const nonStackableBosses = [Mirror, Customs, Snowflake, Sun, Frog, Biohazard, Coral, Izakaya, REDACTED, Fog, Singularity]
+export const allBosses = [LowBattery, NorthWind, Downturn, Hook, Mirror, Shrine, Whale, Anchor, Castle, Circus, Customs, Hammer, Izakaya, Tsunami, Wilt, Biohazard, Coral, Lock, Factory, Jack, Coaster, Snowflake, Tornado, Eclipse, Bones, Frog, Singularity, Volcano, Sun, Fog, Omega, Reaper, REDACTED, Wrath]
+export const nonStackableBosses = [Mirror, Customs, Snowflake, Sun, Frog, Biohazard, Coral, Izakaya, REDACTED, Fog, Singularity, Tornado]
 
 console.log('bosses length: ', allBosses.length)
 let adminLogs = {
-  rarity1: 0,
-  rarity2: 0,
-  rarity3: 0,
-  rarity4: 0,
-  rarity5: 0,
-  rarity6: 0
+    rarity1: 0,
+    rarity2: 0,
+    rarity3: 0,
+    rarity4: 0,
+    rarity5: 0,
+    rarity6: 0
 }
 allBosses.forEach(admin => {
-  if(admin.rarity === 1) adminLogs.rarity1 += 1;
-  if(admin.rarity === 2) adminLogs.rarity2 += 1;
-  if(admin.rarity === 3) adminLogs.rarity3 += 1;
-  if(admin.rarity === 4) adminLogs.rarity4 += 1;
-  if(admin.rarity === 5) adminLogs.rarity5 += 1;
-  if(admin.rarity === 6) adminLogs.rarity6 += 1;
+    if (admin.rarity === 1) adminLogs.rarity1 += 1;
+    if (admin.rarity === 2) adminLogs.rarity2 += 1;
+    if (admin.rarity === 3) adminLogs.rarity3 += 1;
+    if (admin.rarity === 4) adminLogs.rarity4 += 1;
+    if (admin.rarity === 5) adminLogs.rarity5 += 1;
+    if (admin.rarity === 6) adminLogs.rarity6 += 1;
 });
 console.log("Bosses of rarity 1: ", adminLogs.rarity1)
 console.log("Bosses of rarity 2: ", adminLogs.rarity2)

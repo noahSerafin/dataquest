@@ -5,6 +5,7 @@
     import { Item, Box, Genie, Gift, Pinata, Pandora, Voucher, Jar, Update2, Update3, Floppy, Life, Cake, Wand, Hourglass, Dupe } from "../Items";
     import { allBosses, nonStackableBosses } from "../Bosses";
     import { watch } from "vue";
+    import { reapplyTutorialTooltips } from "../tutorial";
     import { Player } from "../Player";
     import type { WorldMap, WorldNode } from "../worldBuilder";
     import { generateWorld } from "../worldBuilder";
@@ -127,6 +128,7 @@
             emit('openDisabledShop')
         } else {    
             selectedPreviewNode.value = node;
+            reapplyTutorialTooltips(200);
         }
     }
 
@@ -300,6 +302,7 @@
         canReroll.value = true;
         node.visible = true;
         emit('incrementProgress');
+        reapplyTutorialTooltips(200);
     }
 
     const skipTarget = ref<PieceBlueprint | Item | null>(null);
@@ -629,7 +632,7 @@
     .preview-modal {
         position: absolute;
         left: 10%;
-        top: 10%;
+        top: 16%;
         width: 80%;
         height: auto;
         background: #111;

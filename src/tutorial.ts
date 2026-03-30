@@ -67,6 +67,12 @@ export function applyTutorialTooltips(steps: TutorialStep[]) {
   }
 }
 
+export function reapplyTutorialTooltips(delay: number = 100) {
+  setTimeout(() => {
+    applyTutorialTooltips(allTips);
+  }, delay);
+}
+
 
 /*tutorial css
 .tutorial-highlight {

@@ -1,7 +1,8 @@
 <script setup lang="ts">
     import { Player } from '../Player';
     import { Admin } from '../AdminPrograms';
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
+import { reapplyTutorialTooltips } from '../tutorial';
 
     interface Props{
         hasWonRound: boolean,
@@ -17,6 +18,10 @@ import { computed } from 'vue';
     }>();
    
     props.player.calcInterest(); //await?? for html
+
+    onMounted(() => {
+        reapplyTutorialTooltips(200);
+    });
 
     const bonus = computed(() => 
         props.player.hasAdmin('Pot of Gold') && props.bosses.length > 0 ? 10 : 0
@@ -119,7 +124,7 @@ import { computed } from 'vue';
 <style scoped>
     .round-summary{
         position: absolute;
-        z-index: 100;
+        z-index: 1;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -134,5 +139,6 @@ import { computed } from 'vue';
         padding: 8rem;
         background-color: black;
         border-radius: 15px;
+        position: relative;
     }
 </style>

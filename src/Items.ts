@@ -498,7 +498,7 @@ export class Gift extends Item<Player> {
 
 export class Genie extends Item<Player> {
     static name = "Genie";
-    static description = "Gifts 3 random programs (must have room)";
+    static description = "Gifts up to 3 random programs (depending on available memory)";
     static unicode = "U+1F9DE";
     static color = "rgb(108, 126, 230)";
     static rarity = 5;
@@ -508,18 +508,17 @@ export class Genie extends Item<Player> {
     //apply(_player: Player, _itemMult: number) {
     //}
     apply(player: Player, _itemMult: number) {
-        if (player.freeMemory >= 2 || (player.hasToolbox && player.freeMemory >= 0.5)) {
-            const classes = [
-                pickWeightedRandom(allPieces, player),
-                pickWeightedRandom(allPieces, player),
-                pickWeightedRandom(allPieces, player),
-            ];
-            const bps = classes.map(c => makeBlueprint(c.class, c.variant ?? undefined));
-            bps.forEach(bp => {
-                StorageManager.unlockPiece(bp.name);
-            });
-            player.programs.push(...bps);
-            player.removeItem(this);
+        player.removeItem(this); // Remove itself first to free up memory
+
+        let added = 0;
+        const costPerProgram = player.hasToolbox ? 0.5 : 1;
+
+        while (player.freeMemory >= costPerProgram && added < 3) {
+            const picked = pickWeightedRandom(allPieces, player);
+            const bp = makeBlueprint(picked.class, picked.variant ?? undefined);
+            StorageManager.unlockPiece(bp.name);
+            player.programs.push(bp);
+            added++;
         }
     }
 }

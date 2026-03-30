@@ -445,6 +445,7 @@ function replaceBosses(admins: Admin[]) {
 async function handleApplyAdmins(trigger: AdminTrigger, id: string, piece?: Piece) {//admin and target
   const playerAdmins = player.value.admins;
   for (const admin of playerAdmins) {
+    if (admin.disabled) continue;
     if (trigger === admin.triggerType) {
       // sort through target types, decide what to pass
       console.log(admin.name, 'trigger', trigger)
@@ -547,6 +548,9 @@ async function selectLevel(newLevel: Level, difficultyMod: number, lReward: numb
   pieceToPlace.value = null;
   showBoard.value = true;
   renewBlueprints()//shouldnt be needed in final;
+  for (const admin of player.value.admins) {
+    admin.disabled = false;
+  }
   hasFinishedTurn.value = false;
   player.value.canPlace = true;
   player.value.canMove = true;
@@ -588,6 +592,7 @@ function handleProceed() {
 
 async function reloadLevel() {
   for (const admin of player.value.admins) {
+    admin.disabled = false;
     if (admin.onRoundEnd) admin.onRoundEnd();
   };
   for (const admin of bossAdmins.value) {

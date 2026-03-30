@@ -88,7 +88,7 @@ class Mirror extends Admin {
     static name = "Mirror";
     static description = "Enemy programs classes are chosen from blueprints in your inventory";
     static unicode = "U+1FA9E";
-    static color = "rgb(30, 0, 112)";
+    static color = "rgb(172, 5, 213)";
     constructor() {
         super(Mirror.name, Mirror.description, Mirror.unicode, Mirror.color, 5, Mirror.rarity, 'playerAndGame', 'onRoundStart')
     }
@@ -282,7 +282,7 @@ class Anchor extends Admin {
     static name = "Anchor";
     static description = "Every player program loses -1 moves";
     static unicode = "U+2693";
-    static color = "#0a063fff";
+    static color = "rgb(52, 48, 112)";
     static rarity = 3;
     constructor() {
         super(Anchor.name, Anchor.description, Anchor.unicode, Anchor.color, 5, Anchor.rarity, 'gameState', 'onPlacement')
@@ -366,7 +366,7 @@ class Customs extends Admin {//remove
     static description = "Every player program is exposed";
     static unicode = "U+1F6C3";
     static color = "#127a3eff";
-    static rarity = 3;
+    static rarity = 2;
     constructor() {
         super(Customs.name, Customs.description, Customs.unicode, Customs.color, 3, Customs.rarity, 'gameState', 'onPlacement')
     }
@@ -638,7 +638,7 @@ class Biohazard extends Admin {
     }
 }
 
-/*class Nofun extends Admin {
+class Nofun extends Admin {
     static name = "No Fun Allowed";
     static description = "Disables 1 random admin each turn";
     static unicode = "U+1F6D1"; //NO ENTRY, U+26D4
@@ -651,15 +651,11 @@ class Biohazard extends Admin {
         for(const admin of player.admins){
             admin.disabled = false;
         }
-        player.admins[Math.floor(Math.random()*player.admins.length)].disabled = true;
-    }
-    
-    onRoundEnd() {//no access to player
-        for(const admin of player.admins){
-            admin.disabled = false;
+        if (player.admins.length > 0) {
+            player.admins[Math.floor(Math.random()*player.admins.length)].disabled = true;
         }
     }
-}*/
+}
 
 class Tornado extends Admin {
     static name = "Tornado";
@@ -784,7 +780,7 @@ class Singularity extends Admin {
 //1 admin disabled after each turn
 
 // damage mult for enemy?
-export const allBosses = [LowBattery, NorthWind, Downturn, Hook, Mirror, Shrine, Whale, Anchor, Castle, Circus, Customs, Hammer, Izakaya, Tsunami, Wilt, Biohazard, Coral, Lock, Factory, Jack, Coaster, Snowflake, Tornado, Eclipse, Bones, Frog, Singularity, Volcano, Sun, Fog, Omega, Reaper, REDACTED, Wrath]
+export const allBosses = [LowBattery, NorthWind, Customs, Downturn, Hook, Mirror, Shrine, Whale, Anchor, Castle, Circus, Hammer, Izakaya, Tsunami, Wilt, Biohazard, Coral, Lock, Factory, Jack, Coaster, Snowflake, Tornado, Eclipse, Bones, Frog, Singularity, Volcano, Sun, Fog, Nofun, Omega, Reaper, REDACTED, Wrath]
 export const nonStackableBosses = [Mirror, Customs, Snowflake, Sun, Frog, Biohazard, Coral, Izakaya, REDACTED, Fog, Singularity, Tornado]
 
 console.log('bosses length: ', allBosses.length)

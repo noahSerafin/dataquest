@@ -19,6 +19,7 @@ export abstract class Admin<
   TTrigger extends AdminTrigger = AdminTrigger
 > extends Item<TTarget> {
   triggerType: TTrigger;
+  disabled: boolean = false;
 
   constructor(
     name: string,

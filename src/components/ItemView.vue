@@ -91,13 +91,17 @@ function getRandomProTip() {
   tutorialState.message = randomTip.tooltip;
   tutorialState.activeId = randomTip.id;
 }
+
+const isDisabled = computed(() => {
+  return 'disabled' in props.item && (props.item as any).disabled;
+});
 </script>
 
 <template>
   <div
     :id="item.id"
     class="item"
-    :class="[`item-${cssclass}`, `item-${type}`, `itemName-${item.name.replace(/\s+/g, '')}`, {'is-clippy': item.name === 'Clippy'}]"
+    :class="[`item-${cssclass}`, `item-${type}`, `itemName-${item.name.replace(/\s+/g, '')}`, {'is-clippy': item.name === 'Clippy'}, {'is-disabled': isDisabled}]"
     @click="handleSelect"
     :style="itemStyle"
   >
@@ -154,6 +158,20 @@ function getRandomProTip() {
   position: relative;
   cursor: pointer;
   transition: 0.15s;
+}
+.item.is-disabled {
+  opacity: 0.7;
+}
+.item.is-disabled::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top left, transparent calc(50% - 2px), red calc(50% - 2px), red calc(50% + 2px), transparent calc(50% + 2px));
+  z-index: 10;
+  pointer-events: none;
 }
 .item-card {
   display: flex; 

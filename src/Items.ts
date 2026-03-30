@@ -969,9 +969,8 @@ class Toothbrush extends Item<Piece[]> {//lighting remove 1 tile from all enemy 
     }
 }
 
-
 // CLINKING BEER MUGS, Happy Hour U+1F37B
-/*export class Beer extends Item {
+/*export class Beer extends Item<Player> {
     static name = "Happy Hour";
     static description = "Duplicate a random item.";
     static unicode = "U+1F37B";
@@ -979,21 +978,18 @@ class Toothbrush extends Item<Piece[]> {//lighting remove 1 tile from all enemy 
     static rarity = 6;
     constructor(){
         super(Beer.name, Beer.description, Beer.unicode, Beer.color, 7, Beer.rarity, 'player')
-        //name desc utf || maxsize moves range atk def
     }
-    apply() {
-        apply(player: Player) {
-      //player.admins
-        const randAdmin = player.admins[Math.floor(Math.random()*player.admins.length)]
-        const adminClass = allAdmins.find(a => a.name === randAdmin.name);
-        if(!adminClass) return;
-        player.admins = [randAdmin, new adminClass] //make a new 
-        
+
+    apply(player: Player, _itemMult: number) {
+        const randItem = player.admins[Math.floor(Math.random()*player.admins.length)]
+        const itemClass = allItems.find(a => a.name === randItem.name);
+        if(!itemClass) return;
+        player.items.push(new itemClass);
     }
 }*/
 
 //U+1FAA8 rock damage selected piece
-export class Rock extends Item {
+class Rock extends Item {
     static name = "Rock";
     static description = "Damage a piece by the number of currently held programs";
     static unicode = "U+1FAA8";

@@ -205,11 +205,13 @@ function handleApplyItem(payload: { item: Item, id: string }) {
   const item = payload.item;
   const itemMult = 1 + player.value.admins.filter(a => a.name === 'Chemistry').length;
   console.log('itemMult:', itemMult);
-  if (item.targetType === 'playerAndGame'){
-    if(item.name === 'Jar' && selectedPiece.value && selectedPiece.value.team === 'enemy' && selectedPiece.value.defenceRemaining <= 0 && selectedPiece.value.tiles.length <= 1) {
+  if (item.targetType === 'playerAndGame' && selectedPiece.value){
+    if(item.name === 'Jar' && selectedPiece.value.team === 'enemy' && selectedPiece.value.defenceRemaining <= 0 && selectedPiece.value.tiles.length <= 1) {
       item.apply({ id: selectedPiece.value.id, activePieces: activePieces.value, player: player.value }, itemMult);
       player.value.removeItem(item);
       deselectPiece();
+    } else {
+      item.apply({ id: selectedPiece.value.id, activePieces: activePieces.value, player: player.value }, itemMult);
     }
   }
   if (item.targetType === 'piecesAndBoard') {
@@ -287,8 +289,8 @@ function handleApplyItem(payload: { item: Item, id: string }) {
       player.value.removeItem(item);
     }
     if (!(item.name === 'Gift Box' || item.name === 'Genie' || item.name === 'Mystery Box' || item.name === 'Pinata')) {
-      item.apply(player.value, itemMult)
-      player.value.removeItem(item)
+      item.apply(player.value, itemMult);
+      player.value.removeItem(item);
     }
   }
 

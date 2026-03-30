@@ -4,47 +4,47 @@ import type { Player } from "./Player"
 import { getRandomUnoccupiedTile, makeBlueprint, pickWeightedRandom } from "./helperFunctions"
 
 export abstract class Item<TTarget = any> {
-  id: string
-  static name : string
-  static description : string
-  static unicode : string
-  static color : string
-  name : string
-  description : string
-  unicode : string
-  color : string
-  cost: number
-  rarity: number
-  targetType: 'blueprint' | 'piece' | 'shopItem' | 'player' | 'gameState'  | 'playerAndGame' | 'piecesAndBoard' | 'all'
-  //variantName: string
-  constructor(
-    name : string, 
-    description : string,
-    unicode : string,
-    color : string,
-    cost: number,
-    rarity: number,
-    targetType: 'blueprint' | 'piece' | 'shopItem' | 'player' | 'gameState'  | 'playerAndGame' | 'piecesAndBoard' | 'all',
+    id: string
+    static name: string
+    static description: string
+    static unicode: string
+    static color: string
+    name: string
+    description: string
+    unicode: string
+    color: string
+    cost: number
+    rarity: number
+    targetType: 'blueprint' | 'piece' | 'shopItem' | 'player' | 'gameState' | 'playerAndGame' | 'piecesAndBoard' | 'all'
     //variantName: string
-  ) {
-    this.id = crypto.randomUUID()
-    this.name = name
-    this.description = description
-    this.unicode = unicode
-    this.color = color
-    this.cost = cost
-    this.rarity = rarity
-    this.targetType = targetType
-    //this.variantName = variantName
+    constructor(
+        name: string,
+        description: string,
+        unicode: string,
+        color: string,
+        cost: number,
+        rarity: number,
+        targetType: 'blueprint' | 'piece' | 'shopItem' | 'player' | 'gameState' | 'playerAndGame' | 'piecesAndBoard' | 'all',
+        //variantName: string
+    ) {
+        this.id = crypto.randomUUID()
+        this.name = name
+        this.description = description
+        this.unicode = unicode
+        this.color = color
+        this.cost = cost
+        this.rarity = rarity
+        this.targetType = targetType
+        //this.variantName = variantName
     }
 
-  getItemInfo(): string {
-    return `${this.name} | Size: ${this.cost}`
-  }
+    getItemInfo(): string {
+        return `${this.name} | Size: ${this.cost}`
+    }
 
-  //method to alter a program's stats, possibly in subclasses
-  //or players stats
-  abstract apply(target: TTarget, itemMult: number): void;
+    //method to alter a program's stats, possibly in subclasses
+    //or players stats
+    abstract apply(target: TTarget, itemMult: number): void;
     /*
     abstract apply(
     target: Piece | Player | Item | PieceBlueprint | GameState
@@ -58,12 +58,12 @@ export class Mushroom extends Item<PieceBlueprint> {
     static unicode = "U+1F344";
     static color = "#ff2222ff";
     static rarity = 1;
-    constructor(){
+    constructor() {
         super(Mushroom.name, Mushroom.description, Mushroom.unicode, Mushroom.color, 3, Mushroom.rarity, 'blueprint')
     }
     //Increases a program's atk by 
     apply(target: PieceBlueprint, itemMult: number) {
-        target.attack += (1* itemMult);
+        target.attack += (1 * itemMult);
     }
 }
 
@@ -73,11 +73,11 @@ export class Meat extends Item<PieceBlueprint> {
     static unicode = "U+1F356";//Meat "U+1F3CB"; //U+1F356 Large meat
     static color = "#ff5656ff";
     static rarity = 4;
-    constructor(){
+    constructor() {
         super(Meat.name, Meat.description, Meat.unicode, Meat.color, 5, Meat.rarity, 'blueprint')
     }
     apply(target: PieceBlueprint, itemMult: number) {
-        target.attack += (2* itemMult);
+        target.attack += (2 * itemMult);
     }
 }
 
@@ -87,12 +87,12 @@ export class Iron extends Item<PieceBlueprint> {
     static unicode = "U+1F96C"
     static color = "#54a4ffff"
     static rarity = 1;
-    constructor(){
-        super(Iron.name, Iron.description, Iron.unicode, Iron.color, 3, Iron.rarity, 'blueprint')      
+    constructor() {
+        super(Iron.name, Iron.description, Iron.unicode, Iron.color, 3, Iron.rarity, 'blueprint')
     }
     //Increases a program's def by 1
     apply(target: PieceBlueprint, itemMult: number) {
-        target.defence += (1* itemMult);
+        target.defence += (1 * itemMult);
     }
 }
 
@@ -102,11 +102,11 @@ export class Garlic extends Item<PieceBlueprint> {
     static unicode = "U+1F9C4";
     static color = "#26d0faff";
     static rarity = 4;
-    constructor(){
+    constructor() {
         super(Garlic.name, Garlic.description, Garlic.unicode, Garlic.color, 5, Garlic.rarity, 'blueprint')
     }
     apply(target: PieceBlueprint, itemMult: number) {
-        target.defence += (2* itemMult);
+        target.defence += (2 * itemMult);
     }
 }
 
@@ -116,18 +116,18 @@ export class Ginger extends Item<PieceBlueprint> {
     static unicode = "U+1FADA"
     static color = "#54a4ffff"
     static rarity = 6;
-    constructor(){
-        super(Ginger.name, Ginger.description, Ginger.unicode, Ginger.color, 7, Ginger.rarity, 'blueprint')      
+    constructor() {
+        super(Ginger.name, Ginger.description, Ginger.unicode, Ginger.color, 7, Ginger.rarity, 'blueprint')
     }
     //Increases a program's def by 1
     apply(target: PieceBlueprint, itemMult: number) {
         console.log('target: ', target)
-        target.defence += (3* itemMult);
+        target.defence += (3 * itemMult);
     }
 }
 
 //"U+1F356" //meat
- //??"U+26E8";
+//??"U+26E8";
 
 export class Blueberry extends Item<PieceBlueprint> {
     static name = "Blueberry";
@@ -135,13 +135,13 @@ export class Blueberry extends Item<PieceBlueprint> {
     static unicode = "U+1FAD0";
     static color = "#1cffe1ff";
     static rarity = 1;
-    constructor(){
-        super(Blueberry.name, Blueberry.description, Blueberry.unicode, Blueberry.color, 3, Blueberry.rarity, 'blueprint')      
+    constructor() {
+        super(Blueberry.name, Blueberry.description, Blueberry.unicode, Blueberry.color, 3, Blueberry.rarity, 'blueprint')
     }
     //Increases a program's maxSize by 1
     apply(target: PieceBlueprint, itemMult: number) {
         console.log('target: ', target)
-        target.maxSize += (1* itemMult);
+        target.maxSize += (1 * itemMult);
     }
 }
 
@@ -151,13 +151,13 @@ class Melon extends Item<PieceBlueprint> {
     static unicode = "U+1F349";
     static color = "rgb(17, 110, 71)";
     static rarity = 3;
-    constructor(){
-        super(Melon.name, Melon.description, Melon.unicode, Melon.color, 5, Melon.rarity, 'blueprint')      
+    constructor() {
+        super(Melon.name, Melon.description, Melon.unicode, Melon.color, 5, Melon.rarity, 'blueprint')
     }
     //Increases a program's maxSize by 1
     apply(target: PieceBlueprint, itemMult: number) {
         console.log('target: ', target)
-        target.maxSize += (2* itemMult);
+        target.maxSize += (2 * itemMult);
     }
 }
 
@@ -167,13 +167,13 @@ class Pie extends Item<PieceBlueprint> {
     static unicode = "U+1F967";
     static color = "rgb(11, 122, 20)";
     static rarity = 4;
-    constructor(){
-        super(Pie.name, Pie.description, Pie.unicode, Pie.color, 6, Pie.rarity, 'blueprint')      
+    constructor() {
+        super(Pie.name, Pie.description, Pie.unicode, Pie.color, 6, Pie.rarity, 'blueprint')
     }
     //Increases a program's maxSize by 1
     apply(target: PieceBlueprint, itemMult: number) {
         console.log('target: ', target)
-        target.maxSize += (3* itemMult);
+        target.maxSize += (3 * itemMult);
     }
 }
 
@@ -183,13 +183,13 @@ class Pepper extends Item<PieceBlueprint> {
     static unicode = "U+1FAD1" //Radish U+1FADC
     static color = "rgb(255, 188, 43)";
     static rarity = 1;
-    constructor(){
+    constructor() {
         super(Pepper.name, Pepper.description, Pepper.unicode, Pepper.color, 3, Pepper.rarity, 'blueprint')
     }
     //Increases a program's range by 1
     apply(target: PieceBlueprint, itemMult: number) {
         console.log('target: ', target)
-        target.range += (1* itemMult);
+        target.range += (1 * itemMult);
     }
 }
 
@@ -199,13 +199,13 @@ export class Carrot extends Item<PieceBlueprint> {
     static unicode = "U+1F955"//scope "U+1F52D";
     static color = "#fff12bff";
     static rarity = 4;
-    constructor(){
+    constructor() {
         super(Carrot.name, Carrot.description, Carrot.unicode, Carrot.color, 5, Carrot.rarity, 'blueprint')
     }
     //Increases a program's range by 1
     apply(target: PieceBlueprint, itemMult: number) {
         console.log('target: ', target)
-        target.range += (2* itemMult);
+        target.range += (2 * itemMult);
     }
 }
 
@@ -215,11 +215,11 @@ export class Juice extends Item<PieceBlueprint> {
     static unicode = "U+1F9C3";
     static color = "rgb(255, 227, 71)";
     static rarity = 1;
-    constructor(){
-        super(Juice.name, Juice.description, Juice.unicode, Juice.color, 1, Juice.rarity, 'blueprint')  
+    constructor() {
+        super(Juice.name, Juice.description, Juice.unicode, Juice.color, 1, Juice.rarity, 'blueprint')
     }
     apply(target: PieceBlueprint, itemMult: number) {
-        target.moves += (1* itemMult);
+        target.moves += (1 * itemMult);
     }
 }
 
@@ -229,12 +229,12 @@ class Teapot extends Item<PieceBlueprint> {
     static unicode = "U+1FAD6";//BEANS, U+1FAD8
     static color = "#dc00e4ff";
     static rarity = 2;
-    constructor(){
+    constructor() {
         super(Teapot.name, Teapot.description, Teapot.unicode, Teapot.color, 3, Teapot.rarity, 'blueprint')
     }
     //Increases a program's moves by 1
     apply(target: PieceBlueprint, itemMult: number) {
-        target.moves += (2* itemMult);
+        target.moves += (2 * itemMult);
     }
 }
 
@@ -244,11 +244,11 @@ export class Coffee extends Item<PieceBlueprint> {
     static unicode = "U+2615";
     static color = "#e346f1ff";
     static rarity = 5;
-    constructor(){
+    constructor() {
         super(Coffee.name, Coffee.description, Coffee.unicode, Coffee.color, 5, Coffee.rarity, 'blueprint')
     }
     apply(target: PieceBlueprint, itemMult: number) {
-        target.moves += (3* itemMult);
+        target.moves += (3 * itemMult);
     }
 }
 
@@ -258,12 +258,12 @@ export class Roids extends Item<PieceBlueprint> {
     static unicode = "U+1F489";
     static color = "#00e4b3ff";
     static rarity = 3;
-    constructor(){
+    constructor() {
         super(Roids.name, Roids.description, Roids.unicode, Roids.color, 4, Roids.rarity, 'blueprint')
     }
     apply(target: PieceBlueprint, itemMult: number) {
-        target.attack += (1* itemMult);
-        target.moves += (1* itemMult);
+        target.attack += (1 * itemMult);
+        target.moves += (1 * itemMult);
     }
 }
 
@@ -273,12 +273,12 @@ export class Formula extends Item<PieceBlueprint> {
     static unicode = "U+1F37C";
     static color = "#27f743ff";
     static rarity = 2;
-    constructor(){
+    constructor() {
         super(Formula.name, Formula.description, Formula.unicode, Formula.color, 4, Formula.rarity, 'blueprint')
     }
     apply(target: PieceBlueprint, itemMult: number) {
-        target.maxSize += (1* itemMult);
-        target.defence += (1* itemMult);
+        target.maxSize += (1 * itemMult);
+        target.defence += (1 * itemMult);
     }
 }
 
@@ -290,16 +290,16 @@ export class Blessing extends Item<PieceBlueprint> {
     static unicode = "U+1F389";
     static color = "#a9ffffff";
     static rarity = 6;
-    constructor(){
+    constructor() {
         super(Blessing.name, Blessing.description, Blessing.unicode, Blessing.color, 9, Blessing.rarity, 'blueprint')
     }
     apply(target: PieceBlueprint, itemMult: number) {
         console.log('target: ', target)
-        target.maxSize += (1* itemMult);
-        target.moves += (1* itemMult);
-        target.range += (1* itemMult);
-        target.attack += (1* itemMult);
-        target.defence += (1* itemMult);
+        target.maxSize += (1 * itemMult);
+        target.moves += (1 * itemMult);
+        target.range += (1 * itemMult);
+        target.attack += (1 * itemMult);
+        target.defence += (1 * itemMult);
     }
 }
 
@@ -309,16 +309,16 @@ export class Supplement extends Item<Piece> {
     static unicode = "U+1F48A";
     static color = "#6e0c8bff";
     static rarity = 4;
-    constructor(){
+    constructor() {
         super(Supplement.name, Supplement.description, Supplement.unicode, Supplement.color, 5, Supplement.rarity, 'piece')
     }
     apply(target: Piece, itemMult: number) {
-        target.maxSize += (1* itemMult);
-        target.moves += (1* itemMult);
-        target.movesRemaining += (1* itemMult);
-        target.range += (1* itemMult);
-        target.attack += (1* itemMult);
-        target.defence += (1* itemMult);
+        target.maxSize += (1 * itemMult);
+        target.moves += (1 * itemMult);
+        target.movesRemaining += (1 * itemMult);
+        target.range += (1 * itemMult);
+        target.attack += (1 * itemMult);
+        target.defence += (1 * itemMult);
     }
 }
 
@@ -328,11 +328,11 @@ export class Bandage extends Item<Piece> {
     static unicode = "U+1FA79";
     static color = "#5659ebff";
     static rarity = 2;
-    constructor(){
+    constructor() {
         super(Bandage.name, Bandage.description, Bandage.unicode, Bandage.color, 1, Bandage.rarity, 'piece')
     }
     static harmfulStatuses = ['diseased', 'slowed', 'blinded', 'burning', 'poisoned', 'frozen', 'charmed', 'confused', 'exposed']
-    
+
     apply(target: Piece, _itemMult: number) {
         const activeHarmful = Bandage.harmfulStatuses.filter(
             (statusName) => target.statuses[statusName]
@@ -358,11 +358,11 @@ export class Cake extends Item<Piece> {
     static unicode = "U+1F382";
     static color = "rgb(175, 145, 179)";
     static rarity = 4;
-    constructor(){
+    constructor() {
         super(Cake.name, Cake.description, Cake.unicode, Cake.color, 2, Cake.rarity, 'piece')
     }
     apply(target: Piece, _itemMult: number) {
-        if(!target.statuses.exposed){
+        if (!target.statuses.exposed) {
             target.statuses.hidden = true;
         }
     }
@@ -374,7 +374,7 @@ class Soap extends Item<Piece> {
     static unicode = "U+1F9FC";
     static color = "#821391ff";
     static rarity = 2;
-    constructor(){
+    constructor() {
         super(Soap.name, Soap.description, Soap.unicode, Soap.color, 3, Soap.rarity, 'piece')
     }
     static harmfulStatuses = ['diseased', 'slowed', 'blinded', 'burning', 'poisoned', 'frozen', 'charmed', 'confused', 'exposed']
@@ -391,10 +391,10 @@ export class Voucher extends Item<Item> {
     static unicode = "U+1F9FE";
     static color = "#ffd000ff";
     static rarity = 1;
-    constructor(){
+    constructor() {
         super(Voucher.name, Voucher.description, Voucher.unicode, Voucher.color, 3, Voucher.rarity, 'shopItem')
     }
-    apply(target: Item | PieceBlueprint ) {
+    apply(target: Item | PieceBlueprint) {
         target.cost = 0
     }
 }
@@ -405,7 +405,7 @@ export class Rations extends Item<Piece> {
     static unicode = "U+1F96B";
     static color = "#f7eb45ff";
     static rarity = 3;
-    constructor(){
+    constructor() {
         super(Rations.name, Rations.description, Rations.unicode, Rations.color, 2, Rations.rarity, 'piece')
     }
     apply(target: Piece, _itemMult: number) {
@@ -419,7 +419,7 @@ export class Beans extends Item<Piece> {
     static unicode = "U+1FAD8";
     static color = "#f03030ff";
     static rarity = 3;
-    constructor(){
+    constructor() {
         super(Beans.name, Beans.description, Beans.unicode, Beans.color, 2, Beans.rarity, 'piece')
     }
     apply(target: Piece, _itemMult: number) {
@@ -433,7 +433,7 @@ export class ShootingStar extends Item<Piece> {
     static unicode = "U+1F320";
     static color = "#1e023dff";
     static rarity = 3;
-    constructor(){
+    constructor() {
         super(ShootingStar.name, ShootingStar.description, ShootingStar.unicode, ShootingStar.color, 2, ShootingStar.rarity, 'piece')
     }
     apply(target: Piece, _itemMult: number) {
@@ -463,13 +463,13 @@ export class Pandora extends Item<Player> {
     static unicode = "U+1F3FA";
     static color = "#e0b24fff";
     static rarity = 6;
-    constructor(){
+    constructor() {
         super(Pandora.name, Pandora.description, Pandora.unicode, Pandora.color, 6, Pandora.rarity, 'player')
     }
     apply(_player: Player, _itemMult: number) {
     }
     //apply(player: Player, itemMult: number) {
-      //  player.addProgram(makeBlueprint(pickWeightedRandom(allPieces, player)));
+    //  player.addProgram(makeBlueprint(pickWeightedRandom(allPieces, player)));
     //}
 }
 
@@ -480,27 +480,27 @@ export class Gift extends Item<Player> {
     static unicode = "U+1F381";
     static color = "#e9ab27ff";
     static rarity = 2;
-    constructor(){
+    constructor() {
         super(Gift.name, Gift.description, Gift.unicode, Gift.color, 3, Gift.rarity, 'player')
     }
     apply(_player: Player, _itemMult: number) {
     }
     //apply(player: Player, itemMult: number) {
-      //  player.addProgram(makeBlueprint(pickWeightedRandom(allPieces, player)));
+    //  player.addProgram(makeBlueprint(pickWeightedRandom(allPieces, player)));
     //}
 }
 
 export class Genie extends Item<Player> {
-  static name = "Genie";
-  static description = "Gifts 3 random programs (must have room)";
-  static unicode = "U+1F9DE";
-  static color = "rgb(108, 126, 230)";
-  static rarity = 5;
-  constructor() {
-   super(Genie.name, Genie.description, Genie.unicode, Genie.color, 5, Genie.rarity, 'player')
-  }
-  //apply(_player: Player, _itemMult: number) {
-  //}
+    static name = "Genie";
+    static description = "Gifts 3 random programs (must have room)";
+    static unicode = "U+1F9DE";
+    static color = "rgb(108, 126, 230)";
+    static rarity = 5;
+    constructor() {
+        super(Genie.name, Genie.description, Genie.unicode, Genie.color, 5, Genie.rarity, 'player')
+    }
+    //apply(_player: Player, _itemMult: number) {
+    //}
     apply(player: Player, _itemMult: number) {
         player.addProgram(makeBlueprint(pickWeightedRandom(allPieces, player)));
         player.addProgram(makeBlueprint(pickWeightedRandom(allPieces, player)));
@@ -514,7 +514,7 @@ export class Box extends Item<Player> {
     static unicode = "U+1F4E6";
     static color = "#926439ff";
     static rarity = 1;
-    constructor(){
+    constructor() {
         super(Box.name, Box.description, Box.unicode, Box.color, 3, Box.rarity, 'player')
     }
     apply(_player: Player, _itemMult: number) {
@@ -540,7 +540,7 @@ export class Spanner extends Item<Piece> {
     static unicode = "U+1F527";
     static color = "#5a0505ff";
     static rarity = 3;
-    constructor(){
+    constructor() {
         super(Spanner.name, Spanner.description, Spanner.unicode, Spanner.color, 2, Spanner.rarity, 'piece')
         //name desc utf || maxsize moves range atk def
     }
@@ -556,7 +556,7 @@ class Makeover extends Item<Piece> {//admin?
     static unicode = "U+1F485";
     static color = "#f18fedff";
     static rarity = 3;
-    constructor(){
+    constructor() {
         super(Makeover.name, Makeover.description, Makeover.unicode, Makeover.color, 2, Makeover.rarity, 'piece')
         //name desc utf || maxsize moves range atk def
     }
@@ -567,28 +567,28 @@ class Makeover extends Item<Piece> {//admin?
 
 //gameState
 export class Wand extends Item<Piece[]> {//TODO test
-  static name = "Magic Wand";
-  static description = "Undo a turn";
-  static unicode = "U+1FA84";
-  static color = "#440975ff";
-  static rarity = 4;
-  constructor() {
-    super(Wand.name, Wand.description, Wand.unicode, Wand.color, 7, Wand.rarity, 'gameState')
-  }
+    static name = "Magic Wand";
+    static description = "Undo a turn";
+    static unicode = "U+1FA84";
+    static color = "#440975ff";
+    static rarity = 4;
+    constructor() {
+        super(Wand.name, Wand.description, Wand.unicode, Wand.color, 7, Wand.rarity, 'gameState')
+    }
     apply(_target: Piece[]) {
         //should know previous state of activeprogram's
     }
 }
 
 export class Hourglass extends Item<Piece[]> {//TODO test
-  static name = "Hourglass";
-  static description = "Retry a node without losing a life";
-  static unicode = "U+231B";
-  static color = "#000000ff";
-  static rarity = 5;
-  constructor() {
-   super(Hourglass.name, Hourglass.description, Hourglass.unicode, Hourglass.color, 10, Hourglass.rarity, 'gameState')
-  }
+    static name = "Hourglass";
+    static description = "Retry a node without losing a life";
+    static unicode = "U+231B";
+    static color = "#000000ff";
+    static rarity = 5;
+    constructor() {
+        super(Hourglass.name, Hourglass.description, Hourglass.unicode, Hourglass.color, 10, Hourglass.rarity, 'gameState')
+    }
     apply(_target: Piece[]) {//game state from app??
         //receive game state, and map
         //reload level
@@ -596,17 +596,17 @@ export class Hourglass extends Item<Piece[]> {//TODO test
 }
 
 class Extinguisher extends Item<Piece[]> {
-  static name = "Extinguisher";
-  static description = "Removes burning from all your programs";
-  static unicode = "U+1F9EF";
-  static color = "#e7aa92ff";
-  static rarity = 2;
-  constructor() {
-   super(Extinguisher.name, Extinguisher.description, Extinguisher.unicode, Extinguisher.color, 2, Extinguisher.rarity, 'gameState')
-  }
+    static name = "Extinguisher";
+    static description = "Removes burning from all your programs";
+    static unicode = "U+1F9EF";
+    static color = "#e7aa92ff";
+    static rarity = 2;
+    constructor() {
+        super(Extinguisher.name, Extinguisher.description, Extinguisher.unicode, Extinguisher.color, 2, Extinguisher.rarity, 'gameState')
+    }
     apply(activePieces: Piece[], _itemMult: number) {//game state from app??
         activePieces.forEach(piece => {
-            if(piece.team === 'player'){
+            if (piece.team === 'player') {
                 piece.statuses.burning = false;
             }
         });
@@ -614,17 +614,17 @@ class Extinguisher extends Item<Piece[]> {
 }
 
 class Plunger extends Item<Piece[]> {//item remove??
-  static name = "Plunger";
-  static description = "Removes slowed from all your programs";
-  static unicode = "U+1FAA0";
-  static color = "#82e2ffff";
-  static rarity = 2;
-  constructor(){
-   super(Plunger.name, Plunger.description, Plunger.unicode, Plunger.color, 2, Plunger.rarity, 'gameState')
-  }
+    static name = "Plunger";
+    static description = "Removes slowed from all your programs";
+    static unicode = "U+1FAA0";
+    static color = "#82e2ffff";
+    static rarity = 2;
+    constructor() {
+        super(Plunger.name, Plunger.description, Plunger.unicode, Plunger.color, 2, Plunger.rarity, 'gameState')
+    }
     apply(activePieces: Piece[], _itemMult: number) {//game state from app??
         activePieces.forEach(piece => {
-            if(piece.team === 'player'){
+            if (piece.team === 'player') {
                 piece.statuses.slowed = false;
             }
         });
@@ -639,13 +639,13 @@ class Keygen extends Item<Piece[]> {//TODO test
     static color = "#89315aff";
     static rarity = 3;
     constructor() {
-    super(Keygen.name, Keygen.description, Keygen.unicode, Keygen.color, 3, Keygen.rarity, 'gameState')
+        super(Keygen.name, Keygen.description, Keygen.unicode, Keygen.color, 3, Keygen.rarity, 'gameState')
     }
     apply(activePieces: Piece[], itemMult: number) {//game state from app??
         activePieces.forEach(piece => {
-            if(piece.team === 'enemy' && piece.getStat('defence') > 0){
-                piece.addModifier({defence: 1*(-itemMult)})//test
-                piece.defenceRemaining -= (1*(-itemMult))//test
+            if (piece.team === 'enemy' && piece.getStat('defence') > 0) {
+                piece.addModifier({ defence: 1 * (-itemMult) })//test
+                piece.defenceRemaining -= (1 * (-itemMult))//test
             }
         })
         //receive game state, and map
@@ -659,14 +659,14 @@ class Bugle extends Item<Piece[]> {
     static unicode = "U+1F4EF";
     static color = "#ff450dff";
     static rarity = 3;
-    constructor(){
+    constructor() {
         super(Bugle.name, Bugle.description, Bugle.unicode, Bugle.color, 3, Bugle.rarity, 'gameState');
         //name desc utf || maxsize moves range atk def
     }
     apply(activePieces: Piece[], itemMult: number) {
-         activePieces.forEach(piece => {
-            if(piece.team === 'player'){
-                piece.addModifier({attack: 1 * itemMult})//test
+        activePieces.forEach(piece => {
+            if (piece.team === 'player') {
+                piece.addModifier({ attack: 1 * itemMult })//test
             }
         })
     }
@@ -678,15 +678,15 @@ class Djembe extends Item<Piece[]> {
     static unicode = "U+1FA98";//djembe LONG DRUM,
     static color = "rgb(111, 32, 8)";
     static rarity = 4;
-    constructor(){
+    constructor() {
         super(Djembe.name, Djembe.description, Djembe.unicode, Djembe.color, 3, Djembe.rarity, 'gameState');
         //name desc utf || maxsize moves range atk def
     }
     apply(activePieces: Piece[], itemMult: number) {
-         activePieces.forEach(piece => {
-            if(piece.team === 'player'){
-                piece.addModifier({attack: 1 * itemMult})//test
-                piece.addModifier({moves: 1 * itemMult})//test
+        activePieces.forEach(piece => {
+            if (piece.team === 'player') {
+                piece.addModifier({ attack: 1 * itemMult })//test
+                piece.addModifier({ moves: 1 * itemMult })//test
             }
         })
     }
@@ -698,14 +698,14 @@ class Megaphone extends Item<Piece[]> {
     static unicode = "U+1F4E3";
     static color = "#0d86ffff";
     static rarity = 3;
-    constructor(){
+    constructor() {
         super(Megaphone.name, Megaphone.description, Megaphone.unicode, Megaphone.color, 3, Megaphone.rarity, 'gameState');
         //name desc utf || maxsize moves range atk def
     }
     apply(activePieces: Piece[], itemMult: number) {
-         activePieces.forEach(piece => {
-            if(piece.team === 'player'){
-                piece.addModifier({attack: 1 * itemMult})//test
+        activePieces.forEach(piece => {
+            if (piece.team === 'player') {
+                piece.addModifier({ attack: 1 * itemMult })//test
             }
         })
     }
@@ -717,13 +717,13 @@ class Battery extends Item<Piece[]> {
     static unicode = " U+1F50B";
     static color = "#0dff35ff";
     static rarity = 1;
-    constructor(){
+    constructor() {
         super(Battery.name, Battery.description, Battery.unicode, Battery.color, 1, Battery.rarity, 'gameState');
         //name desc utf || maxsize moves range atk def
     }
     apply(activePieces: Piece[], _itemMult: number) {
-         activePieces.forEach(piece => {
-            if(piece.team === 'player'){
+        activePieces.forEach(piece => {
+            if (piece.team === 'player') {
                 piece.resetMoves();
             }
         })
@@ -737,16 +737,16 @@ export class Sandwich extends Item<Piece> {
     static unicode = "U+1F96A";
     static color = "rgb(202, 186, 15)";
     static rarity = 5;
-    constructor(){
+    constructor() {
         super(Sandwich.name, Sandwich.description, Sandwich.unicode, Sandwich.color, 5, Sandwich.rarity, 'piece')
     }
     apply(target: Piece, itemMult: number) {
-        target.maxSize += (2* itemMult);
-        target.moves += (2* itemMult);
-        target.movesRemaining += (2* itemMult);
-        target.range += (2* itemMult);
-        target.attack += (2* itemMult);
-        target.defence += (2* itemMult);
+        target.maxSize += (2 * itemMult);
+        target.moves += (2 * itemMult);
+        target.movesRemaining += (2 * itemMult);
+        target.range += (2 * itemMult);
+        target.attack += (2 * itemMult);
+        target.defence += (2 * itemMult);
     }
 }
 
@@ -756,13 +756,13 @@ class Hotline extends Item {
     static unicode = "U+1F4DE";
     static color = "rgb(199, 13, 255)";
     static rarity = 2;
-    constructor(){
+    constructor() {
         super(Hotline.name, Hotline.description, Hotline.unicode, Hotline.color, 2, Hotline.rarity, 'piecesAndBoard')
         //name desc utf || maxsize moves range atk def
     }
     apply({ activePieces, board }: { activePieces: Piece[], board: Coordinate[] }, _itemMult: number) {
         const space = getRandomUnoccupiedTile(board, activePieces);
-        if(space){
+        if (space) {
             const PieceClass = allPieces[Math.floor(Math.random() * allPieces.length)]//true random without player
             const instance = new PieceClass(space, 'piece', activePieces[0].removeCallback, crypto.randomUUID());
             instance.team = 'player';
@@ -780,7 +780,7 @@ export class Floppy extends Item {
     static unicode = "U+1F4BE";
     static color = "#437feeff";
     static rarity = 1;
-    constructor(){
+    constructor() {
         super(Floppy.name, Floppy.description, Floppy.unicode, Floppy.color, 3, Floppy.rarity, 'player')
         //name desc utf || maxsize moves range atk def
     }
@@ -795,7 +795,7 @@ export class Update2 extends Item {
     static unicode = "U+1F4BF";
     static color = "#797979ff";
     static rarity = 3;
-    constructor(){
+    constructor() {
         super(Update2.name, Update2.description, Update2.unicode, Update2.color, 4, Update2.rarity, 'player')
         //name desc utf || maxsize moves range atk def
     }
@@ -810,7 +810,7 @@ export class Update3 extends Item {
     static unicode = " U+1F4BD";//"U+1F4C0"; // MINIDISC, U+1F4BD
     static color = "#000000ff";
     static rarity = 6;
-    constructor(){
+    constructor() {
         super(Update3.name, Update3.description, Update3.unicode, Update3.color, 9, Update3.rarity, 'player')
         //name desc utf || maxsize moves range atk def
     }
@@ -825,7 +825,7 @@ export class Life extends Item {
     static unicode = "U+1F493";
     static color = "rgb(164, 255, 103)";
     static rarity = 6;
-    constructor(){
+    constructor() {
         super(Life.name, Life.description, Life.unicode, Life.color, 10, Life.rarity, 'player')
         //name desc utf || maxsize moves range atk def
     }
@@ -840,35 +840,35 @@ export class Dupe extends Item {
     static unicode = "U+1F942";
     static color = "rgb(153, 4, 91)";
     static rarity = 5;
-    constructor(){
+    constructor() {
         super(Dupe.name, Dupe.description, Dupe.unicode, Dupe.color, 7, Dupe.rarity, 'player')
         //name desc utf || maxsize moves range atk def
     }
     apply() {
-    /*apply(player: Player) {
-      //player.admins
-        const randAdmin = player.admins[Math.floor(Math.random()*player.admins.length)]
-        const adminClass = allAdmins.find(a => a.name === randAdmin.name);
-        if(!adminClass) return;
-        player.admins = [randAdmin, new adminClass] //make a new 
-        */
+        /*apply(player: Player) {
+          //player.admins
+            const randAdmin = player.admins[Math.floor(Math.random()*player.admins.length)]
+            const adminClass = allAdmins.find(a => a.name === randAdmin.name);
+            if(!adminClass) return;
+            player.admins = [randAdmin, new adminClass] //make a new 
+            */
     }
 }
 
 //JAR, U+1FAD9 - piece? capture an enemy of size 1, turn into blueprint
-export class Jar extends Item {//Pokeball?
+class Jar extends Item {//Pokeball?
     static name = "Jar";
     static description = "Use on an enemy with a size of 1 and defence of 0 to add it to your inventory";
     static unicode = "U+1FAD9";
     static color = "rgb(255, 37, 84)";
     static rarity = 3;
-    constructor(){
+    constructor() {
         super(Jar.name, Jar.description, Jar.unicode, Jar.color, 5, Jar.rarity, 'playerAndGame')
         //name desc utf || maxsize moves range atk def
     }
     async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }, _itemMult: number) {
         const idx = activePieces.findIndex(p => p.id === id);
-        if(activePieces[idx].team === 'enemy' && activePieces[idx].defenceRemaining <= 0 && activePieces[idx].tiles.length <= 1){
+        if (activePieces[idx].team === 'enemy' && activePieces[idx].defenceRemaining <= 0 && activePieces[idx].tiles.length <= 1) {
             const bpClass = allPieces.find(p =>
                 p.name === activePieces[idx].name
             )
@@ -895,15 +895,15 @@ class Chili extends Item<Piece[]> {//HOT PEPPER, U+1F336 - moves +1 range +1
     static unicode = "U+1F372";
     static color = "rgb(202, 74, 15)";
     static rarity = 3;
-    constructor(){
+    constructor() {
         super(Chili.name, Chili.description, Chili.unicode, Chili.color, 5, Chili.rarity, 'gameState')
     }
     apply(activePieces: Piece[], itemMult: number) {
-        for(const target of activePieces){
-            if(target.team === 'player'){
-                target.moves += (1* itemMult);
-                target.movesRemaining += (1* itemMult);
-                target.range += (1* itemMult);
+        for (const target of activePieces) {
+            if (target.team === 'player') {
+                target.moves += (1 * itemMult);
+                target.movesRemaining += (1 * itemMult);
+                target.range += (1 * itemMult);
             }
         }
     }
@@ -915,35 +915,35 @@ class Feast extends Item<Piece[]> {
     static unicode = "U+1F372";
     static color = "rgb(202, 186, 15)";
     static rarity = 6;
-    constructor(){
+    constructor() {
         super(Feast.name, Feast.description, Feast.unicode, Feast.color, 5, Feast.rarity, 'gameState')
     }
     apply(activePieces: Piece[], itemMult: number) {
-        for(const target of activePieces){
-            if(target.team === 'player'){
-                target.maxSize += (3* itemMult);
-                target.moves += (3* itemMult);
-                target.movesRemaining += (3* itemMult);
-                target.range += (3* itemMult);
-                target.attack += (3* itemMult);
-                target.defence += (3* itemMult);
+        for (const target of activePieces) {
+            if (target.team === 'player') {
+                target.maxSize += (3 * itemMult);
+                target.moves += (3 * itemMult);
+                target.movesRemaining += (3 * itemMult);
+                target.range += (3 * itemMult);
+                target.attack += (3 * itemMult);
+                target.defence += (3 * itemMult);
             }
         }
     }
 }
 
 class Lightning extends Item<Piece[]> {//lighting remove 1 tile from all enemy pieces U+26A1
-  static name = "Lightning";
-  static description = "Removes all defences and 1 tile from all enemies";
-  static unicode = "U+26A1";
-  static color = "rgb(61, 87, 233)";
-  static rarity = 4;
-  constructor() {
-   super(Lightning.name, Lightning.description, Lightning.unicode, Lightning.color, 2, Lightning.rarity, 'gameState')
-  }
+    static name = "Lightning";
+    static description = "Removes all defences and 1 tile from all enemies";
+    static unicode = "U+26A1";
+    static color = "rgb(61, 87, 233)";
+    static rarity = 4;
+    constructor() {
+        super(Lightning.name, Lightning.description, Lightning.unicode, Lightning.color, 2, Lightning.rarity, 'gameState')
+    }
     apply(activePieces: Piece[], _itemMult: number) {
         activePieces.forEach(piece => {
-            if(piece.team === 'enemy'){
+            if (piece.team === 'enemy') {
                 piece.takeDamage(piece.defenceRemaining + 1);
             }
         });
@@ -952,17 +952,17 @@ class Lightning extends Item<Piece[]> {//lighting remove 1 tile from all enemy p
 
 //toothbrush - single use broom?
 class Toothbrush extends Item<Piece[]> {//lighting remove 1 tile from all enemy pieces U+26A1
-  static name = "Toothbrush";
-  static description = "Removes all enemies with a size of 1 and 0 defence remaining";
-  static unicode = "U+1FAA5";
-  static color = "rgb(233, 73, 61)";
-  static rarity = 2;
-  constructor() {
-   super(Toothbrush.name, Toothbrush.description, Toothbrush.unicode, Toothbrush.color, 2, Toothbrush.rarity, 'gameState')
-  }
+    static name = "Toothbrush";
+    static description = "Removes all enemies with a size of 1 and 0 defence remaining";
+    static unicode = "U+1FAA5";
+    static color = "rgb(233, 73, 61)";
+    static rarity = 2;
+    constructor() {
+        super(Toothbrush.name, Toothbrush.description, Toothbrush.unicode, Toothbrush.color, 2, Toothbrush.rarity, 'gameState')
+    }
     apply(activePieces: Piece[], _itemMult: number) {
         activePieces.forEach(piece => {
-            if(piece.team === 'enemy'){
+            if (piece.team === 'enemy') {
                 piece.takeDamage(1);
             }
         });
@@ -970,23 +970,31 @@ class Toothbrush extends Item<Piece[]> {//lighting remove 1 tile from all enemy 
 }
 
 // CLINKING BEER MUGS, Happy Hour U+1F37B
-/*export class Beer extends Item<Player> {
+class Beer extends Item<Player> {
     static name = "Happy Hour";
     static description = "Duplicate a random item.";
     static unicode = "U+1F37B";
     static color = "rgb(237, 209, 49)";
     static rarity = 6;
-    constructor(){
+    constructor() {
         super(Beer.name, Beer.description, Beer.unicode, Beer.color, 7, Beer.rarity, 'player')
     }
 
     apply(player: Player, _itemMult: number) {
-        const randItem = player.admins[Math.floor(Math.random()*player.admins.length)]
+        // 1. Return if there are no items to duplicate
+        if (player.items.length === 0) return;
+
+        // 2. Look in player.items instead of player.admins
+        const randItem = player.items[Math.floor(Math.random() * player.items.length)];
+
+        // 3. Find the matching constructor
         const itemClass = allItems.find(a => a.name === randItem.name);
-        if(!itemClass) return;
-        player.items.push(new itemClass);
+        if (!itemClass) return;
+
+        // 4. Add the new instance
+        player.items.push(new itemClass());
     }
-}*/
+}
 
 //U+1FAA8 rock damage selected piece
 class Rock extends Item {
@@ -995,7 +1003,7 @@ class Rock extends Item {
     static unicode = "U+1FAA8";
     static color = "rgb(109, 147, 159)";
     static rarity = 1;
-    constructor(){
+    constructor() {
         super(Rock.name, Rock.description, Rock.unicode, Rock.color, 5, Rock.rarity, 'playerAndGame')
     }
     async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }, itemMult: number) {
@@ -1009,7 +1017,7 @@ class Rock extends Item {
 //lifeboat ROWBOAT, U+1F6A3
 
 
-export const allItems = [Blueberry, Box, Battery, Iron, Juice, Mushroom, Pepper, Rock, Floppy, Voucher, Bandage, Extinguisher, Formula, Gift, Hotline, Plunger, Roids, Teapot, Toothbrush, Beans, Bugle, Jar, Keygen, Makeover, Melon, Megaphone, Pinata, Rations, ShootingStar, Spanner, Supplement, Update2, Chili, Cake, Carrot, Coffee, Djembe, Garlic, Wand, Lightning, Meat, Pie, Soap, Dupe, Genie, Hourglass, Sandwich, Life, Blessing, Feast, Ginger, Pandora, Update3];
+export const allItems = [Blueberry, Box, Battery, Iron, Juice, Mushroom, Pepper, Rock, Floppy, Voucher, Bandage, Extinguisher, Formula, Gift, Hotline, Plunger, Roids, Teapot, Toothbrush, Beans, Bugle, Jar, Keygen, Makeover, Melon, Megaphone, Pinata, Rations, ShootingStar, Spanner, Supplement, Update2, Chili, Cake, Carrot, Coffee, Djembe, Garlic, Wand, Lightning, Meat, Pie, Soap, Dupe, Genie, Hourglass, Sandwich, Life, Blessing, Feast, Ginger, Beer, Pandora, Update3];
 export const upgradeItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Roids, Formula]
 
 /*Items.forEach(i => {
@@ -1026,6 +1034,6 @@ console.log('all items: ', allItems.length);
 
 //PAGE WITH CURL, U+1F4C3
 
- // U+1F47A
+// U+1F47A
 
 //BLACK HEART SUIT, U+2665

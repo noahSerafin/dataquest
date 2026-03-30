@@ -246,6 +246,7 @@ import { reapplyTutorialTooltips } from "../tutorial";
         align-items: center;
     }
     .player-info{
+        position: relative;
         width: 15%;
         line-height: 1.2;
     }

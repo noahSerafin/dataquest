@@ -330,6 +330,7 @@ body,
 }
 
 .enemy-info .tutorial-help-btn,
+.player-info .tutorial-help-btn,
 .board-piece .tutorial-help-btn,
 .piece-controller .tutorial-help-btn {
   top: 0;
@@ -343,6 +344,7 @@ body,
   left: -8px;
 }
 
+.player-info .tutorial-help-btn,
 .enemy-info .security .tutorial-help-btn,
 .enemy-info .infamy .tutorial-help-btn {
   top: -14px;
@@ -370,8 +372,6 @@ body,
   .top-hud p {
     margin: 0;
   }
-
-  .stage {}
 
   .player-area {
     p {

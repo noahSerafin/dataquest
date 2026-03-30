@@ -134,10 +134,6 @@ const shopItemTip: TutorialStep = {
     id: 'item-consumable',
     tooltip: "This is a consumable item, it takes up 1 memory in your inventory and can only be used once.",
 }
-const itemTip: TutorialStep = {
-    id: 'item-inventory',
-    tooltip: 'This is a consumable item, select a piece to use it on.',
-}
 const adminTip: TutorialStep = {
     id: 'item-admin',
     tooltip: 'This is an admin, it takes up an admin slot and will provide passive benefits when it is triggered.',
@@ -170,7 +166,7 @@ const rewardTip: TutorialStep = {
     id: 'reward-summary',
     tooltip: "You have earned a reward for completing this node. Plus any bonus rewards granted from your admin programs",
 }
-export const allTips: TutorialStep[] = [welcomeTip, mapTip, bossTip, visitedNodeTip, currentNodeTip, levelNodeTip, previewTip, skipNodeTip, shopNodeTip, bossNodeTip, boardTip, programTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, actionsTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, infamyTip, bossesTip, summaryTip, lossTip, shopTip, rerollTip, shopbpTip, shopItemTip, adminTip, adminsTip, itemTip, playerInfoTip, nodePreviewTip, interestTip, rewardTip, inventoryTip, invBtnTip];
+export const allTips: TutorialStep[] = [welcomeTip, mapTip, bossTip, visitedNodeTip, currentNodeTip, levelNodeTip, previewTip, skipNodeTip, shopNodeTip, bossNodeTip, boardTip, programTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, actionsTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, infamyTip, bossesTip, summaryTip, lossTip, shopTip, rerollTip, shopbpTip, shopItemTip, adminTip, adminsTip, playerInfoTip, nodePreviewTip, interestTip, rewardTip, inventoryTip, invBtnTip];
 
 export const proTipSuggestion: TutorialStep = {
     id: 'proTip',

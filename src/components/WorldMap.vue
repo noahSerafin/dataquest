@@ -5,7 +5,7 @@
     import { Item, Box, Genie, Gift, Pinata, Pandora, Voucher, Jar, Update2, Update3, Floppy, Life, Cake, Wand, Hourglass, Dupe } from "../Items";
     import { allBosses, nonStackableBosses } from "../Bosses";
     import { watch } from "vue";
-    import { reapplyTutorialTooltips } from "../tutorial";
+    import { reapplyTutorialTooltips, showTutorialTip } from "../tutorial";
     import { Player } from "../Player";
     import type { WorldMap, WorldNode } from "../worldBuilder";
     import { generateWorld } from "../worldBuilder";
@@ -175,6 +175,7 @@
             emit("addBoss", boss.value);
         }
         if (node.level) {
+            showTutorialTip('board');
             //console.log(node.level)
             emit("select-level", node.level, node.difficultyMod, (node.reward + props.player.bonusReward));
         }

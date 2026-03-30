@@ -295,9 +295,14 @@ html, body, #app {
   line-height: 20px;
 }
 
-.board .tutorial-help-btn {
+.shop-container .tutorial-help-btn, .board .tutorial-help-btn {
   top: 0;
   right: 0;
+}
+.enemy-info .tutorial-help-btn, .board-piece .tutorial-help-btn, .piece-controller .tutorial-help-btn {
+  top: 0;
+  right: unset;
+  left: 0px;
 }
 
 .tutorial-help-btn:hover {

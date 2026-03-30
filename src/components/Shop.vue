@@ -85,7 +85,7 @@ const type = ((item: Item) => {
     :class="props.cssclass">
     <div class="shop-top">
       <h2>Shop</h2>
-      <button
+      <button class="shop-reroll-btn"
       :disabled="!canReroll"
       @click="emit('refresh-shop')">
       Reroll {{ props.rerollCost }}

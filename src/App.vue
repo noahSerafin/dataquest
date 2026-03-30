@@ -1737,4 +1737,7 @@ function toggleDebug() {
     left: 100%;
   }
 }
+.enemy-bosses{
+  position: relative;
+}
 </style>

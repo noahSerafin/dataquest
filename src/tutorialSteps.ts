@@ -46,8 +46,12 @@ const programTip: TutorialStep = {
     id: 'piece',
     tooltip: "This a loaded program, click on it to see it's stats"
 }
+const shopbpTip: TutorialStep = {
+    id: 'shop-piece',
+    tooltip: "This is a program blueprint, click on it to see it's stats. Purchase it to add it to your inventory."
+}
 const bpTip: TutorialStep = {
-    id: 'blueprint',
+    id: 'inventory-piece',
     tooltip: "You own this program, click on it to see it's stats. After entering a node, select or drag it into the node to load it."
 }
 const controllerTip: TutorialStep = {
@@ -118,9 +122,9 @@ const shopTip: TutorialStep = {
     id: 'shop-container',
     tooltip: "At the shop, you can buy new programs (P), admin programs (A), or consumable items (I). There are 6 tiers of rarity. You can reroll the shop for a price, the cost exponentially increases with each reroll, but resets at each shop.",
 }
-const shopbpTip: TutorialStep = {
-    id: 'shop-piece',
-    tooltip: 'Purchase this program to add it to your inventory if you have 1 free space of memory.',
+const rerollTip: TutorialStep = {
+    id: 'shop-reroll-btn',
+    tooltip: "The current reroll price. Each reroll will add $1 + any previous additions to the cost. This will reset to $5 at each new shop.",
 }
 const shopItemTip: TutorialStep = {
     id: 'item-consumable',
@@ -160,9 +164,9 @@ const interestTip: TutorialStep = {
 }
 const rewardTip: TutorialStep = {
     id: 'reward-summary',
-    tooltip: "You have earned a reward for completing this node. Plus bonus rewards granted from your admin programs",
+    tooltip: "You have earned a reward for completing this node. Plus any bonus rewards granted from your admin programs",
 }
-export const allTips: TutorialStep[] = [welcomeTip, mapTip, bossTip, currentNodeTip, levelNodeTip, previewTip, skipNodeTip, shopNodeTip, bossNodeTip, boardTip, programTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, actionsTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, infamyTip, bossesTip, summaryTip, lossTip, shopTip, shopbpTip, shopItemTip, adminTip, adminsTip, itemTip, playerInfoTip, nodePreviewTip, interestTip, rewardTip, inventoryTip, invBtnTip];
+export const allTips: TutorialStep[] = [welcomeTip, mapTip, bossTip, currentNodeTip, levelNodeTip, previewTip, skipNodeTip, shopNodeTip, bossNodeTip, boardTip, programTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, actionsTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, infamyTip, bossesTip, summaryTip, lossTip, shopTip, rerollTip, shopbpTip, shopItemTip, adminTip, adminsTip, itemTip, playerInfoTip, nodePreviewTip, interestTip, rewardTip, inventoryTip, invBtnTip];
 /*
 const Tip: TutorialStep = {
     id: '',

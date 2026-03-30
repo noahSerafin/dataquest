@@ -39,15 +39,32 @@ export function highlightElement(el: HTMLElement) {
 }*/
 
 export function applyTutorialTooltips(steps: TutorialStep[]) {
+  // First, clean up any stale help buttons
+  const existingButtons = document.querySelectorAll('.tutorial-help-btn');
+  existingButtons.forEach(btn => {
+    const target = btn.parentElement;
+    if (target) {
+      const stepId = btn.getAttribute('data-step-id');
+      // Remove button if it lacks a step ID (from older versions) or if the target lost the class
+      if (!stepId || !target.classList.contains(stepId)) {
+        btn.remove();
+        if (!target.querySelector('.tutorial-help-btn')) {
+          target.classList.remove('has-tutorial');
+        }
+      }
+    }
+  });
+
   for (const step of steps) {
     const targets = document.querySelectorAll(`.${step.id}`);
 
     targets.forEach(target => {
-      // Prevent adding multiple icons if called again
-      if (target.querySelector('.tutorial-help-btn')) return;
+      // Prevent adding multiple icons for this precise step if called again
+      if (target.querySelector(`.tutorial-help-btn[data-step-id="${step.id}"]`)) return;
 
       const helpBtn = document.createElement("button");
       helpBtn.className = "tutorial-help-btn";
+      helpBtn.setAttribute("data-step-id", step.id);
       helpBtn.innerText = "📎";
       
       helpBtn.addEventListener('click', (e) => {
@@ -71,6 +88,18 @@ export function reapplyTutorialTooltips(delay: number = 100) {
   setTimeout(() => {
     applyTutorialTooltips(allTips);
   }, delay);
+}
+
+export function showTutorialTip(stepId: string) {
+  const step = allTips.find(t => t.id === stepId);
+  if (step) {
+    tutorialState.message = step.tooltip;
+    tutorialState.activeId = step.id;
+    tutorialState.collapsed = false;
+    if (!tutorialState.hasSeenFirst) {
+      tutorialState.hasSeenFirst = true;
+    }
+  }
 }
 
 

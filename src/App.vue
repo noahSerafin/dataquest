@@ -16,7 +16,7 @@ import { allPieces } from "./Pieces"
 import type { Coordinate, PieceBlueprint, Level, OS } from "./types";
 import { runEnemyStateMachine } from "./Enemy";
 import WorldMap from "./components/WorldMap.vue";
-import { addItemsUntilFull, applyVariant, coordKey, findAnyPiecesInRange, getOccupiedTileSet, getTilesInRange, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, rollVariant, isSoundEnabled } from "./helperFunctions";
+import { applyVariant, coordKey, findAnyPiecesInRange, getOccupiedTileSet, getTilesInRange, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, rollVariant, isSoundEnabled } from "./helperFunctions";
 import Shop from "./components/Shop.vue";
 import BossView from "./components/BossView.vue";
 import RoundSummary from "./components/RoundSummary.vue";
@@ -237,59 +237,8 @@ function handleApplyItem(payload: { item: Item, id: string }) {
   }
 
   if (item.targetType === "player") {
-    if (item.name === 'Dupe') {
-      const randAdmin = player.value.admins[Math.floor(Math.random() * player.value.admins.length)]
-      const adminClass = allAdmins.find(a => a.name === randAdmin.name);
-      if (!adminClass) return;
-      player.value.admins = [randAdmin, new adminClass] //make a new 
-      player.value.removeItem(item);
-    }
-    //some these items cannot be passed allItems/ Alladmins because they are declared in /Items.ts first
-    const hasRoom = player.value.usedMemory <= player.value.memory;
-    if (item.name === 'Gift Box' && hasRoom) {
-      const newProgram = pickWeightedRandom(allPieces, player.value);
-      player.value.programs.push(makeBlueprint(newProgram.class, newProgram.variant ?? undefined));
-      StorageManager.unlockPiece(newProgram.class.name);
-      player.value.removeItem(item);
-    }
-    if (item.name === 'Genie' && (player.value.freeMemory >= 2 || player.value.hasToolbox && player.value.freeMemory >= 0.5)) {//check for toolbox
-      //addProgramsUntilFull(player.value, 3)
-      /*let attempts = 0
-      while ((player.value.freeMemory >=1 || player.value.hasToolbox && player.value.freeMemory >= 0.5) && attempts < 2) {
-        const PieceClass = pickWeightedRandom(allPieces, player.value)
-        const bp = makeBlueprint(PieceClass);
-        player.value.addProgram(bp);
-      }*/
-      const classes = [
-        pickWeightedRandom(allPieces, player.value),
-        pickWeightedRandom(allPieces, player.value),
-        pickWeightedRandom(allPieces, player.value),
-      ];
-      const bps = classes.map(c => makeBlueprint(c.class, c.variant ?? undefined));
-      bps.forEach(bp => {
-        StorageManager.unlockPiece(bp.name);
-      })
-      player.value.programs.push(...bps);//do one by one
-      player.value.removeItem(item)
-    }
-    if (item.name === 'Mystery Box' && hasRoom) {
-      const newItem = pickWeightedRandomItem(allItems, player.value)
-      player.value.items.push(newItem)
-      StorageManager.unlockItem(newItem.name);
-      player.value.removeItem(item)
-    }
-    if (item.name === 'Pandora' && player.value.freeMemory) {//check for trolley/schoolbag
-      player.value.removeItem(item)
-      addItemsUntilFull(player.value, 3);
-    }
-    if (item.name === 'Pinata' && hasRoom) {
-      const newAdmin = pickWeightedRandomItem(allAdmins, player.value);
-      StorageManager.unlockAdmin(newAdmin.name);
-      player.value.admins.push(newAdmin);
-      player.value.removeItem(item);
-    }
-    if (!(item.name === 'Gift Box' || item.name === 'Genie' || item.name === 'Mystery Box' || item.name === 'Pinata')) {
-      item.apply(player.value, itemMult);
+    item.apply(player.value, itemMult);
+    if (!['Gift Box', 'Genie', 'Mystery Box', 'Pinata', 'Pandora', 'Dupe'].includes(item.name)) {
       player.value.removeItem(item);
     }
   }

@@ -493,7 +493,7 @@ const Debugger : OS = {//lance //bug //screwdriver
     adminSlots: 6,
     blueprints: [aegis, superKnife, testhybrid, testPiece],
     items: [new Genie, new Pandora, new Update2],
-    admins: [new Clippy, new Crystal],
+    admins: [new Crystal],
     lives: 9,
     description: 'FOR TESTING'
 }

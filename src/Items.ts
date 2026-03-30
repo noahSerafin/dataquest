@@ -1,7 +1,8 @@
 import type { Coordinate, PieceBlueprint } from "./types"
 import { allPieces, type Piece } from "./Pieces"
 import type { Player } from "./Player"
-import { getRandomUnoccupiedTile, makeBlueprint, pickWeightedRandom } from "./helperFunctions"
+import { getRandomUnoccupiedTile, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, addItemsUntilFull } from "./helperFunctions"
+import { StorageManager } from "./StorageManager"
 
 export abstract class Item<TTarget = any> {
     id: string
@@ -466,11 +467,12 @@ export class Pandora extends Item<Player> {
     constructor() {
         super(Pandora.name, Pandora.description, Pandora.unicode, Pandora.color, 6, Pandora.rarity, 'player')
     }
-    apply(_player: Player, _itemMult: number) {
+    apply(player: Player, _itemMult: number) {
+        if (player.freeMemory) { // check for trolley/schoolbag
+            player.removeItem(this);
+            addItemsUntilFull(player, 3);
+        }
     }
-    //apply(player: Player, itemMult: number) {
-    //  player.addProgram(makeBlueprint(pickWeightedRandom(allPieces, player)));
-    //}
 }
 
 //move randomgen functions to helper file, import asnd use them them here
@@ -483,11 +485,15 @@ export class Gift extends Item<Player> {
     constructor() {
         super(Gift.name, Gift.description, Gift.unicode, Gift.color, 3, Gift.rarity, 'player')
     }
-    apply(_player: Player, _itemMult: number) {
+    apply(player: Player, _itemMult: number) {
+        const hasRoom = player.usedMemory <= player.memory;
+        if (hasRoom) {
+            const newProgram = pickWeightedRandom(allPieces, player);
+            player.programs.push(makeBlueprint(newProgram.class, newProgram.variant ?? undefined));
+            StorageManager.unlockPiece(newProgram.class.name);
+            player.removeItem(this);
+        }
     }
-    //apply(player: Player, itemMult: number) {
-    //  player.addProgram(makeBlueprint(pickWeightedRandom(allPieces, player)));
-    //}
 }
 
 export class Genie extends Item<Player> {
@@ -502,9 +508,19 @@ export class Genie extends Item<Player> {
     //apply(_player: Player, _itemMult: number) {
     //}
     apply(player: Player, _itemMult: number) {
-        player.addProgram(makeBlueprint(pickWeightedRandom(allPieces, player)));
-        player.addProgram(makeBlueprint(pickWeightedRandom(allPieces, player)));
-        player.addProgram(makeBlueprint(pickWeightedRandom(allPieces, player)));
+        if (player.freeMemory >= 2 || (player.hasToolbox && player.freeMemory >= 0.5)) {
+            const classes = [
+                pickWeightedRandom(allPieces, player),
+                pickWeightedRandom(allPieces, player),
+                pickWeightedRandom(allPieces, player),
+            ];
+            const bps = classes.map(c => makeBlueprint(c.class, c.variant ?? undefined));
+            bps.forEach(bp => {
+                StorageManager.unlockPiece(bp.name);
+            });
+            player.programs.push(...bps);
+            player.removeItem(this);
+        }
     }
 }
 
@@ -517,7 +533,14 @@ export class Box extends Item<Player> {
     constructor() {
         super(Box.name, Box.description, Box.unicode, Box.color, 3, Box.rarity, 'player')
     }
-    apply(_player: Player, _itemMult: number) {
+    apply(player: Player, _itemMult: number) {
+        const hasRoom = player.usedMemory <= player.memory;
+        if (hasRoom) {
+            const newItem = pickWeightedRandomItem(allItems, player);
+            player.items.push(newItem);
+            StorageManager.unlockItem(newItem.name);
+            player.removeItem(this);
+        }
     }
 }
 
@@ -530,7 +553,16 @@ export class Pinata extends Item<Player> {//untested
     constructor() {
         super(Pinata.name, Pinata.description, Pinata.unicode, Pinata.color, 3, Pinata.rarity, 'player')
     }
-    apply(_player: Player, _itemMult: number) {
+    apply(player: Player, _itemMult: number) {
+        const hasRoom = player.usedMemory <= player.memory;
+        if (hasRoom) {
+            import("./AdminPrograms").then(({ allAdmins }) => {
+                const newAdmin = pickWeightedRandomItem(allAdmins, player);
+                StorageManager.unlockAdmin(newAdmin.name);
+                player.admins.push(newAdmin);
+                player.removeItem(this);
+            });
+        }
     }
 }
 
@@ -834,7 +866,7 @@ export class Life extends Item {
     }
 }
 
-export class Dupe extends Item {
+export class Dupe extends Item<Player> {
     static name = "Dupe";
     static description = "Duplicate a random Admin, destroy all other admins";
     static unicode = "U+1F942";
@@ -844,19 +876,20 @@ export class Dupe extends Item {
         super(Dupe.name, Dupe.description, Dupe.unicode, Dupe.color, 7, Dupe.rarity, 'player')
         //name desc utf || maxsize moves range atk def
     }
-    apply() {
-        /*apply(player: Player) {
-          //player.admins
-            const randAdmin = player.admins[Math.floor(Math.random()*player.admins.length)]
+    apply(player: Player, _itemMult: number) {
+        if (player.admins.length === 0) return;
+        import("./AdminPrograms").then(({ allAdmins }) => {
+            const randAdmin = player.admins[Math.floor(Math.random() * player.admins.length)];
             const adminClass = allAdmins.find(a => a.name === randAdmin.name);
-            if(!adminClass) return;
-            player.admins = [randAdmin, new adminClass] //make a new 
-            */
+            if (!adminClass) return;
+            player.admins = [randAdmin, new adminClass()];
+            player.removeItem(this);
+        });
     }
 }
 
 //JAR, U+1FAD9 - piece? capture an enemy of size 1, turn into blueprint
-class Jar extends Item {//Pokeball?
+export class Jar extends Item {//Pokeball?
     static name = "Jar";
     static description = "Use on an enemy with a size of 1 and defence of 0 to add it to your inventory";
     static unicode = "U+1FAD9";
@@ -969,7 +1002,6 @@ class Toothbrush extends Item<Piece[]> {//lighting remove 1 tile from all enemy 
     }
 }
 
-// CLINKING BEER MUGS, Happy Hour U+1F37B
 class Beer extends Item<Player> {
     static name = "Happy Hour";
     static description = "Duplicate a random item.";
@@ -996,7 +1028,6 @@ class Beer extends Item<Player> {
     }
 }
 
-//U+1FAA8 rock damage selected piece
 class Rock extends Item {
     static name = "Rock";
     static description = "Damage a piece by the number of currently held programs";
@@ -1015,7 +1046,6 @@ class Rock extends Item {
 //RING BUOY, U+1F6DF revive a dead program
 //RING BUOY, U+1F6DF restore the last destroyed program to hand /target a space? or give piece a wontDie bool?
 //lifeboat ROWBOAT, U+1F6A3
-
 
 export const allItems = [Blueberry, Box, Battery, Iron, Juice, Mushroom, Pepper, Rock, Floppy, Voucher, Bandage, Extinguisher, Formula, Gift, Hotline, Plunger, Roids, Teapot, Toothbrush, Beans, Bugle, Jar, Keygen, Makeover, Melon, Megaphone, Pinata, Rations, ShootingStar, Spanner, Supplement, Update2, Chili, Cake, Carrot, Coffee, Djembe, Garlic, Wand, Lightning, Meat, Pie, Soap, Dupe, Genie, Hourglass, Sandwich, Life, Blessing, Feast, Ginger, Beer, Pandora, Update3];
 export const upgradeItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Roids, Formula]

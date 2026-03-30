@@ -108,8 +108,8 @@ function getPathPositions(
   const startX = 200 - ((totalPaths - 1) * spacing) / 2;
 
   return {
-    node1: { x: startX + pathIndex * spacing, y: 280 },
-    node2: { x: startX + pathIndex * spacing, y: 120 },
+    node1: { x: startX + pathIndex * spacing, y: 380 },
+    node2: { x: startX + pathIndex * spacing, y: 220 },
   };
 }
 
@@ -134,7 +134,7 @@ export function generateWorld(
     id: startId,
     type: "level",
     next: [],
-    position: { x: 200, y: 400 },
+    position: { x: 200, y: 500 },
     company: chooseRandomCompany(),
     difficultyMod: -1,
     reward: 0
@@ -284,7 +284,7 @@ export function generateWorld(
     id: shopId,
     type: "shop",
     next: [bossId],
-    position: { x: 200, y: 50 },
+    position: { x: 200, y: 150 },
     company: chooseRandomCompany(),
     difficultyMod: 0,
     reward: 0
@@ -296,7 +296,7 @@ export function generateWorld(
     type: "boss",
     level: pick(),
     next: [],
-    position: { x: 200, y: 0 },
+    position: { x: 200, y: 100 },
     company: chooseRandomCompany(),
     difficultyMod: 0,
     reward: Math.min(10, difficulty * 2)// +5;
@@ -316,91 +316,3 @@ export function generateWorld(
     nodes
   };
 }
-
-/*original method
-export function generateWorld(levelPool: Level[], difficulty: number): WorldMap {
-  const pick = () => levelPool[Math.floor(Math.random() * levelPool.length)];
-
-  const start = "start";
-  const a1 = "pathA_1";
-  const a2 = "pathA_2";
-  const b1 = "pathB_1";
-  const b2 = "pathB_2";
-  const merge = "shop";
-  const final = "boss";
-
-  return {
-    startNode: start,
-    nodes: {
-      [start]: {//have a shop at start?
-        id: start,
-        //level: arena,
-        type: "level",
-        next: [a1, b1],
-        position: { x: 200, y: 400 },
-        company: chooseRandomCompany(),
-        difficultyMod: 0,
-        reward: 3
-      },
-      [a1]: {
-        id: a1,
-        level: pick(),
-        type: "level",
-        next: [a2],
-        position: { x: 100, y: 250 },
-        company: chooseRandomCompany(),
-        difficultyMod: 0,
-        reward: 3
-      },
-      [a2]: {
-        id: a2,
-        level: pick(),
-        type: "level",
-        next: [merge],
-        position: { x: 100, y: 100 },
-        company: chooseRandomCompany(),
-        difficultyMod: 0,
-        reward: 3
-      },
-      [b1]: {
-        id: b1,
-        type: "level",
-        level: pick(),
-        next: [b2],
-        position: { x: 300, y: 250 },
-        company: chooseRandomCompany(),
-        difficultyMod: 0,
-        reward: 3
-      },
-      [b2]: {
-        id: b2,
-        type: "level",
-        level: pick(),
-        next: [merge],
-        position: { x: 300, y: 100 },
-        company: chooseRandomCompany(),
-        difficultyMod: 1,
-        reward: 5
-      },
-      [merge]: {
-        id: merge,
-        type: "shop", //might have themed shops later
-        next: [final],
-        position: { x: 200, y: 50 },
-        company: chooseRandomCompany(),
-        difficultyMod: 0,
-        reward: 0
-      },
-      [final]: {
-        id: final,
-        type: "boss",
-        level: pick(),
-        next: [],
-        position: { x: 200, y: 0 },
-        company: chooseRandomCompany(),
-        difficultyMod: 0,
-        reward: 2
-      }
-    }
-  };
-}*/

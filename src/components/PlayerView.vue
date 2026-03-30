@@ -128,7 +128,6 @@
             <div class="admin-middle-container">
                 <div class="admin-header flex">
                     <span class=""><strong>Admins:</strong> {{ props.player.admins.length }}/{{ props.player.adminSlots }}</span>
-                    <span class=""><strong>Memory:</strong> {{ props.player.usedMemory }}/{{ props.player.memory }}</span>
                 </div>
                 <ul class="admins">
                     <li v-for="(item, index) in props.player.admins"

@@ -1,11 +1,12 @@
 <script setup lang="ts">
-    import { computed, ref } from "vue";
+    import { computed, ref, watch, nextTick } from "vue";
     import MiniMap from "./MiniMap.vue";
     import { Admin } from "../AdminPrograms";
     import { Item, Box, Genie, Gift, Pinata, Pandora, Voucher, Jar, Update2, Update3, Floppy, Life, Cake, Wand, Hourglass, Dupe } from "../Items";
     import { allBosses, nonStackableBosses } from "../Bosses";
-    import { watch } from "vue";
     import { Player } from "../Player";
+    import { applyTutorialTooltips } from "../tutorial";
+    import { allTips } from "../tutorialSteps";
     import type { WorldMap, WorldNode } from "../worldBuilder";
     import { generateWorld } from "../worldBuilder";
     import type { Level, PieceBlueprint, SkipReward } from "../types";
@@ -99,6 +100,7 @@
         emit('replaceBosses', newBosses);
         props.player.spend(rerollBossCost.value);
         rerollBossCost.value = rerollBossCost.value*2;
+        nextTick(() => applyTutorialTooltips(allTips));
     }
 
     const worldNodes = computed(() =>
@@ -127,6 +129,7 @@
             emit('openDisabledShop')
         } else {    
             selectedPreviewNode.value = node;
+            nextTick(() => applyTutorialTooltips(allTips));
         }
     }
 
@@ -270,6 +273,7 @@
     function rerollSkipReward(node: WorldNode){
         node.skipReward = generateSkipReward();
         canReroll.value = false;
+        nextTick(() => applyTutorialTooltips(allTips));
     }
 
     function takeSkipReward(node: WorldNode){//ask about this next
@@ -300,6 +304,7 @@
         canReroll.value = true;
         node.visible = true;
         emit('incrementProgress');
+        nextTick(() => applyTutorialTooltips(allTips));
     }
 
     const skipTarget = ref<PieceBlueprint | Item | null>(null);
@@ -526,7 +531,7 @@
     }
     .node-map{
         position: relative;
-        width: 50%;
+        width: 60%;
         height: 80%;
         left: -26px;
     }

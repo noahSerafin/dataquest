@@ -4,6 +4,7 @@ variant tooltips
 -
 GAME / BUGS
 hidden enemies/Traps are still selectable
+skipreward node not updating tutorial message
 add new items, toothbrush? - single use broom, happy hour - dupes items (admin??)
 add new bosses
 visualise: retaliation, dmg + dmg mult, admin actions and counts

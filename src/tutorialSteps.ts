@@ -4,10 +4,10 @@ export type TutorialStep = {
 }
 const welcomeTip: TutorialStep = {
     id: "welcome",
-    tooltip: "Welcome to cyberspace! I'll be here to guide you through the basics of hacking. Click on different things and I will keep you informed as we go.",
+    tooltip: "Welcome to cyberspace! I'll be here to guide you through the basics of hacking. Click anywhere you see me and I will keep you informed as we go.",
 }
 const mapTip: TutorialStep = {
-    id: 'world-map',
+    id: 'node-map',
     tooltip: 'This is the Node map. Choose your path forward, there will always be an easier path to the left with two nodes at your currently security level(difficulty). Alternatively, there may also be a harder path with greater rewards, an option receive a free program or item followed by a harder level, or other hidden rewards along it.'
 }
 const currentNodeTip: TutorialStep = {
@@ -44,7 +44,7 @@ const programTip: TutorialStep = {
 }
 const bpTip: TutorialStep = {
     id: 'blueprint',
-    tooltip: "You own this program, select or drag it into a node to load it."
+    tooltip: "You own this program, click on it to see it's stats. After entering a node, select or drag it into the node to load it."
 }
 const controllerTip: TutorialStep = {
     id: 'piece-controller',
@@ -134,8 +134,23 @@ const playerInfoTip: TutorialStep = {
     id: 'player-info',
     tooltip: "This section shows your current money and remaining lives.",
 }
-
-export const allTips: TutorialStep[] = [welcomeTip, mapTip, levelNodeTip, currentNodeTip, previewTip, skipNodeTip, shopNodeTip, bossNodeTip, boardTip, programTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, actionsTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, infamyTip, bossesTip, summaryTip, shopTip, shopbpTip, shopItemTip, itemTip, adminTip, adminsTip, playerInfoTip];
+const invBtnTip: TutorialStep = {
+    id: 'inv-btn',
+    tooltip: "Click here to toggle your inventory.",
+}
+const inventoryTip: TutorialStep = {
+    id: 'inventory',
+    tooltip: "This is your inventory. You have a limited amount of memory, which programs and items will each take up 1 space of.",
+}
+const nodePreviewTip: TutorialStep = {
+    id: 'map-wrapper',
+    tooltip: "This preview shows your starting load point in green, and the enemies in red.",
+}
+const interestTip: TutorialStep = {
+    id: 'interestSummary',
+    tooltip: "You will earn an extra $1 for every $5 you have at the end of each round, up to the maximum interest, which is $5 by default.",
+}
+export const allTips: TutorialStep[] = [welcomeTip, mapTip, currentNodeTip, levelNodeTip, previewTip, skipNodeTip, shopNodeTip, bossNodeTip, boardTip, programTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, actionsTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, infamyTip, bossesTip, summaryTip, shopTip, shopbpTip, shopItemTip, adminTip, adminsTip, itemTip, playerInfoTip, nodePreviewTip, interestTip, inventoryTip, invBtnTip];
 /*
 const Tip: TutorialStep = {
     id: '',

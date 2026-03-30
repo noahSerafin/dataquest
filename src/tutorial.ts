@@ -3,9 +3,11 @@ import type { TutorialStep } from "./tutorialSteps";
 import { allTips } from "./tutorialSteps";
 import { reactive } from "vue";
 
+const welcomeTip = allTips.find(tip => tip.id === 'welcome')?.tooltip || "";
+
 export const tutorialState = reactive({
-  message: "",
-  collapsed: true, // starts collapsed or hidden until a message is hovered
+  message: welcomeTip,
+  collapsed: false, // starts open with the welcome message
   activeId: "",
   hasSeenFirst: false
 });
@@ -41,18 +43,26 @@ export function applyTutorialTooltips(steps: TutorialStep[]) {
     const targets = document.querySelectorAll(`.${step.id}`);
 
     targets.forEach(target => {
-      // attach hover listeners instead of tooltip elements
-      target.addEventListener('mouseenter', () => {
+      // Prevent adding multiple icons if called again
+      if (target.querySelector('.tutorial-help-btn')) return;
+
+      const helpBtn = document.createElement("button");
+      helpBtn.className = "tutorial-help-btn";
+      helpBtn.innerText = "📎";
+      
+      helpBtn.addEventListener('click', (e) => {
+        e.stopPropagation(); // avoid triggering clicks on the target
         tutorialState.message = step.tooltip;
         tutorialState.activeId = step.id;
         
-        if (!tutorialState.hasSeenFirst && tutorialState.collapsed) {
-           tutorialState.collapsed = false;
+        tutorialState.collapsed = false;
+        if (!tutorialState.hasSeenFirst) {
            tutorialState.hasSeenFirst = true;
         }
       });
 
       target.classList.add("has-tutorial");
+      target.appendChild(helpBtn);
     });
   }
 }

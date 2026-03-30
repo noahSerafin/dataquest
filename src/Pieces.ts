@@ -783,7 +783,7 @@ class Lance extends Piece {
   static name = "Lance";
   static description = "An attacking piece that can charge, damaging targets in a staight line and moving forward until stopped";
   static unicode = "U+1F3A0";
-  static color = "#f9f9f9";
+  static color = "#27ced0";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
   super(Lance.name, Lance.description, Lance.unicode, 3, 2, 3, 2, 0, Lance.color, headPosition, [headPosition], team, Lance.rarity, removeCallback, id)//horse carousel atm //cane: "U+1F9AF"

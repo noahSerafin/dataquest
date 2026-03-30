@@ -291,14 +291,9 @@ export function generateNode(difficulty: number): Level {
 
     const validEnemyTiles: Coordinate[] = tiles.filter(tile => {
         const d = distances.get(key(tile.x, tile.y));
-        return d !== undefined && d >= 5;
+        return d !== undefined && d >= 6;
     });
     
-    //if (validEnemyTiles.length < enemyCount) {
-        // Not enough space — regenerate level
-        //return null; restart function
-    //}
-
     const shuffled: Coordinate[] = shuffle([...validEnemyTiles]);
     const headPositions = shuffled.slice(0, enemyCount);
     //something here to randomly assign enemy headpostions from the valid tiles
@@ -333,13 +328,6 @@ export function generateNode(difficulty: number): Level {
 
     const availableTiles = new Set(carvedTiles);
     availableTiles.delete(key(playerTile.x, playerTile.y));//remove player spawn from set
-
-    // Remove 'safe' tiles (< 5 distance from player) so enemies don't grow path-blocking
-    /*for (const [k, d] of distances.entries()) {
-        if (d < 5) {
-            availableTiles.delete(k);
-        }
-    }*/
 
     enemySpawns.forEach(enemy => {//from these, find paths to the player if possible, exclude these paths from growenemy (remove from availabletiles)
       if(enemy.headPosition){

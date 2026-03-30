@@ -2,19 +2,35 @@ TUTORIAL - clippy
 finish TUTORIAL
 variant tooltips
 -
+
+Company flavours - make some piece lists
+
+difficulty - add +1, +2 programs for variety, or make variants +- security level 7
+
+MAP
+Altar nodes - sacrifice a program for more money than selling - 8 - skippable
+Duplicator nodes - duplicate a program - skippable
+Node to nerf stats - workbench? -1 stat +another etc.
+Gladiator nodes - +1 or 2 security, place only once in arena node for reward - skippable
+Other challenge nodes - challenge node file with custom maps of fixed pieces? - deforester, wizard battle, trojan army, etc.
+
 GAME / BUGS
-add new bosses
-visualise: retaliation, dmg + dmg mult, admin actions and counts
+visualise:
+    ADMINS - animate admins
+    retaliation, dmg + dmg mult numbers, admin actions and counts
+
+SEEDED RANDOMNESS - save seed functionality
+SAVE GAME STATE for bugs 7.5
+
 //sort out trolley/toolbox
 allow burning to remove freezing? and vice versa?
 Investigate why taoism or highrise might be adding def every turn
 variants stats reloading but not name/color etc.
 variant should overide base piece color, (and tile colour???)
-non stacking bosses should cycle through (mirror becomes too predicatable)
+buff relay to be programs.length?
+non stacking bosses should cycle through (mirror becomes too predicatable)//always remove mirror
 possible to get stuck on cave and gauntlet if sling/bee and knife spawn
 nerf rosebud - pieces can't stay exposed after a special?
-Level loaded twice with same piece causes bug where it cannot be attacked is not in activepieces to be targeted - test
-pandora not giving 1 at full inventory
 checkforroundend after takedamage
 //move itemmult to player?
 Nerf Pandora by using allitems???
@@ -22,28 +38,13 @@ self specials easy to accidentally auto click, move buttons z-index up
 -
 EnemyAI: store ids/check statuses in special move pieces to prevent enemies using special mutliple times on the same player program
 enemy traps not walking over players
-reveal hidden enemies before damage
+
 -level edits-
 level 3 siege change head of wall
 'lockup' change
 ----low priority:
 display company/node name in board
 Ties currently count as wins - but player still loses a life? Might be fine to leave
-
-ADMINS
-animate admins
-
-difficulty - add +1, +2 programs for variety, or make variants +- security level 7
-
-SAVE GAME STATE for bugs 7.5
-SEEDED RANDOMNESS - save seed funcionality
-
-MAP
-Altar nodes - sacrifice a program for more money than selling - 8 - skippable
-Duplicator nodes - duplicate a program - skippable
-Node to nerf stats - workbench? -1 stat +another etc.
-Gladiator nodes - +3 security, place only once in arena node for reward - skippable
-Other challenge nodes - challenge node file with custom maps of fixed pieces? - deforester, wizard battle, trojan army, etc.
 
 ITEMS/admins shortand descriptions eg. +1 attack instead of "increases"
 
@@ -57,9 +58,6 @@ vary map design for harder difficulties
 
 AI 6 nearly-done
     maybe ignore statuses if already has a status??? or dont consume an action amd increase special count?? -- sortof done
-
-ITEMS
-jar to capture piece of 1 size -- testing
 
 PIECES
 keep track of upgrades and display on piece 7
@@ -75,6 +73,4 @@ Spawn all enemies at all difficulties, but do not weight selection,
 enemies of lower rank get +1 to all stats for every rarity below the current security level
 
 CLEANUP 8
-sort out player inv items - genie + gift: Piececlass is not a constructor - don't use any type
-move pandora + box to own apply funcs
 worldmap, get seperate preview components for node/boss/skip

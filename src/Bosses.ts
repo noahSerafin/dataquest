@@ -547,9 +547,10 @@ class Frog extends Admin {
         }
     }
 }
-//quicksand
+//quicksand - players that move lose 1 move
 //THONG SANDAL, U+1FA74
 //HOURGLASS WITH FLOWING SAND, U+23F3
+
 class Coral extends Admin {
     static name = "Deep Water";
     static description = "Every player program is slowed";
@@ -726,8 +727,8 @@ class Tsunami extends Admin {
 }
 
 class Coaster extends Admin {
-    static name = "Up and Up";
-    static description = "Every player piece takes damage equal to the player's current security level each turn after the first";
+    static name = "Up and Up";//cranking up
+    static description = "Every player piece takes damage equal to the player's current security level each turn after the first";//turn count is damage?
     static unicode = "U+1F3D4";//roller coaster"U+1F3A2";
     static color = "rgb(212, 201, 187)";
     static rarity = 4;

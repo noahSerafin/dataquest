@@ -2178,7 +2178,7 @@ class Bowling extends Admin {//test
   static name = "Strike";
   static description = "Destroying a program deals 1 damage to each enemy tile adjacent to it's head";
   static unicode = "U+1F3B3"; // damage adjacent tiles
-  static color = "rgb(215, 44, 25)";
+  static color = "rgb(247, 222, 162)";
   static rarity = 2;//3?
   constructor() {
     super(Bowling.name, Bowling.description, Bowling.unicode, Bowling.color, 4, Bowling.rarity, 'gameState', 'onPieceDestruction')

@@ -825,7 +825,7 @@ class Cocktail extends Admin {
 //1 admin disabled after each turn
 
 // damage mult for enemy?
-export const allBosses = [LowBattery, NorthWind, Customs, Downturn, Hook, Mirror, Shrine, Whale, Anchor, Castle, Circus, Hammer, Izakaya, Tsunami, Wilt, Biohazard, Coral, Lock, Factory, Jack, Coaster, Cocktail, Snowflake, Tornado, Eclipse, Bones, Frog, Singularity, Volcano, Sun, Fog, Nofun, Omega, Reaper, REDACTED, Wrath]
+export const allBosses = [LowBattery, NorthWind, Customs, Downturn, Hook, Mirror, Shrine, Whale, Anchor, Castle, Circus, Hammer, Izakaya, Tsunami, Wilt, Biohazard, Cocktail, Coral, Lock, Factory, Jack, Coaster, Snowflake, Tornado, Eclipse, Bones, Frog, Singularity, Volcano, Sun, Fog, Nofun, Omega, Reaper, REDACTED, Wrath]
 export const nonStackableBosses = [Mirror, Customs, Snowflake, Sun, Frog, Biohazard, Coral, Izakaya, REDACTED, Fog, Singularity, Tornado, Cocktail]
 
 console.log('bosses length: ', allBosses.length)

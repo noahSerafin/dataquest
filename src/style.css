@@ -295,7 +295,7 @@ html, body, #app {
   line-height: 20px;
 }
 
-.grid-board.tutorial-help-btn {
+.board .tutorial-help-btn {
   top: 0;
   right: 0;
 }

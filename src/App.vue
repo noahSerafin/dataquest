@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, watch, nextTick } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import Board from './components/Board.vue';
 import Leveleditor from './components/Leveleditor.vue';
 import { castled, level1Levels } from './level1Levels';
@@ -577,7 +577,6 @@ const toggleMap = () => {
 }
 const openSummary = (state: boolean) => {
   showSummary.value = state;
-  nextTick(() => applyTutorialTooltips(allTips));
 }
 
 const renewBlueprints = async () => {

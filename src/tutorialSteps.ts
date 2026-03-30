@@ -30,6 +30,10 @@ const shopNodeTip: TutorialStep = {
     id: 'shopNode',
     tooltip: 'This node is a shop where you can purchase new programs, admins, and consumable items.'
 }
+const bossTip: TutorialStep = {
+    id: 'item-boss',
+    tooltip: "This is an active boss, click on it to read it's effect. Defeating it will load a new node map, and raise the security level of all future nodes by one."
+}
 const bossNodeTip: TutorialStep = {
     id: 'bossNode',
     tooltip: "This is the boss for this security level, it's effects are described on the right. Bosses act like admins for the enemy, they may boost enemy stats, nerf yours, or add some other challenging effect to a node. Beating it will load a new node map, and raise the security level of all future nodes by one."
@@ -150,7 +154,7 @@ const interestTip: TutorialStep = {
     id: 'interestSummary',
     tooltip: "You will earn an extra $1 for every $5 you have at the end of each round, up to the maximum interest, which is $5 by default.",
 }
-export const allTips: TutorialStep[] = [welcomeTip, mapTip, currentNodeTip, levelNodeTip, previewTip, skipNodeTip, shopNodeTip, bossNodeTip, boardTip, programTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, actionsTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, infamyTip, bossesTip, summaryTip, shopTip, shopbpTip, shopItemTip, adminTip, adminsTip, itemTip, playerInfoTip, nodePreviewTip, interestTip, inventoryTip, invBtnTip];
+export const allTips: TutorialStep[] = [welcomeTip, mapTip, bossTip, currentNodeTip, levelNodeTip, previewTip, skipNodeTip, shopNodeTip, bossNodeTip, boardTip, programTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, actionsTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, infamyTip, bossesTip, summaryTip, shopTip, shopbpTip, shopItemTip, adminTip, adminsTip, itemTip, playerInfoTip, nodePreviewTip, interestTip, inventoryTip, invBtnTip];
 /*
 const Tip: TutorialStep = {
     id: '',

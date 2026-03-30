@@ -61,6 +61,7 @@ export function applyTutorialTooltips(steps: TutorialStep[]) {
     targets.forEach(target => {
       // Prevent adding multiple icons for this precise step if called again
       if (target.querySelector(`.tutorial-help-btn[data-step-id="${step.id}"]`)) return;
+      if (target.classList.contains('is-clippy')) return;
 
       const helpBtn = document.createElement("button");
       helpBtn.className = "tutorial-help-btn";

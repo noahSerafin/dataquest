@@ -172,7 +172,7 @@ const rewardTip: TutorialStep = {
 }
 export const allTips: TutorialStep[] = [welcomeTip, mapTip, bossTip, visitedNodeTip, currentNodeTip, levelNodeTip, previewTip, skipNodeTip, shopNodeTip, bossNodeTip, boardTip, programTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, actionsTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, infamyTip, bossesTip, summaryTip, lossTip, shopTip, rerollTip, shopbpTip, shopItemTip, adminTip, adminsTip, itemTip, playerInfoTip, nodePreviewTip, interestTip, rewardTip, inventoryTip, invBtnTip];
 
-const proTipsuggestion: TutorialStep = {
+export const proTipSuggestion: TutorialStep = {
     id: 'proTip',
     tooltip: 'Want some general gameplay hints?'
 }
@@ -196,4 +196,4 @@ const lineSpecialsTipTip: TutorialStep = {
     id: 'lineSpecialsTip',
     tooltip: 'Special moves that target in a line can effect the same program more than once if the multiple tiles occupy the line.'
 }
-export const proTips: TutorialStep[] = [proTipsuggestion, defenderTip, specialTip, damageMultTip, adminOrderTip, lineSpecialsTipTip];
+export const proTips: TutorialStep[] = [proTipSuggestion, defenderTip, specialTip, damageMultTip, adminOrderTip, lineSpecialsTipTip];

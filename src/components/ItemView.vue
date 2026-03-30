@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import { Item } from "../Items"; // adjust path
 import { tutorialState } from "../tutorial";
+import { proTips, proTipSuggestion } from "../tutorialSteps";
 //import type { PieceVariant } from "../types";
 
 const props = defineProps<{
@@ -66,6 +67,23 @@ const handleUse = () => {
   emit('use', props.item);
 }
 // /<!-- v_${item.variantName}`
+
+const isProTip = computed(() => {
+  return tutorialState.activeId === 'proTip' || proTips.some(t => t.id === tutorialState.activeId);
+});
+
+function openProTip() {
+  tutorialState.message = proTipSuggestion.tooltip;
+  tutorialState.activeId = proTipSuggestion.id;
+  tutorialState.collapsed = false;
+}
+
+function getRandomProTip() {
+  const tips = proTips.filter(t => t.id !== 'proTip');
+  const randomTip = tips[Math.floor(Math.random() * tips.length)];
+  tutorialState.message = randomTip.tooltip;
+  tutorialState.activeId = randomTip.id;
+}
 </script>
 
 <template>
@@ -85,8 +103,9 @@ const handleUse = () => {
       <div v-if="!tutorialState.collapsed" class="clippy-speech-bubble">
         <button class="clippy-toggle" @click="tutorialState.collapsed = true">X</button>
         <div class="clippy-message" v-html="tutorialState.message"></div>
+        <button v-if="isProTip" class="give-tip-btn" @click="getRandomProTip">Give me a tip</button>
       </div>
-      <div v-else class="clippy-collapsed-icon" @click="tutorialState.collapsed = false">
+      <div v-else class="clippy-collapsed-icon" @click="openProTip">
         ?
       </div>
     </div>
@@ -227,7 +246,7 @@ button:disabled {
   position: absolute;
   bottom: 120%;
   right: -50px;
-  background: white;
+  background: #faeec8;
   color: black;
   border-radius: 8px;
   padding: 10px 14px;
@@ -293,5 +312,21 @@ button:disabled {
 
 .clippy-collapsed-icon:hover {
   background: #2563eb;
+}
+
+.give-tip-btn {
+  margin-top: 8px;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+  width: 100%;
+  font-weight: bold;
+}
+
+.give-tip-btn:hover {
+  background-color: #2563eb;
 }
 </style>

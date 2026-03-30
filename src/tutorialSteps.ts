@@ -10,6 +10,10 @@ const mapTip: TutorialStep = {
     id: 'node-map',
     tooltip: 'This is the Node map. Choose your path forward, there will always be an easier path to the left with two nodes at your currently security level(difficulty). Alternatively, there may also be a harder path with greater rewards, an option receive a free program or item followed by a harder level, or other hidden rewards along it.'
 }
+const visitedNodeTip: TutorialStep = {
+    id: 'visited',
+    tooltip: 'A previously visited node. You cannot enter it again.'
+}
 const currentNodeTip: TutorialStep = {
     id: 'current',
     tooltip: 'Your current position in cyberspace.'
@@ -166,7 +170,7 @@ const rewardTip: TutorialStep = {
     id: 'reward-summary',
     tooltip: "You have earned a reward for completing this node. Plus any bonus rewards granted from your admin programs",
 }
-export const allTips: TutorialStep[] = [welcomeTip, mapTip, bossTip, currentNodeTip, levelNodeTip, previewTip, skipNodeTip, shopNodeTip, bossNodeTip, boardTip, programTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, actionsTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, infamyTip, bossesTip, summaryTip, lossTip, shopTip, rerollTip, shopbpTip, shopItemTip, adminTip, adminsTip, itemTip, playerInfoTip, nodePreviewTip, interestTip, rewardTip, inventoryTip, invBtnTip];
+export const allTips: TutorialStep[] = [welcomeTip, mapTip, bossTip, visitedNodeTip, currentNodeTip, levelNodeTip, previewTip, skipNodeTip, shopNodeTip, bossNodeTip, boardTip, programTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, actionsTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, infamyTip, bossesTip, summaryTip, lossTip, shopTip, rerollTip, shopbpTip, shopItemTip, adminTip, adminsTip, itemTip, playerInfoTip, nodePreviewTip, interestTip, rewardTip, inventoryTip, invBtnTip];
 /*
 const Tip: TutorialStep = {
     id: '',

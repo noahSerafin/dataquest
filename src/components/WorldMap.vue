@@ -145,6 +145,7 @@
     }
     function skipNode(node: WorldNode){
         selectedPreviewNode.value = null;
+        world.value.nodes[currentNodeId.value].visited = true;
         currentNodeId.value = node.id;
         if(!props.player.hasAdmin('Leg Up') || skipsThisLevel.value !== 0){
             props.player.spend(5)
@@ -162,6 +163,7 @@
         if(node.type === 'shop' && !shopisNext){
             emit('openDisabledShop')
         } else {
+            current.visited = true;
             currentNodeId.value = node.id;
             node.visible = true;
         }
@@ -297,7 +299,7 @@
             StorageManager.unlockItem(node.skipReward.value.name);
             break;
         }
-        node.visited = true;
+        world.value.nodes[currentNodeId.value].visited = true;
         currentNodeId.value = node.id
         selectedPreviewNode.value = null;
         canReroll.value = true;
@@ -353,7 +355,8 @@
                 bossNode: node.type === 'boss',
                 shopNode: node.type === 'shop',
                 skipNode: node.type === 'skip',
-                levelNode: node.type === 'level'
+                levelNode: node.type === 'level' && node.id !== currentNodeId && !node.visited,
+                visited: node.visited
             }"
             :style="{
                 left: node.position.x + 'px',
@@ -693,5 +696,13 @@
     }
     h6{
         margin: 0.5rem;
+    }
+    .node.visited::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        pointer-events: none;
+        z-index: 5;
     }
 </style>

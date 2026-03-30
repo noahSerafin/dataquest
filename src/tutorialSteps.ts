@@ -158,7 +158,11 @@ const interestTip: TutorialStep = {
     id: 'interest-summary',
     tooltip: "You will earn an extra $1 for every $5 you have at the end of each round, up to the maximum interest, which is $5 by default.",
 }
-export const allTips: TutorialStep[] = [welcomeTip, mapTip, bossTip, currentNodeTip, levelNodeTip, previewTip, skipNodeTip, shopNodeTip, bossNodeTip, boardTip, programTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, actionsTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, infamyTip, bossesTip, summaryTip, lossTip, shopTip, shopbpTip, shopItemTip, adminTip, adminsTip, itemTip, playerInfoTip, nodePreviewTip, interestTip, inventoryTip, invBtnTip];
+const rewardTip: TutorialStep = {
+    id: 'reward-summary',
+    tooltip: "You have earned a reward for completing this node. Plus bonus rewards granted from your admin programs",
+}
+export const allTips: TutorialStep[] = [welcomeTip, mapTip, bossTip, currentNodeTip, levelNodeTip, previewTip, skipNodeTip, shopNodeTip, bossNodeTip, boardTip, programTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, actionsTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, infamyTip, bossesTip, summaryTip, lossTip, shopTip, shopbpTip, shopItemTip, adminTip, adminsTip, itemTip, playerInfoTip, nodePreviewTip, interestTip, rewardTip, inventoryTip, invBtnTip];
 /*
 const Tip: TutorialStep = {
     id: '',

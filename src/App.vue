@@ -26,7 +26,7 @@ import MainMenu from "./components/MainMenu.vue";
 import PieceController from "./components/PieceController.vue";
 import HybridCompiler from "./components/HybridCompiler.vue";
 import Collection from "./components/Collection.vue";
-import { applyTutorialTooltips } from "./tutorial.ts";
+import { applyTutorialTooltips, reapplyTutorialTooltips } from "./tutorial.ts";
 import { allTips } from "./tutorialSteps.ts";
 import { StorageManager } from "./StorageManager";
 
@@ -152,6 +152,7 @@ const extraDifficulty = ref<number>(0)//player/seed
 function incrementMapProgress() {
   player.value.mapProgress++
   //console.log('progress increased:', mapProgress.value)
+  reapplyTutorialTooltips(200);
 }
 
 function openMainMenu() {

@@ -131,9 +131,11 @@ import { reapplyTutorialTooltips } from '../tutorial';
     }
     .reward-summary{
         margin-bottom: 10px;
+        position: relative;
     }
     .interest-summary{
         margin-bottom: 2rem;
+        position: relative;
     }
     .if-won, .if-lost{
         padding: 8rem;

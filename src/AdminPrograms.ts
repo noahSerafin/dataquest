@@ -2333,7 +2333,7 @@ export class Skyscraper extends Admin {//test not working
 class School extends Admin {//test
   static name = "Staying in School";
   static description = "Each unplaced program in your inventory gains +1 to all stats at the end of a round, up to a max of +7"
-  static unicode = "U+1F3EB";
+  static unicode = "U+1F393";//school building "U+1F3EB";
   static color = "rgb(180, 210, 243)";
   static rarity = 6;
   constructor() {
@@ -2363,7 +2363,7 @@ class Dharma extends Admin {//test
   static color = "rgb(146, 100, 0)";
   static rarity = 5;
   constructor() {
-    super(Dharma.name, Dharma.description, Dharma.unicode, Dharma.color, 2, Dharma.rarity, 'player', 'onRoundEnd')
+    super(Dharma.name, Dharma.description, Dharma.unicode, Dharma.color, 10, Dharma.rarity, 'player', 'onRoundEnd')
   }
 }
 
@@ -2696,7 +2696,7 @@ class Bell extends Admin {//test
   static name = "Saved by the Bell";
   static description = "Freezes programs attacking yours when there is only 1 player program in a node";
   static unicode = "U+1F514";
-  static color = "rgb(186, 255, 246)";
+  static color = "rgb(5, 6, 53)";
   static rarity = 5;
   constructor() {
     super(Bell.name, Bell.description, Bell.unicode, Bell.color, 8, Bell.rarity, 'gameState', 'onReceiveDamage')

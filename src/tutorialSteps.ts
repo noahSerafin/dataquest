@@ -44,7 +44,7 @@ const bossNodeTip: TutorialStep = {
 }
 const boardTip: TutorialStep = {
     id: "board",
-    tooltip: "Now we're inside a Node. Your job is to clear all the enemy programs from it using your own programs. You may load your programs into the green tiles initially. Once you have a program down, you may load in next to any tile it occupies. Be careful, once you load a program in, the enemy programs will take their move, so don't place anything vunerable too close to an enemy. Each turn, you may either load a new program or move your programs already inside the node. If all your loaded programs are cleared from a node, you will lose a life."
+    tooltip: "Now we're inside a Node. Your job is to clear all the enemy programs from it using your own programs. Each turn, you may either load a new program or move and take actions with your programs already inside the node. You may load your programs into the green tiles initially. Once you have a program down, you may load in next to any tile it occupies. Be careful, once you load a program in, the enemy programs will take their move, so don't place anything vunerable too close to an enemy. If all your loaded programs are cleared from a node, you will lose a life."
 }
 const programTip: TutorialStep = {
     id: 'piece',

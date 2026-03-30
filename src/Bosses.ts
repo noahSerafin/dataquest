@@ -663,7 +663,7 @@ class Biohazard extends Admin {
 
 /*class Tornado extends Admin {//unfinished, needs access to the whole tileset
   static name = "Tornado";
-  static description = "All load points are randomised";
+  static description = "Player load points are randomised";
   static unicode = "U+1F6D1";//"U+1F32A";
   static color = "rgb(84, 139, 138)";
   static rarity = 5;
@@ -675,41 +675,107 @@ class Biohazard extends Admin {
     }
 }*/
 
-/*
 class Tsunami extends Admin {
   static name = "Tsunami";
-  static description = "Every piece takes 1 + security level damage each turn after the first";//1 damage for security level?
+  static description = "Every piece is moved left 3 spaces each turn after the first";//the player's current security level no.?
   static unicode = "U+1F30A";
   static color = "#3eebd4ff";
   static rarity = 3;
   constructor() {
-    super(Tsunami.name, Tsunami.description, Tsunami.unicode, Tsunami.color, 5, 9, 'all', 'onTurnEnd')
+    super(Tsunami.name, Tsunami.description, Tsunami.unicode, Tsunami.color, 5, 9, 'piecesAndBoard', 'onTurnEnd')
   }
-    async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
-        const playerPieces: Piece[] = []
-        for(const piece of activePieces){
-            if(piece.team === 'player'){
-                piece.takeDamage(1)
-                //piece.takeDamage(player.difficulty)
-            }
-        };
+    private count: number = 0
+    async apply({activePieces, board }: {activePieces: Piece[], board: Coordinate[] }) {
+        if(this.count >= 1){
+            const playerPieces: Piece[] = []
+            for(const piece of activePieces){
+                if(piece.team === 'player'){
+                    playerPieces.push(piece)
+                }
+            };
+            //do 3 times
+            for(const piece of playerPieces){
+                for (let i = 0; i < 3; i++) {
+                    const spaceToCheck  = {x: piece.headPosition.x-1, y: piece.headPosition.y}
+                    //check space is unoccupied and on board
+                    const isOccupied = activePieces.some(p =>
+                        p.tiles.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)
+                    );
+                    const isOnBoard = board.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)
+                    if(!isOccupied && isOnBoard){
+                        piece.moveTo(spaceToCheck);
+                    } else {
+                        break;
+                    }
+                }
+            };
+        }
+        this.count++;
     }
-}*/
+    onRoundEnd() {
+        this.count = 0;
+    }
+}
 
-//ROBOT HEAD "U+1F916" Singularity - enemies get 2 actions
+class Coaster extends Admin {
+  static name = "Up and Up";
+  static description = "Every player piece takes damage equal to the player's current security level each turn after the first";
+  static unicode = "U+1F3D4";//roller coaster"U+1F3A2";
+  static color = "rgb(212, 201, 187)";
+  static rarity = 4;
+  constructor() {
+    super(Coaster.name, Coaster.description, Coaster.unicode, Coaster.color, 5, 9, 'playerAndGame', 'onTurnEnd')
+  }
+    private count: number = 0
+    async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+        if(this.count >= 1){
+            for(const piece of activePieces){
+                if(piece.team === 'player'){
+                    piece.takeDamage(player.difficulty);
+                }
+            };
+        }
+        this.count ++
+    }
+    onRoundEnd() {
+        this.count = 0;
+    }
+}
+
+class Singularity extends Admin {
+  static name = "Singularity";
+  static description = "After 3 turns, all enemies' actions are doubled";
+  static unicode = "U+1F916";
+  static color = "rgb(59, 59, 59)";
+  static rarity = 5;
+  constructor() {
+    super(Singularity.name, Singularity.description, Singularity.unicode, Singularity.color, 5, 9, 'all', 'onTurnEnd')
+  }
+    private count: number = 0
+    async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+        if(this.count >= 3){
+            for(const piece of activePieces){
+                if(piece.team === 'enemy'){
+                    piece.actions = 2;
+                }
+            };
+        }
+        this.count ++
+    }
+    onRoundEnd() {
+        this.count = 0;
+    }
+}
 
 //FIREWORKS, U+1F386 enemy splash damage
-
-//monarch  BUTTERFLY, U+1F98B - remove admin???
-
 
 //FACE WITH LOOK OF TRIUMPH, U+1F624
 //EXPRESSIONLESS FACE, U+1F611 sleepy
 //1 admin disabled after each turn
 
 // damage mult for enemy?
-export const allBosses = [LowBattery, NorthWind, Downturn, Hook, Mirror, Shrine, Whale, Anchor, Castle, Circus, Customs, Hammer, Izakaya, Wilt, Biohazard, Lock, Coral, Jack, Snowflake, Eclipse, Factory, Bones, Frog, Volcano, Sun, Fog, Omega, Reaper, REDACTED, Wrath,]
-export const nonStackableBosses = [Mirror, Customs, Snowflake, Sun, Frog, Biohazard, Coral, Izakaya, REDACTED, Fog]
+export const allBosses = [LowBattery, NorthWind, Downturn, Hook, Mirror, Shrine, Whale, Anchor, Castle, Circus, Customs, Hammer, Izakaya, Tsunami, Wilt, Biohazard, Coral, Lock, Factory, Jack, Coaster, Snowflake, Eclipse, Bones, Frog, Singularity, Volcano, Sun, Fog, Omega, Reaper, REDACTED, Wrath]
+export const nonStackableBosses = [Mirror, Customs, Snowflake, Sun, Frog, Biohazard, Coral, Izakaya, REDACTED, Fog, Singularity]
 
 console.log('bosses length: ', allBosses.length)
 let adminLogs = {
@@ -746,8 +812,6 @@ console.log("Bosses of rarity 6: ", adminLogs.rarity6)
 // CLIPBOARD, U+1F4CB inspection
 
 //RIBBON, U+1F380
-
-// BEER MUG, U+1F37A move buttons randomised
 
 // CHERRY BLOSSOM, U+1F338
 //WILTED FLOWER, U+1F940

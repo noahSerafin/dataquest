@@ -1008,7 +1008,7 @@ class Dataworm extends Piece {//test
 
 class Snake extends Piece {//test
   static name = "Snake";
-  static description = "A large program that can move into others' tiles (head excluded), removing a piece of memory regardless of defence and adding to its own max size";
+  static description = "A program that can move into others' tiles (head excluded), removing a piece of memory regardless of defence and adding to its own max size";
   static unicode = "U+1F40D";
   static color = "#034d22ff";
   static rarity = 2;

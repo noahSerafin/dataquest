@@ -311,7 +311,7 @@ export class Supplement extends Item<Piece> {
     static color = "#6e0c8bff";
     static rarity = 4;
     constructor() {
-        super(Supplement.name, Supplement.description, Supplement.unicode, Supplement.color, 5, Supplement.rarity, 'piece')
+        super(Supplement.name, Supplement.description, Supplement.unicode, Supplement.color, 3, Supplement.rarity, 'piece')
     }
     apply(target: Piece, itemMult: number) {
         target.maxSize += (1 * itemMult);
@@ -480,7 +480,7 @@ export class Gift extends Item<Player> {
     static name = "Gift Box";
     static description = "Grants a random program (must have room)";
     static unicode = "U+1F381";
-    static color = "#e9ab27ff";
+    static color = "rgb(61, 172, 94)";
     static rarity = 2;
     constructor() {
         super(Gift.name, Gift.description, Gift.unicode, Gift.color, 3, Gift.rarity, 'player')
@@ -1005,7 +1005,7 @@ class Beer extends Item<Player> {
     static name = "Happy Hour";
     static description = "Duplicate a random item.";
     static unicode = "U+1F37B";
-    static color = "rgb(237, 209, 49)";
+    static color = "rgb(237, 159, 49)";
     static rarity = 6;
     constructor() {
         super(Beer.name, Beer.description, Beer.unicode, Beer.color, 7, Beer.rarity, 'player')

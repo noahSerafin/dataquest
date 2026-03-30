@@ -3,7 +3,6 @@ finish TUTORIAL
 variant tooltips
 -
 GAME / BUGS
-add new items, toothbrush? - single use broom, happy hour - dupes items (admin??)
 add new bosses
 visualise: retaliation, dmg + dmg mult, admin actions and counts
 //sort out trolley/toolbox

@@ -3622,7 +3622,7 @@ class Alien extends Piece {
 class Lightning extends Piece {
   static name = "Charger";
   static description = "A program that can give an extra action to another";
-  static unicode = "U+26A1";// ELECTRIC PLUG, U+1F50C
+  static unicode = "U+1F50C";//U+26A1";// ELECTRIC PLUG, U+1F50C
   static color = "rgb(44, 125, 255)";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){

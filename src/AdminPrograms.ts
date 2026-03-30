@@ -3000,6 +3000,7 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //splash damage- mult to group targets??
 //bomb bonuses -
 //gene hybrids appear in shop
+// BUTTER, U+1F9C8
 
 //TULIP, U+1F337 pair with bubble, some kind of effect based off money???
 

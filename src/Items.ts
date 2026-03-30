@@ -308,7 +308,7 @@ export class Supplement extends Item<Piece> {
     static description = "Increases all a placed program's stats by 1 for one round";
     static unicode = "U+1F48A";
     static color = "#6e0c8bff";
-    static rarity = 5;
+    static rarity = 4;
     constructor(){
         super(Supplement.name, Supplement.description, Supplement.unicode, Supplement.color, 5, Supplement.rarity, 'piece')
     }
@@ -736,7 +736,7 @@ export class Sandwich extends Item<Piece> {
     static description = "Increases all a placed program's stats by 2 for one round";
     static unicode = "U+1F96A";
     static color = "rgb(202, 186, 15)";
-    static rarity = 6;
+    static rarity = 5;
     constructor(){
         super(Sandwich.name, Sandwich.description, Sandwich.unicode, Sandwich.color, 5, Sandwich.rarity, 'piece')
     }
@@ -749,7 +749,6 @@ export class Sandwich extends Item<Piece> {
         target.defence += (2* itemMult);
     }
 }
-
 
 class Hotline extends Item {
     static name = "Hotline";
@@ -890,15 +889,131 @@ export class Jar extends Item {//Pokeball?
     }
 }
 
-//lighting remove 1 tile from all enemy pieces
+class Chili extends Item<Piece[]> {//HOT PEPPER, U+1F336 - moves +1 range +1
+    static name = "Zing";
+    static description = "Increases all your placed programs' moves and range by 1 for one round";
+    static unicode = "U+1F372";
+    static color = "rgb(202, 74, 15)";
+    static rarity = 3;
+    constructor(){
+        super(Chili.name, Chili.description, Chili.unicode, Chili.color, 5, Chili.rarity, 'gameState')
+    }
+    apply(activePieces: Piece[], itemMult: number) {
+        for(const target of activePieces){
+            if(target.team === 'player'){
+                target.moves += (1* itemMult);
+                target.movesRemaining += (1* itemMult);
+                target.range += (1* itemMult);
+            }
+        }
+    }
+}
+
+class Feast extends Item<Piece[]> {
+    static name = "Feast";
+    static description = "Increases all your placed programs' stats by 3 for one round";
+    static unicode = "U+1F372";
+    static color = "rgb(202, 186, 15)";
+    static rarity = 6;
+    constructor(){
+        super(Feast.name, Feast.description, Feast.unicode, Feast.color, 5, Feast.rarity, 'gameState')
+    }
+    apply(activePieces: Piece[], itemMult: number) {
+        for(const target of activePieces){
+            if(target.team === 'player'){
+                target.maxSize += (3* itemMult);
+                target.moves += (3* itemMult);
+                target.movesRemaining += (3* itemMult);
+                target.range += (3* itemMult);
+                target.attack += (3* itemMult);
+                target.defence += (3* itemMult);
+            }
+        }
+    }
+}
+
+class Lightning extends Item<Piece[]> {//lighting remove 1 tile from all enemy pieces U+26A1
+  static name = "Lightning";
+  static description = "Removes all defences and 1 tile from all enemies";
+  static unicode = "U+26A1";
+  static color = "rgb(61, 87, 233)";
+  static rarity = 4;
+  constructor() {
+   super(Lightning.name, Lightning.description, Lightning.unicode, Lightning.color, 2, Lightning.rarity, 'gameState')
+  }
+    apply(activePieces: Piece[], _itemMult: number) {
+        activePieces.forEach(piece => {
+            if(piece.team === 'enemy'){
+                piece.takeDamage(piece.defenceRemaining + 1);
+            }
+        });
+    }
+}
+
 //toothbrush - single use broom?
-// POT OF FOOD, U+1F372 - Feast +1 moves and max size for all pieces?
-//HOT PEPPER, U+1F336 - moves +1 range +1
-//buoy revive last destroyed piece
-//RING BUOY, U+1F6DF restore the last destroyed program to hand /target a space? or give piece a wontDie bool?
+class Toothbrush extends Item<Piece[]> {//lighting remove 1 tile from all enemy pieces U+26A1
+  static name = "Toothbrush";
+  static description = "Removes all enemies with a size of 1 and 0 defence remaining";
+  static unicode = "U+1FAA5";
+  static color = "rgb(233, 73, 61)";
+  static rarity = 2;
+  constructor() {
+   super(Toothbrush.name, Toothbrush.description, Toothbrush.unicode, Toothbrush.color, 2, Toothbrush.rarity, 'gameState')
+  }
+    apply(activePieces: Piece[], _itemMult: number) {
+        activePieces.forEach(piece => {
+            if(piece.team === 'enemy'){
+                piece.takeDamage(1);
+            }
+        });
+    }
+}
+
+
+// CLINKING BEER MUGS, Happy Hour U+1F37B
+/*export class Beer extends Item {
+    static name = "Happy Hour";
+    static description = "Duplicate a random item.";
+    static unicode = "U+1F37B";
+    static color = "rgb(237, 209, 49)";
+    static rarity = 6;
+    constructor(){
+        super(Beer.name, Beer.description, Beer.unicode, Beer.color, 7, Beer.rarity, 'player')
+        //name desc utf || maxsize moves range atk def
+    }
+    apply() {
+        apply(player: Player) {
+      //player.admins
+        const randAdmin = player.admins[Math.floor(Math.random()*player.admins.length)]
+        const adminClass = allAdmins.find(a => a.name === randAdmin.name);
+        if(!adminClass) return;
+        player.admins = [randAdmin, new adminClass] //make a new 
+        
+    }
+}*/
 
 //U+1FAA8 rock damage selected piece
-export const allItems = [Blueberry, Box, Battery, Iron, Juice, Mushroom, Pepper, Floppy, Voucher, Bandage, Extinguisher, Formula, Gift, Hotline, Plunger, Roids, Teapot, Beans, Bugle, Jar, Keygen, Makeover, Melon, Megaphone, Pinata, Rations, ShootingStar, Spanner, Update2, Cake, Carrot, Coffee, Djembe, Garlic, Wand, Meat, Pie, Soap, Dupe, Genie, Hourglass, Supplement, Life, Blessing, Pandora, Sandwich, Ginger, Update3];
+export class Rock extends Item {
+    static name = "Rock";
+    static description = "Damage a piece by the number of currently held programs";
+    static unicode = "U+1FAA8";
+    static color = "rgb(109, 147, 159)";
+    static rarity = 1;
+    constructor(){
+        super(Rock.name, Rock.description, Rock.unicode, Rock.color, 5, Rock.rarity, 'playerAndGame')
+    }
+    async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }, itemMult: number) {
+        const idx = activePieces.findIndex(p => p.id === id);
+        activePieces[idx].takeDamage(player.programs.length * itemMult);
+    }
+}
+
+//RING BUOY, U+1F6DF revive a dead program
+//RING BUOY, U+1F6DF restore the last destroyed program to hand /target a space? or give piece a wontDie bool?
+//lifeboat ROWBOAT, U+1F6A3
+
+
+export const allItems = [Blueberry, Box, Battery, Iron, Juice, Mushroom, Pepper, Rock, Floppy, Voucher, Bandage, Extinguisher, Formula, Gift, Hotline, Plunger, Roids, Teapot, Toothbrush, Beans, Bugle, Jar, Keygen, Makeover, Melon, Megaphone, Pinata, Rations, ShootingStar, Spanner, Supplement, Update2, Chili, Cake, Carrot, Coffee, Djembe, Garlic, Wand, Lightning, Meat, Pie, Soap, Dupe, Genie, Hourglass, Sandwich, Life, Blessing, Feast, Ginger, Pandora, Update3];
 export const upgradeItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Roids, Formula]
 
 /*Items.forEach(i => {
@@ -911,15 +1026,10 @@ export type ItemConstructor = new (...args: any[]) => Item<any>;
 
 console.log('all items: ', allItems.length);
 
-//RING BUOY, U+1F6DF revive a dead program
-//lifeboat ROWBOAT, U+1F6A3
 // /SCROLL, U+1F4DC
 
 //PAGE WITH CURL, U+1F4C3
 
  // U+1F47A
-
-
-
 
 //BLACK HEART SUIT, U+2665

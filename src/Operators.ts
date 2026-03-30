@@ -190,7 +190,7 @@ import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Vola
         maxSize: 1,
         moves: 5,
         range: 1,
-        attack: 1,
+        attack: 2,
         defence: 1,
         rarity: 1,
         // blueprint-only fields:

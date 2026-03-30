@@ -157,6 +157,50 @@ function computeDistancesFrom(
   return distances;
 }
 
+function findShortestPath(
+  start: Coordinate,
+  goal: Coordinate,
+  tiles: Set<string>
+): Coordinate[] {
+  const queue: { x: number; y: number; path: Coordinate[] }[] = [];
+  const visited = new Set<string>();
+
+  const startKey = key(start.x, start.y);
+  queue.push({ x: start.x, y: start.y, path: [start] });
+  visited.add(startKey);
+
+  const goalKey = key(goal.x, goal.y);
+
+  while (queue.length > 0) {
+    const current = queue.shift()!;
+    const { x, y, path } = current;
+    const currentKey = key(x, y);
+
+    if (currentKey === goalKey) {
+      return path;
+    }
+
+    const neighbors = [
+      { x: x + 1, y },
+      { x: x - 1, y },
+      { x, y: y + 1 },
+      { x, y: y - 1 },
+    ];
+
+    for (const n of neighbors) {
+      const k = key(n.x, n.y);
+
+      if (!tiles.has(k)) continue;
+      if (visited.has(k)) continue;
+
+      visited.add(k);
+      queue.push({ x: n.x, y: n.y, path: [...path, n] });
+    }
+  }
+
+  return [];
+}
+
 function growEnemy(
   head: Coordinate,
   targetSize: number,
@@ -249,6 +293,7 @@ export function generateNode(difficulty: number): Level {
         const d = distances.get(key(tile.x, tile.y));
         return d !== undefined && d >= 5;
     });
+    
     //if (validEnemyTiles.length < enemyCount) {
         // Not enough space — regenerate level
         //return null; restart function
@@ -290,15 +335,21 @@ export function generateNode(difficulty: number): Level {
     availableTiles.delete(key(playerTile.x, playerTile.y));//remove player spawn from set
 
     // Remove 'safe' tiles (< 5 distance from player) so enemies don't grow path-blocking
-    for (const [k, d] of distances.entries()) {
+    /*for (const [k, d] of distances.entries()) {
         if (d < 5) {
             availableTiles.delete(k);
         }
-    }
+    }*/
 
-    enemySpawns.forEach(enemy => {
+    enemySpawns.forEach(enemy => {//from these, find paths to the player if possible, exclude these paths from growenemy (remove from availabletiles)
       if(enemy.headPosition){
         availableTiles.delete(key(enemy.headPosition.x,enemy.headPosition.y));//remove from avialable to grow into, //stops growth entirely for some reason???
+        
+        // Find a path to the player and reserve it so we don't block the spawn
+        const pathToPlayer = findShortestPath(enemy.headPosition, playerTile, carvedTiles);
+        pathToPlayer.forEach(p => {
+          availableTiles.delete(key(p.x, p.y));
+        });
       }
     });
 

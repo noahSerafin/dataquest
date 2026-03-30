@@ -25,6 +25,19 @@ function decideEnemyIntent(
   console.log('target: ', target)
   if (target && enemy.actions > 0 ){//target found
     console.log('target found');
+    if (enemy.targetType === 'pieceAndPlace' || enemy.targetType === 'placeAndPieces') {
+      if (target.place.x === target.piece.headPosition.x && target.place.y === target.piece.headPosition.y) {
+        for (const tile of target.piece.tiles) {
+          if (tile.x !== target.piece.headPosition.x || tile.y !== target.piece.headPosition.y) {
+            const dist = Math.abs(enemy.headPosition.x - tile.x) + Math.abs(enemy.headPosition.y - tile.y);
+            if (dist <= enemy.getStat('range')) {
+              target.place = tile;
+              break;
+            }
+          }
+        }
+      }
+    }
     if(enemy.canAttack && enemy.getStat('attack') > 0 && target.piece.defenceRemaining + target.piece.tiles.length <= enemy.getStat('attack')){//can we kill a player piece?
       return {type: 'attack', target: target.piece}
     }
@@ -55,10 +68,11 @@ function decideEnemyIntent(
         }
         if (newTarget)  return { type: 'special', target: {line: getTilesInLine(enemy, newTarget.place), activePieces: activePieces} }
       }
-      if(enemy.targetType == 'pieceAndPlace' && target.piece.headPosition !== target.place && specialAttempts < 1){//rectify attempts later
+      //if(enemy.targetType == 'pieceAndPlace'){ see if we can target a non head tile first
+      if(enemy.targetType == 'pieceAndPlace' && (target.piece.headPosition.x !== target.place.x || target.piece.headPosition.y !== target.place.y) && specialAttempts < 1){//rectify attempts later
         return { type: 'special', target: {piece: target.piece, target: target.place}}//enemy still attacking- but should use this
       }
-      if(enemy.targetType == 'placeAndPieces' && target.piece.headPosition !== target.place && specialAttempts < 1){//rectify attempts later
+      if(enemy.targetType == 'placeAndPieces' && (target.piece.headPosition.x !== target.place.x || target.piece.headPosition.y !== target.place.y) && specialAttempts < 1){//rectify attempts later
         return { type: 'special', target: {target: target.place, activePieces: activePieces}}
       }
       if(enemy.targetType === 'piece' && specialAttempts < 1){ ///can execute a special

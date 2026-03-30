@@ -2320,7 +2320,7 @@ class Bug extends Piece {//ant - bug can be higher and cause slow
   static color = "rgb(4, 202, 129)";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Bug.name, Bug.description, Bug.unicode, 1, 5, 1, 1, 1, Bug.color, headPosition, [headPosition], team, Bug.rarity, removeCallback, id)
+    super(Bug.name, Bug.description, Bug.unicode, 1, 5, 1, 2, 1, Bug.color, headPosition, [headPosition], team, Bug.rarity, removeCallback, id)
     this.specialName = 'Glitch'
   }
   async special(targetPiece: Piece):Promise<void>{

@@ -14,7 +14,8 @@ export const companies: Company[] = [
     { name: 'Red Sky Dynamics', abbr: 'RSD', unicode: "U+1F3B4" },
     { name: 'Whiteflower Global', abbr: 'WFG', unicode: "U+1F4AE" },
     { name: 'Cook.io', abbr: 'CKI', unicode: "U+1F36A" },
-    { name: 'Sakura Robotics', abbr: 'SRB', unicode: "U+1F338"}
+    { name: 'Sakura Robotics', abbr: 'SRB', unicode: "U+1F338"},
+    { name: 'Panda Holdings LLC', abbr: 'PAN', unicode: "U+1F43C"},
 ]
 
 // PANDA FACE, U+1F43C
@@ -25,7 +26,7 @@ export const companies: Company[] = [
 //Meridian - Emphasis on defensive pieces
 //export const MeridianPieces = [Knife, Sling, Dagger, Arms, Shield, Aegis, Greatshield, Fence, Stonewall, Gate, Firewall, Trojan, Nerf]
 
-//Longhouse - medival type pieces, sword, shield, tojaflute etc.
+//Longhouse - medival type pieces, sword, shield, tojaflute etc., traps
 
 //Tsukimi - attacking, ranged, bomb pieces
 
@@ -39,7 +40,7 @@ export const companies: Company[] = [
 
 //Monkey - high move pieces, 
 
-//Red Sky - high attack pieces, defensive pieces
+//Red Sky - high attack pieces, large defensive pieces, bombs
 
 //Whiteflower - all pieces, traps
 

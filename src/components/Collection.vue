@@ -37,7 +37,9 @@ onMounted(() => {
 const playablePieces = computed(() => allPieces.filter(p => p.name !== Spawn.name));
 
 function isPieceUnlocked(name: string): boolean {
-  return collection.value.pieces.includes(name);
+  return true;
+  //collection.value.pieces.includes(name);
+  //remember to change back!!!
 }
 
 function isAdminUnlocked(name: string): boolean {

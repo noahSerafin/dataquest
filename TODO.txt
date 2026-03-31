@@ -40,7 +40,6 @@ statuses 3
 
 special functions 4
 keep track of upgrades and display on piece
-variants? 
 
 ADMIN PIECES
 

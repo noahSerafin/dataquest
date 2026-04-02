@@ -1,21 +1,31 @@
 import type { Company } from "./types";
+import { allPieces, cookiePieces, flybyPieces, monkeyPieces, NightbridgePieces, pandaPieces, redskyPieces, sakuraPieces } from "./Pieces";
+import { MeridianPieces } from "./Pieces";
+import { longHousePieces } from "./Pieces";
+import { TsukimiPieces } from "./Pieces";
+import { zenithPieces } from "./Pieces";
+import { starlanePieces } from "./Pieces";
+import { sunrisePieces } from "./Pieces";
+//import saturnpieces just use allPieces for now
+
+import { whiteflowerPieces } from "./Pieces";
 
 export const companies: Company[] = [
-    { name: 'Nightbridge Corp', abbr: 'NBC',  unicode: "U+1F309" },
-    { name: 'Meridian Security Inc.', abbr: 'MSI', unicode: "U+1F310" },
-    { name: 'Longhouse Web Services', abbr: 'LWS', unicode: "U+1F6D6" },
-    { name: 'Tsukimi Group', abbr: 'TKG', unicode: "U+1F391" },
-    { name: 'Zenith Ltd.', abbr: 'ZNT', unicode: "U+1F304" },
-    { name: 'Starlane Tech', abbr: 'SLT', unicode: "U+1F30C" },
-    { name: 'Sunrise Associates', abbr: 'SRA', unicode: "U+1F305" },
-    { name: 'Saturn Solutions', abbr: 'SSL', unicode: "U+1FA90" },
-    { name: 'Flyby Surveilance', abbr: 'FBS', unicode: "U+1FAB0" },
-    { name: 'Monkey Media', abbr: 'MMD', unicode: "U+1F412"},//"U+1F435" },
-    { name: 'Red Sky Dynamics', abbr: 'RSD', unicode: "U+1F3B4" },
-    { name: 'Whiteflower Global', abbr: 'WFG', unicode: "U+1F4AE" },
-    { name: 'Cook.io', abbr: 'CKI', unicode: "U+1F36A" },
-    { name: 'Sakura Robotics', abbr: 'SRB', unicode: "U+1F338"},
-    { name: 'Panda Holdings LLC', abbr: 'PAN', unicode: "U+1F43C"},
+    { name: 'Nightbridge Corp', abbr: 'NBC',  unicode: "U+1F309", pieceList: NightbridgePieces },
+    { name: 'Meridian Security Inc.', abbr: 'MSI', unicode: "U+1F310", pieceList: MeridianPieces},
+    { name: 'Longhouse Web Services', abbr: 'LWS', unicode: "U+1F6D6", pieceList: longHousePieces},
+    { name: 'Tsukimi Group', abbr: 'TKG', unicode: "U+1F391", pieceList: TsukimiPieces},
+    { name: 'Zenith Ltd.', abbr: 'ZNT', unicode: "U+1F304", pieceList: zenithPieces},
+    { name: 'Starlane Tech', abbr: 'SLT', unicode: "U+1F30C", pieceList: starlanePieces},
+    { name: 'Sunrise Associates', abbr: 'SRA', unicode: "U+1F305", pieceList: sunrisePieces},
+    { name: 'Saturn Solutions', abbr: 'SSL', unicode: "U+1FA90", pieceList: allPieces},
+    { name: 'Flyby Surveilance', abbr: 'FBS', unicode: "U+1FAB0", pieceList: flybyPieces},
+    { name: 'Monkey Media', abbr: 'MMD', unicode: "U+1F412", pieceList: monkeyPieces},//"U+1F435" },
+    { name: 'Red Sky Dynamics', abbr: 'RSD', unicode: "U+1F3B4", pieceList: redskyPieces},
+    { name: 'Whiteflower Global', abbr: 'WFG', unicode: "U+1F4AE", pieceList: whiteflowerPieces},
+    { name: 'Cook.io', abbr: 'CKI', unicode: "U+1F36A", pieceList: cookiePieces},
+    { name: 'Sakura Robotics', abbr: 'SRB', unicode: "U+1F338", pieceList: sakuraPieces},
+    { name: 'Panda Holdings LLC', abbr: 'PAN', unicode: "U+1F43C", pieceList: pandaPieces},
 ]
 
 // PANDA FACE, U+1F43C

@@ -3,11 +3,19 @@ finish TUTORIAL
 variant tooltips
 -
 
-Company flavours - make some piece lists
+// BUGS
+Pandora not useable when full
+pass primary variant to hybrid
+you win not dissapearing in endless mode
+
+make some items give immunity to a blueprint - repurpose some admins that do this
+more + - trade off admins
+make some variants immunities?
 
 difficulty - add +1, +2 programs for variety, or make variants +- security level 7
 
 MAP
+padding on hybrid compiler description
 Altar nodes - sacrifice a program for more money than selling - 8 - skippable
 Duplicator nodes - duplicate a program - skippable
 Node to nerf stats - workbench? -1 stat +another etc.
@@ -15,6 +23,7 @@ Gladiator nodes - +1 or 2 security, place only once in arena node for reward - s
 Other challenge nodes - challenge node file with custom maps of fixed pieces? - deforester, wizard battle, trojan army, etc.
 
 GAME / BUGS
+display variants on pieceview same as in piececontroller and blueprintview
 visualise:
     ADMINS - animate admins
     retaliation, dmg + dmg mult numbers, admin actions and counts

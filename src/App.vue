@@ -13,7 +13,7 @@ import PlayerView from "./components/PlayerView.vue";
 import type { Piece } from "./Pieces"
 import { Spawn, Dolls } from './Pieces';
 import { allPieces } from "./Pieces"
-import type { Coordinate, PieceBlueprint, Level, OS } from "./types";
+import type { Coordinate, PieceBlueprint, Level, OS, Company } from "./types";
 import { runEnemyStateMachine } from "./Enemy";
 import WorldMap from "./components/WorldMap.vue";
 import { applyVariant, coordKey, findAnyPiecesInRange, getOccupiedTileSet, getTilesInRange, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, rollVariant, isSoundEnabled } from "./helperFunctions";
@@ -145,6 +145,7 @@ function createNewPlayer(os: OS) {
   showMainMenu.value = false;
   showMap.value = true;
   gameStarted.value = true;
+  currentCompany.value = { name: 'Player', abbr: '',  unicode: player.value.osunicode, pieceList: [] };
 }
 const showCollection = ref(false);
 const extraDifficulty = ref<number>(0)//player/seed
@@ -543,9 +544,11 @@ const renewBlueprints = async () => {
 const lastTurnPieces = ref<InstanceType<typeof Piece>[]>([]);//player
 const originalPieces = ref<InstanceType<typeof Piece>[]>([]);//player
 const originalSpawns = ref<Coordinate[]>([]);//player
+const currentCompany = ref<Company>({ name: 'Player', abbr: '',  unicode: player.value.osunicode, pieceList: [] });
 
-async function selectLevel(newLevel: Level, difficultyMod: number, lReward: number) {//load level, start 
+async function selectLevel(newLevel: Level, company: Company, difficultyMod: number, lReward: number) {//load level, start 
   pieceToPlace.value = null;
+  currentCompany.value = company;
   showBoard.value = true;
   renewBlueprints()//shouldnt be needed in final;
   for (const admin of player.value.admins) {
@@ -562,7 +565,7 @@ async function selectLevel(newLevel: Level, difficultyMod: number, lReward: numb
   player.value.nextReward = lReward;
   const newPieces = rehydratePieces(newLevel.pieces);
   extraDifficulty.value = difficultyMod;
-  activePieces.value = processSpawnPoints(newPieces, difficultyMod);
+  activePieces.value = processSpawnPoints(newPieces, company.pieceList, difficultyMod);
   console.log('originalSpawns: ', originalSpawns.value);
   //originalSpawns.value = [...playerSpawns.value];
   originalPieces.value = activePieces.value.map(p => p.clone());
@@ -697,7 +700,8 @@ const newPlacementHighlights = (): Coordinate[] => {//board should only show the
   return uniqueHighlights;
 };
 
-function processSpawnPoints(pieces: Piece[], mod: number) {
+//(pieces(already in level), companyPieceList, mod)
+function processSpawnPoints(pieces: Piece[], companyPieces: any[], mod: number) {
   const processed: Piece[] = [];
   const newPlayerSpawns: Coordinate[] = [];
 
@@ -717,24 +721,33 @@ function processSpawnPoints(pieces: Piece[], mod: number) {
         }
         const { min, max } = DIFFICULTY_RARITY[trueDifficulty];
 
-        const validEnemies = allPieces.filter(EnemyClass => {
-          //p.rarity >= min && p.rarity <= max //old method for spawnsize 1 only
-          if (EnemyClass.name !== "Nuke"){// bomb too?
-            const temp = new EnemyClass(piece.headPosition, 'enemy', removePiece);
-            return (
-              temp.rarity >= min &&
-              temp.rarity <= max &&
-              temp.maxSize >= spawnSize //not working??? test
-            );
-          }
+        // 1. Get all enemies that match the current difficulty rarity
+        const difficultyMatched = companyPieces.filter(EnemyClass => {
+          if (EnemyClass.name === "Nuke") return false;
+          
+          // Create a temp instance to check rarity and maxSize
+          const temp = new EnemyClass(piece.headPosition, 'enemy', removePiece);
+          return temp.rarity >= min && temp.rarity <= max;
         });
-        const pool = validEnemies.length > 0 ? validEnemies : allPieces;
-        //console.log('lengths:', min, max, allPieces.length, pool.length)
+        // 2. Try to find one from that group that fits the spawn size
+        let pool = difficultyMatched.filter(EnemyClass => {
+          const temp = new EnemyClass(piece.headPosition, 'enemy', removePiece);
+          return temp.maxSize >= spawnSize;
+        });
+        // 3. FALLBACK: If none fit the size, stay within the difficulty but allow smaller pieces
+        if (pool.length === 0) {
+          console.warn(`No enemy of rarity ${min}-${max} fits spawn size ${spawnSize}. Falling back to smaller units.`);
+          pool = difficultyMatched; 
+        }
+        // 4. LAST RESORT: If no enemies match the rarity at all, only then use allPieces
+        /*if (pool.length === 0) {
+          pool = allPieces;
+        }*/
 
         const EnemyClass = pool[Math.floor(Math.random() * pool.length)];
 
         const enemyInstance = new EnemyClass(piece.headPosition, 'enemy', removePiece);
-        enemyInstance.tiles = piece.tiles;
+        enemyInstance.tiles = piece.tiles.slice(0, enemyInstance.maxSize);//trims the larger spawn down, might be a problem on castled
         enemyInstance.defenceRemaining = enemyInstance.getStat('defence');//not working??
 
         const variantChance = Math.min((0.1 * trueDifficulty - 0.1), 1)
@@ -781,7 +794,7 @@ function rehydratePieces(rawPieces: any[]): InstanceType<typeof Piece>[] {
 
 onMounted(() => {
   const initPieces = rehydratePieces(level.value.pieces);
-  activePieces.value = processSpawnPoints(initPieces, 0); // sets placementHighlights internally
+  activePieces.value = processSpawnPoints(initPieces, allPieces, 0); // sets placementHighlights internally
   refreshShop(true)//handle in round, or don't for crystal ball
 });
 
@@ -1236,6 +1249,7 @@ const handleSpecialActionAt = async (target: Coordinate) => {
     selectedPiece.value = null;
     return;
   }
+  clearFog();
   checkForRoundEnd();
 };
 
@@ -1269,6 +1283,7 @@ const endRound = async (roundWon: boolean) => {
         StorageManager.recordWin(player.value.osunicode, player.value.stake);
       }
     }
+    currentCompany.value = { name: 'Player', abbr: '',  unicode: player.value.osunicode, pieceList: [] };
     openSummary(true);
     //move to btn inside round summary
   } else {
@@ -1384,7 +1399,7 @@ const handleExport = (levelData: any) => {
   level.value.pieces = levelData.pieces;
   // Hydrate pieces once
   const initPieces = rehydratePieces(level.value.pieces);
-  activePieces.value = processSpawnPoints(initPieces, 0);
+  activePieces.value = processSpawnPoints(initPieces, allPieces, 0);
   displayEditor.value = false; // swap to board view
 };
 
@@ -1541,6 +1556,10 @@ function toggleDebug() {
     </div>
     <div class="top-hud">
       <div class="enemy-info">
+        <span v-if="currentCompany">
+          <div>{{ currentCompany.abbr }}</div>
+          <div>{{ String.fromCodePoint(parseInt(currentCompany.unicode.replace('U+', ''), 16), 0xFE0F) }}</div>
+        </span>
         <p class="security"><strong>Security level: </strong>{{ player.difficulty + extraDifficulty }}</p>
         <p class="infamy"><strong>Infamy: </strong>{{ stake }}</p>
         <span class="enemy-bosses">
@@ -1565,7 +1584,7 @@ function toggleDebug() {
         :player="player" :bosses="bossAdmins" @proceedFromEndOfRound="handleProceed" @reloadLevel="reloadLevel"
         @mainMenu="openMainMenu" />
       <WorldMap v-if="!displayEditor" class="stage-panel" :class="{ active: showMap }" :allLevels="level1Levels"
-        :player="player" :seed="worldSeed" :cssclass="mapClass" :bosses="bossAdmins" @select-level="selectLevel"
+        :player="player" :seed="worldSeed" :cssclass="mapClass" :bosses="bossAdmins" @selectLevel="selectLevel"
         @openShop="openShop" @openDisabledShop="openDisabledShop" @openCompiler="openCompiler"
         @incrementProgress="incrementMapProgress" @addBoss="addBossAdmin" @replaceBosses="replaceBosses"
         @increaseDifficulty="increaseDifficulty" />

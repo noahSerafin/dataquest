@@ -143,7 +143,8 @@ export const statusUnicodes: Record<keyof typeof props.piece.statuses, string> =
 export type Company = {
   name: string,
   abbr: string,
-  unicode: string
+  unicode: string,
+  pieceList: any[]
 }
 
 export type SkipReward =

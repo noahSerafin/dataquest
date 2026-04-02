@@ -9,7 +9,7 @@
     import { Player } from "../Player";
     import type { WorldMap, WorldNode } from "../worldBuilder";
     import { generateWorld } from "../worldBuilder";
-    import type { Level, PieceBlueprint, SkipReward } from "../types";
+    import type { Company, Level, PieceBlueprint, SkipReward } from "../types";
     import { level1Levels } from "../level1Levels";
     import { level2Levels } from "../level2Levels";
     import { level3Levels } from "../level3Levels";
@@ -33,7 +33,7 @@
     }>();
 
     const emit = defineEmits<{
-        (e: "select-level", level: Level, difficultyMod: number, reward: number): void;
+        (e: "selectLevel", level: Level, company: Company, difficultyMod: number, reward: number): void;
         (e: "openShop"): void;
         (e: "openDisabledShop"): void;
         (e: "openCompiler"): void;
@@ -180,8 +180,8 @@
         }
         if (node.level) {
             showTutorialTip('board');
-            //console.log(node.level)
-            emit("select-level", node.level, node.difficultyMod, (node.reward + props.player.bonusReward));
+            //just pass the compamy for extra visual styling?
+            emit("selectLevel", node.level, node.company, node.difficultyMod, (node.reward + props.player.bonusReward));
         }
     }
 

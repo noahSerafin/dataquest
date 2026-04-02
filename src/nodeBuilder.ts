@@ -258,10 +258,10 @@ function growEnemy(
 }
 
 export function generateNode(difficulty: number): Level {
-    const enemyCount = randInt(difficulty, difficulty + 3);
+    const enemyCount = randInt(difficulty+1, difficulty + 2);
 
     const minSize = 6;
-    const maxSize = Math.max(6, enemyCount + 2);
+    const maxSize = Math.max(6, enemyCount + 3);
 
     const widthIsMax = Math.random() < 0.5;
 
@@ -282,8 +282,17 @@ export function generateNode(difficulty: number): Level {
     const tiles: Coordinate[] = Array.from(carvedTiles).map(parseCoord);
 
     //4
-    console.log('tiles:', tiles);
-    const playerTile = tiles[randInt(0, tiles.length-1)];
+    // Filter for tiles where x or y is on the boundary
+    const edgeTiles = tiles.filter(t => 
+        t.x === 0 || 
+        t.x === width - 1 || 
+        t.y === 0 || 
+        t.y === height - 1
+    );
+
+    // Fallback to any tile if no edge tiles exist after carving
+    const spawnPool = edgeTiles.length > 0 ? edgeTiles : tiles;
+    const playerTile = spawnPool[randInt(0, spawnPool.length - 1)];
 
     //5
     console.log('player start:', playerTile);
@@ -348,8 +357,10 @@ export function generateNode(difficulty: number): Level {
       const targetSize = sizes[i] ?? 1;
 
       // 2. TEMPORARILY add this enemy's head back so the function can "see" it
-      const headKey = key(spawn.headPosition.x, spawn.headPosition.y);
-      availableTiles.add(headKey);
+      if(spawn.headPosition){
+        const headKey = key(spawn.headPosition.x, spawn.headPosition.y);
+        availableTiles.add(headKey);
+      }
 
       const grownTiles = growEnemy(
         spawn.headPosition,

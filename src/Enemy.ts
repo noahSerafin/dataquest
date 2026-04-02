@@ -25,7 +25,7 @@ function decideEnemyIntent(
   console.log('target: ', target)
   if (target && enemy.actions > 0 ){//target found
     console.log('target found');
-    if (enemy.targetType === 'pieceAndPlace' || enemy.targetType === 'placeAndPieces') {
+    if ((enemy.targetType === 'pieceAndPlace' || enemy.targetType === 'placeAndPieces') && !enemy.hasFriendlySpecial) {
       if (target.place.x === target.piece.headPosition.x && target.place.y === target.piece.headPosition.y) {
         for (const tile of target.piece.tiles) {
           if (tile.x !== target.piece.headPosition.x || tile.y !== target.piece.headPosition.y) {
@@ -139,7 +139,7 @@ function decideEnemyIntent(
   }
 
   if(enemy.actions > 0  && specialAttempts < 1){//still have an action? 
-    if (enemy.specialName === 'Charge' || enemy.specialName === 'Pounce') {
+    if (enemy.specialName === 'Charge' || enemy.specialName === 'Pounce' || enemy.specialName === 'Dash') {
       const targetCoord = nearest || target?.piece.headPosition;
       if (targetCoord) {
         const directions = [

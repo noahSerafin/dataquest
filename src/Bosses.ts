@@ -219,17 +219,18 @@ class Reaper extends Admin {
 
 class Volcano extends Admin {
     static name = "Volcano";
-    static description = "After 5 turns, burning is applied to every player program at the end of every turn";//coundown to round loss??
+    static description = "After 3 turns, burning is applied to every player program at the end of every enemy turn";//coundown to round loss??
+    //static description = "After 5 turns, burning is applied to every player program at the end of every turn";//coundown to round loss??
     static unicode = "U+1F30B";
-    static color = "#790a0aff";
+    static color = "rgb(129, 49, 6)";
     static rarity = 5;
     constructor() {
-        super(Volcano.name, Volcano.description, Volcano.unicode, Volcano.color, 5, Volcano.rarity, 'gameState', 'onTurnEnd')
+        super(Volcano.name, Volcano.description, Volcano.unicode, Volcano.color, 5, Volcano.rarity, 'gameState', 'onEnemyTurnEnd')
     }
     private count: number = 0
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
         this.count += 1
-        if (this.count >= 5) {
+        if (this.count >= 3) {
             for (const piece of activePieces) {
                 if (piece.team === 'player' && !piece.immunities.burning) {
                     piece.statuses.burning = true;
@@ -691,7 +692,7 @@ class Tsunami extends Admin {
     static color = "#3eebd4ff";
     static rarity = 3;
     constructor() {
-        super(Tsunami.name, Tsunami.description, Tsunami.unicode, Tsunami.color, 5, 9, 'piecesAndBoard', 'onTurnEnd')
+        super(Tsunami.name, Tsunami.description, Tsunami.unicode, Tsunami.color, 5, Tsunami.rarity, 'piecesAndBoard', 'onTurnEnd')
     }
     private count: number = 0
     async apply({ activePieces, board }: { activePieces: Piece[], board: Coordinate[] }) {
@@ -728,19 +729,19 @@ class Tsunami extends Admin {
 
 class Coaster extends Admin {
     static name = "Up and Up";//cranking up
-    static description = "Every player piece takes damage equal to the player's current security level each turn after the first";//turn count is damage?
-    static unicode = "U+1F3D4";//roller coaster"U+1F3A2";
+    static description = "Every player piece takes damage +1 damage after each turn after the first";//turn count is damage?
+    static unicode = "U+1F3A2";//"U+1F3D4";//mountain
     static color = "rgb(212, 201, 187)";
     static rarity = 4;
     constructor() {
-        super(Coaster.name, Coaster.description, Coaster.unicode, Coaster.color, 5, 9, 'playerAndGame', 'onTurnEnd')
+        super(Coaster.name, Coaster.description, Coaster.unicode, Coaster.color, 5, Coaster.rarity, 'playerAndGame', 'onTurnEnd')
     }
     private count: number = 0
     async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
         if (this.count >= 1) {
             for (const piece of activePieces) {
                 if (piece.team === 'player') {
-                    piece.takeDamage(player.difficulty);
+                    piece.takeDamage(this.count);
                 }
             };
         }

@@ -98,6 +98,7 @@ export class Bubble extends Admin {
     if(pop){
       player.money = 0
       player.bonusInterest = 0
+      //remove self?
     }else{
       player.bonusInterest += this.count;
       this.count ++
@@ -337,7 +338,7 @@ export class Notepad extends Admin {
   static color = "#4b4b4bff";
   static rarity = 1;
   constructor() {
-    super(Notepad.name, Notepad.description, Notepad.unicode, Notepad.color, 3, Notepad.rarity, 'player', 'other')
+    super(Notepad.name, Notepad.description, Notepad.unicode, Notepad.color, 2, Notepad.rarity, 'player', 'other')
   }
   async apply({ player }: { player: Player }) {
     player.memory += 1
@@ -935,7 +936,7 @@ class Bucket extends Admin {
   static color = "#ff5555";
   static rarity = 1;
   constructor() {
-    super(Bucket.name, Bucket.description, Bucket.unicode, Bucket.color, 4, Bucket.rarity, 'player', 'other')
+    super(Bucket.name, Bucket.description, Bucket.unicode, Bucket.color, 3, Bucket.rarity, 'player', 'other')
   }
   //
   async apply({ player }: { player: Player }) {
@@ -1029,7 +1030,7 @@ class Lightbulb extends Admin {
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({range: 1})
+    activePieces[idx].addModifier({range: 2})
   }
 }
 ////ELECTRIC LIGHT BULB, U+1F4A1 +2 range?
@@ -1135,7 +1136,7 @@ class Lotus extends Admin {//boss? remove money?
   static name = "Lotus";
   static description = "Each rare admin gives + 0.5 damage mult on attacking";
   static unicode = "U+1FAB7";
-  static color = "#ff5555";
+  static color = "#fff0f0";
   static rarity =  5;
   constructor() {
     super(Lotus.name, Lotus.description, Lotus.unicode, Lotus.color, 10, Lotus.rarity, 'playerAndGame', 'onDealDamage')
@@ -1177,7 +1178,7 @@ class Pickup extends Admin {
   static color = "#c9804fff";
   static rarity = 2;
   constructor() {
-    super(Pickup.name, Pickup.description, Pickup.unicode, Pickup.color, 7, Pickup.rarity, 'player', 'other')
+    super(Pickup.name, Pickup.description, Pickup.unicode, Pickup.color, 4, Pickup.rarity, 'player', 'other')
   }
   async apply({ player }: { player: Player }) {
     player.memory += 3
@@ -1591,7 +1592,7 @@ class Toilet extends Admin {
 
 class Harvest extends Admin {
   static name = "Harvest";
-  static description = "Every 4 turns, +1 max size to all your programs";
+  static description = "Every 4 turns, +1 max size to all your placed programs";
   static unicode = "U+1F33E";
   static color = "#ff5555";
   static rarity = 1;
@@ -1704,7 +1705,7 @@ class HedgeFund extends Admin {
   static name = "Hedge Fund";
   static description = "Raises interest cap by $10";
   static unicode = "U+1F4B8";
-  static color = "#ff5555";
+  static color = "#b0e2a0";
   static rarity = 3;
   constructor() {
     super(HedgeFund.name, HedgeFund.description, HedgeFund.unicode, HedgeFund.color, 10, HedgeFund.rarity, 'player', 'other')
@@ -2740,7 +2741,7 @@ class Luggage extends Admin {
   static name = "Carry On";
   static description = "+1 memory each time a boss is cleared";
   static unicode = "U+1F9F3";
-  static color = "#75a8d8";
+  static color = "#b6d9f9";
   static rarity = 3;
   constructor() {
     super(Luggage.name, Luggage.description, Luggage.unicode, Luggage.color, 5, Luggage.rarity, 'player', 'onRoundEnd')

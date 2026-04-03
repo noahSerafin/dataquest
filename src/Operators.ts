@@ -177,7 +177,7 @@ import { createDefaultStatuses } from "./types";
         cost: 1,
         immunities: createDefaultStatuses()
     }
-    const egg =  {
+    /*const egg =  {
         id: crypto.randomUUID(),
         name: "Egg",
         description: "What came first? Spawns a Chick",
@@ -193,7 +193,7 @@ import { createDefaultStatuses } from "./types";
         isPlaced: false,
         cost: 1,
         immunities: createDefaultStatuses()
-    }
+    }*/
     const snail =  {
         id: crypto.randomUUID(),
         name: "Snail",
@@ -401,7 +401,7 @@ const Apple : OS = {
     money: 10,
     memory: 5,
     adminSlots: 4,
-    blueprints: [ant, bee, egg],
+    blueprints: [ant, bee, shield],
     items: [new Mushroom, new Juice],
     admins: [],
     lives: 3,

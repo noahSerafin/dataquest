@@ -1337,7 +1337,6 @@ class Scarf extends Admin {
     super(Scarf.name, Scarf.description, Scarf.unicode, Scarf.color, 4, Scarf.rarity, 'gameState', 'onPlacement')//or gamestate?
   }
 
-  //on placement
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].immunities.frozen = true;
@@ -2813,7 +2812,6 @@ class Fuel extends Admin {
   }
 }
 
-//BRIEFCASE, U+1F4BC bribe $10 reduces defence
 class Briefcase extends Admin {
   static name = "Bribe";
   static description = "If possible, spends $5 to lower the defences of all enemy progams by 1 at the start of a round";
@@ -2982,44 +2980,53 @@ console.log("Admins of rarity 3: ", adminLogs.rarity3)
 console.log("Admins of rarity 4: ", adminLogs.rarity4)
 console.log("Admins of rarity 5: ", adminLogs.rarity5)
 console.log("Admins of rarity 6: ", adminLogs.rarity6)
-//make all immunity admins <= uncommon?
 
-//"U+1FABD";//wing, icarus? - flight immmune to traps?
-//fleur de lis U+269C scout, lay traps?
+// FATHER CHRISTMAS, U+1F38 gift at the end of each round
+// MAN IN TUXEDO, U+1F935 butler, food at end of each round
+//CHAIN reaction onPieceDestruction deal damage around head like bowling but deal +1 damage each time?
+//NOSE, U+1F443 traffic sniffing programs that move become exposed/ or tracker does that?
+//// BUTTER, U+1F9C8 moves your pieces randomly after your turn (for free?)
 
-// ROUNDED SYMBOL FOR CAI, U+1F265 wealth
-// ROUNDED SYMBOL FOR FU, U+1F260 luck
-//ROUNDED SYMBOL FOR LU, U+1F261 prosperity
-//ROUNDED SYMBOL FOR SHOU, U+1F262 logevity
-//ROUNDED SYMBOL FOR XI, U+1F263 happiness
+//"U+1FABD" "U+269A" wings immune to traps //rarity less than tracker - make tracker rarer?
+//RECYCLING SYMBOL, U+2672 selling programs gives 1 of lower rarirty
 
 //U+1F5BC Framed picture - copy items?
+
+//SEE-NO-EVIL MONKEY, U+1F648 -1 range
+//HEAR-NO-EVIL MONKEY, U+1F649 -1 moves
+//SPEAK-NO-EVIL MONKEY, U+1F64A -1 attack/actions?
+
+// ROUNDED SYMBOL FOR CAI, U+1F265 wealth + rand money admin?
+// ROUNDED SYMBOL FOR FU, U+1F260 luck + clovers?
+//ROUNDED SYMBOL FOR LU, U+1F261 prosperity +  mystery boxes
+//ROUNDED SYMBOL FOR SHOU, U+1F262 logevity + max size
+//ROUNDED SYMBOL FOR XI, U+1F263 happiness + gifts
+
+//PROBING CANE, U+1F9AF trigger traps early
+//fleur de lis U+269C scout, lay traps?
+
+
 //U+26F0 mountain
 //landslide U+1F6D8
 
 //GOAT, U+1F410 charge line piece, or GOAT admin
 
 //splash damage- mult to group targets??
-//bomb bonuses -
+//bomb bonuses - 
 //gene hybrids appear in shop
-// BUTTER, U+1F9C8
 
 //TULIP, U+1F337 pair with bubble, some kind of effect based off money???
 
 //CLAPPER BOARD, U+1F3AC Action 
 // CRESCENT MOON, U+1F319
-
+//CRUTCH, U+1FA7C
 // MOUNT FUJI, U+1F5FB
-//PAGER, U+1F4DF
+//FINGERPRINT, U+1FAC6 forensics
 //MEDIUM WHITE CIRCLE, U+26AA Pearl
-//ROLLER COASTER, U+1F3A2
-//TOOTHBRUSH, U+1FAA5
 //TOOTH, U+1F9B7
 //HINDU TEMPLE, U+1F6D5 polytheism
 //KAABA, U+1F54B move in a circle
-//WATER WAVE, U+1F30A surf
 //HIBISCUS, U+1F33A + health
-//FINGERPRINT, U+1FAC6
 //LOLLIPOP, U+1F36D sweet tooth
 //CANDY, U+1F36C
 //PINCHED FINGERS, U+1F90C
@@ -3035,8 +3042,6 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 
 //SOCKS, U+1F9E6
 // BILLED CAP, U+1F9E2
-//DIVING MASK, U+1F93F
-//POURING LIQUID, U+1FAD7, spillage
 //DUMPLING, U+1F95F Pierog
 //PEANUTS, U+1F95C
 //⛱️
@@ -3061,26 +3066,16 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 
 //complicated edits...
 //ROUND PUSHPIN, U+1F4CD trap's heads are marked with pin, doesn't reveal them though
-//NEST WITH EGGS, U+1FABA after placing last program, buff all pieces but make their deaths permanent?
-//changes to movement/range
+
 //TAKEOUT BOX, U+1F961
 
-//SEE-NO-EVIL MONKEY, U+1F648 -1 range
-//HEAR-NO-EVIL MONKEY, U+1F649 -1 defence
-//SPEAK-NO-EVIL MONKEY, U+1F64A -1 attack/actions?
-
 //AMPERSAND, U+26
-
 //AEGEAN NUMBER ONE THOUSAND, U+10122 hit markers
-
 //MUSICAL SYMBOL GLISSANDO UP, U+1D1B1, stairs
 
 //blood tax nerf to only attacking own pieces? overkills? or jolly roger?
 //nerf needle to random stat? have a count? only trigger on bosses?
-//COCKTAIL GLASS, U+1F378 hybrids get bonus stats on placement
-//DECIDΑCPS TREE, U+1F333 OLD OAK, spawns acorns // CHESTNUT, U+1F330
 // HOSPITAL, U+1F3E5
-//blue screen of death - freezes all programs
 // BLACK ROSETTE, U+1F3F6
 //MOUNTAIN BICYCLIST, U+1F6B5
 
@@ -3091,29 +3086,15 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 // PUSHPIN, U+1F4CC
 //WAVING BLACK FLAG, U+1F3F4
 
-
 //ANKH, U+2625
 
 //EGYPTIAN HIEROGLYPH S034, U+132F9
 //EGYPTIAN HIEROGLYPH O010A, U+13262
 // LEFT LUGGAGE, U+1F6C5 Key and suitcase
 
-
-//CHEQUERED FLAG, U+1F3C1
-
 // PLACARD, U+1FAA7
 
-//WILTED FLOWER, U+1F940
-
-//FOLDING HAND FAN, U+1FAAD
-
-//BANKNOTE WITH DOLLAR SIGN, U+1F4B5
-
-// POTTED PLANT, U+1FAB4
-
 //hex SOFTWARE-FUNCTION SYMBOL, U+2394
-
-//EXTRATERRESTRIAL ALIEN, U+1F47D
 
 // AUTOMATED TELLER MACHINE, U+1F3E7
 

@@ -6,11 +6,12 @@ export const STATUS_ICONS: Record<string, string> = {
   poisoned: "🤢",    // U+1F922
   frozen: "🥶",      // U+1F976
   charmed: "😍",     // U+1F60D
-  confused: "🤕",    // U+1F915 // SHAKING FACE, U+1FAE8
+  confused: "🤕",    // U+1F915 // SHAKING FACE, U+1FAE8 //DIZZY SYMBOL, U+1F4AB
   exposed: "🫣",  
   hidden: "🤫",      // U+1F92B
   negative: "🫥",    // U+1FAE5
 };
+// ANGER SYMBOL, U+1F4A2
 
 export const STATUS_INFO: Record<string, string> = {
   diseased: "Loses -1 max size every turn",

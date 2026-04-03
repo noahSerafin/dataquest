@@ -581,7 +581,7 @@ export class Spanner extends Item<Piece> {
     }
 }
 
-class Makeover extends Item<Piece> {//admin?
+class Makeover extends Item<Piece> {
     static name = "Makeover";
     static description = "Remove exposed from a program";
     static unicode = "U+1F485";
@@ -596,7 +596,6 @@ class Makeover extends Item<Piece> {//admin?
     }
 }
 
-//gameState
 export class Wand extends Item<Piece[]> {//TODO test
     static name = "Magic Wand";
     static description = "Undo a turn";
@@ -625,43 +624,6 @@ export class Hourglass extends Item<Piece[]> {//TODO test
         //reload level
     }
 }
-
-class Extinguisher extends Item<Piece[]> {
-    static name = "Extinguisher";
-    static description = "Removes burning from all your programs";
-    static unicode = "U+1F9EF";
-    static color = "#e7aa92ff";
-    static rarity = 2;
-    constructor() {
-        super(Extinguisher.name, Extinguisher.description, Extinguisher.unicode, Extinguisher.color, 2, Extinguisher.rarity, 'gameState')
-    }
-    apply(activePieces: Piece[], _itemMult: number) {//game state from app??
-        activePieces.forEach(piece => {
-            if (piece.team === 'player') {
-                piece.statuses.burning = false;
-            }
-        });
-    }
-}
-
-class Plunger extends Item<Piece[]> {//item remove??
-    static name = "Plunger";
-    static description = "Removes slowed from all your programs";
-    static unicode = "U+1FAA0";
-    static color = "#82e2ffff";
-    static rarity = 2;
-    constructor() {
-        super(Plunger.name, Plunger.description, Plunger.unicode, Plunger.color, 2, Plunger.rarity, 'gameState')
-    }
-    apply(activePieces: Piece[], _itemMult: number) {//game state from app??
-        activePieces.forEach(piece => {
-            if (piece.team === 'player') {
-                piece.statuses.slowed = false;
-            }
-        });
-    }
-}
-
 
 class Keygen extends Item<Piece[]> {//TODO test
     static name = "Keygen";
@@ -1027,7 +989,7 @@ class Beer extends Item<Player> {
     }
 }
 
-class Rock extends Item {
+/*class Rock extends Item {
     static name = "Rock";
     static description = "Damage a piece by the number of currently held programs";
     static unicode = "U+1FAA8";
@@ -1040,13 +1002,132 @@ class Rock extends Item {
         const idx = activePieces.findIndex(p => p.id === id);
         activePieces[idx].takeDamage(player.programs.length * itemMult);
     }
+}*/
+
+export class Headphones extends Item<PieceBlueprint> {
+    static name = "Locked In";
+    static description = "Make a program in your inventory permanently immune to being confused";
+    static unicode = "U+1F3A7";
+    static color = "rgb(8, 5, 7)";
+    static rarity = 1;
+    constructor() {
+        super(Headphones.name, Headphones.description, Headphones.unicode, Headphones.color, 3, Headphones.rarity, 'blueprint')
+    }
+    apply(target: PieceBlueprint, _itemMult: number) {
+        target.immunities.confused = true;
+    }
+}
+class Disguise extends Item<PieceBlueprint> {
+    static name = "Disguise";
+    static description = "Make a program in your inventory permanently immune to being exposed";
+    static unicode = "U+1F97";
+    static color = "rgb(96, 96, 96)";
+    static rarity = 5;
+    constructor() {
+        super(Disguise.name, Disguise.description, Disguise.unicode, Disguise.color, 9, Disguise.rarity, 'blueprint')
+    }
+    apply(target: PieceBlueprint, _itemMult: number) {
+        target.immunities.exposed = true;
+    }
+}
+class Goggles extends Item<PieceBlueprint> {
+    static name = "Goggles";
+    static description = "Make a program in your inventory permanently immune to being Blinded";
+    static unicode = "U+1F97D";
+    static color = "rgb(0, 104, 132)";
+    static rarity = 4;
+    constructor() {
+        super(Goggles.name, Goggles.description, Goggles.unicode, Goggles.color, 5, Goggles.rarity, 'blueprint')
+    }
+    apply(target: PieceBlueprint, _itemMult: number) {
+        target.immunities.blinded = true;
+    }
+}
+class Gloves extends Item<PieceBlueprint> {
+    static name = "Gloves";
+    static description = "Make a program in your inventory permanently immune to being frozen";
+    static unicode = "U+1F9E4";
+    static color = "rgb(156, 253, 248)";
+    static rarity = 3;
+    constructor() {
+        super(Gloves.name, Gloves.description, Gloves.unicode, Gloves.color, 6, Gloves.rarity, 'blueprint')
+    }
+    apply(target: PieceBlueprint, _itemMult: number) {
+        target.immunities.frozen = true;
+    }
+}
+class Labcoat extends Item<PieceBlueprint> {
+    static name = "Lab Coat";
+    static description = "Make a program in your inventory permanently immune to being diseased";
+    static unicode = "U+1F97C";
+    static color = "rgb(75, 209, 224)";
+    static rarity = 2;
+    constructor() {
+        super(Labcoat.name, Labcoat.description, Labcoat.unicode, Labcoat.color, 3, Labcoat.rarity, 'blueprint')
+    }
+    apply(target: PieceBlueprint, _itemMult: number) {
+        target.immunities.diseased = true;
+    }
+}
+class Frogman extends Item<PieceBlueprint> {
+    static name = "Frogman";
+    static description = "Make a program in your inventory permanently immune to being posioned";
+    static unicode = "U+1F93F";
+    static color = "#5b22dfff";
+    static rarity = 2;
+    constructor() {
+        super(Frogman.name, Frogman.description, Frogman.unicode, Frogman.color, 2, Frogman.rarity, 'blueprint')
+    }
+    apply(target: PieceBlueprint, _itemMult: number) {
+        target.immunities.poisoned = true;
+    }
+}
+class Blackheart extends Item<PieceBlueprint> {
+    static name = "Blackheart";
+    static description = "Make a program in your inventory permanently immune to being charmed";
+    static unicode = "U+2665";
+    static color = "rgb(147, 7, 116)";
+    static rarity = 3;
+    constructor() {
+        super(Blackheart.name, Blackheart.description, Blackheart.unicode, Blackheart.color, 5, Blackheart.rarity, 'blueprint')
+    }
+    apply(target: PieceBlueprint, _itemMult: number) {
+        target.immunities.charmed = true;
+    }
+}
+class Plunger extends Item<PieceBlueprint> {//item remove??
+    static name = "Plunger";
+    static description = "Make a program in your inventory permanently immune to being slowed";
+    static unicode = "U+1FAA0";
+    static color = "#82e2ffff";
+    static rarity = 2;
+    constructor() {
+        super(Plunger.name, Plunger.description, Plunger.unicode, Plunger.color, 2, Plunger.rarity, 'blueprint')
+    }
+    apply(target: PieceBlueprint, _itemMult: number) {
+        target.immunities.slowed = true;
+    }
+}
+////POURING LIQUID, U+1FAD7, spillage
+class Extinguisher extends Item<PieceBlueprint> {
+    static name = "Extinguisher";
+    static description = "Make a program in your inventory permanently immune to burning";
+    static unicode = "U+1F9EF";
+    static color = "rgb(143, 237, 237)";
+    static rarity = 2;
+    constructor() {
+        super(Extinguisher.name, Extinguisher.description, Extinguisher.unicode, Extinguisher.color, 4, Extinguisher.rarity, 'blueprint')
+    }
+    apply(target: PieceBlueprint, _itemMult: number) {
+        target.immunities.burning = true;
+    }
 }
 
 //RING BUOY, U+1F6DF revive a dead program
 //RING BUOY, U+1F6DF restore the last destroyed program to hand /target a space? or give piece a wontDie bool?
 //lifeboat ROWBOAT, U+1F6A3
 
-export const allItems = [Blueberry, Box, Battery, Iron, Juice, Mushroom, Pepper, Rock, Floppy, Voucher, Bandage, Extinguisher, Formula, Gift, Hotline, Plunger, Roids, Teapot, Toothbrush, Beans, Bugle, Jar, Keygen, Makeover, Melon, Megaphone, Pinata, Rations, ShootingStar, Spanner, Supplement, Update2, Chili, Cake, Carrot, Coffee, Djembe, Garlic, Wand, Lightning, Meat, Pie, Soap, Dupe, Genie, Hourglass, Sandwich, Life, Blessing, Feast, Ginger, Beer, Pandora, Update3];
+export const allItems = [Blueberry, Box, Battery, Iron, Headphones, Juice, Mushroom, Pepper, Floppy, Voucher, Bandage, Extinguisher, Formula, Frogman, Gift, Hotline, Labcoat, Plunger, Roids, Teapot, Toothbrush, Beans, Blackheart, Bugle, Gloves, Jar, Keygen, Makeover, Melon, Megaphone, Pinata, Rations, ShootingStar, Spanner, Supplement, Update2, Chili, Cake, Carrot, Coffee, Djembe, Garlic, Goggles, Wand, Lightning, Meat, Pie, Soap, Disguise, Dupe, Genie, Hourglass, Sandwich, Life, Blessing, Feast, Ginger, Beer, Pandora, Update3];
 export const upgradeItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Roids, Formula]
 
 /*Items.forEach(i => {
@@ -1065,4 +1146,3 @@ console.log('all items: ', allItems.length);
 
 // U+1F47A
 
-//BLACK HEART SUIT, U+2665

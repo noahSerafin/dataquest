@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue"
 import type { PieceBlueprint } from "../types"
+import { STATUS_ICONS } from "../statuses";
 
 const props = defineProps<{
   piece: PieceBlueprint;
@@ -81,6 +82,24 @@ function showRarity(rarity: number) {
 
 const rarityInfo = computed(() => showRarity(props.piece.rarity));
 
+const activeImmunities = computed((): [string, boolean][] => {
+  // Object.entries returns (string | boolean)[], so we assert/carefully filter
+  return Object.entries(props.piece.immunities)
+    .map(([k, v]) => [k, Boolean(v)] as [string, boolean]) // normalize to boolean
+    .filter(([, active]) => active);
+});
+
+const openTooltip = ref<string|null>(null);
+function toggleTooltip(key: string) {
+  // If clicking the already-open one, close it
+  if (openTooltip.value === key) {
+    openTooltip.value = null;
+    return;
+  }
+  // Otherwise open the new one (AND close all others automatically)
+  openTooltip.value = key;
+}
+
 defineEmits(["buy", "sell", "highlightPlacements", "close"])
 </script>
 
@@ -116,6 +135,16 @@ defineEmits(["buy", "sell", "highlightPlacements", "close"])
         <p class="stat stat-range text-orange">Range: {{ piece.range }}</p>
         <p class="stat stat-attack text-red">Attack: {{ piece.attack }}</p>
         <p class="stat stat-defence text-cyan">Defence: {{ piece.defence }}</p>
+        <p v-if="activeImmunities.length > 0">Immune to:
+          <span
+          v-for="([key]) in activeImmunities"
+          :key="key"
+          class="status-icon"
+          title="key"  
+          @click="toggleTooltip(key)"        
+          >{{ STATUS_ICONS[key] ?? '?' }}
+          </span>
+        </p>
       </div>
 
       <div class="actions">

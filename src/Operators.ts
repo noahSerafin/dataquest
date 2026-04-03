@@ -1,6 +1,7 @@
 import type { OS } from "./types";
-import { Voucher, Mushroom, Garlic, Juice, Meat, Genie, Pandora, Update2, Dupe} from "./Items";
+import { Voucher, Mushroom, Garlic, Juice, Meat, Genie, Pandora, Update2, Dupe, Headphones} from "./Items";
 import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Clippy, Notepad} from "./AdminPrograms";
+import { createDefaultStatuses } from "./types";
 
     const knife =  {
         id: crypto.randomUUID(),
@@ -16,7 +17,8 @@ import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Vola
         color: '#2fc5ebff',
         // blueprint-only fields:
         isPlaced: false,
-        cost: 1 // or whatever cost formula you want
+        cost: 1 ,
+        immunities: createDefaultStatuses()
     }
     const testPiece =  {
         id: crypto.randomUUID(),
@@ -32,7 +34,8 @@ import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Vola
         color: "#ee74eeff",
         // blueprint-only fields:
         isPlaced: false,
-        cost: 10 // or whatever cost formula you want
+        cost: 10 ,
+        immunities: createDefaultStatuses()
     }
     const superKnife =  {
         id: crypto.randomUUID(),
@@ -48,7 +51,8 @@ import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Vola
         color: '#902febff',
         // blueprint-only fields:
         isPlaced: false,
-        cost: 1 // or whatever cost formula you want
+        cost: 1 ,
+        immunities: createDefaultStatuses()
     }
 
     const shield =  {
@@ -65,7 +69,8 @@ import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Vola
         color: "#2fa7ca",
         // blueprint-only fields:
         isPlaced: false,
-        cost: 1 // or whatever cost formula you want
+        cost: 1 ,
+        immunities: createDefaultStatuses()
     }
 
     const sling =  {
@@ -82,7 +87,8 @@ import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Vola
         color: "#019700",
         // blueprint-only fields:
         isPlaced: false,
-        cost: 1 // or whatever cost formula you want
+        cost: 1 ,
+        immunities: createDefaultStatuses()
     }
 
     const potato =  {
@@ -99,7 +105,8 @@ import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Vola
         color: "#ad8226ff",
         // blueprint-only fields:
         isPlaced: false,
-        cost: 1 // or whatever cost formula you want
+        cost: 1 ,
+        immunities: createDefaultStatuses()
     }
     const tp =  {
         id: crypto.randomUUID(),
@@ -115,7 +122,8 @@ import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Vola
         rarity: 1,
         // blueprint-only fields:
         isPlaced: false,
-        cost: 1 // or whatever cost formula you want
+        cost: 1,
+        immunities: createDefaultStatuses()
     }
     const rat =  {
         id: crypto.randomUUID(),
@@ -131,7 +139,8 @@ import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Vola
         rarity: 1,
         // blueprint-only fields:
         isPlaced: false,
-        cost: 1 // or whatever cost formula you want
+        cost: 1,
+        immunities: createDefaultStatuses()
     }
     const ant =  {
         id: crypto.randomUUID(),
@@ -147,7 +156,8 @@ import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Vola
         rarity: 1,
         // blueprint-only fields:
         isPlaced: false,
-        cost: 1 // or whatever cost formula you want
+        cost: 1,
+        immunities: createDefaultStatuses()
     }
     const labrat =  {
         id: crypto.randomUUID(),
@@ -163,7 +173,8 @@ import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Vola
         rarity: 3,
         // blueprint-only fields:
         isPlaced: false,
-        cost: 1 // or whatever cost formula you want
+        cost: 1,
+        immunities: createDefaultStatuses()
     }
     const snail =  {
         id: crypto.randomUUID(),
@@ -179,7 +190,8 @@ import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Vola
         rarity: 1,
         // blueprint-only fields:
         isPlaced: false,
-        cost: 1 // or whatever cost formula you want
+        cost: 1,
+        immunities: createDefaultStatuses()
     }
     const bug =  {
         id: crypto.randomUUID(),
@@ -195,7 +207,8 @@ import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Vola
         rarity: 1,
         // blueprint-only fields:
         isPlaced: false,
-        cost: 1 // or whatever cost formula you want
+        cost: 1,
+        immunities: createDefaultStatuses()
     }
     const bee =  {
         id: crypto.randomUUID(),
@@ -211,7 +224,8 @@ import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Vola
         rarity: 1,
         // blueprint-only fields:
         isPlaced: false,
-        cost: 1 // or whatever cost formula you want
+        cost: 1,
+        immunities: createDefaultStatuses()
     }
     const aegis =  {
         id: crypto.randomUUID(),
@@ -227,7 +241,8 @@ import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Vola
         rarity: 2,
         // blueprint-only fields:
         isPlaced: false,
-        cost: 1 // or whatever cost formula you want
+        cost: 1,
+        immunities: createDefaultStatuses()
     }
     const screwdriver =  {
         id: crypto.randomUUID(),
@@ -243,7 +258,8 @@ import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Vola
         rarity: 5,
         // blueprint-only fields:
         isPlaced: false,
-        cost: 1 // or whatever cost formula you want
+        cost: 1,
+        immunities: createDefaultStatuses()
     }
     const lance = {
         id: crypto.randomUUID(),
@@ -259,6 +275,7 @@ import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Vola
         color: "#2fc5ebff",
         isPlaced: false,
         cost: 2,
+        immunities: createDefaultStatuses()
     }
     const banana = {
         id: crypto.randomUUID(),
@@ -274,6 +291,7 @@ import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Vola
         color: "#2f724b",
         isPlaced: false,
         cost: 1,
+        immunities: createDefaultStatuses()
     }
     //1, 1, 0, 0, 0,
 
@@ -292,7 +310,8 @@ import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Vola
         isPlaced: false,
         cost: 1,
         hybridName: 'LanceHog',
-        extraUnicode: 'U+1F994'
+        extraUnicode: 'U+1F994',
+        immunities: createDefaultStatuses()
     }
 
     //guard, snail, TP, Lance, Bug, Screwdriver
@@ -492,7 +511,7 @@ const Debugger : OS = {//lance //bug //screwdriver
     memory: 10,
     adminSlots: 6,
     blueprints: [aegis, superKnife, testhybrid, testPiece],
-    items: [new Genie, new Pandora, new Update2, new Dupe],
+    items: [new Genie, new Pandora, new Update2, new Dupe, new Headphones],
     admins: [new Crystal],
     lives: 9,
     description: 'FOR TESTING'

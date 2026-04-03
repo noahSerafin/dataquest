@@ -25,6 +25,7 @@ export type PieceBlueprint = {
   color: string
   isPlaced: boolean
   cost: number
+  immunities: Immunities
   hybridName?: string
   extraUnicode?: string
   variantName?: string

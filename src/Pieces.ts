@@ -304,6 +304,16 @@ export abstract class Piece {
     // ---- copy runtime state
     copy.actions = this.actions;
     copy.movesRemaining = this.movesRemaining;
+    copy.defenceRemaining = this.defenceRemaining;
+    
+    if(this.hybridName){
+      copy.hybridName = this.hybridName;
+      copy.description = this.description;
+      copy.extraUnicode = this.extraUnicode;
+    }
+    if (this.variantName) {
+      copy.variantName = this.variantName;
+    }
 
     return copy;
   }
@@ -1177,7 +1187,7 @@ class Tar extends Piece {
 class Mine extends Piece {
   static name = "Mine";
   static description = "A program invisble to the enemy that damages programs moving over it, removing itself";
-  static unicode = "U+1F4A5";
+  static unicode = "U+1F4A5";// MAP SYMBOL FOR LIGHTHOUSE, U+26EF
   static color = "#ff9d00";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
@@ -4125,16 +4135,23 @@ console.log("Pieces of rarity 4: ", adminLogs.rarity4)
 console.log("Pieces of rarity 5: ", adminLogs.rarity5)
 console.log("Pieces of rarity 6: ", adminLogs.rarity6)
 
-//chequered flag U+1F3C1
+//add ink?
+//Poo U+1F4A9 - disease trap?
+//CONSTRUCTION WORKER, U+1F477 spawns stonewalls
+//TELEVISION, U+1F4FA charm piece - brainwash
 //U+1F6A9 Triangular flag - Banner: boost group of friendly's attack
+// ZOMBIE, U+1F9DF
 
-//U+1FAA8 rock boulder pivk up speed not maxsize (worse snowman)
+// SUPERHERO, U+1F9B8 high atk, defence, movement,  - double mover? laser/cannon attack
+//fleur de lis U+269C scout, lay traps?
 //fix dolls
-
 //Invisible wall - hi defence hidden piece
+//U+1FAA8 rock boulder pick up speed not maxsize (worse snowman)
 //FISHING POLE AND FISH, U+1F3A3 long range - move a piece toward it
-//PLAYGROUND SLIDE, U+1F6DD like gate but with more range? line target??
 
+//chequered flag U+1F3C1
+
+//PLAYGROUND SLIDE, U+1F6DD like gate but with more range? line target??
 //SWAN, U+1F9A2 - break a man's arm /reduce range?
 
 //FROG FACE, U+1F438 //range 3 low atk //poison/hop ability? FROG EGYPTIAN HIEROGLYPH I007, U+1318F
@@ -4143,5 +4160,5 @@ console.log("Pieces of rarity 6: ", adminLogs.rarity6)
 //chess knight special move L shape
 
 //DANCER, U+1F483 //high movement no damage
-//
 //BACTRIAN CAMEL, U+1F42B
+//Dromidary

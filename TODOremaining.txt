@@ -8,7 +8,6 @@ Pandora not useable when full
 pass primary variant to hybrid
 you win not dissapearing in endless mode
 
-make some items give immunity to a blueprint - repurpose some admins that do this
 more + - trade off admins
 make some variants immunities?
 
@@ -34,7 +33,6 @@ SAVE GAME STATE for bugs 7.5
 //sort out trolley/toolbox
 allow burning to remove freezing? and vice versa?
 Investigate why taoism or highrise might be adding def every turn
-variants stats reloading but not name/color etc.
 variant should overide base piece color, (and tile colour???)
 buff relay to be programs.length?
 non stacking bosses should cycle through (mirror becomes too predicatable)//always remove mirror

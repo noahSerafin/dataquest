@@ -870,7 +870,7 @@ function instantiatePieceFromBlueprint(//this goes in app
   piece.attack = bp.attack
   piece.defence = bp.defence
   piece.defenceRemaining = bp.defence
-
+  piece.immunities = bp.immunities;
 
   // Step 3: hybrid-specific augmentation
   if (bp.hybridName) {
@@ -882,8 +882,8 @@ function instantiatePieceFromBlueprint(//this goes in app
   if (bp.variantName) {
     piece.variantName = bp.variantName;
   }
-
-  return piece//modified piece with new stats
+  
+  return piece;//modified piece with new stats
 }
 
 async function placePieceOnBoardAt(coord: Coordinate) {

@@ -3101,6 +3101,7 @@ console.log("Admins of rarity 4: ", adminLogs.rarity4)
 console.log("Admins of rarity 5: ", adminLogs.rarity5)
 console.log("Admins of rarity 6: ", adminLogs.rarity6)
 
+//SALT SHAKER, U+1F9C2 Salty - losing a round boosts your stats
 //// BUTTER, U+1F9C8 moves your pieces randomly after your turn (for free?)
 //RECYCLING SYMBOL, U+2672 selling programs gives 1 of lower rarirty
 

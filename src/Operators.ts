@@ -177,6 +177,23 @@ import { createDefaultStatuses } from "./types";
         cost: 1,
         immunities: createDefaultStatuses()
     }
+    const egg =  {
+        id: crypto.randomUUID(),
+        name: "Egg",
+        description: "What came first? Spawns a Chick",
+        unicode: "U+1F95A",
+        color: "rgb(240, 232, 216)",
+        maxSize: 1,
+        moves: 0,
+        range: 1,
+        attack: 0,
+        defence: 1,
+        rarity: 1,
+        // blueprint-only fields:
+        isPlaced: false,
+        cost: 1,
+        immunities: createDefaultStatuses()
+    }
     const snail =  {
         id: crypto.randomUUID(),
         name: "Snail",
@@ -378,13 +395,13 @@ const Window : OS = {//knife //shield //snail
 
 }
 
-const Apple : OS = {//TP //rat
+const Apple : OS = {
     name: 'Apple',
     unicode: 'U+1F34F',
     money: 10,
     memory: 5,
     adminSlots: 4,
-    blueprints: [ant, bee, shield],
+    blueprints: [ant, bee, egg],
     items: [new Mushroom, new Juice],
     admins: [],
     lives: 3,

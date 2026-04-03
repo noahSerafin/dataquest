@@ -332,10 +332,10 @@ class Lock extends Admin {
 
 class Eclipse extends Admin {
     static name = "Eclipse";
-    static description = "Every player program loses -1 range";
+    static description = "Every player program loses -1 range";//hides enemies?
     static unicode = "U+1F31A";
     static color = "#000000ff";
-    static rarity = 5;
+    static rarity = 4;
     constructor() {
         super(Eclipse.name, Eclipse.description, Eclipse.unicode, Eclipse.color, 5, Eclipse.rarity, 'gameState', 'onPlacement')
     }
@@ -548,9 +548,6 @@ class Frog extends Admin {
         }
     }
 }
-//quicksand - players that move lose 1 move
-//THONG SANDAL, U+1FA74
-//HOURGLASS WITH FLOWING SAND, U+23F3
 
 class Coral extends Admin {
     static name = "Deep Water";
@@ -624,7 +621,6 @@ class Wilt extends Admin {
     }
 }
 
-// BIOHAZARD SIGN, U+2623 -2 max size
 class Biohazard extends Admin {
     static name = "Biohazard";
     static description = "Every player program is diseased";
@@ -729,7 +725,7 @@ class Tsunami extends Admin {
 
 class Coaster extends Admin {
     static name = "Up and Up";//cranking up
-    static description = "Every player piece takes damage +1 damage after each turn after the first";//turn count is damage?
+    static description = "Every player piece takes a cumulating +1 damage after each turn after the first";//turn count is damage?
     static unicode = "U+1F3A2";//"U+1F3D4";//mountain
     static color = "rgb(212, 201, 187)";
     static rarity = 4;
@@ -819,15 +815,130 @@ class Cocktail extends Admin {
         this.addedBosses = [];
     }
 }
+//"U+1F3D4";//mountain +4 maxsize (3)
+class Mountain extends Admin {
+    static name = "Mountain";
+    static description = "Every enemy gains +4 max size at the start of the round";
+    static unicode = "U+1F3D4";
+    static color = "rgb(154, 155, 155)";
+    static rarity = 3;
+    constructor() {
+        super(Mountain.name, Mountain.description, Mountain.unicode, Mountain.color, 3, Mountain.rarity, 'gameState', 'onRoundStart')
+    }
+    async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+        for (const piece of activePieces) {
+            if (piece.team === 'enemy') {
+                piece.addModifier({ maxSize: 4 })
+            }
+        };
+    }
+}
+//quicksand BEACH WITH UMBRELLA, U+1F3D6 //THONG SANDAL, U+1FA74 //HOURGLASS WITH FLOWING SAND, U+23F3
+export class Quicksand extends Admin {
+  static name = "Quicksand";
+  static description = "player programs that have moved temporarily lose -1 moves at the end of your turn";
+  static unicode = "U+1F3D6";
+  static color = "rgb(252, 230, 148)";
+  static rarity = 1;
+  constructor() {
+    super(Quicksand.name, Quicksand.description, Quicksand.unicode, Quicksand.color, 3, Quicksand.rarity, 'gameState', 'onTurnEnd')
+  }
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    for (const p of activePieces) {
+      if(p.team==='enemy' && p.movesRemaining < p.getStat('moves')){
+        p.addTempModifier({moves: -1})
+      }    
+    };
+  }
+}
+//CLOUD WITH SNOW, U+1F328 - white out -1 moves -1 range 5
+class Snow extends Admin {
+    static name = "White Out";
+    static description = "Every player program loses -1 range and -1 moves";
+    static unicode = "U+1F328";
+    static color = "rgb(255, 255, 255)";
+    static rarity = 5;
+    constructor() {
+        super(Snow.name, Snow.description, Snow.unicode, Snow.color, 5, Snow.rarity, 'gameState', 'onPlacement')
+    }
+    async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+        const idx = activePieces.findIndex(p => p.id === id);
+        activePieces[idx].addModifier({ range: -1 })
+        activePieces[idx].addModifier({ moves: -1 })
+    }
+}
+class Nightfall extends Admin {
+    static name = "Nightfall";
+    static description = "Hides a random enemy on the end of each turn";
+    static unicode = "U+1F303";
+    static color = "rgb(0, 0, 0)";
+    static rarity = 6;
+    constructor() {
+        super(Nightfall.name, Nightfall.description, Nightfall.unicode, Nightfall.color, 5, Nightfall.rarity, 'gameState', 'onTurnEnd')
+    }
+    async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+        const enemyPieces: Piece[] = []
+        for (const piece of activePieces) {
+            if (piece.team === 'enemy' && !piece.statuses.exposed) {
+                enemyPieces.push(piece)
+            }
+        };
+        const randId = enemyPieces[Math.floor(Math.random() * enemyPieces.length)].id
+        const idx = activePieces.findIndex(p => p.id === randId);
+        activePieces[idx].statuses.hidden = true
+    }
+}
+//black book NOTEBOOK, U+1F4D3 after 3 turns switch the side of a friendly 5
+class Blackmail extends Admin {
+    static name = "Blackmail";
+    static description = "After 5 turns, a random player piece switches sides.";
+    static unicode = "U+1F4D3";
+    static color = "rgb(9, 2, 107)";
+    static rarity = 5;
+    constructor() {
+        super(Blackmail.name, Blackmail.description, Blackmail.unicode, Blackmail.color, 5, Blackmail.rarity, 'gameState', 'onTurnEnd')
+    }
+    private count: number = 0
+    async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+        if (this.count === 5) {
+            const playerPieces: Piece[] = []
+            for (const piece of activePieces) {
+                if (piece.team === 'player') {
+                    playerPieces.push(piece)
+                }
+            };
+            const randId = playerPieces[Math.floor(Math.random() * playerPieces.length)].id
+            const idx = activePieces.findIndex(p => p.id === randId);
+            activePieces[idx].team = 'enemy'
+        }
+        this.count++
+    }
+    onRoundEnd() {
+        this.count = 0;
+    }
+}
 
-//FIREWORKS, U+1F386 enemy splash damage
-
-//FACE WITH LOOK OF TRIUMPH, U+1F624
-//EXPRESSIONLESS FACE, U+1F611 sleepy
-//1 admin disabled after each turn
+// CLIPBOARD, U+1F4CB inspection nerfs all your placed programs 3
+class ClipBoard extends Admin {
+    static name = "Inpsection";
+    static description = "Every player program loses -1 max size and -1 attack";
+    static unicode = "U+1F4CB";
+    static color = "rgb(158, 158, 158)";
+    static rarity = 3;
+    constructor() {
+        super(ClipBoard.name, ClipBoard.description, ClipBoard.unicode, ClipBoard.color, 3, ClipBoard.rarity, 'gameState', 'onPlacement')
+    }
+    async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+        const idx = activePieces.findIndex(p => p.id === id);
+        if (activePieces[idx].getStat('maxSize') > 1) {
+            activePieces[idx].addModifier({ maxSize: -1 })
+        }
+    }
+}
+// LEDGER, U+1F4D2 all transactions - nerf based on money 2
 
 // damage mult for enemy?
-export const allBosses = [LowBattery, NorthWind, Customs, Downturn, Hook, Mirror, Shrine, Whale, Anchor, Castle, Circus, Hammer, Izakaya, Tsunami, Wilt, Biohazard, Cocktail, Coral, Lock, Factory, Jack, Coaster, Snowflake, Tornado, Eclipse, Bones, Frog, Singularity, Volcano, Sun, Fog, Nofun, Omega, Reaper, REDACTED, Wrath]
+export const allBosses = [LowBattery, NorthWind, Quicksand, Customs, Downturn, Hook, Mirror, Mountain, Shrine, Whale, Anchor, Castle, Circus, Hammer, ClipBoard, Izakaya, Tsunami, Wilt, Biohazard, Cocktail, Coral, Eclipse, Lock, Factory, Jack, Coaster, Blackmail, Snowflake, Bones, Frog, Singularity, Tornado, Volcano, Snow, Sun, Fog, Nightfall, Nofun, Omega, Reaper, REDACTED, Wrath]
 export const nonStackableBosses = [Mirror, Customs, Snowflake, Sun, Frog, Biohazard, Coral, Izakaya, REDACTED, Fog, Singularity, Tornado, Cocktail]
 
 console.log('bosses length: ', allBosses.length)
@@ -854,15 +965,14 @@ console.log("Bosses of rarity 4: ", adminLogs.rarity4)
 console.log("Bosses of rarity 5: ", adminLogs.rarity5)
 console.log("Bosses of rarity 6: ", adminLogs.rarity6)
 
+//FIREWORKS, U+1F386 enemy splash damage
+//FACE WITH LOOK OF TRIUMPH, U+1F624
+//EXPRESSIONLESS FACE, U+1F611 sleepy
+//1 admin disabled after each turn
 
-//CLOUD WITH SNOW, U+1F328
+// LEAFLESS TREE, U+1FABE
 
 //EUROPEAN CASTLE, U+1F3F0 enemies def up +1, maxsize + 1
-
-//black book NOTEBOOK, U+1F4D3
-
-// LEDGER, U+1F4D2 all transactions
-// CLIPBOARD, U+1F4CB inspection
 
 //RIBBON, U+1F380
 

@@ -1028,8 +1028,14 @@ const movePiece = async (coord: Coordinate) => {
     p.targetType == 'trapPiece' && p.tiles.some(t => t.x === coord.x && t.y === coord.y)
   );
   if (trap && trap.id !== selectedPiece.value.id) {
-    await trap.triggerTrap(selectedPiece.value);
-    //removePiece(trap);//shouldn't really be necessary - testing without
+    if(player.value.hasAdmin('Wings')){//still trigger and remove, but don't damage
+      trap.isTriggering = true;
+      trap.statuses.hidden = false;
+      await new Promise(resolve => setTimeout(resolve, 350));
+      removePiece(trap)
+    } else {
+      await trap.triggerTrap(selectedPiece.value);
+    }
   }
   if (selectedPiece.value.targetType === 'trapPiece') {
     //check for others

@@ -282,14 +282,13 @@ async function executeEnemyIntent(
           );
           if (trap && trap.id !== enemy.id) {
             await trap.triggerTrap(enemy);
-            //removePiece(trap);//shouldn't really be necessary
           }
           if(enemy.targetType === 'trapPiece'){//frond logic
             const otherPiece = activePieces.find(p =>
               p.id !== enemy.id && p.tiles.some(t => t.x === step.x && t.y === step.y)
             );
             if(otherPiece){
-              await enemy.triggerTrap(otherPiece);
+              await enemy.triggerTrap(otherPiece);//
             }
           }
         }
@@ -308,7 +307,6 @@ async function executeEnemyIntent(
         enemy.moveTo(intent.space)
         if (trap && trap.id !== enemy.id) {
           await trap.triggerTrap(enemy);
-          //removePiece(trap);//shouldn't really be necessary
         }
         helpers.clearHighlights();
         break;

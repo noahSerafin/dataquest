@@ -1,4 +1,5 @@
-import { Item } from "./Items";
+import { pickWeightedRandomItem } from "./helperFunctions";
+import { Box, Gift, Item, upgradeItems } from "./Items";
 import { Piece, allPieces } from "./Pieces";
 import { Player } from "./Player";
 import type { Coordinate, PieceBlueprint, StatModifier, StatusKey } from "./types";
@@ -1951,14 +1952,14 @@ class Hermit extends Admin {
   }
 }
 
-class Tracker extends Admin {// PAW PRINTS, U+1F43E Tracker // FOOTPRINTS, U+1F463 Tracker
+class Tracker extends Admin { // FOOTPRINTS, U+1F463
   static name = "Tracker";
   static description = "Exposes all enemies at the start of a round";
   static unicode = "U+1F43E";
   static color = "#00720fff";
-  static rarity = 2;
+  static rarity = 3;
   constructor() {
-    super(Tracker.name, Tracker.description, Tracker.unicode, Tracker.color, 3, Tracker.rarity, 'gameState', 'onRoundStart')
+    super(Tracker.name, Tracker.description, Tracker.unicode, Tracker.color, 4, Tracker.rarity, 'gameState', 'onRoundStart')
   }
   
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
@@ -2833,9 +2834,128 @@ class Briefcase extends Admin {
     }
   }
 }
+//150
+class Mail extends Admin {
+  static name = "Subscription";
+  static description = "If you have room, spends $2 to receive a mystery box after every round won";
+  static unicode = "U+1F4EB";
+  static color = "rgb(63, 141, 81)";
+  static rarity = 2;
+  constructor() {
+    super(Mail.name, Mail.description, Mail.unicode, Mail.color, 2, Mail.rarity, 'player', 'onRoundEnd')
+  }
+  
+  async apply({ player }: { player: Player }) {
+    if(player.effectiveMoney >= 2 && (player.freeMemory >= 1 || player.hasAdmin('Schoolbag') && player.freeMemory >= 0.5)){
+      player.spend(2);
+      const gift = new Box;
+      player.items.push(gift);
+    }
+  }
+}
+class Christmas extends Admin {
+  static name = "St. Nick";
+  static description = "Gives you a gift box after every round won";
+  static unicode = "U+1F385";
+  static color = "rgb(26, 95, 0)";
+  static rarity = 3;
+  constructor() {
+    super(Christmas.name, Christmas.description, Christmas.unicode, Christmas.color, 5, Christmas.rarity, 'player', 'onRoundEnd')
+  }
+  
+  async apply({ player }: { player: Player }) {
+    if(player.freeMemory >= 1 || player.hasAdmin('Schoolbag') && player.freeMemory >= 0.5){
+      const gift = new Gift;
+      player.items.push(gift);
+    }
+  }
+}
+class Butler extends Admin {
+  static name = "Butler";
+  static description = "Brings you food after every round won";
+  static unicode = "U+1F935";
+  static color = "rgb(27, 27, 27)";
+  static rarity = 4;
+  constructor() {
+    super(Butler.name, Butler.description, Butler.unicode, Butler.color, 8, Butler.rarity, 'player', 'onRoundEnd')
+  }
+  
+  async apply({ player }: { player: Player }) {
+    if(player.freeMemory >= 1 || player.hasAdmin('Schoolbag') && player.freeMemory >= 0.5){
+      const gift =  pickWeightedRandomItem(upgradeItems, player);
+      player.items.push(gift);
+    }
+  }
+}
+//CHAIN reaction onPieceDestruction deal damage around head like bowling but deal +1 damage each time?
+class Chain extends Admin {//test
+  static name = "Chain Reaction";
+  static description = "Destroying a program deals 1 damage to each enemy tile adjacent to it's head, +1 damage each time this is triggered. Resets to 1 each round.";//or enemy's attack???
+  static unicode = "U+26D3";//U+26D3//U+1F517
+  static color = "rgb(247, 222, 162)";
+  static rarity = 3;
+  constructor() {
+    super(Chain.name, Chain.description, Chain.unicode, Chain.color, 4, Chain.rarity, 'gameState', 'onPieceDestruction')
+  }
+  private count = 0;
+  async apply({ activePieces, piece }: { activePieces: Piece[], piece?: Piece }) {
+    if (!piece) return;
+    const targetTile = piece.headPosition
+    const adjacent : Coordinate[] = [
+      {x: targetTile.x+1, y: targetTile.y },
+      {x: targetTile.x-1, y: targetTile.y },
+      {x: targetTile.x, y: targetTile.y+1 },
+      {x: targetTile.x, y: targetTile.y-1 }
+    ];
+    for (const piece of activePieces) {
+      const isAdjacent = piece.tiles.some(t =>
+        adjacent.some(c => c.x === t.x && c.y === t.y)
+      );
+      if (isAdjacent && piece.team === 'enemy') {//only attacks enemies
+        await piece.takeDamage(1 + this.count);
+      }
+    };
+  }
+  onRoundEnd() {
+    this.count = 0;
+  }
+}
+class Nose extends Admin {
+  static name = "Traffic Sniffer";
+  static description = "Enemies that move are exposed";
+  static unicode = "U+1F443";
+  static color = "rgb(94, 117, 100)";
+  static rarity = 1;
+  constructor() {
+    super(Nose.name, Nose.description, Nose.unicode, Nose.color, 2, Nose.rarity, 'gameState', 'onEnemyTurnEnd')
+  }
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    for (const p of activePieces) {
+      if(p.team==='enemy' && p.movesRemaining < p.getStat('moves')){
+        if(!p.immunities.exposed){
+          p.statuses.hidden = false;
+          p.statuses.exposed = true;
+        }
+      }    
+    };
+  }
+}
+//"U+269A" wings immune to traps
+class Wings extends Admin {
+  static name = "Wings";
+  static description = "Your programs are immune to traps";//and move over gaps?
+  static unicode = "U+1FABD";
+  static color = "rgb(94, 117, 100)";
+  static rarity = 2;
+  constructor() {
+    super(Wings.name, Wings.description, Wings.unicode, Wings.color, 3, Wings.rarity, 'player', 'other')
+  }
+  async apply({ player: _player }: { player: Player }) {
+  }
+}
 
-//4 all require damage receiver
 /*
+//3 all require damage receiver
 //SELFIE, U+1F933 use action on self for a temp defence?
 
 export class Chain extends Admin {// status test unfinished: make enemies spread to fellow enemies
@@ -2946,7 +3066,7 @@ export class Clippy extends Admin {
   //handle in player
 }
 
-export const allAdmins = [Bank, Bucket, Candle, Cheese, Smoker, Compass, CreditCard, Crystal, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Trolley, Seed, Slots, Sprinkler, Tempura, Sneakers, Chime, Abacus, Aesculapius, Appraisal, Balloon, Briefcase, Bubble, Cactus, Coin, Purse, Convenience, FireEngine, Heart, Hermes, Joker, Loot, Clover, Microscope, Newspaper, Pickup, Putter, Relay, Scarf, Stiletto, Bowling, Tracker, Violin, Vitamins, AdminMap, Barber, Ace, AirSupport, Bone, Blood, Bouquet, Camp, Luggage, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Dice, Jammer, Roger, Juggler, Ladder, Puzzle, Razor, Sled, Rune, Shades, Stonks, Telescope, Crown, Toolbox, Ambulance, Backdoor, BionicArm, BionicLeg, Crash, Broom, DartBoard, Dove, Evergreen, Eye, Discount, Fountain, Feather, Fuel, Spoon, Liberty, Lightbulb, Lotus, Ollie, Palette, Pazzaz, PetriDish, Prayer, Wheel, Pants, Bipolar, Variety, Volatile, Artic, BlackBelt, Lungs, Chemistry, Chivalry, Toilet, Copier, Diamond, Hamsa, Skyscraper, Howzat, Inheritance, Cherries, Brain, Meteor, Monarch, Onion, PeaPod, Teddy, Pong, RollerBlades, Bell, Ice, Ballet, Umbrella, Dharma, Bath, Cards, Disco, Minerva, Needle, Pi, Osiris, Ring, School, Taoism];
+export const allAdmins = [Bank, Bucket, Candle, Cheese, Smoker, Compass, CreditCard, Crystal, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Trolley, Seed, Slots, Sprinkler, Tempura, Nose, Sneakers, Chime, Abacus, Aesculapius, Appraisal, Balloon, Briefcase, Bubble, Cactus, Coin, Purse, Convenience, FireEngine, Heart, Hermes, Joker, Loot, Clover, Microscope, Newspaper, Pickup, Putter, Relay, Scarf, Stiletto, Mail, Bowling, Violin, Vitamins, Wings, AdminMap, Barber, Ace, AirSupport, Bone, Blood, Bouquet, Camp, Luggage, Chain, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Dice, Jammer, Roger, Juggler, Ladder, Puzzle, Razor, Sled, Rune, Shades, Stonks, Christmas, Telescope, Crown, Toolbox, Tracker, Ambulance, Backdoor, BionicArm, BionicLeg, Crash, Broom, DartBoard, Butler, Dove, Evergreen, Eye, Discount, Fountain, Feather, Fuel, Spoon, Liberty, Lightbulb, Lotus, Ollie, Palette, Pazzaz, PetriDish, Prayer, Wheel, Pants, Bipolar, Variety, Volatile, Artic, BlackBelt, Lungs, Chemistry, Chivalry, Toilet, Copier, Diamond, Hamsa, Skyscraper, Howzat, Inheritance, Cherries, Brain, Meteor, Monarch, Onion, PeaPod, Teddy, Pong, RollerBlades, Bell, Ice, Ballet, Umbrella, Dharma, Bath, Cards, Disco, Minerva, Needle, Pi, Osiris, Ring, School, Taoism];
 console.log('admins length: ', allAdmins.length)
 let adminLogs = {
   rarity1: 0,
@@ -2981,13 +3101,7 @@ console.log("Admins of rarity 4: ", adminLogs.rarity4)
 console.log("Admins of rarity 5: ", adminLogs.rarity5)
 console.log("Admins of rarity 6: ", adminLogs.rarity6)
 
-// FATHER CHRISTMAS, U+1F38 gift at the end of each round
-// MAN IN TUXEDO, U+1F935 butler, food at end of each round
-//CHAIN reaction onPieceDestruction deal damage around head like bowling but deal +1 damage each time?
-//NOSE, U+1F443 traffic sniffing programs that move become exposed/ or tracker does that?
 //// BUTTER, U+1F9C8 moves your pieces randomly after your turn (for free?)
-
-//"U+1FABD" "U+269A" wings immune to traps //rarity less than tracker - make tracker rarer?
 //RECYCLING SYMBOL, U+2672 selling programs gives 1 of lower rarirty
 
 //U+1F5BC Framed picture - copy items?

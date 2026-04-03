@@ -236,7 +236,7 @@ export abstract class Piece {
   async triggerTrap(target: any): Promise<void> {
     this.isTriggering = true;
     this.statuses.hidden = false;
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 350));
     await this.special(target);
     this.isTriggering = false;
   }

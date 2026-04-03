@@ -836,7 +836,7 @@ class Mountain extends Admin {
 //quicksand BEACH WITH UMBRELLA, U+1F3D6 //THONG SANDAL, U+1FA74 //HOURGLASS WITH FLOWING SAND, U+23F3
 export class Quicksand extends Admin {
   static name = "Quicksand";
-  static description = "player programs that have moved temporarily lose -1 moves at the end of your turn";
+  static description = "Programs that move temporarily lose -1 moves at the end of your turn";
   static unicode = "U+1F3D6";
   static color = "rgb(252, 230, 148)";
   static rarity = 1;
@@ -845,7 +845,7 @@ export class Quicksand extends Admin {
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces) {
-      if(p.team==='enemy' && p.movesRemaining < p.getStat('moves')){
+      if(p.team==='player' && p.movesRemaining < p.getStat('moves')){
         p.addTempModifier({moves: -1})
       }    
     };

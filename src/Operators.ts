@@ -286,7 +286,7 @@ import { createDefaultStatuses } from "./types";
         unicode: "U+1F3A0",
         maxSize: 3,
         moves: 2,
-        range: 3,
+        range: 2,
         attack: 2,
         defence: 0,
         rarity: 2,
@@ -408,7 +408,7 @@ const Apple : OS = {
     description: 'Limited admin functionality, but start with excess money and some consumable items.'
 }
 
-const Temple : OS = {//lance //bug //screwdriver
+const Temple : OS = {
     name: 'Temple',
     unicode: 'U+2696',
     money: 1,
@@ -421,7 +421,7 @@ const Temple : OS = {//lance //bug //screwdriver
     description: "Overclocked memory and admin slots, low money. Some unique starting programs, and a Pandora's Box."
 }
 
-const Fortran : OS = {//lance //bug //screwdriver
+const Fortran : OS = {
     name: 'Fortran',
     unicode: 'U+2697',
     money: 0,
@@ -434,7 +434,7 @@ const Fortran : OS = {//lance //bug //screwdriver
     description: "Ancient alchemical technology, heavily focused on statuses."
 }
 
-const Cobol : OS = {//lance //bug //screwdriver
+const Cobol : OS = {
     name: 'Cobol',
     unicode: 'U+1F3DB',
     money: 15,
@@ -522,7 +522,7 @@ Inferno
 give programs that create their own other programs
 */
 
-const Debugger : OS = {//lance //bug //screwdriver
+const Debugger : OS = {
     name: 'Debugger',
     unicode: 'U+1F41B',
     money: 50,

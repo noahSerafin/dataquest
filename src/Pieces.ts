@@ -796,7 +796,7 @@ class Lance extends Piece {
   static color = "#27ced0";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-  super(Lance.name, Lance.description, Lance.unicode, 3, 2, 3, 2, 0, Lance.color, headPosition, [headPosition], team, Lance.rarity, removeCallback, id)//horse carousel atm //cane: "U+1F9AF"
+  super(Lance.name, Lance.description, Lance.unicode, 3, 2, 2, 2, 0, Lance.color, headPosition, [headPosition], team, Lance.rarity, removeCallback, id)//horse carousel atm //cane: "U+1F9AF"
     this.specialName = 'Charge';
     this.targetType = 'line'
   }
@@ -2006,7 +2006,7 @@ class Squid extends Piece {
   static color = "#08004dff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Squid.name, Squid.description, Squid.unicode, 5, 2, 1, 2, 1, Squid.color, headPosition, [headPosition], team, Squid.rarity, removeCallback, id)
+    super(Squid.name, Squid.description, Squid.unicode, 5, 2, 1, 3, 1, Squid.color, headPosition, [headPosition], team, Squid.rarity, removeCallback, id)
     this.immunities.blinded = true;
     this.specialName = 'Ink';
     this.targetType = 'line';
@@ -3912,7 +3912,7 @@ class Octopus extends Piece {
   static color = "rgb(19, 70, 236)";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Octopus.name, Octopus.description, Octopus.unicode, 4, 3, 2, 3, 0, Octopus.color, headPosition, [headPosition], team, Octopus.rarity, removeCallback, id)
+    super(Octopus.name, Octopus.description, Octopus.unicode, 4, 3, 1, 2, 0, Octopus.color, headPosition, [headPosition], team, Octopus.rarity, removeCallback, id)
     this.specialName = 'Morph'
     this.targetType = 'self'
     this.hasFriendlySpecial = true;

@@ -192,4 +192,8 @@ const lineSpecialsTipTip: TutorialStep = {
     id: 'lineSpecialsTip',
     tooltip: 'Special moves that target in a line can effect the same program more than once if the multiple tiles occupy the line.'
 }
-export const proTips: TutorialStep[] = [proTipSuggestion, defenderTip, specialTip, damageMultTip, adminOrderTip, lineSpecialsTipTip];
+const hotkeysTip: TutorialStep = {
+    id: 'hotkeysTip',
+    tooltip: 'Hotkeys: A to attack, S for special move, D to deselect, spacebar to end turn.'
+}
+export const proTips: TutorialStep[] = [proTipSuggestion, defenderTip, specialTip, damageMultTip, adminOrderTip, lineSpecialsTipTip, hotkeysTip];

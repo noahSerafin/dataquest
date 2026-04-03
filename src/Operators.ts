@@ -35,7 +35,8 @@ import { createDefaultStatuses } from "./types";
         // blueprint-only fields:
         isPlaced: false,
         cost: 10 ,
-        immunities: createDefaultStatuses()
+        immunities: createDefaultStatuses(),
+        variantName: 'Holographic'
     }
     const superKnife =  {
         id: crypto.randomUUID(),
@@ -336,7 +337,7 @@ const Window95 : OS = {
     items: [new Voucher, new Mushroom],
     admins: [new Notepad, new Clippy],
     lives: 3,
-    description: 'The intro to cyberspace, comes with a helpful assistant'
+    description: 'The intro to cyberspace, comes with a helpful assistant.'
 }
 const Steam : OS = {
     name: 'Steam',

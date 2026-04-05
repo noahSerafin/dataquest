@@ -1102,7 +1102,7 @@ class Banana extends Piece {
 
 class Trap extends Piece {
   static name = "Trap";
-  static description = "A program invisble to the enemy that immobilises programs moving over it and applies posion to them, removing itself";
+  static description = "A program invisble to the enemy that freezes programs moving over it and applies posion to them, removing itself";
   static unicode = "U+1FAA4";
   static color = "#686026";
   static rarity = 3;
@@ -1859,7 +1859,6 @@ class Rabbit extends Piece {//not working
    super(Rabbit.name, Rabbit.description, Rabbit.unicode, 2, 4, 1, 1, 0, Rabbit.color, headPosition, [headPosition], team, Rabbit.rarity, removeCallback, id)
    this.specialName='Breed'
    this.targetType='space'
-   this.canAttack=false;
   }
   async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
     if(this.tiles.length >= this.getStat('maxSize')){
@@ -3123,7 +3122,7 @@ class Shrike extends Piece {
   static color = "#bebebeff";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Shrike.name, Shrike.description, Shrike.unicode, 2, 5, 1, 2, 2, Shrike.color, headPosition, [headPosition], team, Shrike.rarity, removeCallback, id)
+   super(Shrike.name, Shrike.description, Shrike.unicode, 2, 5, 1, 3, 2, Shrike.color, headPosition, [headPosition], team, Shrike.rarity, removeCallback, id)
    this.targetType = 'piece'
    this.specialName = 'Pierce'
   }
@@ -3503,7 +3502,7 @@ class Hippo extends Piece {
   static name = "Hippo";
   static description = "A tough program that can charge, damaging targets in a staight line and moving forward until stopped";
   static unicode = "U+1F99B";
-  static color = "rgb(98, 90, 162)";
+  static color = "rgb(97, 78, 66)";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
   super(Hippo.name, Hippo.description, Hippo.unicode, 5, 1, 2, 4, 3, Hippo.color, headPosition, [headPosition], team, Hippo.rarity, removeCallback, id)//horse carousel atm //cane: "U+1F9AF"
@@ -4093,6 +4092,7 @@ class Banner extends Piece {
    super(Banner.name, Banner.description, Banner.unicode, 1, 0, 2, 1, 0, Banner.color, headPosition, [headPosition], team, Banner.rarity, removeCallback, id)
    this.specialName = 'Rally';
    this.targetType = 'group';
+   this.hasFriendlySpecial = true;
    this.canAttack = false;
   }
 
@@ -4109,10 +4109,10 @@ class Tradie extends Piece {
   static name = "Tradie";
   static description = "A program that can spawn walls";
   static unicode = "U+1F477";
-  static color = "rgb(106, 255, 20)";
+  static color = "rgb(214, 182, 130)";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Tradie.name, Tradie.description, Tradie.unicode, 1, 1, 1, 2, 1, Tradie.color, headPosition, [headPosition], team, Egg.rarity, removeCallback, id)
+    super(Tradie.name, Tradie.description, Tradie.unicode, 1, 1, 1, 2, 1, Tradie.color, headPosition, [headPosition], team, Tradie.rarity, removeCallback, id)
     this.specialName = 'Construct';
     this.targetType = 'space';
   }

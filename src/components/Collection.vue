@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
 import { allPieces, Spawn } from "../Pieces";
-import { allItems } from "../Items";
+import { allItems, Item } from "../Items";
 import { allAdmins } from "../AdminPrograms";
 import { allBosses } from "../Bosses";
 import { StorageManager, type PlayerCollection, type PlayerStats } from "../StorageManager";
@@ -16,6 +16,16 @@ const emit = defineEmits<{
 
 const collection = ref<PlayerCollection>({ pieces: [], admins: [], bosses: [], items: [] });
 const stats = ref<PlayerStats>({ osStats: {} });
+const selectedItem = ref<Item | null>(null);
+
+function selectItem(item: Item){
+  selectedItem.value = item;
+  return;
+}
+function deselectItem(){
+  selectedItem.value = null;
+  return;
+}
 
 onMounted(() => {
   collection.value = StorageManager.getCollection();
@@ -99,7 +109,11 @@ const activeTab = ref<'pieces' | 'items' | 'admins' | 'bosses' | 'stats'>('piece
           <div v-for="ItemClass in allItems" :key="ItemClass.name" class="slot-container">
             <template v-if="isItemUnlocked(ItemClass.name)">
               <ItemView :item="getItemInstance(ItemClass)" type="consumable" cssclass="collection" :tileSize="60"
-                :canBuy="false" :showController="false" />
+                :canBuy="false"
+                :showController="(selectedItem === item)"
+                @select="selectItem"
+                @deselect="deselectItem"
+                />
               <div class="name-label">{{ ItemClass.name }}</div>
             </template>
             <div v-else class="locked-slot item-slot">

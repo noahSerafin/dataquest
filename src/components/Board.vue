@@ -19,6 +19,8 @@ interface Props{
   showFastControls: boolean
   isDraggingPlacement: boolean
   pieceToPlace: PieceBlueprint | null
+  tileColor: string
+  edgeColor: string
 }
 const props = defineProps<Props>()
 
@@ -467,7 +469,10 @@ function resolveMove(
             class="border border-black"
             :class="tileSet.has(`${col-1},${row-1}`) ? 'tile' : 'tile-empty'"
             :id="col-1+', '+(row-1)"
-          />
+            :style="tileSet.has(`${col-1},${row-1}`) ? { 
+                  backgroundColor: tileColor, 
+                  border: `2px solid ${edgeColor}` 
+                } : {}"          />
         </template>
       </template>
     </div>
@@ -607,6 +612,7 @@ function resolveMove(
 }
 .tile-empty{
   background-color: black;
+  z-index: -1;
 }
 .highlight-tile {
   position: absolute;

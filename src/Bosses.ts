@@ -727,13 +727,13 @@ class Coaster extends Admin {
     static name = "Up and Up";//cranking up
     static description = "Every player piece takes a cumulating +1 damage after each turn after the first";//turn count is damage?
     static unicode = "U+1F3A2";//"U+1F3D4";//mountain
-    static color = "rgb(212, 201, 187)";
+    static color = "rgb(196, 233, 245)";
     static rarity = 4;
     constructor() {
         super(Coaster.name, Coaster.description, Coaster.unicode, Coaster.color, 5, Coaster.rarity, 'playerAndGame', 'onTurnEnd')
     }
     private count: number = 0
-    async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+    async apply({ id: _id, activePieces, player: _player }: { id: string, activePieces: Piece[], player: Player }) {
         if (this.count >= 1) {
             for (const piece of activePieces) {
                 if (piece.team === 'player') {
@@ -836,17 +836,17 @@ class Mountain extends Admin {
 //quicksand BEACH WITH UMBRELLA, U+1F3D6 //THONG SANDAL, U+1FA74 //HOURGLASS WITH FLOWING SAND, U+23F3
 export class Quicksand extends Admin {
   static name = "Quicksand";
-  static description = "Programs that move temporarily lose -1 moves at the end of your turn";
+  static description = "Programs that move temporarily lose -1 moves at the end of enemy's turn";
   static unicode = "U+1F3D6";
   static color = "rgb(252, 230, 148)";
   static rarity = 1;
   constructor() {
-    super(Quicksand.name, Quicksand.description, Quicksand.unicode, Quicksand.color, 3, Quicksand.rarity, 'gameState', 'onTurnEnd')
+    super(Quicksand.name, Quicksand.description, Quicksand.unicode, Quicksand.color, 3, Quicksand.rarity, 'gameState', 'onEnemyTurnEnd')
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces) {
       if(p.team==='player' && p.movesRemaining < p.getStat('moves')){
-        p.addTempModifier({moves: -1})
+        p.movesRemaining-= 1;
       }    
     };
   }

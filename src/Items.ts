@@ -747,7 +747,7 @@ class Hotline extends Item {
     static name = "Hotline";
     static description = "load a random friendly program into a node at a random position";
     static unicode = "U+1F4DE";
-    static color = "rgb(199, 13, 255)";
+    static color = "rgb(228, 184, 166)";
     static rarity = 2;
     constructor() {
         super(Hotline.name, Hotline.description, Hotline.unicode, Hotline.color, 2, Hotline.rarity, 'piecesAndBoard')
@@ -1085,7 +1085,7 @@ class Frogman extends Item<PieceBlueprint> {
 class Blackheart extends Item<PieceBlueprint> {
     static name = "Blackheart";
     static description = "Make a program in your inventory permanently immune to being charmed";
-    static unicode = "U+2665";
+    static unicode = "U+1F5A4";
     static color = "rgb(147, 7, 116)";
     static rarity = 3;
     constructor() {

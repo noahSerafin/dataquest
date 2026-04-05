@@ -338,6 +338,10 @@
             newBoss();
         }
     );
+
+    function companyUnicode(node: WorldNode) {
+        return node.company.unicode ? String.fromCodePoint(parseInt(node.company.unicode.replace('U+', ''), 16), 0xFE0F) : ''
+    }
     
 </script>
 
@@ -380,7 +384,7 @@
                 {{ node.company.abbr }}
             </div>
             <div>
-                {{ String.fromCodePoint(parseInt(node.company.unicode.replace('U+', ''), 16), 0xFE0F) }}
+                {{ companyUnicode(node) }}
             </div>
             <div>
                 $ {{ node.reward }}
@@ -418,7 +422,9 @@
     </div>
 
     <!-- Preview modal -->
-    <div v-if="selectedPreviewNode" class="preview-modal">
+    <div v-if="selectedPreviewNode" class="preview-modal"
+    :style="selectedPreviewNode.type!=='boss' && selectedPreviewNode.type==='level' ? {backgroundColor: `${selectedPreviewNode.company.tileColor}`, border: `2px solid ${selectedPreviewNode.company.edgeColor}`} : {}"
+    >
       <h3>{{ selectedPreviewNode.type.toUpperCase() }}</h3>
        <h6 v-if="selectedPreviewNode.type==='boss'"></h6>
         <button :disabled="player.effectiveMoney >= rerollBossCost"
@@ -427,14 +433,15 @@
         >
             Reroll
     </button>
-      <h6 v-if="selectedPreviewNode.type==='hybrid compiler'">Combine two programs stats into one (rounded up). Keep the primary's special move.</h6>
-      <h6 v-if="selectedPreviewNode.type==='skip'">(Must have room)</h6>
-      <h4 v-if="selectedPreviewNode.type==='boss' || selectedPreviewNode.type==='level'">{{ selectedPreviewNode.company.name}}</h4>
-      <h5 v-if="selectedPreviewNode.type==='boss' || selectedPreviewNode.type==='level'">Security Level: {{ player.difficulty + selectedPreviewNode.difficultyMod}}</h5>
-      <h6 v-if="selectedPreviewNode.type==='boss' || selectedPreviewNode.type==='level'">Reward: ${{ selectedPreviewNode.reward }}</h6>
-      <MiniMap v-if="selectedPreviewNode && selectedPreviewNode.level"
-        :level="selectedPreviewNode.level"
-        :company="selectedPreviewNode.company"
+        <h6 v-if="selectedPreviewNode.type==='hybrid compiler'">Combine two programs stats into one (rounded up). Keep the primary's special move.</h6>
+        <h6 v-if="selectedPreviewNode.type==='skip'">(Must have room)</h6>
+        <h4 v-if="selectedPreviewNode.type!=='boss' && selectedPreviewNode.type==='level'">{{ selectedPreviewNode.company.name}}</h4>
+        <div v-if="selectedPreviewNode.type!=='boss' && selectedPreviewNode.type==='level'">{{String.fromCodePoint(parseInt(selectedPreviewNode.company.unicode.replace('U+', ''), 16), 0xFE0F)}}</div>
+        <h5 v-if="selectedPreviewNode.type==='boss' || selectedPreviewNode.type==='level'">Security Level: {{ player.difficulty + selectedPreviewNode.difficultyMod}}</h5>
+        <h6 v-if="selectedPreviewNode.type==='boss' || selectedPreviewNode.type==='level'">Reward: ${{ selectedPreviewNode.reward }}</h6>
+        <MiniMap v-if="selectedPreviewNode && selectedPreviewNode.level"
+            :level="selectedPreviewNode.level"
+            :company="selectedPreviewNode.company"
         />
         <template v-if="selectedPreviewNode?.type === 'skip'">
             <BlueprintView

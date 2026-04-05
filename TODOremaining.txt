@@ -4,6 +4,8 @@ variant tooltips
 -
 
 // BUGS
+Player unicode appearing on nodes
+rectify REx/ sprinkler/ quicksand
 Pandora not useable when full
 pass primary variant to hybrid
 you win not dissapearing in endless mode

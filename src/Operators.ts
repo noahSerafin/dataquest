@@ -298,7 +298,7 @@ import { createDefaultStatuses } from "./types";
     const banana = {
         id: crypto.randomUUID(),
         name: "Banana Peel",
-        description: "A test piece",
+        description: "A program invisble to the enemy that immobilises programs moving over it for 1 turn",
         unicode: "U+1F34C",
         maxSize: 1,
         moves: 1,

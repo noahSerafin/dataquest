@@ -551,7 +551,7 @@ class Heart extends Admin {//change
 
 class Bone extends Admin {//change
   static name = "Big Boned";
-  static description = "Programs all gain +2 max size on placement";
+  static description = "Programs all gain +2 max size, -1 moves on placement";
   static unicode = "U+1F9B4";
   static color = "rgb(61, 17, 0)";
   static rarity = 3;
@@ -560,7 +560,8 @@ class Bone extends Admin {//change
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({maxSize: 2})
+    activePieces[idx].addModifier({maxSize: 3})
+    activePieces[idx].addModifier({moves: -1})
   }
 }
 
@@ -592,7 +593,8 @@ class Lungs extends Admin {
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for(const piece of activePieces){
       if(piece.team === 'player'){
-        piece.addTempModifier({moves: 4})
+        //piece.addTempModifier({moves: 3})
+        piece.movesRemaining += 3;
       }
     }
     //const idx = activePieces.findIndex(p => p.id === id);
@@ -742,7 +744,7 @@ export class Palette extends Admin {
 
 class Osiris extends Admin {
   static name = "Osiris";
-  static description = "+1 damage to all your placed programs each time a program is destroyed";
+  static description = "+1 damage to all your placed programs each time a program is destroyed";//your own programs?
   static unicode = "U+13080";//horus: "U+1314A";
   static color = "#33073bff";
   static rarity = 6;
@@ -847,7 +849,7 @@ export class Seed extends Admin {
   static name = "Seed";
   static description = "Raises maximum interest by $5";
   static unicode = "U+1F331";
-  static color = "#ff5555";
+  static color = "#824224";
   static rarity = 1;
   constructor() {
     super(Seed.name, Seed.description, Seed.unicode, Seed.color, 10, Seed.rarity, 'player', 'other')
@@ -1210,7 +1212,7 @@ class Sprinkler extends Admin {
   static name = "Sprinkler";
   static description = "Removes burning from all programs at the end of your turn";
   static unicode = "U+1F6BF";
-  static color = "#cc1515ff";
+  static color = "rgb(241, 253, 255)";
   static rarity = 1;
   constructor() {
     super(Sprinkler.name, Sprinkler.description, Sprinkler.unicode, Sprinkler.color, 2, Sprinkler.rarity, 'gameState', 'onTurnEnd')
@@ -2061,7 +2063,7 @@ class Bath extends Admin {
   static name = "Decontamination";
   static description = "Removes all negative statuses from all programs at the end of each turn";
   static unicode = "U+1F6C1";
-  static color = "#cc1515ff";
+  static color = "rgb(168, 255, 245)";
   static rarity = 6;//5,4?
   constructor() {
     super(Bath.name, Bath.description, Bath.unicode, Bath.color, 12, Bath.rarity, 'gameState', 'onTurnEnd')
@@ -2269,7 +2271,7 @@ class Nest extends Admin {
 
 class Sled extends Admin {//test
   static name = "Rosebud";
-  static description = "Your last placed program starts hidden";
+  static description = "Your last loaded program starts hidden";
   static unicode = "U+1F6F7";
   static color = "rgb(185, 185, 185)";
   static rarity = 3;
@@ -2314,7 +2316,7 @@ class Crash extends Admin {//test
 
 export class Skyscraper extends Admin {//test not working
   static name = "Highrise";
-  static description = "Each placed program gains +1 temporary defence for every 2 tiles of currently occupied on the end of your turns";//every 3? can make larger to nerf
+  static description = "Each placed program gains +1 temporary defence for every 2 tiles of currently occupied on the end of your turn";//every 3? can make larger to nerf
   static unicode = "U+1F3E2";
   static color = "rgb(215, 44, 25)";
   static rarity = 5;
@@ -2371,7 +2373,7 @@ class Dharma extends Admin {//test
 
 class Putter extends Admin {//test
   static name = "Putter";
-  static description = "The last enemy program loses -1 to all stats";//0 defence?
+  static description = "After a program is destroyed, the last remaining enemy program loses -1 to all stats";//0 defence?
   static unicode = "U+26F3";
   static color = "rgb(25, 215, 107)";
   static rarity = 2;
@@ -2406,7 +2408,7 @@ class Smoker extends Admin {
 
 class Wine extends Admin {
   static name = "Full Bodied";//Field Wine";
-  static description = "+1 max size, +1 defence";
+  static description = "+1 max size, +1 defence, -1 moves";
   static unicode = "U+1F377"; //"U+1FA7A";// Wine, + max Size/defence?
   static color = "rgb(226, 186, 99)";
   static rarity = 3;
@@ -2417,6 +2419,7 @@ class Wine extends Admin {
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({maxSize: +1});
     activePieces[idx].addModifier({defence: +1});
+    activePieces[idx].addModifier({moves: -1});
   }
 }
 

@@ -1,6 +1,6 @@
 import type { Company, Coordinate, SkipReward } from "./types";
 import type { Piece } from "./Pieces";
-import { companies } from "./companies";
+import { bossCompany, companies } from "./companies";
 import { generateNode } from "./nodeBuilder";
 
 interface Level {
@@ -297,7 +297,7 @@ export function generateWorld(
     level: pick(),
     next: [],
     position: { x: 200, y: 100 },
-    company: chooseRandomCompany(),
+    company: bossCompany,
     difficultyMod: 0,
     reward: Math.min(10, difficulty * 2)// +5;
   };

@@ -145,12 +145,13 @@ function createNewPlayer(os: OS) {
   showMainMenu.value = false;
   showMap.value = true;
   gameStarted.value = true;
-  currentCompany.value = { name: 'Player', abbr: '',  unicode: player.value.osunicode, pieceList: [] };
+  currentCompany.value = { name: 'Player', abbr: '',  unicode: player.value.osunicode, pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "#9CC954" };
 }
 const showCollection = ref(false);
 const extraDifficulty = ref<number>(0)//player/seed
 
 function incrementMapProgress() {
+  extraDifficulty.value = 0;
   player.value.mapProgress++
   //console.log('progress increased:', mapProgress.value)
   if(player.value.hasAdmin('Clippy')){
@@ -544,11 +545,12 @@ const renewBlueprints = async () => {
 const lastTurnPieces = ref<InstanceType<typeof Piece>[]>([]);//player
 const originalPieces = ref<InstanceType<typeof Piece>[]>([]);//player
 const originalSpawns = ref<Coordinate[]>([]);//player
-const currentCompany = ref<Company>({ name: 'Player', abbr: '',  unicode: player.value.osunicode, pieceList: [] });
+const currentCompany = ref<Company>({ name: 'Player', abbr: '',  unicode: player.value.osunicode  || '', pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "#9CC954"});
 
 async function selectLevel(newLevel: Level, company: Company, difficultyMod: number, lReward: number) {//load level, start 
   pieceToPlace.value = null;
   currentCompany.value = company;
+  console.log(currentCompany.value.tileColor)
   showBoard.value = true;
   renewBlueprints()//shouldnt be needed in final;
   for (const admin of player.value.admins) {
@@ -588,7 +590,6 @@ function handleProceed() {
   for (const admin of currentBossAdmins) {
     if (admin.onRoundEnd) admin.onRoundEnd(bossAdmins.value);
   };
-  
   openSummary(false);
   incrementMapProgress();
   if (player.value.mapProgress >= 3) {
@@ -599,6 +600,8 @@ function handleProceed() {
     }
   }
   showMap.value = true;
+  currentCompany.value.abbr = '';
+  currentCompany.value.unicode = player.value.osunicode;
 }
 
 async function reloadLevel() {
@@ -999,7 +1002,7 @@ function handlePieceSelect(piece: Piece) {
     selectedPiece.value = piece
   }
   //highlight range
-  if (piece.team === 'enemy') {
+  if (piece.team === 'enemy' && !piece.statuses.charmed) {
     boardRef.value.highlightTargets(piece);
   } else if (player.value.canMove) {
     boardRef.value.highlightMoves(piece);
@@ -1277,7 +1280,6 @@ const endRound = async (roundWon: boolean) => {
     await handleApplyAdmins('onRoundEnd', '');
     activePieces.value = [];//for needle
     originalPieces.value = [];
-    extraDifficulty.value = 0;
     console.log('player map progress: ', player.value.mapProgress)
     console.log('player previous bosses cleared: ', player.value.bossesCleared)
     if (player.value.mapProgress >= 2) {
@@ -1289,9 +1291,7 @@ const endRound = async (roundWon: boolean) => {
         StorageManager.recordWin(player.value.osunicode, player.value.stake);
       }
     }
-    currentCompany.value = { name: 'Player', abbr: '',  unicode: player.value.osunicode, pieceList: [] };
     openSummary(true);
-    //move to btn inside round summary
   } else {
     hasWonRound.value = false;
     activePieces.value = [];
@@ -1366,11 +1366,11 @@ const endTurn = async () => {
   await applyStatusEffects('player');
   for (const piece of activePieces.value) {
     if (piece.team === 'player') {
-      piece.resetMoves();
       piece.resetDefence();
       piece.actions = 1;
     }
     if (piece.team === 'enemy') {
+      piece.resetMoves();
       piece.resetTempModifiers();
       piece.willRetaliate = false;//
     }
@@ -1381,11 +1381,11 @@ const endTurn = async () => {
   await handleApplyAdmins('onEnemyTurnEnd', '');
   for (const piece of activePieces.value) {
     if (piece.team === 'enemy') {
-      piece.resetMoves();
       piece.resetDefence();
       piece.actions = 1;
     }
     if (piece.team === 'player') {
+      piece.resetMoves();
       piece.resetTempModifiers();
       piece.willRetaliate = false;//
     }
@@ -1564,7 +1564,7 @@ function toggleDebug() {
       <div class="enemy-info">
         <span v-if="currentCompany">
           <div>{{ currentCompany.abbr }}</div>
-          <div>{{ String.fromCodePoint(parseInt(currentCompany.unicode.replace('U+', ''), 16), 0xFE0F) }}</div>
+          <div>{{ currentCompany.unicode ? String.fromCodePoint(parseInt(currentCompany.unicode.replace('U+', ''), 16), 0xFE0F) : '' }}</div>
         </span>
         <p class="security"><strong>Security level: </strong>{{ player.difficulty + extraDifficulty }}</p>
         <p class="infamy"><strong>Infamy: </strong>{{ stake }}</p>
@@ -1606,7 +1606,7 @@ function toggleDebug() {
         :tiles="level.tiles" :foggedTiles="foggedTiles" :pieces="activePieces" :selectedPiece="selectedPiece"
         :placementHighlights="playerSpawns" :isFirstTurn="isFirstTurn" :placementMode="isPlacing"
         :movementMode="isMoving" :hasFinishedTurn="hasFinishedTurn" :player="player"
-        :showFastControls="showFastControls" :isDraggingPlacement="isDraggingPlacement" :pieceToPlace="pieceToPlace"
+        :showFastControls="showFastControls" :isDraggingPlacement="isDraggingPlacement" :pieceToPlace="pieceToPlace" :tileColor="currentCompany.tileColor" :edgeColor="currentCompany.edgeColor"
         @placeOnBoard="placePieceOnBoardAt" @handlePieceSelect="handlePieceSelect" @deselect="deselectPiece"
         @movePiece="movePiece" @damagePieceAt="damagePieceAt" @specialActionAt="handleSpecialActionAt"
         @placeAt="placeAt" gameStart="true" />
@@ -1625,7 +1625,7 @@ function toggleDebug() {
         @highlightTargets="boardRef.highlightTargets" @highlightSpecials="boardRef.highlightSpecials"
         @close="deselectPiece" />
       <div v-if="!displayEditor" class="player-actions">
-        <button v-if="(!displayEditor && roundHasStarted && !hasFinishedTurn) || debugMode" class="end-turn"
+        <button v-if="(!displayEditor && roundHasStarted && !hasFinishedTurn && !isFirstTurn) || debugMode" class="end-turn"
           v-on:click="endTurn()">End Turn</button>
         <!--<button class="mt-2 px-2 py-1 bg-blue-500 text-white rounded" @click="showInventory = !showInventory">{{showInventory ? 'Hide Inventory' : 'Inventory' }}</button>-->
         <!--<div v-if="!displayEditor && roundHasStarted" class="graveyard">

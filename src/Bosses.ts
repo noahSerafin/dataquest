@@ -4,21 +4,8 @@ import { Player } from "./Player";
 import type { Coordinate } from "./types";
 import { DIFFICULTY_RARITY } from "./constants";
 import { getRandomUnoccupiedTile } from "./helperFunctions";
-/*
-targetType: 'blueprint' | 'piece' | 'shopItem' | 'player' | 'gameState'  | 'playerAndGame' | 'piecesandBoard' | 'all'
-| 'onPlacement'
-  | 'onTurnEnd'
-  | 'onRoundStart'
-  | 'onRoundEnd'
-  | 'onDealDamage' //piece id of receiver?
-  | 'onReceiveDamage'
-  | 'onPieceDestruction'
-  | 'other';
-  
-*/
 
 //lower difficulty of +1 bosses, more +2 bosses
-//have boss maximums before endless mode
 class NorthWind extends Admin {//🌬️//dash U+1F4A8
     static rarity = 1;
     static name = "North Wind";

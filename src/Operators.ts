@@ -1,6 +1,6 @@
 import type { OS } from "./types";
 import { Voucher, Mushroom, Garlic, Juice, Meat, Genie, Pandora, Update2, Dupe, Headphones} from "./Items";
-import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Clippy, Notepad} from "./AdminPrograms";
+import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Clippy, Notepad, Copier} from "./AdminPrograms";
 import { createDefaultStatuses } from "./types";
 
     const knife =  {
@@ -530,10 +530,9 @@ const Debugger : OS = {
     adminSlots: 6,
     blueprints: [aegis, superKnife, testhybrid, testPiece],
     items: [new Genie, new Pandora, new Update2, new Dupe, new Headphones],
-    admins: [new Crystal],
+    admins: [new Crystal, new Copier],
     lives: 9,
     description: 'FOR TESTING'
 }
-
 
 export const allOSes = [Window95, Steam, Window, Apple, Penguin, Temple, Fortran, Cobol, Debugger];

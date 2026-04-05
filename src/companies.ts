@@ -10,7 +10,7 @@ import { sunrisePieces } from "./Pieces";
 
 import { whiteflowerPieces } from "./Pieces";
 
-export const bossCompany: Company = { name: 'Umbrella', abbr: 'BOSS', unicode: "", pieceList: allPieces, tileColor: "rgb(34, 53, 12)", edgeColor: "#9CC954"};
+export const bossCompany: Company = Object.freeze({ name: 'Umbrella', abbr: 'BOSS', unicode: "", pieceList: allPieces, tileColor: "rgb(34, 53, 12)", edgeColor: "#9CC954"});
 export const companies: Company[] = [
     { name: 'Saturn Solutions', abbr: 'SSL', unicode: "U+1FA90", pieceList: allPieces, tileColor: "rgb(74, 74, 74)", edgeColor: "#e9e9e9"},
     { name: 'Nightbridge Corp', abbr: 'NBC',  unicode: "U+1F309", pieceList: NightbridgePieces, tileColor: "rgb(62, 9, 66)", edgeColor: "#f7acee"},
@@ -27,7 +27,7 @@ export const companies: Company[] = [
     { name: 'Cook.io', abbr: 'CKI', unicode: "U+1F36A", pieceList: cookiePieces, tileColor: "rgb(204, 148, 36)", edgeColor: "#421c01"},
     { name: 'Sakura Robotics', abbr: 'SRB', unicode: "U+1F338", pieceList: sakuraPieces, tileColor: "rgb(165, 33, 150)", edgeColor: "#f7d8f4"},
     { name: 'Panda Holdings LLC', abbr: 'PAN', unicode: "U+1F43C", pieceList: pandaPieces, tileColor: "rgb(22, 45, 19)", edgeColor: "#ffd884"},
-]
+].map(c => Object.freeze(c));
 
 // PANDA FACE, U+1F43C
 //flavour of pieces 

@@ -43,7 +43,8 @@ const testSword = {
   rarity: 1,
   color: "#2fc5ebff",
   isPlaced: false,
-  cost: 1
+  cost: 1,
+  immunities: {}
 }
 const testShield = {
   id: "274ec329-8c17-4265-8c12-e9a28bcf0111",
@@ -58,7 +59,8 @@ const testShield = {
   rarity: 1,
   color: "#2fc5ebff",
   isPlaced: false,
-  cost: 1
+  cost: 1,
+  immunities: {}
 }
 const test = {
   id: "274ec329-8c17-4265-8c12-e9a28bcf0112",
@@ -75,7 +77,8 @@ const test = {
   isPlaced: false,
   cost: 1,
   hybridName: 'LanceHog',
-  extraUnicode: 'U+1F994'
+  extraUnicode: 'U+1F994',
+  immunities: {}
 }
 const testVoucher = new Voucher();
 
@@ -457,6 +460,9 @@ async function handleApplyAdmins(trigger: AdminTrigger, id: string, piece?: Piec
       if (admin.targetType === 'playerAndGame') {
         await admin.apply({ id: id, activePieces: activePieces.value, player: player.value, piece })
       }
+      if (admin.targetType === 'piecesAndBoard') {
+        await admin.apply({ activePieces: activePieces.value, board: level.value.tiles })
+      }
       if (admin.targetType === 'player') {
         await admin.apply({ player: player.value, piece })
       }
@@ -549,8 +555,7 @@ const currentCompany = ref<Company>({ name: 'Player', abbr: '',  unicode: player
 
 async function selectLevel(newLevel: Level, company: Company, difficultyMod: number, lReward: number) {//load level, start 
   pieceToPlace.value = null;
-  currentCompany.value = company;
-  console.log(currentCompany.value.tileColor)
+  currentCompany.value = { ...company };
   showBoard.value = true;
   renewBlueprints()//shouldnt be needed in final;
   for (const admin of player.value.admins) {
@@ -1305,7 +1310,8 @@ const endRound = async (roundWon: boolean) => {
       if (index !== -1) player.value.admins.splice(index, 1);
     }
     else if (player.value.lives > 0) {
-      player.value.lives -= 1
+      player.value.lives -= 1;
+      await handleApplyAdmins('onRoundLoss', '');
     } else {
       alert('game over!')
     }

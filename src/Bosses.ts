@@ -364,7 +364,7 @@ class LowBattery extends Admin {
 
 class Customs extends Admin {//remove
     static name = "Customs";
-    static description = "Every player program is exposed";
+    static description = "Every player program is exposed, and loses 1 moves";
     static unicode = "U+1F6C3";
     static color = "#127a3eff";
     static rarity = 2;
@@ -377,7 +377,7 @@ class Customs extends Admin {//remove
             activePieces[idx].statuses.exposed = true;
             activePieces[idx].statuses.hidden = false;
         }
-        //activePieces[idx].addModifier({moves: -1})
+        activePieces[idx].addModifier({moves: -1})
     }
 }
 
@@ -833,7 +833,7 @@ class Mountain extends Admin {
         };
     }
 }
-//quicksand BEACH WITH UMBRELLA, U+1F3D6 //THONG SANDAL, U+1FA74 //HOURGLASS WITH FLOWING SAND, U+23F3
+//quicksand BEACH WITH UMBRELLA, U+1F3D6 //THONG SANDAL, U+1FA74 //HOURGLASS WITH FLOWING SAND,// U+23F3 DESERT, U+1F3DC
 export class Quicksand extends Admin {
   static name = "Quicksand";
   static description = "Programs that move temporarily lose -1 moves at the end of enemy's turn";
@@ -846,8 +846,10 @@ export class Quicksand extends Admin {
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces) {
       if(p.team==='player' && p.movesRemaining < p.getStat('moves')){
-        p.movesRemaining-= 1;
-      }    
+        p.quickSanded = true;
+      } else {
+        p.quickSanded = false;
+      }
     };
   }
 }

@@ -379,7 +379,7 @@
             <div class="pins-right"></div>
         </div>
         <div class="node-inner">
-        <div v-if="node.type=='boss' || node.type=='level' && node.id !== currentNodeId  && node.id !=='start'" class="company-info">
+        <div v-if="!node.visited && (node.type=='boss' || node.type=='level' && node.id !== currentNodeId  && node.id !=='start')" class="company-info">
             <div>
                 {{ node.company.abbr }}
             </div>
@@ -422,7 +422,7 @@
     </div>
 
     <!-- Preview modal -->
-    <div v-if="selectedPreviewNode" class="preview-modal"
+    <div v-if="selectedPreviewNode" :class="`preview-modal ${selectedPreviewNode.company.abbr}`"
     :style="selectedPreviewNode.type!=='boss' && selectedPreviewNode.type==='level' ? {backgroundColor: `${selectedPreviewNode.company.tileColor}`, border: `2px solid ${selectedPreviewNode.company.edgeColor}`} : {}"
     >
       <h3>{{ selectedPreviewNode.type.toUpperCase() }}</h3>
@@ -658,6 +658,12 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
+    }
+    .preview-modal.WFG {
+        color: rgb(52, 12, 51);
+    }
+    .preview-modal.ZEN {
+        color: rgb(16, 16, 16);
     }
     .btns{
         display: flex;

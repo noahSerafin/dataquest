@@ -56,7 +56,7 @@ const shopbpTip: TutorialStep = {
 }
 const bpTip: TutorialStep = {
     id: 'inventory-piece',
-    tooltip: "You own this program, click on it to see it's stats. After entering a node, select or drag it into the node to load it."
+    tooltip: "You own this program, click on it to see it's stats. After entering a node, select or drag it into the node to load it. You can reload programs later in other nodes."
 }
 const controllerTip: TutorialStep = {
     id: 'piece-controller',

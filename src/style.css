@@ -605,6 +605,9 @@ steel
 .v_Beserker .variant {
   color: #a00303;
 }
+.v_Deadly .variant {
+  color: #ff0000;
+}
 
 .v_Savage {
   box-shadow: inset 0 0 10px #571532, inset 0 3px 30px #ff005d, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);

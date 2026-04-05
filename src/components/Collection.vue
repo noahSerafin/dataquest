@@ -110,9 +110,10 @@ const activeTab = ref<'pieces' | 'items' | 'admins' | 'bosses' | 'stats'>('piece
             <template v-if="isItemUnlocked(ItemClass.name)">
               <ItemView :item="getItemInstance(ItemClass)" type="consumable" cssclass="collection" :tileSize="60"
                 :canBuy="false"
-                :showController="(selectedItem === item)"
+                :showController="(selectedItem?.name === ItemClass.name)"
                 @select="selectItem"
                 @deselect="deselectItem"
+                :class="`selected-${selectedItem?.name === ItemClass.name}`"
                 />
               <div class="name-label">{{ ItemClass.name }}</div>
             </template>
@@ -127,7 +128,12 @@ const activeTab = ref<'pieces' | 'items' | 'admins' | 'bosses' | 'stats'>('piece
           <div v-for="AdminClass in allAdmins" :key="AdminClass.name" class="slot-container">
             <template v-if="isAdminUnlocked(AdminClass.name)">
               <ItemView :item="getItemInstance(AdminClass)" type="admin" cssclass="collection" :tileSize="60"
-                :canBuy="false" :showController="false" />
+                :canBuy="false" 
+                :showController="(selectedItem?.name === AdminClass.name)"
+                @select="selectItem"
+                @deselect="deselectItem"
+                :class="`selected-${selectedItem?.name === AdminClass.name}`"
+                />
               <div class="name-label">{{ AdminClass.name }}</div>
             </template>
             <div v-else class="locked-slot item-slot">
@@ -141,7 +147,11 @@ const activeTab = ref<'pieces' | 'items' | 'admins' | 'bosses' | 'stats'>('piece
           <div v-for="AdminClass in allBosses" :key="AdminClass.name" class="slot-container">
             <template v-if="isBossUnlocked(AdminClass.name)">
               <ItemView :item="getItemInstance(AdminClass)" type="admin" cssclass="collection" :tileSize="60"
-                :canBuy="false" :showController="false" />
+                :canBuy="false" 
+                :showController="(selectedItem?.name === AdminClass.name)"
+                @select="selectItem"
+                @deselect="deselectItem"
+                />
               <div class="name-label">{{ AdminClass.name }}</div>
             </template>
             <div v-else class="locked-slot item-slot">
@@ -379,5 +389,9 @@ const activeTab = ref<'pieces' | 'items' | 'admins' | 'bosses' | 'stats'>('piece
   padding: 0.2rem 0.6rem;
   border-radius: 12px;
   font-size: 0.85rem;
+}
+
+.selected-true{
+  z-index: 99!important;
 }
 </style>

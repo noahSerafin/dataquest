@@ -29,17 +29,17 @@ export abstract class Admin<
     color: string,
     cost: number,
     rarity: number,
-    targetType: "blueprint" | "piece" | "shopItem" | "player" | "gameState"  | 'playerAndGame' | 'piecesAndBoard' | 'all',
+    targetType: "blueprint" | "piece" | "shopItem" | "player" | "gameState" | 'playerAndGame' | 'piecesAndBoard' | 'all',
     triggerType: TTrigger
   ) {
     super(name, description, unicode, color, cost, rarity, targetType);
     this.triggerType = triggerType;
   }
 
-  async apply(_target: any):Promise<void>{
+  async apply(_target: any): Promise<void> {
     //do not destroy the admin
   }
-  remove(_target: any):void{
+  remove(_target: any): void {
 
   }
   getModifier(): StatModifier {//remove this???
@@ -96,13 +96,13 @@ export class Bubble extends Admin {
   async apply({ player }: { player: Player }) {
     //calc 10% chance for pop
     const pop = Math.random() < 0.1;
-    if(pop){
+    if (pop) {
       player.money = 0
       player.bonusInterest = 0
       //remove self?
-    }else{
+    } else {
       player.bonusInterest += this.count;
-      this.count ++
+      this.count++
     }
 
   }
@@ -144,7 +144,7 @@ class Onion extends Admin {
   }
   //
   //async apply({ player }: { player: Player }) {
-    //player.lives += 1
+  //player.lives += 1
   //}//add a if for player death to remove this
 }
 //name desc utf || maxsize moves range atk def
@@ -162,7 +162,7 @@ class Blood extends Admin {
   async apply({ player }: { player: Player }) {
     player.money += 1 //enemy pieces only?
   }
-  
+
 }
 
 class Razor extends Admin {
@@ -174,11 +174,11 @@ class Razor extends Admin {
   constructor() {
     super(Razor.name, Razor.description, Razor.unicode, Razor.color, 6, Razor.rarity, 'gameState', 'onPlacement')
   }
-  
+
   //on placement/after hydration
-  async apply({ id, activePieces }: {  id: string, activePieces: Piece[] }) {
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({attack: 1})//enemy pieces only?  
+    activePieces[idx].addModifier({ attack: 1 })//enemy pieces only?  
   }
 }
 
@@ -191,11 +191,11 @@ class BionicArm extends Admin {
   constructor() {
     super(BionicArm.name, BionicArm.description, BionicArm.unicode, BionicArm.color, 7, BionicArm.rarity, 'gameState', 'onPlacement')
   }
-  
+
   //on placement/after hydration
-  async apply({ id, activePieces }: {  id: string, activePieces: Piece[] }) {
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({attack: 2})//enemy pieces only?  
+    activePieces[idx].addModifier({ attack: 2 })//enemy pieces only?  
   }
 }
 
@@ -211,7 +211,7 @@ class BionicLeg extends Admin {
 
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({moves: 2})
+    activePieces[idx].addModifier({ moves: 2 })
     activePieces[idx].movesRemaining += 2;
   }
 }
@@ -249,11 +249,11 @@ class Eye extends Admin {
   constructor() {
     super(Eye.name, Eye.description, Eye.unicode, Eye.color, 8, Eye.rarity, 'gameState', 'onRoundStart')
   }
-  
+
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-    for (const p of activePieces){
-      if(p.team==='enemy'){
-        p.addModifier({defence: -1})//enemy pieces only?
+    for (const p of activePieces) {
+      if (p.team === 'enemy') {
+        p.addModifier({ defence: -1 })//enemy pieces only?
       }
     }
   }
@@ -299,7 +299,7 @@ class Hamsa extends Admin {
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({defence: 3})
+    activePieces[idx].addModifier({ defence: 3 })
   }
 }
 
@@ -315,8 +315,8 @@ class Relay extends Admin {
 
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    if(activePieces[idx].team==='player' && activePieces[idx].getStat('range') > 1){
-      activePieces[idx].addModifier({attack: 2})
+    if (activePieces[idx].team === 'player' && activePieces[idx].getStat('range') > 1) {
+      activePieces[idx].addModifier({ attack: 2 })
     }
   }
 }
@@ -380,9 +380,9 @@ export class PetriDish extends Admin {// status test unfinished: make enemies sp
       for (const enemy of enemies) {
         const isAdjacent = piece.tiles.some(st =>
           enemy.tiles.some(tt =>
-          Math.abs(st.x - tt.x) + Math.abs(st.y - tt.y) === 1
-        )
-      );
+            Math.abs(st.x - tt.x) + Math.abs(st.y - tt.y) === 1
+          )
+        );
 
         if (!isAdjacent) continue;
 
@@ -450,21 +450,21 @@ class Needle extends Admin {//needs some kind of nerf, increase max size only?
     super(Needle.name, Needle.description, Needle.unicode, Needle.color, 10, Needle.rarity, 'playerAndGame', 'onRoundEnd')//6 and player?
   }
   async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
-    for (const p of activePieces){
+    for (const p of activePieces) {
       const playerPieces = [];
-      if(p.team==='player'){
+      if (p.team === 'player') {
         playerPieces.push(p)
         //p.addModifier({lives: 1})
       }
-      if(playerPieces.length === 1){//we find by activepieces, not by no. of placed bps
-       //needs to interact with the blueprint
-       const bpID = playerPieces[0].id
-       const idx = player.programs.findIndex(p => p.id === bpID);
-       player.programs[idx].maxSize += 1;
-       player.programs[idx].moves += 1;
-       player.programs[idx].attack += 1;
-       player.programs[idx].range += 1;
-       player.programs[idx].defence += 1;
+      if (playerPieces.length === 1) {//we find by activepieces, not by no. of placed bps
+        //needs to interact with the blueprint
+        const bpID = playerPieces[0].id
+        const idx = player.programs.findIndex(p => p.id === bpID);
+        player.programs[idx].maxSize += 1;
+        player.programs[idx].moves += 1;
+        player.programs[idx].attack += 1;
+        player.programs[idx].range += 1;
+        player.programs[idx].defence += 1;
       }
     }
   }
@@ -482,7 +482,7 @@ class Rune extends Admin {
   //onDamage
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    if(activePieces[idx].getStat('range') === 1){
+    if (activePieces[idx].getStat('range') === 1) {
       activePieces[idx].damageMult += 1;
     }
   }
@@ -544,8 +544,8 @@ class Heart extends Admin {//change
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({maxSize: 1})
-    activePieces[idx].addModifier({moves: 1})
+    activePieces[idx].addModifier({ maxSize: 1 })
+    activePieces[idx].addModifier({ moves: 1 })
   }
 }
 
@@ -560,8 +560,8 @@ class Bone extends Admin {//change
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({maxSize: 3})
-    activePieces[idx].addModifier({moves: -1})
+    activePieces[idx].addModifier({ maxSize: 3 })
+    activePieces[idx].addModifier({ moves: -1 })
   }
 }
 
@@ -576,7 +576,7 @@ class RollerBlades extends Admin {
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({moves: 3})
+    activePieces[idx].addModifier({ moves: 3 })
     activePieces[idx].movesRemaining += 3;
   }
 }
@@ -591,8 +591,8 @@ class Lungs extends Admin {
     super(Lungs.name, Lungs.description, Lungs.unicode, Lungs.color, 10, Lungs.rarity, 'gameState', 'onTurnEnd');//'onPlacement');
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-    for(const piece of activePieces){
-      if(piece.team === 'player'){
+    for (const piece of activePieces) {
+      if (piece.team === 'player') {
         //piece.addTempModifier({moves: 3})
         piece.movesRemaining += 3;
       }
@@ -614,7 +614,7 @@ class Brain extends Admin {//unfinished, actionsHandler in Piececontroller playi
   }
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({attack: Math.round(player.freeMemory)})
+    activePieces[idx].addModifier({ attack: Math.round(player.freeMemory) })
   }
 }
 
@@ -669,10 +669,10 @@ class Trolley extends Admin {
     super(Trolley.name, Trolley.description, Trolley.unicode, Trolley.color, 3, Trolley.rarity, 'player', 'other')//'player')??
   }
   async apply({ player }: { player: Player }) {
-   player.hasTrolley = true;
+    player.hasTrolley = true;
   }
   async remove({ player }: { player: Player }) {
-   player.hasTrolley = false;
+    player.hasTrolley = false;
   }
 }
 
@@ -686,10 +686,10 @@ export class Toolbox extends Admin {
     super(Toolbox.name, Toolbox.description, Toolbox.unicode, Toolbox.color, 5, Toolbox.rarity, 'player', 'other')//'player')??
   }
   async apply({ player }: { player: Player }) {
-   player.hasToolbox = true;
+    player.hasToolbox = true;
   }
   async remove({ player }: { player: Player }) {
-   player.hasToolbox = false;
+    player.hasToolbox = false;
   }
 }
 
@@ -717,14 +717,14 @@ class Communism extends Admin {
 
   //on placement
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
-    if(player.money<=4){
+    if (player.money <= 4) {
       const idx = activePieces.findIndex(p => p.id === id);
       activePieces[idx].addModifier({
-            attack: 1,
-            defence: 1,
-            maxSize: 1,
-            moves: 1,
-            range: 1
+        attack: 1,
+        defence: 1,
+        maxSize: 1,
+        moves: 1,
+        range: 1
       });
     }
   }
@@ -752,10 +752,10 @@ class Osiris extends Admin {
     super(Osiris.name, Osiris.description, Osiris.unicode, Osiris.color, 8, Osiris.rarity, 'gameState', 'onPieceDestruction')
   }
   //on receive damage //on piece destrcution
-  async apply({ id: _id, activePieces }: {id: string, activePieces: Piece[] }) {
-    for (const p of activePieces){
-      if(p.team==='player'){
-        p.addModifier({attack: 1})
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    for (const p of activePieces) {
+      if (p.team === 'player') {
+        p.addModifier({ attack: 1 })
       }
     }
   }
@@ -784,8 +784,8 @@ class Newspaper extends Admin {
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    if(activePieces[idx].team==='player' && activePieces[idx].getStat('range')===1){
-      activePieces[idx].addModifier({attack: 1})
+    if (activePieces[idx].team === 'player' && activePieces[idx].getStat('range') === 1) {
+      activePieces[idx].addModifier({ attack: 1 })
     }
   }
 }
@@ -801,7 +801,7 @@ class Crown extends Admin {
   }
   //on round end
   async apply({ player }: { player: Player }) {
-   player.bonusReward += 5;
+    player.bonusReward += 5;
   }
 }
 
@@ -855,10 +855,10 @@ export class Seed extends Admin {
     super(Seed.name, Seed.description, Seed.unicode, Seed.color, 10, Seed.rarity, 'player', 'other')
   }
   async apply({ player }: { player: Player }) {
-   player.interestCap += 5;
+    player.interestCap += 5;
   }
   remove({ player }: { player: Player }) {
-   player.interestCap -= 5;
+    player.interestCap -= 5;
   }
 }
 
@@ -873,7 +873,7 @@ class Puzzle extends Admin {
   }
   //on turn end
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-    for (const p of activePieces){
+    for (const p of activePieces) {
       if (p.team !== 'player') continue;
       const hasAdjacentAlly = activePieces.some(other =>
         other !== p &&
@@ -900,7 +900,7 @@ class Chivalry extends Admin {
   }
   //on turn end
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-    for (const p of activePieces){
+    for (const p of activePieces) {
       if (p.team !== 'player') continue;
 
       const hasAdjacentAlly = activePieces.some(other =>
@@ -928,7 +928,7 @@ class Roger extends Admin {
   }
   //on piece destruction
   async apply({ player }: { player: Player }) {
-   player.money += 1;
+    player.money += 1;
   }
 }
 
@@ -943,10 +943,10 @@ class Bucket extends Admin {
   }
   //
   async apply({ player }: { player: Player }) {
-   player.memory += 2;
+    player.memory += 2;
   }
   remove({ player }: { player: Player }) {
-   player.memory -= 2;
+    player.memory -= 2;
   }
 }
 
@@ -960,11 +960,11 @@ class Diamond extends Admin {
     super(Diamond.name, Diamond.description, Diamond.unicode, Diamond.color, 8, Diamond.rarity, 'playerAndGame', 'onPlacement')
   }
   async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
-    for (const p of activePieces){
-      if(p.team==='player'){
+    for (const p of activePieces) {
+      if (p.team === 'player') {
         //from the headposition, look for adjacent player tiles
         const noOfTwentys = Math.max(0, Math.floor(player.money / 20)); //rounded down
-        p.addModifier({defence: noOfTwentys})
+        p.addModifier({ defence: noOfTwentys })
         //else no buff
       }
     }
@@ -1001,7 +1001,7 @@ class Sneakers extends Admin {//item???
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({moves: 1});
+    activePieces[idx].addModifier({ moves: 1 });
     activePieces[idx].movesRemaining += 1;
   }
 }
@@ -1018,7 +1018,7 @@ class Candle extends Admin {
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({range: 1})
+    activePieces[idx].addModifier({ range: 1 })
   }
 }
 
@@ -1033,7 +1033,7 @@ class Lightbulb extends Admin {
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({range: 2})
+    activePieces[idx].addModifier({ range: 2 })
   }
 }
 ////ELECTRIC LIGHT BULB, U+1F4A1 +2 range?
@@ -1049,10 +1049,10 @@ class Feather extends Admin {
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({moves: 1})
+    activePieces[idx].addModifier({ moves: 1 })
     activePieces[idx].movesRemaining += 1;
-    if(activePieces[idx].getStat("maxSize") < 1){
-      activePieces[idx].addModifier({maxSize: -1})
+    if (activePieces[idx].getStat("maxSize") < 1) {
+      activePieces[idx].addModifier({ maxSize: -1 })
     }
   }
 }
@@ -1067,30 +1067,30 @@ export class Copier extends Admin {
     super(Copier.name, Copier.description, Copier.unicode, Copier.color, 9, Copier.rarity, 'gameState', 'onPlacement')
   }
   //on placement, handle in App
-  async apply({ id, activePieces }: { id: string, activePieces: Piece[]}) {
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    const playerPieces : Piece[] = [];
-    for (const p of activePieces){
-      if(p.team==='player'){
+    const playerPieces: Piece[] = [];
+    for (const p of activePieces) {
+      if (p.team === 'player') {
         playerPieces.push(p)
       }
     }
 
-    if(playerPieces.length === 1 ){//&& player.isfirstTurn){
+    if (playerPieces.length === 1) {//&& player.isfirstTurn){
       const PieceClass = allPieces.find(p => p.name === playerPieces[0].name)
       if (!PieceClass) return
-      const newHead : Coordinate = {x: playerPieces[0].headPosition.x + 1, y: playerPieces[0].headPosition.y}
+      const newHead: Coordinate = { x: playerPieces[0].headPosition.x + 1, y: playerPieces[0].headPosition.y }
       const isOccupied = activePieces.some(p =>
         p.tiles.some(t => t.x === newHead.x && t.y === newHead.y)
       );
-      if(!isOccupied){
+      if (!isOccupied) {
         const copy = new PieceClass(newHead, 'player', activePieces[idx].removeCallback, crypto.randomUUID());
         copy.maxSize = playerPieces[0].getStat('maxSize');
         copy.moves = playerPieces[0].getStat('moves');
         copy.range = playerPieces[0].getStat('range');
         copy.attack = playerPieces[0].getStat('attack');
         copy.defence = playerPieces[0].getStat('defence');
-        if(playerPieces[0].hybridName){
+        if (playerPieces[0].hybridName) {
           copy.hybridName = playerPieces[0].hybridName;
           copy.description = playerPieces[0].description;
           copy.extraUnicode = playerPieces[0].extraUnicode;
@@ -1112,8 +1112,8 @@ class Telescope extends Admin {
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({range: 3})
-    activePieces[idx].addModifier({moves: -2})
+    activePieces[idx].addModifier({ range: 3 })
+    activePieces[idx].addModifier({ moves: -2 })
   }
 }
 
@@ -1127,9 +1127,9 @@ class Microscope extends Admin {
     super(Microscope.name, Microscope.description, Microscope.unicode, Microscope.color, 5, Microscope.rarity, 'gameState', 'onTurnEnd')
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-    for(const p of activePieces){
-      if(p.tiles.length === 1){
-        p.addTempModifier({defence: 1})
+    for (const p of activePieces) {
+      if (p.tiles.length === 1) {
+        p.addTempModifier({ defence: 1 })
       }
     }
   }
@@ -1140,15 +1140,15 @@ class Lotus extends Admin {//boss? remove money?
   static description = "Each rare admin gives + 0.5 damage mult on attacking";
   static unicode = "U+1FAB7";
   static color = "#fff0f0";
-  static rarity =  5;
+  static rarity = 5;
   constructor() {
     super(Lotus.name, Lotus.description, Lotus.unicode, Lotus.color, 10, Lotus.rarity, 'playerAndGame', 'onDealDamage')
   }
   //on damage
-  async apply({id, activePieces, player}: { id: string, activePieces: Piece[], player: Player}) {
+  async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    for (const a of player.admins){
-      if(a.rarity === 3){
+    for (const a of player.admins) {
+      if (a.rarity === 3) {
         activePieces[idx].damageMult += 0.5
       }
     }
@@ -1167,9 +1167,9 @@ class Broom extends Admin {
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (let index = 0; index < activePieces.length; index++) {
       const p = activePieces[index];
-      if(p.team==='enemy' && p.tiles.length === 1 && p.defenceRemaining === 0){
+      if (p.team === 'enemy' && p.tiles.length === 1 && p.defenceRemaining === 0) {
         activePieces.splice(index, 1);
-      }    
+      }
     }
   }
 }
@@ -1218,7 +1218,7 @@ class Sprinkler extends Admin {
     super(Sprinkler.name, Sprinkler.description, Sprinkler.unicode, Sprinkler.color, 2, Sprinkler.rarity, 'gameState', 'onTurnEnd')
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-    for (const p of activePieces){
+    for (const p of activePieces) {
       p.statuses.burning = false
     }
   }
@@ -1250,7 +1250,7 @@ class Prayer extends Admin {
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({defence: 2})
+    activePieces[idx].addModifier({ defence: 2 })
   }
 
 }
@@ -1265,7 +1265,7 @@ class Vitamins extends Admin {
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({defence: 1})
+    activePieces[idx].addModifier({ defence: 1 })
   }
 }
 
@@ -1280,7 +1280,7 @@ class Protein extends Admin {
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({maxSize: 1})
+    activePieces[idx].addModifier({ maxSize: 1 })
   }
 }
 
@@ -1295,18 +1295,18 @@ class Fountain extends Admin {
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({maxSize: 3})
+    activePieces[idx].addModifier({ maxSize: 3 })
   }
 }
 
 class Spoon extends Admin {
-  static name =  "Silver Spoon";
+  static name = "Silver Spoon";
   static description = "Gain $4 at the start of every round";
   static unicode = "U+1F944";
   static color = "#c9a91dff";
   static rarity = 4;
   constructor() {
-    super (Spoon.name, Spoon.description, Spoon.unicode, Spoon.color, 10, Spoon.rarity, 'player', 'onRoundStart')
+    super(Spoon.name, Spoon.description, Spoon.unicode, Spoon.color, 10, Spoon.rarity, 'player', 'onRoundStart')
   }
   async apply({ player }: { player: Player }) {
     player.money += 4
@@ -1357,11 +1357,11 @@ export class Ambulance extends Admin {//a promoted piece dying should recover th
   }
   async apply({ activePieces, player, piece }: { activePieces: Piece[], player: Player, piece?: Piece }) {
     if (!piece) return;
-    const bpIdx = player.programs.findIndex(bp => bp.id === piece.id )
-    if(piece.team==='player'){
-      if(piece.name === 'Pawn'){
+    const bpIdx = player.programs.findIndex(bp => bp.id === piece.id)
+    if (piece.team === 'player') {
+      if (piece.name === 'Pawn') {
         const promoted = activePieces.findIndex(p => p.id === piece.id + '1');
-        if(promoted !== -1) {
+        if (promoted !== -1) {
           console.log('promoted piece found')
           return;
         }
@@ -1466,8 +1466,8 @@ class Ballet extends Admin {//needs to reset
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     this.count += 1;
     for (const piece of activePieces) {
-      if(piece.team === 'player'){
-        if(this.count <= 2 && !piece.statuses.exposed){
+      if (piece.team === 'player') {
+        if (this.count <= 2 && !piece.statuses.exposed) {
           piece.statuses.hidden = true
         } else {
           piece.statuses.hidden = false;
@@ -1492,9 +1492,9 @@ class Pants extends Admin {
   private count = 0;
   async apply({ player, piece }: { activePieces?: Piece[], player: Player, piece?: Piece }) {
     if (!piece) return;
-    if(this.count === 0){
-      const bpIdx = player.programs.findIndex(bp => bp.id === piece.id )
-      if(piece.team==='player'){
+    if (this.count === 0) {
+      const bpIdx = player.programs.findIndex(bp => bp.id === piece.id)
+      if (piece.team === 'player') {
         if (bpIdx !== -1) player.programs[bpIdx].isPlaced = false;
       }
       this.count += 1;//must be reset at end of round;
@@ -1518,18 +1518,18 @@ class Ace extends Admin {
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     let isLastBp = true;
     for (const bp of player.programs) {
-      if(!bp.isPlaced) isLastBp = false;
+      if (!bp.isPlaced) isLastBp = false;
     };
-    if(isLastBp){
+    if (isLastBp) {
       const idx = activePieces.findIndex(p => p.id === id);
       //const bpIdx = player.programs.findIndex(bp => bp.id === activePieces[idx].id )
-      if(activePieces[idx].team==='player'){
-        activePieces[idx].addModifier({maxSize: 1, moves: 1, range: 1, attack: 1, defence: 1})
+      if (activePieces[idx].team === 'player') {
+        activePieces[idx].addModifier({ maxSize: 1, moves: 1, range: 1, attack: 1, defence: 1 })
         //player.programs[bpIdx].isPlaced = false;
         //activePieces.filter(p => p.id !== activePieces[idx].id);//we could splice, but this might be safer?
       }
     }
-      
+
   }
 }
 
@@ -1561,7 +1561,7 @@ class Pazzaz extends Admin {
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     const idx = activePieces.findIndex(p => p.id === id);
     const noOfTens = Math.max(0, Math.floor(player.money / 10));
-    activePieces[idx].addModifier({moves: noOfTens})
+    activePieces[idx].addModifier({ moves: noOfTens })
   }
 }
 
@@ -1577,17 +1577,17 @@ class Toilet extends Admin {
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     let noOfCommons = 0;
     for (const admin of player.admins) {
-      if(admin.rarity === 1){
+      if (admin.rarity === 1) {
         noOfCommons += 1;
       }
     };
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({
-            attack: noOfCommons,
-            defence: noOfCommons,
-            maxSize: noOfCommons,
-            moves: noOfCommons,
-            range: noOfCommons
+      attack: noOfCommons,
+      defence: noOfCommons,
+      maxSize: noOfCommons,
+      moves: noOfCommons,
+      range: noOfCommons
     });
   }
 }
@@ -1604,10 +1604,10 @@ class Harvest extends Admin {
   private count = 0;
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     this.count += 1;
-    if(this.count === 4){
+    if (this.count === 4) {
       for (const p of activePieces) {
-        if(p.team==='player'){
-          p.addModifier({maxSize: 1})
+        if (p.team === 'player') {
+          p.addModifier({ maxSize: 1 })
         }
       };
       this.count = 0;
@@ -1629,10 +1629,10 @@ class Bipolar extends Admin {
   }
   async apply({ player, piece }: { activePieces?: Piece[], player: Player, piece?: Piece }) {
     if (!piece) return;
-    if(piece.team === 'enemy'){
+    if (piece.team === 'enemy') {
       player.money += 1
     }
-    if(piece.team === 'player'){
+    if (piece.team === 'player') {
       player.money -= 5
     }
   }
@@ -1651,16 +1651,16 @@ class Taoism extends Admin {
     const playerPieces: Piece[] = [];//are these reset every apply?
     const enemyPieces = [];
     for (const p of activePieces) {
-      if(p.team==='player'){
+      if (p.team === 'player') {
         playerPieces.push(p);
       }
-      if(p.team==='enemy'){
+      if (p.team === 'enemy') {
         enemyPieces.push(p);
       }
     };
-    if(enemyPieces.length === playerPieces.length){
+    if (enemyPieces.length === playerPieces.length) {
       for (const p of activePieces) {
-        if(p.team === 'player'){
+        if (p.team === 'player') {
           p.addModifier({
             attack: 1,
             defence: 1,
@@ -1717,7 +1717,7 @@ class HedgeFund extends Admin {
   }
   remove({ player }: { player: Player }) {
     //if player does not have seed
-   player.interestCap -= 10;
+    player.interestCap -= 10;
   }
 }
 
@@ -1749,7 +1749,7 @@ class Liberty extends Admin {
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({range: 1, moves: 1})
+    activePieces[idx].addModifier({ range: 1, moves: 1 })
   }
 }
 
@@ -1764,7 +1764,7 @@ class Punching extends Admin {
   }
   async apply({ player }: { player: Player }) {
     player.difficulty += 1
-    player.bonusReward += 5; 
+    player.bonusReward += 5;
   }
   remove({ player }: { player: Player }) {
     player.difficulty -= 1
@@ -1799,7 +1799,7 @@ export class Abacus extends Admin {
     super(Abacus.name, Abacus.description, Abacus.unicode, Abacus.color, 5, Abacus.rarity, 'player', 'onRoundEnd')
   }
   async apply({ player }: { player: Player }) {
-    const amount = Math.floor(6/player.difficulty)
+    const amount = Math.floor(6 / player.difficulty)
     player.bonusReward += amount;
   }
 }
@@ -1839,7 +1839,7 @@ class AirSupport extends Admin {
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const piece of activePieces) {
-      if(piece.team === 'enemy'){
+      if (piece.team === 'enemy') {
         await piece.takeDamage(1);
       }
     };
@@ -1904,9 +1904,9 @@ class Ring extends Admin {
     super(Ring.name, Ring.description, Ring.unicode, Ring.color, 15, Ring.rarity, 'playerAndGame', 'onRoundEnd')
   }
   async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
-    for(const piece of activePieces){
+    for (const piece of activePieces) {
       const id = piece.id;
-      for(const blueprint of player.programs){
+      for (const blueprint of player.programs) {
         if (blueprint.id === id) {
           blueprint.maxSize = (piece.getStat('maxSize'));
           blueprint.moves = (piece.getStat('moves'));
@@ -1929,10 +1929,10 @@ class Minerva extends Admin {
     super(Minerva.name, Minerva.description, Minerva.unicode, Minerva.color, 9, Minerva.rarity, 'gameState', 'onPieceDestruction')
   }
   //on receive damage //on piece destrcution
-  async apply({ id: _id, activePieces }: {id: string, activePieces: Piece[] }) {
-    for (const p of activePieces){
-      if(p.team==='player'){
-        p.addModifier({range: 1})
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    for (const p of activePieces) {
+      if (p.team === 'player') {
+        p.addModifier({ range: 1 })
       }
     }
   }
@@ -1949,8 +1949,8 @@ class Hermit extends Admin {
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({defence: 2});
-    activePieces[idx].addModifier({moves: -1});
+    activePieces[idx].addModifier({ defence: 2 });
+    activePieces[idx].addModifier({ moves: -1 });
   }
 }
 
@@ -1963,10 +1963,10 @@ class Tracker extends Admin { // FOOTPRINTS, U+1F463
   constructor() {
     super(Tracker.name, Tracker.description, Tracker.unicode, Tracker.color, 4, Tracker.rarity, 'gameState', 'onRoundStart')
   }
-  
+
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-    for (const p of activePieces){
-      if(p.team==='enemy' && !p.immunities.exposed){
+    for (const p of activePieces) {
+      if (p.team === 'enemy' && !p.immunities.exposed) {
         p.statuses.hidden = false;
         p.statuses.exposed = true;
       }
@@ -2023,9 +2023,9 @@ class Jammer extends Admin {
     super(Jammer.name, Jammer.description, Jammer.unicode, Jammer.color, 6, Jammer.rarity, 'gameState', 'onRoundStart')
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-    for (const p of activePieces){
-      if(p.team==='enemy' && p.getStat('range') > 1){
-        p.addModifier({range: -1});
+    for (const p of activePieces) {
+      if (p.team === 'enemy' && p.getStat('range') > 1) {
+        p.addModifier({ range: -1 });
       }
     }
   }
@@ -2041,7 +2041,7 @@ class Balloon extends Admin {
     super(Balloon.name, Balloon.description, Balloon.unicode, Balloon.color, 2, Balloon.rarity, 'player', 'onRoundEnd')
   }
   async apply({ player }: { player: Player }) {
-    for (const p of player.programs){
+    for (const p of player.programs) {
       p.maxSize += 1;
     }
   }
@@ -2138,25 +2138,25 @@ class Camp extends Admin {//needs reviewing
   static color = "rgb(26, 2, 65)";
   static rarity = 3;//5 for all stats
   constructor() {
-    super(Camp.name, Camp.description,Camp.unicode, Camp.color, 6, Camp.rarity, 'gameState', 'onTurnEnd')
+    super(Camp.name, Camp.description, Camp.unicode, Camp.color, 6, Camp.rarity, 'gameState', 'onTurnEnd')
     //private count for shop reference?
   }
   private count = 0;
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     this.count++;
     for (const piece of activePieces) {
-      if(piece.team === 'player' && !piece.statuses.hidden){
-        if(piece.movesRemaining === piece.getStat('moves')){
-          if(this.count === 2){
-            piece.addModifier({range: 1});//encourages camping, seemingly only temporary. If so change to attack
+      if (piece.team === 'player' && !piece.statuses.hidden) {
+        if (piece.movesRemaining === piece.getStat('moves')) {
+          if (this.count === 2) {
+            piece.addModifier({ range: 1 });//encourages camping, seemingly only temporary. If so change to attack
             //piece.addTempModifier({defence : 1})
           }
         } else {
-          piece.addModifier({range: -(piece.getModifier('range'))});//encourages camping
+          piece.addModifier({ range: -(piece.getModifier('range')) });//encourages camping
         }
       }
     };
-    if(this.count === 2){
+    if (this.count === 2) {
       this.count = 0;
     }
   }
@@ -2189,11 +2189,11 @@ class Bowling extends Admin {//test
   async apply({ activePieces, piece }: { activePieces: Piece[], piece?: Piece }) {
     if (!piece) return;
     const targetTile = piece.headPosition
-    const adjacent : Coordinate[] = [
-      {x: targetTile.x+1, y: targetTile.y },
-      {x: targetTile.x-1, y: targetTile.y },
-      {x: targetTile.x, y: targetTile.y+1 },
-      {x: targetTile.x, y: targetTile.y-1 }
+    const adjacent: Coordinate[] = [
+      { x: targetTile.x + 1, y: targetTile.y },
+      { x: targetTile.x - 1, y: targetTile.y },
+      { x: targetTile.x, y: targetTile.y + 1 },
+      { x: targetTile.x, y: targetTile.y - 1 }
     ];
     for (const piece of activePieces) {
       const isAdjacent = piece.tiles.some(t =>
@@ -2217,8 +2217,8 @@ class Stiletto extends Admin {
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({attack: 1})
-    activePieces[idx].addModifier({moves: -1})
+    activePieces[idx].addModifier({ attack: 1 })
+    activePieces[idx].addModifier({ moves: -1 })
     //activePieces[idx].movesRemaining -= 1;
   }
 }
@@ -2237,14 +2237,14 @@ class Disco extends Admin {
     const idx = activePieces.findIndex(p => p.id === id);
     //activePieces[idx].takeDamage(activePieces[idx].getStat('attack'));
     const targetTile = activePieces[idx].headPosition
-    const adjacent : Coordinate[] = [
-      {x: targetTile.x+1, y: targetTile.y },
-      {x: targetTile.x-1, y: targetTile.y },
-      {x: targetTile.x, y: targetTile.y+1 },
-      {x: targetTile.x, y: targetTile.y-1 }
+    const adjacent: Coordinate[] = [
+      { x: targetTile.x + 1, y: targetTile.y },
+      { x: targetTile.x - 1, y: targetTile.y },
+      { x: targetTile.x, y: targetTile.y + 1 },
+      { x: targetTile.x, y: targetTile.y - 1 }
     ];
     for (const piece of activePieces) {
-      if(piece.id === id || piece.team === 'player') return;//skip the attacker?, and only reflect damage to enemies
+      if (piece.id === id || piece.team === 'player') return;//skip the attacker?, and only reflect damage to enemies
       const isAdjacent = piece.tiles.some(t =>
         adjacent.some(c => c.x === t.x && c.y === t.y)
       );
@@ -2282,16 +2282,16 @@ class Sled extends Admin {//test
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     let isLastBp = true;
     for (const bp of player.programs) {
-      if(!bp.isPlaced) isLastBp = false;
+      if (!bp.isPlaced) isLastBp = false;
     };
-    if(isLastBp){
+    if (isLastBp) {
       const idx = activePieces.findIndex(p => p.id === id);
-      if(activePieces[idx].team==='player'){
-        if(!activePieces[idx].statuses.exposed){
+      if (activePieces[idx].team === 'player') {
+        if (!activePieces[idx].statuses.exposed) {
           activePieces[idx].statuses.hidden = true;
         }
       }
-    }  
+    }
   }
 }
 
@@ -2306,7 +2306,7 @@ class Crash extends Admin {//test
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const piece of activePieces) {
-      if(!piece.immunities.frozen){
+      if (!piece.immunities.frozen) {
         piece.statuses.frozen = true;
         piece.movesRemaining = 0;
       }
@@ -2326,9 +2326,9 @@ export class Skyscraper extends Admin {//test not working
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     //const idx = activePieces.findIndex(p => p.id === id);
     for (const piece of activePieces) {
-      if(piece.team === 'player'){
+      if (piece.team === 'player') {
         const noOfTwos = Math.floor(piece.tiles.length / 2);
-        piece.addTempModifier({defence: noOfTwos});
+        piece.addTempModifier({ defence: noOfTwos });
       }
     };
   }
@@ -2345,9 +2345,9 @@ class School extends Admin {//test
   }
   private count = 0;
   async apply({ player }: { player: Player }) {
-    if(this.count < 7){
+    if (this.count < 7) {
       for (const bp of player.programs) {
-        if(!bp.isPlaced){
+        if (!bp.isPlaced) {
           bp.maxSize += 1;
           bp.moves += 1;
           bp.attack += 1;
@@ -2355,7 +2355,7 @@ class School extends Admin {//test
           bp.defence += 1;
         }
       };
-      this.count ++
+      this.count++
     }
   }
 }
@@ -2383,9 +2383,9 @@ class Putter extends Admin {//test
   async apply({ activePieces, piece }: { activePieces: Piece[], piece?: Piece }) {
     if (piece?.team !== 'enemy') return;
     const enemiesLeft = activePieces.filter(p => p.team === 'enemy');
-    if(enemiesLeft.length === 1){
-      const idx = activePieces.findIndex(p => p.id === enemiesLeft[0].id); 
-      if (idx !== -1) activePieces[idx].addModifier({maxSize: -1, moves: -1, range: -1, attack: -1, defence: -1})
+    if (enemiesLeft.length === 1) {
+      const idx = activePieces.findIndex(p => p.id === enemiesLeft[0].id);
+      if (idx !== -1) activePieces[idx].addModifier({ maxSize: -1, moves: -1, range: -1, attack: -1, defence: -1 })
     }
   }
 }
@@ -2401,7 +2401,7 @@ class Smoker extends Admin {
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({maxSize: -1});
+    activePieces[idx].addModifier({ maxSize: -1 });
     activePieces[idx].immunities.confused = true;
   }
 }
@@ -2417,9 +2417,9 @@ class Wine extends Admin {
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({maxSize: +1});
-    activePieces[idx].addModifier({defence: +1});
-    activePieces[idx].addModifier({moves: -1});
+    activePieces[idx].addModifier({ maxSize: +1 });
+    activePieces[idx].addModifier({ defence: +1 });
+    activePieces[idx].addModifier({ moves: -1 });
   }
 }
 
@@ -2466,10 +2466,10 @@ class Evergreen extends Admin {
   private count = 0;
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     this.count += 1;
-    if(this.count === 2){
+    if (this.count === 2) {
       for (const p of activePieces) {
-        if(p.team==='player'){
-          p.addModifier({maxSize: 1})
+        if (p.team === 'player') {
+          p.addModifier({ maxSize: 1 })
         }
       };
       this.count = 0;
@@ -2493,11 +2493,11 @@ class Cards extends Admin {//test
   }
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    const maxSizeMod = player.items.filter(i => i.name === 'Formula').length + player.items.filter(i => i.name === 'Blueberry').length + (2*player.items.filter(i => i.name === 'Melon').length) + (3*player.items.filter(i => i.name === 'Pie').length);
-    const movesMod = player.items.filter(i => i.name === 'Roids').length + player.items.filter(i => i.name === 'Juice').length + (2*player.items.filter(i => i.name === 'Teapot').length) + (2*player.items.filter(i => i.name === 'Coffee').length);
-    const rangeMod = player.items.filter(i => i.name === 'Glasses').length + (2*player.items.filter(i => i.name === 'Carrot').length);
-    const attackMod = player.items.filter(i => i.name === 'Roids').length + player.items.filter(i => i.name === 'Mushroom').length + (2*player.items.filter(i => i.name === 'Meat').length);
-    const defenceMod = player.items.filter(i => i.name === 'Formula').length + player.items.filter(i => i.name === 'Iron').length + (2*player.items.filter(i => i.name === 'Garlic').length) + (3*player.items.filter(i => i.name === 'Ginger').length);
+    const maxSizeMod = player.items.filter(i => i.name === 'Formula').length + player.items.filter(i => i.name === 'Blueberry').length + (2 * player.items.filter(i => i.name === 'Melon').length) + (3 * player.items.filter(i => i.name === 'Pie').length);
+    const movesMod = player.items.filter(i => i.name === 'Roids').length + player.items.filter(i => i.name === 'Juice').length + (2 * player.items.filter(i => i.name === 'Teapot').length) + (2 * player.items.filter(i => i.name === 'Coffee').length);
+    const rangeMod = player.items.filter(i => i.name === 'Glasses').length + (2 * player.items.filter(i => i.name === 'Carrot').length);
+    const attackMod = player.items.filter(i => i.name === 'Roids').length + player.items.filter(i => i.name === 'Mushroom').length + (2 * player.items.filter(i => i.name === 'Meat').length);
+    const defenceMod = player.items.filter(i => i.name === 'Formula').length + player.items.filter(i => i.name === 'Iron').length + (2 * player.items.filter(i => i.name === 'Garlic').length) + (3 * player.items.filter(i => i.name === 'Ginger').length);
     const blessingBonus = player.items.filter(i => i.name === 'Blessing').length;
 
     //[Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Roids, Formula]
@@ -2548,11 +2548,11 @@ class Juggler extends Admin {//test
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     let placedBps = [];
     for (const bp of player.programs) {
-      if(bp.isPlaced) placedBps.push(bp.id)
+      if (bp.isPlaced) placedBps.push(bp.id)
     };
-    if(placedBps.length <= 1 && this.firstId !== id){
+    if (placedBps.length <= 1 && this.firstId !== id) {
       const idx = activePieces.findIndex(p => p.id === id);
-      activePieces[idx].addModifier({maxSize: 1, moves: 1, range: 1, attack: 1, defence: 1})
+      activePieces[idx].addModifier({ maxSize: 1, moves: 1, range: 1, attack: 1, defence: 1 })
       this.firstId = id;
     }
   }
@@ -2572,11 +2572,11 @@ class Ice extends Admin {//needs to reset
     this.count += 1;
     for (const piece of activePieces) {
       //if(piece.team === 'player'){
-        if(this.count <= 1 && !piece.immunities.frozen){
-          piece.statuses.frozen = true
-        } else {
-          piece.statuses.frozen = false;
-        }
+      if (this.count <= 1 && !piece.immunities.frozen) {
+        piece.statuses.frozen = true
+      } else {
+        piece.statuses.frozen = false;
+      }
       //}
     };
   }
@@ -2598,9 +2598,9 @@ class Howzat extends Admin {
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (let index = 0; index < activePieces.length; index++) {
       const p = activePieces[index];
-      if(p.team==='enemy' && p.tiles.length <= 2 && p.defenceRemaining === 0){
+      if (p.team === 'enemy' && p.tiles.length <= 2 && p.defenceRemaining === 0) {
         activePieces.splice(index, 1);
-      }    
+      }
     }
   }
 }
@@ -2618,10 +2618,10 @@ class Cherries extends Admin {//test
     const idx = activePieces.findIndex(p => p.id === id);
     const matchingBps: PieceBlueprint[] = [];
     for (const bp of player.programs) {
-      if((bp.name === activePieces[idx].name) && !bp.isPlaced) matchingBps.push(bp)
+      if ((bp.name === activePieces[idx].name) && !bp.isPlaced) matchingBps.push(bp)
     };
     for (const bp of matchingBps) {
-      activePieces[idx].addModifier({maxSize: bp.maxSize, moves: bp.moves, range: bp.range, attack: bp.attack, defence: bp.defence})
+      activePieces[idx].addModifier({ maxSize: bp.maxSize, moves: bp.moves, range: bp.range, attack: bp.attack, defence: bp.defence })
       //activePieces[idx].addModifier({maxSize: 1, moves: 1, range: 1, attack: 1, defence: 1})
     };
   }
@@ -2637,7 +2637,7 @@ class Coin extends Admin {
     super(Coin.name, Coin.description, Coin.unicode, Coin.color, 5, Coin.rarity, 'piece', 'onDealDamage')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
-    if(Math.random() < 0.5){
+    if (Math.random() < 0.5) {
       const idx = activePieces.findIndex(p => p.id === id);
       activePieces[idx].damageMult += 1;
     }
@@ -2671,10 +2671,10 @@ class Tempura extends Admin {
   constructor() {
     super(Tempura.name, Tempura.description, Tempura.unicode, Tempura.color, 3, Tempura.rarity, 'gameState', 'onPlacement')
   }
-  async apply({ id, activePieces }: {  id: string, activePieces: Piece[] }) {
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({defence: 1}) 
-    activePieces[idx].addModifier({maxSize: -1}) 
+    activePieces[idx].addModifier({ defence: 1 })
+    activePieces[idx].addModifier({ maxSize: -1 })
   }
 }
 
@@ -2690,9 +2690,9 @@ class BlackBelt extends Admin {
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (let index = 0; index < activePieces.length; index++) {
       const p = activePieces[index];
-      if(p.team==='player' && p.actions >= 1){
+      if (p.team === 'player' && p.actions >= 1) {
         p.willRetaliate = true;
-      }    
+      }
     }
   }
 }
@@ -2706,7 +2706,7 @@ class Bell extends Admin {//test
   constructor() {
     super(Bell.name, Bell.description, Bell.unicode, Bell.color, 8, Bell.rarity, 'gameState', 'onReceiveDamage')
   }
-  
+
   async apply({ id: id, activePieces }: { id: string, activePieces: Piece[] }) {
     const dealer = activePieces.find(p => p.id === id);
     // Guard clause: if dealer doesn't exist or is already frozen, exit early
@@ -2733,7 +2733,7 @@ class Violin extends Admin {//test
   async apply({ player, piece }: { activePieces?: Piece[], player: Player, piece?: Piece }) {
     if (!piece) return;
     const idbp = player.programs.findIndex(bp => bp.id === piece.id);
-    if(idbp !== -1 && piece.team === 'player'){
+    if (idbp !== -1 && piece.team === 'player') {
       player.money += 3;
     }
   }
@@ -2752,7 +2752,7 @@ class Luggage extends Admin {
 
   //noRoundend
   async apply({ player }: { player: Player }) {
-    if(player.mapProgress >= 2){
+    if (player.mapProgress >= 2) {
       player.memory += 1;
     }
   }
@@ -2772,11 +2772,11 @@ class Reinforcement extends Admin {
   constructor() {
     super(Reinforcement.name, Reinforcement.description, Reinforcement.unicode, Reinforcement.color, 4, Reinforcement.rarity, 'gameState', 'onPlacement')
   }
-  async apply({ id, activePieces }: {  id: string, activePieces: Piece[] }) {
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({defence: 1}) 
-    activePieces[idx].addModifier({maxSize: +1}) 
-    activePieces[idx].addModifier({moves: -1}) 
+    activePieces[idx].addModifier({ defence: 1 })
+    activePieces[idx].addModifier({ maxSize: +1 })
+    activePieces[idx].addModifier({ moves: -1 })
   }
 }
 
@@ -2784,16 +2784,16 @@ class Chime extends Admin {
   static name = "Wind Chime";
   static description = "Enemies that have moved lose -1 defence for 1 turn";
   static unicode = "U+1F390";
-  static color = "rgb(185, 250, 255)";
+  static color = "rgb(232, 238, 238)";
   static rarity = 1;
   constructor() {
     super(Chime.name, Chime.description, Chime.unicode, Chime.color, 3, Chime.rarity, 'gameState', 'onEnemyTurnEnd')
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces) {
-      if(p.team==='enemy' && p.movesRemaining < p.getStat('moves')){
-        p.addTempModifier({defence: -1})
-      }    
+      if (p.team === 'enemy' && p.movesRemaining < p.getStat('moves')) {
+        p.addTempModifier({ defence: -1 })
+      }
     };
   }
 }
@@ -2809,9 +2809,9 @@ class Fuel extends Admin {
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces) {
-      if(p.team==='player'){
+      if (p.team === 'player') {
         p.movesRemaining += 1;
-      }    
+      }
     };
   }
 }
@@ -2825,12 +2825,12 @@ class Briefcase extends Admin {
   constructor() {
     super(Briefcase.name, Briefcase.description, Briefcase.unicode, Briefcase.color, 5, Briefcase.rarity, 'playerAndGame', 'onRoundStart')
   }
-  
+
   async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
-    if(player.effectiveMoney >= 5){
-      for (const p of activePieces){
-        if(p.team==='enemy'){
-          p.addModifier({defence: -1})//enemy pieces only?
+    if (player.effectiveMoney >= 5) {
+      for (const p of activePieces) {
+        if (p.team === 'enemy') {
+          p.addModifier({ defence: -1 })//enemy pieces only?
         }
       }
       player.spend(5);
@@ -2847,9 +2847,9 @@ class Mail extends Admin {
   constructor() {
     super(Mail.name, Mail.description, Mail.unicode, Mail.color, 2, Mail.rarity, 'player', 'onRoundEnd')
   }
-  
+
   async apply({ player }: { player: Player }) {
-    if(player.effectiveMoney >= 2 && (player.freeMemory >= 1 || player.hasAdmin('Schoolbag') && player.freeMemory >= 0.5)){
+    if (player.effectiveMoney >= 2 && (player.freeMemory >= 1 || player.hasAdmin('Schoolbag') && player.freeMemory >= 0.5)) {
       player.spend(2);
       const gift = new Box;
       player.items.push(gift);
@@ -2865,9 +2865,9 @@ class Christmas extends Admin {
   constructor() {
     super(Christmas.name, Christmas.description, Christmas.unicode, Christmas.color, 5, Christmas.rarity, 'player', 'onRoundEnd')
   }
-  
+
   async apply({ player }: { player: Player }) {
-    if(player.freeMemory >= 1 || player.hasAdmin('Schoolbag') && player.freeMemory >= 0.5){
+    if (player.freeMemory >= 1 || player.hasAdmin('Schoolbag') && player.freeMemory >= 0.5) {
       const gift = new Gift;
       player.items.push(gift);
     }
@@ -2882,10 +2882,10 @@ class Butler extends Admin {
   constructor() {
     super(Butler.name, Butler.description, Butler.unicode, Butler.color, 8, Butler.rarity, 'player', 'onRoundEnd')
   }
-  
+
   async apply({ player }: { player: Player }) {
-    if(player.freeMemory >= 1 || player.hasAdmin('Schoolbag') && player.freeMemory >= 0.5){
-      const gift =  pickWeightedRandomItem(upgradeItems, player);
+    if (player.freeMemory >= 1 || player.hasAdmin('Schoolbag') && player.freeMemory >= 0.5) {
+      const gift = pickWeightedRandomItem(upgradeItems, player);
       player.items.push(gift);
     }
   }
@@ -2904,11 +2904,11 @@ class Chain extends Admin {//test
   async apply({ activePieces, piece }: { activePieces: Piece[], piece?: Piece }) {
     if (!piece) return;
     const targetTile = piece.headPosition
-    const adjacent : Coordinate[] = [
-      {x: targetTile.x+1, y: targetTile.y },
-      {x: targetTile.x-1, y: targetTile.y },
-      {x: targetTile.x, y: targetTile.y+1 },
-      {x: targetTile.x, y: targetTile.y-1 }
+    const adjacent: Coordinate[] = [
+      { x: targetTile.x + 1, y: targetTile.y },
+      { x: targetTile.x - 1, y: targetTile.y },
+      { x: targetTile.x, y: targetTile.y + 1 },
+      { x: targetTile.x, y: targetTile.y - 1 }
     ];
     for (const piece of activePieces) {
       const isAdjacent = piece.tiles.some(t =>
@@ -2934,12 +2934,12 @@ class Nose extends Admin {
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces) {
-      if(p.team==='enemy' && p.movesRemaining < p.getStat('moves')){
-        if(!p.immunities.exposed){
+      if (p.team === 'enemy' && p.movesRemaining < p.getStat('moves')) {
+        if (!p.immunities.exposed) {
           p.statuses.hidden = false;
           p.statuses.exposed = true;
         }
-      }    
+      }
     };
   }
 }
@@ -3090,12 +3090,12 @@ let adminLogs = {
   | 'other';
 */
 allAdmins.forEach(admin => {
-  if(admin.rarity === 1) adminLogs.rarity1 += 1;
-  if(admin.rarity === 2) adminLogs.rarity2 += 1;
-  if(admin.rarity === 3) adminLogs.rarity3 += 1;
-  if(admin.rarity === 4) adminLogs.rarity4 += 1;
-  if(admin.rarity === 5) adminLogs.rarity5 += 1;
-  if(admin.rarity === 6) adminLogs.rarity6 += 1;
+  if (admin.rarity === 1) adminLogs.rarity1 += 1;
+  if (admin.rarity === 2) adminLogs.rarity2 += 1;
+  if (admin.rarity === 3) adminLogs.rarity3 += 1;
+  if (admin.rarity === 4) adminLogs.rarity4 += 1;
+  if (admin.rarity === 5) adminLogs.rarity5 += 1;
+  if (admin.rarity === 6) adminLogs.rarity6 += 1;
 });
 console.log("Admins of rarity 1: ", adminLogs.rarity1)
 console.log("Admins of rarity 2: ", adminLogs.rarity2)
@@ -3130,12 +3130,12 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //GOAT, U+1F410 charge line piece, or GOAT admin
 
 //splash damage- mult to group targets??
-//bomb bonuses - 
+//bomb bonuses -
 //gene hybrids appear in shop
 
 //TULIP, U+1F337 pair with bubble, some kind of effect based off money???
 
-//CLAPPER BOARD, U+1F3AC Action 
+//CLAPPER BOARD, U+1F3AC Action
 // CRESCENT MOON, U+1F319
 //CRUTCH, U+1FA7C
 // MOUNT FUJI, U+1F5FB
@@ -3169,8 +3169,8 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //GAMER  VIDEO GAME, U+1F3AE
 //Arevakhach LEFT-FACING ARMENIAN ETERNITY SIGN, U+58E
 //RIGHT-FACING ARMENIAN ETERNITY SIGN, U+58D
-// SAXOPHONE, U+1F3B7 + moves 
-// ACCORDION, U+1FA97 Busker - 
+// SAXOPHONE, U+1F3B7 + moves
+// ACCORDION, U+1FA97 Busker -
 //PINE DECORATION, U+1F38D
 //SEAT, U+1F4BA Recliner
 //CHAIR, U+1FA91
@@ -3216,7 +3216,7 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 
 // AUTOMATED TELLER MACHINE, U+1F3E7
 
-//TURNED BLACK SHOGI PIECE, U+26CA //black shield 
+//TURNED BLACK SHOGI PIECE, U+26CA //black shield
 
 //8ball BILLIARDS, U+1F3B1
 

@@ -125,10 +125,8 @@ export function applyVariant(piece: Piece, variant: PieceVariant) {
   for (const [stat, delta] of Object.entries(variant.mods) as [StatKey, number][]) {
     const min = STAT_MIN[stat];
     const next = piece[stat] + delta;
-
     piece[stat] = Math.max(min, next);
   }
-
   piece.variantName = variant.name;
 }
 

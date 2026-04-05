@@ -17,7 +17,7 @@ export const companies: Company[] = [
     { name: 'Meridian Security Inc.', abbr: 'MSI', unicode: "U+1F310", pieceList: MeridianPieces, tileColor: "rgb(14, 10, 77)", edgeColor: "#59f0f3"},
     { name: 'Longhouse Web Services', abbr: 'LWS', unicode: "U+1F6D6", pieceList: longHousePieces, tileColor: "rgb(63, 28, 4)", edgeColor: "#e39740"},
     { name: 'Tsukimi Group', abbr: 'TKG', unicode: "U+1F391", pieceList: TsukimiPieces, tileColor: "rgb(78, 78, 78)", edgeColor: "#e4e4e4"},
-    { name: 'Zenith Ltd.', abbr: 'ZNT', unicode: "U+1F304", pieceList: zenithPieces, tileColor: "rgb(234, 234, 234)", edgeColor: "#a1a1a1"},
+    { name: 'Zenith Ltd.', abbr: 'ZEN', unicode: "U+1F304", pieceList: zenithPieces, tileColor: "rgb(234, 234, 234)", edgeColor: "#a1a1a1"},
     { name: 'Starlane Tech', abbr: 'SLT', unicode: "U+1F30C", pieceList: starlanePieces, tileColor: "rgb(29, 29, 29)", edgeColor: "#fffa92"},
     { name: 'Sunrise Associates', abbr: 'SRA', unicode: "U+1F305", pieceList: sunrisePieces, tileColor: "rgb(184, 98, 0)", edgeColor: "#f6fc4f"},
     { name: 'Flyby Surveilance', abbr: 'FBS', unicode: "U+1FAB0", pieceList: flybyPieces, tileColor: "rgb(105, 108, 105)", edgeColor: "#f3f97d"},

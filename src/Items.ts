@@ -418,7 +418,7 @@ export class Beans extends Item<Piece> {
     static name = "Beans";
     static description = "Replenish a programs actions";
     static unicode = "U+1FAD8";
-    static color = "#f03030ff";
+    static color = "rgb(101, 179, 192)";
     static rarity = 3;
     constructor() {
         super(Beans.name, Beans.description, Beans.unicode, Beans.color, 2, Beans.rarity, 'piece')
@@ -1127,7 +1127,7 @@ class Extinguisher extends Item<PieceBlueprint> {
 //RING BUOY, U+1F6DF restore the last destroyed program to hand /target a space? or give piece a wontDie bool?
 //lifeboat ROWBOAT, U+1F6A3
 
-export const allItems = [Blueberry, Box, Battery, Iron, Headphones, Juice, Mushroom, Pepper, Floppy, Voucher, Bandage, Extinguisher, Formula, Frogman, Gift, Hotline, Labcoat, Plunger, Roids, Teapot, Toothbrush, Beans, Blackheart, Bugle, Gloves, Jar, Keygen, Makeover, Melon, Megaphone, Pinata, Rations, ShootingStar, Spanner, Supplement, Update2, Chili, Cake, Carrot, Coffee, Djembe, Garlic, Goggles, Wand, Lightning, Meat, Pie, Soap, Disguise, Dupe, Genie, Hourglass, Sandwich, Life, Blessing, Feast, Ginger, Beer, Pandora, Update3];
+export const allItems = [Blueberry, Battery, Iron, Headphones, Juice, Mushroom, Box, Pepper, Floppy, Voucher, Bandage, Extinguisher, Formula, Frogman, Gift, Hotline, Labcoat, Plunger, Roids, Teapot, Toothbrush, Beans, Blackheart, Bugle, Gloves, Jar, Keygen, Makeover, Melon, Megaphone, Pinata, Rations, ShootingStar, Spanner, Supplement, Update2, Chili, Cake, Carrot, Coffee, Djembe, Garlic, Goggles, Wand, Lightning, Meat, Pie, Soap, Disguise, Dupe, Genie, Hourglass, Sandwich, Life, Blessing, Feast, Ginger, Beer, Pandora, Update3];
 export const upgradeItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Roids, Formula]
 
 /*Items.forEach(i => {

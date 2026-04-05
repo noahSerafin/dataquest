@@ -33,6 +33,7 @@ export abstract class Piece {
   redacted: boolean = false;//for boss
   isBusy: boolean = false;//for AI
   isTriggering: boolean = false; //for trap animations
+  quickSanded: boolean = false;
 
   specialName?: string;
   extraUnicode?: string;
@@ -55,6 +56,7 @@ export abstract class Piece {
   color: string
   attack: number
   defence: number
+  damageMult: number = 1;
   headPosition: Coordinate
   tiles: Coordinate[] // an array of (x, y) positions
   movesRemaining: number
@@ -62,7 +64,6 @@ export abstract class Piece {
   actions: number
   team: string //'player' or 'enemy'
   rarity: number
-  damageMult: number = 1;
 
   constructor(
     name: string, 
@@ -159,6 +160,10 @@ export abstract class Piece {
   }
 
   resetMoves() {
+    if(this.quickSanded){
+      this.movesRemaining -= 1;
+      this.addTempModifier({moves: -1});
+    }
     if(!this.statuses.frozen){
       this.movesRemaining = this.getStat('moves');
     }
@@ -1873,7 +1878,7 @@ class Rabbit extends Piece {//not working
 
 // TOP HAT, U+1F3A9 spawns a rabbit
 /*class Hat extends Piece {//not working
-  static name = "Top Hat";
+  static name = "Hat Trick";
   static description = "A program that can turn into a rabbit";
   static unicode = "U+1F3A9";
   static color = "#6ea1caff";

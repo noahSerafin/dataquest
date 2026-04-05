@@ -5,10 +5,14 @@ variant tooltips
 
 // BUGS
 Player unicode appearing on nodes
-rectify REx/ sprinkler/ quicksand
 Pandora not useable when full
-pass primary variant to hybrid
 you win not dissapearing in endless mode
+
+make a check in Enemy for movesremaining/actionsremaining for stopwatch/drum etc.
+
+hybrids should combine immunities
+pass primary variant to hybrid
+
 
 more + - trade off admins
 make some variants immunities?

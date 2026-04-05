@@ -1103,13 +1103,16 @@ const damagePieceAt = async (coord: Coordinate) => {
   //if (!damageReceiver || (damageReceiver.team === selectedPiece.value.team && !selectedPiece.value.statuses.charmed)) return;
   //console.log("Damage call:", coord, damage)
   const baseDamage = selectedPiece.value.getStat('attack');
+  const baseMult = selectedPiece.value.damageMult;
+  if(selectedPiece.value.variantName === 'Deadly'){
+    selectedPiece.value.damageMult += 0.5;
+  }
   await handleApplyAdmins('onDealDamage', selectedPiece.value.id);// damageReceiver.id)//attacker's id, (bug: blood tax will trigger even on no damage)
   const damage = Math.floor(baseDamage * selectedPiece.value.damageMult);//mult should be applyed inside takeDamage for special moves
   await damageReceiver.takeDamage(damage);
   if (selectedPiece.value.statuses.hidden) {
     selectedPiece.value.statuses.hidden = false;
   }
-  selectedPiece.value.damageMult = 1;
   if (damageReceiver.willRetaliate || damageReceiver.name === 'Hedgehog') {
     await selectedPiece.value.takeDamage(damageReceiver.getStat('attack'));
     if (damageReceiver.name === 'Puffer' && !selectedPiece.value.immunities.poisoned) {
@@ -1118,7 +1121,7 @@ const damagePieceAt = async (coord: Coordinate) => {
   }
   selectedPiece.value.willRetaliate = false;//pieces that have enacted defensive option
   //could trigger blood tax here using 'other'
-  selectedPiece.value.damageMult = 1;
+  selectedPiece.value.damageMult = baseMult;
   //console.log(damageReceiver?.name, ' tiles afterdmg: ', damageReceiver.tiles)
   boardRef.value.clearHighlights();
   checkForRoundEnd();
@@ -1370,8 +1373,8 @@ const endTurn = async () => {
       piece.actions = 1;
     }
     if (piece.team === 'enemy') {
-      piece.resetMoves();
       piece.resetTempModifiers();
+      piece.resetMoves();
       piece.willRetaliate = false;//
     }
   };
@@ -1385,8 +1388,8 @@ const endTurn = async () => {
       piece.actions = 1;
     }
     if (piece.team === 'player') {
-      piece.resetMoves();
       piece.resetTempModifiers();
+      piece.resetMoves();
       piece.willRetaliate = false;//
     }
   };

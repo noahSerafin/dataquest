@@ -79,7 +79,9 @@
                 isPlaced: false,
                 cost: primary.cost + secondary.cost,
                 hybridName: makeHybridName(primary.name, secondary.name),
-                extraUnicode: secondary.unicode
+                extraUnicode: secondary.unicode,
+                immunities: primary.immunities, //+ secondary.immunities
+                variantName: primary.variantName
             }
         }
         return {
@@ -98,7 +100,9 @@
             isPlaced: false,
             cost: primary.cost + secondary.cost,
             hybridName: makeHybridName(primary.name, secondary.name),
-            extraUnicode: secondary.unicode
+            extraUnicode: secondary.unicode,
+            immunities: primary.immunities, //+ secondary.immunities
+            variantName: primary.variantName 
         }
     };
 
@@ -176,7 +180,7 @@
 <template>
   <div class="container hybrid-compiler">
     <h4>HYBRID COMPILER</h4>
-    <p>Choose 2 programs to combine into 1, adding their stats together and keeping the primary program's special move.</p>
+    <p class="padded">Choose 2 programs to combine into 1, adding their stats together and keeping the primary program's special move.</p>
     <!-- Slots -->
     <div class="slots">
         <div class="slot-container">
@@ -294,5 +298,8 @@
     display: flex;
     justify-content: space-between;
     gap: 2rem;
+}
+.padded{
+    padding: 20px;
 }
 </style>

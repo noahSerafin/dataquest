@@ -949,7 +949,7 @@ class Toothbrush extends Item<Piece[]> {//lighting remove 1 tile from all enemy 
     static name = "Toothbrush";
     static description = "Removes all enemies with a size of 1 and 0 defence remaining";
     static unicode = "U+1FAA5";
-    static color = "rgb(233, 73, 61)";
+    static color = "rgb(255, 249, 222)";
     static rarity = 2;
     constructor() {
         super(Toothbrush.name, Toothbrush.description, Toothbrush.unicode, Toothbrush.color, 2, Toothbrush.rarity, 'gameState')

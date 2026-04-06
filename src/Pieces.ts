@@ -34,6 +34,7 @@ export abstract class Piece {
   isBusy: boolean = false;//for AI
   isTriggering: boolean = false; //for trap animations
   quickSanded: boolean = false;
+  disarmed: boolean = false;
 
   specialName?: string;
   extraUnicode?: string;
@@ -167,6 +168,9 @@ export abstract class Piece {
     if(!this.statuses.frozen){
       this.movesRemaining = this.getStat('moves');
     }
+    if(this.disarmed){
+      this.actions = 0;
+    }
   }
   resetDefence() {
     this.defenceRemaining = this.getStat('defence');
@@ -241,7 +245,7 @@ export abstract class Piece {
   async triggerTrap(target: any): Promise<void> {
     this.isTriggering = true;
     this.statuses.hidden = false;
-    await new Promise(resolve => setTimeout(resolve, 350));
+    await new Promise(resolve => setTimeout(resolve, 450));
     await this.special(target);
     this.isTriggering = false;
   }
@@ -1089,7 +1093,7 @@ class Copycat extends Piece {
 
 class Banana extends Piece {
   static name = "Banana Peel";
-  static description = "A program invisble to the enemy that immobilises programs moving over it for 1 turn";
+  static description = "A program invisble to the enemy that immobilises programs moving over it for 1 turn, and strips them of any actions, removing itself in the process";
   static unicode = "U+1F34C";
   static color = "#2f724b";
   static rarity = 1;
@@ -1101,6 +1105,7 @@ class Banana extends Piece {
   }
   async special(target: Piece): Promise<void> {
     target.movesRemaining = 0;
+    target.actions = 0;
     this.removeCallback?.(this);
   }
 }
@@ -2824,7 +2829,7 @@ class Stopwatch extends Piece {//not passive
   async special(targetPiece: Piece):Promise<void>{
     if(targetPiece.team === this.team && targetPiece.id !== this.id){
       targetPiece.movesRemaining = targetPiece.getStat('moves');
-      targetPiece.actions = 1;
+      targetPiece.actions += 1;
     } else {
       targetPiece.movesRemaining = 0;
       targetPiece.actions = 0;
@@ -3974,7 +3979,8 @@ class Coat extends Piece {
     if(target.team === 'enemy'){
       target.team = 'player';
     } else if (target.team === 'player'){
-      target.team = 'enemy'
+      target.team = 'enemy';
+      target.color = 'black';
     }
     this.actions--
     this.removeCallback?.(this);
@@ -4153,7 +4159,7 @@ class Super extends Piece {
   }
 }
 
-export const allPieces = [Ant, Acorn, Banana, Bee, Egg, Knife, Potato, Rat, Shield, Sling, Snail, TP, Aegis, Banner, Beetle, Bow, Bull, Chick, Chicken, Dagger, Decoy, Dog, Fence, Firework, Frond, Doctor, Gecko, Guard, Hedgehog, Jellyfish, Larva, Lance, Tree, Poop, Flute, Rooster, Saw, Snake, Tar, Vulture, Germ, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Buffalo, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, Hopper, LabRat, LadyBeetle, Magnet, Medic, Mosquito, Ninja, Octopus, Officer, Paladin, Wasp, Pawn, Peacock, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Alien, Arms, Axe, Cannon, Lightning, Palm, Bison, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Kite, Leopard, Lighthouse, Mammoth, Mine, Nerf, Oil, Puffer, Rabbit, Scarab, Shark, Snowman, Soldier, Squid, Stopwatch, Teargas, Tradie, Tiger, Bat, Wizard, Wolf, Zebra, Archdaemon, Recurve, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Gman, Giraffe, Hippo, Lion, Lovebomb, Oni, Orangutan, Paragon, Rhino, Screwdriver, Shovel, Shrike, Tank, Coat, UFO, Vampire, Bear, Helicopter, Gorilla, Greatshield, Nuke, Sol, Sponge, Super, Rex, Unicorn];//Dolls //100 +2 (web, ink)
+export const allPieces = [Ant, Banana, Bee, Egg, Knife, Potato, Rat, Shield, Sling, Snail, TP, Acorn, Aegis, Banner, Beetle, Bow, Bull, Chick, Chicken, Dagger, Decoy, Dog, Fence, Firework, Frond, Doctor, Gecko, Guard, Hedgehog, Jellyfish, Larva, Lance, Tree, Poop, Flute, Rooster, Saw, Snake, Tar, Vulture, Germ, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Buffalo, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, Hopper, LabRat, LadyBeetle, Magnet, Medic, Mosquito, Ninja, Octopus, Officer, Paladin, Wasp, Pawn, Peacock, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Alien, Arms, Axe, Cannon, Lightning, Palm, Bison, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Kite, Leopard, Lighthouse, Mammoth, Mine, Nerf, Oil, Puffer, Rabbit, Scarab, Shark, Snowman, Soldier, Squid, Stopwatch, Teargas, Tradie, Tiger, Bat, Wizard, Wolf, Zebra, Archdaemon, Recurve, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Gman, Giraffe, Hippo, Lion, Lovebomb, Oni, Orangutan, Paragon, Rhino, Screwdriver, Shovel, Shrike, Tank, Coat, UFO, Vampire, Bear, Helicopter, Gorilla, Greatshield, Nuke, Sol, Sponge, Super, Rex, Unicorn];//Dolls //100 +2 (web, ink)
 
 //companies
 /*

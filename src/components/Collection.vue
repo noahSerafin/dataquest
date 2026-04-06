@@ -151,6 +151,7 @@ const activeTab = ref<'pieces' | 'items' | 'admins' | 'bosses' | 'stats'>('piece
                 :showController="(selectedItem?.name === AdminClass.name)"
                 @select="selectItem"
                 @deselect="deselectItem"
+                :class="`selected-${selectedItem?.name === AdminClass.name}`"
                 />
               <div class="name-label">{{ AdminClass.name }}</div>
             </template>

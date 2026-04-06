@@ -134,10 +134,10 @@
         props.player.addProgram(resultBP.value);
 
         // Clean up local state
-        primaryBP.value = null
-        secondaryBP.value = null
-        resultBP.value = null
-
+        primaryBP.value = null;
+        secondaryBP.value = null;
+        resultBP.value = null;
+        selectedBP.value = null;
         emit('close')
     }
 

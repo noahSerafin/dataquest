@@ -152,12 +152,6 @@
         @close="deselect"
     />
 
-    <button
-      v-if="resultBP"
-      @click="collect"
-    >
-      Collect
-    </button>
     <div class="btns">
         <button @click="cancel">Cancel</button>
         <button @click="skip">Skip</button>

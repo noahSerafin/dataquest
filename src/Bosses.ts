@@ -73,7 +73,7 @@ class Hook extends Admin {
 class Mirror extends Admin {
     static rarity = 2;
     static name = "Mirror";
-    static description = "Enemy programs classes are chosen from blueprints in your inventory";
+    static description = "Enemy program's classes are chosen from blueprints in your inventory";
     static unicode = "U+1FA9E";
     static color = "rgb(172, 5, 213)";
     constructor() {
@@ -268,7 +268,7 @@ class Castle extends Admin {
 
 class Anchor extends Admin {
     static name = "Anchor";
-    static description = "Every player program loses -1 moves";
+    static description = "Every player program loses -2 moves";
     static unicode = "U+2693";
     static color = "rgb(52, 48, 112)";
     static rarity = 3;
@@ -277,7 +277,7 @@ class Anchor extends Admin {
     }
     async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
         const idx = activePieces.findIndex(p => p.id === id);
-        activePieces[idx].addModifier({ moves: -1 })
+        activePieces[idx].addModifier({ moves: -2 })
     }
 }
 
@@ -285,7 +285,7 @@ class Jack extends Admin {
     static name = "Jack O' Lantern";
     static description = "Every enemy gains +1 range at the start of the round";
     static unicode = "U+1F383";
-    static color = "#000000ff";
+    static color = "rgb(180, 63, 5)";
     static rarity = 4;
     constructor() {
         super(Jack.name, Jack.description, Jack.unicode, Jack.color, 5, Jack.rarity, 'gameState', 'onRoundStart')
@@ -351,7 +351,7 @@ class LowBattery extends Admin {
 
 class Customs extends Admin {//remove
     static name = "Customs";
-    static description = "Every player program is exposed, and loses 1 moves";
+    static description = "Every player program is exposed and loses -1 moves";
     static unicode = "U+1F6C3";
     static color = "#127a3eff";
     static rarity = 2;
@@ -821,7 +821,7 @@ class Mountain extends Admin {
     }
 }
 //quicksand BEACH WITH UMBRELLA, U+1F3D6 //THONG SANDAL, U+1FA74 //HOURGLASS WITH FLOWING SAND,// U+23F3 DESERT, U+1F3DC
-export class Quicksand extends Admin {
+class Quicksand extends Admin {
   static name = "Quicksand";
   static description = "Programs that move temporarily lose -1 moves at the end of enemy's turn";
   static unicode = "U+1F3D6";
@@ -909,7 +909,7 @@ class Blackmail extends Admin {
 
 // CLIPBOARD, U+1F4CB inspection nerfs all your placed programs 3
 class ClipBoard extends Admin {
-    static name = "Inpsection";
+    static name = "Inspection";
     static description = "Every player program loses -1 max size and -1 attack";
     static unicode = "U+1F4CB";
     static color = "rgb(158, 158, 158)";
@@ -924,10 +924,161 @@ class ClipBoard extends Admin {
         }
     }
 }
-// LEDGER, U+1F4D2 all transactions - nerf based on money 2
+
+//TRAFFIC LIGHT, U+1F6A6 pieces that take an action take 1 damage
+class TrafficLight extends Admin {
+    static name = "Traffic Light";
+    static description = "Programs that move or take an action when the light is red take 1 damage at the end of your turn";//or lose 1 moves:
+    static unicode = "U+1F6A6";
+    static color = "hsl(116, 100%, 67%)";
+    static rarity = 1;
+    constructor() {
+        super(TrafficLight.name, TrafficLight.description, TrafficLight.unicode, TrafficLight.color, 3, TrafficLight.rarity, 'gameState', 'onTurnEnd')
+    }
+    private count = 0;
+    async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+        if(this.count === 2){
+            for (const p of activePieces) {
+                if(p.team==='player' && (p.actions < 1 || p.getStat('moves') > p.movesRemaining)){
+                    await p.takeDamage(1)
+                }
+            }
+            this.color = 'green';
+            this.count = 0;
+        } else {
+            this.count ++
+            if(this.count === 1){
+                this.color = 'orange';
+            } else  if(this.count === 2){
+                this.color = 'red';
+            }
+        }
+    }
+    onRoundEnd() {
+        this.count = 0;
+        this.color = 'green';
+    }
+}
+
+class Concussion extends Admin {//needs fixing
+    static name = "Concussion";
+    static description = "Your programs that take damage twice are confused";
+    static unicode = "U+1F4AB";
+    static color = "rgb(10, 8, 1)";
+    static rarity = 1;
+    constructor() {
+        super(Concussion.name, Concussion.description, Concussion.unicode, Concussion.color, 3, Concussion.rarity, 'gameState', 'onReceiveDamage')
+    }
+    private candidates: Record<string, number> = {};
+    async apply({ id, activePieces: _activePieces, piece }: { id: string, activePieces: Piece[], piece?: Piece }) {
+        if(!piece) return;
+        const wasDamageTaken = piece.defenceRemaining < 0;
+        if(wasDamageTaken){
+            this.candidates[piece.id] = (this.candidates[piece.id] || 0) + 1;
+        }
+        
+        if (this.candidates[piece.id] >= 2) {
+        // Remove the enemy
+            if(piece && !piece.immunities.confused){
+                piece.statuses.confused = true;
+                // Clean up tracking for this specific ID
+                delete this.candidates[id];
+            }
+        };
+    }
+    onRoundEnd() {
+        this.candidates = {};
+    }
+}
+
+class Taxman extends Admin {
+    static rarity = 1;
+    static name = "Taxman";
+    static description = "Your program's attack is nerfed by -1 for every $5 you have on load";
+    static unicode = "U+1F4D2";
+    static color = "rgb(172, 5, 213)";
+    constructor() {
+        super(Taxman.name, Taxman.description, Taxman.unicode, Taxman.color, 5, Taxman.rarity, 'playerAndGame', 'onPlacement')
+    }
+
+    async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+        const noOfFives = Math.floor(player.money / 5) //round down
+        for(const p of activePieces){
+            if(p.team === 'player'){
+                p.addModifier({attack: -noOfFives})
+            }
+        }
+    }
+}
+
+class Rage extends Admin {
+    static name = "Rage";
+    static description = "Enemy programs that take damage temporarily gain +1 attack";
+    static unicode = "U+1F4A2";
+    static color = "rgb(126, 2, 114)";
+    static rarity = 2;
+    constructor() {
+        super(Rage.name, Rage.description, Rage.unicode, Rage.color, 3, Rage.rarity, 'gameState', 'onDealDamage')
+    }
+    async apply({ id: _id, activePieces: _activePieces, piece }: { id: string, activePieces: Piece[], piece?: Piece }) {
+        if(!piece) return;
+        if(piece.defenceRemaining < 0){
+            piece.addTempModifier({attack: 1});
+        };
+    }
+}
+
+class Autumn extends Admin {
+    static name = "Autumn";
+    static description = "Every player program loses -3 max size"; //and -1 defence?
+    static unicode = "U+1FABE";
+    static color = "rgb(69, 76, 90)";
+    static rarity = 4;
+    constructor() {
+        super(Autumn.name, Autumn.description, Autumn.unicode, Autumn.color, 3, Autumn.rarity, 'gameState', 'onPlacement')
+    }
+    async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+        const idx = activePieces.findIndex(p => p.id === id);
+        if (activePieces[idx].getStat('maxSize') > 1) {
+            activePieces[idx].addModifier({ maxSize: -3 })
+        }
+    }
+}
+
+
+//SLEEPING SYMBOL, U+1F4A4
+class Snoozefest extends Admin {
+    static name = "Snoozefest";
+    static description = "Your programs lose 1 action until 2 turns after they are placed";
+    static unicode = "U+1F4A4";
+    static color = "rgb(21, 13, 46)";
+    static rarity = 2;
+    constructor() {
+        super(Snoozefest.name, Snoozefest.description, Snoozefest.unicode, Snoozefest.color, 3, Snoozefest.rarity, 'gameState', 'onTurnEnd')
+    }
+    private candidates: Record<string, number> = {};
+    async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+        for(const piece of activePieces){
+            if(piece.team==='player'){
+                this.candidates[piece.id] = (this.candidates[piece.id] || 0) + 1;
+                if (this.candidates[piece.id] >= 2) {
+                    piece.disarmed = true;
+                } else {
+                    piece.statuses.frozen = true;
+                    piece.disarmed = true;
+                }
+            }
+        };
+    }
+    onRoundEnd() {
+        this.candidates = {};
+    }
+}
 
 // damage mult for enemy?
-export const allBosses = [LowBattery, NorthWind, Quicksand, Customs, Downturn, Hook, Mirror, Mountain, Shrine, Whale, Anchor, Castle, Circus, Hammer, ClipBoard, Izakaya, Tsunami, Wilt, Biohazard, Cocktail, Coral, Eclipse, Lock, Factory, Jack, Coaster, Blackmail, Snowflake, Bones, Frog, Singularity, Tornado, Volcano, Snow, Sun, Fog, Nightfall, Nofun, Omega, Reaper, REDACTED, Wrath]
+export const testBosses = [Concussion, Taxman, Snoozefest, TrafficLight, Rage, Autumn]
+//Concussion, LowBattery, NorthWind, Taxman, TrafficLight, Quicksand, Customs, Downturn, Hook, Mirror, Rage, Shrine, Snoozefest, Whale,
+export const allBosses = [Concussion, Rage, Snoozefest, Anchor, Castle, Circus, Hammer, ClipBoard, Izakaya, Mountain, Tsunami, Wilt, Biohazard, Cocktail, Coral, Eclipse, Lock, Factory, Jack, Coaster, Blackmail, Snowflake, Bones, Frog, Singularity, Tornado, Volcano, Snow, Sun, Fog, Nightfall, Nofun, Omega, Reaper, REDACTED, Wrath]
 export const nonStackableBosses = [Mirror, Customs, Snowflake, Sun, Frog, Biohazard, Coral, Izakaya, REDACTED, Fog, Singularity, Tornado, Cocktail]
 
 console.log('bosses length: ', allBosses.length)
@@ -954,17 +1105,8 @@ console.log("Bosses of rarity 4: ", adminLogs.rarity4)
 console.log("Bosses of rarity 5: ", adminLogs.rarity5)
 console.log("Bosses of rarity 6: ", adminLogs.rarity6)
 
-//FIREWORKS, U+1F386 enemy splash damage
 //FACE WITH LOOK OF TRIUMPH, U+1F624
-//EXPRESSIONLESS FACE, U+1F611 sleepy
-//1 admin disabled after each turn
 //angry pieces, deadly pieces - apply variants?
 
-// LEAFLESS TREE, U+1FABE
 
-//EUROPEAN CASTLE, U+1F3F0 enemies def up +1, maxsize + 1
-
-//RIBBON, U+1F380
-
-// CHERRY BLOSSOM, U+1F338
-//WILTED FLOWER, U+1F940
+//EXPRESSIONLESS FACE, U+1F611 sleepy

@@ -133,6 +133,7 @@
         props.player.addProgram(resultBP.value);
         primaryBP.value = null;
         resultBP.value = null;
+        selectedBP.value = null;
         emit('close');
     }
 

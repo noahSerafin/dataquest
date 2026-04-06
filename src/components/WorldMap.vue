@@ -448,7 +448,10 @@
         >
             Reroll
     </button>
-        <h6 v-if="selectedPreviewNode.type==='hybrid compiler'">Combine two programs stats into one (rounded up). Keep the primary's special move.</h6>
+        <h6 v-if="selectedPreviewNode.type==='workbench'">Tinker with up to 5 of a program's stats</h6>
+        <h6 v-if="selectedPreviewNode.type==='sacrificial altar'">Sacrifice a program for x3 it's sell value</h6>
+        <h6 v-if="selectedPreviewNode.type==='duplicator'">Copy one of your programs (must have room)</h6>
+        <h6 v-if="selectedPreviewNode.type==='hybrid compiler'">Combine two programs stats into one. Keep the primary's special move.</h6>
         <h6 v-if="selectedPreviewNode.type==='skip'">(Must have room)</h6>
         <h4 v-if="selectedPreviewNode.type!=='boss' && selectedPreviewNode.type==='level'">{{ selectedPreviewNode.company.name}}</h4>
         <div v-if="selectedPreviewNode.type!=='boss' && selectedPreviewNode.type==='level'">{{String.fromCodePoint(parseInt(selectedPreviewNode.company.unicode.replace('U+', ''), 16), 0xFE0F)}}</div>

@@ -1153,7 +1153,7 @@ class Lotus extends Admin {//boss? remove money?
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     const idx = activePieces.findIndex(p => p.id === id);
     for (const a of player.admins) {
-      if (a.rarity === 3) {
+      if (a.rarity === 3 && !a.disabled) {
         activePieces[idx].damageMult += 0.5
       }
     }
@@ -1578,7 +1578,7 @@ class Toilet extends Admin {
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     let noOfCommons = 0;
     for (const admin of player.admins) {
-      if (admin.rarity === 1) {
+      if (admin.rarity === 1 && !admin.disabled) {
         noOfCommons += 1;
       }
     };
@@ -2843,7 +2843,7 @@ class Mail extends Admin {
   static name = "Subscription";
   static description = "If you have room, spends $2 to receive a mystery box after every round won";
   static unicode = "U+1F4EB";
-  static color = "rgb(63, 141, 81)";
+  static color = "rgb(106, 218, 132)";
   static rarity = 2;
   constructor() {
     super(Mail.name, Mail.description, Mail.unicode, Mail.color, 2, Mail.rarity, 'player', 'onRoundEnd')

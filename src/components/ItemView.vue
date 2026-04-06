@@ -101,7 +101,7 @@ const isDisabled = computed(() => {
   <div
     :id="item.id"
     class="item"
-    :class="[`item-${cssclass}`, `item-${type}`, `itemName-${item.name.replace(/\s+/g, '')}`, {'is-clippy': item.name === 'Clippy'}, {'is-disabled': isDisabled}]"
+    :class="[`item-${type}`, `itemName-${item.name.replace(/\s+/g, '')}`, {'is-clippy': item.name === 'Clippy'}, {'is-disabled': isDisabled}]"
     @click="handleSelect"
     :style="itemStyle"
   >

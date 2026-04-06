@@ -20,7 +20,7 @@ const currentNodeTip: TutorialStep = {
 }
 const levelNodeTip: TutorialStep = {
     id: 'levelNode',
-    tooltip: 'This is a privately controlled node, the title and picture show us what company it is owned by. The dollar amount below is the reward for clearing this node. The lock number indicates security level of a Node. Rarer, higher level enemy programs appear at higher difficulties. Click to see the preview.'
+    tooltip: 'This is a privately controlled node, the title and picture show us what company it is owned by. The $ amount below is the reward for clearing this node. The 🔒 number indicates security level of a Node. Rarer, higher level enemy programs appear at higher difficulties. Click to see the preview.'
 }
 const previewTip: TutorialStep = {
     id: 'preview-modal',
@@ -45,6 +45,10 @@ const bossNodeTip: TutorialStep = {
 const boardTip: TutorialStep = {
     id: "board",
     tooltip: "Now we're inside a Node. Your job is to clear all the enemy programs from it using your own programs. Each turn, you may either load a new program or move and take actions with your programs already inside the node. You may load your programs into the green tiles initially. Once you have a program down, you may load in next to any tile it occupies. Be careful, once you load a program in, the enemy programs will take their move, so don't place anything vunerable too close to an enemy. If all your loaded programs are cleared from a node, you will lose a life."
+}
+const placementTip: TutorialStep = {
+    id: "placement-tile",
+    tooltip: "Drag one of your programs here to load it. This will also end your turn, so be wary what you can be attacked by in this space."
 }
 const programTip: TutorialStep = {
     id: 'piece',
@@ -166,7 +170,7 @@ const rewardTip: TutorialStep = {
     id: 'reward-summary',
     tooltip: "You have earned a reward for completing this node. Plus any bonus rewards granted from your admin programs",
 }
-export const allTips: TutorialStep[] = [welcomeTip, mapTip, bossTip, visitedNodeTip, currentNodeTip, levelNodeTip, previewTip, skipNodeTip, shopNodeTip, bossNodeTip, boardTip, programTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, actionsTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, infamyTip, bossesTip, summaryTip, lossTip, shopTip, rerollTip, shopbpTip, shopItemTip, adminTip, adminsTip, playerInfoTip, nodePreviewTip, interestTip, rewardTip, inventoryTip];
+export const allTips: TutorialStep[] = [welcomeTip, mapTip, bossTip, visitedNodeTip, currentNodeTip, levelNodeTip, previewTip, skipNodeTip, shopNodeTip, bossNodeTip, boardTip, placementTip, programTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, actionsTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, infamyTip, bossesTip, summaryTip, lossTip, shopTip, rerollTip, shopbpTip, shopItemTip, adminTip, adminsTip, playerInfoTip, nodePreviewTip, interestTip, rewardTip, inventoryTip];
 
 export const proTipSuggestion: TutorialStep = {
     id: 'proTip',

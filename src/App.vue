@@ -1173,10 +1173,7 @@ const handleSpecialActionAt = async (target: Coordinate) => {
   if (selectedPiece.value.targetType === 'piece') {
     if (targetPiece) {
       await selectedPiece.value.special(targetPiece);
-      playerSpawns.value = newPlacementHighlights();
-      selectedPiece.value = null;
     }
-    return;
   }
   // --- piece + player payload ---
   if (selectedPiece.value.targetType === 'pieceAndPlayer') {
@@ -1185,10 +1182,7 @@ const handleSpecialActionAt = async (target: Coordinate) => {
         piece: targetPiece,
         player: player.value
       });
-      playerSpawns.value = newPlacementHighlights();
-      selectedPiece.value = null;
     }
-    return;
   }
   if (selectedPiece.value.targetType === 'pieceAndPlace') {
     if (targetPiece) {
@@ -1196,10 +1190,7 @@ const handleSpecialActionAt = async (target: Coordinate) => {
         piece: targetPiece,
         target: target
       });
-      playerSpawns.value = newPlacementHighlights();
-      selectedPiece.value = null;
     }
-    return;
   }
   if (selectedPiece.value.targetType === 'placeAndPieces') {
     if (targetPiece) {
@@ -1207,10 +1198,7 @@ const handleSpecialActionAt = async (target: Coordinate) => {
         target: target,
         activePieces: activePieces.value
       });
-      playerSpawns.value = newPlacementHighlights();
-      selectedPiece.value = null;
     }
-    return;
   }
   // --- space target --- target must be// --- space target
   if (selectedPiece.value.targetType === 'space') {
@@ -1221,9 +1209,6 @@ const handleSpecialActionAt = async (target: Coordinate) => {
         player: player.value
       });
     }
-    playerSpawns.value = newPlacementHighlights();
-    selectedPiece.value = null;
-    return;
   }
   // --- one target but effects all --- target can be a piece
   if (selectedPiece.value.targetType === 'all') {
@@ -1231,18 +1216,12 @@ const handleSpecialActionAt = async (target: Coordinate) => {
       target: target,
       activePieces: activePieces.value
     });
-    playerSpawns.value = newPlacementHighlights();
-    selectedPiece.value = null;
-    return;
   }
   // --- group target (AOE) ---
   if (selectedPiece.value.targetType === 'group') {
     // get every piece inside selectedPiece.value.range
     const inRange = findAnyPiecesInRange(selectedPiece.value, activePieces.value);
     await selectedPiece.value.special(inRange);
-    playerSpawns.value = newPlacementHighlights();
-    selectedPiece.value = null;
-    return;
   }
   if (selectedPiece.value.targetType === 'line') {
     const actor = selectedPiece.value;
@@ -1271,16 +1250,10 @@ const handleSpecialActionAt = async (target: Coordinate) => {
       line: tilesInLine,
       activePieces: activePieces.value
     });
-    playerSpawns.value = newPlacementHighlights();
-    selectedPiece.value = null;
-    return;
   }
   // --- self target ---
   if (selectedPiece.value.targetType === 'self') {
     await selectedPiece.value.special(target);
-    playerSpawns.value = newPlacementHighlights();
-    selectedPiece.value = null;
-    return;
   };
   if (selectedPiece.value.targetType === 'graveyard') {//test
     if (!targetPiece) {
@@ -1290,12 +1263,12 @@ const handleSpecialActionAt = async (target: Coordinate) => {
         graveyard: graveyard.value
       });
     }
-    playerSpawns.value = newPlacementHighlights();
-    selectedPiece.value = null;
-    return;
   }
+  playerSpawns.value = newPlacementHighlights();
+  selectedPiece.value = null;
   clearFog();
   checkForRoundEnd();
+  return;
 };
 
 const hasWonRound = ref<boolean>(false);
@@ -1407,8 +1380,8 @@ const endTurn = async () => {
     }
     if (piece.team === 'enemy') {
       piece.resetTempModifiers();
-      piece.resetMoves();
       piece.actions = 1;
+      piece.resetMoves();
       piece.willRetaliate = false;//
     }
   };
@@ -1422,8 +1395,8 @@ const endTurn = async () => {
     }
     if (piece.team === 'player') {
       piece.resetTempModifiers();
-      piece.resetMoves();
       piece.actions = 1;
+      piece.resetMoves();
       piece.willRetaliate = false;//
     }
   };

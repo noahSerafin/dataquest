@@ -1,6 +1,6 @@
 import type { Company, Coordinate, SkipReward } from "./types";
 import type { Piece } from "./Pieces";
-import { bossCompany, companies } from "./companies";
+import { bossCompany, companies, playerCompany, shopCompany } from "./companies";
 import { generateNode } from "./nodeBuilder";
 
 interface Level {
@@ -83,10 +83,16 @@ function getIndividualPath(difficulty: number): PathSpec {
 }
 
 function getPathSpecsForDifficulty(difficulty: number): PathSpec[] {
-  // difficulty 0 / 1
+  /*const safePaths: PathSpec[] = [
+    { type: 'level', mods: [0, 0], rewards: [3, 3] },
+    { type: 'hiddenAltar', mods: [0, 0], rewards: [3, 3] },
+  ]
+  shuffle(safePaths);
+  const safePath = safePaths[0];
+  */
   if (difficulty <= 1) {
     return [
-      { type: 'level', mods: [0, 0], rewards: [3, 3] }, // safe path
+      Math.random() > 0.5 ? { type: 'level', mods: [0, 0], rewards: [3, 3] } : { type: 'hiddenAltar', mods: [0, 0], rewards: [3, 3] }, // safe path
       //getIndividualPath(difficulty)
       { type: 'skip',  mods: [0, 1], rewards: [0, 5] },
       //{ type: 'hiddenShop',  mods: [1, 2], rewards: [4, 7] }
@@ -155,7 +161,7 @@ export function generateWorld(
         type: 'skip',
         next: [p2],
         position: pos.node1,
-        company: chooseRandomCompany(),
+        company: bossCompany,
         difficultyMod: spec.mods[0],
         reward: spec.rewards[0],
         resolved: false
@@ -195,7 +201,7 @@ export function generateWorld(
           x: pos.node1.x,
           y: (pos.node1.y + pos.node2.y) / 2
         },
-        company: chooseRandomCompany(),
+        company: shopCompany,
         difficultyMod: 0,
         reward: 0,
         hiddenUntilVisited: p1,
@@ -236,7 +242,7 @@ export function generateWorld(
           x: pos.node1.x,
           y: (pos.node1.y + pos.node2.y) / 2
         },
-        company: chooseRandomCompany(),
+        company: playerCompany,
         difficultyMod: 0,
         reward: 0,
         hiddenUntilVisited: p1,
@@ -277,7 +283,7 @@ export function generateWorld(
           x: pos.node1.x,
           y: (pos.node1.y + pos.node2.y) / 2
         },
-        company: chooseRandomCompany(),
+        company: playerCompany,
         difficultyMod: 0,
         reward: 0,
         hiddenUntilVisited: p1,
@@ -318,7 +324,7 @@ export function generateWorld(
           x: pos.node1.x,
           y: (pos.node1.y + pos.node2.y) / 2
         },
-        company: chooseRandomCompany(),
+        company: playerCompany,
         difficultyMod: 0,
         reward: 0,
         hiddenUntilVisited: p1,
@@ -359,7 +365,7 @@ export function generateWorld(
           x: pos.node1.x,
           y: (pos.node1.y + pos.node2.y) / 2
         },
-        company: chooseRandomCompany(),
+        company: playerCompany,
         difficultyMod: 0,
         reward: 0,
         hiddenUntilVisited: p1,
@@ -411,7 +417,7 @@ export function generateWorld(
     type: "shop",
     next: [bossId],
     position: { x: 200, y: 150 },
-    company: chooseRandomCompany(),
+    company: shopCompany,
     difficultyMod: 0,
     reward: 0
   };

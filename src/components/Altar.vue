@@ -31,11 +31,15 @@
     const selectedBP = ref<PieceBlueprint | null>(null)
 
     function sacrifice() {
-        if (!primaryBP.value) return;
-        const idx = props.player.programs.find(bp => bp.id === primaryBP.value.id);
-        props.player.programs.splice(idx, 1);
-        props.player.money += primaryBP.value.rarity * 3;
+        const bp = primaryBP.value;
+        if (!bp) return;
+        const idx = props.player.programs.findIndex(p => p.id === bp.id);
+        if (idx !== -1) {
+            props.player.programs.splice(idx, 1);
+            props.player.money += bp.rarity * 3;
+        }
         primaryBP.value = null;
+        selectedBP.value = null;
     }
 
     function cancel() {
@@ -128,7 +132,7 @@
     />
     <div class="btns">
         <button @click="cancel">Cancel</button>
-        <button @click="skip">Skip</button>
+        <button @click="skip">Continue</button>
     </div>
 
   </div>

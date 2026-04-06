@@ -10,6 +10,8 @@ import { sunrisePieces } from "./Pieces";
 
 import { whiteflowerPieces } from "./Pieces";
 
+export const shopCompany: Company = Object.freeze({ name: 'SPEC', abbr: 'SHOP', unicode: "", pieceList: allPieces, tileColor: "rgb(34, 53, 12)", edgeColor: "#9CC954"});
+export const playerCompany: Company = Object.freeze({ name: 'SPEC', abbr: '???', unicode: "", pieceList: allPieces, tileColor: "rgb(34, 53, 12)", edgeColor: "#9CC954"});
 export const bossCompany: Company = Object.freeze({ name: 'Umbrella', abbr: 'BOSS', unicode: "", pieceList: allPieces, tileColor: "rgb(34, 53, 12)", edgeColor: "#9CC954"});
 export const companies: Company[] = [
     { name: 'Saturn Solutions', abbr: 'SSL', unicode: "U+1FA90", pieceList: allPieces, tileColor: "rgb(74, 74, 74)", edgeColor: "#e9e9e9"},

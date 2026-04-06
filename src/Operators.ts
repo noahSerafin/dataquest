@@ -311,7 +311,7 @@ import { createDefaultStatuses } from "./types";
     const banana = {
         id: crypto.randomUUID(),
         name: "Banana Peel",
-        description: "A program invisble to the enemy that immobilises programs moving over it for 1 turn",
+        description: "A program invisble to the enemy that immobilises programs moving over it for 1 turn, and strips them of any actions, removing itself in the process",
         unicode: "U+1F34C",
         maxSize: 1,
         moves: 1,
@@ -360,7 +360,7 @@ import { createDefaultStatuses } from "./types";
 const Window95 : OS = {
     name: 'Classic95',
     unicode: 'U+229E',
-    money: 5,
+    money: 4,
     memory: 5,
     adminSlots: 5,
     blueprints: [lance, shield, banana],

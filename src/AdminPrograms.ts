@@ -3167,10 +3167,17 @@ console.log("Admins of rarity 5: ", adminLogs.rarity5)
 console.log("Admins of rarity 6: ", adminLogs.rarity6)
 
 //JEANS, U+1F456 effect compiler
-//BUTTER, U+1F9C8 moves your pieces randomly after your turn (for free?)
+//PERSON IN LOTUS POSITION, U+1F9D8 stationary programs gain +1 defence/attack??
+//BOTTLE WITH POPPING CORK, U+1F37E buff after each boss defeated? //like rainbow but some other reward, pinata?
 //RECYCLING SYMBOL, U+2672 selling programs gives 1 of lower rarirty
-//basketball and HOOP, U+1F3C0
-//BOTTLE WITH POPPING CORK, U+1F37E
+//RIGHTWARDS PUSHING HAND, U+1FAF8 left hand path - going left buffs pieces //(difficulty === player difficulty && player map progress = 1)
+//BUTTER, U+1F9C8 moves your pieces randomly after your turn (for free?)
+//SLEUTH OR SPY, U+1F575
+//basketball and HOOP, U+1F3C0 slam dunk
+// SURFER, U+1F3C4
+//SNOWBOARDER, U+1F3C2
+//WOMANS BOOTS, U+1F462
+// LIPSTICK, U+1F484
 
 // challenge nodes?
 //DESERT ISLAND, U+1F3DD

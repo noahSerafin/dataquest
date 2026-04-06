@@ -385,10 +385,10 @@ function sleep(ms: number) {
 
 async function attackPiece(attacker: Piece, defender: Piece) {
   if(attacker.actions > 0 && attacker.canAttack){//!canAttack should do special
-    const damage = attacker.attack;
-    await defender.takeDamage(damage);
+    const damage = attacker.getStat('attack');
+    await defender.takeDamage(damage * attacker.damageMult);
     if(defender.willRetaliate || defender.name === 'Hedgehog'){
-      await attacker.takeDamage(defender.getStat('attack'));
+      await attacker.takeDamage(defender.getStat('attack') * defender.damageMult);
       if(defender.name === 'Puffer' && !attacker.immunities.poisoned){
         attacker.statuses.poisoned = true;
       }

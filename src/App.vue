@@ -29,6 +29,9 @@ import Collection from "./components/Collection.vue";
 import { applyTutorialTooltips, reapplyTutorialTooltips } from "./tutorial.ts";
 import { allTips } from "./tutorialSteps.ts";
 import { StorageManager } from "./StorageManager";
+import Altar from "./components/Altar.vue";
+import Duplicator from "./components/Duplicator.vue";
+import Workbench from "./components/Workbench.vue";
 
 const testSword = {
   id: "274ec329-8c17-4265-8c12-e9a28bcf0833",
@@ -427,6 +430,9 @@ async function buyItem(item: Item) {
 }
 const showShop = ref(false)
 const showCompiler = ref(false)
+const showAltar = ref(false)
+const showDuplicator = ref(false)
+const showWorkbench = ref(false)
 const showMap = ref(false)
 const showBoard = ref(false)
 //--shop-----
@@ -674,6 +680,24 @@ const toggleCompiler = () => {
 }
 const openCompiler = () => {
   showCompiler.value = true;
+}
+const toggleAltar = () => {
+  showAltar.value = !showAltar.value;
+}
+const openAltar = () => {
+  showAltar.value = true;
+}
+const toggleDuplicator = () => {
+  showDuplicator.value = !showDuplicator.value;
+}
+const openDuplicator = () => {
+  showDuplicator.value = true;
+}
+const toggleWorkbench = () => {
+  showWorkbench.value = !showWorkbench.value;
+}
+const openWorkbench = () => {
+  showWorkbench.value = true;
 }
 
 const newPlacementHighlights = (): Coordinate[] => {//board should only show these if isPlacing
@@ -1112,9 +1136,6 @@ const damagePieceAt = async (coord: Coordinate) => {
   //console.log("Damage call:", coord, damage)
   const baseDamage = selectedPiece.value.getStat('attack');
   const baseMult = selectedPiece.value.damageMult;
-  if(selectedPiece.value.variantName === 'Deadly'){
-    selectedPiece.value.damageMult += 0.5;
-  }
   await handleApplyAdmins('onDealDamage', selectedPiece.value.id, damageReceiver);// damageReceiver.id)//attacker's id, (bug: blood tax will trigger even on no damage)
   const damage = Math.floor(baseDamage * selectedPiece.value.damageMult);//mult should be applyed inside takeDamage for special moves
   await damageReceiver.takeDamage(damage);
@@ -1542,6 +1563,18 @@ function toggleDebug() {
         @mousedown="toggleCompiler()">
         Toggle Compiler
       </button>
+      <button v-if="debugMode === true" class="altar-toggle"
+        @mousedown="toggleAltar()">
+        Toggle Altar
+      </button>
+      <button v-if="debugMode === true" class="duplicator-toggle"
+        @mousedown="toggleDuplicator()">
+        Toggle Duplicator
+      </button>
+      <button v-if="debugMode === true" class="workbench-toggle"
+        @mousedown="toggleWorkbench()">
+        Toggle Workbench
+      </button>
       <button v-if="debugMode === true" class="map-toggle" @mousedown="toggleMap()">
         Toggle Map
       </button>
@@ -1607,7 +1640,7 @@ function toggleDebug() {
         @mainMenu="openMainMenu" />
       <WorldMap v-if="!displayEditor" class="stage-panel" :class="{ active: showMap }" :allLevels="level1Levels"
         :player="player" :seed="worldSeed" :cssclass="mapClass" :bosses="bossAdmins" @selectLevel="selectLevel"
-        @openShop="openShop" @openDisabledShop="openDisabledShop" @openCompiler="openCompiler"
+        @openShop="openShop" @openDisabledShop="openDisabledShop" @openCompiler="openCompiler" @openAltar="openAltar" @openDuplicator="openDuplicator" @openWorkbench="openWorkbench"
         @incrementProgress="incrementMapProgress" @addBoss="addBossAdmin" @replaceBosses="replaceBosses"
         @increaseDifficulty="increaseDifficulty" />
       <Shop v-if="!displayEditor" class="stage-panel" :class="{ active: showShop }" :cssclass="shopClass"
@@ -1618,6 +1651,15 @@ function toggleDebug() {
       <HybridCompiler v-if="!displayEditor" class="stage-panel" :class="{ active: showCompiler }" :player="player"
         :pieceToPlace="pieceToPlace" :isDraggingPlacement="isDraggingPlacement" @openCompiler="openCompiler"
         @toggleCompiler="toggleCompiler" @clear-drag="clearDrag" @close="toggleCompiler" />
+      <Altar v-if="!displayEditor" class="stage-panel" :class="{ active: showAltar }" :player="player"
+        :pieceToPlace="pieceToPlace" :isDraggingPlacement="isDraggingPlacement" @openAltar="openAltar"
+        @toggleAltar="toggleAltar" @clear-drag="clearDrag" @close="toggleAltar" />
+      <Duplicator v-if="!displayEditor" class="stage-panel" :class="{ active: showDuplicator }" :player="player"
+        :pieceToPlace="pieceToPlace" :isDraggingPlacement="isDraggingPlacement" @openDuplicator="openDuplicator"
+        @toggleDuplicator="toggleDuplicator" @clear-drag="clearDrag" @close="toggleDuplicator" />
+      <Workbench v-if="!displayEditor" class="stage-panel" :class="{ active: showWorkbench }" :player="player"
+        :pieceToPlace="pieceToPlace" :isDraggingPlacement="isDraggingPlacement" @openWorkbench="openWorkbench"
+        @toggleWorkbench="toggleWorkbench" @clear-drag="clearDrag" @close="toggleWorkbench" />
       <Board ref="boardRef" v-if="!displayEditor" class="stage-panel" :class="{ active: showBoard }"
         :tiles="level.tiles" :foggedTiles="foggedTiles" :pieces="activePieces" :selectedPiece="selectedPiece"
         :placementHighlights="playerSpawns" :isFirstTurn="isFirstTurn" :placementMode="isPlacing"

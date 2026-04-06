@@ -128,6 +128,9 @@ export function applyVariant(piece: Piece, variant: PieceVariant) {
     piece[stat] = Math.max(min, next);
   }
   piece.variantName = variant.name;
+  if(variant.name === 'Deadly'){
+    piece.damageMult += 0.5;
+  }
 }
 
 function rollRarity(clovers:number) {

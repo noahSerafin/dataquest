@@ -958,6 +958,7 @@ console.log("Bosses of rarity 6: ", adminLogs.rarity6)
 //FACE WITH LOOK OF TRIUMPH, U+1F624
 //EXPRESSIONLESS FACE, U+1F611 sleepy
 //1 admin disabled after each turn
+//angry pieces, deadly pieces - apply variants?
 
 // LEAFLESS TREE, U+1FABE
 

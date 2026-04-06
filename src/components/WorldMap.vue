@@ -36,6 +36,9 @@
         (e: "selectLevel", level: Level, company: Company, difficultyMod: number, reward: number): void;
         (e: "openShop"): void;
         (e: "openDisabledShop"): void;
+        (e: "openAltar"): void;
+        (e: "openDuplicator"): void;
+        (e: "openWorkbench"): void;
         (e: "openCompiler"): void;
         (e: "addBoss", admin: Admin): void;
         (e: "replaceBosses", admins: Admin[]): void;
@@ -172,6 +175,15 @@
         if(node.type === 'shop' && shopisNext){
             emit('openShop')
         }
+        if(node.type === 'sacrificial altar'){
+            emit('openAltar')
+        }
+        if(node.type === 'duplicator'){
+            emit('openDuplicator')
+        }
+        if(node.type === 'workbench'){
+            emit('openWorkbench')
+        }
         if(node.type === 'hybrid compiler'){
             emit('openCompiler')
         }
@@ -197,6 +209,9 @@
         switch (node.type) {
             case "start": return "⬤";
             case "shop": return "🛒";
+            case "sacrificial altar": return String.fromCodePoint(parseInt("U+1FAA6".replace('U+', ''), 16), 0xFE0F);//U+1F5E1
+            case "duplicator": return String.fromCodePoint(parseInt("U+1F46F".replace('U+', ''), 16), 0xFE0F);
+            case "workbench": return String.fromCodePoint(parseInt("U+2699".replace('U+', ''), 16), 0xFE0F);// NUT AND BOLT, U+1F529 //GEAR, U+2699
             case "hybrid compiler": return String.fromCodePoint(parseInt("U+1F9EC".replace('U+', ''), 16), 0xFE0F);
             case "level": return String.fromCodePoint(parseInt(node.company.unicode.replace('U+', ''), 16), 0xFE0F);
             case "boss": return  String.fromCodePoint(parseInt(boss.value.unicode.replace('U+', ''), 16), 0xFE0F);

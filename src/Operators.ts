@@ -35,7 +35,20 @@ import { createDefaultStatuses } from "./types";
         // blueprint-only fields:
         isPlaced: false,
         cost: 10 ,
-        immunities: createDefaultStatuses(),
+        immunities: {
+            diseased: false,
+            slowed: true,
+            blinded: false,
+            burning: false,
+            poisoned: false,
+            frozen: false,
+            charmed: false,
+            confused: false,
+            exposed: false,
+
+            hidden: false,
+            negative: false,
+        },
         variantName: 'Holographic'
     }
     const superKnife =  {

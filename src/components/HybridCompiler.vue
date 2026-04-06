@@ -179,8 +179,8 @@
 
 <template>
   <div class="container hybrid-compiler">
-    <h4>HYBRID COMPILER</h4>
-    <p class="padded">Choose 2 programs to combine into 1, adding their stats together and keeping the primary program's special move.</p>
+    <h4>HYBRID COMPILER {{ String.fromCodePoint(parseInt("U+1F9EC".replace('U+', ''), 16), 0xFE0F) }}</h4>
+    <p class="padded">Choose 2 programs to combine into 1, adding their stats and immunities together and keeping the primary program's special move.</p>
     <!-- Slots -->
     <div class="slots">
         <div class="slot-container">

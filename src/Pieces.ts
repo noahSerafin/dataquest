@@ -4267,6 +4267,7 @@ console.log("Pieces of rarity 6: ", adminLogs.rarity6)
 //building castle? creates a wall around it of 8 tiles 
 //🏗 crane  U+1F3D7
 
+//LICH - summon zombies if graveyard has pieces in
 // ZOMBIE, U+1F9DF
 //fix dolls
 //Invisible wall - hi defence hidden piece

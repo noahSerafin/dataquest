@@ -1,6 +1,6 @@
 <script setup lang="ts">
     import { ref } from 'vue';
-    import type { PieceBlueprint } from '../types';
+    import type { PieceBlueprint, Immunities, StatusKey } from '../types';
     import { Player } from '../Player';
     import BlueprintView from './BlueprintView.vue';
     import BlueprintController from './BlueprintController.vue';
@@ -61,15 +61,23 @@
     function createHybridBlueprint(
         primary: PieceBlueprint,
         secondary: PieceBlueprint
-        ): PieceBlueprint {
-        if(props.player.hasAdmin('ribbon')){
+    ): PieceBlueprint {
+        const combinedImmunities: Immunities = { ...primary.immunities };
+        for (const key in secondary.immunities) {
+            const statusKey = key as StatusKey;
+            if (secondary.immunities[statusKey]) {
+                combinedImmunities[statusKey] = true;
+            }
+        }
+
+        if (props.player.hasAdmin('ribbon')) {
             return {
                 id: crypto.randomUUID(),
-                name: primary.name,//for finding the base class with special move
-                description: 'A boosted hybrid, primary feature: '+primary.description,//need to remove string 'A boosted hybrid, primary feature: ' for double hybrid
+                name: primary.name, // for finding the base class with special move
+                description: 'A boosted hybrid, primary feature: ' + primary.description, // need to remove string 'A boosted hybrid, primary feature: ' for double hybrid
                 unicode: primary.unicode,
                 // averaged stats (rounded down)
-                maxSize: Math.ceil(primary.maxSize + secondary.maxSize),//change back
+                maxSize: Math.ceil(primary.maxSize + secondary.maxSize), // change back
                 moves: Math.ceil(primary.moves + secondary.moves),
                 range: Math.ceil(primary.range + secondary.range),
                 attack: Math.ceil(primary.attack + secondary.attack),
@@ -80,29 +88,29 @@
                 cost: primary.cost + secondary.cost,
                 hybridName: makeHybridName(primary.name, secondary.name),
                 extraUnicode: secondary.unicode,
-                immunities: primary.immunities, //+ secondary.immunities
+                immunities: combinedImmunities,
                 variantName: primary.variantName
             }
         }
         return {
             id: crypto.randomUUID(),
-            name: primary.name,//for finding the base class with special move
-            description: 'A hybrid, primary feature: '+primary.description,
+            name: primary.name, // for finding the base class with special move
+            description: 'A hybrid, primary feature: ' + primary.description,
             unicode: primary.unicode,
             // averaged stats (rounded down)
-            maxSize: primary.maxSize + secondary.maxSize,//Math.ceil((primary.maxSize + secondary.maxSize) / 2),
-            moves: primary.moves + secondary.moves,//Math.ceil((primary.moves + secondary.moves) / 2),
-            range: primary.range + secondary.range,//Math.ceil((primary.range + secondary.range) / 2),
-            attack: primary.attack + secondary.attack,//Math.ceil((primary.attack + secondary.attack) / 2),
-            defence: primary.defence + secondary.defence,//Math.ceil((primary.defence + secondary.defence) / 2),
+            maxSize: primary.maxSize + secondary.maxSize, // Math.ceil((primary.maxSize + secondary.maxSize) / 2),
+            moves: primary.moves + secondary.moves, // Math.ceil((primary.moves + secondary.moves) / 2),
+            range: primary.range + secondary.range, // Math.ceil((primary.range + secondary.range) / 2),
+            attack: primary.attack + secondary.attack, // Math.ceil((primary.attack + secondary.attack) / 2),
+            defence: primary.defence + secondary.defence, // Math.ceil((primary.defence + secondary.defence) / 2),
             rarity: Math.max(primary.rarity, secondary.rarity),
             color: primary.color,
             isPlaced: false,
             cost: primary.cost + secondary.cost,
             hybridName: makeHybridName(primary.name, secondary.name),
             extraUnicode: secondary.unicode,
-            immunities: primary.immunities, //+ secondary.immunities
-            variantName: primary.variantName 
+            immunities: combinedImmunities,
+            variantName: primary.variantName
         }
     };
 
@@ -180,7 +188,7 @@
 <template>
   <div class="container hybrid-compiler">
     <h4>HYBRID COMPILER {{ String.fromCodePoint(parseInt("U+1F9EC".replace('U+', ''), 16), 0xFE0F) }}</h4>
-    <p class="padded">Choose 2 programs to combine into 1, adding their stats and immunities together and keeping the primary program's special move.</p>
+    <p class="padded">Choose 2 programs to combine into 1, adding their stats and immunities together, and keeping the primary program's special move.</p>
     <!-- Slots -->
     <div class="slots">
         <div class="slot-container">

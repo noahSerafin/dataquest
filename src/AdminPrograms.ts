@@ -3170,6 +3170,7 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //BUTTER, U+1F9C8 moves your pieces randomly after your turn (for free?)
 //RECYCLING SYMBOL, U+2672 selling programs gives 1 of lower rarirty
 //basketball and HOOP, U+1F3C0
+//BOTTLE WITH POPPING CORK, U+1F37E
 
 // challenge nodes?
 //DESERT ISLAND, U+1F3DD

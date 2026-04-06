@@ -4090,7 +4090,7 @@ class Firework extends Piece {
 class Banner extends Piece {
   static name = "Banner";
   static description = "A program that cannot attack, but can boost the attack of all friendlies in range by it's own attack";//multpie targets?
-  static unicode = "U+1F6A9";//BLACK PENNANT, U+1F3F2
+  static unicode = "U+1F6A9";//BLACK PENNANT, U+1F3F2 //WAVING BLACK FLAG, U+1F3F4
   static color = "rgb(118, 255, 230)";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){

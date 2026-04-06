@@ -326,7 +326,8 @@ export async function runEnemyStateMachine(
   player: Player,
   delay = 200 // ms between moves for visibility
 ){
-  const enemiesToProcess = activePieces.filter(p => (p.team === 'enemy' && !p.statuses.charmed));
+  let passCount = 0;
+  let changed = true;
 
   const helpers = {  
     highlightMoves,
@@ -336,25 +337,43 @@ export async function runEnemyStateMachine(
     delay
   }
 
-  for (const enemy of enemiesToProcess) {
-    if (!activePieces.includes(enemy)) continue;
-    
-    let specialAttempts = 0;
-    while (enemy.movesRemaining > 0 || enemy.actions > 0) {
-      if (!activePieces.includes(enemy)) break;
+  while (changed && passCount < 3) {
+    changed = false;
+    passCount++;
 
-      const enemyPieces = activePieces.filter(p => (p.team === 'enemy' && !p.statuses.charmed));
-      const playerPieces = activePieces.filter(p => p.team === 'player' && !p.statuses.charmed);
+    const enemiesToProcess = activePieces.filter(p => (p.team === 'enemy' && !p.statuses.charmed));
 
-      const intent = decideEnemyIntent(enemy, activePieces, playerPieces, enemyPieces, tileSet, specialAttempts, player);
-      if (intent.type === 'wait') break;
+    // Sort: hasFriendlySpecial should come first
+    enemiesToProcess.sort((a, b) => {
+      if ((a.hasFriendlySpecial || a.hasNeutralSpecial) && !b.hasFriendlySpecial) return -1;
+      if (!a.hasFriendlySpecial && (b.hasFriendlySpecial || b.hasNeutralSpecial)) return 1;
+      return 0;
+    });
 
-      if(intent.type === 'special'){
-        specialAttempts += 1;
-      }
-      await executeEnemyIntent(enemy, activePieces, tileSet, intent, helpers);
-      await sleep(helpers.delay);
-    } 
+    for (const enemy of enemiesToProcess) {
+      if (!activePieces.includes(enemy)) continue;
+      if (enemy.movesRemaining <= 0 && enemy.actions <= 0) continue;
+      
+      let specialAttempts = 0;
+      while (enemy.movesRemaining > 0 || enemy.actions > 0) {
+        if (!activePieces.includes(enemy)) break;
+
+        const enemyPieces = activePieces.filter(p => (p.team === 'enemy' && !p.statuses.charmed));
+        const playerPieces = activePieces.filter(p => p.team === 'player' && !p.statuses.charmed);
+
+        const intent = decideEnemyIntent(enemy, activePieces, playerPieces, enemyPieces, tileSet, specialAttempts, player);
+        if (intent.type === 'wait') break;
+
+        // If we are here, we are doing something other than wait
+        changed = true; 
+
+        if(intent.type === 'special'){
+          specialAttempts += 1;
+        }
+        await executeEnemyIntent(enemy, activePieces, tileSet, intent, helpers);
+        await sleep(helpers.delay);
+      } 
+    }
   }
 }
 

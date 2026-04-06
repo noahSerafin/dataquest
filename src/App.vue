@@ -650,6 +650,7 @@ const openDisabledShop = () => {
   console.log('shop disabled')
   shopDisabled.value = true;
   showShop.value = true;
+  canProceedFromShop.value = false;
 }
 const toggleShop = () => {
   showShop.value = !showShop.value;
@@ -658,12 +659,14 @@ const toggleShop = () => {
 }
 const openShop = () => {
   showShop.value = true;
-  refreshShop(true);
   canProceedFromShop.value = true;
   shopDisabled.value = false;
 }
 const closeShop = () => {
   showShop.value = false;
+  if(!shopDisabled){
+    refreshShop(true);
+  }
   canProceedFromShop.value = false;
 }
 const toggleCompiler = () => {
@@ -1380,11 +1383,11 @@ const endTurn = async () => {
   for (const piece of activePieces.value) {
     if (piece.team === 'player') {
       piece.resetDefence();
-      piece.actions = 1;
     }
     if (piece.team === 'enemy') {
       piece.resetTempModifiers();
       piece.resetMoves();
+      piece.actions = 1;
       piece.willRetaliate = false;//
     }
   };
@@ -1395,11 +1398,11 @@ const endTurn = async () => {
   for (const piece of activePieces.value) {
     if (piece.team === 'enemy') {
       piece.resetDefence();
-      piece.actions = 1;
     }
     if (piece.team === 'player') {
       piece.resetTempModifiers();
       piece.resetMoves();
+      piece.actions = 1;
       piece.willRetaliate = false;//
     }
   };

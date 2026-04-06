@@ -110,7 +110,7 @@ const isDisabled = computed(() => {
     <div class="icon">{{ unicodeSymbol }}</div>
 
     <!-- Speech bubble for Clippy admin -->
-    <div v-if="item.name === 'Clippy' && tutorialState.message" class="clippy-speech-bubble-container" @click.stop>
+    <div v-if="cssclass !== 'shop' && cssclass !== 'collection' && item.name === 'Clippy' && tutorialState.message" class="clippy-speech-bubble-container" @click.stop>
       <div v-if="!tutorialState.collapsed" class="clippy-speech-bubble">
         <button class="clippy-toggle" @click="tutorialState.collapsed = true">X</button>
         <div class="clippy-message" v-html="tutorialState.message"></div>

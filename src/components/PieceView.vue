@@ -166,12 +166,12 @@ const shieldIcon = String.fromCodePoint(
     </div>
     <div class="piece-defence">
       <span class="piece-defence-shield"
-        v-for="n in Math.min(piece.defenceRemaining, 2)"
+        v-for="n in Math.min(Math.max(0, piece.defenceRemaining), 2)"
         :key="n"
       >
         {{ shieldIcon }}
       </span>
-      <span class="piece-defence-shield" v-if="piece.defenceRemaining > 2">+</span>
+      <span class="piece-defence-shield" v-if="Math.max(0, piece.defenceRemaining) > 2">+</span>
     </div>
   </div>
   <div

@@ -81,7 +81,7 @@ function getIndividualPath(difficulty: number): PathSpec {
 
 function getPathSpecsForDifficulty(difficulty: number): PathSpec[] {
   // difficulty 0 / 1
-  if (difficulty <= 2) {
+  if (difficulty <= 1) {
     return [
       { type: 'level', mods: [0, 0], rewards: [3, 3] }, // safe path
       //getIndividualPath(difficulty)

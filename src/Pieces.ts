@@ -207,10 +207,10 @@ export abstract class Piece {
 
   async takeDamage(damage: number) {
     if (damage <= 0) return;
-    const defenceBefore = this.defenceRemaining;
+    const defenceBefore = Math.max(0, this.defenceRemaining);
     // 1. Apply damage to defence
-    this.defenceRemaining = Math.max(0, this.defenceRemaining - damage);
-    
+    this.defenceRemaining -= damage;
+
     playSoundFx(damageSoundUrl, this.name);
 
     // 2. Calculate overflow damage
@@ -4090,7 +4090,7 @@ class Firework extends Piece {
 class Banner extends Piece {
   static name = "Banner";
   static description = "A program that cannot attack, but can boost the attack of all friendlies in range by it's own attack";//multpie targets?
-  static unicode = "U+1F6A9";
+  static unicode = "U+1F6A9";//BLACK PENNANT, U+1F3F2
   static color = "rgb(118, 255, 230)";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){

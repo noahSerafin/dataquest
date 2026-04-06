@@ -235,7 +235,7 @@ async function executeEnemyIntent(
     highlightMoves: (piece: Piece) => void,
     highlightTargets: (piece: Piece) => void,
     clearHighlights: () => void, 
-    onReceiveDamage: (id: string) => void,
+    onReceiveDamage: (id: string, receiver: Piece) => void,
     delay: number 
   }
 ) {
@@ -258,7 +258,7 @@ async function executeEnemyIntent(
       helpers.highlightTargets(enemy);
       await sleep(helpers.delay);
       await attackPiece(enemy, intent.target);
-      helpers.onReceiveDamage(enemy.id);
+      helpers.onReceiveDamage(enemy.id, intent.target);
       helpers.clearHighlights();
       if(enemy.statuses.hidden) enemy.statuses.hidden = false;
       break;
@@ -322,7 +322,7 @@ export async function runEnemyStateMachine(
   highlightTargets: (piece: Piece) => void,
   clearHighlights: () => void,
   tileSet: Set<string>,
-  onReceiveDamage: (id: string) => void,
+  onReceiveDamage: (id: string, receiver: Piece) => void,
   player: Player,
   delay = 200 // ms between moves for visibility
 ){

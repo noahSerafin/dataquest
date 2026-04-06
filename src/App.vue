@@ -1112,14 +1112,18 @@ const damagePieceAt = async (coord: Coordinate) => {
   if(selectedPiece.value.variantName === 'Deadly'){
     selectedPiece.value.damageMult += 0.5;
   }
-  await handleApplyAdmins('onDealDamage', selectedPiece.value.id);// damageReceiver.id)//attacker's id, (bug: blood tax will trigger even on no damage)
+  await handleApplyAdmins('onDealDamage', selectedPiece.value.id, damageReceiver);// damageReceiver.id)//attacker's id, (bug: blood tax will trigger even on no damage)
   const damage = Math.floor(baseDamage * selectedPiece.value.damageMult);//mult should be applyed inside takeDamage for special moves
   await damageReceiver.takeDamage(damage);
+  if(damageReceiver.team === 'player'){
+    handleApplyAdmins('onReceiveDamage', selectedPiece.value.id, damageReceiver)
+  }
   if (selectedPiece.value.statuses.hidden) {
     selectedPiece.value.statuses.hidden = false;
   }
   if (damageReceiver.willRetaliate || damageReceiver.name === 'Hedgehog') {
     await selectedPiece.value.takeDamage(damageReceiver.getStat('attack'));
+    handleApplyAdmins('onReceiveDamage', damageReceiver.id, selectedPiece.value)
     if (damageReceiver.name === 'Puffer' && !selectedPiece.value.immunities.poisoned) {
       selectedPiece.value.statuses.poisoned = true;
     }
@@ -1327,8 +1331,8 @@ const endRound = async (roundWon: boolean) => {
   roundHasStarted.value = false;
 }
 
-async function onReceiveDamage(id: string) {
-  await handleApplyAdmins("onReceiveDamage", id);
+async function onReceiveDamage(id: string, receiver: Piece) {
+  await handleApplyAdmins("onReceiveDamage", id, receiver);
 }
 
 //enemy moves

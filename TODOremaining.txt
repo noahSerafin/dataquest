@@ -1,14 +1,13 @@
-TUTORIAL - clippy
-finish TUTORIAL
+finish TUTORIAL - make more handholdy?
 variant tooltips
 -
 
 // BUGS
+make a check in Enemy for movesremaining/actionsremaining for stopwatch/drum etc.
+
 Player unicode appearing on nodes
 Pandora not useable when full
 you win not dissapearing in endless mode
-
-make a check in Enemy for movesremaining/actionsremaining for stopwatch/drum etc.
 
 hybrids should combine immunities
 pass primary variant to hybrid

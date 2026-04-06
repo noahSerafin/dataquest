@@ -2973,7 +2973,7 @@ class Glasses extends Admin {
     activePieces[idx].addModifier({ attack: -1 })
   }
 }
-class Salt extends Admin {
+export class Salt extends Admin {
   static name = "Salty";
   static description = "All your programs get +1 attack when you lose a round";
   static unicode = "U+1F9C2";
@@ -2988,61 +2988,91 @@ class Salt extends Admin {
     }
   }
 }
-/*
-class Baseball extends Admin {
+
+export class Baseball extends Admin {
   static name = "Strike Out";
   static description = "Enemies that fail to damage your programs 3 times are removed";
   static unicode = "U+26BE";
   static color = "rgb(36, 255, 138)";
-  static rarity = 4;
+  static rarity = 5;
   constructor() {
     super(Baseball.name, Baseball.description, Baseball.unicode, Baseball.color, 7, Baseball.rarity, 'gameState', 'onReceiveDamage')//pieces?
   }
   //on receive damage
-  private candidates: object[{id: string, strikes: number}] = [];
-  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
-    const idxa = activePieces.findIndex(p => p.id === id);//index of attacker
-    //activePieces[idx].takeDamage(activePieces[idx].getStat('attack'));
-    //using id of defender
-    const idxd = activePieces.findIndex(p => p.idR === idR);//index of receiver
-    if(activePieces[idxd].defence > 0){
-      if(this.candidates.includes(id)){
-        //for this id, strikes ++
-        //if strikes >= 3, activePieces.splice(idxa)
-      } else {
-        this.candidates.push({id: id, })
+  private candidates: Record<string, number> = {};
+  async apply({ id, activePieces, receiver }: { id: string, activePieces: Piece[], receiver: Piece }) {
+    // 1. Find the attacker piece
+    const attackerIdx = activePieces.findIndex(p => p.id === id);
+    if (attackerIdx === -1) return;
+    
+    const attacker = activePieces[attackerIdx];
+
+    // 2. Only track if an ENEMY fails to damage a PLAYER program
+    if (attacker.team !== 'enemy' || receiver.team !== 'player') return;
+
+    // 3. Logic for "Failing to damage": 
+    // This usually means the receiver's HP/Size didn't decrease (blocked by defence)
+    // Adjust this condition based on your specific 'takeDamage' implementation
+    const wasDamageBlocked = receiver.defenceRemaining >= 0;
+
+    if (wasDamageBlocked) {
+      // Increment strikes
+      this.candidates[id] = (this.candidates[id] || 0) + 1;
+
+      // 4. Check for Strike Out (3 strikes)
+      if (this.candidates[id] >= 3) {
+        // Remove the enemy
+        activePieces.splice(attackerIdx, 1);
+        // Clean up tracking for this specific ID
+        delete this.candidates[id];
       }
     }
   }
+
+  // Reset strikes at the end of the round if that is your intended balance
   onRoundEnd() {
-    this.candidates = [];
+    this.candidates = {};
   }
 }
-*/
+//SELFIE, U+1F933 use action on self for a temp defence?
+export class Selfie extends Admin {
+  static name = "Selfie";
+  static description = "Programs that attack themselves gain +1 attack";
+  static unicode = "U+1F933";
+  static color = "rgb(36, 255, 138)";
+  static rarity = 4;
+  constructor() {
+    super(Selfie.name, Selfie.description, Selfie.unicode, Selfie.color, 7, Selfie.rarity, 'gameState', 'onReceiveDamage')//pieces?
+  }
+  async apply({ id, activePieces: _activePieces, receiver }: { id: string, activePieces: Piece[], receiver: Piece }) {
+    if(id === receiver.id){
+      receiver.addModifier({attack: 1})
+    }
+  }
+}
 ////fleur de lis U+269C scout, lay traps?
 
-/*
-//3 all require damage receiver
-//SELFIE, U+1F933 use action on self for a temp defence?
 
-export class Chain extends Admin {// status test unfinished: make enemies spread to fellow enemies
+//2 all require damage receiver
+
+export class Daisy extends Admin {// test
   static name = "Daisy Chain";
-  static description = "Attacks damage enemy programs next to the damage dealer";//effect all programs??
+  static description = "Attacks damage enemy programs next to the damage receiver";//effect all programs??
   static unicode = "U+1F33C";
   static color = "rgb(27, 230, 245)";
   static rarity = 5;
   constructor() {
-    super(Chain.name, Chain.description, Chain.unicode, Chain.color, 7, Chain.rarity, 'gameState', 'onDealDamage')
+    super(Daisy.name, Daisy.description, Daisy.unicode, Daisy.color, 7, Daisy.rarity, 'gameState', 'onDealDamage')
   }
   //on turn end
-  async apply({ id: id, activePieces }: { id: string; activePieces: Piece[] }) {
+  async apply({ id: id, activePieces, receiver }: { id: string; activePieces: Piece[]; receiver: Piece }) {
     const idx = activePieces.findIndex(p => p.id === id);
     const dealer = activePieces[idx];
     const enemies = activePieces.filter(p => p.team === 'enemy');
 
     //for (const piece of activePieces) {
     for (const enemy of enemies) {
-      const isAdjacent = dealer.tiles.some(st =>
+      const isAdjacent = receiver.tiles.some(st =>
         enemy.tiles.some(tt =>
         Math.abs(st.x - tt.x) + Math.abs(st.y - tt.y) === 1)
       );
@@ -3051,12 +3081,12 @@ export class Chain extends Admin {// status test unfinished: make enemies spread
     }
   }
 }
-
+/*
 //SPLATTER, U+1FADF
 //SPLASHING SWEAT SYMBOL, U+1F4A6
 export class Splash extends Admin {
   static name = "Splash Damage";
-  static description = "Damage dealt by your programs also applies to tiles adjacent to the target's head";//change to coord adjacency, need coord instead of id
+  static description = "Damage dealt by your programs also applies to tiles adjacent to the target";//change to coord adjacency, need coord instead of id
   static unicode = "U+1FADF";
   static color = "rgb(31, 5, 125)";
   static rarity = 4;
@@ -3087,12 +3117,6 @@ export class Splash extends Admin {
 }
   */
 
-// BASEBALL, U+26BE Strike out, Enemies that fail to damage a program 3 times are removed - onreceivedamage would need a second id to check
-//baseball also needs id of receiver, only onReceiveDamage only gets dealer atm, could use target to determine if tiles were spliced or not
-/*
-
-  */
-
 export class Clippy extends Admin {
   static name = "Clippy";
   static description = "Provides tutorial hints";
@@ -3105,7 +3129,7 @@ export class Clippy extends Admin {
   //handle in player
 }
 
-export const allAdmins = [Bank, Bucket, Candle, Cheese, Smoker, Compass, CreditCard, Crystal, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Trolley, Seed, Slots, Sprinkler, Tempura, Nose, Sneakers, Chime, Abacus, Aesculapius, Appraisal, Balloon, Briefcase, Bubble, Cactus, Coin, Purse, Convenience, FireEngine, Heart, Hermes, Joker, Loot, Clover, Microscope, Newspaper, Pickup, Putter, Relay, Scarf, Stiletto, Mail, Bowling, Violin, Vitamins, Wings, AdminMap, Barber, Ace, AirSupport, Bone, Blood, Bouquet, Camp, Luggage, Chain, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Dice, Jammer, Roger, Juggler, Ladder, Puzzle, Razor, Sled, Rune, Shades, Stonks, Christmas, Telescope, Crown, Toolbox, Tracker, Ambulance, Backdoor, BionicArm, BionicLeg, Crash, Broom, DartBoard, Butler, Dove, Evergreen, Eye, Discount, Fountain, Feather, Fuel, Spoon, Liberty, Lightbulb, Lotus, Ollie, Palette, Pazzaz, PetriDish, Prayer, Wheel, Pants, Bipolar, Variety, Volatile, Artic, BlackBelt, Lungs, Chemistry, Chivalry, Toilet, Copier, Diamond, Hamsa, Skyscraper, Howzat, Inheritance, Cherries, Brain, Meteor, Monarch, Onion, PeaPod, Teddy, Pong, RollerBlades, Bell, Ice, Ballet, Umbrella, Dharma, Bath, Cards, Disco, Minerva, Needle, Pi, Osiris, Ring, School, Taoism];
+export const allAdmins = [Bank, Bucket, Candle, Cheese, Clippy, Smoker, Compass, CreditCard, Crystal, Glasses, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Trolley, Seed, Slots, Sprinkler, Tempura, Nose, Sneakers, Chime, Abacus, Aesculapius, Appraisal, Balloon, Briefcase, Bubble, Cactus, Coin, Purse, Convenience, FireEngine, Heart, Hermes, Joker, Loot, Clover, Microscope, Newspaper, Pickup, Putter, Relay, Scarf, Stiletto, Mail, Bowling, Violin, Vitamins, Wings, AdminMap, Barber, Ace, AirSupport, Bone, Blood, Bouquet, Camp, Luggage, Chain, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Dice, Jammer, Roger, Juggler, Ladder, Puzzle, Razor, Sled, Rune, Shades, Stonks, Christmas, Telescope, Crown, Toolbox, Tracker, Ambulance, Backdoor, BionicArm, BionicLeg, Crash, Broom, DartBoard, Butler, Dove, Evergreen, Eye, Discount, Fountain, Feather, Fuel, Spoon, Liberty, Lightbulb, Lotus, Ollie, Palette, Pazzaz, PetriDish, Prayer, Wheel, Salt, Selfie, Pants, Bipolar, Variety, Volatile, Artic, BlackBelt, Lungs, Chemistry, Chivalry, Toilet, Copier, Daisy, Diamond, Hamsa, Skyscraper, Howzat, Inheritance, Cherries, Brain, Meteor, Monarch, Onion, PeaPod, Teddy, Pong, RollerBlades, Bell, Baseball, Ice, Ballet, Umbrella, Dharma, Bath, Cards, Disco, Minerva, Needle, Pi, Osiris, Ring, School, Taoism];
 console.log('admins length: ', allAdmins.length)
 let adminLogs = {
   rarity1: 0,
@@ -3143,7 +3167,13 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //JEANS, U+1F456 effect compiler
 //BUTTER, U+1F9C8 moves your pieces randomly after your turn (for free?)
 //RECYCLING SYMBOL, U+2672 selling programs gives 1 of lower rarirty
+//basketball and HOOP, U+1F3C0
 
+// challenge nodes?
+//DESERT ISLAND, U+1F3DD
+//DESERT, U+1F3DC
+//DERELICT HOUSE BUILDING, U+1F3DA
+//STADIUM, U+1F3DF
 //U+26F0 mountain
 //landslide U+1F6D8
 

@@ -1608,7 +1608,7 @@ function toggleDebug() {
     </div>
     <div class="stage">
       <MainMenu v-if="showMainMenu && !displayEditor" @createNewPlayer="createNewPlayer" class="stage-panel"
-        :class="{ active: showMainMenu }" />
+        :class="{ active: showMainMenu }" :debugMode="debugMode"/>
       <RoundSummary v-if="showSummary" class="stage-panel" :class="{ active: showSummary }" :hasWonRound="hasWonRound"
         :player="player" :bosses="bossAdmins" @proceedFromEndOfRound="handleProceed" @reloadLevel="reloadLevel"
         @mainMenu="openMainMenu" />
@@ -1642,7 +1642,7 @@ function toggleDebug() {
         @placeOnBoard="placePieceOnBoardAt" @handlePieceSelect="handlePieceSelect" @deselect="deselectPiece"
         @movePiece="movePiece" @damagePieceAt="damagePieceAt" @specialActionAt="handleSpecialActionAt"
         @placeAt="placeAt" gameStart="true" />
-      <Collection class="stage-panel" :class="{ active: showCollection }" @close="showCollection = false" />
+      <Collection class="stage-panel" :class="{ active: showCollection }" @close="showCollection = false" :debugMode="debugMode" />
     </div>
     <Leveleditor v-if="displayEditor" @export-level="handleExport" />
     <div class="player-area">

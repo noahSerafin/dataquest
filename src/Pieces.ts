@@ -4281,7 +4281,8 @@ console.log("Pieces of rarity 6: ", adminLogs.rarity6)
 //fix dolls
 //Invisible wall - hi defence hidden piece
 //U+1FAA8 rock boulder pick up speed not maxsize (worse snowman)
-//FISHING POLE AND FISH, U+1F3A3 long range - move a piece toward it
+//FISHING POLE AND FISH, U+1F3A3 long range - move a piece toward it - magnet with long range
+//acorn -> sapling -> oak then acorn can be rarity 1
 
 //chequered flag U+1F3C1
 

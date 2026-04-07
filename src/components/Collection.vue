@@ -10,6 +10,10 @@ import ItemView from "./ItemView.vue";
 import { makeBlueprint } from "../helperFunctions";
 import type { PieceBlueprint } from "../types";
 
+const props = defineProps<{
+  debugMode: boolean;
+}>();
+
 const emit = defineEmits<{
   (e: 'close'): void;
 }>();
@@ -47,19 +51,19 @@ onMounted(() => {
 const playablePieces = computed(() => allPieces.filter(p => p.name !== Spawn.name));
 
 function isPieceUnlocked(name: string): boolean {
-  return collection.value.pieces.includes(name);
+  return props.debugMode ? true : collection.value.pieces.includes(name);
 }
 
 function isAdminUnlocked(name: string): boolean {
-  return collection.value.admins.includes(name);
+  return props.debugMode ? true : collection.value.admins.includes(name);
 }
 
 function isBossUnlocked(name: string): boolean {
-  return collection.value.bosses.includes(name);
+  return props.debugMode ? true : collection.value.bosses.includes(name);
 }
 
 function isItemUnlocked(name: string): boolean {
-  return collection.value.items.includes(name);
+  return props.debugMode ? true : collection.value.items.includes(name);
 }
 
 // Generate an instance just for display properties

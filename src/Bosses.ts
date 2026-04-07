@@ -1013,7 +1013,7 @@ class Taxman extends Admin {
 class Rage extends Admin {
     static name = "Rage";
     static description = "Enemy programs that take health damage become enraged";
-    static unicode = "U+1F4A2";
+    static unicode = "U+1F620";//"U+1F4A2";
     static color = "rgb(92, 0, 0)";
     static rarity = 2;
     constructor() {
@@ -1033,7 +1033,7 @@ class Autumn extends Admin {
     static name = "Autumn";
     static description = "Every player program loses -3 max size"; //and -1 defence?
     static unicode = "U+1FABE";
-    static color = "rgb(69, 76, 90)";
+    static color = "rgb(220, 135, 0)";
     static rarity = 4;
     constructor() {
         super(Autumn.name, Autumn.description, Autumn.unicode, Autumn.color, 3, Autumn.rarity, 'gameState', 'onPlacement')

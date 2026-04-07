@@ -468,6 +468,7 @@ export class Pandora extends Item<Player> {
         super(Pandora.name, Pandora.description, Pandora.unicode, Pandora.color, 6, Pandora.rarity, 'player')
     }
     apply(player: Player, _itemMult: number) {
+        player.removeItem(this); // Remove itself first to free up memory
         if (player.freeMemory) { // check for trolley/schoolbag
             player.removeItem(this);
             addItemsUntilFull(player, 3);
@@ -861,6 +862,7 @@ export class Jar extends Item {//Pokeball?
         //name desc utf || maxsize moves range atk def
     }
     async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }, _itemMult: number) {
+        player.removeItem(this); // Remove itself first to free up memory
         const idx = activePieces.findIndex(p => p.id === id);
         if (activePieces[idx].team === 'enemy' && activePieces[idx].defenceRemaining <= 0 && activePieces[idx].tiles.length <= 1) {
             const bpClass = allPieces.find(p =>

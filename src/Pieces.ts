@@ -283,6 +283,9 @@ export abstract class Piece {
         this.removeCallback?.(this);
       }
     }
+    if(this.statuses.enraged){
+      this.addTempModifier({attack: 1});
+    }
   }
 
   clone(): Piece {

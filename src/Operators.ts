@@ -1,5 +1,5 @@
 import type { OS } from "./types";
-import { Voucher, Mushroom, Garlic, Juice, Meat, Genie, Pandora, Update2, Dupe, Headphones} from "./Items";
+import { Voucher, Mushroom, Garlic, Juice, Meat, Genie, Pandora, Update2, Dupe, Headphones, Jar} from "./Items";
 import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Clippy, Notepad} from "./AdminPrograms";
 import { createDefaultStatuses } from "./types";
 
@@ -542,7 +542,7 @@ const Debugger : OS = {
     memory: 10,
     adminSlots: 6,
     blueprints: [aegis, superKnife, testhybrid, testPiece],
-    items: [new Genie, new Pandora, new Update2, new Dupe, new Headphones],
+    items: [new Genie, new Pandora, new Update2, new Dupe, new Jar],
     admins: [new Crystal],
     lives: 9,
     description: 'FOR TESTING'

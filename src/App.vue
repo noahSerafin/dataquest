@@ -483,10 +483,10 @@ async function handleApplyAdmins(trigger: AdminTrigger, id: string, piece?: Piec
           await admin.apply({ player: player.value })
         }
         if (admin.targetType === 'gameState') {
-          await admin.apply({ id, activePieces: activePieces.value })
+          await admin.apply({ id: id, activePieces: activePieces.value, piece })
         }
         if (admin.targetType === 'playerAndGame') {
-          await admin.apply({ id, activePieces: activePieces.value, player: player.value })
+          await admin.apply({ id: id, activePieces: activePieces.value, player: player.value })
         }
         if (admin.targetType === 'piecesAndBoard') {
           await admin.apply({ activePieces: activePieces.value, board: level.value.tiles })
@@ -1382,7 +1382,7 @@ const endTurn = async () => {
       piece.resetTempModifiers();
       piece.actions = 1;
       piece.resetMoves();
-      piece.willRetaliate = false;//
+      piece.willRetaliate = false;
     }
   };
   await enemyTurn();
@@ -1392,6 +1392,7 @@ const endTurn = async () => {
   for (const piece of activePieces.value) {
     if (piece.team === 'enemy') {
       piece.resetDefence();
+      piece.statuses.enraged = false;
     }
     if (piece.team === 'player') {
       piece.resetTempModifiers();

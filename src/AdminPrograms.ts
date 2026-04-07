@@ -6,8 +6,8 @@ import type { Coordinate, PieceBlueprint, StatModifier, StatusKey } from "./type
 
 export type AdminTrigger =
   | 'onPlacement'
-  | 'onEnemyTurnEnd'
   | 'onTurnEnd'
+  | 'onEnemyTurnEnd'
   | 'onRoundStart'
   | 'onRoundEnd'
   | 'onDealDamage' //piece id of receiver?
@@ -3166,15 +3166,18 @@ console.log("Admins of rarity 4: ", adminLogs.rarity4)
 console.log("Admins of rarity 5: ", adminLogs.rarity5)
 console.log("Admins of rarity 6: ", adminLogs.rarity6)
 
-//JEANS, U+1F456 effect compiler
-//PERSON IN LOTUS POSITION, U+1F9D8 stationary programs gain +1 defence/attack??
+//PERSON IN LOTUS POSITION, U+1F9D8 stationary programs gain +1 max size
+//TUMBLER GLASS, U+1F943 Mean drunk enraged and confused on load
 //BOTTLE WITH POPPING CORK, U+1F37E buff after each boss defeated? //like rainbow but some other reward, pinata?
 //RECYCLING SYMBOL, U+2672 selling programs gives 1 of lower rarirty
-//RIGHTWARDS PUSHING HAND, U+1FAF8 left hand path - going left buffs pieces //(difficulty === player difficulty && player map progress = 1)
+//RIGHTWARDS PUSHING HAND, U+1FAF8 Left Hand Path - going left buffs pieces //(difficulty === player difficulty && player map progress = 1)
+// SURFER, U+1F3C4 //move into a free space after taking damage 
+
+//JEANS, U+1F456 effect compiler
 //BUTTER, U+1F9C8 moves your pieces randomly after your turn (for free?)
 //SLEUTH OR SPY, U+1F575
+//TEACUP WITHOUT HANDLE, U+1F375 calm down
 //basketball and HOOP, U+1F3C0 slam dunk
-// SURFER, U+1F3C4
 //SNOWBOARDER, U+1F3C2
 //WOMANS BOOTS, U+1F462
 // LIPSTICK, U+1F484

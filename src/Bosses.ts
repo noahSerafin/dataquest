@@ -234,7 +234,7 @@ class Circus extends Admin {
     static name = "Circus";
     static description = "Every enemy gains +1 moves at the start of the round";
     static unicode = "U+1F3AA";
-    static color = "rgb(255, 131, 245)";
+    static color = "rgb(95, 208, 227)";
     static rarity = 3;
     constructor() {
         super(Circus.name, Circus.description, Circus.unicode, Circus.color, 5, Circus.rarity, 'gameState', 'onRoundStart')
@@ -928,9 +928,9 @@ class ClipBoard extends Admin {
 //TRAFFIC LIGHT, U+1F6A6 pieces that take an action take 1 damage
 class TrafficLight extends Admin {
     static name = "Traffic Light";
-    static description = "Programs that move or take an action when the light is red take 1 damage at the end of your turn";//or lose 1 moves:
+    static description = "Programs that move or action when the light is red take 1 damage at the end of your turn";//or lose 1 moves:
     static unicode = "U+1F6A6";
-    static color = "hsl(116, 100%, 67%)";
+    static color = "hsl(0, 0%, 69%)";
     static rarity = 1;
     constructor() {
         super(TrafficLight.name, TrafficLight.description, TrafficLight.unicode, TrafficLight.color, 3, TrafficLight.rarity, 'gameState', 'onTurnEnd')
@@ -960,7 +960,7 @@ class TrafficLight extends Admin {
     }
 }
 
-class Concussion extends Admin {//needs fixing
+class Concussion extends Admin {
     static name = "Concussion";
     static description = "Your programs that take damage twice are confused";
     static unicode = "U+1F4AB";
@@ -970,19 +970,18 @@ class Concussion extends Admin {//needs fixing
         super(Concussion.name, Concussion.description, Concussion.unicode, Concussion.color, 3, Concussion.rarity, 'gameState', 'onReceiveDamage')
     }
     private candidates: Record<string, number> = {};
-    async apply({ id, activePieces: _activePieces, piece }: { id: string, activePieces: Piece[], piece?: Piece }) {
+    async apply({ id: _id, activePieces: _activePieces, piece }: { id: string, activePieces: Piece[], piece?: Piece }) {
         if(!piece) return;
-        const wasDamageTaken = piece.defenceRemaining < 0;
-        if(wasDamageTaken){
+        
+        if(piece.defenceRemaining < 0){
+            // Increment hit count for this program
             this.candidates[piece.id] = (this.candidates[piece.id] || 0) + 1;
         }
-        
         if (this.candidates[piece.id] >= 2) {
-        // Remove the enemy
-            if(piece && !piece.immunities.confused){
+            if(!piece.immunities.confused){
                 piece.statuses.confused = true;
                 // Clean up tracking for this specific ID
-                delete this.candidates[id];
+                delete this.candidates[piece.id];
             }
         };
     }
@@ -996,7 +995,7 @@ class Taxman extends Admin {
     static name = "Taxman";
     static description = "Your program's attack is nerfed by -1 for every $5 you have on load";
     static unicode = "U+1F4D2";
-    static color = "rgb(172, 5, 213)";
+    static color = "rgb(70, 70, 70)";
     constructor() {
         super(Taxman.name, Taxman.description, Taxman.unicode, Taxman.color, 5, Taxman.rarity, 'playerAndGame', 'onPlacement')
     }
@@ -1013,17 +1012,19 @@ class Taxman extends Admin {
 
 class Rage extends Admin {
     static name = "Rage";
-    static description = "Enemy programs that take damage temporarily gain +1 attack";
+    static description = "Enemy programs that take health damage become enraged";
     static unicode = "U+1F4A2";
-    static color = "rgb(126, 2, 114)";
+    static color = "rgb(92, 0, 0)";
     static rarity = 2;
     constructor() {
         super(Rage.name, Rage.description, Rage.unicode, Rage.color, 3, Rage.rarity, 'gameState', 'onDealDamage')
     }
-    async apply({ id: _id, activePieces: _activePieces, piece }: { id: string, activePieces: Piece[], piece?: Piece }) {
+    async apply({ id, activePieces, piece }: { id: string, activePieces: Piece[], piece: Piece }) {
         if(!piece) return;
-        if(piece.defenceRemaining < 0){
-            piece.addTempModifier({attack: 1});
+        console.log('rage receiver')
+        const idx = activePieces.findIndex(p => p.id === id);
+        if(piece.team === 'enemy' && piece.defenceRemaining < (activePieces[idx].getStat('attack') * activePieces[idx].damageMult)){
+            piece.statuses.enraged = true;
         };
     }
 }
@@ -1045,13 +1046,12 @@ class Autumn extends Admin {
     }
 }
 
-
 //SLEEPING SYMBOL, U+1F4A4
 class Snoozefest extends Admin {
     static name = "Snoozefest";
-    static description = "Your programs lose 1 action until 2 turns after they are placed";
+    static description = "Your programs lose 1 action the first turn after they are placed";
     static unicode = "U+1F4A4";
-    static color = "rgb(21, 13, 46)";
+    static color = "rgb(25, 25, 21)";
     static rarity = 2;
     constructor() {
         super(Snoozefest.name, Snoozefest.description, Snoozefest.unicode, Snoozefest.color, 3, Snoozefest.rarity, 'gameState', 'onTurnEnd')
@@ -1061,11 +1061,10 @@ class Snoozefest extends Admin {
         for(const piece of activePieces){
             if(piece.team==='player'){
                 this.candidates[piece.id] = (this.candidates[piece.id] || 0) + 1;
-                if (this.candidates[piece.id] >= 2) {
+                if (this.candidates[piece.id] < 2) {
                     piece.disarmed = true;
                 } else {
-                    piece.statuses.frozen = true;
-                    piece.disarmed = true;
+                    piece.disarmed = false;
                 }
             }
         };
@@ -1076,9 +1075,7 @@ class Snoozefest extends Admin {
 }
 
 // damage mult for enemy?
-export const testBosses = [Concussion, Taxman, Snoozefest, TrafficLight, Rage, Autumn]
-//Concussion, LowBattery, NorthWind, Taxman, TrafficLight, Quicksand, Customs, Downturn, Hook, Mirror, Rage, Shrine, Snoozefest, Whale,
-export const allBosses = [Concussion, Rage, Snoozefest, Anchor, Castle, Circus, Hammer, ClipBoard, Izakaya, Mountain, Tsunami, Wilt, Biohazard, Cocktail, Coral, Eclipse, Lock, Factory, Jack, Coaster, Blackmail, Snowflake, Bones, Frog, Singularity, Tornado, Volcano, Snow, Sun, Fog, Nightfall, Nofun, Omega, Reaper, REDACTED, Wrath]
+export const allBosses = [Concussion, LowBattery, NorthWind, Taxman, TrafficLight, Quicksand, Customs, Downturn, Hook, Mirror, Rage, Shrine, Snoozefest, Whale, Anchor, Castle, Circus, Hammer, ClipBoard, Izakaya, Mountain, Tsunami, Wilt, Autumn, Biohazard, Cocktail, Coral, Eclipse, Lock, Factory, Jack, Coaster, Blackmail, Snowflake, Bones, Frog, Singularity, Tornado, Volcano, Snow, Sun, Fog, Nightfall, Nofun, Omega, Reaper, REDACTED, Wrath]
 export const nonStackableBosses = [Mirror, Customs, Snowflake, Sun, Frog, Biohazard, Coral, Izakaya, REDACTED, Fog, Singularity, Tornado, Cocktail]
 
 console.log('bosses length: ', allBosses.length)

@@ -10,8 +10,8 @@ export const STATUS_ICONS: Record<string, string> = {
   exposed: "🫣",  
   hidden: "🤫",      // U+1F92B
   negative: "🫥",    // U+1FAE5
+  enraged: "💢",     // ANGER SYMBOL, U+1F4A2
 };
-// ANGER SYMBOL, U+1F4A2
 
 export const STATUS_INFO: Record<string, string> = {
   diseased: "Loses -1 max size every turn",
@@ -25,6 +25,7 @@ export const STATUS_INFO: Record<string, string> = {
   exposed: 'Can no longer hide.',
   hidden: 'Invisible to enemies until next move or action.',
   negative: "Can move through other programs",
+  enraged: "Gains +1 attack on the start of it's turn"
 };
 
 // 🫨 SHAKING FACE, U+1FAE8

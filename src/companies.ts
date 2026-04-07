@@ -15,7 +15,7 @@ export const playerCompany: Company = Object.freeze({ name: 'SPEC', abbr: '???',
 export const bossCompany: Company = Object.freeze({ name: 'Umbrella', abbr: 'BOSS', unicode: "", pieceList: allPieces, tileColor: "rgb(34, 53, 12)", edgeColor: "#9CC954"});
 export const companies: Company[] = [
     { name: 'Saturn Solutions', abbr: 'SSL', unicode: "U+1FA90", pieceList: allPieces, tileColor: "rgb(74, 74, 74)", edgeColor: "#e9e9e9"},
-    { name: 'Nightbridge Corp', abbr: 'NBC',  unicode: "U+1F309", pieceList: NightbridgePieces, tileColor: "rgb(62, 9, 66)", edgeColor: "#f7acee"},
+    { name: 'Nightbridge Corp', abbr: 'NBC',  unicode: "U+1F309", pieceList: NightbridgePieces, tileColor: "rgb(47, 11, 86)", edgeColor: "#f7acee"},
     { name: 'Meridian Security Inc.', abbr: 'MSI', unicode: "U+1F310", pieceList: MeridianPieces, tileColor: "rgb(14, 10, 77)", edgeColor: "#59f0f3"},
     { name: 'Longhouse Web Services', abbr: 'LWS', unicode: "U+1F6D6", pieceList: longHousePieces, tileColor: "rgb(63, 28, 4)", edgeColor: "#e39740"},
     { name: 'Tsukimi Group', abbr: 'TKG', unicode: "U+1F391", pieceList: TsukimiPieces, tileColor: "rgb(78, 78, 78)", edgeColor: "#e4e4e4"},

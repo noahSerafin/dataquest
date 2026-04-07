@@ -6,6 +6,8 @@ variant tooltips
 Enemy traps not trying to walk into players
 enemies not pathing to player sometimes, are they looking for the head position???
 Pandora not useable when full
+Jar not useable when full
+shop not rerolling when proceeding from a hidden node
 you win not dissapearing in endless mode
 
 hybrids should combine immunities

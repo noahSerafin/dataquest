@@ -935,7 +935,7 @@ class TrafficLight extends Admin {
     constructor() {
         super(TrafficLight.name, TrafficLight.description, TrafficLight.unicode, TrafficLight.color, 3, TrafficLight.rarity, 'gameState', 'onTurnEnd')
     }
-    private count = 0;
+    private count = 2;
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
         if(this.count === 2){
             for (const p of activePieces) {

@@ -1022,7 +1022,7 @@ export class Headphones extends Item<PieceBlueprint> {
 class Disguise extends Item<PieceBlueprint> {
     static name = "Disguise";
     static description = "Make a program in your inventory permanently immune to being exposed";
-    static unicode = "U+1F97";
+    static unicode = "U+1F978";
     static color = "rgb(96, 96, 96)";
     static rarity = 5;
     constructor() {

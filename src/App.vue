@@ -1140,14 +1140,14 @@ const damagePieceAt = async (coord: Coordinate) => {
   const damage = Math.floor(baseDamage * selectedPiece.value.damageMult);//mult should be applyed inside takeDamage for special moves
   await damageReceiver.takeDamage(damage);
   if(damageReceiver.team === 'player'){
-    handleApplyAdmins('onReceiveDamage', selectedPiece.value.id, damageReceiver)
+    await handleApplyAdmins('onReceiveDamage', selectedPiece.value.id, damageReceiver)
   }
   if (selectedPiece.value.statuses.hidden) {
     selectedPiece.value.statuses.hidden = false;
   }
   if (damageReceiver.willRetaliate || damageReceiver.name === 'Hedgehog') {
     await selectedPiece.value.takeDamage(damageReceiver.getStat('attack'));
-    handleApplyAdmins('onReceiveDamage', damageReceiver.id, selectedPiece.value)
+    await handleApplyAdmins('onReceiveDamage', damageReceiver.id, selectedPiece.value)
     if (damageReceiver.name === 'Puffer' && !selectedPiece.value.immunities.poisoned) {
       selectedPiece.value.statuses.poisoned = true;
     }

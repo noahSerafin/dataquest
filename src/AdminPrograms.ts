@@ -1646,7 +1646,7 @@ class Taoism extends Admin {
   static color = "rgba(92, 92, 92, 1)ff";
   static rarity = 6;
   constructor() {
-    super(Taoism.name, Taoism.description, Taoism.unicode, Taoism.color, 5, Taoism.rarity, 'gameState', 'onTurnEnd')
+    super(Taoism.name, Taoism.description, Taoism.unicode, Taoism.color, 8, Taoism.rarity, 'gameState', 'onTurnEnd')
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     const playerPieces: Piece[] = [];//are these reset every apply?

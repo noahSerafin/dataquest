@@ -34,7 +34,6 @@ export abstract class Piece {
   isBusy: boolean = false;//for AI
   isTriggering: boolean = false; //for trap animations
   quickSanded: boolean = false;
-  disarmed: boolean = false;
 
   specialName?: string;
   extraUnicode?: string;
@@ -129,7 +128,7 @@ export abstract class Piece {
     });
   }
 
-  resetTempModifiers() {
+  async resetTempModifiers() {
     this.tempStatModifiers = {};
   }
 
@@ -167,9 +166,6 @@ export abstract class Piece {
     }
     if(!this.statuses.frozen){
       this.movesRemaining = this.getStat('moves');
-    }
-    if(this.disarmed){
-      this.actions = 0;
     }
   }
   resetDefence() {
@@ -283,8 +279,20 @@ export abstract class Piece {
         this.removeCallback?.(this);
       }
     }
+  }
+  async applyStartingStatusEffects(mult: number){
+    if(this.statuses.disarmed){
+      this.actions = 0;
+    }
     if(this.statuses.enraged){
-      this.addTempModifier({attack: 1});
+      this.addTempModifier({attack: 1 * mult});
+    }
+    if(this.statuses.zen){
+      this.addTempModifier({maxSize: 1 * mult});
+      this.addTempModifier({range: 1 * mult});
+      this.addTempModifier({attack: 1 * mult});
+      this.addTempModifier({defence: 1 * mult});
+      this.addTempModifier({moves: 1 * mult});
     }
   }
 

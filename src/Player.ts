@@ -5,6 +5,7 @@ import { StorageManager } from "./StorageManager";
 
 export class Player {
     difficulty: number = 1;
+    extraDifficulty: number = 0;
     stake: number;
     bossesCleared: number = 0;
     mapProgress: number = 0;
@@ -27,8 +28,8 @@ export class Player {
     canMove: boolean = true;
     canAction: boolean = true;
     osunicode: string;
-    nextInterest: number
-    nextReward: number
+    nextInterest: number;
+    nextReward: number;
     //adminModifiers: Record<string, StatModifier>
     constructor(
         osunicode = '',

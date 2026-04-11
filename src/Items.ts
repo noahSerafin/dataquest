@@ -416,7 +416,7 @@ export class Rations extends Item<Piece> {
 
 export class Beans extends Item<Piece> {
     static name = "Beans";
-    static description = "Replenish a programs actions";
+    static description = "Replenish a programs actions";//give a placed piece 2 actions every turn for a round?
     static unicode = "U+1FAD8";
     static color = "rgb(101, 179, 192)";
     static rarity = 3;

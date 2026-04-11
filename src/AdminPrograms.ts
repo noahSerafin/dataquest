@@ -1,5 +1,5 @@
 import { pickWeightedRandomItem } from "./helperFunctions";
-import { Box, Gift, Item, upgradeItems } from "./Items";
+import { Box, Gift, Item, Pinata, upgradeItems } from "./Items";
 import { Piece, allPieces } from "./Pieces";
 import { Player } from "./Player";
 import type { Coordinate, PieceBlueprint, StatModifier, StatusKey } from "./types";
@@ -2859,7 +2859,7 @@ class Mail extends Admin {
 }
 class Christmas extends Admin {
   static name = "St. Nick";
-  static description = "Gives you a gift box after every round won";
+  static description = "Gives you a gift box containing a random program after every boss defeated";
   static unicode = "U+1F385";
   static color = "rgb(26, 95, 0)";
   static rarity = 3;
@@ -2868,7 +2868,7 @@ class Christmas extends Admin {
   }
 
   async apply({ player }: { player: Player }) {
-    if (player.freeMemory >= 1 || player.hasAdmin('Schoolbag') && player.freeMemory >= 0.5) {
+    if (player.mapProgress >= 3 && (player.freeMemory >= 1 || player.hasAdmin('Schoolbag') && player.freeMemory >= 0.5)) {
       const gift = new Gift;
       player.items.push(gift);
     }
@@ -2876,7 +2876,7 @@ class Christmas extends Admin {
 }
 class Butler extends Admin {
   static name = "Butler";
-  static description = "Brings you food after every round won";
+  static description = "Brings you food after every boss defeaeted";//boss defeated?
   static unicode = "U+1F935";
   static color = "rgb(27, 27, 27)";
   static rarity = 4;
@@ -2885,7 +2885,7 @@ class Butler extends Admin {
   }
 
   async apply({ player }: { player: Player }) {
-    if (player.freeMemory >= 1 || player.hasAdmin('Schoolbag') && player.freeMemory >= 0.5) {
+    if (player.mapProgress >= 3 && (player.freeMemory >= 1 || player.hasAdmin('Schoolbag') && player.freeMemory >= 0.5)) {
       const gift = pickWeightedRandomItem(upgradeItems, player);
       player.items.push(gift);
     }
@@ -3083,6 +3083,107 @@ class Daisy extends Admin {// test
     }
   }
 }
+
+//PERSON IN LOTUS POSITION, U+1F9D8 stationary programs gain +1 max size
+class Meditation extends Admin {//needs reviewing
+  static name = "Meditation";
+  static description = "Your non-hidden programs that don't move temoprarily gain +1 to all stats";// to all stats on the end of your turn";
+  static unicode = "U+1F9D8";
+  static color = "rgb(145, 247, 254)";
+  static rarity = 5;
+  constructor() {
+    super(Meditation.name, Meditation.description, Meditation.unicode, Meditation.color, 6, Meditation.rarity, 'gameState', 'onTurnEnd')
+    //private count for shop reference?
+  }
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    for (const piece of activePieces) {
+      if (piece.team === 'player' && !piece.statuses.hidden) {
+        if (piece.movesRemaining === piece.getStat('moves')) {
+          piece.statuses.zen = true;
+        }
+      }
+    };
+  }
+}
+//TUMBLER GLASS, U+1F943 Mean drunk enraged and confused on load + damage mult
+class Drunk extends Admin {
+  static name = "Mean Drunk";
+  static description = "Your pieces are enraged on load, gaining +1 attack, as well as +0.5 damage mult. But are also confused.";
+  static unicode = "U+1F943";
+  static color = "rgb(166, 9, 9)";
+  static rarity = 4;
+  constructor() {
+    super(Drunk.name, Drunk.description, Drunk.unicode, Drunk.color, 6, Drunk.rarity, 'gameState', 'onPlacement')
+  }
+
+  //on placement/after hydration
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    activePieces[idx].statuses.enraged = true;
+    activePieces[idx].damageMult += 0.5;//enemy pieces only?  
+    if (!activePieces[idx].immunities.confused){
+      activePieces[idx].statuses.confused = true;
+    }
+  }
+}
+
+class StoneAge extends Admin {//needs reviewing
+  static name = "Stone Age";
+  static description = "Sets all pieces range to 1 on the end of every turn";
+  static unicode = "U+1FAA8";
+  static color = "rgb(109, 147, 159)";
+  static rarity = 2;
+  constructor() {
+    super(StoneAge.name, StoneAge.description, StoneAge.unicode, StoneAge.color, 6, StoneAge.rarity, 'gameState', 'onTurnEnd')
+  }
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    for (const piece of activePieces) {
+      const effectiveRangeMinusOne = piece.getStat('range') -1;
+      piece.addModifier({range: -effectiveRangeMinusOne})
+    };
+  }
+}
+//BOTTLE WITH POPPING CORK, U+1F37E buff after each boss defeated? 7
+class Huzzah extends Admin {
+  static name = "Huzzah";
+  static description = "Gain a pinata with random admin inside after beating a boss";
+  static unicode = "U+1F37E";
+  static color = "rgb(241, 119, 223)";
+  static rarity = 3;
+  constructor() {
+    super(Huzzah.name, Huzzah.description, Huzzah.unicode, Huzzah.color, 3, Huzzah.rarity, 'player', 'onRoundEnd')
+  }
+  async apply({ player }: { player: Player }) {
+    if (player.mapProgress >= 3 && (player.freeMemory >= 1 || player.hasAdmin('Schoolbag') && player.freeMemory >= 0.5)) {
+      const pinata = new Pinata;
+      player.items.push(pinata);
+    }
+  }
+}
+
+//RIGHTWARDS PUSHING HAND, U+1FAF8 Left Hand Path - going left buffs pieces //(difficulty === player difficulty && player map progress = 1)
+class Lefty extends Admin {
+  static name = "Left Hand Path";
+  static description = "Your programs gain +1 to all stats every non boss node your enter that equals your current security level";// too easy, make right hand instead
+  static unicode = "U+1FAF8";
+  static color = "rgb(241, 119, 223)";
+  static rarity = 6;
+  constructor() {
+    super(Lefty.name, Lefty.description, Lefty.unicode, Lefty.color, 3, Lefty.rarity, 'player', 'onRoundStart')
+  }
+  async apply({ player }: { player: Player }) {
+    if (player.mapProgress < 3 && (player.extraDifficulty === 0)) {
+      for(const bp of player.programs){
+        bp.maxSize += 1;
+        bp.moves += 1;
+        bp.range += 1;
+        bp.attack += 1;
+        bp.defence += 1;
+      }
+    }
+  }
+}
+
 /*
 //SPLATTER, U+1FADF
 //SPLASHING SWEAT SYMBOL, U+1F4A6
@@ -3166,11 +3267,7 @@ console.log("Admins of rarity 4: ", adminLogs.rarity4)
 console.log("Admins of rarity 5: ", adminLogs.rarity5)
 console.log("Admins of rarity 6: ", adminLogs.rarity6)
 
-//PERSON IN LOTUS POSITION, U+1F9D8 stationary programs gain +1 max size
-//TUMBLER GLASS, U+1F943 Mean drunk enraged and confused on load + damage mult
-//BOTTLE WITH POPPING CORK, U+1F37E buff after each boss defeated? //like rainbow but some other reward, pinata?
-//RIGHTWARDS PUSHING HAND, U+1FAF8 Left Hand Path - going left buffs pieces //(difficulty === player difficulty && player map progress = 1)
-//stone age all pieces are range 1
+
 // SURFER, U+1F3C4 //move into a free space after taking damage (even defensive)
 //RECYCLING SYMBOL, U+2672 selling programs gives 1 of lower rarirty
 //pre rune - 1 range on attack?

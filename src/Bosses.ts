@@ -1025,6 +1025,7 @@ class Rage extends Admin {
         const idx = activePieces.findIndex(p => p.id === id);
         if(piece.team === 'enemy' && piece.defenceRemaining < (activePieces[idx].getStat('attack') * activePieces[idx].damageMult)){
             piece.statuses.enraged = true;
+            piece.addTempModifier({attack: 1})
         };
     }
 }
@@ -1062,9 +1063,9 @@ class Snoozefest extends Admin {
             if(piece.team==='player'){
                 this.candidates[piece.id] = (this.candidates[piece.id] || 0) + 1;
                 if (this.candidates[piece.id] < 2) {
-                    piece.disarmed = true;
+                    piece.statuses.disarmed = true;
                 } else {
-                    piece.disarmed = false;
+                    piece.statuses.disarmed = false;
                 }
             }
         };

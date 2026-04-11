@@ -7,10 +7,12 @@ export const STATUS_ICONS: Record<string, string> = {
   frozen: "🥶",      // U+1F976
   charmed: "😍",     // U+1F60D
   confused: "🤕",    // U+1F915 // SHAKING FACE, U+1FAE8 //DIZZY SYMBOL, U+1F4AB
-  exposed: "🫣",  
+  exposed: "🫣",
+  disarmed: "🤐", //U+1F910
   hidden: "🤫",      // U+1F92B
   negative: "🫥",    // U+1FAE5
   enraged: "💢",     // ANGER SYMBOL, U+1F4A2
+  zen: "😌", //U+1F60C
 };
 
 export const STATUS_INFO: Record<string, string> = {
@@ -23,9 +25,11 @@ export const STATUS_INFO: Record<string, string> = {
   charmed: 'Is controlled by the opposition',
   confused: 'Moves randomly.',
   exposed: 'Can no longer hide.',
+  disarmed: "Starts the turn with no actions",
   hidden: 'Invisible to enemies until next move or action.',
   negative: "Can move through other programs",
-  enraged: "Gains +1 attack on the start of it's turn"
+  enraged: "Gains +1 attack on the start of it's turn",
+  zen: "temporary +1 to all stats"
 };
 
 // 🫨 SHAKING FACE, U+1FAE8

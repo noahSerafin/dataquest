@@ -154,10 +154,9 @@ function createNewPlayer(os: OS) {
   currentCompany.value = { name: 'Player', abbr: '',  unicode: player.value.osunicode, pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "#9CC954" };
 }
 const showCollection = ref(false);
-const extraDifficulty = ref<number>(0)//player/seed
 
 function incrementMapProgress() {
-  extraDifficulty.value = 0;
+  player.value.extraDifficulty = 0;
   player.value.mapProgress++
   //console.log('progress increased:', mapProgress.value)
   if(player.value.hasAdmin('Clippy')){
@@ -577,7 +576,7 @@ async function selectLevel(newLevel: Level, company: Company, difficultyMod: num
   level.value = newLevel;
   player.value.nextReward = lReward;
   const newPieces = rehydratePieces(newLevel.pieces);
-  extraDifficulty.value = difficultyMod;
+  player.value.extraDifficulty = difficultyMod;
   activePieces.value = processSpawnPoints(newPieces, company.pieceList, difficultyMod);
   console.log('originalSpawns: ', originalSpawns.value);
   //originalSpawns.value = [...playerSpawns.value];
@@ -1354,16 +1353,6 @@ async function enemyTurn() {
   hasFinishedTurn.value = false;
 }
 
-async function applyStatusEffects(team: string) {//async for animations?
-  for (const piece of activePieces.value) {
-    //petri dish, spread statuses here
-    if (piece.team === team) {
-      const statusMult = 1 + player.value.admins.filter(a => a.name === 'Volatile').length;
-      await piece.applyStatusEffects(statusMult);
-    }
-  };
-}
-
 const endTurn = async () => {
   hasFinishedTurn.value = true;
   selectedPiece.value = null;
@@ -1373,32 +1362,35 @@ const endTurn = async () => {
   player.value.canMove = false;
   player.value.canAction = false;
   await handleApplyAdmins('onTurnEnd', '');//sprinkler
-  await applyStatusEffects('player');
+  const statusMult = 1 + player.value.admins.filter(a => a.name === 'Volatile').length;
   for (const piece of activePieces.value) {
     if (piece.team === 'player') {
+      await piece.applyStatusEffects(statusMult);
       piece.resetDefence();
     }
     if (piece.team === 'enemy') {
-      piece.resetTempModifiers();
+      await piece.resetTempModifiers();
       piece.actions = 1;
+      await piece.applyStartingStatusEffects(statusMult);
       piece.resetMoves();
       piece.willRetaliate = false;
     }
   };
   await enemyTurn();
-  await applyStatusEffects('enemy');
   //player piece tempstats reset
   await handleApplyAdmins('onEnemyTurnEnd', '');
   for (const piece of activePieces.value) {
     if (piece.team === 'enemy') {
+      await piece.applyStatusEffects(statusMult);
       piece.resetDefence();
       piece.statuses.enraged = false;
     }
     if (piece.team === 'player') {
-      piece.resetTempModifiers();
+      await piece.resetTempModifiers();
       piece.actions = 1;
+      await piece.applyStartingStatusEffects(statusMult);
       piece.resetMoves();
-      piece.willRetaliate = false;//
+      piece.willRetaliate = false;
     }
   };
   if (isFirstTurn) {

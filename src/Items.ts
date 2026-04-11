@@ -428,16 +428,16 @@ export class Beans extends Item<Piece> {
     }
 }
 
-export class ShootingStar extends Item<Piece> {
+export class ShootingStar extends Item<PieceBlueprint> {
     static name = "Shooting Star";
-    static description = "Make a placed program immune to all harmful statuses";
+    static description = "Make a program immune to all harmful statuses";
     static unicode = "U+1F320";
     static color = "#1e023dff";
     static rarity = 3;
     constructor() {
         super(ShootingStar.name, ShootingStar.description, ShootingStar.unicode, ShootingStar.color, 2, ShootingStar.rarity, 'piece')
     }
-    apply(target: Piece, _itemMult: number) {
+    apply(target: PieceBlueprint, _itemMult: number) {
         target.immunities = {
             diseased: true,
             slowed: true,

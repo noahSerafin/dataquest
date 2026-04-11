@@ -18,16 +18,16 @@
 
     function getUnlockRule(osName: string): string | null {
         if (osName === 'Penguin') {
-            if (!props.debugMode || !StorageManager.hasAnyWin()) return "Win with any operator";
+            if (!props.debugMode && !StorageManager.hasAnyWin()) return "Win with any operator";
         }
         if (osName === 'Temple') {
-            if (!props.debugMode || StorageManager.getUniqueWinsCount() < 3) return "Win with 3 different operators";
+            if (!props.debugMode && StorageManager.getUniqueWinsCount() < 3) return "Win with 3 different operators";
         }
         if (osName === 'Fortran') {
-            if (!props.debugMode || !StorageManager.hasStakeWin(2)) return "Win with at least 2 infamy";
+            if (!props.debugMode && !StorageManager.hasStakeWin(2)) return "Win with at least 2 infamy";
         }
         if (osName === 'Cobol') {
-            if (!props.debugMode || StorageManager.getUniqueWinsCount() < 5) return "Win with 5 different operators";
+            if (!props.debugMode && StorageManager.getUniqueWinsCount() < 5) return "Win with 5 different operators";
         }
         return null;
     }

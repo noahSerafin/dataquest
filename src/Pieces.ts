@@ -910,6 +910,7 @@ class Nerf extends Piece {
     target.addModifier({range: -1})
     target.addModifier({attack: -1})
     target.addModifier({defence: -1})
+    this.actions --
   }
 }
 
@@ -1626,14 +1627,14 @@ class Elephant extends Piece {
   static color = "rgb(228, 217, 195)";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Elephant.name, Elephant.description, Elephant.unicode, 5, 2, 1, 2, 2, Elephant.color, headPosition, [headPosition], team, Elephant.rarity, removeCallback, id)
+   super(Elephant.name, Elephant.description, Elephant.unicode, 5, 2, 1, 3, 2, Elephant.color, headPosition, [headPosition], team, Elephant.rarity, removeCallback, id)
   }
   //special - trample
 }
 
 class Mammoth extends Piece {
   static name = "Mammoth";
-  static description = "A larger Elephant";
+  static description = "A larger, tougher Elephant";
   static unicode = "U+1F9A3"
   static color = "rgb(206, 228, 236)";
   static rarity = 4;
@@ -2943,20 +2944,39 @@ export class Dolls extends Piece {//finished? test, will have to be handled in a
 
 class UFO extends Piece {
   static name = "UFO";
-  static description = "A strong ranged program that can damage and confuse enemies";// that can move enemies away from itself";//without increasing size?? And traverse gaps?
+  static description = "A strong ranged program that can pull enemy's heads toward itself, confusing them. Or damaging if already confused.";// that can move enemies away from itself";//without increasing size?? And traverse gaps?
   static unicode = "U+1F6F8";
   static color = "#000d47ff";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(UFO.name, UFO.description, UFO.unicode, 4, 3, 3, 3, 2, UFO.color, headPosition, [headPosition], team, UFO.rarity, removeCallback, id)
+    super(UFO.name, UFO.description, UFO.unicode, 4, 3, 3, 4, 2, UFO.color, headPosition, [headPosition], team, UFO.rarity, removeCallback, id)
     this.specialName = 'abduct'
-    this.targetType = 'piece'
+    this.targetType = 'line'
   }
-  async special(targetPiece: Piece):Promise<void>{  
-    if(targetPiece.statuses.confused === true){
-      targetPiece.takeDamage(this.getStat('attack'));
-    } else if(!targetPiece.immunities.confused){
-      targetPiece.statuses.confused = true;
+  async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
+    for (let i = 0; i < line.length; i++) {
+      if (i + 1 >= line.length) break;
+      const here = line[i];
+      const next = line[i + 1];
+      const occupierHere = activePieces.find(p =>
+        p.tiles.some(t => t.x === here.x && t.y === here.y)
+      );
+      if (occupierHere) continue;  
+      // Tile is *not* empty → cannot pull anything into it
+      const occupierNext = activePieces.find(p =>
+        p.tiles.some(t => t.x === next.x && t.y === next.y)
+      );
+      if (!occupierNext) continue;
+      // Pull occupier 1 step closer
+      //occupierNext.moveTo(here);
+      //without making them grow
+      occupierNext.headPosition = here;
+      occupierNext.tiles[0] = here;
+      if(occupierNext.statuses.confused === true){
+        occupierNext.takeDamage(this.getStat('attack'));
+      } else if(!occupierNext.immunities.confused){
+        occupierNext.statuses.confused = true;
+      }
     }
     this.actions--
   }
@@ -3193,11 +3213,11 @@ class Daemon extends Piece {
    this.specialName = 'Chug'
   }
   async special(targetPiece: Piece):Promise<void>{
-    if(!targetPiece.immunities.slowed){
-      targetPiece.statuses.slowed = true
-    } else if(targetPiece.statuses.slowed){
+    if(targetPiece.statuses.slowed){
       targetPiece.takeDamage(this.getStat('attack'));
       if(targetPiece.willRetaliate) await this.takeDamage(targetPiece.getStat('attack'))
+    } else if(!targetPiece.immunities.slowed){
+      targetPiece.statuses.slowed = true
     }
     this.actions--
   }
@@ -3215,11 +3235,11 @@ class Archdaemon extends Piece {
    this.immunities.slowed = true;
   }
   async special(targetPiece: Piece):Promise<void>{
-    if(!targetPiece.immunities.slowed){
-      targetPiece.statuses.slowed = true
-    } else if(targetPiece.statuses.slowed){
+    if(targetPiece.statuses.slowed){
       targetPiece.takeDamage(this.getStat('attack'));
       if(targetPiece.willRetaliate) await this.takeDamage(targetPiece.getStat('attack'))
+    } else if(!targetPiece.immunities.slowed){
+      targetPiece.statuses.slowed = true
     }
     this.actions--
   }
@@ -3627,7 +3647,7 @@ class Alien extends Piece {
   static color = "rgb(130, 46, 131)";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-  super(Alien.name, Alien.description, Alien.unicode, 2, 2, 3, 4, 2, Alien.color, headPosition, [headPosition], team, Alien.rarity, removeCallback, id)
+  super(Alien.name, Alien.description, Alien.unicode, 2, 2, 3, 3, 1, Alien.color, headPosition, [headPosition], team, Alien.rarity, removeCallback, id)
     this.specialName = 'Bluebeam';
     this.targetType = 'group'
   }

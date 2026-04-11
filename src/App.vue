@@ -670,7 +670,7 @@ const openShop = () => {
 }
 const closeShop = () => {
   showShop.value = false;
-  if(!shopDisabled){
+  if(!shopDisabled.value && canProceedFromShop.value){
     refreshShop(true);
   }
   canProceedFromShop.value = false;

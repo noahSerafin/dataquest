@@ -54,7 +54,7 @@ const canBuyItem = ((item: Item) => {
   if (item instanceof Admin) {
     return (props.player.effectiveMoney >= item.cost || canSteal.value ) && props.player.admins.length < props.player.adminSlots;
   }
-  const hasTrolley = props.player.hasTrolley;
+  const hasTrolley = props.player.hasAdmin('Schoolbag');
   //const hasToolbox = props.player.hasAdmin('Schoolbag');
   const hasSpace = hasTrolley ? props.player.usedMemory <= props.player.memory-0.5 : props.player.usedMemory <= props.player.memory-1;
   

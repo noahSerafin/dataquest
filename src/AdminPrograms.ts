@@ -473,7 +473,7 @@ class Needle extends Admin {//needs some kind of nerf, increase max size only?
 
 class Rune extends Admin {
   static name = "Rune";//
-  static description = "Programs with a range of 1 on attacking get +1 damage multiplyer";
+  static description = "Your programs with a range of 1 on attacking get +1 damage multiplyer";//all programs?
   static unicode = "U+16B1";
   static color = "#640909ff";
   static rarity = 3;
@@ -3170,25 +3170,27 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //TUMBLER GLASS, U+1F943 Mean drunk enraged and confused on load + damage mult
 //BOTTLE WITH POPPING CORK, U+1F37E buff after each boss defeated? //like rainbow but some other reward, pinata?
 //RIGHTWARDS PUSHING HAND, U+1FAF8 Left Hand Path - going left buffs pieces //(difficulty === player difficulty && player map progress = 1)
-//BUTTER, U+1F9C8 moves your pieces randomly after health damage?
+//stone age all pieces are range 1
 // SURFER, U+1F3C4 //move into a free space after taking damage (even defensive)
 //RECYCLING SYMBOL, U+2672 selling programs gives 1 of lower rarirty
+//pre rune - 1 range on attack?
+//BUTTER, U+1F9C8 moves your pieces randomly after health damage?
 
-//JEANS, U+1F456 effect compiler
-//SLEUTH OR SPY, U+1F575
-//TEACUP WITHOUT HANDLE, U+1F375 calm down
-//basketball and HOOP, U+1F3C0 slam dunk
+//JEANS, U+1F456 effect compiler +1 defence for hybrids on creation
+//SLEUTH OR SPY, U+1F575 
+//TEACUP WITHOUT HANDLE, U+1F375 calm down, removes enraged from enemies
+//basketball and HOOP, U+1F3C0 - range of 3+ gets +3 attack
 //SNOWBOARDER, U+1F3C2
-//WOMANS BOOTS, U+1F462
-// LIPSTICK, U+1F484
+//WOMANS BOOTS, U+1F462 +1 moves +1 max size
+// LIPSTICK, U+1F484 retaliations charm enemies
 
 // challenge nodes?
 //DESERT ISLAND, U+1F3DD
 //DESERT, U+1F3DC
 //DERELICT HOUSE BUILDING, U+1F3DA
-//STADIUM, U+1F3DF
+//STADIUM, U+1F3DF colloseum -  1 on 1
 //U+26F0 mountain
-//landslide U+1F6D8
+//landslide U+1F6D8 
 
 //U+1F5BC Framed picture - copy items?
 

@@ -127,7 +127,7 @@
         if(!props.player.hasAdmin('World Map') && node.type !== 'shop' || (!props.player.hasAdmin('Crystal Ball') && node.type === 'shop')){
             if (!canClick(node)) return;
         }
-        if(props.player.hasAdmin('Crystal Ball') && node.type === 'shop' && (selectedPreviewNode.value && node.next.includes(selectedPreviewNode.value.id))){//
+        if(props.player.hasAdmin('Crystal Ball') && node.type === 'shop' && (selectedPreviewNode.value && node.next.includes(selectedPreviewNode.value.id))){//&& !node.next.includes(selectedPreviewNode.value.id ?? if shop is next node we actually want to open it regularly
             emit('openDisabledShop')
         } else {    
             selectedPreviewNode.value = node;

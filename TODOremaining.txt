@@ -1,6 +1,17 @@
-finish TUTORIAL - make more handholdy?
+TUTORIAL - make more handholdy?
 variant tooltips
 -
+//IMPROVEMENTS
+nerf alien dmg or buff ufo? or make ufo spawn aliens? - test
+early hidden shop not refreshing on progression. because we don't proceed?? - test fix
+crystal ball stopping shop progression - once seed is sorted let it also preview node contents
+make status appliers check for status and attack if not (could be done through immunities) - for players benefit
+-
+make a pre-rune that sets all (your?) ranges to 1 on enemyturnend
+Stone age sets all ranges to one?
+Array piece like banner that buffs range?
+let enemy helicopter travel 2 spaces
+
 
 // BUGS
 Enemy traps not trying to walk into players

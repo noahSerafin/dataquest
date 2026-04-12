@@ -1,5 +1,5 @@
 import { pickWeightedRandomItem } from "./helperFunctions";
-import { Box, Gift, Item, upgradeItems } from "./Items";
+import { Box, Gift, Item, Pinata, upgradeItems } from "./Items";
 import { Piece, allPieces } from "./Pieces";
 import { Player } from "./Player";
 import type { Coordinate, PieceBlueprint, StatModifier, StatusKey } from "./types";
@@ -2868,7 +2868,7 @@ class Christmas extends Admin {
   }
 
   async apply({ player }: { player: Player }) {
-    if (player.mapProgress >= 3 && (player.freeMemory >= 1 || player.hasAdmin('Schoolbag') && player.freeMemory >= 0.5)) {
+    if (player.mapProgress >= 2 && (player.freeMemory >= 1 || player.hasAdmin('Schoolbag') && player.freeMemory >= 0.5)) {
       const gift = new Gift;
       player.items.push(gift);
     }
@@ -2885,7 +2885,7 @@ class Butler extends Admin {
   }
 
   async apply({ player }: { player: Player }) {
-    if (player.mapProgress >= 3 && (player.freeMemory >= 1 || player.hasAdmin('Schoolbag') && player.freeMemory >= 0.5)) {
+    if (player.mapProgress >= 2 && (player.freeMemory >= 1 || player.hasAdmin('Schoolbag') && player.freeMemory >= 0.5)) {
       const gift = pickWeightedRandomItem(upgradeItems, player);
       player.items.push(gift);
     }
@@ -3083,7 +3083,7 @@ class Daisy extends Admin {// test
     }
   }
 }
-/*
+
 //PERSON IN LOTUS POSITION, U+1F9D8 stationary programs gain +1 max size
 class Meditation extends Admin {//needs reviewing
   static name = "Meditation";
@@ -3100,12 +3100,13 @@ class Meditation extends Admin {//needs reviewing
       if (piece.team === 'player' && !piece.statuses.hidden) {
         if (piece.movesRemaining === piece.getStat('moves')) {
           piece.statuses.zen = true;
+        } else {
+          piece.statuses.zen = false;
         }
       }
     };
   }
 }
-
 //TUMBLER GLASS, U+1F943 Mean drunk enraged and confused on load + damage mult
 class Drunk extends Admin {
   static name = "Mean Drunk";
@@ -3128,9 +3129,9 @@ class Drunk extends Admin {
   }
 }
 
-class StoneAge extends Admin {//needs reviewing
+export class StoneAge extends Admin {//needs reviewing
   static name = "Stone Age";
-  static description = "Sets all pieces range to 1 on the end of every turn";
+  static description = "Fixes all pieces' range to 1 on the end of every turn";
   static unicode = "U+1FAA8";
   static color = "rgb(109, 147, 159)";
   static rarity = 2;
@@ -3147,27 +3148,26 @@ class StoneAge extends Admin {//needs reviewing
 //BOTTLE WITH POPPING CORK, U+1F37E buff after each boss defeated? 7
 class Huzzah extends Admin {
   static name = "Huzzah";
-  static description = "Gain a pinata with random admin inside after beating a boss";
+  static description = "Gain a pinata with a random admin inside after beating a boss";
   static unicode = "U+1F37E";
-  static color = "rgb(241, 119, 223)";
+  static color = "rgb(77, 1, 74)";
   static rarity = 3;
   constructor() {
     super(Huzzah.name, Huzzah.description, Huzzah.unicode, Huzzah.color, 3, Huzzah.rarity, 'player', 'onRoundEnd')
   }
   async apply({ player }: { player: Player }) {
-    if (player.mapProgress >= 3 && (player.freeMemory >= 1 || player.hasAdmin('Schoolbag') && player.freeMemory >= 0.5)) {
+    if (player.mapProgress >= 2 && (player.freeMemory >= 1 || player.hasAdmin('Schoolbag') && player.freeMemory >= 0.5)) {
       const pinata = new Pinata;
       player.items.push(pinata);
     }
   }
 }
 
-//RIGHTWARDS PUSHING HAND, U+1FAF8 Left Hand Path - going left buffs pieces //(difficulty === player difficulty && player map progress = 1)
 class Lefty extends Admin {
   static name = "Left Hand Path";
-  static description = "Your programs gain +1 to all stats every non boss node your enter that equals your current security level";// too easy, make right hand instead
-  static unicode = "U+1FAF8";
-  static color = "rgb(241, 119, 223)";
+  static description = "Your programs gain +1 attack every non boss node your enter that equals your current security level";// too easy, make right hand instead
+  static unicode = "U+1FAF2";//"U+1FAF8";
+  static color = "rgb(32, 32, 32)";
   static rarity = 6;
   constructor() {
     super(Lefty.name, Lefty.description, Lefty.unicode, Lefty.color, 3, Lefty.rarity, 'player', 'onRoundStart')
@@ -3175,16 +3175,30 @@ class Lefty extends Admin {
   async apply({ player }: { player: Player }) {
     if (player.mapProgress < 3 && (player.extraDifficulty === 0)) {
       for(const bp of player.programs){
-        bp.maxSize += 1;
-        bp.moves += 1;
-        bp.range += 1;
         bp.attack += 1;
+      }
+    }
+  }
+}
+
+class Righty extends Admin {
+  static name = "Right Hand Path";
+  static description = "Your programs gain +1 defence for every node your enter that has a highter security level than your own";// too easy, make right hand instead
+  static unicode = "U+1FAF1";//"U+1FAF7";//"U+1F91A";
+  static color = "rgb(32, 32, 32)";
+  static rarity = 6;
+  constructor() {
+    super(Righty.name, Righty.description, Righty.unicode, Righty.color, 3, Righty.rarity, 'player', 'onRoundStart')
+  }
+  async apply({ player }: { player: Player }) {
+    if (player.mapProgress < 3 && (player.extraDifficulty !== 0)) {
+      for(const bp of player.programs){
         bp.defence += 1;
       }
     }
   }
 }
-*/
+
 /*
 //SPLATTER, U+1FADF
 //SPLASHING SWEAT SYMBOL, U+1F4A6
@@ -3233,7 +3247,7 @@ export class Clippy extends Admin {
   //handle in player
 }
 
-export const allAdmins = [Bank, Bucket, Candle, Cheese, Clippy, Smoker, Compass, CreditCard, Crystal, Glasses, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Trolley, Seed, Slots, Sprinkler, Tempura, Nose, Sneakers, Bipolar, Chime, Abacus, Aesculapius, Appraisal, Balloon, Briefcase, Bubble, Cactus, Coin, Purse, Convenience, FireEngine, Heart, Hermes, Joker, Loot, Clover, Microscope, Newspaper, Pickup, Putter, Relay, Scarf, Stiletto, Mail, Bowling, Violin, Vitamins, Wings, AdminMap, Barber, Ace, AirSupport, Bone, Bouquet, Camp, Luggage, Chain, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Dice, Jammer, Roger, Juggler, Ladder, Puzzle, Razor, Sled, Rune, Shades, Stonks, Christmas, Telescope, Crown, Toolbox, Tracker, Ambulance, Backdoor, BionicArm, BionicLeg, Crash, Blood, Broom, DartBoard, Butler, Dove, Evergreen, Eye, Discount, Fountain, Feather, Fuel, Spoon, Liberty, Lightbulb, Ollie, Palette, Pazzaz, PetriDish, Prayer, Wheel, Salt, Selfie, Pants, Variety, Volatile, Artic, BlackBelt, Lungs, Chemistry, Chivalry, Toilet, Copier, Daisy, Diamond, Hamsa, Skyscraper, Howzat, Inheritance, Cherries, Lotus, Brain, Meteor, Monarch, Onion, PeaPod, Teddy, Pong, RollerBlades, Bell, Baseball, Ice, Ballet, Umbrella, Dharma, Bath, Cards, Disco, Minerva, Needle, Pi, Osiris, Ring, School, Taoism];
+export const allAdmins = [Bank, Bucket, Candle, Cheese, Clippy, Smoker, Compass, CreditCard, Crystal, Glasses, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Trolley, Seed, Slots, Sprinkler, StoneAge, Tempura, Nose, Sneakers, Bipolar, Chime, Abacus, Aesculapius, Appraisal, Balloon, Briefcase, Bubble, Cactus, Coin, Purse, Convenience, FireEngine, Heart, Hermes, Joker, Loot, Clover, Microscope, Newspaper, Pickup, Putter, Relay, Scarf, Stiletto, Mail, Bowling, Violin, Vitamins, Wings, AdminMap, Barber, Ace, AirSupport, Bone, Bouquet, Camp, Huzzah, Luggage, Chain, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Dice, Jammer, Roger, Juggler, Ladder, Puzzle, Razor, Sled, Rune, Shades, Stonks, Christmas, Telescope, Crown, Toolbox, Tracker, Ambulance, Backdoor, BionicArm, BionicLeg, Crash, Blood, Broom, DartBoard, Butler, Dove, Drunk, Evergreen, Eye, Discount, Fountain, Feather, Fuel, Spoon, Liberty, Lightbulb, Ollie, Palette, Pazzaz, PetriDish, Prayer, Wheel, Salt, Selfie, Pants, Variety, Volatile, Artic, BlackBelt, Lungs, Chemistry, Chivalry, Toilet, Copier, Daisy, Diamond, Hamsa, Skyscraper, Howzat, Inheritance, Cherries, Lotus, Brain, Meditation, Meteor, Monarch, Onion, PeaPod, Teddy, Pong, RollerBlades, Bell, Baseball, Ice, Ballet, Umbrella, Dharma, Bath, Cards, Disco, Lefty, Minerva, Needle, Pi, Osiris, Righty, Ring, School, Taoism];
 console.log('admins length: ', allAdmins.length)
 let adminLogs = {
   rarity1: 0,

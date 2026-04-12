@@ -265,6 +265,7 @@
 }
 .padded{
     padding: 20px;
+    margin: 0;
 }
 .item-selection {
     margin-top: 20px;

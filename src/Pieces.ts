@@ -3806,13 +3806,13 @@ class Lion extends Piece {
 
 class Bear extends Piece {
   static name = "Grizzly";
-  static description = "A slow, powerful program that can pounce to move to a target, deal damage, and reduce it's moves by 2.";
+  static description = "A slow, powerful program that can maul to move to a target, deal damage, and reduce it's moves by 2.";
   static unicode = "U+1F43B";
   static color = "rgb(1, 101, 8)";
   static rarity = 6;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Bear.name, Bear.description, Bear.unicode, 5, 1, 2, 7, 3, Bear.color, headPosition, [headPosition], team, Bear.rarity, removeCallback, id)
-   this.specialName = 'Pounce';
+   this.specialName = 'Maul';
    //this.targetType = 'piece';
     this.targetType = 'line';
   }  

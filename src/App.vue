@@ -1581,7 +1581,7 @@ function toggleDebug() {
           <div>{{ currentCompany.abbr }}</div>
           <div>{{ currentCompany.unicode ? String.fromCodePoint(parseInt(currentCompany.unicode.replace('U+', ''), 16), 0xFE0F) : '' }}</div>
         </span>
-        <p class="security"><strong>Security level: </strong>{{ player.difficulty + extraDifficulty }}</p>
+        <p class="security"><strong>Security level: </strong>{{ player.difficulty + player.extraDifficulty }}</p>
         <p class="infamy"><strong>Infamy: </strong>{{ stake }}</p>
         <span class="enemy-bosses">
           <BossView v-if="bossAdmins.length > 0" :admins="bossAdmins" />

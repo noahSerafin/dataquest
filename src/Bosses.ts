@@ -1012,12 +1012,12 @@ class Taxman extends Admin {
 
 class Rage extends Admin {
     static name = "Rage";
-    static description = "Enemy programs that take health damage become enraged";
+    static description = "Enemy programs that take health damage from attacks become enraged";
     static unicode = "U+1F620";//"U+1F4A2";
     static color = "rgb(92, 0, 0)";
     static rarity = 2;
     constructor() {
-        super(Rage.name, Rage.description, Rage.unicode, Rage.color, 3, Rage.rarity, 'gameState', 'onDealDamage')
+        super(Rage.name, Rage.description, Rage.unicode, Rage.color, 3, Rage.rarity, 'gameState', 'onDealDamage')//onTurnEnd?
     }
     async apply({ id, activePieces, piece }: { id: string, activePieces: Piece[], piece: Piece }) {
         if(!piece) return;

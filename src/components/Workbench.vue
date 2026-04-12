@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { ref, computed } from 'vue';
     import type { PieceBlueprint, StatKey } from '../types';
     import { Player } from '../Player';
     import BlueprintView from './BlueprintView.vue';
@@ -35,6 +35,27 @@
 
     // Track original stats for the 5-point limit
     const originalStats = ref<Record<StatKey, number> | null>(null);
+
+    const isModified = computed(() => {
+        if (!workingBP.value || !originalStats.value) return false;
+        return (
+            workingBP.value.maxSize !== originalStats.value.maxSize ||
+            workingBP.value.moves !== originalStats.value.moves ||
+            workingBP.value.range !== originalStats.value.range ||
+            workingBP.value.attack !== originalStats.value.attack ||
+            workingBP.value.defence !== originalStats.value.defence
+        );
+    });
+
+    function resetStats() {
+        if (!originalStats.value || !workingBP.value) return;
+        workingBP.value.maxSize = originalStats.value.maxSize;
+        workingBP.value.moves = originalStats.value.moves;
+        workingBP.value.range = originalStats.value.range;
+        workingBP.value.attack = originalStats.value.attack;
+        workingBP.value.defence = originalStats.value.defence;
+        freePoints.value = 0;
+    }
 
     function tweakStats(statToChange: StatKey, changeNum: number) {
         if (!workingBP.value || !originalStats.value) return;
@@ -82,9 +103,7 @@
             cost: workingBP.value.cost,
             immunities: workingBP.value.immunities
         }
-        if(workingBP.value.variantName){
-            resultBP.value.variantName = 'Modded';
-        }
+        resultBP.value.variantName = 'Modded';
         if(workingBP.value.hybridName){
             resultBP.value.hybridName = workingBP.value.hybridName;
             resultBP.value.extraUnicode = workingBP.value.extraUnicode;
@@ -142,7 +161,7 @@
 <template>
   <div class="container workbench">
     <h4>WORKBENCH {{ String.fromCodePoint(parseInt("U+2699".replace('U+', ''), 16), 0xFE0F) }}</h4>
-    <p class="padded">Reassign up to 5 stat points of 1 program</p>
+    <p class="no-margin">Reassign up to 5 stat points of 1 program</p>
     <!-- Slots -->
     <div class="slots">
         <div class="slot-container">
@@ -164,70 +183,94 @@
             :class="'placed-'+primaryBP.isPlaced"
             @select="select(primaryBP)"
             />
+             <!-- Result preview -->
+            <BlueprintView
+                v-if="resultBP"
+                :key="resultBP.id"
+                :blueprint="resultBP"
+                :tileSize="60"
+                cssclass="inventory"
+                :class="'placed-'+resultBP.isPlaced"
+                @select="select(resultBP)"
+            />
+            <BlueprintController
+                v-if="selectedBP"
+                :piece="selectedBP"
+                mode="shop"
+                :canBuy="false"
+                :canPlace="false"
+                :defaultPosition="{ x: 0, y: 0 }"
+                @close="deselect"
+            />
             </div>
+            <button v-if="primaryBP" class="btn-cancel-slot" @click="removePrimary">Cancel</button>
         </div>    
     </div>
     <div v-if="workingBP" class="statMods">
-        <div class="free-points">Free Points: {{ freePoints }} / 5</div>
-        <div class="flex">
-            <div class="maxSize">Max Size: {{ workingBP.maxSize }}
-                <button @click="tweakStats('maxSize', 1)">+</button>
-                <button @click="tweakStats('maxSize', -1)">-</button>
+        <div class="free-points">Free Points: <span class="text-yellow">{{ freePoints }}</span> / 5</div>
+        <div class="stats-row">
+            <div class="stat-control">
+                <div class="stat-label">Size</div>
+                <div class="stat-original" v-if="workingBP.maxSize !== originalStats?.maxSize">{{ originalStats?.maxSize }}</div>
+                <div class="stat-value">{{ workingBP.maxSize }}</div>
+                <div class="stat-btns">
+                    <button class="small-btn" @click="tweakStats('maxSize', 1)">+</button>
+                    <button class="small-btn" @click="tweakStats('maxSize', -1)">-</button>
+                </div>
             </div>
-            <div class="moves">Moves: {{ workingBP.moves }}
-                <button @click="tweakStats('moves', 1)">+</button>
-                <button @click="tweakStats('moves', -1)">-</button>
+            <div class="stat-control">
+                <div class="stat-label">Moves</div>
+                <div class="stat-original" v-if="workingBP.moves !== originalStats?.moves">{{ originalStats?.moves }}</div>
+                <div class="stat-value">{{ workingBP.moves }}</div>
+                <div class="stat-btns">
+                    <button class="small-btn" @click="tweakStats('moves', 1)">+</button>
+                    <button class="small-btn" @click="tweakStats('moves', -1)">-</button>
+                </div>
             </div>
-            <div class="range">Range: {{ workingBP.range }}
-                <button @click="tweakStats('range', 1)">+</button>
-                <button @click="tweakStats('range', -1)">-</button>
+            <div class="stat-control">
+                <div class="stat-label">Range</div>
+                <div class="stat-original" v-if="workingBP.range !== originalStats?.range">{{ originalStats?.range }}</div>
+                <div class="stat-value">{{ workingBP.range }}</div>
+                <div class="stat-btns">
+                    <button class="small-btn" @click="tweakStats('range', 1)">+</button>
+                    <button class="small-btn" @click="tweakStats('range', -1)">-</button>
+                </div>
             </div>
-            <div class="attack">Attack: {{ workingBP.attack }}
-                <button @click="tweakStats('attack', 1)">+</button>
-                <button @click="tweakStats('attack', -1)">-</button>
+            <div class="stat-control">
+                <div class="stat-label">Attack</div>
+                <div class="stat-original" v-if="workingBP.attack !== originalStats?.attack">{{ originalStats?.attack }}</div>
+                <div class="stat-value">{{ workingBP.attack }}</div>
+                <div class="stat-btns">
+                    <button class="small-btn" @click="tweakStats('attack', 1)">+</button>
+                    <button class="small-btn" @click="tweakStats('attack', -1)">-</button>
+                </div>
             </div>
-            <div class="defence">Defence: {{ workingBP.defence }}
-                <button @click="tweakStats('defence', 1)">+</button>
-                <button @click="tweakStats('defence', -1)">-</button>
+            <div class="stat-control">
+                <div class="stat-label">Defence</div>
+                <div class="stat-original" v-if="workingBP.defence !== originalStats?.defence">{{ originalStats?.defence }}</div>
+                <div class="stat-value">{{ workingBP.defence }}</div>
+                <div class="stat-btns">
+                    <button class="small-btn" @click="tweakStats('defence', 1)">+</button>
+                    <button class="small-btn" @click="tweakStats('defence', -1)">-</button>
+                </div>
             </div>
         </div>
+        <button class="btn-reset" :disabled="!isModified" @click="resetStats">Reset Stats</button>
     </div>
-
     <!-- Compile -->
-    <button
-      :disabled="!primaryBP"
-      @click="applyStatMods"
-    >
-      Apply
-    </button>
-
-    <!-- Result preview -->
-    <BlueprintView
-        v-if="resultBP"
-        :key="resultBP.id"
-        :blueprint="resultBP"
-        :tileSize="60"
-        cssclass="inventory"
-        :class="'placed-'+resultBP.isPlaced"
-        @select="select(resultBP)"
-    />
-    <BlueprintController
-        v-if="selectedBP"
-        :piece="selectedBP"
-        mode="shop"
-        :canBuy="false"
-        :canPlace="false"
-        :defaultPosition="{ x: 0, y: 0 }"
-        @close="deselect"
-    />
-
-    <button
-      v-if="resultBP"
-      @click="collect"
-    >
-      Collect
-    </button>
     <div class="btns">
+        <button
+        :disabled="!primaryBP || !isModified"
+        @click="applyStatMods"
+        >
+        Apply
+        </button>
+        <button
+        v-if="resultBP"
+        @click="collect"
+        >
+        Collect
+        </button>
         <button @click="cancel">Cancel</button>
         <button @click="skip">Skip</button>
     </div>
@@ -266,7 +309,66 @@
     justify-content: space-between;
     gap: 2rem;
 }
-.padded{
-    padding: 20px;
+.no-margin{
+    margin: 0;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.statMods {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+}
+.stats-row {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    width: 100%;
+}
+.stat-control {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    min-width: 60px;
+}
+.stat-label {
+    font-size: 0.8rem;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.stat-original {
+    font-size: 0.7rem;
+    color: #666;
+    height: 0.8rem;
+}
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+.stat-btns {
+    display: flex;
+    gap: 0.5rem;
+}
+.small-btn {
+    padding: 2px 8px;
+    font-size: 0.9rem;
+}
+.btn-reset {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    padding: 4px 12px;
+}
+.btn-cancel-slot {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    background-color: #331111;
+    border-color: #662222;
+}
+.btn-cancel-slot:hover {
+    background-color: #552222;
 }
 </style>

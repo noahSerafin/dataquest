@@ -1,5 +1,5 @@
 import { pickWeightedRandomItem } from "./helperFunctions";
-import { Box, Gift, Item, Pinata, upgradeItems } from "./Items";
+import { Box, Gift, Item, upgradeItems } from "./Items";
 import { Piece, allPieces } from "./Pieces";
 import { Player } from "./Player";
 import type { Coordinate, PieceBlueprint, StatModifier, StatusKey } from "./types";
@@ -3083,7 +3083,7 @@ class Daisy extends Admin {// test
     }
   }
 }
-
+/*
 //PERSON IN LOTUS POSITION, U+1F9D8 stationary programs gain +1 max size
 class Meditation extends Admin {//needs reviewing
   static name = "Meditation";
@@ -3105,6 +3105,7 @@ class Meditation extends Admin {//needs reviewing
     };
   }
 }
+
 //TUMBLER GLASS, U+1F943 Mean drunk enraged and confused on load + damage mult
 class Drunk extends Admin {
   static name = "Mean Drunk";
@@ -3183,7 +3184,7 @@ class Lefty extends Admin {
     }
   }
 }
-
+*/
 /*
 //SPLATTER, U+1FADF
 //SPLASHING SWEAT SYMBOL, U+1F4A6

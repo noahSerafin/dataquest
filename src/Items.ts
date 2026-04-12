@@ -1142,7 +1142,7 @@ export type ItemConstructor = new (...args: any[]) => Item<any>;
 
 console.log('all items: ', allItems.length);
 
-// /SCROLL, U+1F4DC
+// /SCROLL, U+1F4DC decree
 
 //PAGE WITH CURL, U+1F4C3
 

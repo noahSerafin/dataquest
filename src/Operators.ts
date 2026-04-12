@@ -22,7 +22,7 @@ import { createDefaultStatuses } from "./types";
     }
     const testPiece =  {
         id: crypto.randomUUID(),
-        name: "Daemon",
+        name: "Dolls",
         description: '"testing this pieces special move"',
         unicode: 'U+1F47E',
         maxSize: 2,

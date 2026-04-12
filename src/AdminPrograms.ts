@@ -921,7 +921,7 @@ class Chivalry extends Admin {
 class Roger extends Admin {
   static name = "Jolly Roger";
   static description = "Gain $1 per destroyed program";
-  static unicode = "U+2620";
+  static unicode = "U+1F571";//"U+2620";
   static color = "#000000ff";
   static rarity = 3;
   constructor() {

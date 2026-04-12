@@ -2938,18 +2938,6 @@ class Helicopter extends Piece {//unfinished, handle in app
   }
 }
 
-export class Dolls extends Piece {//finished? test, will have to be handled in app for sure, and a custom flag for hybrids
-  static name = "Nesting Dolls";
-  static description = "Replaced by a copy with -1 max size if destroyed"
-  static unicode = " U+1FA86";
-  static color = "#ff5a0dff";
-  static rarity = 6;
-  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Dolls.name, Dolls.description, Dolls.unicode, 3, 0, 1, 3, 0, Dolls.color, headPosition, [headPosition], team, Dolls.rarity, removeCallback, id)
-  }
-}
-
-
 class UFO extends Piece {
   static name = "UFO";
   static description = "A strong ranged program that can pull enemy's heads toward itself, confusing them. Or damaging if already confused.";// that can move enemies away from itself";//without increasing size?? And traverse gaps?
@@ -3046,7 +3034,7 @@ class Croc extends Piece {
 
 class Lighthouse extends Piece {
   static name = "Lighthouse";
-  static description = "A program the can expose and blind targets in a wide area";
+  static description = "A program that can expose and blind enemies in a wide area, as well as temporarily increase firendlies range by 1";
   static unicode = "U+1F6A8";
   static color = "#000000ff";
    static rarity = 4;
@@ -3056,6 +3044,7 @@ class Lighthouse extends Piece {
     this.targetType = 'group'
     this.canAttack = false;
     this.hasExposingSpecial = true;
+    this.hasFriendlySpecial = true;
   }
   async special(targets: Piece[]):Promise<void>{
     for (const t of targets) {
@@ -3067,6 +3056,8 @@ class Lighthouse extends Piece {
           t.statuses.hidden = false;
           t.statuses.exposed = true;
         }
+      } else {
+        t.addTempModifier({range: 1});
       }
     }
     this.actions--
@@ -3075,7 +3066,7 @@ class Lighthouse extends Piece {
 
 class Torch extends Piece {//remove from enemies for now
   static name = "Torch";
-  static description = "A long range program that can expose a group of targets";
+  static description = "A long range program that can expose a group of targets, and temporarily increase friendlies range by 1";
   static unicode = "U+1F526";
   static color = "#000000ff";
    static rarity = 3;
@@ -3085,6 +3076,7 @@ class Torch extends Piece {//remove from enemies for now
     this.targetType = 'group';//'line'
     this.canAttack = false;
     this.hasExposingSpecial = true;
+    this.hasFriendlySpecial = true;
   }
   //old line version
   /*async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
@@ -3106,6 +3098,8 @@ class Torch extends Piece {//remove from enemies for now
           t.statuses.hidden = false;
           t.statuses.exposed = true;
         }
+      } else {
+        t.addTempModifier({range: 1})
       }
     }
     this.actions--
@@ -4190,6 +4184,23 @@ class Super extends Piece {
   }
 }
 
+export class Dolls extends Piece {//finished? test, will have to be handled in app for sure, and a custom flag for hybrids
+  static name = "Nesting Dolls";
+  static description = "Replaced by a copy with -1 max size if destroyed"
+  static unicode = " U+1FA86";
+  static color = "#ff5a0dff";
+  static rarity = 6;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Dolls.name, Dolls.description, Dolls.unicode, 3, 0, 1, 3, 0, Dolls.color, headPosition, [headPosition], team, Dolls.rarity, removeCallback, id)
+  }
+}
+// ZOMBIE, U+1F9DF - only dies if head is attacked
+//LICH - U+1F480 summon zombies, if graveyard has pieces in?
+//FISHING POLE AND FISH, U+1F3A3 long range - move a piece toward it - magnet with long range
+//Pentagram - U+269D summons daemons
+// PARROT, U+1F99C like copycat but temp modifiers
+//taxi U+1F695 move other pieces (friendly) to it's tail?
+
 export const allPieces = [Ant, Banana, Bee, Egg, Knife, Potato, Rat, Shield, Sling, Snail, TP, Acorn, Aegis, Banner, Beetle, Bow, Bull, Chick, Chicken, Dagger, Decoy, Dog, Fence, Firework, Frond, Doctor, Gecko, Guard, Hedgehog, Jellyfish, Larva, Lance, Tree, Poop, Flute, Rooster, Saw, Snake, Tar, Vulture, Germ, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Buffalo, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, Hopper, LabRat, LadyBeetle, Magnet, Medic, Mosquito, Ninja, Octopus, Officer, Paladin, Wasp, Pawn, Peacock, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Alien, Arms, Axe, Cannon, Lightning, Palm, Bison, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Kite, Leopard, Lighthouse, Mammoth, Mine, Nerf, Oil, Puffer, Rabbit, Scarab, Shark, Snowman, Soldier, Squid, Stopwatch, Teargas, Tiger, Tradie, Bat, Wizard, Wolf, Zebra, Archdaemon, Recurve, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Gman, Giraffe, Hippo, Lion, Lovebomb, Orangutan, Paragon, Rhino, Screwdriver, Shovel, Shrike, Tank, Coat, UFO, Vampire, Bear, Helicopter, Gorilla, Greatshield, Nuke, Oni, Sol, Sponge, Super, Rex, Unicorn];//Dolls //100 +2 (web, ink)
 
 //companies
@@ -4300,16 +4311,12 @@ console.log("Pieces of rarity 5: ", adminLogs.rarity5)
 console.log("Pieces of rarity 6: ", adminLogs.rarity6)
 
 //TELEVISION, U+1F4FA charm piece - brainwash
-//fleur de lis U+269C scout, lay traps?
+//fleur de lis U+269C scout, lay traps? expose/Temp increase friendlies range.
 //building castle? creates a wall around it of 8 tiles 
 //🏗 crane  U+1F3D7
 
-//LICH - summon zombies if graveyard has pieces in
-// ZOMBIE, U+1F9DF
-//fix dolls
 //Invisible wall - hi defence hidden piece
 //U+1FAA8 rock boulder pick up speed not maxsize (worse snowman)
-//FISHING POLE AND FISH, U+1F3A3 long range - move a piece toward it - magnet with long range
 //acorn -> sapling -> oak then acorn can be rarity 1
 
 //chequered flag U+1F3C1
@@ -4319,9 +4326,9 @@ console.log("Pieces of rarity 6: ", adminLogs.rarity6)
 
 //FROG FACE, U+1F438 //range 3 low atk //poison/hop ability? FROG EGYPTIAN HIEROGLYPH I007, U+1318F
 // KANGAROO, U+1F998 hop
+//BACTRIAN CAMEL, U+1F42B
+//Dromidary
 
 //chess knight special move L shape
 
 //DANCER, U+1F483 //high movement no damage
-//BACTRIAN CAMEL, U+1F42B
-//Dromidary

@@ -4,7 +4,7 @@
     import { Player } from '../Player';
     import BlueprintView from './BlueprintView.vue';
     import BlueprintController from './BlueprintController.vue';
-    // NUT AND BOLT, U+1F529 //GEAR, U+2699
+    // NUT AND BOLT, U+1F529 //GEAR, U+2699 //hammer and pick U+2692
 
     const props = defineProps<{
         player: Player;

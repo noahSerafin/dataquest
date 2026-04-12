@@ -2,8 +2,6 @@ TUTORIAL - make more handholdy?
 variant tooltips
 -
 //IMPROVEMENTS
-nerf alien dmg or buff ufo? or make ufo spawn aliens? - test
-early hidden shop not refreshing on progression. because we don't proceed?? - test fix
 crystal ball stopping shop progression - once seed is sorted let it also preview node contents
 make status appliers check for status and attack if not (could be done through immunities) - for players benefit
 -

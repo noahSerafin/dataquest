@@ -69,8 +69,11 @@ function getIndividualPath(difficulty: number): PathSpec {
   }
   if (difficulty > 2 ){
     options.push({ type: 'skip',  mods: [0, 2], rewards: [0, 7] });
+    options.push({ type: 'hiddenAltar',  mods: [0, 1], rewards: [3, 5] });
     options.push({ type: 'hiddenAltar',  mods: [1, 2], rewards: [4, 7] });
+    options.push({ type: 'hiddenDuplicator',  mods: [0, 1], rewards: [3, 5] });
     options.push({ type: 'hiddenDuplicator',  mods: [1, 2], rewards: [4, 7] });
+    options.push({ type: 'hiddenWorkbench',  mods: [0, 1], rewards: [3, 5] });
     options.push({ type: 'hiddenWorkbench',  mods: [1, 2], rewards: [4, 7] });
     options.push({ type: 'hiddenCompiler',  mods: [0, 1], rewards: [3, 5] });
     options.push({ type: 'hiddenCompiler',  mods: [1, 2], rewards: [4, 7] });

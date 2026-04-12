@@ -3084,7 +3084,6 @@ class Daisy extends Admin {// test
   }
 }
 
-//PERSON IN LOTUS POSITION, U+1F9D8 stationary programs gain +1 max size
 class Meditation extends Admin {//needs reviewing
   static name = "Meditation";
   static description = "Your non-hidden programs that don't move temoprarily gain +1 to all stats";// to all stats on the end of your turn";
@@ -3107,7 +3106,7 @@ class Meditation extends Admin {//needs reviewing
     };
   }
 }
-//TUMBLER GLASS, U+1F943 Mean drunk enraged and confused on load + damage mult
+
 class Drunk extends Admin {
   static name = "Mean Drunk";
   static description = "Your pieces are enraged on load, gaining +1 attack, as well as +0.5 damage mult. But are also confused.";
@@ -3145,7 +3144,7 @@ export class StoneAge extends Admin {//needs reviewing
     };
   }
 }
-//BOTTLE WITH POPPING CORK, U+1F37E buff after each boss defeated? 7
+
 class Huzzah extends Admin {
   static name = "Huzzah";
   static description = "Gain a pinata with a random admin inside after beating a boss";

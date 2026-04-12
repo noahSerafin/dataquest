@@ -713,6 +713,7 @@
         height: fit-content;
         top: -35px;
         left: 175%;
+        width: 120px;
     }
     @media (max-width: 768px) {
         .world-map{

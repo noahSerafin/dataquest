@@ -632,7 +632,7 @@ async function reloadLevel() {
   playerSpawns.value = originalSpawns.value.map(s => ({ ...s }));//not working?
   console.log('playerSpawns:', playerSpawns.value);
   selectedPiece.value = null;
-  isPlacing.value = true
+  isPlacing.value = true;
   openSummary(false);
   await handleApplyAdmins('onRoundStart', '');
   roundHasStarted.value = true;
@@ -1350,7 +1350,6 @@ async function enemyTurn() {
   );
   checkForRoundEnd();
   playerSpawns.value = newPlacementHighlights();
-  hasFinishedTurn.value = false;
 }
 
 const endTurn = async () => {

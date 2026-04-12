@@ -3166,13 +3166,13 @@ class Lefty extends Admin {
   static name = "Left Hand Path";
   static description = "Your programs gain +1 attack every non boss node your enter that equals your current security level";// too easy, make right hand instead
   static unicode = "U+1FAF2";//"U+1FAF8";
-  static color = "rgb(32, 32, 32)";
+  static color = "rgb(150, 30, 0)";
   static rarity = 6;
   constructor() {
     super(Lefty.name, Lefty.description, Lefty.unicode, Lefty.color, 3, Lefty.rarity, 'player', 'onRoundStart')
   }
   async apply({ player }: { player: Player }) {
-    if (player.mapProgress < 3 && (player.extraDifficulty === 0)) {
+    if (player.mapProgress < 2 && (player.extraDifficulty === 0)) {
       for(const bp of player.programs){
         bp.attack += 1;
       }
@@ -3184,13 +3184,13 @@ class Righty extends Admin {
   static name = "Right Hand Path";
   static description = "Your programs gain +1 defence for every node your enter that has a highter security level than your own";// too easy, make right hand instead
   static unicode = "U+1FAF1";//"U+1FAF7";//"U+1F91A";
-  static color = "rgb(32, 32, 32)";
+  static color = "rgb(11, 0, 71)";
   static rarity = 6;
   constructor() {
     super(Righty.name, Righty.description, Righty.unicode, Righty.color, 3, Righty.rarity, 'player', 'onRoundStart')
   }
   async apply({ player }: { player: Player }) {
-    if (player.mapProgress < 3 && (player.extraDifficulty !== 0)) {
+    if (player.mapProgress < 2 && (player.extraDifficulty !== 0)) {
       for(const bp of player.programs){
         bp.defence += 1;
       }

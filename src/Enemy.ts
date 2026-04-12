@@ -70,12 +70,21 @@ function decideEnemyIntent(
       }
       //if(enemy.targetType == 'pieceAndPlace'){ see if we can target a non head tile first
       if(enemy.targetType == 'pieceAndPlace' && (target.piece.headPosition.x !== target.place.x || target.piece.headPosition.y !== target.place.y) && specialAttempts < 1){//rectify attempts later
+        const willDamageMoreThanOne = enemy.getStat('attack') > target.piece.defenceRemaining + 1;
+        const allAlreadyHaveStatus = enemy.appliesStatuses.length > 0 && enemy.appliesStatuses.every(s => target.piece.statuses[s] || target.piece.immunities[s]);
+        if((willDamageMoreThanOne || allAlreadyHaveStatus) && enemy.canAttack && enemy.getStat('attack') > 0){
+          return { type: 'attack', target: target.piece };
+        }
         return { type: 'special', target: {piece: target.piece, target: target.place}}//enemy still attacking- but should use this
       }
       if(enemy.targetType == 'placeAndPieces' && (target.piece.headPosition.x !== target.place.x || target.piece.headPosition.y !== target.place.y) && specialAttempts < 1){//rectify attempts later
         return { type: 'special', target: {target: target.place, activePieces: activePieces}}
       }
-      if(enemy.targetType === 'piece' && specialAttempts < 1){ ///can execute a special
+      if((enemy.targetType === 'piece' || enemy.targetType === 'pieceAndPlayer') && specialAttempts < 1){ ///can execute a special
+        const allStatusesApplied = enemy.appliesStatuses.length > 0 && enemy.appliesStatuses.every(s => target.piece.statuses[s] || target.piece.immunities[s]);
+        if(allStatusesApplied && enemy.canAttack && enemy.getStat('attack') > 0){
+          return { type: 'attack', target: target.piece };
+        }
         if(enemy.attack > 2 && (enemy.specialName === 'Imitate' || enemy.specialName === 'Absorb')){
           return { type: 'attack', target: target.piece };
         } else {
@@ -84,6 +93,15 @@ function decideEnemyIntent(
       }
       if(enemy.targetType === 'group'){//bomb type pieces
         const inRange = findAnyPiecesInRange(enemy, activePieces);
+        if(enemy.appliesStatuses.length > 0 && inRange){
+          const playerTargets = inRange.filter(p => p.team === 'player' && !p.statuses.hidden);
+          const allAlreadyHaveStatus = playerTargets.length > 0 && playerTargets.every(p => 
+            enemy.appliesStatuses.every(s => p.statuses[s] || p.immunities[s])
+          );
+          if(allAlreadyHaveStatus && enemy.canAttack && enemy.getStat('attack') > 0 && target){
+            return { type: 'attack', target: target.piece };
+          }
+        }
         return { type: 'special', target: inRange ? inRange : []}
       }
       console.log('no special moves');

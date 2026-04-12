@@ -554,7 +554,7 @@ export class Pinata extends Item<Player> {//untested
         super(Pinata.name, Pinata.description, Pinata.unicode, Pinata.color, 3, Pinata.rarity, 'player')
     }
     apply(player: Player, _itemMult: number) {
-        const hasRoom = player.usedMemory <= player.memory;
+        const hasRoom = player.admins.length < player.adminSlots;
         if (hasRoom) {
             import("./AdminPrograms").then(({ allAdmins }) => {
                 const newAdmin = pickWeightedRandomItem(allAdmins, player);

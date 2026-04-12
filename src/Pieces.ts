@@ -1,4 +1,4 @@
-import type { Coordinate, Immunities, StatModifier } from "./types"
+import type { Coordinate, Immunities, StatModifier, StatusKey } from "./types"
 import { createDefaultStatuses } from "./types";
 import { Player } from "./Player";
 import damageSoundUrl from '../sfx/damage.ogg';
@@ -22,6 +22,9 @@ export abstract class Piece {
     exposed: false,
     hidden: false,
     negative: false,
+    enraged: false,
+    disarmed: false,
+    zen: false
   };
   immunities: Immunities = createDefaultStatuses();
   canAttack: boolean = true;
@@ -34,6 +37,7 @@ export abstract class Piece {
   isBusy: boolean = false;//for AI
   isTriggering: boolean = false; //for trap animations
   quickSanded: boolean = false;
+  appliesStatuses: StatusKey[] = [];
 
   specialName?: string;
   extraUnicode?: string;
@@ -130,6 +134,7 @@ export abstract class Piece {
 
   async resetTempModifiers() {
     this.tempStatModifiers = {};
+    this.statuses.disarmed = false;
   }
 
   // --- Accessors for base / modifiers / total ---
@@ -725,13 +730,11 @@ class Firewall extends Piece {
    super(Firewall.name, Firewall.description, Firewall.unicode, 12, 2, 1, 2, 2, Firewall.color, headPosition, [headPosition], team, Firewall.rarity, removeCallback, id)
     this.targetType = 'piece'
     this.specialName = 'Burn'
+    this.appliesStatuses = ['burning'];
   }
   async special(target: Piece): Promise<void> {
     //await target.takeDamage(this.getStat('attack'));
-    if(target.statuses.burning){
-      target.takeDamage(this.getStat('attack'));
-      if(target.willRetaliate) await this.takeDamage(target.getStat('attack'))
-    } else if(!target.immunities.burning){
+    if(!target.immunities.burning){
       target.statuses.burning = true;
     }
     this.actions --
@@ -1003,6 +1006,7 @@ class Dataworm extends Piece {//test
     super(Dataworm.name, Dataworm.description, Dataworm.unicode, 6, 3, 1, 4, 2, Dataworm.color, headPosition, [headPosition], team, Dataworm.rarity, removeCallback, id)
     this.specialName = 'Tunnel';
     this.targetType = 'pieceAndPlace'
+    this.appliesStatuses = ['diseased'];
   }
 
   async special({piece, target} : {piece: Piece, target: Coordinate}):Promise<void>{
@@ -1316,6 +1320,7 @@ class Germ extends Piece {//up to here //TODO
     this.targetType = 'piece'
     this.specialName = 'Infect'
     this.immunities.diseased = true;
+    this.appliesStatuses = ['diseased'];
   }
   async special(target: Piece): Promise<void> {
     if(!target.immunities.diseased){
@@ -1343,14 +1348,12 @@ class Vice extends Piece {
    super(Vice.name, Vice.description, Vice.unicode, 2, 2, 1, 2, 1, Vice.color, headPosition, [headPosition], team, Vice.rarity, removeCallback, id)
     this.targetType = 'piece'
     this.specialName = 'Freeze'
+    this.appliesStatuses = ['frozen'];
   }
   async special(target: Piece): Promise<void> {
     if(!target.immunities.frozen){
       target.statuses.frozen = true
       target.movesRemaining = 0
-    } else if(target.statuses.frozen){
-      await target.takeDamage(this.getStat('attack'));
-      if(target.willRetaliate) await this.takeDamage(target.getStat('attack'))
     }
     this.actions--
   }
@@ -1606,6 +1609,7 @@ class Tengu extends Piece {//not working
    super(Tengu.name, Tengu.description, Tengu.unicode, 2, 2, 2, 2, 0, Tengu.color, headPosition, [headPosition], team, Tengu.rarity, removeCallback, id)
    this.specialName = 'Curse';
    this.targetType = 'pieceAndPlayer'
+   this.appliesStatuses = ['slowed'];
    //this.canAttack = false;
   }
   private ids: string[] = []//track already stolen pieces?
@@ -1927,6 +1931,7 @@ class LabRat extends Piece {
     super(LabRat.name, LabRat.description, LabRat.unicode, 2, 3, 1, 2, 0, LabRat.color, headPosition, [headPosition], team, LabRat.rarity, removeCallback, id)
     this.specialName = 'Fleas'
     this.targetType = 'piece'
+    this.appliesStatuses = ['diseased'];
   }
 
   async special(target: Piece): Promise<void> {
@@ -1943,7 +1948,7 @@ class LabRat extends Piece {
 
 class Bat extends Piece {
   static name = "Vampire Bat";
-  static description = "A program immune to disease and blinding. Can steal body memory spaces from other programs spread disease to them, and increasing it's max size";//remove tile, +1 temp defence? spread statuess?
+  static description = "A program immune to disease and blinding. Can bite body tiles from other programs spread disease to them, gaining a move and increasing it's max size";//remove tile, +1 temp defence? spread statuess?
   static unicode = "U+1F987";
   static color = "#ff290dff";
   static rarity = 4;
@@ -1953,6 +1958,7 @@ class Bat extends Piece {
    this.targetType = 'pieceAndPlace'
    this.immunities.diseased = true;
    this.immunities.blinded = true;
+   this.appliesStatuses = ['diseased'];
   }
   async special({piece, target} : {piece: Piece, target: Coordinate}):Promise<void>{
     const tileIndex = piece.tiles.findIndex(t => t.x === target.x && t.y === target.y);
@@ -1965,7 +1971,8 @@ class Bat extends Piece {
       piece.statuses.diseased = true;
     }
     this.actions--
-    this.tiles.push(target);
+    //this.tiles.push(target);
+    this.movesRemaining += 1;
     this.addModifier({maxSize: 1});
   }
   //raise defence +1 if total dmg > 0
@@ -1982,6 +1989,7 @@ class Dragon extends Piece {//line?
    this.specialName = 'Fire Breath';
    this.targetType = 'group'
    this.immunities.burning = true;
+   this.appliesStatuses = ['burning'];
   }
 
   async special(targets: Piece[]):Promise<void>{
@@ -2031,6 +2039,7 @@ class Squid extends Piece {
     this.immunities.blinded = true;
     this.specialName = 'Ink';
     this.targetType = 'line';
+    this.appliesStatuses = ['blinded'];
   }
 
  async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
@@ -2303,6 +2312,7 @@ class Cupid extends Piece {
     super(Cupid.name, Cupid.description, Cupid.unicode, 1, 1, 3, 3, 0, Cupid.color, headPosition, [headPosition], team, Cupid.rarity, removeCallback, id)
     this.specialName='Charm'
     this.targetType='piece'
+    this.appliesStatuses = ['charmed'];
   }
 
   async special(targetPiece: Piece):Promise<void>{
@@ -2318,7 +2328,7 @@ class Cupid extends Piece {
 
 class Oni extends Piece {
   static name = "Oni";
-  static description = "A strong but slow program that can inflict the slow status on a group of enemies";
+  static description = "A strong but slow program that can inflict the slow status on a group of enemies, or damage already slowed ones";
   static unicode = "U+1F479";
   static color = "#9e0303ff";
   static rarity = 6;//6 target group
@@ -2327,6 +2337,7 @@ class Oni extends Piece {
     this.specialName = 'Haunt';//Haunt
     this.targetType = 'group';
     this.immunities.slowed = true;
+    this.appliesStatuses = ['slowed'];
   }
   //async special(targetPiece: Piece):Promise<void>{
   async special(targets: Piece[]):Promise<void>{
@@ -2336,8 +2347,8 @@ class Oni extends Piece {
       } else if(targetPiece.statuses.slowed){
         targetPiece.takeDamage(this.getStat('attack'));
         if(targetPiece.willRetaliate) await this.takeDamage(targetPiece.getStat('attack'))
-        }
       }
+    }
     this.actions--
   }
 }
@@ -2362,13 +2373,11 @@ class Bug extends Piece {//ant - bug can be higher and cause slow
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Bug.name, Bug.description, Bug.unicode, 1, 5, 1, 2, 1, Bug.color, headPosition, [headPosition], team, Bug.rarity, removeCallback, id)
     this.specialName = 'Glitch'
+    this.appliesStatuses = ['slowed'];
   }
   async special(targetPiece: Piece):Promise<void>{
     if(!targetPiece.immunities.slowed){
       targetPiece.statuses.slowed = true
-    } else if(targetPiece.statuses.slowed){
-      targetPiece.takeDamage(this.getStat('attack'));
-      if(targetPiece.willRetaliate) await this.takeDamage(targetPiece.getStat('attack'))
     }
     this.actions--
   }
@@ -2396,6 +2405,7 @@ class Mosquito extends Piece {
    super(Mosquito.name, Mosquito.description, Mosquito.unicode, 2, 2, 1, 2, 0, Mosquito.color, headPosition, [headPosition], team, Mosquito.rarity, removeCallback, id)
     this.specialName = 'Bite';
     this.targetType = 'pieceAndPlace'
+    this.appliesStatuses = ['diseased'];
   }
   async special({piece, target} : {piece: Piece, target: Coordinate}):Promise<void>{
     const tileIndex = piece.tiles.findIndex(t => t.x === target.x && t.y === target.y);
@@ -2426,14 +2436,13 @@ class Scorpion extends Piece {
     this.specialName='Sting'
     this.targetType='piece'
     this.immunities.poisoned = true;
+    this.appliesStatuses = ['poisoned'];
   }
 
   async special(targetPiece: Piece):Promise<void>{
     if(!targetPiece.immunities.poisoned){
       targetPiece.statuses.poisoned = true;
-    } else if(targetPiece.statuses.poisioned){
-      targetPiece.takeDamage(this.getStat('attack'))
-      if(targetPiece.willRetaliate) await this.takeDamage(targetPiece.getStat('attack'))
+
     }
     this.actions--
   }
@@ -2442,7 +2451,7 @@ class Scorpion extends Piece {
 
 class Firebrand extends Piece {
   static name = "Firebrand";
-  static description = "A high level program which can apply burning";
+  static description = "A high level program which can apply burning and damage at the same time";
   static unicode = "U+1F4DB";
   static color = "#ff0d0dff";
   static rarity = 5;
@@ -2450,16 +2459,15 @@ class Firebrand extends Piece {
     super(Firebrand.name, Firebrand.description, Firebrand.unicode, 4, 3, 1, 3, 3, Firebrand.color, headPosition, [headPosition], team, Firebrand.rarity, removeCallback, id)
     this.specialName='Brand'
     this.targetType='piece'
+    //this.appliesStatuses = ['burning'];
   }
 
   async special(targetPiece: Piece):Promise<void>{
     //await targetPiece.takeDamage(this.getStat('attack'));
-    if(targetPiece.statuses.burning){
-      targetPiece.takeDamage(this.getStat('attack'))
-      if(targetPiece.willRetaliate) await this.takeDamage(targetPiece.getStat('attack'))
-    } else if(!targetPiece.immunities.burning){
+    if(!targetPiece.immunities.burning){
       targetPiece.statuses.burning = true;
     }
+    targetPiece.takeDamage(this.getStat('attack'))
     this.actions--
   }
   //burn a piece
@@ -2486,11 +2494,13 @@ class Gman extends Piece {
    super(Gman.name, Gman.description, Gman.unicode, 6, 4, 3, 4, 1, Gman.color, headPosition, [headPosition], team, Gman.rarity, removeCallback, id)
    this.targetType = 'piece'
    this.specialName = 'Stun'
+   this.appliesStatuses = ['frozen', 'disarmed'];
   }
   async special(targetPiece: Piece):Promise<void>{
     if(!targetPiece.immunities.frozen){
       targetPiece.statuses.frozen = true;
-      targetPiece.movesRemaining = 0;
+      //targetPiece.movesRemaining = 0;
+      targetPiece.statuses.disarmed = true;
     }
     targetPiece.actions = 0;
     this.actions--
@@ -2711,13 +2721,14 @@ class Jellyfish extends Piece {
     super(Jellyfish.name, Jellyfish.description, Jellyfish.unicode, 3, 1, 1, 4, 0, Jellyfish.color, headPosition, [headPosition], team, Jellyfish.rarity, removeCallback, id)
     this.specialName='Shock';
     this.targetType='piece';
+    this.appliesStatuses = ['slowed'];
   }
 
   async special(targetPiece: Piece):Promise<void>{
-    await targetPiece.takeDamage(this.getStat('attack'));
     if(!targetPiece.immunities.slowed){
       targetPiece.statuses.slowed = true
     }
+    await targetPiece.takeDamage(this.getStat('attack'));
     this.actions--
   }
   //sting
@@ -2896,7 +2907,7 @@ class Vampire extends Piece {
     piece.tiles.splice(tileIndex, 1);
     this.addModifier({maxSize: 1});
     this.addModifier({attack: 1});
-    this.addTempModifier({defence: piece.getStat('defence')})
+    this.addTempModifier({defence: piece.getStat('defence')});
     this.movesRemaining += 1;
     //this.tiles.push(target);
     this.actions --
@@ -2913,16 +2924,14 @@ class Centipede extends Piece {
     super(Centipede.name, Centipede.description, Centipede.unicode, 7, 2, 1, 4, 2, Centipede.color, headPosition, [headPosition], team, Centipede.rarity, removeCallback, id)
     this.targetType = 'piece'
     this.specialName = 'Bite'
+    //this.appliesStatuses = ['poisoned'];
   }
   async special(targetPiece: Piece):Promise<void>{
-    await targetPiece.takeDamage(this.getStat('attack'))
     if(!targetPiece.immunities.poisoned){
       targetPiece.statuses.poisoned = true;
     }
-    if(targetPiece.statuses.poisioned){
-      targetPiece.takeDamage(this.getStat('attack'))
-      if(targetPiece.willRetaliate) await this.takeDamage(targetPiece.getStat('attack'))
-    }
+    await targetPiece.takeDamage(this.getStat('attack'))
+    
     this.actions --
   }
 }
@@ -2948,6 +2957,7 @@ class UFO extends Piece {
     super(UFO.name, UFO.description, UFO.unicode, 4, 3, 3, 4, 2, UFO.color, headPosition, [headPosition], team, UFO.rarity, removeCallback, id)
     this.specialName = 'abduct'
     this.targetType = 'line'
+    this.appliesStatuses = ['confused'];
   }
   async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
     for (let i = 0; i < line.length; i++) {
@@ -3116,13 +3126,11 @@ class Camera extends Piece {
    super(Camera.name, Camera.description, Camera.unicode, 4, 1, 3, 1, 0, Camera.color, headPosition, [headPosition], team, Camera.rarity, removeCallback, id)
    this.specialName = 'Flash';
    this.targetType = 'piece'
+   this.appliesStatuses = ['blinded'];
   }
   async special(target: Piece): Promise<void> {
     if(!target.immunities.blinded){
       target.statuses.blinded = true;
-    } else if(target.statuses.blinded){
-      target.takeDamage(this.getStat('attack'))
-      if(target.willRetaliate) await this.takeDamage(target.getStat('attack'))
     }
     this.actions--
   }
@@ -3160,6 +3168,7 @@ class Shrike extends Piece {
    super(Shrike.name, Shrike.description, Shrike.unicode, 2, 5, 1, 3, 2, Shrike.color, headPosition, [headPosition], team, Shrike.rarity, removeCallback, id)
    this.targetType = 'piece'
    this.specialName = 'Pierce'
+   //this.appliesStatuses = ['frozen'];
   }
   async special(targetPiece: Piece):Promise<void>{
     if(!targetPiece.immunities.frozen){
@@ -3183,7 +3192,7 @@ class Eagle extends Piece {
 
 class Recurve extends Piece {
   static name = "Archer";
-  static description = "A longer ranged program, can launch a volley of attacks on a group of enemies";
+  static description = "A longer ranged program, can launch a volley of attacks on all non hidden enemies";
   static unicode = "U+1664";
   static color = "#06640fff";
   static rarity = 5;
@@ -3194,7 +3203,7 @@ class Recurve extends Piece {
   }
   async special(targets: Piece[]):Promise<void>{
     for (const t of targets) {
-      if(t.team != this.team){
+      if(t.team !== this.team && !t.statuses.hidden){
         await t.takeDamage(this.getStat('attack'));
       }
     }
@@ -3213,12 +3222,10 @@ class Daemon extends Piece {
    super(Daemon.name, Daemon.description, Daemon.unicode, 4, 3, 2, 3, 2, Daemon.color, headPosition, [headPosition], team, Daemon.rarity, removeCallback, id)
    this.immunities.slowed = true;
    this.specialName = 'Chug'
+   this.appliesStatuses = ['slowed'];
   }
   async special(targetPiece: Piece):Promise<void>{
-    if(targetPiece.statuses.slowed){
-      targetPiece.takeDamage(this.getStat('attack'));
-      if(targetPiece.willRetaliate) await this.takeDamage(targetPiece.getStat('attack'))
-    } else if(!targetPiece.immunities.slowed){
+    if(!targetPiece.immunities.slowed){
       targetPiece.statuses.slowed = true
     }
     this.actions--
@@ -3229,18 +3236,16 @@ class Archdaemon extends Piece {
   static name = "Arch Daemon";
   static description = "A stronger Daemon that can apply slow to other programs";
   static unicode = "U+1F608"
-  static color = "rgb(78, 10, 6)";
+  static color = "rgb(44, 5, 3)";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Archdaemon.name, Archdaemon.description, Archdaemon.unicode, 4, 3, 3, 4, 3, Archdaemon.color, headPosition, [headPosition], team, Archdaemon.rarity, removeCallback, id)
    this.specialName = 'Chug'
    this.immunities.slowed = true;
+   this.appliesStatuses = ['slowed'];
   }
   async special(targetPiece: Piece):Promise<void>{
-    if(targetPiece.statuses.slowed){
-      targetPiece.takeDamage(this.getStat('attack'));
-      if(targetPiece.willRetaliate) await this.takeDamage(targetPiece.getStat('attack'))
-    } else if(!targetPiece.immunities.slowed){
+    if(!targetPiece.immunities.slowed){
       targetPiece.statuses.slowed = true
     }
     this.actions--
@@ -3322,12 +3327,10 @@ class Peacock extends Piece {
    super(Peacock.name, Peacock.description, Peacock.unicode, 3, 2, 2, 3, 1, Peacock.color, headPosition, [headPosition], team, Peacock.rarity, removeCallback, id)
    this.targetType = 'piece'
    this.specialName = 'Fan'
+   this.appliesStatuses = ['confused'];
   }
   async special(targetPiece: Piece):Promise<void>{
-    if(targetPiece.statuses.confused = true){
-      targetPiece.takeDamage(this.getStat('attack'))
-      if(targetPiece.willRetaliate) await this.takeDamage(targetPiece.getStat('attack'))
-    } else if(!targetPiece.immunities.confused){
+    if(!targetPiece.immunities.confused){
       targetPiece.statuses.confused = true;
     }
     this.actions--
@@ -3652,13 +3655,12 @@ class Alien extends Piece {
   super(Alien.name, Alien.description, Alien.unicode, 2, 2, 3, 3, 1, Alien.color, headPosition, [headPosition], team, Alien.rarity, removeCallback, id)
     this.specialName = 'Bluebeam';
     this.targetType = 'group'
+    this.appliesStatuses = ['confused'];
   }
   async special(targets: Piece[]):Promise<void>{
     for (const t of targets) {
       if(t.team != this.team){
-        if(t.statuses.confused === true){
-          t.takeDamage(this.getStat('attack'));
-        } else if(!t.immunities.confused){
+        if(!t.immunities.confused){
           t.statuses.confused = true;
         }
       }
@@ -4199,6 +4201,7 @@ export class Dolls extends Piece {//finished? test, will have to be handled in a
 //FISHING POLE AND FISH, U+1F3A3 long range - move a piece toward it - magnet with long range
 //Pentagram - U+269D summons daemons
 // PARROT, U+1F99C like copycat but temp modifiers
+//Gong applies zen
 //taxi U+1F695 move other pieces (friendly) to it's tail?
 
 export const allPieces = [Ant, Banana, Bee, Egg, Knife, Potato, Rat, Shield, Sling, Snail, TP, Acorn, Aegis, Banner, Beetle, Bow, Bull, Chick, Chicken, Dagger, Decoy, Dog, Fence, Firework, Frond, Doctor, Gecko, Guard, Hedgehog, Jellyfish, Larva, Lance, Tree, Poop, Flute, Rooster, Saw, Snake, Tar, Vulture, Germ, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Buffalo, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, Hopper, LabRat, LadyBeetle, Magnet, Medic, Mosquito, Ninja, Octopus, Officer, Paladin, Wasp, Pawn, Peacock, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Alien, Arms, Axe, Cannon, Lightning, Palm, Bison, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Kite, Leopard, Lighthouse, Mammoth, Mine, Nerf, Oil, Puffer, Rabbit, Scarab, Shark, Snowman, Soldier, Squid, Stopwatch, Teargas, Tiger, Tradie, Bat, Wizard, Wolf, Zebra, Archdaemon, Recurve, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Gman, Giraffe, Hippo, Lion, Lovebomb, Orangutan, Paragon, Rhino, Screwdriver, Shovel, Shrike, Tank, Coat, UFO, Vampire, Bear, Helicopter, Gorilla, Greatshield, Nuke, Oni, Sol, Sponge, Super, Rex, Unicorn];//Dolls //100 +2 (web, ink)

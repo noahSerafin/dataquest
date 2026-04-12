@@ -2,23 +2,14 @@ TUTORIAL - make more handholdy?
 variant tooltips
 -
 //IMPROVEMENTS
-crystal ball stopping shop progression - once seed is sorted let it also preview node contents
-make status appliers check for status and attack if not (could be done through immunities) - for players benefit
--
-make a pre-rune that sets all (your?) ranges to 1 on enemyturnend
-Stone age sets all ranges to one?
-Array piece like banner that buffs range?
 let enemy helicopter travel 2 spaces
-
 
 // BUGS
 Enemy traps not trying to walk into players
 enemies not pathing to player sometimes, are they looking for the head position???
-shop not rerolling when proceeding from a hidden node
 you win not dissapearing in endless mode
-
-hybrids should combine immunities
-pass primary variant to hybrid
+spawns dissapearing if retry is clicked during enemy turn
+crystal ball stopping shop progression - once seed is sorted let it also preview node contents
 
 more + - trade off admins
 make some variants immunities?
@@ -26,12 +17,9 @@ make some variants immunities?
 difficulty - add +1, +2 programs for variety, or make variants +- security level 7
 
 MAP
-padding on hybrid compiler description
-Altar nodes - sacrifice a program for more money than selling - 8 - skippable
-Duplicator nodes - duplicate a program - skippable
-Node to nerf stats - workbench? -1 stat +another etc.
 Gladiator nodes - +1 or 2 security, place only once in arena node for reward - skippable
-Other challenge nodes - challenge node file with custom maps of fixed pieces? - deforester, wizard battle, trojan army, etc.
+Other challenge nodes - challenge node file with custom maps of fixed pieces? - make with editor
+ - deforester, wizard battle (w/pentagrams), trojan army, lich lair, man in the high castle (tradies gurading a watchman), etc.
 
 GAME / BUGS
 display variants on pieceview same as in piececontroller and blueprintview
@@ -55,8 +43,7 @@ checkforroundend after takedamage
 Nerf Pandora by using allitems???
 self specials easy to accidentally auto click, move buttons z-index up
 -
-EnemyAI: store ids/check statuses in special move pieces to prevent enemies using special mutliple times on the same player program
-enemy traps not walking over players
+
 
 -level edits-
 level 3 siege change head of wall

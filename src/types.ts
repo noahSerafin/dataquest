@@ -101,6 +101,8 @@ export type Statuses = {
   hidden: boolean// not visible to opposite team, requires editing targeting  //FACE WITH FINGER COVERING CLOSED LIPS, U+1F92B
   negative: boolean// can occupy the same space as another piece, requires editing movement // DOTTED LINE FACE, U+1FAE5
   enraged: boolean
+  zen: boolean
+  disarmed: boolean
 }
 
 //move to statuses
@@ -118,6 +120,8 @@ export function createDefaultStatuses(): Statuses {
     hidden: false,
     negative: false,
     enraged: false,
+    zen: false,
+    disarmed: false,
   };
 }
 

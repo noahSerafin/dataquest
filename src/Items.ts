@@ -667,7 +667,7 @@ class Bugle extends Item<Piece[]> {
 }
 
 class Djembe extends Item<Piece[]> {
-    static name = "Drums of War";
+    static name = "War Drum";
     static description = "All placed player programs gain +1 attack and +1 moves";
     static unicode = "U+1FA98";//djembe LONG DRUM,
     static color = "rgb(111, 32, 8)";
@@ -1129,7 +1129,7 @@ class Extinguisher extends Item<PieceBlueprint> {
 //RING BUOY, U+1F6DF restore the last destroyed program to hand /target a space? or give piece a wontDie bool?
 //lifeboat ROWBOAT, U+1F6A3
 
-export const allItems = [Blueberry, Battery, Iron, Headphones, Juice, Mushroom, Box, Pepper, Floppy, Voucher, Bandage, Extinguisher, Formula, Frogman, Gift, Hotline, Labcoat, Plunger, Soap, Teapot, Toothbrush, Beans, Blackheart, Bugle, Gloves, Jar, Keygen, Makeover, Melon, Megaphone, Pinata, Rations, Roids, Spanner, Update2, Chili, Cake, Carrot, Djembe, Garlic, Goggles, Wand, Lightning, Meat, Pie, Supplement, Coffee, Disguise, Dupe, Genie, Hourglass, Sandwich, Life, Blessing, Feast, Ginger, Beer, Pandora, Update3, ShootingStar];
+export const allItems = [Blueberry, Battery, Iron, Headphones, Juice, Mushroom, Box, Pepper, Floppy, Voucher, Bandage, Extinguisher, Formula, Frogman, Gift, Hotline, Labcoat, Plunger, Soap, Teapot, Toothbrush, Beans, Blackheart, Bugle, Gloves, Jar, Keygen, Makeover, Melon, Megaphone, Pinata, Rations, Roids, Spanner, Update2, Chili, Cake, Carrot, Garlic, Goggles, Wand, Lightning, Meat, Pie, Supplement, Djembe, Coffee, Disguise, Dupe, Genie, Hourglass, Sandwich, Life, Blessing, Feast, Ginger, Beer, Pandora, Update3, ShootingStar];
 export const upgradeItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Roids, Formula]
 
 /*Items.forEach(i => {

@@ -17,6 +17,7 @@ export abstract class Item<TTarget = any> {
     cost: number
     rarity: number
     targetType: 'blueprint' | 'piece' | 'shopItem' | 'player' | 'gameState' | 'playerAndGame' | 'piecesAndBoard' | 'all'
+    isTriggering: boolean = false;
     //variantName: string
     constructor(
         name: string,

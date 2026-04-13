@@ -2,7 +2,13 @@ TUTORIAL - make more handholdy?
 variant tooltips
 -
 //IMPROVEMENTS
+checkforroundend in removePiece - test
+visualise:
+    ADMINS - animate admins
+    retaliation, dmg + dmg mult numbers, admin actions and counts
 let enemy helicopter travel 2 spaces
+self specials easy to accidentally auto click, move buttons z-index up
+
 SEEDED RANDOMNESS - save seed functionality 6
 SAVE GAME STATE for bugs 7.5
 PIECES - keep track of upgrades and display on piece 7
@@ -11,6 +17,8 @@ more + - trade off admins
 make some variants immunities?
 difficulty - add +1, +2 programs for variety, or make variants +- security level 9
 non stacking bosses should cycle through (mirror becomes too predicatable)//always remove mirror after and replace with another random boss
+nerf rosebud - pieces can't stay exposed after a special?
+variant should overide base piece color, (and tile colour???)
 
 // BUGS
 you win not dissapearing in endless mode
@@ -25,16 +33,6 @@ Gladiator nodes - +1 or 2 security, place only once in arena node for reward - s
 Other challenge nodes - challenge node file with custom maps of fixed pieces? - make with editor
  - deforester, wizard battle (w/pentagrams), trojan army, lich lair, man in the high castle (tradies gurading a watchman), etc.
 
-GAME / BUGS
-visualise:
-    ADMINS - animate admins
-    retaliation, dmg + dmg mult numbers, admin actions and counts
-
-variant should overide base piece color, (and tile colour???)
-nerf rosebud - pieces can't stay exposed after a special?
-checkforroundend after takedamage
-self specials easy to accidentally auto click, move buttons z-index up
--
 ITEMS/admins shortand descriptions eg. +1 attack instead of "increases"
 VISUAL: 5
 show attack when selected?
@@ -42,8 +40,6 @@ variant tooltip to show stat mods, use colored text
 add class to acting admins
 -skipNode controller
 Onion Icon for life
-
-companies 8 - own list of programs/variants;
 
 SHOP - 8
 - two piece/item slots

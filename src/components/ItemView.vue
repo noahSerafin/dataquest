@@ -101,7 +101,7 @@ const isDisabled = computed(() => {
   <div
     :id="item.id"
     class="item"
-    :class="[`item-${type}`, `itemName-${item.name.replace(/\s+/g, '')}`, {'is-clippy': item.name === 'Clippy'}, {'is-disabled': isDisabled}]"
+    :class="[`item-${type}`, `itemName-${item.name.replace(/\s+/g, '')}`, {'is-clippy': item.name === 'Clippy'}, {'is-disabled': isDisabled}, {'is-triggering': (item as any).isTriggering}]"
     @click="handleSelect"
     :style="itemStyle"
   >
@@ -353,5 +353,17 @@ button:disabled {
 
 .give-tip-btn:hover {
   background-color: #2563eb;
+}
+
+@keyframes adminTrigger {
+  0% { transform: scale(1); filter: brightness(1) drop-shadow(0 0 0px yellow); }
+  50% { transform: scale(1.15); filter: brightness(1.3) drop-shadow(0 0 12px yellow); }
+  100% { transform: scale(1); filter: brightness(1) drop-shadow(0 0 0px yellow); }
+}
+
+.is-triggering {
+  z-index: 9999 !important;
+  animation: adminTrigger 0.5s ease-in-out;
+  border-style: double !important;
 }
 </style>

@@ -453,6 +453,8 @@ async function handleApplyAdmins(trigger: AdminTrigger, id: string, piece?: Piec
   for (const admin of playerAdmins) {
     if (admin.disabled) continue;
     if (trigger === admin.triggerType) {
+      admin.isTriggering = true;
+      setTimeout(() => admin.isTriggering = false, 500);
       // sort through target types, decide what to pass
       console.log(admin.name, 'trigger', trigger)
       if (admin.targetType === 'gameState') {
@@ -473,6 +475,8 @@ async function handleApplyAdmins(trigger: AdminTrigger, id: string, piece?: Piec
   if (!player.value.hasAdmin('Umbrella')) {
     for (const admin of bossAdmins.value) {
       if (trigger === admin.triggerType) {
+        admin.isTriggering = true;
+        setTimeout(() => admin.isTriggering = false, 500);
         // sort through target types, decide what to pass
         if (admin.targetType === 'player') {
           await admin.apply({ player: player.value })
@@ -873,6 +877,7 @@ async function removePiece(piece: Piece) {
         activePieces.value.push(NewDoll);
       }
     }
+    checkForRoundEnd();
   }
 }
 
@@ -1152,7 +1157,6 @@ const damagePieceAt = async (coord: Coordinate) => {
   selectedPiece.value.damageMult = baseMult;
   //console.log(damageReceiver?.name, ' tiles afterdmg: ', damageReceiver.tiles)
   boardRef.value.clearHighlights();
-  checkForRoundEnd();
 }
 
 const handleSpecialActionAt = async (target: Coordinate) => {
@@ -1262,7 +1266,6 @@ const handleSpecialActionAt = async (target: Coordinate) => {
   playerSpawns.value = newPlacementHighlights();
   selectedPiece.value = null;
   clearFog();
-  checkForRoundEnd();
   return;
 };
 
@@ -1344,7 +1347,6 @@ async function enemyTurn() {
     player.value,
     300
   );
-  checkForRoundEnd();
   playerSpawns.value = newPlacementHighlights();
 }
 

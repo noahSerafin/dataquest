@@ -513,7 +513,6 @@ class Bones extends Admin {
                 activePieces.push(enemyInstance);
                 //original pieces destruction happens in app, but we do it here to stop the piece entering the graveyard
                 activePieces.filter(p => p.id !== piece.id);
-                //activePieces.splice(idx, 1);
             }
         }
     }

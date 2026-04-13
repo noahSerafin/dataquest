@@ -1162,7 +1162,7 @@ class Broom extends Admin {
     for (let index = 0; index < activePieces.length; index++) {
       const p = activePieces[index];
       if (p.team === 'enemy' && p.tiles.length === 1 && p.defenceRemaining === 0) {
-        activePieces.splice(index, 1);
+        activePieces[index].removeCallback?.(activePieces[index])
       }
     }
   }
@@ -2589,7 +2589,7 @@ class Howzat extends Admin {
     for (let index = 0; index < activePieces.length; index++) {
       const p = activePieces[index];
       if (p.team === 'enemy' && p.tiles.length <= 2 && p.defenceRemaining === 0) {
-        activePieces.splice(index, 1);
+        activePieces[index].removeCallback?.(activePieces[index])
       }
     }
   }
@@ -3012,7 +3012,7 @@ class Baseball extends Admin {
       // 4. Check for Strike Out (3 strikes)
       if (this.candidates[id] >= 3) {
         // Remove the enemy
-        activePieces.splice(attackerIdx, 1);
+        activePieces[attackerIdx].removeCallback?.(activePieces[attackerIdx])
         // Clean up tracking for this specific ID
         delete this.candidates[id];
       }

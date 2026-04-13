@@ -469,7 +469,7 @@ export class Pandora extends Item<Player> {
     }
     apply(player: Player, _itemMult: number) {
         player.removeItem(this); // Remove itself first to free up memory
-        if (player.freeMemory) { // check for trolley/schoolbag
+        if (player.freeMemory) { // check for schoolbag
             player.removeItem(this);
             addItemsUntilFull(player, 3);
         }

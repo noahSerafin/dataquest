@@ -22,8 +22,6 @@ export class Player {
     interestCap: number
     bonusInterest: number
     bonusReward: number
-    hasTrolley: boolean
-    hasToolbox: boolean
     canPlace: boolean = true;
     canMove: boolean = true;
     canAction: boolean = true;
@@ -45,8 +43,6 @@ export class Player {
         bonusReward: number,
         nextInterest: number,
         nextReward: number,
-        hasTrolley: boolean,//remove
-        hasToolbox: boolean,//remove
         stake: number
         //adminModifiers: Record<string, StatModifier> = {}
     ) {
@@ -63,16 +59,14 @@ export class Player {
         this.bonusReward = bonusReward;
         this.nextInterest = nextInterest;
         this.nextReward = nextReward;
-        this.hasTrolley = hasTrolley;
-        this.hasToolbox = hasToolbox;
         this.stake = stake;
         //this.adminModifiers = adminModifiers;
     }
 
     /** Total "memory" usage from items + programs */
   get usedMemory(): number {
-    const itemUsage = this.hasTrolley ? (this.items.length/2) : this.items.length 
-    const bpUsage = this.hasToolbox ? (this.programs.length/2) : this.programs.length 
+    const itemUsage = this.hasAdmin('Schoolbag') ? (this.items.length/2) : this.items.length 
+    const bpUsage = this.hasAdmin('Toolbox') ? (this.programs.length/2) : this.programs.length 
     return itemUsage + bpUsage;
   }
 

@@ -273,7 +273,7 @@ export function addItemsUntilFull(
   let attempts = 0;
   let freeMemory = player.freeMemory
   
-  while ((freeMemory >= 1 || player.hasTrolley && freeMemory >= 0.5)&& attempts < maxAttempts) {
+  while ((freeMemory >= 1 || player.hasAdmin('Schoolbag') && freeMemory >= 0.5)&& attempts < maxAttempts) {
     const item = pickWeightedRandomItem(upgradeItems, player);
     StorageManager.unlockItem(item);
     // If addProgram returns false when full, even better

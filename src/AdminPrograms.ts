@@ -661,20 +661,14 @@ class Stonks extends Admin {
 
 }
 
-class Trolley extends Admin {
-  static name = "Schoolbag";//"Trolley";
+class Schoolbag extends Admin {
+  static name = "Schoolbag";//"Schoolbag";
   static description = "Items only use 0.5 memory each";
   static unicode = "U+1F392";// "U+1F6D2";
   static color = "#55fff1ff";
   static rarity = 1;
   constructor() {
-    super(Trolley.name, Trolley.description, Trolley.unicode, Trolley.color, 3, Trolley.rarity, 'player', 'other')//'player')??
-  }
-  async apply({ player }: { player: Player }) {
-    player.hasTrolley = true;
-  }
-  async remove({ player }: { player: Player }) {
-    player.hasTrolley = false;
+    super(Schoolbag.name, Schoolbag.description, Schoolbag.unicode, Schoolbag.color, 3, Schoolbag.rarity, 'player', 'other')//'player')??
   }
 }
 
@@ -3247,7 +3241,7 @@ export class Clippy extends Admin {
   //handle in player
 }
 
-export const allAdmins = [Bank, Bucket, Candle, Cheese, Clippy, Smoker, Compass, CreditCard, Crystal, Glasses, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Trolley, Seed, Slots, Sprinkler, StoneAge, Tempura, Nose, Sneakers, Bipolar, Chime, Abacus, Aesculapius, Appraisal, Balloon, Briefcase, Bubble, Cactus, Coin, Purse, Convenience, FireEngine, Heart, Hermes, Joker, Loot, Clover, Microscope, Newspaper, Pickup, Putter, Relay, Scarf, Stiletto, Mail, Bowling, Violin, Vitamins, Wings, AdminMap, Barber, Ace, AirSupport, Bone, Bouquet, Camp, Huzzah, Luggage, Chain, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Dice, Jammer, Roger, Juggler, Ladder, Puzzle, Razor, Sled, Rune, Shades, Stonks, Christmas, Telescope, Crown, Toolbox, Tracker, Ambulance, Backdoor, BionicArm, BionicLeg, Crash, Blood, Broom, DartBoard, Butler, Dove, Drunk, Evergreen, Eye, Discount, Fountain, Feather, Fuel, Spoon, Liberty, Lightbulb, Ollie, Palette, Pazzaz, PetriDish, Prayer, Wheel, Salt, Selfie, Pants, Variety, Volatile, Artic, BlackBelt, Lungs, Chemistry, Chivalry, Toilet, Copier, Daisy, Diamond, Hamsa, Skyscraper, Howzat, Inheritance, Cherries, Lotus, Brain, Meditation, Meteor, Monarch, Onion, PeaPod, Teddy, Pong, RollerBlades, Bell, Baseball, Ice, Ballet, Umbrella, Dharma, Bath, Cards, Disco, Lefty, Minerva, Needle, Pi, Osiris, Righty, Ring, School, Taoism];
+export const allAdmins = [Bank, Bucket, Candle, Cheese, Clippy, Smoker, Compass, CreditCard, Crystal, Glasses, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Schoolbag, Seed, Slots, Sprinkler, StoneAge, Tempura, Nose, Sneakers, Bipolar, Chime, Abacus, Aesculapius, Appraisal, Balloon, Briefcase, Bubble, Cactus, Coin, Purse, Convenience, FireEngine, Heart, Hermes, Joker, Loot, Clover, Microscope, Newspaper, Pickup, Putter, Relay, Scarf, Stiletto, Mail, Bowling, Violin, Vitamins, Wings, AdminMap, Barber, Ace, AirSupport, Bone, Bouquet, Camp, Huzzah, Luggage, Chain, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Dice, Jammer, Roger, Juggler, Ladder, Puzzle, Razor, Sled, Rune, Shades, Stonks, Christmas, Telescope, Crown, Toolbox, Tracker, Ambulance, Backdoor, BionicArm, BionicLeg, Crash, Blood, Broom, DartBoard, Butler, Dove, Drunk, Evergreen, Eye, Discount, Fountain, Feather, Fuel, Spoon, Liberty, Lightbulb, Ollie, Palette, Pazzaz, PetriDish, Prayer, Wheel, Salt, Selfie, Pants, Variety, Volatile, Artic, BlackBelt, Lungs, Chemistry, Chivalry, Toilet, Copier, Daisy, Diamond, Hamsa, Skyscraper, Howzat, Inheritance, Cherries, Lotus, Brain, Meditation, Meteor, Monarch, Onion, PeaPod, Teddy, Pong, RollerBlades, Bell, Baseball, Ice, Ballet, Umbrella, Dharma, Bath, Cards, Disco, Lefty, Minerva, Needle, Pi, Osiris, Righty, Ring, School, Taoism];
 console.log('admins length: ', allAdmins.length)
 let adminLogs = {
   rarity1: 0,

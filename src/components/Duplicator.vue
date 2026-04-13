@@ -45,8 +45,8 @@
         if (!isBlueprint && !isItem) return;
 
         const costToDupe = isBlueprint 
-            ? (props.player.hasToolbox ? 0.5 : 1) 
-            : (props.player.hasTrolley ? 0.5 : 1);
+            ? (props.player.hasAdmin('Toolbox') ? 0.5 : 1) 
+            : (props.player.hasAdmin('Schoolbag') ? 0.5 : 1);
 
         if (props.player.freeMemory < costToDupe) return;
 
@@ -182,7 +182,7 @@
 
     <!-- Compile -->
     <button
-      :disabled="(!primaryBP && !primaryItem) || (props.player.freeMemory < (primaryBP ? (props.player.hasToolbox ? 0.5 : 1) : (props.player.hasTrolley ? 0.5 : 1)))"
+      :disabled="(!primaryBP && !primaryItem) || (props.player.freeMemory < (primaryBP ? (props.player.hasAdmin('Toolbox') ? 0.5 : 1) : (props.player.hasAdmin('Schoolbag') ? 0.5 : 1)))"
       @click="duplicate"
     >
       Duplicate

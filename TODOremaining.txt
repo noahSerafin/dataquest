@@ -3,70 +3,45 @@ variant tooltips
 -
 //IMPROVEMENTS
 let enemy helicopter travel 2 spaces
-
-// BUGS
-Enemy traps not trying to walk into players
-enemies not pathing to player sometimes, are they looking for the head position???
-you win not dissapearing in endless mode
-spawns dissapearing if retry is clicked during enemy turn
-crystal ball stopping shop progression - once seed is sorted let it also preview node contents
-
+SEEDED RANDOMNESS - save seed functionality 6
+SAVE GAME STATE for bugs 7.5
+PIECES - keep track of upgrades and display on piece 7
+always start the player inside the arena node???
 more + - trade off admins
 make some variants immunities?
+difficulty - add +1, +2 programs for variety, or make variants +- security level 9
+non stacking bosses should cycle through (mirror becomes too predicatable)//always remove mirror after and replace with another random boss
 
-difficulty - add +1, +2 programs for variety, or make variants +- security level 7
+// BUGS
+you win not dissapearing in endless mode
+spawns dissapearing if retry is clicked during enemy turn
+enemies not pathing to player sometimes, are they looking for the head position???
+crystal ball stopping shop progression - once seed is sorted let it also preview node contents
+Ties currently count as wins - but player still loses a life? Might be fine to leave
+Investigate why taoism or highrise might be adding def every turn = test fix
 
-MAP
+MAP/WORLD BUILDER
 Gladiator nodes - +1 or 2 security, place only once in arena node for reward - skippable
 Other challenge nodes - challenge node file with custom maps of fixed pieces? - make with editor
  - deforester, wizard battle (w/pentagrams), trojan army, lich lair, man in the high castle (tradies gurading a watchman), etc.
 
 GAME / BUGS
-display variants on pieceview same as in piececontroller and blueprintview
 visualise:
     ADMINS - animate admins
     retaliation, dmg + dmg mult numbers, admin actions and counts
 
-SEEDED RANDOMNESS - save seed functionality
-SAVE GAME STATE for bugs 7.5
-
-//sort out trolley/toolbox
-allow burning to remove freezing? and vice versa?
-Investigate why taoism or highrise might be adding def every turn
 variant should overide base piece color, (and tile colour???)
-buff relay to be programs.length?
-non stacking bosses should cycle through (mirror becomes too predicatable)//always remove mirror
-possible to get stuck on cave and gauntlet if sling/bee and knife spawn
 nerf rosebud - pieces can't stay exposed after a special?
 checkforroundend after takedamage
-//move itemmult to player?
-Nerf Pandora by using allitems???
 self specials easy to accidentally auto click, move buttons z-index up
 -
-
-
--level edits-
-level 3 siege change head of wall
-'lockup' change
-----low priority:
-display company/node name in board
-Ties currently count as wins - but player still loses a life? Might be fine to leave
-
 ITEMS/admins shortand descriptions eg. +1 attack instead of "increases"
-
 VISUAL: 5
 show attack when selected?
 variant tooltip to show stat mods, use colored text
 add class to acting admins
 -skipNode controller
 Onion Icon for life
-vary map design for harder difficulties
-
-AI 6 nearly-done
-    maybe ignore statuses if already has a status??? or dont consume an action amd increase special count?? -- sortof done
-
-PIECES
-keep track of upgrades and display on piece 7
 
 companies 8 - own list of programs/variants;
 

@@ -346,14 +346,6 @@ import { createDefaultStatuses } from "./types";
     }
 
     //guard, snail, TP, Lance, Bug, Screwdriver
-
-/*
-    this.interestCap = interestCap;
-    this.bonusInterest = bonusInterest;
-    this.hasTrolley = hasTrolley;
-    this.hasToolbox = hasToolbox;
-*/
-
 //MINUS WHITE X, U+2756
 //
 

@@ -106,8 +106,6 @@ const player = ref(new Player(
   0,
   0,
   0,
-  false,
-  false,
   stake.value
 ));
 const showInventory = ref(true);
@@ -135,8 +133,6 @@ function createNewPlayer(os: OS) {
     0,
     0,
     0,
-    false,
-    false,
     stake.value
   )
   

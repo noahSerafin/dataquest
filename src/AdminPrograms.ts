@@ -681,12 +681,6 @@ export class Toolbox extends Admin {
   constructor() {
     super(Toolbox.name, Toolbox.description, Toolbox.unicode, Toolbox.color, 5, Toolbox.rarity, 'player', 'other')//'player')??
   }
-  async apply({ player }: { player: Player }) {
-    player.hasToolbox = true;
-  }
-  async remove({ player }: { player: Player }) {
-    player.hasToolbox = false;
-  }
 }
 
 class Backdoor extends Admin {

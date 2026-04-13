@@ -512,7 +512,7 @@ export class Genie extends Item<Player> {
         player.removeItem(this); // Remove itself first to free up memory
 
         let added = 0;
-        const costPerProgram = player.hasToolbox ? 0.5 : 1;
+        const costPerProgram = player.hasAdmin('Toolbox') ? 0.5 : 1;
 
         while (player.freeMemory >= costPerProgram && added < 3) {
             const picked = pickWeightedRandom(allPieces, player);

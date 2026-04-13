@@ -136,21 +136,18 @@ function decideEnemyIntent(
     p.name === 'Frond'// && p.hasFriendlySpecial && p.targetType === 'trapPiece';
   )
   if(friendlyTrap && enemy.movesRemaining > 0){
-    const pathToFrond = findShortestPath(enemy.headPosition, friendlyTrap.headPosition, tileSet, activePieces); //won't include frond's position
+    const pathToFrond = findShortestPath(enemy.headPosition, friendlyTrap.headPosition, tileSet, activePieces, true); 
     if(pathToFrond){
-    const pathToFollow = [...pathToFrond, friendlyTrap.headPosition]
-      return { type: 'move', path: pathToFollow };//find
+      return { type: 'move', path: pathToFrond };
     }
   }
 
   //otherwise we look for another target
   let nearest = (enemy.specialName && !enemy.hasFriendlySpecial && enemy.targetType !== 'trapPiece') ? findNearestPieceCoordinate(enemy, playerPieces) : findNearestAttackableCoordinate(enemy, playerPieces);
 
-  if (!target && nearest && enemy.movesRemaining > 0 && !enemy.statuses.frozen) {//
-    //console.log('found player to move towards at: ', nearest);
-    //console.log('path: ', findShortestPath(enemy.headPosition, nearest, tileSet, activePieces))
-    const path = findShortestPath(enemy.headPosition, nearest, tileSet, activePieces);//don't put this inside a loop
-    if (path && path.length > 1) {//should really never get to path.length = 1, why is there no target if we are next to the goal of path?
+  if ((!target || enemy.targetType === 'trapPiece') && nearest && enemy.movesRemaining > 0 && !enemy.statuses.frozen) {
+    const path = findShortestPath(enemy.headPosition, nearest, tileSet, activePieces, enemy.targetType === 'trapPiece');
+    if (path && path.length > 1) {
       console.log('found a path to the player')
       return { type: 'move', path: path };//move toward a target
     }
@@ -225,7 +222,7 @@ function decideEnemyIntent(
       if(enemy.targetType === 'trapPiece' && enemy.movesRemaining > 0){//frond
         const allyPos = findWeakestPlayerInRange(enemy, enemyPieces)?.place
         if(allyPos){
-          const path = findShortestPath(enemy.headPosition, allyPos, tileSet, activePieces)
+          const path = findShortestPath(enemy.headPosition, allyPos, tileSet, activePieces, true)
           if(path){
             return {type: 'move', path: path}
           }
@@ -504,8 +501,11 @@ function findShortestPath(
   start: Coordinate,
   goal: Coordinate,
   levelTiles: Set<string>,        // e.g., Set of "x,y" strings for walkable tiles
-  activePieces: Piece[]
+  activePieces: Piece[],
+  keepGoal: boolean = false
 ): Coordinate[] | null {
+  if (start.x === goal.x && start.y === goal.y) return null;
+
   const queue: { pos: Coordinate; path: Coordinate[] }[] = [{ pos: start, path: [start] }];
   const visited = new Set<string>();
   visited.add(`${start.x},${start.y}`);
@@ -534,7 +534,7 @@ function findShortestPath(
     // Reached goal
     if (pos.x === goal.x && pos.y === goal.y && path.length > 1){//shortest path that can reach goal will be origin+goal, so 2 spaces
       //infinite loop caused by trying to move into goal
-      path.pop();//remove goal
+      if (!keepGoal) path.pop();//remove goal
       return path;
     }
       

@@ -1399,6 +1399,7 @@ const endTurn = async () => {
   player.value.canMove = true;
   player.value.canAction = true;
   hasFinishedTurn.value = false;
+  handleApplyAdmins('onTurnStart', '');
 }
 
 // When editor exports a new level, shouldn't be needed in final

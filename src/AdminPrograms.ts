@@ -7,6 +7,7 @@ import type { Coordinate, PieceBlueprint, StatModifier, StatusKey } from "./type
 export type AdminTrigger =
   | 'onPlacement'
   | 'onTurnEnd'
+  | 'onTurnStart'
   | 'onEnemyTurnEnd'
   | 'onRoundStart'
   | 'onRoundEnd'
@@ -584,12 +585,12 @@ class RollerBlades extends Admin {
 
 class Lungs extends Admin {
   static name = "Cardio";
-  static description = "Programs all gain a temporary +3 moves after each turn";//+3 temp moves? would negate slowed
+  static description = "Player programs all gain a temporary +3 moves on the start of each turn";//+3 temp moves? would negate slowed
   static unicode = "U+1FAC1";
   static color = "rgb(146, 14, 158)";
   static rarity = 5;
   constructor() {
-    super(Lungs.name, Lungs.description, Lungs.unicode, Lungs.color, 10, Lungs.rarity, 'gameState', 'onTurnEnd');//'onPlacement');
+    super(Lungs.name, Lungs.description, Lungs.unicode, Lungs.color, 10, Lungs.rarity, 'gameState', 'onTurnStart');//'onPlacement');
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const piece of activePieces) {
@@ -2801,12 +2802,12 @@ class Chime extends Admin {
 
 class Fuel extends Admin {
   static name = "Gassed";
-  static description = "Player programs get an extra 1 moves remaining after the enemy's turn";
+  static description = "Player programs get an extra 1 moves on the start of every turn.";
   static unicode = "U+26FD";
   static color = "rgb(185, 250, 255)";
   static rarity = 4;
   constructor() {
-    super(Fuel.name, Fuel.description, Fuel.unicode, Fuel.color, 6, Fuel.rarity, 'gameState', 'onEnemyTurnEnd')
+    super(Fuel.name, Fuel.description, Fuel.unicode, Fuel.color, 6, Fuel.rarity, 'gameState', 'onTurnStart')
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces) {
@@ -3130,12 +3131,12 @@ class Drunk extends Admin {
 
 export class StoneAge extends Admin {//needs reviewing
   static name = "Stone Age";
-  static description = "Fixes all pieces' range to 1 on the end of every turn";
+  static description = "Fixes all pieces' range to 1 on the start of every turn after the first";
   static unicode = "U+1FAA8";
   static color = "rgb(109, 147, 159)";
   static rarity = 2;
   constructor() {
-    super(StoneAge.name, StoneAge.description, StoneAge.unicode, StoneAge.color, 6, StoneAge.rarity, 'gameState', 'onTurnEnd')
+    super(StoneAge.name, StoneAge.description, StoneAge.unicode, StoneAge.color, 6, StoneAge.rarity, 'gameState', 'onTurnStart')
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const piece of activePieces) {

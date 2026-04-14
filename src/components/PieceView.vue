@@ -173,6 +173,16 @@ const shieldIcon = String.fromCodePoint(
       </span>
       <span class="piece-defence-shield" v-if="Math.max(0, piece.defenceRemaining) > 2">+</span>
     </div>
+    <div class="popups-container">
+      <div
+        v-for="popup in piece.popups"
+        :key="popup.id"
+        :class="['damage-popup', { fixed: popup.isFixed }]"
+        :style="{ color: popup.color }"
+      >
+        <span :key="popup.text" class="popup-text">{{ popup.text }}</span>
+      </div>
+    </div>
   </div>
   <div
     v-for="(tile, index) in bodyTiles"
@@ -348,5 +358,44 @@ const shieldIcon = String.fromCodePoint(
   z-index: 3;
   top: 0;
   left: 0;
+}
+.popups-container {
+  position: absolute;
+  top: -20px;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1000;
+}
+
+.damage-popup {
+  font-weight: bold;
+  font-size: 1.2rem;
+  text-shadow: 1px 1px 2px black;
+  position: absolute;
+  white-space: nowrap;
+}
+
+.damage-popup:not(.fixed) {
+  animation: floatUp 1.5s forwards;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-60px); opacity: 0; }
+}
+
+.popup-text {
+  display: inline-block;
+  animation: pulse 0.3s ease-out;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+  100% { transform: scale(1); }
 }
 </style>

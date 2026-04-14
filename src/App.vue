@@ -448,13 +448,15 @@ function replaceBosses(admins: Admin[]) {
   bossAdmins.value = admins;
 }
 
-async function handleApplyAdmins(trigger: AdminTrigger, id: string, piece?: Piece) {//admin and target
+async function handleApplyAdmins(trigger: AdminTrigger, id: string, piece?: Piece, onAdminTriggered?: () => Promise<void>) {//admin and target
   const playerAdmins = player.value.admins;
   for (const admin of playerAdmins) {
     if (admin.disabled) continue;
     if (trigger === admin.triggerType) {
-      admin.isTriggering = true;
-      setTimeout(() => admin.isTriggering = false, 500);
+      //if(admin.triggerType !== 'onDealDamage' && admin.triggerType !== 'onTurnEnd' && admin.triggerType !== 'onEnemyTurnEnd'){
+        admin.isTriggering = true;
+        setTimeout(() => admin.isTriggering = false, 500);
+      //}
       // sort through target types, decide what to pass
       console.log(admin.name, 'trigger', trigger)
       if (admin.targetType === 'gameState') {
@@ -469,14 +471,17 @@ async function handleApplyAdmins(trigger: AdminTrigger, id: string, piece?: Piec
       if (admin.targetType === 'player') {
         await admin.apply({ player: player.value, piece })
       }
+      if (onAdminTriggered) await onAdminTriggered();
     }
-  };
+  }
   //we do bosses second for onPlacement immunities to take effect
   if (!player.value.hasAdmin('Umbrella')) {
     for (const admin of bossAdmins.value) {
       if (trigger === admin.triggerType) {
-        admin.isTriggering = true;
-        setTimeout(() => admin.isTriggering = false, 500);
+        //if(admin.triggerType !== 'onDealDamage' && admin.triggerType !== 'onTurnEnd' && admin.triggerType !== 'onEnemyTurnEnd'){
+          admin.isTriggering = true;
+          setTimeout(() => admin.isTriggering = false, 500);
+        //}
         // sort through target types, decide what to pass
         if (admin.targetType === 'player') {
           await admin.apply({ player: player.value })
@@ -493,6 +498,7 @@ async function handleApplyAdmins(trigger: AdminTrigger, id: string, piece?: Piec
         if (admin.targetType === 'all') {
           await admin.apply({ id, activePieces: activePieces.value, removeCallback: removePiece, board: level.value.tiles, player: player.value, playerSpawns: playerSpawns.value, bosses: bossAdmins.value });//, graveyard: graveyard.value})
         }
+        if (onAdminTriggered) await onAdminTriggered();
       }
     }
   };
@@ -1136,9 +1142,26 @@ const damagePieceAt = async (coord: Coordinate) => {
   //console.log("Damage call:", coord, damage)
   const baseDamage = selectedPiece.value.getStat('attack');
   const baseMult = selectedPiece.value.damageMult;
-  await handleApplyAdmins('onDealDamage', selectedPiece.value.id, damageReceiver);// damageReceiver.id)//attacker's id, (bug: blood tax will trigger even on no damage)
-  const damage = Math.floor(baseDamage * selectedPiece.value.damageMult);//mult should be applyed inside takeDamage for special moves
-  await damageReceiver.takeDamage(damage);
+  const attackPopup = damageReceiver.addPopup({ text: `${baseDamage}${baseMult > 1 ? ` x${baseMult.toFixed(1)}` : ''}`, type: 'attack', isFixed: true });
+  // Initial pause so the user can see the starting attack value
+  
+  let lastSeenMult = baseMult;
+  await handleApplyAdmins('onDealDamage', selectedPiece.value.id, damageReceiver, async () => {
+    const attacker = activePieces.value.find(p => p.id === selectedPiece.value?.id);
+    if(attacker && attacker.damageMult !== lastSeenMult) {
+      lastSeenMult = attacker.damageMult;
+      console.log('adding mult, now: ', lastSeenMult)
+      // Update text and force Vue to detect the change by re-assigning the array
+      attackPopup.text = `${baseDamage} x${lastSeenMult.toFixed(1)}`;
+      damageReceiver.popups = [...damageReceiver.popups];
+      
+      await new Promise(resolve => setTimeout(resolve, 350));
+    }
+  });
+  const damage = Math.floor(baseDamage * (activePieces.value.find(p => p.id === selectedPiece.value!.id)?.damageMult ?? 1));
+  // Brief pause before showing the final damage total
+  //await new Promise(resolve => setTimeout(resolve, 200));
+  await damageReceiver.takeDamage(damage, attackPopup);
   if(damageReceiver.team === 'player'){
     await handleApplyAdmins('onReceiveDamage', selectedPiece.value.id, damageReceiver)
   }

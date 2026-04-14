@@ -38,6 +38,7 @@ export abstract class Piece {
   isTriggering: boolean = false; //for trap animations
   quickSanded: boolean = false;
   appliesStatuses: StatusKey[] = [];
+  popups: { id: string; text: string; color: string; type: string; isFixed?: boolean }[] = [];
 
   specialName?: string;
   extraUnicode?: string;
@@ -105,6 +106,31 @@ export abstract class Piece {
     this.rarity = rarity
     this.removeCallback = removeCallback
     this.id = id ?? crypto.randomUUID()
+  }
+
+  addPopup(popup: { text: string; color?: string; type?: string, isFixed?: boolean }) {
+    const id = crypto.randomUUID();
+    const newPopup = {
+      id,
+      text: popup.text,
+      color: popup.color || "red",
+      type: popup.type || "damage",
+      isFixed: popup.isFixed || false,
+    };
+    this.popups.push(newPopup);
+    if(!newPopup.isFixed){
+      setTimeout(() => {
+        this.popups = this.popups.filter((p) => p.id !== id);
+      }, 1500);
+    }
+    return newPopup;
+  }
+
+  releasePopup(popup: any) {
+    popup.isFixed = false;
+    setTimeout(() => {
+      this.popups = this.popups.filter((p) => p.id !== popup.id);
+    }, 1500);
   }
 
   // --- Methods to handle modifiers ---
@@ -210,8 +236,14 @@ export abstract class Piece {
     this.useMove();
   }
 
-  async takeDamage(damage: number) {
+  async takeDamage(damage: number, existingPopup?: any) {
     if (damage <= 0) return;
+    if (existingPopup) {
+      existingPopup.text = damage.toString();
+      this.releasePopup(existingPopup);
+    } else {
+      this.addPopup({ text: damage.toString() });
+    }
     const defenceBefore = Math.max(0, this.defenceRemaining);
     // 1. Apply damage to defence
     this.defenceRemaining -= damage;

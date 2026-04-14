@@ -163,6 +163,8 @@ class Blood extends Admin {
   //on damage
   async apply({ player }: { player: Player }) {
     player.money += 1 //enemy pieces only?
+    //this.isTriggering = true;
+    //setTimeout(() => this.isTriggering = false, 500);
   }
 
 }
@@ -472,7 +474,7 @@ class Needle extends Admin {//needs some kind of nerf, increase max size only?
   }
 }
 
-class Rune extends Admin {
+export class Rune extends Admin {
   static name = "Rune";//
   static description = "Your programs with a range of 1 on attacking get +1 damage multiplyer";//all programs?
   static unicode = "U+16B1";
@@ -486,6 +488,8 @@ class Rune extends Admin {
     const idx = activePieces.findIndex(p => p.id === id);
     if (activePieces[idx].getStat('range') === 1) {
       activePieces[idx].damageMult += 1;
+      //this.isTriggering = true;
+      //setTimeout(() => this.isTriggering = false, 500);
     }
   }
 }
@@ -1836,7 +1840,7 @@ class AirSupport extends Admin {
   }
 }
 
-class DartBoard extends Admin {//test
+export class DartBoard extends Admin {//test
   static name = "Bullseye";//
   static description = "Programs get +1 damage multiplyer on attacking";
   static unicode = "U+1F3AF";
@@ -1849,6 +1853,8 @@ class DartBoard extends Admin {//test
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].damageMult += 1;
+    //this.isTriggering = true;
+    //setTimeout(() => this.isTriggering = false, 500);
   }
 }
 

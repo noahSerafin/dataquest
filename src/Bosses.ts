@@ -33,6 +33,8 @@ class NorthWind extends Admin {//🌬️//dash U+1F4A8
             //if(!isOccupied && isOnBoard){
             if (!isOccupied && isOnBoard) {
                 piece.moveTo(spaceToCheck);
+                this.isTriggering = true;
+                setTimeout(() => this.isTriggering = false, 500);
             }
         };
     }
@@ -65,6 +67,8 @@ class Hook extends Admin {
             const isOnBoard = board.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)
             if (!isOccupied && isOnBoard) {
                 piece.moveTo(spaceToCheck);
+                this.isTriggering = true;
+                setTimeout(() => this.isTriggering = false, 500);
             }
         };
     }
@@ -110,7 +114,9 @@ class Downturn extends Admin {
         super(Downturn.name, Downturn.description, Downturn.unicode, Downturn.color, 5, Downturn.rarity, 'player', 'onTurnEnd')
     }
     async apply({ player }: { player: Player }) {
-        player.money--
+        player.money--;
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
     }
 }
 
@@ -143,6 +149,8 @@ class Factory extends Admin {
                 enemyInstance.movesRemaining = 0;
                 enemyInstance.actions = 0;
                 activePieces.push(enemyInstance);
+                this.isTriggering = true;
+                setTimeout(() => this.isTriggering = false, 500);
             }
             this.count = 0;
         }
@@ -173,6 +181,8 @@ class Wrath extends Admin {//⛈️//🌩️
             const randId = playerPieces[Math.floor(Math.random() * playerPieces.length)].id
             const idx = activePieces.findIndex(p => p.id === randId);
             activePieces[idx].takeDamage(1 + activePieces[idx].defenceRemaining);//should also remove a size 1 piece from the board
+            this.isTriggering = true;
+            setTimeout(() => this.isTriggering = false, 500);
         }
         this.count++
     }
@@ -194,6 +204,8 @@ class Reaper extends Admin {
     async apply({ player }: { player: Player }) {
         this.count += 1
         if (this.count === 10) {
+            this.isTriggering = true;
+            setTimeout(() => this.isTriggering = false, 500);
             player.lives--
             this.count = 0;
         }
@@ -221,6 +233,8 @@ class Volcano extends Admin {
             for (const piece of activePieces) {
                 if (piece.team === 'player' && !piece.immunities.burning) {
                     piece.statuses.burning = true;
+                    this.isTriggering = true;
+                    setTimeout(() => this.isTriggering = false, 500);
                 }
             };
         }
@@ -639,6 +653,8 @@ class Nofun extends Admin {
         }
         if (player.admins.length > 0) {
             player.admins[Math.floor(Math.random() * player.admins.length)].disabled = true;
+            this.isTriggering = true;
+            setTimeout(() => this.isTriggering = false, 500);
         }
     }
 }
@@ -696,6 +712,8 @@ class Tsunami extends Admin {
                     const isOnBoard = board.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)
                     if (!isOccupied && isOnBoard) {
                         piece.moveTo(spaceToCheck);
+                        this.isTriggering = true;
+                        setTimeout(() => this.isTriggering = false, 500);
                     } else {
                         break;
                     }
@@ -724,6 +742,8 @@ class Coaster extends Admin {
             for (const piece of activePieces) {
                 if (piece.team === 'player') {
                     piece.takeDamage(this.count);
+                    this.isTriggering = true;
+                    setTimeout(() => this.isTriggering = false, 500);
                 }
             };
         }
@@ -749,6 +769,8 @@ class Singularity extends Admin {
             for (const piece of activePieces) {
                 if (piece.team === 'enemy') {
                     piece.actions = 2;
+                    this.isTriggering = true;
+                    setTimeout(() => this.isTriggering = false, 500);
                 }
             };
         }
@@ -833,6 +855,8 @@ class Quicksand extends Admin {
     for (const p of activePieces) {
       if(p.team==='player' && p.movesRemaining < p.getStat('moves')){
         p.quickSanded = true;
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
       } else {
         p.quickSanded = false;
       }
@@ -873,7 +897,9 @@ class Nightfall extends Admin {
         };
         const randId = enemyPieces[Math.floor(Math.random() * enemyPieces.length)].id
         const idx = activePieces.findIndex(p => p.id === randId);
-        activePieces[idx].statuses.hidden = true
+        activePieces[idx].statuses.hidden = true;
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
     }
 }
 //black book NOTEBOOK, U+1F4D3 after 3 turns switch the side of a friendly 5
@@ -897,7 +923,9 @@ class Blackmail extends Admin {
             };
             const randId = playerPieces[Math.floor(Math.random() * playerPieces.length)].id
             const idx = activePieces.findIndex(p => p.id === randId);
-            activePieces[idx].team = 'enemy'
+            activePieces[idx].team = 'enemy';
+            this.isTriggering = true;
+            setTimeout(() => this.isTriggering = false, 500);
         }
         this.count++
     }
@@ -950,6 +978,8 @@ class TrafficLight extends Admin {
                 this.color = 'orange';
             } else  if(this.count === 2){
                 this.color = 'red';
+                this.isTriggering = true;
+                setTimeout(() => this.isTriggering = false, 500);
             }
         }
     }
@@ -1025,6 +1055,8 @@ class Rage extends Admin {
         if(piece.team === 'enemy' && piece.defenceRemaining < (activePieces[idx].getStat('attack') * activePieces[idx].damageMult)){
             piece.statuses.enraged = true;
             piece.addTempModifier({attack: 1})
+            this.isTriggering = true;
+            setTimeout(() => this.isTriggering = false, 500);
         };
     }
 }
@@ -1063,6 +1095,8 @@ class Snoozefest extends Admin {
                 this.candidates[piece.id] = (this.candidates[piece.id] || 0) + 1;
                 if (this.candidates[piece.id] < 2) {
                     piece.statuses.disarmed = true;
+                    this.isTriggering = true;
+                    setTimeout(() => this.isTriggering = false, 500);
                 } else {
                     piece.statuses.disarmed = false;
                 }

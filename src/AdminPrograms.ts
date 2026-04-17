@@ -163,8 +163,8 @@ class Blood extends Admin {
   //on damage
   async apply({ player }: { player: Player }) {
     player.money += 1 //enemy pieces only?
-    //this.isTriggering = true;
-    //setTimeout(() => this.isTriggering = false, 500);
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
   }
 
 }
@@ -389,6 +389,8 @@ export class PetriDish extends Admin {// status test unfinished: make enemies sp
         );
 
         if (!isAdjacent) continue;
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
 
         for (const statusKey of Object.keys(piece.statuses) as StatusKey[]) {
           if (piece === enemy) continue;
@@ -488,8 +490,8 @@ export class Rune extends Admin {
     const idx = activePieces.findIndex(p => p.id === id);
     if (activePieces[idx].getStat('range') === 1) {
       activePieces[idx].damageMult += 1;
-      //this.isTriggering = true;
-      //setTimeout(() => this.isTriggering = false, 500);
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
     }
   }
 }
@@ -506,6 +508,8 @@ class Joker extends Admin {
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].damageMult += 0.5;
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
   }
 }
 
@@ -878,6 +882,8 @@ class Puzzle extends Admin {
 
       if (hasAdjacentAlly) {
         p.addTempModifier({ defence: 1 })
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
       }
     }
   }
@@ -906,6 +912,8 @@ class Chivalry extends Admin {
 
       if (hasAdjacentAlly) {
         p.addModifier({ attack: 1 })
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
       }
     }
   }
@@ -964,25 +972,6 @@ class Diamond extends Admin {
     }
   }
 }
-/*
-class Drum extends Admin {//try it out
-  static name = "Marching Drum";
-  static description = "+1 moves for all placed programs on the end of your turn";
-  static unicode = "U+1F941";
-  static color = "#ff5555";
-  constructor() {
-    super(Drum.name, Drum.description, Drum.unicode, Drum.color, 3, 1, 'gameState', 'onTurnEnd')
-  }
-  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
-    for (const p of activePieces){
-      if(p.team==='player'){
-        p.addModifier({moves: 1})
-        //p.movesRemaining += 1;
-      }
-    }
-  }
-}
-  */
 
 class Sneakers extends Admin {//item???
   static name = "Trainers";
@@ -1117,7 +1106,7 @@ class Telescope extends Admin {
 
 class Microscope extends Admin {
   static name = "Microbiology";
-  static description = "Programs with a size of 1 temporarily get +1 defence at the end of your turn";//+2 temp defence on end of turn? 
+  static description = "Your programs with a size of 1 temporarily get +1 defence at the end of your turn";//+2 temp defence on end of turn? 
   static unicode = "U+1F52C";
   static color = "#c6fcf3";
   static rarity = 2;
@@ -1126,8 +1115,10 @@ class Microscope extends Admin {
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces) {
-      if (p.tiles.length === 1) {
+      if (p.tiles.length === 1 && p.team === 'player') {
         p.addTempModifier({ defence: 1 })
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
       }
     }
   }
@@ -1148,6 +1139,8 @@ class Lotus extends Admin {//boss? remove money?
     for (const a of player.admins) {
       if (a.rarity === 3 && !a.disabled) {
         activePieces[idx].damageMult += 0.5
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
       }
     }
   }
@@ -1167,6 +1160,8 @@ class Broom extends Admin {
       const p = activePieces[index];
       if (p.team === 'enemy' && p.tiles.length === 1 && p.defenceRemaining === 0) {
         activePieces[index].removeCallback?.(activePieces[index])
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
       }
     }
   }
@@ -1218,6 +1213,8 @@ class Sprinkler extends Admin {
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces) {
       p.statuses.burning = false
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
     }
   }
 }
@@ -1463,6 +1460,8 @@ class Ballet extends Admin {//needs to reset
       if (piece.team === 'player') {
         if (this.count <= 2 && !piece.statuses.exposed) {
           piece.statuses.hidden = true
+          this.isTriggering = true;
+          setTimeout(() => this.isTriggering = false, 500);
         } else {
           piece.statuses.hidden = false;
         }
@@ -1540,6 +1539,8 @@ class Pi extends Admin {//test
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].damageMult += 3.14;
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
   }
 }
 
@@ -1602,6 +1603,8 @@ class Harvest extends Admin {
       for (const p of activePieces) {
         if (p.team === 'player') {
           p.addModifier({ maxSize: 1 })
+          this.isTriggering = true;
+          setTimeout(() => this.isTriggering = false, 500);
         }
       };
       this.count = 0;
@@ -1632,7 +1635,7 @@ class Bipolar extends Admin {
   }
 }
 
-class Taoism extends Admin {
+export class Taoism extends Admin {
   static name = "Taoism";
   static description = "At the end of your turn, when the number of enemy programs equals the number of your programs, +1 to all your placed programs' stats";
   static unicode = "U+262F";
@@ -1654,15 +1657,20 @@ class Taoism extends Admin {
     };
     if (enemyPieces.length === playerPieces.length) {
       for (const p of activePieces) {
-        if (p.team === 'player') {
-          p.addModifier({
+        if (p.team === 'player') {//add zen status? might be an appropriate nerf
+          /*p.addModifier({
             attack: 1,
             defence: 1,
             maxSize: 1,
             moves: 1,
             range: 1
-          });
+          });*/
+          p.statuses.zen=true;
+        } else {
+          p.statuses.zen=false;
         }
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
       };
     }
   }
@@ -1853,8 +1861,8 @@ export class DartBoard extends Admin {//test
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].damageMult += 1;
-    //this.isTriggering = true;
-    //setTimeout(() => this.isTriggering = false, 500);
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
   }
 }
 
@@ -2073,6 +2081,8 @@ class Bath extends Admin {
       p.statuses.frozen = false;
       p.statuses.poisoned = false;
     };
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
   }
 }
 
@@ -2146,6 +2156,8 @@ class Camp extends Admin {//needs reviewing
           if (this.count === 2) {
             piece.addModifier({ range: 1 });//encourages camping, seemingly only temporary. If so change to attack
             //piece.addTempModifier({defence : 1})
+            this.isTriggering = true;
+            setTimeout(() => this.isTriggering = false, 500);
           }
         } else {
           piece.addModifier({ range: -(piece.getModifier('range')) });//encourages camping
@@ -2325,6 +2337,8 @@ export class Skyscraper extends Admin {//test not working
       if (piece.team === 'player') {
         const noOfTwos = Math.floor(piece.tiles.length / 2);
         piece.addTempModifier({ defence: noOfTwos });
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
       }
     };
   }
@@ -2466,6 +2480,8 @@ class Evergreen extends Admin {
       for (const p of activePieces) {
         if (p.team === 'player') {
           p.addModifier({ maxSize: 1 })
+          this.isTriggering = true;
+          setTimeout(() => this.isTriggering = false, 500);
         }
       };
       this.count = 0;
@@ -2556,7 +2572,7 @@ class Juggler extends Admin {//test
 
 class Ice extends Admin {//needs to reset
   static name = "Thaw";
-  static description = "Freezes all programs on the first turn of a round, then unfreezes them";
+  static description = "Freezes all programs on the first turn of a round, then unfreezes them every turn after";
   static unicode = "U+1F9CA";
   static color = "rgb(186, 255, 246)";
   static rarity = 5;
@@ -2570,8 +2586,12 @@ class Ice extends Admin {//needs to reset
       //if(piece.team === 'player'){
       if (this.count <= 1 && !piece.immunities.frozen) {
         piece.statuses.frozen = true
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
       } else {
         piece.statuses.frozen = false;
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
       }
       //}
     };
@@ -2596,6 +2616,8 @@ class Howzat extends Admin {
       const p = activePieces[index];
       if (p.team === 'enemy' && p.tiles.length <= 2 && p.defenceRemaining === 0) {
         activePieces[index].removeCallback?.(activePieces[index])
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
       }
     }
   }
@@ -2636,6 +2658,8 @@ class Coin extends Admin {
     if (Math.random() < 0.5) {
       const idx = activePieces.findIndex(p => p.id === id);
       activePieces[idx].damageMult += 1;
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
     }
   }
 }
@@ -2688,6 +2712,8 @@ class BlackBelt extends Admin {
       const p = activePieces[index];
       if (p.team === 'player' && p.actions >= 1) {
         p.willRetaliate = true;
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
       }
     }
   }
@@ -2788,7 +2814,9 @@ class Chime extends Admin {
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces) {
       if (p.team === 'enemy' && p.movesRemaining < p.getStat('moves')) {
-        p.addTempModifier({ defence: -1 })
+        p.addTempModifier({ defence: -1 });
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
       }
     };
   }
@@ -2934,6 +2962,8 @@ class Nose extends Admin {
         if (!p.immunities.exposed) {
           p.statuses.hidden = false;
           p.statuses.exposed = true;
+          this.isTriggering = true;
+          setTimeout(() => this.isTriggering = false, 500);
         }
       }
     };
@@ -3075,6 +3105,8 @@ class Daisy extends Admin {// test
       );
       if (!isAdjacent) continue;
       enemy.takeDamage(dealer.getStat('attack'));
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 250);
     }
   }
 }
@@ -3094,6 +3126,8 @@ class Meditation extends Admin {//needs reviewing
       if (piece.team === 'player' && !piece.statuses.hidden) {
         if (piece.movesRemaining === piece.getStat('moves')) {
           piece.statuses.zen = true;
+          this.isTriggering = true;
+          setTimeout(() => this.isTriggering = false, 500);
         } else {
           piece.statuses.zen = false;
         }

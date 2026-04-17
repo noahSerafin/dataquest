@@ -5,8 +5,9 @@ variant tooltips
 checkforroundend in removePiece - test
 visualise:
     ADMINS - animate admins
-    retaliation, dmg + dmg mult numbers, admin actions and counts
+    admin actions and counts
 let enemy helicopter travel 2 spaces
+nerf taoism by applying zen instead
 self specials easy to accidentally auto click, move buttons z-index up
 
 SEEDED RANDOMNESS - save seed functionality 6

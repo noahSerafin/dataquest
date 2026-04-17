@@ -453,10 +453,10 @@ async function handleApplyAdmins(trigger: AdminTrigger, id: string, piece?: Piec
   for (const admin of playerAdmins) {
     if (admin.disabled) continue;
     if (trigger === admin.triggerType) {
-      //if(admin.triggerType !== 'onDealDamage' && admin.triggerType !== 'onTurnEnd' && admin.triggerType !== 'onEnemyTurnEnd'){
+      if(admin.triggerType !== 'onDealDamage' && admin.triggerType !== 'onTurnEnd' && admin.triggerType !== 'onEnemyTurnEnd'){
         admin.isTriggering = true;
         setTimeout(() => admin.isTriggering = false, 500);
-      //}
+      }
       // sort through target types, decide what to pass
       console.log(admin.name, 'trigger', trigger)
       if (admin.targetType === 'gameState') {
@@ -478,10 +478,10 @@ async function handleApplyAdmins(trigger: AdminTrigger, id: string, piece?: Piec
   if (!player.value.hasAdmin('Umbrella')) {
     for (const admin of bossAdmins.value) {
       if (trigger === admin.triggerType) {
-        //if(admin.triggerType !== 'onDealDamage' && admin.triggerType !== 'onTurnEnd' && admin.triggerType !== 'onEnemyTurnEnd'){
+        if(admin.triggerType !== 'onDealDamage' && admin.triggerType !== 'onTurnEnd' && admin.triggerType !== 'onEnemyTurnEnd'){
           admin.isTriggering = true;
           setTimeout(() => admin.isTriggering = false, 500);
-        //}
+        }
         // sort through target types, decide what to pass
         if (admin.targetType === 'player') {
           await admin.apply({ player: player.value })

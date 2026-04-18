@@ -992,21 +992,6 @@ class Beer extends Item<Player> {
     }
 }
 
-/*class Rock extends Item {
-    static name = "Rock";
-    static description = "Damage a piece by the number of currently held programs";
-    static unicode = "U+1FAA8";
-    static color = "rgb(109, 147, 159)";
-    static rarity = 1;
-    constructor() {
-        super(Rock.name, Rock.description, Rock.unicode, Rock.color, 5, Rock.rarity, 'playerAndGame')
-    }
-    async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }, itemMult: number) {
-        const idx = activePieces.findIndex(p => p.id === id);
-        activePieces[idx].takeDamage(player.programs.length * itemMult);
-    }
-}*/
-
 export class Headphones extends Item<PieceBlueprint> {
     static name = "Locked In";
     static description = "Make a program in your inventory permanently immune to being confused";
@@ -1126,9 +1111,10 @@ class Extinguisher extends Item<PieceBlueprint> {
     }
 }
 
-//RING BUOY, U+1F6DF revive a dead program
 //RING BUOY, U+1F6DF restore the last destroyed program to hand /target a space? or give piece a wontDie bool?
 //lifeboat ROWBOAT, U+1F6A3
+//PUSHPIN, U+1F4CC save node(+game?) state, return to it later.
+//SLEEPING ACCOMMODATION, U+1F6CC reroll next node?
 
 export const allItems = [Blueberry, Battery, Iron, Headphones, Juice, Mushroom, Box, Pepper, Floppy, Voucher, Bandage, Extinguisher, Formula, Frogman, Gift, Hotline, Labcoat, Plunger, Soap, Teapot, Toothbrush, Beans, Blackheart, Bugle, Gloves, Jar, Keygen, Makeover, Melon, Megaphone, Pinata, Rations, Roids, Spanner, Update2, Chili, Cake, Carrot, Garlic, Goggles, Wand, Lightning, Meat, Pie, Supplement, Djembe, Coffee, Disguise, Dupe, Genie, Hourglass, Sandwich, Life, Blessing, Feast, Ginger, Beer, Pandora, Update3, ShootingStar];
 export const upgradeItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Roids, Formula]

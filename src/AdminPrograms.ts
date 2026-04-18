@@ -60,14 +60,14 @@ class Meteor extends Admin {
   constructor() {
     super(Meteor.name, Meteor.description, Meteor.unicode, Meteor.color, 10, Meteor.rarity, 'gameState', 'onRoundStart')
   }
-
-  //onRoundStart
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     for (const p of activePieces) await p.takeDamage(2);
   }
 }
 
-class Miner extends Admin {
+export class Miner extends Admin {
   static name = "Miner";
   static description = "Collect $2 at the end of every round";
   static unicode = "U+26CF";
@@ -255,6 +255,8 @@ class Eye extends Admin {
   }
 
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     for (const p of activePieces) {
       if (p.team === 'enemy') {
         p.addModifier({ defence: -1 })//enemy pieces only?
@@ -354,10 +356,10 @@ export class Notepad extends Admin {
 }
 
 // GLOBE WITH MERIDIANS, U+1F310
-class AdminMap extends Admin {
+export class AdminMap extends Admin {
   static name = "World Map";
   static description = "See incoming node structures in advance";
-  static unicode = "U+1F30D";
+  static unicode = "U+1F5FA";//"U+1F30D";
   static color = "#001cbbff";
   static rarity = 2;
   constructor() {
@@ -691,7 +693,7 @@ export class Toolbox extends Admin {
   }
 }
 
-class Backdoor extends Admin {
+export class Backdoor extends Admin {
   static name = "Backdoor";
   static description = "Load Progams anywhere";
   static unicode = "U+1F6AA";
@@ -831,7 +833,7 @@ export class Compass extends Admin {
   //map edit
 }
 
-class OffRoader extends Admin {
+export class OffRoader extends Admin {
   static name = "Off Roader";
   static description = "Travel to nodes on different paths to your own";
   static unicode = "U+1F699";
@@ -973,7 +975,7 @@ class Diamond extends Admin {
   }
 }
 
-class Sneakers extends Admin {//item???
+export class Sneakers extends Admin {//item???
   static name = "Trainers";
   static description = "+1 moves for all placed programs";
   static unicode = "U+1F45F";
@@ -1304,6 +1306,8 @@ class Spoon extends Admin {
     super(Spoon.name, Spoon.description, Spoon.unicode, Spoon.color, 10, Spoon.rarity, 'player', 'onRoundStart')
   }
   async apply({ player }: { player: Player }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     player.money += 4
   }
 }
@@ -1405,9 +1409,9 @@ class Barber extends Admin {
   constructor() {
     super(Barber.name, Barber.description, Barber.unicode, Barber.color, 8, Barber.rarity, 'gameState', 'onRoundStart')
   }
-
-  //onRoundStart
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     for (const p of activePieces) await p.takeDamage(1); //enemy pieces only?
   }
 }
@@ -1640,7 +1644,7 @@ export class Taoism extends Admin {
   static description = "At the end of your turn, when the number of enemy programs equals the number of your programs, +1 to all your placed programs' stats";
   static unicode = "U+262F";
   static color = "rgba(92, 92, 92, 1)ff";
-  static rarity = 6;
+  static rarity = 5;
   constructor() {
     super(Taoism.name, Taoism.description, Taoism.unicode, Taoism.color, 8, Taoism.rarity, 'gameState', 'onTurnEnd')
   }
@@ -1971,6 +1975,8 @@ class Tracker extends Admin { // FOOTPRINTS, U+1F463
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces) {
       if (p.team === 'enemy' && !p.immunities.exposed) {
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
         p.statuses.hidden = false;
         p.statuses.exposed = true;
       }
@@ -2029,6 +2035,8 @@ class Jammer extends Admin {
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces) {
       if (p.team === 'enemy' && p.getStat('range') > 1) {
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
         p.addModifier({ range: -1 });
       }
     }
@@ -2375,7 +2383,7 @@ class Dharma extends Admin {//test
   static description = "Every kind of reroll is free"
   static unicode = "U+2638"; //every kind of reroll is free (shop, bosses(roulette) ---- nodes(ferris), skips(dice-already free), )
   static color = "rgb(146, 100, 0)";
-  static rarity = 5;
+  static rarity = 6;
   constructor() {
     super(Dharma.name, Dharma.description, Dharma.unicode, Dharma.color, 10, Dharma.rarity, 'player', 'onRoundEnd')
   }
@@ -2554,7 +2562,7 @@ class Juggler extends Admin {//test
   static color = "#000000ff";
   static rarity = 3;
   constructor() {
-    super(Juggler.name, Juggler.description, Juggler.unicode, Juggler.color, 7, Juggler.rarity, 'playerAndGame', 'onPlacement')
+    super(Juggler.name, Juggler.description, Juggler.unicode, Juggler.color, 7, Juggler.rarity, 'playerAndGame', 'onTurnEnd')
   }
   private firstId: string = '';
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
@@ -2565,6 +2573,9 @@ class Juggler extends Admin {//test
     if (placedBps.length <= 1 && this.firstId !== id) {
       const idx = activePieces.findIndex(p => p.id === id);
       activePieces[idx].addModifier({ maxSize: 1, moves: 1, range: 1, attack: 1, defence: 1 })
+      activePieces[idx].movesRemaining += 1;
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
       this.firstId = id;
     }
   }
@@ -2623,7 +2634,7 @@ class Howzat extends Admin {
   }
 }
 
-class Cherries extends Admin {//test
+export class Cherries extends Admin {//test
   static name = "Jackpot";
   static description = "Unplaced programs of the same base type in your inventory add their stats to the loaded program";
   static unicode = "U+1F352";
@@ -2677,6 +2688,8 @@ class Monarch extends Admin {
     const enemyPieces = activePieces.filter(p => (p.team === 'enemy'));
     const randomEnemy = enemyPieces[Math.floor(Math.random() * enemyPieces.length)];
     if (randomEnemy && !randomEnemy.immunities.charmed) {
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
       randomEnemy.statuses.charmed = true;
     }
   }
@@ -2852,6 +2865,8 @@ class Briefcase extends Admin {
 
   async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     if (player.effectiveMoney >= 5) {
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
       for (const p of activePieces) {
         if (p.team === 'enemy') {
           p.addModifier({ defence: -1 })//enemy pieces only?
@@ -3202,6 +3217,8 @@ class Lefty extends Admin {
   }
   async apply({ player }: { player: Player }) {
     if (player.mapProgress < 2 && (player.extraDifficulty === 0)) {
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
       for(const bp of player.programs){
         bp.attack += 1;
       }
@@ -3220,6 +3237,8 @@ class Righty extends Admin {
   }
   async apply({ player }: { player: Player }) {
     if (player.mapProgress < 2 && (player.extraDifficulty !== 0)) {
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
       for(const bp of player.programs){
         bp.defence += 1;
       }
@@ -3275,7 +3294,7 @@ export class Clippy extends Admin {
   //handle in player
 }
 
-export const allAdmins = [Bank, Bucket, Candle, Cheese, Clippy, Smoker, Compass, CreditCard, Crystal, Glasses, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Schoolbag, Seed, Slots, Sprinkler, StoneAge, Tempura, Nose, Sneakers, Bipolar, Chime, Abacus, Aesculapius, Appraisal, Balloon, Briefcase, Bubble, Cactus, Coin, Purse, Convenience, FireEngine, Heart, Hermes, Joker, Loot, Clover, Microscope, Newspaper, Pickup, Putter, Relay, Scarf, Stiletto, Mail, Bowling, Violin, Vitamins, Wings, AdminMap, Barber, Ace, AirSupport, Bone, Bouquet, Camp, Huzzah, Luggage, Chain, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Dice, Jammer, Roger, Juggler, Ladder, Puzzle, Razor, Sled, Rune, Shades, Stonks, Christmas, Telescope, Crown, Toolbox, Tracker, Ambulance, Backdoor, BionicArm, BionicLeg, Crash, Blood, Broom, DartBoard, Butler, Dove, Drunk, Evergreen, Eye, Discount, Fountain, Feather, Fuel, Spoon, Liberty, Lightbulb, Ollie, Palette, Pazzaz, PetriDish, Prayer, Wheel, Salt, Selfie, Pants, Variety, Volatile, Artic, BlackBelt, Lungs, Chemistry, Chivalry, Toilet, Copier, Daisy, Diamond, Hamsa, Skyscraper, Howzat, Inheritance, Cherries, Lotus, Brain, Meditation, Meteor, Monarch, Onion, PeaPod, Teddy, Pong, RollerBlades, Bell, Baseball, Ice, Ballet, Umbrella, Dharma, Bath, Cards, Disco, Lefty, Minerva, Needle, Pi, Osiris, Righty, Ring, School, Taoism];
+export const allAdmins = [Bank, Bucket, Candle, Cheese, Clippy, Smoker, Compass, CreditCard, Crystal, Glasses, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Schoolbag, Seed, Slots, Sprinkler, StoneAge, Tempura, Nose, Sneakers, Bipolar, Chime, Abacus, Aesculapius, Appraisal, Balloon, Briefcase, Bubble, Cactus, Coin, Purse, Convenience, FireEngine, Heart, Hermes, Joker, Loot, Clover, Microscope, Newspaper, Pickup, Putter, Relay, Scarf, Stiletto, Mail, Bowling, Violin, Vitamins, Wings, AdminMap, Barber, Ace, AirSupport, Bone, Bouquet, Camp, Huzzah, Luggage, Chain, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Dice, Jammer, Roger, Juggler, Ladder, Puzzle, Razor, Sled, Rune, Shades, Stonks, Christmas, Telescope, Crown, Toolbox, Tracker, Ambulance, Backdoor, BionicArm, BionicLeg, Crash, Blood, Broom, DartBoard, Butler, Dove, Drunk, Evergreen, Eye, Discount, Fountain, Feather, Fuel, Spoon, Liberty, Lightbulb, Ollie, Palette, Pazzaz, PetriDish, Prayer, Wheel, Salt, Selfie, Pants, Variety, Volatile, Artic, BlackBelt, Lungs, Chemistry, Chivalry, Toilet, Copier, Daisy, Diamond, Hamsa, Skyscraper, Howzat, Inheritance, Cherries, Lotus, Brain, Meditation, Meteor, Monarch, Onion, PeaPod, Teddy, Pong, RollerBlades, Bell, Baseball, Taoism, Ice, Ballet, Umbrella, Bath, Cards, Disco, Lefty, Minerva, Needle, Pi, Osiris, Righty, Ring, School, Dharma ];
 console.log('admins length: ', allAdmins.length)
 let adminLogs = {
   rarity1: 0,

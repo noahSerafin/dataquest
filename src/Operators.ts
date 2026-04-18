@@ -1,6 +1,6 @@
 import type { OS } from "./types";
-import { Voucher, Mushroom, Garlic, Juice, Meat, Genie, Pandora, Update2, Dupe, Jar} from "./Items";
-import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Clippy, Notepad, StoneAge, Rune, DartBoard, Taoism} from "./AdminPrograms";
+import { Voucher, Mushroom, Garlic, Juice, Meat, Genie, Pandora, Update2, Dupe, Jar, Iron} from "./Items";
+import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Clippy, Notepad, StoneAge, Rune, DartBoard, Taoism, OffRoader, AdminMap, Compass, Backdoor, Miner, Copier, Cherries, Sneakers, Palette} from "./AdminPrograms";
 import { createDefaultStatuses } from "./types";
 
     const knife =  {
@@ -258,6 +258,23 @@ import { createDefaultStatuses } from "./types";
         cost: 1,
         immunities: createDefaultStatuses()
     }
+    const honey =  {
+        id: crypto.randomUUID(),
+        name: "HoneyPot",
+        description: "A program that can summon Bees",
+        unicode: "U+1F36F",
+        color: "#ffb20dff",
+        maxSize: 1,
+        moves: 0,
+        range: 1,
+        attack: 0,
+        defence: 0,
+        rarity: 1,
+        // blueprint-only fields:
+        isPlaced: false,
+        cost: 2,
+        immunities: createDefaultStatuses()
+    }
     const aegis =  {
         id: crypto.randomUUID(),
         name: "Aegis",
@@ -452,25 +469,97 @@ const Cobol : OS = {
     description: "All about money"
 }
 
-//challenges:
-//explorer - map, compass, offroader
+const Arch : OS = {
+    name: 'Arch',
+    unicode: 'U+394',
+    money: 4,
+    memory: 4,
+    adminSlots: 5,
+    blueprints: [sling, aegis],
+    items: [new Mushroom, new Garlic],
+    admins: [new Backdoor],
+    lives: 1,
+    description: "The hackers choice, BTW..."
+}
+
+const GNU : OS = {
+    name: 'GNU',
+    unicode: 'U+1F403',
+    money: 5,
+    memory: 3,
+    adminSlots: 3,
+    blueprints: [ant],//buffalo?
+    items: [],
+    admins: [new Crystal, new StoneAge, new Rune],
+    lives: 2,
+    description: "Progenitor technology"
+}
+
+const Amiga : OS = {
+    name: 'Amiga',
+    unicode: 'U+2705',//HEAVY CHECK MARK, U+2714
+    money: 3,
+    memory: 3,
+    adminSlots: 4,
+    blueprints: [bug, aegis],
+    items: [new Jar],
+    admins: [new Copier, new Cherries],
+    lives: 2,
+    description: "Bonus Multimedia tool"
+}
+
+const Beos : OS = {
+    name: 'BeOS',
+    unicode: 'U+1F41D',
+    money: 5,
+    memory: 5,
+    adminSlots: 4,
+    blueprints: [bee, honey],
+    items: [new Iron],
+    admins: [new Palette, new Sneakers],
+    lives: 2,
+    description: "Fast symmetric multiprocessing"
+}
+
+// ROUND PUSHPIN, U+1F4CD
+const Explorer : OS = {
+    name: 'Explorer',
+    unicode: 'U+1F30D',
+    money: 9,
+    memory: 3,
+    adminSlots: 4,
+    blueprints: [knife, sling, shield],
+    items: [],
+    admins: [new OffRoader, new AdminMap, new Compass],
+    lives: 1,
+    description: "Gets around the overworld with ease. Start with some pocket money."
+}
+
+const Satoshi : OS = {
+    name: 'Satoshi',
+    unicode: 'U+20BF',
+    money: 1,
+    memory: 6,
+    adminSlots: 6,
+    blueprints: [bug, aegis],
+    items: [],
+    admins: [new Miner, new Bubble],
+    lives: 1,
+    description: "Volatile currency generator, high memory and admin slots"
+}
+
 //Fleet - vehicles: offroader, pickup, van, artic, ambulance, firetruck
 
-// SCALES, U+2696 --- CROSSED SWORDS, U+2694
-//scales: EGYPTIAN HIEROGLYPH U038, U+1335D
-//temple - +1 admin +1 memory -1 interest
-//---------
-
-//STEAM LOCOMOTIVE, U+1F682
-//+2 admin 
-
-//BITCOIN SIGN, U+20BF
-
-//U+1F403 GNU
-
 /*
-//Arch /Kali - dragon head
-//GREEK CAPITAL LETTER DELTA, U+394
+//Solaris
+Developed by Sun Microsystems (later Oracle Corporation)
+Enterprise reliability
+ZFS filesystem
+DTrace performance tools
+Solaris powered many internet servers in the 1990s and 2000s.
+[toolbox, schoolbag]
+
+/Kali - dragon head
 [daemon, dataworm]
 [backdoor]
 
@@ -479,31 +568,6 @@ const Cobol : OS = {
 //Huge ecosystem of early software (WordStar, dBase, etc.)
 [pandora, genie,]
 [notepad]
-
-//AmigaOS
-Advanced multitasking
-Built-in GUI (Workbench)
-Strong multimedia capabilities
-[copier, cherries]
-[Jar]
-
-BeOS
-Designed for multimedia performance
-Symmetric multiprocessing
-64-bit journaling filesystem
-Very fast UI
-[rollers, palette]
-
-UNIX Variants (Non-Linux)
----
-
-Solaris
-Developed by Sun Microsystems (later Oracle Corporation)
-Enterprise reliability
-ZFS filesystem
-DTrace performance tools
-Solaris powered many internet servers in the 1990s and 2000s.
-[fan, schoolbag]
 
 FreeBSD
 High-performance servers
@@ -540,4 +604,4 @@ const Debugger : OS = {
     description: 'FOR TESTING'
 }
 
-export const allOSes = [Window95, Steam, Window, Apple, Penguin, Temple, Fortran, Cobol, Debugger];
+export const allOSes = [Window95, Steam, Window, Apple, Penguin, Temple, Fortran, Cobol, Arch, GNU, Amiga, Beos, Explorer, Satoshi, Debugger];

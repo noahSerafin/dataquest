@@ -453,7 +453,7 @@ async function handleApplyAdmins(trigger: AdminTrigger, id: string, piece?: Piec
   for (const admin of playerAdmins) {
     if (admin.disabled) continue;
     if (trigger === admin.triggerType) {
-      if(admin.triggerType !== 'onDealDamage' && admin.triggerType !== 'onTurnEnd' && admin.triggerType !== 'onEnemyTurnEnd'){
+      if(admin.triggerType !== 'onDealDamage' && admin.triggerType !== 'onTurnEnd' && admin.triggerType !== 'onEnemyTurnEnd' && admin.triggerType !== 'onRoundStart'){
         admin.isTriggering = true;
         setTimeout(() => admin.isTriggering = false, 500);
       }

@@ -27,8 +27,27 @@
             if (!props.debugMode && !StorageManager.hasStakeWin(2)) return "Win with at least 2 infamy";
         }
         if (osName === 'Cobol') {
-            if (!props.debugMode && StorageManager.getUniqueWinsCount() < 5) return "Win with 5 different operators";
+            if (!props.debugMode && StorageManager.getUniqueWinsCount() < 4) return "Win with 4 different operators";
         }
+        if (osName === 'Arch') {
+            if (!props.debugMode && !StorageManager.hasStakeWin(3)) return "Win with at least 3 infamy";
+        }
+        if (osName === 'GNU') {
+            if (!props.debugMode && StorageManager.getUniqueWinsCount() < 5) return "Win with at least 5 different operators";
+        }
+        if (osName === 'Amiga') {
+            if (!props.debugMode && !StorageManager.hasStakeWin(4)) return "Win with at least 4 infamy";
+        }
+        if (osName === 'BeOS') {
+            if (!props.debugMode && !StorageManager.hasStakeWin(5)) return "Win with at least 5 infamy";
+        }
+        if (osName === 'Explorer') {
+            if (!props.debugMode && StorageManager.getUniqueWinsCount() < 6) return "Win with at least 6 different operators";
+        }
+        if (osName === 'Satoshi') {
+            if (!props.debugMode && StorageManager.getUniqueWinsCount() < 6) return "Win with at least 6 infamy";
+        }
+        //Explorer, Satoshi, Debugger
         return null;
     }
 

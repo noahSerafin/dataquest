@@ -85,6 +85,8 @@ class Mirror extends Admin {
     }
 
     async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
         const enemyPieces: Piece[] = []
         for (const piece of activePieces) {
             enemyPieces.push(piece)
@@ -254,6 +256,8 @@ class Circus extends Admin {
         super(Circus.name, Circus.description, Circus.unicode, Circus.color, 5, Circus.rarity, 'gameState', 'onRoundStart')
     }
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
         for (const piece of activePieces) {
             if (piece.team === 'enemy') {
                 piece.addModifier({ moves: 1 })
@@ -272,6 +276,8 @@ class Castle extends Admin {
         super(Castle.name, Castle.description, Castle.unicode, Castle.color, 5, Castle.rarity, 'gameState', 'onRoundStart')
     }
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
         for (const piece of activePieces) {
             if (piece.team === 'enemy') {
                 piece.addModifier({ defence: 1 })
@@ -305,6 +311,8 @@ class Jack extends Admin {
         super(Jack.name, Jack.description, Jack.unicode, Jack.color, 5, Jack.rarity, 'gameState', 'onRoundStart')
     }
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
         for (const piece of activePieces) {
             if (piece.team === 'enemy') {
                 piece.addModifier({ range: 1 })
@@ -323,6 +331,8 @@ class Lock extends Admin {
         super(Lock.name, Lock.description, Lock.unicode, Lock.color, 6, Lock.rarity, 'gameState', 'onRoundStart')
     }
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
         for (const piece of activePieces) {
             if (piece.team === 'enemy') {
                 piece.addModifier({ defence: 2 })
@@ -458,6 +468,8 @@ class Whale extends Admin {
         super(Whale.name, Whale.description, Whale.unicode, Whale.color, 3, Whale.rarity, 'gameState', 'onRoundStart')
     }
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
         for (const piece of activePieces) {
             if (piece.team === 'enemy') {
                 piece.addModifier({ maxSize: 2 })
@@ -476,6 +488,8 @@ class Hammer extends Admin {
         super(Hammer.name, Hammer.description, Hammer.unicode, Hammer.color, 3, Hammer.rarity, 'gameState', 'onRoundStart')
     }
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
         for (const piece of activePieces) {
             if (piece.team === 'enemy') {
                 piece.addModifier({ maxSize: 2 })
@@ -494,6 +508,8 @@ class Omega extends Admin {
         super(Omega.name, Omega.description, Omega.unicode, Omega.color, 6, Omega.rarity, 'gameState', 'onRoundStart')
     }
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
         for (const piece of activePieces) {
             if (piece.team === 'enemy') {
                 piece.addModifier({
@@ -576,6 +592,8 @@ class REDACTED extends Admin {
         super(REDACTED.name, REDACTED.description, REDACTED.unicode, REDACTED.color, 6, REDACTED.rarity, 'all', 'onRoundStart')
     }
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
         for (const piece of activePieces) {
             if (piece.team === 'enemy') {
                 piece.redacted = true;
@@ -595,6 +613,8 @@ class Fog extends Admin {//😶‍🌫️🌫️
     }
 
     async apply({ player }: { player: Player }) {
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
         player.fogged = true
     }
     /*
@@ -670,6 +690,8 @@ class Tornado extends Admin {
     }
     async apply({ activePieces, board, playerSpawns }: { activePieces: Piece[], board: Coordinate[], playerSpawns?: Coordinate[] }) {
         if (!playerSpawns) return;
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
         const unoccupiedTiles = board.filter(t => !activePieces.some(p => p.tiles.some(pt => pt.x === t.x && pt.y === t.y)));
 
         const newSpawns: Coordinate[] = [];
@@ -795,6 +817,8 @@ class Cocktail extends Admin {
     async apply({ player, bosses }: { player: Player, bosses?: Admin[] }) {
         if (!bosses) return;
         this.onRoundEnd(bosses); // in case previous bosses were not cleared
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
 
         const possibleBosses = allBosses.filter(b => b.rarity < player.difficulty && b.name !== Cocktail.name);
         if (possibleBosses.length === 0) return;
@@ -834,6 +858,8 @@ class Mountain extends Admin {
         super(Mountain.name, Mountain.description, Mountain.unicode, Mountain.color, 3, Mountain.rarity, 'gameState', 'onRoundStart')
     }
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
         for (const piece of activePieces) {
             if (piece.team === 'enemy') {
                 piece.addModifier({ maxSize: 4 })

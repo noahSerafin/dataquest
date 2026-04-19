@@ -180,6 +180,7 @@ export interface SavedGameState {
   currentSeed: string;
   activePieces: any[];
   originalSpawns: Coordinate[];
+  playerSpawns: Coordinate[];
   originalPieces: any[];
   lastTurnPieces: any[];
   currentCompany: Company | null;
@@ -195,6 +196,20 @@ export interface SavedGameState {
   currentBoss: any;
   skipsThisLevel: number;
   rerollBossCost: number;
+
+  displayState: {
+    showMap: boolean;
+    showShop: boolean;
+    showBoard: boolean;
+    showCompiler: boolean;
+    showAltar: boolean;
+    showDuplicator: boolean;
+    showWorkbench: boolean;
+    showSummary: boolean;
+    showInventory: boolean;
+  };
+
+  boardTiles: Coordinate[];
 
   timestamp: number;
 }

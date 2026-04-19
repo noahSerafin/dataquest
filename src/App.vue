@@ -190,6 +190,7 @@ function saveGame() {
     currentSeed: currentSeed.value,
     activePieces: activePieces.value.map(p => serializePiece(p)),
     originalSpawns: originalSpawns.value.map(s => ({ ...s })),
+    playerSpawns: playerSpawns.value,
     originalPieces: originalPieces.value.map(p => serializePiece(p)),
     lastTurnPieces: lastTurnPieces.value.map(p => serializePiece(p)),
     currentCompany: currentCompany.value,
@@ -205,7 +206,23 @@ function saveGame() {
     skipsThisLevel: skipsThisLevel.value,
     rerollBossCost: rerollBossCost.value,
 
+    displayState: {
+      showMap: showMap.value,
+      showShop: showShop.value,
+      showBoard: showBoard.value,
+      showCompiler: showCompiler.value,
+      showAltar: showAltar.value,
+      showDuplicator: showDuplicator.value,
+      showWorkbench: showWorkbench.value,
+      showSummary: showSummary.value,
+      showInventory: showInventory.value,
+    },
+
+    boardTiles: level.value.tiles,
+
     timestamp: Date.now()
+
+
   };
 
   StorageManager.saveGameState(state);
@@ -233,6 +250,7 @@ function loadGame() {
   // Rehydrate Battle State
   activePieces.value = saved.activePieces.map(p => rehydratePiece(p, removePiece));
   originalSpawns.value = saved.originalSpawns;
+  playerSpawns.value = saved.playerSpawns;
   originalPieces.value = saved.originalPieces.map(p => rehydratePiece(p, removePiece));
   lastTurnPieces.value = saved.lastTurnPieces.map(p => rehydratePiece(p, removePiece));
   currentCompany.value = saved.currentCompany;
@@ -241,14 +259,30 @@ function loadGame() {
   bossAdmins.value = saved.bossAdmins.map(a => rehydrateAdmin(a));
   graveyard.value = saved.graveyard.map(p => rehydratePiece(p, removePiece));
   foggedTiles.value = saved.foggedTiles;
+  level.value.tiles = saved.boardTiles || [];
 
   showMainMenu.value = false;
-  if (roundHasStarted.value) {
-    showBoard.value = true;
-    showMap.value = false;
+
+  if (saved.displayState) {
+    showMap.value = saved.displayState.showMap;
+    showShop.value = saved.displayState.showShop;
+    showBoard.value = saved.displayState.showBoard;
+    showCompiler.value = saved.displayState.showCompiler;
+    showAltar.value = saved.displayState.showAltar;
+    showDuplicator.value = saved.displayState.showDuplicator;
+    showWorkbench.value = saved.displayState.showWorkbench;
+    showSummary.value = saved.displayState.showSummary;
+    showInventory.value = saved.displayState.showInventory;
   } else {
-    showMap.value = true;
+    // Fallback for older saves
+    if (roundHasStarted.value) {
+      showBoard.value = true;
+      showMap.value = false;
+    } else {
+      showMap.value = true;
+    }
   }
+
 }
 
 const showCollection = ref(false);
@@ -716,7 +750,9 @@ async function selectLevel(newLevel: Level, company: Company, difficultyMod: num
   }
   showMap.value = false;
   roundHasStarted.value = true;
+  saveGame();
 }
+
 
 function handleProceed() {
   for (const admin of player.value.admins) {
@@ -738,6 +774,7 @@ function handleProceed() {
   showMap.value = true;
   currentCompany.value.abbr = '';
   currentCompany.value.unicode = player.value.osunicode;
+  saveGame();
 }
 
 async function reloadLevel() {
@@ -767,6 +804,7 @@ async function reloadLevel() {
     foggedTiles.value = [...level.value.tiles];
     clearFog();
   }
+  saveGame();
 }
 
 function retryLevel() {
@@ -1543,6 +1581,7 @@ const endTurn = async () => {
   player.value.canAction = true;
   hasFinishedTurn.value = false;
   handleApplyAdmins('onTurnStart', '');
+  saveGame();
 }
 
 // When editor exports a new level, shouldn't be needed in final

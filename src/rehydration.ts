@@ -144,10 +144,14 @@ export function serializePlayer(player: Player): any {
         bonusInterest: player.bonusInterest,
         bonusReward: player.bonusReward,
         nextInterest: player.nextInterest,
+        nextReward: player.nextReward,
+        interestCap: player.interestCap,
+        stake: player.stake,
         fogged: player.fogged,
         osunicode: player.osunicode
     };
 }
+
 
 export function rehydratePlayer(data: any, allOSes: OS[]): Player {
     const player = new Player(

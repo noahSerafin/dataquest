@@ -102,7 +102,7 @@ const pieceStyle = computed(() => {
     lineHeight: props.tileSize -24 + 'px',
     backgroundColor: props.piece.color,
     '--piece-color': props.piece.color,
-    'z-index': 2,
+    'z-index': 'auto',
     position: 'unset'
   }
   if (props.cssclass === 'inventory'){
@@ -277,7 +277,7 @@ const shieldIcon = String.fromCodePoint(
   color: white;
   right: 0;
   border-radius: 0;
-  z-index: 2;
+  z-index: 1000;
 }
 .action-btn{
   bottom: 0;

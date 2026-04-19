@@ -6,7 +6,7 @@ checkforroundend in removePiece - test
 visualise:
     ADMINS - animate admins testing, counts too?
     nerf taoism by applying zen instead - testing
-self specials easy to accidentally auto click, move buttons z-index up
+
 
 SEEDED RANDOMNESS - save seed functionality 6
 SAVE GAME STATE for bugs 7.5
@@ -20,12 +20,10 @@ nerf rosebud - pieces can't stay exposed after a special?
 variant should overide base piece color, (and tile colour???)
 
 // BUGS
+spawn still sometimes dissapearing
 you win not dissapearing in endless mode
-spawns dissapearing if retry is clicked during enemy turn
 enemies not pathing to player sometimes, are they looking for the head position???
 crystal ball stopping shop progression - once seed is sorted let it also preview node contents
-Ties currently count as wins - but player still loses a life? Might be fine to leave
-Investigate why taoism or highrise might be adding def every turn = test fix
 
 MAP/WORLD BUILDER
 Gladiator nodes - +1 or 2 security, place only once in arena node for reward - skippable

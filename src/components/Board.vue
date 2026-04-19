@@ -692,8 +692,8 @@ function resolveMove(
 .move-button:after {
   right: 0;
 }
-.piece-layer.piece{
-  z-index: 2;
+.piece-layer{
+  z-index: auto;
 }
 .green{
   background-color: rgba(21, 255, 0, 0.432);

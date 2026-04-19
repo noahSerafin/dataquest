@@ -321,7 +321,7 @@ class Hamsa extends Admin {
 
 class Relay extends Admin {
   static name = "Relay";
-  static description = "All placed programs with a range bigger than 1 on placement gain +1 attack";
+  static description = "All placed programs with a range bigger than 1 on placement gain +2 attack";
   static unicode = "U+1F4E1";
   static color = "rgb(226, 94, 42)";
   static rarity = 2;

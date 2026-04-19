@@ -160,3 +160,41 @@ export type SkipReward =
   | { kind: "blueprint"; value: PieceBlueprint }
   | { kind: "admin"; value: Admin }
   | { kind: "item"; value: Item };
+
+export type WorldNode = {
+  id: string
+  type: 'combat' | 'shop' | 'event' | 'boss' | 'elite' | 'treasure' | 'compiler' | 'altar' | 'workbench' | 'terminal' | 'empty'
+  visited: boolean
+  selectable: boolean
+  connections: string[]
+  depth: number
+  levelId?: string
+  skipReward?: SkipReward
+  isBossLine?: boolean
+}
+
+export type World = Record<string, WorldNode>
+
+export interface SavedGameState {
+  player: any;
+  currentSeed: string;
+  activePieces: any[];
+  originalSpawns: Coordinate[];
+  originalPieces: any[];
+  lastTurnPieces: any[];
+  currentCompany: Company | null;
+  roundHasStarted: boolean;
+  gameStarted: boolean;
+  bossAdmins: any[];
+  graveyard: any[];
+  foggedTiles: Coordinate[];
+  
+  // WorldMap state
+  world: World;
+  currentNodeId: string;
+  currentBoss: any;
+  skipsThisLevel: number;
+  rerollBossCost: number;
+
+  timestamp: number;
+}

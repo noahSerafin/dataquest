@@ -6,11 +6,15 @@
 
     const props = defineProps<{
         debugMode: boolean;
+        showResume?: boolean;
     }>();
+
 
     const emit = defineEmits<{
         (e: 'createNewPlayer', payload: { os: OS, seed: string }): void;
+        (e: 'resumeGame'): void;
     }>();
+
 
     const seedInput = ref<string>('');
 
@@ -122,8 +126,7 @@
 
 <template>
     <div class="container">
-        <h2 class="mm-heading2">Choose your OS:</h2>
-
+        <h2 class="mm-heading2">Choose your OS </h2>
         <div class="oses" ref="oses">
             <div class="os"
             v-for="os in allOSes"
@@ -187,11 +190,53 @@
             <button class="play-btn" :disabled="!seedInput" @click="startWithSeed">
                 Play
             </button>
+            <span v-if="showResume">OR <button class="resume-btn" @click="emit('resumeGame')">RESUME GAME</button></span>
         </div>
     </div>
 </template>
 
 <style scoped>
+    .heading{
+        display: flex;
+    }
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        color: white;
+    }
+
+    .resume-section {
+        margin-bottom: 2rem;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .resume-btn {
+        background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+        color: white;
+        padding: 0.2rem 0.4rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s, box-shadow 0.2s;
+        font-weight: bold;
+    }
+
+    .resume-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .resume-btn:active {
+        transform: scale(0.98);
+    }
+
     h1, h2{
         margin: 0;
         text-align: center;
@@ -199,6 +244,7 @@
     h2{
         margin: 0.2rem;
     }
+
     .oses{
         z-index: 9999;
         padding: 1rem;

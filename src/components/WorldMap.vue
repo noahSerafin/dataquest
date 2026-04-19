@@ -203,7 +203,7 @@
     }
 
     function displayIcon(node: WorldNode) {
-        if(node.id === currentNodeId.value){
+        if(node.id === currentNodeId.value && props.player.osunicode){
             return String.fromCodePoint(parseInt(props.player.osunicode.replace('U+', ''), 16), 0xFE0F);
         }
         if (node.type === 'skip' && node.skipReward) {

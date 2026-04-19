@@ -7,8 +7,7 @@ visualise:
     ADMINS - animate admins testing
     nerf taoism by applying zen instead - testing
     not all admins always trigger (ace/pants)
-    -onPlacement
-    -onPieceDestruction
+    -onRoundStart
     admin actions and counts
 let enemy helicopter travel 2 spaces
 self specials easy to accidentally auto click, move buttons z-index up

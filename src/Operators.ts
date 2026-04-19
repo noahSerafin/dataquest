@@ -557,6 +557,7 @@ Enterprise reliability
 ZFS filesystem
 DTrace performance tools
 Solaris powered many internet servers in the 1990s and 2000s.
+'Highly efficient storage management'
 [toolbox, schoolbag]
 
 /Kali - dragon head

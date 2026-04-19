@@ -477,8 +477,8 @@ async function handleApplyAdmins(trigger: AdminTrigger, id: string, piece?: Piec
   //we do bosses second for onPlacement immunities to take effect
   if (!player.value.hasAdmin('Umbrella')) {
     for (const admin of bossAdmins.value) {
-      if (trigger === admin.triggerType) {
-        if(admin.triggerType !== 'onDealDamage' && admin.triggerType !== 'onTurnEnd' && admin.triggerType !== 'onEnemyTurnEnd'){
+      if (trigger === admin.triggerType) {//'onTurnStart' 'onRoundEnd' 'onReceiveDamage' 'onRoundLoss'  | 'other';
+        if(admin.triggerType === 'onTurnStart' || admin.triggerType === 'onRoundEnd' || admin.triggerType === 'onReceiveDamage' || admin.triggerType === 'onRoundLoss' ){
           admin.isTriggering = true;
           setTimeout(() => admin.isTriggering = false, 500);
         }

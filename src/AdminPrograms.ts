@@ -181,6 +181,8 @@ class Razor extends Admin {
 
   //on placement/after hydration
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({ attack: 1 })//enemy pieces only?  
   }
@@ -198,6 +200,8 @@ class BionicArm extends Admin {
 
   //on placement/after hydration
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({ attack: 2 })//enemy pieces only?  
   }
@@ -214,6 +218,8 @@ class BionicLeg extends Admin {
   }
 
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({ moves: 2 })
     activePieces[idx].movesRemaining += 2;
@@ -289,6 +295,8 @@ class Heartbreaker extends Admin {//make a boss
 
   //on placement
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].immunities.charmed = true;
   }
@@ -304,6 +312,8 @@ class Hamsa extends Admin {
     super(Hamsa.name, Hamsa.description, Hamsa.unicode, Hamsa.color, 8, Hamsa.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({ defence: 3 })
   }
@@ -322,6 +332,8 @@ class Relay extends Admin {
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
     if (activePieces[idx].team === 'player' && activePieces[idx].getStat('range') > 1) {
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
       activePieces[idx].addModifier({ attack: 2 })
     }
   }
@@ -539,6 +551,8 @@ class Aesculapius extends Admin {
 
   //on placement
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].immunities.poisoned = true
     activePieces[idx].immunities.diseased = true
@@ -555,6 +569,8 @@ class Heart extends Admin {//change
     super(Heart.name, Heart.description, Heart.unicode, Heart.color, 5, Heart.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({ maxSize: 1 })
     activePieces[idx].addModifier({ moves: 1 })
@@ -571,6 +587,8 @@ class Bone extends Admin {//change
     super(Bone.name, Bone.description, Bone.unicode, Bone.color, 5, Bone.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({ maxSize: 3 })
     activePieces[idx].addModifier({ moves: -1 })
@@ -587,6 +605,8 @@ class RollerBlades extends Admin {
     super(RollerBlades.name, RollerBlades.description, RollerBlades.unicode, RollerBlades.color, 8, RollerBlades.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({ moves: 3 })
     activePieces[idx].movesRemaining += 3;
@@ -605,6 +625,8 @@ class Lungs extends Admin {
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const piece of activePieces) {
       if (piece.team === 'player') {
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
         //piece.addTempModifier({moves: 3})
         piece.movesRemaining += 3;
       }
@@ -625,6 +647,8 @@ class Brain extends Admin {//unfinished, actionsHandler in Piececontroller playi
     super(Brain.name, Brain.description, Brain.unicode, Brain.color, 9, Brain.rarity, 'playerAndGame', 'onPlacement')
   }
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({ attack: Math.round(player.freeMemory) })
   }
@@ -718,6 +742,8 @@ class Communism extends Admin {
   //on placement
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     if (player.money <= 4) {
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
       const idx = activePieces.findIndex(p => p.id === id);
       activePieces[idx].addModifier({
         attack: 1,
@@ -744,7 +770,7 @@ export class Palette extends Admin {
 
 class Osiris extends Admin {
   static name = "Osiris";
-  static description = "+1 damage to all your placed programs each time a program is destroyed";//your own programs?
+  static description = "+1 attack to all your placed programs each time a program is destroyed";//your own programs?
   static unicode = "U+13080";//horus: "U+1314A";
   static color = "#33073bff";
   static rarity = 6;
@@ -753,6 +779,8 @@ class Osiris extends Admin {
   }
   //on receive damage //on piece destrcution
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     for (const p of activePieces) {
       if (p.team === 'player') {
         p.addModifier({ attack: 1 })
@@ -785,6 +813,8 @@ class Newspaper extends Admin {
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
     if (activePieces[idx].team === 'player' && activePieces[idx].getStat('range') === 1) {
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
       activePieces[idx].addModifier({ attack: 1 })
     }
   }
@@ -932,6 +962,8 @@ class Roger extends Admin {
   }
   //on piece destruction
   async apply({ player }: { player: Player }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     player.money += 1;
   }
 }
@@ -968,7 +1000,11 @@ class Diamond extends Admin {
       if (p.team === 'player') {
         //from the headposition, look for adjacent player tiles
         const noOfTwentys = Math.max(0, Math.floor(player.money / 20)); //rounded down
-        p.addModifier({ defence: noOfTwentys })
+        if(noOfTwentys > 0){
+          this.isTriggering = true;
+          setTimeout(() => this.isTriggering = false, 500);
+          p.addModifier({ defence: noOfTwentys })
+        }
         //else no buff
       }
     }
@@ -985,6 +1021,8 @@ export class Sneakers extends Admin {//item???
     super(Sneakers.name, Sneakers.description, Sneakers.unicode, Sneakers.color, 4, Sneakers.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({ moves: 1 });
     activePieces[idx].movesRemaining += 1;
@@ -1002,6 +1040,8 @@ class Candle extends Admin {
     super(Candle.name, Candle.description, Candle.unicode, Candle.color, 4, Candle.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({ range: 1 })
     activePieces[idx].addModifier({ moves: -1 })
@@ -1018,6 +1058,8 @@ class Lightbulb extends Admin {
     super(Lightbulb.name, Lightbulb.description, Lightbulb.unicode, Lightbulb.color, 6, Lightbulb.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({ range: 2 })
   }
@@ -1034,6 +1076,8 @@ class Feather extends Admin {
     super(Feather.name, Feather.description, Feather.unicode, Feather.color, 8, Feather.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({ moves: 1 })
     activePieces[idx].movesRemaining += 1;
@@ -1070,6 +1114,8 @@ export class Copier extends Admin {
         p.tiles.some(t => t.x === newHead.x && t.y === newHead.y)
       );
       if (!isOccupied) {
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
         const copy = new PieceClass(newHead, 'player', playerPieces[0].removeCallback, crypto.randomUUID());
         copy.maxSize = playerPieces[0].getStat('maxSize');
         copy.moves = playerPieces[0].getStat('moves');
@@ -1100,6 +1146,8 @@ class Telescope extends Admin {
     super(Telescope.name, Telescope.description, Telescope.unicode, Telescope.color, 5, Telescope.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({ range: 3 })
     activePieces[idx].addModifier({ moves: -2 })
@@ -1231,6 +1279,8 @@ class FireEngine extends Admin {
     super(FireEngine.name, FireEngine.description, FireEngine.unicode, FireEngine.color, 4, FireEngine.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].immunities.burning = true
   }
@@ -1246,6 +1296,8 @@ class Prayer extends Admin {
     super(Prayer.name, Prayer.description, Prayer.unicode, Prayer.color, 7, Prayer.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({ defence: 2 })
   }
@@ -1261,6 +1313,8 @@ class Vitamins extends Admin {
     super(Vitamins.name, Vitamins.description, Vitamins.unicode, Vitamins.color, 4, Vitamins.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({ defence: 1 })
   }
@@ -1276,6 +1330,8 @@ class Protein extends Admin {
     super(Protein.name, Protein.description, Protein.unicode, Protein.color, 2, Protein.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({ maxSize: 1 })
   }
@@ -1291,6 +1347,8 @@ class Fountain extends Admin {
     super(Fountain.name, Fountain.description, Fountain.unicode, Fountain.color, 6, Fountain.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({ maxSize: 3 })
   }
@@ -1324,6 +1382,8 @@ class Hermes extends Admin {//moves
 
   //on placement
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].immunities.slowed = true;
   }
@@ -1340,6 +1400,8 @@ class Scarf extends Admin {
   }
 
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].immunities.frozen = true;
   }
@@ -1358,6 +1420,8 @@ export class Ambulance extends Admin {//a promoted piece dying should recover th
     if (!piece) return;
     const bpIdx = player.programs.findIndex(bp => bp.id === piece.id)
     if (piece.team === 'player') {
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
       if (piece.name === 'Pawn') {
         const promoted = activePieces.findIndex(p => p.id === piece.id + '1');
         if (promoted !== -1) {
@@ -1380,6 +1444,8 @@ class FakeID extends Admin {
     super(FakeID.name, FakeID.description, FakeID.unicode, FakeID.color, 5, FakeID.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].immunities.exposed = true;
   }
@@ -1395,6 +1461,8 @@ class Shades extends Admin {
     super(Shades.name, Shades.description, Shades.unicode, Shades.color, 5, Shades.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].immunities.blinded = true;
   }
@@ -1490,6 +1558,8 @@ class Pants extends Admin {
   async apply({ player, piece }: { activePieces?: Piece[], player: Player, piece?: Piece }) {
     if (!piece) return;
     if (this.count === 0) {
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
       const bpIdx = player.programs.findIndex(bp => bp.id === piece.id)
       if (piece.team === 'player') {
         if (bpIdx !== -1) player.programs[bpIdx].isPlaced = false;
@@ -1518,6 +1588,8 @@ class Ace extends Admin {
       if (!bp.isPlaced) isLastBp = false;
     };
     if (isLastBp) {
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
       const idx = activePieces.findIndex(p => p.id === id);
       //const bpIdx = player.programs.findIndex(bp => bp.id === activePieces[idx].id )
       if (activePieces[idx].team === 'player') {
@@ -1560,7 +1632,11 @@ class Pazzaz extends Admin {
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     const idx = activePieces.findIndex(p => p.id === id);
     const noOfTens = Math.max(0, Math.floor(player.money / 10));
-    activePieces[idx].addModifier({ moves: noOfTens })
+    if(noOfTens > 0){
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
+      activePieces[idx].addModifier({ moves: noOfTens })
+    }
   }
 }
 
@@ -1580,14 +1656,18 @@ class Toilet extends Admin {
         noOfCommons += 1;
       }
     };
-    const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({
-      attack: noOfCommons,
-      defence: noOfCommons,
-      maxSize: noOfCommons,
-      moves: noOfCommons,
-      range: noOfCommons
-    });
+    if(noOfCommons > 0){
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
+      const idx = activePieces.findIndex(p => p.id === id);
+      activePieces[idx].addModifier({
+        attack: noOfCommons,
+        defence: noOfCommons,
+        maxSize: noOfCommons,
+        moves: noOfCommons,
+        range: noOfCommons
+      });
+    }
   }
 }
 
@@ -1629,6 +1709,8 @@ class Bipolar extends Admin {
     super(Bipolar.name, Bipolar.description, Bipolar.unicode, Bipolar.color, 5, Bipolar.rarity, 'playerAndGame', 'onPieceDestruction')
   }
   async apply({ player, piece }: { activePieces?: Piece[], player: Player, piece?: Piece }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     if (!piece) return;
     if (piece.team === 'enemy') {
       player.money += 1
@@ -1754,6 +1836,8 @@ class Liberty extends Admin {
     super(Liberty.name, Liberty.description, Liberty.unicode, Liberty.color, 6, Liberty.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({ range: 1, moves: 1 })
   }
@@ -1844,6 +1928,8 @@ class AirSupport extends Admin {
     super(AirSupport.name, AirSupport.description, AirSupport.unicode, AirSupport.color, 10, AirSupport.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     for (const piece of activePieces) {
       if (piece.team === 'enemy') {
         await piece.takeDamage(1);
@@ -1938,6 +2024,8 @@ class Minerva extends Admin {
   }
   //on receive damage //on piece destrcution
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     for (const p of activePieces) {
       if (p.team === 'player') {
         p.addModifier({ range: 1 })
@@ -1956,6 +2044,8 @@ class Hermit extends Admin {
     super(Hermit.name, Hermit.description, Hermit.unicode, Hermit.color, 3, Hermit.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({ defence: 2 });
     activePieces[idx].addModifier({ moves: -1 });
@@ -2216,6 +2306,8 @@ class Bowling extends Admin {//test
         adjacent.some(c => c.x === t.x && c.y === t.y)
       );
       if (isAdjacent && piece.team === 'enemy') {//only attacks enemies
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
         await piece.takeDamage(1);
       }
     };
@@ -2232,6 +2324,8 @@ class Stiletto extends Admin {
     super(Stiletto.name, Stiletto.description, Stiletto.unicode, Stiletto.color, 6, Stiletto.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({ attack: 1 })
     activePieces[idx].addModifier({ moves: -1 })
@@ -2301,6 +2395,8 @@ class Sled extends Admin {//test
       if (!bp.isPlaced) isLastBp = false;
     };
     if (isLastBp) {
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
       const idx = activePieces.findIndex(p => p.id === id);
       if (activePieces[idx].team === 'player') {
         if (!activePieces[idx].statuses.exposed) {
@@ -2323,6 +2419,8 @@ class Crash extends Admin {//test
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const piece of activePieces) {
       if (!piece.immunities.frozen) {
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
         piece.statuses.frozen = true;
         piece.movesRemaining = 0;
       }
@@ -2402,6 +2500,8 @@ class Putter extends Admin {//test
     if (piece?.team !== 'enemy') return;
     const enemiesLeft = activePieces.filter(p => p.team === 'enemy');
     if (enemiesLeft.length === 1) {
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
       const idx = activePieces.findIndex(p => p.id === enemiesLeft[0].id);
       if (idx !== -1) activePieces[idx].addModifier({ maxSize: -1, moves: -1, range: -1, attack: -1, defence: -1 })
     }
@@ -2418,6 +2518,8 @@ class Smoker extends Admin {
     super(Smoker.name, Smoker.description, Smoker.unicode, Smoker.color, 5, Smoker.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({ maxSize: -1 });
     activePieces[idx].immunities.confused = true;
@@ -2434,6 +2536,8 @@ class Wine extends Admin {
     super(Wine.name, Wine.description, Wine.unicode, Wine.color, 5, Wine.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({ maxSize: +1 });
     activePieces[idx].addModifier({ defence: +1 });
@@ -2520,14 +2624,18 @@ class Cards extends Admin {//test
     const defenceMod = player.items.filter(i => i.name === 'Formula').length + player.items.filter(i => i.name === 'Iron').length + (2 * player.items.filter(i => i.name === 'Garlic').length) + (3 * player.items.filter(i => i.name === 'Ginger').length);
     const blessingBonus = player.items.filter(i => i.name === 'Blessing').length;
 
-    //[Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Roids, Formula]
-    activePieces[idx].addModifier({
-      maxSize: maxSizeMod + blessingBonus,
-      moves: movesMod + blessingBonus,
-      range: rangeMod + blessingBonus,
-      attack: attackMod + blessingBonus,
-      defence: defenceMod + blessingBonus
-    })
+    if(maxSizeMod > 0 || movesMod > 0 || rangeMod > 0 || attackMod > 0 || defenceMod > 0 || blessingBonus > 0){
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
+      //[Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Roids, Formula]
+      activePieces[idx].addModifier({
+        maxSize: maxSizeMod + blessingBonus,
+        moves: movesMod + blessingBonus,
+        range: rangeMod + blessingBonus,
+        attack: attackMod + blessingBonus,
+        defence: defenceMod + blessingBonus
+      });
+    }
   }
 }
 
@@ -2650,6 +2758,8 @@ export class Cherries extends Admin {//test
       if ((bp.name === activePieces[idx].name) && !bp.isPlaced) matchingBps.push(bp)
     };
     for (const bp of matchingBps) {
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
       activePieces[idx].addModifier({ maxSize: bp.maxSize, moves: bp.moves, range: bp.range, attack: bp.attack, defence: bp.defence })
       //activePieces[idx].addModifier({maxSize: 1, moves: 1, range: 1, attack: 1, defence: 1})
     };
@@ -2705,6 +2815,8 @@ class Tempura extends Admin {
     super(Tempura.name, Tempura.description, Tempura.unicode, Tempura.color, 3, Tempura.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({ defence: 1 })
     activePieces[idx].addModifier({ maxSize: -1 })
@@ -2769,6 +2881,8 @@ class Violin extends Admin {//test
     if (!piece) return;
     const idbp = player.programs.findIndex(bp => bp.id === piece.id);
     if (idbp !== -1 && piece.team === 'player') {
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
       player.money += 3;
     }
   }
@@ -2808,6 +2922,8 @@ class Reinforcement extends Admin {
     super(Reinforcement.name, Reinforcement.description, Reinforcement.unicode, Reinforcement.color, 4, Reinforcement.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({ defence: 1 })
     activePieces[idx].addModifier({ maxSize: +1 })
@@ -2954,6 +3070,8 @@ class Chain extends Admin {//test
         adjacent.some(c => c.x === t.x && c.y === t.y)
       );
       if (isAdjacent && piece.team === 'enemy') {//only attacks enemies
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
         await piece.takeDamage(1 + this.count);
       }
     };
@@ -3008,6 +3126,8 @@ class Glasses extends Admin {
     super(Glasses.name, Glasses.description, Glasses.unicode, Glasses.color, 2, Glasses.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({ range: 1 })
     activePieces[idx].addModifier({ attack: -1 })
@@ -3163,6 +3283,8 @@ class Drunk extends Admin {
 
   //on placement/after hydration
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].statuses.enraged = true;
     activePieces[idx].damageMult += 0.5;//enemy pieces only?  

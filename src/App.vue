@@ -33,6 +33,7 @@ import Altar from "./components/Altar.vue";
 import Duplicator from "./components/Duplicator.vue";
 import Workbench from "./components/Workbench.vue";
 import { Random } from "./Random";
+import { allOSes } from "./Operators.ts";
 
 const testSword = {
   id: "274ec329-8c17-4265-8c12-e9a28bcf0833",
@@ -125,20 +126,16 @@ function createNewPlayer(payload: { os: OS, seed: string }) {
 
   if (!rawSeed) {
     rawSeed = Math.random().toString(36).substring(2, 10).toUpperCase();
-    // Add prefix to currentSeed for display/sharing
-    currentSeed.value = (os.prefix || '') + rawSeed;
   } else {
-    // If seed was provided (e.g. from Play button), it might have a prefix
-    // But MainMenu's Play button already splits it. 
-    // However, if called from os selection button with a manual seed in the box, 
-    // it's passed as is.
-
-    // Safety check: if seed starts with os.prefix + [something], strip it? 
-    // Actually, createNewPlayer should just trust payload.seed is the raw part
-    // unless it came from a direct paste.
-
-    currentSeed.value = (os.prefix || '') + rawSeed;
+    // Standardize: if the seed starts with any OS prefix, we strip it to get the raw PRNG part.
+    // This handles cases where a full prefixed seed is pasted into the box but a regular OS button is clicked.
+    const allPrefixes = allOSes.map(o => o.prefix).filter(p => !!p);
+    if (allPrefixes.includes(rawSeed.charAt(0)) && rawSeed.length > 8) { // Seeds are usually 8 chars + 1 prefix
+      rawSeed = rawSeed.substring(1);
+    }
   }
+
+  currentSeed.value = (os.prefix || "") + rawSeed;
 
   Random.setSeed(rawSeed);
 
@@ -1467,6 +1464,12 @@ const mapClass = computed(() =>
 )
 
 const worldSeed = ref(0);
+const combinedMapSeed = computed(() => {
+  // Extract raw seed (everything after the prefix)
+  const raw = currentSeed.value.length > 1 ? currentSeed.value.substring(1) : currentSeed.value;
+  // Combine with the world reroll counter
+  return raw + (worldSeed.value || '');
+});
 const increaseDifficulty = () => {
   player.value.difficulty += 1;
   if (player.value.difficulty < 7 && player.value.stake === 1) {//cumulate bosses in endless mode
@@ -1649,7 +1652,7 @@ function toggleDebug() {
         :player="player" :bosses="bossAdmins" @proceedFromEndOfRound="handleProceed" @reloadLevel="reloadLevel"
         @mainMenu="openMainMenu" />
       <WorldMap v-if="!displayEditor" class="stage-panel" :class="{ active: showMap }" :allLevels="level1Levels"
-        :player="player" :seed="worldSeed" :cssclass="mapClass" :bosses="bossAdmins" @selectLevel="selectLevel"
+        :player="player" :seed="combinedMapSeed" :cssclass="mapClass" :bosses="bossAdmins" @selectLevel="selectLevel"
         @openShop="openShop" @openDisabledShop="openDisabledShop" @openCompiler="openCompiler" @openAltar="openAltar"
         @openDuplicator="openDuplicator" @openWorkbench="openWorkbench" @incrementProgress="incrementMapProgress"
         @addBoss="addBossAdmin" @replaceBosses="replaceBosses" @increaseDifficulty="increaseDifficulty" />

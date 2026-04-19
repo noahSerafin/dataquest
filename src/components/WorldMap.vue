@@ -28,7 +28,7 @@
     const props = defineProps<{
         player: Player;
         allLevels: Level[];
-        seed: number;
+        seed: string | number;
         cssclass: 'visible' | 'collapsed';
         bosses: Admin[]
     }>();
@@ -66,6 +66,9 @@
         return levelTiers[tierIndex];
     });
     const skipsThisLevel = ref<number>(0);
+
+    // Explicitly seed the PRNG before any map generation starts to ensure reproducibility
+    Random.setSeed(props.seed);
 
     const world = ref<WorldMap>(generateWorld(levelPool.value, props.player.difficulty));//should be called again with after boss after increase difficulty
     assignSkipRewards(world.value);
@@ -346,8 +349,10 @@
     watch(
         () => props.seed,
         () => {
-            // rebuild world graph
-            console.log('building map')
+            // rebuild world graph using the same deterministic sequence
+            console.log('rebuilding deterministic map');
+            Random.setSeed(props.seed);
+            
             world.value = generateWorld(levelPool.value, props.player.difficulty);
             assignSkipRewards(world.value);
             currentNodeId.value = world.value.startNode;

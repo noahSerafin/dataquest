@@ -94,8 +94,8 @@ function copySeed() {
       </div>
 
       <div class="tabs">
-        <button v-if="currentSeed" :class="{ active: activeTab === 'run' }" @click="activeTab = 'run'">This Run</button>
         <button :class="{ active: activeTab === 'stats' }" @click="activeTab = 'stats'">Stats</button>
+        <button v-if="currentSeed" :class="{ active: activeTab === 'run' }" @click="activeTab = 'run'">This Run</button>
         <button :class="{ active: activeTab === 'pieces' }" @click="activeTab = 'pieces'">Programs</button>
         <button :class="{ active: activeTab === 'items' }" @click="activeTab = 'items'">Items</button>
         <button :class="{ active: activeTab === 'admins' }" @click="activeTab = 'admins'">Admins</button>

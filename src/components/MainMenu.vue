@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { onMounted } from 'vue';
+    import { ref, onMounted } from 'vue';
     import type { OS } from '../types';
     import { allOSes } from '../Operators';
     import { StorageManager } from '../StorageManager';
@@ -9,8 +9,10 @@
     }>();
 
     const emit = defineEmits<{
-        (e: 'createNewPlayer', os: OS): void;
+        (e: 'createNewPlayer', payload: { os: OS, seed: string }): void;
     }>();
+
+    const seedInput = ref<string>('');
 
     function returnUnicode(unicode: String){
         return  String.fromCodePoint(parseInt(unicode.replace('U+', ''), 16), 0xFE0F);
@@ -107,8 +109,8 @@
 
 <template>
     <div class="container">
-        <h1 class="mm-heading">Welcome</h1>
         <h2 class="mm-heading2">Choose your OS:</h2>
+
         <div class="oses" ref="oses">
             <div class="os"
             v-for="os in allOSes"
@@ -155,10 +157,20 @@
                     </div>
                 </template>
 
-                <button :disabled="!!getUnlockRule(os.name)" @click="emit('createNewPlayer', os)">
+                <button :disabled="!!getUnlockRule(os.name)" @click="emit('createNewPlayer', { os, seed: seedInput })">
                     {{ getUnlockRule(os.name) ? 'Locked' : 'Choose' }}
                 </button>
             </div>
+        </div>
+        <div class="seed-section flex">
+            <label for="seed-input">Seed (optional):</label>
+            <input 
+                id="seed-input"
+                type="text" 
+                v-model="seedInput" 
+                placeholder="Enter seed..."
+                class="seed-input"
+            />
         </div>
     </div>
 </template>
@@ -173,7 +185,7 @@
     }
     .oses{
         z-index: 9999;
-        padding: 2rem;
+        padding: 1rem;
         background-color: black;
         color: white;
         display: flex;
@@ -243,5 +255,30 @@
         cursor: not-allowed;
         background-color: #333;
         color: #777;
+    }
+
+    .seed-section {
+        margin: 1rem 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .seed-input {
+        background: #111;
+        border: 1px solid #444;
+        color: #4CAF50;
+        padding: 0.5rem;
+        border-radius: 4px;
+        font-family: monospace;
+        text-align: center;
+        width: 200px;
+    }
+
+    .seed-input:focus {
+        outline: none;
+        border-color: #4CAF50;
     }
 </style>

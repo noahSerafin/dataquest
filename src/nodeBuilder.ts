@@ -1,4 +1,5 @@
 import type { Coordinate, Level } from "./types";
+import { Random } from "./Random";
 //rules for level generation:
 /*
 1: enemy spawn count, min difficultyValue+2, max difficultyValue +3
@@ -10,7 +11,7 @@ import type { Coordinate, Level } from "./types";
 */
 //helpers
 function randInt(min: number, max: number): number {
-    return Math.floor(Math.random() * (max - min)) + min;
+    return Random.range(min, max);
 }
 
 function key(x: number, y: number) {
@@ -41,7 +42,7 @@ function parseCoord(k: string): Coordinate {
 //shorthand
 function shuffle<T>(arr: T[]): T[] {
   for (let i = arr.length - 1; i > 0; i--) {
-    const j = randInt(0, i);
+    const j = Random.range(0, i + 1);
     [arr[i], arr[j]] = [arr[j], arr[i]];
   }
   return arr;
@@ -263,7 +264,7 @@ export function generateNode(difficulty: number): Level {
     const minSize = 6;
     const maxSize = Math.max(6, enemyCount + 5);
 
-    const widthIsMax = Math.random() < 0.5;
+    const widthIsMax = Random.bool(0.5);
 
     const width = widthIsMax
     ? maxSize

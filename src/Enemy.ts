@@ -2,6 +2,7 @@ import type { Piece } from "./Pieces";
 import type { Coordinate } from "./types";
 import { findAnyPiecesInRange } from "./helperFunctions";
 import type { Player } from "./Player";
+import { Random } from "./Random";
 
 type EnemyIntent =
   | { type: 'attack'; target: Piece }
@@ -203,7 +204,7 @@ function decideEnemyIntent(
       }
     }
     if(enemy.targetType === 'self'){
-      const randTile = enemy.tiles[Math.floor(Math.random()*enemy.tiles.length)]
+      const randTile = Random.pick(enemy.tiles);
       return {type: 'special', target: randTile}
     }
     if(enemy.targetType === 'space'){
@@ -244,7 +245,7 @@ function decideEnemyIntent(
   if(enemy.tiles.length < enemy.maxSize && enemy.movesRemaining > 0 && !enemy.statuses.frozen){
     //move somewhere free to reach max size
     const spaces = getAdjacentEmptySpaces(enemy.headPosition, activePieces, tileSet)
-    if(spaces) return { type: 'wander', space: spaces[Math.floor(Math.random() * spaces.length)] };
+    if(spaces) return { type: 'wander', space: Random.pick(spaces) };
   }
   //is already max size, or no moves left, or no space to move into
   return {type: 'wait'};
@@ -297,7 +298,7 @@ async function executeEnemyIntent(
         if(enemy.statuses.confused){
           const allMoves = getAdjacentEmptySpaces(enemy.headPosition, activePieces, tileSet);
           if(allMoves){
-            enemy.moveTo(allMoves[Math.floor(Math.random() * allMoves.length)]);
+            enemy.moveTo(Random.pick(allMoves));
           } 
         } else {
           enemy.moveTo(step);//cant move here if its occupied
@@ -646,7 +647,7 @@ function getAnySpaceInRange(
 
   if (candidates.length === 0) return null;
 
-  return candidates[Math.floor(Math.random() * candidates.length)];
+  return Random.pick(candidates);
 }
 
 function getAllTilesInStraightLines(

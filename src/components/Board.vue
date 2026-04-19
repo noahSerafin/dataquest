@@ -5,6 +5,7 @@ import { getTilesInRange } from "../helperFunctions";
 import PieceView from "./PieceView.vue";
 import { Piece } from "../Pieces"
 import { Player } from "../Player";
+import { Random } from "../Random";
 
 interface Props{
   tiles : Coordinate[]
@@ -438,8 +439,8 @@ function resolveMove(
     emit('movePiece', {x: chosenMove.x, y: chosenMove.y});
   } else { 
     // Confused → random valid move
-    const randomIndex = Math.floor(Math.random() * allMoves.length);
-    emit('movePiece', {x: allMoves[randomIndex].x, y: allMoves[randomIndex].y});
+    const randomMove = Random.pick(allMoves);
+    emit('movePiece', {x: randomMove.x, y: randomMove.y});
   }
 }
 //onclick = "resolveMove(tile, moveButtons)""

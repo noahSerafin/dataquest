@@ -5,6 +5,7 @@ import type { Player } from "./Player";
 import { STAT_MIN, PIECE_VARIANTS } from "./constants";
 import { upgradeItems } from "./Items";
 import { StorageManager } from "./StorageManager";
+import { Random } from "./Random";
 
 export const isSoundEnabled = ref(false);
 
@@ -55,8 +56,7 @@ export function getRandomUnoccupiedTile(
 
   if (freeTiles.length === 0) return null;
 
-  const index = Math.floor(Math.random() * freeTiles.length);
-  return freeTiles[index];
+  return Random.pick(freeTiles);
 }
 
 //for group targets. Check if any piece tile that is in range, return a list of pieces
@@ -108,7 +108,7 @@ export function makeBlueprint(PieceClass: any, variant?: PieceVariant, costReduc
 
 const BASE_VARIANT_CHANCE = 0.15; // 15% chance a piece gets a variant
 export function rollVariant(chance: number, difficulty: number): PieceVariant | null{
-  if (Math.random() > chance) return null;
+  if (Random.next() > chance) return null;
 
   const pool: PieceVariant[] = [];
   for (const v of PIECE_VARIANTS) {
@@ -118,7 +118,7 @@ export function rollVariant(chance: number, difficulty: number): PieceVariant | 
     }
   }
 
-  return pool[Math.floor(Math.random() * pool.length)];
+  return Random.pick(pool);
 }
 
 export function applyVariant(piece: Piece, variant: PieceVariant) {
@@ -149,7 +149,7 @@ function rollRarity(clovers:number) {
 
   const total = adjusted.reduce((a,b)=>a+b,0);
 
-  const roll = Math.random() * total;
+  const roll = Random.next() * total;
 
   let sum = 0;
 
@@ -196,8 +196,7 @@ export function pickWeightedRandom(PieceClasses: any[], player: Player) {
     return temp.rarity === rarity;
   });
 
-  const selectedClass =
-    piecesOfRarity[Math.floor(Math.random() * piecesOfRarity.length)];
+  const selectedClass = Random.pick(piecesOfRarity);
 
   const varCount = player.admins.filter(a => a.name === 'Variety Box').length;
   const variantMultiplier = BASE_VARIANT_CHANCE + varCount * 0.25; // each box +25%    const variant = rollVariant(variantMultiplier, 6);
@@ -219,7 +218,7 @@ export function pickWeightedRandomItem(itemClasses: any[], player: Player, costR
       return temp.rarity === rarity;//add a gaurd for no result for lists with missing rarities
     });
 
-    const SelectedClass = itemsOfRarity[Math.floor(Math.random() * itemsOfRarity.length)];
+    const SelectedClass = Random.pick(itemsOfRarity);
     if(costReduction){
       SelectedClass.cost = Math.max(0, (SelectedClass.cost - costReduction));
     }

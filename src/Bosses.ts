@@ -4,6 +4,7 @@ import { Player } from "./Player";
 import type { Coordinate } from "./types";
 import { DIFFICULTY_RARITY } from "./constants";
 import { getRandomUnoccupiedTile } from "./helperFunctions";
+import { Random } from "./Random";
 
 //lower difficulty of +1 bosses, more +2 bosses
 class NorthWind extends Admin {//🌬️//dash U+1F4A8
@@ -95,7 +96,7 @@ class Mirror extends Admin {
         };
 
         for (const piece of enemyPieces) {
-            const enemyClassName = player.programs[Math.floor(Math.random() * player.programs.length)].name;//random name from player pieceBlueprints
+            const enemyClassName = Random.pick(player.programs).name;//random name from player pieceBlueprints
             const EnemyClass = allPieces.find(p => p.name === enemyClassName);
             if (EnemyClass) {
                 const enemyInstance = new EnemyClass(piece.headPosition, 'enemy', piece.removeCallback, crypto.randomUUID());//check later
@@ -141,7 +142,7 @@ class Factory extends Admin {
                 p.rarity >= min && p.rarity <= max && p.name !== 'Nuke' && p.name !== 'Trap' && p.name !== 'Tar' && p.name !== 'Pitfall' && p.name !== 'Web' && p.name !== 'Mine'
             );
             const pool = validEnemies.length > 0 ? validEnemies : allPieces;
-            const EnemyClass = pool[Math.floor(Math.random() * pool.length)];//random piece ranked for diificulty
+            const EnemyClass = Random.pick(pool);//random piece ranked for diificulty
 
             //get a random unnoccupied space
             const space = getRandomUnoccupiedTile(board, activePieces);//removeCallback
@@ -180,8 +181,8 @@ class Wrath extends Admin {//⛈️//🌩️
                     playerPieces.push(piece)
                 }
             };
-            const randId = playerPieces[Math.floor(Math.random() * playerPieces.length)].id
-            const idx = activePieces.findIndex(p => p.id === randId);
+            const randPiece = Random.pick(playerPieces);
+            const idx = activePieces.findIndex(p => p.id === randPiece.id);
             activePieces[idx].takeDamage(1 + activePieces[idx].defenceRemaining);//should also remove a size 1 piece from the board
             this.isTriggering = true;
             setTimeout(() => this.isTriggering = false, 500);
@@ -698,7 +699,7 @@ class Nofun extends Admin {
             admin.disabled = false;
         }
         if (player.admins.length > 0) {
-            player.admins[Math.floor(Math.random() * player.admins.length)].disabled = true;
+            Random.pick(player.admins).disabled = true;
             this.isTriggering = true;
             setTimeout(() => this.isTriggering = false, 500);
         }
@@ -718,12 +719,12 @@ class Tornado extends Admin {
         if (!playerSpawns) return;
         this.isTriggering = true;
         setTimeout(() => this.isTriggering = false, 500);
-        const unoccupiedTiles = board.filter(t => !activePieces.some(p => p.tiles.some(pt => pt.x === t.x && pt.y === t.y)));
+        const unoccupiedTiles = board.filter(t => !activePieces.some(p => p.tiles.some(pt => pt.x === t.x && pt.y === pt.y)));
 
         const newSpawns: Coordinate[] = [];
         for (let i = 0; i < playerSpawns.length; i++) {
             if (unoccupiedTiles.length === 0) break;
-            const randIdx = Math.floor(Math.random() * unoccupiedTiles.length);
+            const randIdx = Random.floor(unoccupiedTiles.length);
             newSpawns.push(unoccupiedTiles[randIdx]);
             unoccupiedTiles.splice(randIdx, 1);
         }
@@ -849,8 +850,8 @@ class Cocktail extends Admin {
         const possibleBosses = allBosses.filter(b => b.rarity < player.difficulty && b.name !== Cocktail.name);
         if (possibleBosses.length === 0) return;
 
-        const Boss1 = possibleBosses[Math.floor(Math.random() * possibleBosses.length)];
-        const Boss2 = possibleBosses[Math.floor(Math.random() * possibleBosses.length)];
+        const Boss1 = Random.pick(possibleBosses);
+        const Boss2 = Random.pick(possibleBosses);
         
         const b1 = new Boss1();
         const b2 = new Boss2();
@@ -949,8 +950,8 @@ class Nightfall extends Admin {
                 enemyPieces.push(piece)
             }
         };
-        const randId = enemyPieces[Math.floor(Math.random() * enemyPieces.length)].id
-        const idx = activePieces.findIndex(p => p.id === randId);
+        const randPiece = Random.pick(enemyPieces);
+        const idx = activePieces.findIndex(p => p.id === randPiece.id);
         activePieces[idx].statuses.hidden = true;
         this.isTriggering = true;
         setTimeout(() => this.isTriggering = false, 500);
@@ -975,8 +976,8 @@ class Blackmail extends Admin {
                     playerPieces.push(piece)
                 }
             };
-            const randId = playerPieces[Math.floor(Math.random() * playerPieces.length)].id
-            const idx = activePieces.findIndex(p => p.id === randId);
+            const randPiece = Random.pick(playerPieces);
+            const idx = activePieces.findIndex(p => p.id === randPiece.id);
             activePieces[idx].team = 'enemy';
             this.isTriggering = true;
             setTimeout(() => this.isTriggering = false, 500);

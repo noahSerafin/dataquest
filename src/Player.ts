@@ -84,6 +84,7 @@ export class Player {
   }
 
   addAdmin(admin: Admin) {
+    StorageManager.unlockAdmin(admin.name);
     if(this.hasAdminSpace){
       this.admins.push(admin)
       if(admin.targetType === 'player' && admin.triggerType === 'other'){
@@ -103,6 +104,7 @@ export class Player {
 
   /** Add an item if there's enough memory */
   addItem(item: Item): boolean {
+    StorageManager.unlockItem(item.name);
     if (this.hasMemorySpace) {
       this.items.push(item);
       return true;

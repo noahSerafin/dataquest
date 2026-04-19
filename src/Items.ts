@@ -3,6 +3,7 @@ import { allPieces, type Piece } from "./Pieces"
 import type { Player } from "./Player"
 import { getRandomUnoccupiedTile, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, addItemsUntilFull } from "./helperFunctions"
 import { StorageManager } from "./StorageManager"
+import { Random } from "./Random"
 
 export abstract class Item<TTarget = any> {
     id: string
@@ -154,7 +155,7 @@ class Melon extends Item<PieceBlueprint> {
     static color = "rgb(17, 110, 71)";
     static rarity = 3;
     constructor() {
-        super(Melon.name, Melon.description, Melon.unicode, Melon.color, 5, Melon.rarity, 'blueprint')
+        super(Melon.name, Melon.description, Melon.unicode, Melon.color, 4, Melon.rarity, 'blueprint')
     }
     //Increases a program's maxSize by 1
     apply(target: PieceBlueprint, itemMult: number) {
@@ -346,8 +347,7 @@ export class Bandage extends Item<Piece> {
         }
 
         // Pick a random harmful status to remove
-        const randomIndex = Math.floor(Math.random() * activeHarmful.length);
-        const statusToRemove = activeHarmful[randomIndex];
+        const statusToRemove = Random.pick(activeHarmful);
 
         // Remove it
         target.statuses[statusToRemove] = false;
@@ -758,7 +758,7 @@ class Hotline extends Item {
     apply({ activePieces, board }: { activePieces: Piece[], board: Coordinate[] }, _itemMult: number) {
         const space = getRandomUnoccupiedTile(board, activePieces);
         if (space) {
-            const PieceClass = allPieces[Math.floor(Math.random() * allPieces.length)]//true random without player
+            const PieceClass = Random.pick(allPieces)//true random without player
             const instance = new PieceClass(space, 'piece', activePieces[0].removeCallback, crypto.randomUUID());
             instance.team = 'player';
             //instance.movesRemaining = 0;
@@ -842,7 +842,7 @@ export class Dupe extends Item<Player> {
     apply(player: Player, _itemMult: number) {
         if (player.admins.length === 0) return;
         import("./AdminPrograms").then(({ allAdmins }) => {
-            const randAdmin = player.admins[Math.floor(Math.random() * player.admins.length)];
+            const randAdmin = Random.pick(player.admins);
             const adminClass = allAdmins.find(a => a.name === randAdmin.name);
             if (!adminClass) return;
             player.admins = [randAdmin, new adminClass()];
@@ -981,7 +981,7 @@ class Beer extends Item<Player> {
         if (player.items.length === 0) return;
 
         // 2. Look in player.items instead of player.admins
-        const randItem = player.items[Math.floor(Math.random() * player.items.length)];
+        const randItem = Random.pick(player.items);
 
         // 3. Find the matching constructor
         const itemClass = allItems.find(a => a.name === randItem.name);

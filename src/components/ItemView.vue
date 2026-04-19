@@ -3,6 +3,7 @@ import { computed } from "vue";
 import { Item } from "../Items"; // adjust path
 import { tutorialState, clearTooltips } from "../tutorial";
 import { proTips, proTipSuggestion } from "../tutorialSteps";
+import { Random } from "../Random";
 //import type { PieceVariant } from "../types";
 
 const props = defineProps<{
@@ -87,7 +88,7 @@ function openProTip() {
 
 function getRandomProTip() {
   const tips = proTips.filter(t => t.id !== 'proTip');
-  const randomTip = tips[Math.floor(Math.random() * tips.length)];
+  const randomTip = Random.pick(tips);
   tutorialState.message = randomTip.tooltip;
   tutorialState.activeId = randomTip.id;
 }

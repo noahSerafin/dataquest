@@ -2,6 +2,7 @@ import type { Company, Coordinate, SkipReward } from "./types";
 import type { Piece } from "./Pieces";
 import { bossCompany, companies, playerCompany, shopCompany } from "./companies";
 import { generateNode } from "./nodeBuilder";
+import { Random } from "./Random";
 
 interface Level {
   name: string;
@@ -32,7 +33,7 @@ export interface WorldMap {
 }
 
 function chooseRandomCompany(){
-  return companies[Math.floor(Math.random() * companies.length)];
+  return Random.pick(companies);
 }
 
 type PathSpec = {
@@ -42,18 +43,9 @@ type PathSpec = {
 };
 
 function shuffle(array: PathSpec[]) {
-  let currentIndex = array.length;
-
-  // While there remain elements to shuffle...
-  while (currentIndex != 0) {
-
-    // Pick a remaining element...
-    let randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-
-    // And swap it with the current element.
-    [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex], array[currentIndex]];
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Random.floor(i + 1);
+    [array[i], array[j]] = [array[j], array[i]];
   }
 }
 
@@ -95,7 +87,7 @@ function getPathSpecsForDifficulty(difficulty: number): PathSpec[] {
   */
   if (difficulty <= 1) {
     return [
-      Math.random() > 0.5 ? { type: 'level', mods: [0, 0], rewards: [3, 3] } : { type: 'hiddenAltar', mods: [0, 0], rewards: [3, 3] }, // safe path
+      Random.bool(0.5) ? { type: 'level', mods: [0, 0], rewards: [3, 3] } : { type: 'hiddenAltar', mods: [0, 0], rewards: [3, 3] }, // safe path
       //getIndividualPath(difficulty)
       { type: 'skip',  mods: [0, 1], rewards: [0, 5] },
       //{ type: 'hiddenShop',  mods: [1, 2], rewards: [4, 7] }
@@ -131,7 +123,7 @@ export function generateWorld(
 ): WorldMap {
 
   //const pick = () => levelPool[Math.floor(Math.random() * levelPool.length)];
-  const pick = () => Math.random() > 0.5 ? levelPool[Math.floor(Math.random() * levelPool.length)] : generateNode(difficulty);
+  const pick = () => Random.bool(0.5) ? Random.pick(levelPool) : generateNode(difficulty);
 
   const startId = "start";
   const shopId = "shop";

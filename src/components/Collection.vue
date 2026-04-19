@@ -12,6 +12,7 @@ import type { PieceBlueprint } from "../types";
 
 const props = defineProps<{
   debugMode: boolean;
+  currentSeed: string;
 }>();
 
 const emit = defineEmits<{
@@ -21,6 +22,7 @@ const emit = defineEmits<{
 const collection = ref<PlayerCollection>({ pieces: [], admins: [], bosses: [], items: [] });
 const stats = ref<PlayerStats>({ osStats: {} });
 const selectedItem = ref<Item | null>(null);
+const seedCopied = ref<boolean>(false);
 
 function selectItem(item: Item){
   selectedItem.value = item;
@@ -75,7 +77,12 @@ function getItemInstance(ItemClass: any) {
   return new ItemClass();
 }
 
-const activeTab = ref<'pieces' | 'items' | 'admins' | 'bosses' | 'stats'>('pieces');
+const activeTab = ref<'pieces' | 'items' | 'admins' | 'bosses' | 'stats' | 'run'>('pieces');
+
+function copySeed() {
+  navigator.clipboard.writeText(props.currentSeed);
+  seedCopied.value = true;
+}
 </script>
 
 <template>
@@ -92,6 +99,7 @@ const activeTab = ref<'pieces' | 'items' | 'admins' | 'bosses' | 'stats'>('piece
         <button :class="{ active: activeTab === 'admins' }" @click="activeTab = 'admins'">Admins</button>
         <button :class="{ active: activeTab === 'bosses' }" @click="activeTab = 'bosses'">Bosses</button>
         <button :class="{ active: activeTab === 'stats' }" @click="activeTab = 'stats'">Stats</button>
+        <button :class="{ active: activeTab === 'run' }" @click="activeTab = 'run'">This Run</button>
       </div>
 
       <div class="content-area">
@@ -186,6 +194,16 @@ const activeTab = ref<'pieces' | 'items' | 'admins' | 'bosses' | 'stats'>('piece
           </div>
         </div>
 
+        <!-- RUN TAB -->
+        <div v-if="activeTab === 'run'" class="run-layout">
+          <h3>Current Run Information</h3>
+          <div class="seed-display">
+            <span class="seed-label">Seed:</span>
+            <span class="seed-value">{{ currentSeed }}</span>
+            <button class="copy-btn" @click="copySeed">Copy Seed</button>
+            <span v-if="seedCopied">Seed copied!</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -398,5 +416,46 @@ const activeTab = ref<'pieces' | 'items' | 'admins' | 'bosses' | 'stats'>('piece
 
 .selected-true{
   z-index: 99!important;
+}
+
+.run-layout {
+  padding: 1rem;
+  color: #ddd;
+}
+
+.seed-display {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #2a2a2a;
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid #444;
+}
+
+.seed-label {
+  font-weight: bold;
+  color: #888;
+}
+
+.seed-value {
+  font-family: monospace;
+  font-size: 1.2rem;
+  color: #4CAF50;
+  letter-spacing: 1px;
+}
+
+.copy-btn {
+  background: #444;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.copy-btn:hover {
+  background: #555;
 }
 </style>

@@ -3,6 +3,7 @@ import { createDefaultStatuses } from "./types";
 import { Player } from "./Player";
 import damageSoundUrl from '../sfx/damage.ogg';
 import { playSoundFx } from "./helperFunctions";
+import { Random } from "./Random";
 
 export abstract class Piece {
   removeCallback?: (piece: Piece) => void;
@@ -639,7 +640,7 @@ class Chick extends Piece {
   }
   async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
     if(this.tiles.length >= this.getStat('maxSize')){
-      const newPoultry = (Math.random() < 0.5) ? new Chicken(target, this.team, this.removeCallback, crypto.randomUUID()) : new Rooster(target, this.team, this.removeCallback, crypto.randomUUID());
+      const newPoultry = Random.bool(0.5) ? new Chicken(target, this.team, this.removeCallback, crypto.randomUUID()) : new Rooster(target, this.team, this.removeCallback, crypto.randomUUID());
       newPoultry.tiles.push(this.headPosition);
       newPoultry.actions = 0;
       newPoultry.movesRemaining = 0;
@@ -2174,8 +2175,8 @@ class Wizard extends Piece {
     });
     if(this.team === 'player' && player && player.programs.length > 0) {
       const availableBlueprints = player.programs.filter(bp => !bp.isPlaced);
-      const randBlueprint = availableBlueprints[Math.floor(Math.random() * availableBlueprints.length)];
-      const PieceClass = randBlueprint ? allPieces.find(p => p.name === randBlueprint.name) : validPieces[Math.floor(Math.random() * validPieces.length)];
+      const randBlueprint = Random.pick(availableBlueprints);
+      const PieceClass = randBlueprint ? allPieces.find(p => p.name === randBlueprint.name) : Random.pick(validPieces);
       if (PieceClass) {
         const summonedPiece = new PieceClass(target, 'player', this.removeCallback, crypto.randomUUID());
         summonedPiece.actions = 0;
@@ -2185,7 +2186,7 @@ class Wizard extends Piece {
       }
     } else if (this.team === 'enemy') {
       if (validPieces.length > 0) {
-        const EnemyClass = validPieces[Math.floor(Math.random() * validPieces.length)];
+        const EnemyClass = Random.pick(validPieces);
         const summonedPiece = new EnemyClass(target, 'enemy', this.removeCallback, crypto.randomUUID());
         summonedPiece.actions = 0;
         summonedPiece.movesRemaining = 0;
@@ -2790,8 +2791,7 @@ class Screwdriver extends Piece {
     ];
 
     // Pick one at random
-    const randomStat =
-      possibleStats[Math.floor(Math.random() * possibleStats.length)];
+    const randomStat = Random.pick(possibleStats);
 
     // Apply +1 to that stat using your modifier system
     const mod: StatModifier = { [randomStat]: (targetPiece.team === this.team) ? 1 : -1};

@@ -32,6 +32,7 @@ import { StorageManager } from "./StorageManager";
 import Altar from "./components/Altar.vue";
 import Duplicator from "./components/Duplicator.vue";
 import Workbench from "./components/Workbench.vue";
+import { Random } from "./Random";
 
 const testSword = {
   id: "274ec329-8c17-4265-8c12-e9a28bcf0833",
@@ -116,8 +117,17 @@ function toggleInventory() {
   showInventory.value = !showInventory.value;
 }
 const showMainMenu = ref(true);
+const currentSeed = ref<string>("");
 
-function createNewPlayer(os: OS) {
+function createNewPlayer(payload: { os: OS, seed: string }) {
+  const { os, seed } = payload;
+  if (seed) {
+    currentSeed.value = seed;
+  } else {
+    currentSeed.value = Math.random().toString(36).substring(2, 10).toUpperCase();
+  }
+  Random.setSeed(currentSeed.value);
+  
   player.value.difficulty = 1
   player.value = new Player(
     os.unicode,
@@ -453,7 +463,7 @@ async function handleApplyAdmins(trigger: AdminTrigger, id: string, piece?: Piec
   for (const admin of playerAdmins) {
     if (admin.disabled) continue;
     if (trigger === admin.triggerType) {
-      if(admin.triggerType === 'onTurnStart' || admin.triggerType === 'onRoundEnd' || admin.triggerType === 'onRoundLoss' ){
+      if(admin.triggerType === 'onTurnStart' || admin.triggerType === 'onRoundLoss' ){
         admin.isTriggering = true;
         setTimeout(() => admin.isTriggering = false, 500);
       }
@@ -478,7 +488,7 @@ async function handleApplyAdmins(trigger: AdminTrigger, id: string, piece?: Piec
   if (!player.value.hasAdmin('Umbrella')) {
     for (const admin of bossAdmins.value) {
       if (trigger === admin.triggerType) {//'onTurnStart' 'onRoundEnd' 'onReceiveDamage' 'onRoundLoss'  | 'other';
-        if(admin.triggerType === 'onTurnStart' || admin.triggerType === 'onRoundEnd' || admin.triggerType === 'onRoundLoss' ){
+        if(admin.triggerType === 'onTurnStart' || admin.triggerType === 'onRoundLoss' ){
           admin.isTriggering = true;
           setTimeout(() => admin.isTriggering = false, 500);
         }
@@ -784,7 +794,7 @@ function processSpawnPoints(pieces: Piece[], companyPieces: any[], mod: number) 
           pool = allPieces;
         }*/
 
-        const EnemyClass = pool[Math.floor(Math.random() * pool.length)];
+        const EnemyClass = Random.pick(pool);
 
         const enemyInstance = new EnemyClass(piece.headPosition, 'enemy', removePiece);
         enemyInstance.tiles = piece.tiles.slice(0, enemyInstance.maxSize);//trims the larger spawn down, might be a problem on castled
@@ -1656,7 +1666,7 @@ function toggleDebug() {
         @placeOnBoard="placePieceOnBoardAt" @handlePieceSelect="handlePieceSelect" @deselect="deselectPiece"
         @movePiece="movePiece" @damagePieceAt="damagePieceAt" @specialActionAt="handleSpecialActionAt"
         @placeAt="placeAt" gameStart="true" />
-      <Collection class="stage-panel" :class="{ active: showCollection }" @close="showCollection = false" :debugMode="debugMode" />
+      <Collection class="stage-panel" :class="{ active: showCollection }" @close="showCollection = false" :debugMode="debugMode" :currentSeed="currentSeed" />
     </div>
     <Leveleditor v-if="displayEditor" @export-level="handleExport" />
     <div class="player-area">

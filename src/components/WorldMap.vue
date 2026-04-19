@@ -23,6 +23,7 @@
     import BlueprintController from "./BlueprintController.vue";
     import { level6Levels } from "../level6Levels";
     import { StorageManager } from "../StorageManager";
+    import { Random } from "../Random";
 
     const props = defineProps<{
         player: Player;
@@ -89,7 +90,8 @@
 
         console.log('allbosses', allBosses.length)
         //console.log('pool', pool.length)
-        return new filteredPool[Math.floor(Math.random() * filteredPool.length)];
+        const SelectedBoss = Random.pick(filteredPool);
+        return new SelectedBoss();
     }
     function newBoss() {
         boss.value = returnNewBoss();
@@ -259,7 +261,7 @@
     });
 
     function generateSkipReward(): SkipReward{
-        const roll = Math.random();
+        const roll = Random.next();
         if (roll < 0.4) {
             const random = pickWeightedRandom(allPieces, props.player)
             return {

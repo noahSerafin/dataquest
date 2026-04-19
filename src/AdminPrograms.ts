@@ -79,6 +79,8 @@ export class Miner extends Admin {
 
   //noRoundend
   async apply({ player }: { player: Player }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     player.bonusReward += 2
   }
   //
@@ -96,6 +98,8 @@ export class Bubble extends Admin {
   private count = 1;
   //at end of round
   async apply({ player }: { player: Player }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     //calc 10% chance for pop
     const pop = Math.random() < 0.1;
     if (pop) {
@@ -444,6 +448,8 @@ class Inheritance extends Admin {
     super(Inheritance.name, Inheritance.description, Inheritance.unicode, Inheritance.color, 10, Inheritance.rarity, 'player', 'onRoundEnd')//onroundend, but we handle outside
   }
   async apply({ player }: { player: Player }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     player.bonusReward += ((player.nextInterest + player.bonusInterest) * 2)
   }
 }
@@ -478,6 +484,8 @@ class Needle extends Admin {//needs some kind of nerf, increase max size only?
       }
       if (playerPieces.length === 1) {//we find by activepieces, not by no. of placed bps
         //needs to interact with the blueprint
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
         const bpID = playerPieces[0].id
         const idx = player.programs.findIndex(p => p.id === bpID);
         player.programs[idx].maxSize += 1;
@@ -690,7 +698,11 @@ class Stonks extends Admin {
   //on end of round
   async apply({ player }: { player: Player }) {
     const noOfFives = Math.floor(player.money / 5) //round down
-    player.bonusInterest += noOfFives//reset after round
+    if(noOfFives > 0){
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
+      player.bonusInterest += noOfFives//reset after round
+    }
   }
 
 }
@@ -831,6 +843,8 @@ class Crown extends Admin {
   }
   //on round end
   async apply({ player }: { player: Player }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     player.bonusReward += 5;
   }
 }
@@ -1508,6 +1522,8 @@ export class Bank extends Admin {
   }
 
   async apply({ player }: { player: Player }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     for (const item of player.items) {
       item.cost += 2;
     };
@@ -1774,24 +1790,11 @@ class Loot extends Admin {
     super(Loot.name, Loot.description, Loot.unicode, Loot.color, 7, Loot.rarity, 'player', 'onRoundEnd')
   }
   async apply({ player }: { player: Player }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     player.bonusReward += 4;
   }
 }
-
-/*
-class Booty extends Admin {
-  static name = "Booty";
-  static description = "Earn an extra $7 at the end of a round";
-  static unicode = "U+1FA8E";
-  static color = "rgb(85, 193, 255)";
-  static rarity = 2;
-  constructor() {
-    super(Booty.name, Booty.description, Booty.unicode, Booty.color, 7, Booty.rarity, 'player', 'onRoundEnd')
-  }
-  async apply({ player }: { player: Player }) {
-    player.bonusReward += 7;
-  }
-}*/
 
 class HedgeFund extends Admin {
   static name = "Hedge Fund";
@@ -1892,7 +1895,11 @@ export class Abacus extends Admin {
   }
   async apply({ player }: { player: Player }) {
     const amount = Math.floor(6 / player.difficulty)
-    player.bonusReward += amount;
+    if(amount > 0){
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
+      player.bonusReward += amount;
+    }
   }
 }
 
@@ -1916,6 +1923,8 @@ export class Cheese extends Admin {
     super(Cheese.name, Cheese.description, Cheese.unicode, Cheese.color, 3, Cheese.rarity, 'player', 'onRoundEnd')
   }
   async apply({ player }: { player: Player }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     player.bonusReward += 1;
   }
 }
@@ -2000,6 +2009,8 @@ class Ring extends Admin {
     super(Ring.name, Ring.description, Ring.unicode, Ring.color, 15, Ring.rarity, 'playerAndGame', 'onRoundEnd')
   }
   async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     for (const piece of activePieces) {
       const id = piece.id;
       for (const blueprint of player.programs) {
@@ -2147,6 +2158,8 @@ class Balloon extends Admin {
     super(Balloon.name, Balloon.description, Balloon.unicode, Balloon.color, 2, Balloon.rarity, 'player', 'onRoundEnd')
   }
   async apply({ player }: { player: Player }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     for (const p of player.programs) {
       p.maxSize += 1;
     }
@@ -2381,6 +2394,8 @@ class Nest extends Admin {
     super(Nest.name, Nest.description, Nest.unicode, Nest.color, 2, Nest.rarity, 'player', 'onRoundEnd')
   }
   async apply({ player: _player }: { player: Player }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     this.cost += 6;
   }
 }
@@ -2468,6 +2483,8 @@ class School extends Admin {//test
   private count = 0;
   async apply({ player }: { player: Player }) {
     if (this.count < 7) {
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
       for (const bp of player.programs) {
         if (!bp.isPlaced) {
           bp.maxSize += 1;
@@ -2478,6 +2495,8 @@ class School extends Admin {//test
         }
       };
       this.count++
+    } else {
+      this.disabled = true;
     }
   }
 }
@@ -2489,7 +2508,7 @@ class Dharma extends Admin {//test
   static color = "rgb(146, 100, 0)";
   static rarity = 6;
   constructor() {
-    super(Dharma.name, Dharma.description, Dharma.unicode, Dharma.color, 10, Dharma.rarity, 'player', 'onRoundEnd')
+    super(Dharma.name, Dharma.description, Dharma.unicode, Dharma.color, 10, Dharma.rarity, 'player', 'other')
   }
 }
 
@@ -2910,6 +2929,8 @@ class Luggage extends Admin {
   //noRoundend
   async apply({ player }: { player: Player }) {
     if (player.mapProgress >= 2) {
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
       player.memory += 1;
     }
   }
@@ -3013,6 +3034,8 @@ class Mail extends Admin {
 
   async apply({ player }: { player: Player }) {
     if (player.effectiveMoney >= 2 && (player.freeMemory >= 1 || player.hasAdmin('Schoolbag') && player.freeMemory >= 0.5)) {
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
       player.spend(2);
       const gift = new Box;
       player.items.push(gift);
@@ -3031,8 +3054,10 @@ class Christmas extends Admin {
 
   async apply({ player }: { player: Player }) {
     if (player.mapProgress >= 2 && (player.freeMemory >= 1 || player.hasAdmin('Schoolbag') && player.freeMemory >= 0.5)) {
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
       const gift = new Gift;
-      player.items.push(gift);
+      player.addItem(gift);
     }
   }
 }
@@ -3048,8 +3073,10 @@ class Butler extends Admin {
 
   async apply({ player }: { player: Player }) {
     if (player.mapProgress >= 2 && (player.freeMemory >= 1 || player.hasAdmin('Schoolbag') && player.freeMemory >= 0.5)) {
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
       const gift = pickWeightedRandomItem(upgradeItems, player);
-      player.items.push(gift);
+      player.addItem(gift);
     }
   }
 }
@@ -3334,6 +3361,8 @@ class Huzzah extends Admin {
   }
   async apply({ player }: { player: Player }) {
     if (player.mapProgress >= 2 && (player.freeMemory >= 1 || player.hasAdmin('Schoolbag') && player.freeMemory >= 0.5)) {
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
       const pinata = new Pinata;
       player.items.push(pinata);
     }
@@ -3379,6 +3408,21 @@ class Righty extends Admin {
     }
   }
 }
+
+/*
+class Booty extends Admin {
+  static name = "Booty";
+  static description = "Earn an extra $7 at the end of a round";
+  static unicode = "U+1FA8E";
+  static color = "rgb(85, 193, 255)";
+  static rarity = 2;
+  constructor() {
+    super(Booty.name, Booty.description, Booty.unicode, Booty.color, 7, Booty.rarity, 'player', 'onRoundEnd')
+  }
+  async apply({ player }: { player: Player }) {
+    player.bonusReward += 7;
+  }
+}*/
 
 /*
 //SPLATTER, U+1FADF
@@ -3463,13 +3507,13 @@ console.log("Admins of rarity 4: ", adminLogs.rarity4)
 console.log("Admins of rarity 5: ", adminLogs.rarity5)
 console.log("Admins of rarity 6: ", adminLogs.rarity6)
 
-
+// CLOWN FACE, U+1F921 Perkeo effect
 // SURFER, U+1F3C4 //move into a free space after taking damage (even defensive)
 //RECYCLING SYMBOL, U+2672 selling programs gives 1 of lower rarirty
 //pre rune - 1 range on attack?
 //BUTTER, U+1F9C8 moves your pieces randomly after health damage?
-
 //JEANS, U+1F456 effect compiler +1 defence for hybrids on creation
+
 //SLEUTH OR SPY, U+1F575 
 //TEACUP WITHOUT HANDLE, U+1F375 calm down, removes enraged from enemies
 //basketball and HOOP, U+1F3C0 - range of 3+ gets +3 attack

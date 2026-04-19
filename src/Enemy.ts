@@ -5,7 +5,7 @@ import type { Player } from "./Player";
 
 type EnemyIntent =
   | { type: 'attack'; target: Piece }
-  | { type: 'special'; target: Piece | Coordinate | Piece[] | {piece: Piece, target: Coordinate} | {line: Coordinate[], activePieces: Piece[]} | {target: Coordinate, activePieces: Piece[], player?: Player} | null }
+  | { type: 'special'; target: Piece | Coordinate | Piece[] | {piece: Piece, target: Coordinate} | {piece: Piece, player: Player} | {line: Coordinate[], activePieces: Piece[]} | {target: Coordinate, activePieces: Piece[], player?: Player} | null }
   | { type: 'move'; path: Coordinate[] }
   | { type: 'wander'; space: Coordinate }
   | { type: 'wait' };
@@ -88,6 +88,9 @@ function decideEnemyIntent(
         if(enemy.attack > 2 && (enemy.specialName === 'Imitate' || enemy.specialName === 'Absorb')){
           return { type: 'attack', target: target.piece };
         } else {
+          if (enemy.targetType === 'pieceAndPlayer') {
+            return { type: 'special', target: { piece: target.piece, player: player } };
+          }
           return { type: 'special', target: target.piece };
         }
       }
@@ -126,7 +129,10 @@ function decideEnemyIntent(
       return {type: 'special', target: (findAnyPiecesInRange(enemy, activePieces))}
     } else if(enemy.targetType == 'placeAndPieces' && specialAttempts < 1){//rectify attempts later
       return { type: 'special', target: {target: friendlyTarget.place, activePieces: activePieces}}
-    } else if(enemy.targetType === 'piece'){//piece
+    } else if(enemy.targetType === 'piece' || enemy.targetType === 'pieceAndPlayer'){//piece
+      if (enemy.targetType === 'pieceAndPlayer') {
+        return { type: 'special', target: { piece: friendlyTarget.piece, player: player } };
+      }
       return {type: 'special', target: friendlyTarget.piece}
     }
   }
@@ -213,9 +219,12 @@ function decideEnemyIntent(
       if(enemy.targetType === 'group'){
         return {type: 'special', target: (findAnyPiecesInRange(enemy, enemyPieces))}
       }
-      if(enemy.targetType === 'piece'){
+      if(enemy.targetType === 'piece' || enemy.targetType === 'pieceAndPlayer'){
         const ally = findWeakestPlayerInRange(enemy, enemyPieces)?.piece
         if(ally){
+          if (enemy.targetType === 'pieceAndPlayer') {
+            return { type: 'special', target: { piece: ally, player: player } };
+          }
           return {type: 'special', target: ally};
         } //else find and path to an ally and move there
       }

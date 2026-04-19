@@ -142,7 +142,7 @@ function decideEnemyIntent(
     p.name === 'Frond'// && p.hasFriendlySpecial && p.targetType === 'trapPiece';
   )
   if(friendlyTrap && enemy.movesRemaining > 0){
-    const pathToFrond = findShortestPath(enemy.headPosition, friendlyTrap.headPosition, tileSet, activePieces, true); 
+    const pathToFrond = findShortestPath(enemy, enemy.headPosition, friendlyTrap.headPosition, tileSet, activePieces, true); 
     if(pathToFrond){
       return { type: 'move', path: pathToFrond };
     }
@@ -152,7 +152,7 @@ function decideEnemyIntent(
   let nearest = (enemy.specialName && !enemy.hasFriendlySpecial && enemy.targetType !== 'trapPiece') ? findNearestPieceCoordinate(enemy, playerPieces) : findNearestAttackableCoordinate(enemy, playerPieces);
 
   if ((!target || enemy.targetType === 'trapPiece') && nearest && enemy.movesRemaining > 0 && !enemy.statuses.frozen) {
-    const path = findShortestPath(enemy.headPosition, nearest, tileSet, activePieces, enemy.targetType === 'trapPiece');
+    const path = findShortestPath(enemy, enemy.headPosition, nearest, tileSet, activePieces, enemy.targetType === 'trapPiece');
     if (path && path.length > 1) {
       console.log('found a path to the player')
       return { type: 'move', path: path };//move toward a target
@@ -231,7 +231,7 @@ function decideEnemyIntent(
       if(enemy.targetType === 'trapPiece' && enemy.movesRemaining > 0){//frond
         const allyPos = findWeakestPlayerInRange(enemy, enemyPieces)?.place
         if(allyPos){
-          const path = findShortestPath(enemy.headPosition, allyPos, tileSet, activePieces, true)
+          const path = findShortestPath(enemy, enemy.headPosition, allyPos, tileSet, activePieces, true)
           if(path){
             return {type: 'move', path: path}
           }
@@ -507,6 +507,7 @@ function findWeakestPlayerInRange(
 
 // Move one tile toward the target using simple orthogonal movement
 function findShortestPath(
+  piece: Piece,
   start: Coordinate,
   goal: Coordinate,
   levelTiles: Set<string>,        // e.g., Set of "x,y" strings for walkable tiles
@@ -525,6 +526,15 @@ function findShortestPath(
     { x: 0, y: 1 },
     { x: 0, y: -1 },
   ];
+
+  if (piece.name === 'Helicopter') {
+    directions.push(
+      { x: 2, y: 0 },
+      { x: -2, y: 0 },
+      { x: 0, y: 2 },
+      { x: 0, y: -2 }
+    );
+  }
 
   const occupiedTiles = new Set<string>();
   for (const p of activePieces) {

@@ -2676,7 +2676,7 @@ class Juggler extends Admin {//test
   static color = "#000000ff";
   static rarity = 3;
   constructor() {
-    super(Juggler.name, Juggler.description, Juggler.unicode, Juggler.color, 7, Juggler.rarity, 'playerAndGame', 'onRoundStart')
+    super(Juggler.name, Juggler.description, Juggler.unicode, Juggler.color, 7, Juggler.rarity, 'playerAndGame', 'onPlacement')
   }
   private firstId: string = '';
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {

@@ -14,6 +14,19 @@
 
     const seedInput = ref<string>('');
 
+    function startWithSeed() {
+        if (!seedInput.value) return;
+        
+        const input = seedInput.value.trim();
+        const prefix = input.charAt(0);
+        const rawSeed = input.substring(1);
+        
+        // Find OS by prefix
+        const os = allOSes.find(o => o.prefix === prefix) || allOSes[0];
+        
+        emit('createNewPlayer', { os, seed: rawSeed });
+    }
+
     function returnUnicode(unicode: String){
         return  String.fromCodePoint(parseInt(unicode.replace('U+', ''), 16), 0xFE0F);
     }
@@ -171,6 +184,9 @@
                 placeholder="Enter seed..."
                 class="seed-input"
             />
+            <button class="play-btn" :disabled="!seedInput" @click="startWithSeed">
+                Play
+            </button>
         </div>
     </div>
 </template>
@@ -280,5 +296,27 @@
     .seed-input:focus {
         outline: none;
         border-color: #4CAF50;
+    }
+
+    .play-btn {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 0.5rem 1.5rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background 0.2s, transform 0.1s;
+    }
+
+    .play-btn:hover:not(:disabled) {
+        background-color: #45a049;
+        transform: scale(1.05);
+    }
+
+    .play-btn:disabled {
+        background-color: #333;
+        color: #777;
+        cursor: not-allowed;
     }
 </style>

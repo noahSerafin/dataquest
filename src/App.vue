@@ -120,14 +120,28 @@ const showMainMenu = ref(true);
 const currentSeed = ref<string>("");
 
 function createNewPlayer(payload: { os: OS, seed: string }) {
-  const { os, seed } = payload;
-  if (seed) {
-    currentSeed.value = seed;
+  let { os, seed } = payload;
+  let rawSeed = seed;
+
+  if (!rawSeed) {
+    rawSeed = Math.random().toString(36).substring(2, 10).toUpperCase();
+    // Add prefix to currentSeed for display/sharing
+    currentSeed.value = (os.prefix || '') + rawSeed;
   } else {
-    currentSeed.value = Math.random().toString(36).substring(2, 10).toUpperCase();
+    // If seed was provided (e.g. from Play button), it might have a prefix
+    // But MainMenu's Play button already splits it. 
+    // However, if called from os selection button with a manual seed in the box, 
+    // it's passed as is.
+
+    // Safety check: if seed starts with os.prefix + [something], strip it? 
+    // Actually, createNewPlayer should just trust payload.seed is the raw part
+    // unless it came from a direct paste.
+
+    currentSeed.value = (os.prefix || '') + rawSeed;
   }
-  Random.setSeed(currentSeed.value);
-  
+
+  Random.setSeed(rawSeed);
+
   player.value.difficulty = 1
   player.value = new Player(
     os.unicode,
@@ -145,7 +159,7 @@ function createNewPlayer(payload: { os: OS, seed: string }) {
     0,
     stake.value
   )
-  
+
   // Track this OS as played
   StorageManager.recordOS(os.unicode);
 
@@ -157,7 +171,7 @@ function createNewPlayer(payload: { os: OS, seed: string }) {
   showMainMenu.value = false;
   showMap.value = true;
   gameStarted.value = true;
-  currentCompany.value = { name: 'Player', abbr: '',  unicode: player.value.osunicode, pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "#9CC954" };
+  currentCompany.value = { name: 'Player', abbr: '', unicode: player.value.osunicode, pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "#9CC954" };
 }
 const showCollection = ref(false);
 
@@ -165,7 +179,7 @@ function incrementMapProgress() {
   player.value.extraDifficulty = 0;
   player.value.mapProgress++
   //console.log('progress increased:', mapProgress.value)
-  if(player.value.hasAdmin('Clippy')){
+  if (player.value.hasAdmin('Clippy')) {
     reapplyTutorialTooltips(200);
   }
 }
@@ -220,8 +234,8 @@ function handleApplyItem(payload: { item: Item, id: string }) {
   const item = payload.item;
   const itemMult = 1 + player.value.admins.filter(a => a.name === 'Chemistry').length;
   console.log('itemMult:', itemMult);
-  if (item.targetType === 'playerAndGame' && selectedPiece.value){
-    if(item.name === 'Jar' && selectedPiece.value.team === 'enemy' && selectedPiece.value.defenceRemaining <= 0 && selectedPiece.value.tiles.length <= 1) {
+  if (item.targetType === 'playerAndGame' && selectedPiece.value) {
+    if (item.name === 'Jar' && selectedPiece.value.team === 'enemy' && selectedPiece.value.defenceRemaining <= 0 && selectedPiece.value.tiles.length <= 1) {
       item.apply({ id: selectedPiece.value.id, activePieces: activePieces.value, player: player.value }, itemMult);
       player.value.removeItem(item);
       deselectPiece();
@@ -230,7 +244,7 @@ function handleApplyItem(payload: { item: Item, id: string }) {
     }
   }
   if (item.targetType === 'piecesAndBoard') {
-    item.apply({activePieces: activePieces.value, board: level.value.tiles}, itemMult);
+    item.apply({ activePieces: activePieces.value, board: level.value.tiles }, itemMult);
     playerSpawns.value = newPlacementHighlights();
     player.value.removeItem(item);
   }
@@ -463,7 +477,7 @@ async function handleApplyAdmins(trigger: AdminTrigger, id: string, piece?: Piec
   for (const admin of playerAdmins) {
     if (admin.disabled) continue;
     if (trigger === admin.triggerType) {
-      if(admin.triggerType === 'onTurnStart' || admin.triggerType === 'onRoundLoss' ){
+      if (admin.triggerType === 'onTurnStart' || admin.triggerType === 'onRoundLoss') {
         admin.isTriggering = true;
         setTimeout(() => admin.isTriggering = false, 500);
       }
@@ -488,7 +502,7 @@ async function handleApplyAdmins(trigger: AdminTrigger, id: string, piece?: Piec
   if (!player.value.hasAdmin('Umbrella')) {
     for (const admin of bossAdmins.value) {
       if (trigger === admin.triggerType) {//'onTurnStart' 'onRoundEnd' 'onReceiveDamage' 'onRoundLoss'  | 'other';
-        if(admin.triggerType === 'onTurnStart' || admin.triggerType === 'onRoundLoss' ){
+        if (admin.triggerType === 'onTurnStart' || admin.triggerType === 'onRoundLoss') {
           admin.isTriggering = true;
           setTimeout(() => admin.isTriggering = false, 500);
         }
@@ -564,7 +578,7 @@ const openSummary = (state: boolean) => {
 }
 
 const renewBlueprints = async () => {
-  for(const blueprint of player.value.programs){
+  for (const blueprint of player.value.programs) {
     blueprint.isPlaced = false;
   };
 }
@@ -572,7 +586,7 @@ const renewBlueprints = async () => {
 const lastTurnPieces = ref<InstanceType<typeof Piece>[]>([]);//player
 const originalPieces = ref<InstanceType<typeof Piece>[]>([]);//player
 const originalSpawns = ref<Coordinate[]>([]);//player
-const currentCompany = ref<Company>({ name: 'Player', abbr: '',  unicode: player.value.osunicode  || '', pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "#9CC954"});
+const currentCompany = ref<Company>({ name: 'Player', abbr: '', unicode: player.value.osunicode || '', pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "#9CC954" });
 
 async function selectLevel(newLevel: Level, company: Company, difficultyMod: number, lReward: number) {//load level, start 
   pieceToPlace.value = null;
@@ -685,7 +699,7 @@ const openShop = () => {
 }
 const closeShop = () => {
   showShop.value = false;
-  if(!shopDisabled.value && canProceedFromShop.value){
+  if (!shopDisabled.value && canProceedFromShop.value) {
     refreshShop(true);
   }
   canProceedFromShop.value = false;
@@ -774,7 +788,7 @@ function processSpawnPoints(pieces: Piece[], companyPieces: any[], mod: number) 
         // 1. Get all enemies that match the current difficulty rarity
         const difficultyMatched = companyPieces.filter(EnemyClass => {
           if (EnemyClass.name === "Nuke") return false;
-          
+
           // Create a temp instance to check rarity and maxSize
           const temp = new EnemyClass(piece.headPosition, 'enemy', removePiece);
           return temp.rarity >= min && temp.rarity <= max;
@@ -787,7 +801,7 @@ function processSpawnPoints(pieces: Piece[], companyPieces: any[], mod: number) 
         // 3. FALLBACK: If none fit the size, stay within the difficulty but allow smaller pieces
         if (pool.length === 0) {
           console.warn(`No enemy of rarity ${min}-${max} fits spawn size ${spawnSize}. Falling back to smaller units.`);
-          pool = difficultyMatched; 
+          pool = difficultyMatched;
         }
         // 4. LAST RESORT: If no enemies match the rarity at all, only then use allPieces
         /*if (pool.length === 0) {
@@ -933,7 +947,7 @@ function instantiatePieceFromBlueprint(//this goes in app
   if (bp.variantName) {
     piece.variantName = bp.variantName;
   }
-  
+
   return piece;//modified piece with new stats
 }
 
@@ -1046,7 +1060,7 @@ function handlePieceSelect(piece: Piece) {
       );
     }
   }
-  if(!(piece.statuses.hidden && piece.team === 'enemy')){
+  if (!(piece.statuses.hidden && piece.team === 'enemy')) {
     selectedPiece.value = piece
   }
   //highlight range
@@ -1055,7 +1069,7 @@ function handlePieceSelect(piece: Piece) {
   } else if (player.value.canMove) {
     boardRef.value.highlightMoves(piece);
   }
-  if(player.value.hasAdmin('Clippy')){
+  if (player.value.hasAdmin('Clippy')) {
     reapplyTutorialTooltips(200);
   }
 }
@@ -1079,7 +1093,7 @@ const movePiece = async (coord: Coordinate) => {
     p.targetType == 'trapPiece' && p.tiles.some(t => t.x === coord.x && t.y === coord.y)
   );
   if (trap && trap.id !== selectedPiece.value.id) {
-    if(player.value.hasAdmin('Wings')){//still trigger and remove, but don't damage
+    if (player.value.hasAdmin('Wings')) {//still trigger and remove, but don't damage
       trap.isTriggering = true;
       trap.statuses.hidden = false;
       await new Promise(resolve => setTimeout(resolve, 350));
@@ -1155,17 +1169,17 @@ const damagePieceAt = async (coord: Coordinate) => {
   const baseMult = selectedPiece.value.damageMult;
   const attackPopup = damageReceiver.addPopup({ text: `${baseDamage}${baseMult > 1 ? ` x${baseMult.toFixed(1)}` : ''}`, type: 'attack', isFixed: true });
   // Initial pause so the user can see the starting attack value
-  
+
   let lastSeenMult = baseMult;
   await handleApplyAdmins('onDealDamage', selectedPiece.value.id, damageReceiver, async () => {
     const attacker = activePieces.value.find(p => p.id === selectedPiece.value?.id);
-    if(attacker && attacker.damageMult !== lastSeenMult) {
+    if (attacker && attacker.damageMult !== lastSeenMult) {
       lastSeenMult = attacker.damageMult;
       console.log('adding mult, now: ', lastSeenMult)
       // Update text and force Vue to detect the change by re-assigning the array
       attackPopup.text = `${baseDamage} x${lastSeenMult.toFixed(1)}`;
       damageReceiver.popups = [...damageReceiver.popups];
-      
+
       await new Promise(resolve => setTimeout(resolve, 350));
     }
   });
@@ -1173,7 +1187,7 @@ const damagePieceAt = async (coord: Coordinate) => {
   // Brief pause before showing the final damage total
   //await new Promise(resolve => setTimeout(resolve, 200));
   await damageReceiver.takeDamage(damage, attackPopup);
-  if(damageReceiver.team === 'player'){
+  if (damageReceiver.team === 'player') {
     await handleApplyAdmins('onReceiveDamage', selectedPiece.value.id, damageReceiver)
   }
   if (selectedPiece.value.statuses.hidden) {
@@ -1527,7 +1541,7 @@ function onKeydown(e: KeyboardEvent) {
         boardRef.value.highlightSpecials(selectedPiece.value);
       }
       break;
-    
+
     case 'KeyD':
       if (selectedPiece.value) {
         selectedPiece.value = null;
@@ -1546,7 +1560,7 @@ function toggleDebug() {
 <template>
   <div class="app-root">
     <div class="debug-controls">
-      <button @click="showCollection = !showCollection">Collection</button>
+      <button @click="showCollection = !showCollection">Info</button>
       <button v-if="debugMode === true" class="swap-display" @mousedown="swapDisplay()">
         {{ displayEditor ? "Show Board" : "Show Editor" }}
       </button>
@@ -1561,16 +1575,13 @@ function toggleDebug() {
         @mousedown="toggleCompiler()">
         Toggle Compiler
       </button>
-      <button v-if="debugMode === true" class="altar-toggle"
-        @mousedown="toggleAltar()">
+      <button v-if="debugMode === true" class="altar-toggle" @mousedown="toggleAltar()">
         Toggle Altar
       </button>
-      <button v-if="debugMode === true" class="duplicator-toggle"
-        @mousedown="toggleDuplicator()">
+      <button v-if="debugMode === true" class="duplicator-toggle" @mousedown="toggleDuplicator()">
         Toggle Duplicator
       </button>
-      <button v-if="debugMode === true" class="workbench-toggle"
-        @mousedown="toggleWorkbench()">
+      <button v-if="debugMode === true" class="workbench-toggle" @mousedown="toggleWorkbench()">
         Toggle Workbench
       </button>
       <button v-if="debugMode === true" class="map-toggle" @mousedown="toggleMap()">
@@ -1611,7 +1622,8 @@ function toggleDebug() {
       <div class="enemy-info">
         <span v-if="currentCompany">
           <div>{{ currentCompany.abbr }}</div>
-          <div>{{ currentCompany.unicode ? String.fromCodePoint(parseInt(currentCompany.unicode.replace('U+', ''), 16), 0xFE0F) : '' }}</div>
+          <div>{{ currentCompany.unicode ? String.fromCodePoint(parseInt(currentCompany.unicode.replace('U+', ''), 16),
+            0xFE0F) : '' }}</div>
         </span>
         <p class="security"><strong>Security level: </strong>{{ player.difficulty + player.extraDifficulty }}</p>
         <p class="infamy"><strong>Infamy: </strong>{{ stake }}</p>
@@ -1632,15 +1644,15 @@ function toggleDebug() {
     </div>
     <div class="stage">
       <MainMenu v-if="showMainMenu && !displayEditor" @createNewPlayer="createNewPlayer" class="stage-panel"
-        :class="{ active: showMainMenu }" :debugMode="debugMode"/>
+        :class="{ active: showMainMenu }" :debugMode="debugMode" />
       <RoundSummary v-if="showSummary" class="stage-panel" :class="{ active: showSummary }" :hasWonRound="hasWonRound"
         :player="player" :bosses="bossAdmins" @proceedFromEndOfRound="handleProceed" @reloadLevel="reloadLevel"
         @mainMenu="openMainMenu" />
       <WorldMap v-if="!displayEditor" class="stage-panel" :class="{ active: showMap }" :allLevels="level1Levels"
         :player="player" :seed="worldSeed" :cssclass="mapClass" :bosses="bossAdmins" @selectLevel="selectLevel"
-        @openShop="openShop" @openDisabledShop="openDisabledShop" @openCompiler="openCompiler" @openAltar="openAltar" @openDuplicator="openDuplicator" @openWorkbench="openWorkbench"
-        @incrementProgress="incrementMapProgress" @addBoss="addBossAdmin" @replaceBosses="replaceBosses"
-        @increaseDifficulty="increaseDifficulty" />
+        @openShop="openShop" @openDisabledShop="openDisabledShop" @openCompiler="openCompiler" @openAltar="openAltar"
+        @openDuplicator="openDuplicator" @openWorkbench="openWorkbench" @incrementProgress="incrementMapProgress"
+        @addBoss="addBossAdmin" @replaceBosses="replaceBosses" @increaseDifficulty="increaseDifficulty" />
       <Shop v-if="!displayEditor" class="stage-panel" :class="{ active: showShop }" :cssclass="shopClass"
         :shopBlueprints="shopBlueprints" :shopItems="shopItems" :rerollCost="rerollCost" :target="shopTarget"
         :hasStolen="hasStolenFromThisShop" @refresh-shop="refreshShop(false)" @buy-blueprint="buyBlueprint"
@@ -1662,11 +1674,12 @@ function toggleDebug() {
         :tiles="level.tiles" :foggedTiles="foggedTiles" :pieces="activePieces" :selectedPiece="selectedPiece"
         :placementHighlights="playerSpawns" :isFirstTurn="isFirstTurn" :placementMode="isPlacing"
         :movementMode="isMoving" :hasFinishedTurn="hasFinishedTurn" :player="player"
-        :showFastControls="showFastControls" :isDraggingPlacement="isDraggingPlacement" :pieceToPlace="pieceToPlace" :tileColor="currentCompany.tileColor" :edgeColor="currentCompany.edgeColor"
-        @placeOnBoard="placePieceOnBoardAt" @handlePieceSelect="handlePieceSelect" @deselect="deselectPiece"
-        @movePiece="movePiece" @damagePieceAt="damagePieceAt" @specialActionAt="handleSpecialActionAt"
-        @placeAt="placeAt" gameStart="true" />
-      <Collection class="stage-panel" :class="{ active: showCollection }" @close="showCollection = false" :debugMode="debugMode" :currentSeed="currentSeed" />
+        :showFastControls="showFastControls" :isDraggingPlacement="isDraggingPlacement" :pieceToPlace="pieceToPlace"
+        :tileColor="currentCompany.tileColor" :edgeColor="currentCompany.edgeColor" @placeOnBoard="placePieceOnBoardAt"
+        @handlePieceSelect="handlePieceSelect" @deselect="deselectPiece" @movePiece="movePiece"
+        @damagePieceAt="damagePieceAt" @specialActionAt="handleSpecialActionAt" @placeAt="placeAt" gameStart="true" />
+      <Collection class="stage-panel" :class="{ active: showCollection }" @close="showCollection = false"
+        :debugMode="debugMode" :currentSeed="currentSeed" />
     </div>
     <Leveleditor v-if="displayEditor" @export-level="handleExport" />
     <div class="player-area">
@@ -1681,8 +1694,8 @@ function toggleDebug() {
         @highlightTargets="boardRef.highlightTargets" @highlightSpecials="boardRef.highlightSpecials"
         @close="deselectPiece" />
       <div v-if="!displayEditor" class="player-actions">
-        <button v-if="(!displayEditor && roundHasStarted && !hasFinishedTurn && !isFirstTurn) || debugMode" class="end-turn"
-          v-on:click="endTurn()">End Turn</button>
+        <button v-if="(!displayEditor && roundHasStarted && !hasFinishedTurn && !isFirstTurn) || debugMode"
+          class="end-turn" v-on:click="endTurn()">End Turn</button>
         <!--<button class="mt-2 px-2 py-1 bg-blue-500 text-white rounded" @click="showInventory = !showInventory">{{showInventory ? 'Hide Inventory' : 'Inventory' }}</button>-->
         <!--<div v-if="!displayEditor && roundHasStarted" class="graveyard">
         <button>🪦</button>
@@ -1790,7 +1803,10 @@ function toggleDebug() {
     left: 100%;
   }
 }
-.enemy-bosses, .security, .infamy{
+
+.enemy-bosses,
+.security,
+.infamy {
   position: relative;
 }
 </style>

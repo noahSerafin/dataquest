@@ -40,6 +40,7 @@ export interface HybridBlueprint extends PieceBlueprint {
 export type OS = {
   name: string
   unicode: string
+  prefix: string
   money: number
   memory: number
   adminSlots: number

@@ -77,7 +77,7 @@ function getItemInstance(ItemClass: any) {
   return new ItemClass();
 }
 
-const activeTab = ref<'pieces' | 'items' | 'admins' | 'bosses' | 'stats' | 'run'>('pieces');
+const activeTab = ref<'pieces' | 'items' | 'admins' | 'bosses' | 'stats' | 'run'>('run');
 
 function copySeed() {
   navigator.clipboard.writeText(props.currentSeed);
@@ -94,12 +94,12 @@ function copySeed() {
       </div>
 
       <div class="tabs">
+        <button :class="{ active: activeTab === 'run' }" @click="activeTab = 'run'">This Run</button>
         <button :class="{ active: activeTab === 'pieces' }" @click="activeTab = 'pieces'">Programs</button>
         <button :class="{ active: activeTab === 'items' }" @click="activeTab = 'items'">Items</button>
         <button :class="{ active: activeTab === 'admins' }" @click="activeTab = 'admins'">Admins</button>
         <button :class="{ active: activeTab === 'bosses' }" @click="activeTab = 'bosses'">Bosses</button>
         <button :class="{ active: activeTab === 'stats' }" @click="activeTab = 'stats'">Stats</button>
-        <button :class="{ active: activeTab === 'run' }" @click="activeTab = 'run'">This Run</button>
       </div>
 
       <div class="content-area">

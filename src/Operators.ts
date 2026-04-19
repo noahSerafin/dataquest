@@ -369,6 +369,7 @@ import { createDefaultStatuses } from "./types";
 const Window95 : OS = {
     name: 'Classic95',
     unicode: 'U+229E',
+    prefix: 'C',
     money: 4,
     memory: 5,
     adminSlots: 5,
@@ -381,6 +382,7 @@ const Window95 : OS = {
 const Steam : OS = {
     name: 'Steam',
     unicode: 'U+1F682',
+    prefix: 'S',
     money: 3,
     memory: 6,
     adminSlots: 5,
@@ -393,6 +395,7 @@ const Steam : OS = {
 const Penguin : OS = {//potato //shield
     name: 'Penguin',
     unicode: 'U+1F427',
+    prefix: 'P',
     money: 4,
     memory: 6,
     adminSlots: 5,
@@ -406,6 +409,7 @@ const Penguin : OS = {//potato //shield
 const Window : OS = {//knife //shield //snail
     name: 'Window',
     unicode: ' U+1FA9F',
+    prefix: 'w',
     money: 5,
     memory: 4,
     adminSlots: 5,
@@ -420,6 +424,7 @@ const Window : OS = {//knife //shield //snail
 const Apple : OS = {
     name: 'Apple',
     unicode: 'U+1F34F',
+    prefix: 'l',
     money: 10,
     memory: 5,
     adminSlots: 4,
@@ -433,6 +438,7 @@ const Apple : OS = {
 const Temple : OS = {
     name: 'Temple',
     unicode: 'U+2696',
+    prefix: 'T',
     money: 1,
     memory: 6,
     adminSlots: 6,
@@ -446,6 +452,7 @@ const Temple : OS = {
 const Fortran : OS = {
     name: 'Fortran',
     unicode: 'U+2697',
+    prefix: 'F',
     money: 0,
     memory: 4,
     adminSlots: 3,
@@ -459,6 +466,7 @@ const Fortran : OS = {
 const Cobol : OS = {
     name: 'Cobol',
     unicode: 'U+1F3DB',
+    prefix: 'C',
     money: 15,
     memory: 3,
     adminSlots: 5,
@@ -472,6 +480,7 @@ const Cobol : OS = {
 const Arch : OS = {
     name: 'Arch',
     unicode: 'U+394',
+    prefix: 'A',
     money: 4,
     memory: 4,
     adminSlots: 5,
@@ -485,6 +494,7 @@ const Arch : OS = {
 const GNU : OS = {
     name: 'GNU',
     unicode: 'U+1F403',
+    prefix: 'G',
     money: 5,
     memory: 3,
     adminSlots: 3,
@@ -498,7 +508,7 @@ const GNU : OS = {
 const Amiga : OS = {
     name: 'Amiga',
     unicode: 'U+2705',//HEAVY CHECK MARK, U+2714
-    money: 3,
+    prefix: 'a',
     memory: 3,
     adminSlots: 4,
     blueprints: [bug, aegis],
@@ -511,6 +521,7 @@ const Amiga : OS = {
 const Beos : OS = {
     name: 'BeOS',
     unicode: 'U+1F41D',
+    prefix: 'B',
     money: 5,
     memory: 5,
     adminSlots: 4,
@@ -525,6 +536,7 @@ const Beos : OS = {
 const Explorer : OS = {
     name: 'Explorer',
     unicode: 'U+1F30D',
+    prefix: 'E',
     money: 9,
     memory: 3,
     adminSlots: 4,
@@ -538,6 +550,7 @@ const Explorer : OS = {
 const Satoshi : OS = {
     name: 'Satoshi',
     unicode: 'U+20BF',
+    prefix: 's',
     money: 1,
     memory: 6,
     adminSlots: 6,
@@ -595,6 +608,7 @@ give programs that create their own other programs
 const Debugger : OS = {
     name: 'Debugger',
     unicode: 'U+1F41B',
+    prefix: 'D',
     money: 50,
     memory: 10,
     adminSlots: 6,

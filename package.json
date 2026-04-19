@@ -10,6 +10,7 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "node": "^25.8.0",
     "vue": "^3.5.18"
   },
   "devDependencies": {

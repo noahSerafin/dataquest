@@ -846,6 +846,8 @@ class Cactus extends Admin {
   }
   //on receive damage
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     await activePieces[idx].takeDamage(1);
   }
@@ -2085,6 +2087,8 @@ class Pong extends Admin {
   }
   //on receive damage
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     await activePieces[idx].takeDamage(activePieces[idx].getStat('attack'));
   }
@@ -2359,6 +2363,8 @@ class Disco extends Admin {
         adjacent.some(c => c.x === t.x && c.y === t.y)
       );
       if (isAdjacent) {
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
         await piece.takeDamage(activePieces[idx].getStat('attack'));
       }
     };
@@ -2861,6 +2867,8 @@ class Bell extends Admin {//test
     // Only filter if we actually need to check the win/trigger condition
     const playerPieces = activePieces.filter(p => p.team === 'player');
     if (playerPieces.length === 1) {
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
       dealer.statuses.frozen = true;
       dealer.movesRemaining = 0;
     }
@@ -3182,6 +3190,8 @@ class Baseball extends Admin {
 
       // 4. Check for Strike Out (3 strikes)
       if (this.candidates[id] >= 3) {
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
         // Remove the enemy
         activePieces[attackerIdx].removeCallback?.(activePieces[attackerIdx])
         // Clean up tracking for this specific ID
@@ -3207,6 +3217,8 @@ class Selfie extends Admin {
   }
   async apply({ id, activePieces: _activePieces, piece }: { id: string, activePieces: Piece[], piece?: Piece }) {
     if(piece && id === piece.id){
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
       piece.addModifier({attack: 1})
     }
   }

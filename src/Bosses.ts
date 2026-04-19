@@ -1063,6 +1063,8 @@ class Concussion extends Admin {
             this.candidates[piece.id] = (this.candidates[piece.id] || 0) + 1;
         }
         if (this.candidates[piece.id] >= 2) {
+            this.isTriggering = true;
+            setTimeout(() => this.isTriggering = false, 500);
             if(!piece.immunities.confused){
                 piece.statuses.confused = true;
                 // Clean up tracking for this specific ID

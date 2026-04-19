@@ -453,7 +453,7 @@ async function handleApplyAdmins(trigger: AdminTrigger, id: string, piece?: Piec
   for (const admin of playerAdmins) {
     if (admin.disabled) continue;
     if (trigger === admin.triggerType) {
-      if(admin.triggerType !== 'onDealDamage' && admin.triggerType !== 'onTurnEnd' && admin.triggerType !== 'onEnemyTurnEnd' && admin.triggerType !== 'onRoundStart'){
+      if(admin.triggerType === 'onTurnStart' || admin.triggerType === 'onRoundEnd' || admin.triggerType === 'onRoundLoss' ){
         admin.isTriggering = true;
         setTimeout(() => admin.isTriggering = false, 500);
       }
@@ -478,7 +478,7 @@ async function handleApplyAdmins(trigger: AdminTrigger, id: string, piece?: Piec
   if (!player.value.hasAdmin('Umbrella')) {
     for (const admin of bossAdmins.value) {
       if (trigger === admin.triggerType) {//'onTurnStart' 'onRoundEnd' 'onReceiveDamage' 'onRoundLoss'  | 'other';
-        if(admin.triggerType === 'onTurnStart' || admin.triggerType === 'onRoundEnd' || admin.triggerType === 'onReceiveDamage' || admin.triggerType === 'onRoundLoss' ){
+        if(admin.triggerType === 'onTurnStart' || admin.triggerType === 'onRoundEnd' || admin.triggerType === 'onRoundLoss' ){
           admin.isTriggering = true;
           setTimeout(() => admin.isTriggering = false, 500);
         }

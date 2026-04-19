@@ -1106,6 +1106,7 @@ function checkForRoundEnd() {
   if (enemyPieces.length === 0) {
     console.log('round won!')
     endRound(true);
+    return;
   }
 
   let hiddenEnemies = []

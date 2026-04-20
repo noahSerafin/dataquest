@@ -4183,7 +4183,7 @@ class Tradie extends Piece {
   static name = "Tradie";
   static description = "A program that can spawn walls";
   static unicode = "U+1F477";
-  static color = "rgb(214, 182, 130)";
+  static color = "rgb(160, 140, 107)";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Tradie.name, Tradie.description, Tradie.unicode, 1, 1, 1, 2, 1, Tradie.color, headPosition, [headPosition], team, Tradie.rarity, removeCallback, id)

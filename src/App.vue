@@ -1030,7 +1030,9 @@ async function removePiece(piece: Piece) {
         activePieces.value.push(NewDoll);
       }
     }
-    checkForRoundEnd();
+    if(piece.name !== 'Bee' && piece.name !== 'Bomb' && piece.name !== 'Nuke' && piece.name !== 'Mine'){
+      checkForRoundEnd();
+    }
   }
 }
 

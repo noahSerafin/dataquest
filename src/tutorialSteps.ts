@@ -112,7 +112,7 @@ const securityTip: TutorialStep = {
 }
 const infamyTip: TutorialStep = {
     id: 'infamy',
-    tooltip: "Higher infamy will add extra challenges on top of your security, you raise this before starting a run. <strong>lvl 2:</strong> Bosses accumulate from begining, <strong>lvl 3:</strong> Enemies get +1 maxSize per security level, <strong>lvl 4:</strong> Enemies get +1 defence per security level, <strong>lvl 5:</strong> Enemies get +1 attack per security level, <strong>lvl 6:</strong> Enemies get +1 moves per security level, <strong>lvl 7:</strong> Enemies get +1 range per security level"
+    tooltip: "Higher infamy will add extra challenges on top of your security, you raise this before starting a run. <strong>lvl 1:</strong> Bosses accumulate from begining, <strong>lvl 2:</strong> Enemies get +1 maxSize per security level, <strong>lvl 3:</strong> Enemies get +1 defence per security level, <strong>lvl 4:</strong> Enemies get +1 attack per security level, <strong>lvl 5:</strong> Enemies get +1 moves per security level, <strong>lvl 6:</strong> Enemies get +1 range per security level"
 }
 const bossesTip: TutorialStep = {
     id: 'enemy-bosses',

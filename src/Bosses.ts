@@ -553,10 +553,9 @@ class Bones extends Admin {
     constructor() {
         super(Bones.name, Bones.description, Bones.unicode, Bones.color, 4, Bones.rarity, 'gameState', 'onPieceDestruction')
     }
-    async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
-        const idx = activePieces.findIndex(p => p.id === id);
-        if (activePieces[idx].team === 'player') {
-            const piece = activePieces[idx];
+    async apply({ activePieces, piece }: { activePieces: Piece[], piece?: Piece }) {
+        if(!piece) return;
+        if (piece.team === 'player') {
             const EnemyClass = allPieces.find(p => p.name === piece.name);
             if (EnemyClass) {
                 this.isTriggering = true;

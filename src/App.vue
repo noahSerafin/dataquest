@@ -1409,6 +1409,7 @@ async function enemyTurn() {
 }
 
 const endTurn = async () => {
+  checkForRoundEnd();
   hasFinishedTurn.value = true;
   selectedPiece.value = null;
   pieceToPlace.value = null;

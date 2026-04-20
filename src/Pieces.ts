@@ -884,7 +884,7 @@ class Lance extends Piece {
 class Trojan extends Piece {//test more
   static name = "Trojan";
   static description = "Can create clones of itself";
-  static unicode = "U+1F434";
+  static unicode = "U+1F40E";//"U+1F434";
   static color = "#c51b1bff";
   static rarity = 3;//4? appears often in shop
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
@@ -3498,7 +3498,7 @@ class Buffalo extends Piece {
 
 class Bison extends Piece {
   static name = "Bison";
-  static description = "A Large and strong program that can charge instead of attacking, damaging and moving forward";
+  static description = "A Large and strong program that charges instead of attacking, damaging and moving forward";
   static unicode = "U+1F9AC";
   static color = "rgb(0, 39, 10)";
   static rarity = 4;

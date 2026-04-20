@@ -1388,20 +1388,26 @@ class Spoon extends Admin {
 
 class Hermes extends Admin {//moves
   static name = "Hermes";// Wings";
-  static description = "All placed programs are immune to being slowed";
+  static description = "All your programs gain +1 moves on the end of each turn and are immune to being slowed";
   static unicode = "U+269A";//"U+1FABD";
   static color = "#083546ff";
-  static rarity = 2;
+  static rarity = 5;//6?
   constructor() {
-    super(Hermes.name, Hermes.description, Hermes.unicode, Hermes.color, 4, Hermes.rarity, 'gameState', 'onPlacement')//or gamestate?
+    super(Hermes.name, Hermes.description, Hermes.unicode, Hermes.color, 4, Hermes.rarity, 'gameState', 'onTurnEnd')//or gamestate?
   }
 
   //on placement
-  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
-    const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].immunities.slowed = true;
+    //const idx = activePieces.findIndex(p => p.id === id);
+    //activePieces[idx].immunities.slowed = true;
+    for(const p of activePieces){
+      if(p.team === 'player'){
+        p.addModifier({moves: 1})
+        p.immunities.slowed = true;
+      }
+    }
   }
 }
 
@@ -1430,7 +1436,7 @@ export class Ambulance extends Admin {//a promoted piece dying should recover th
   static color = "#a2cbc7";
   static rarity = 4;
   constructor() {
-    super(Ambulance.name, Ambulance.description, Ambulance.unicode, Ambulance.color, 5, Ambulance.rarity, 'playerAndGame', 'onPieceDestruction')
+    super(Ambulance.name, Ambulance.description, Ambulance.unicode, Ambulance.color, 7, Ambulance.rarity, 'playerAndGame', 'onPieceDestruction')
   }
   async apply({ activePieces, player, piece }: { activePieces: Piece[], player: Player, piece?: Piece }) {
     if (!piece) return;
@@ -3063,7 +3069,7 @@ class Christmas extends Admin {
 }
 class Butler extends Admin {
   static name = "Butler";
-  static description = "Brings you food after every boss defeaeted";//boss defeated?
+  static description = "Brings you food after every boss defeated";//boss defeated?
   static unicode = "U+1F935";
   static color = "rgb(27, 27, 27)";
   static rarity = 4;
@@ -3472,7 +3478,7 @@ export class Clippy extends Admin {
   //handle in player
 }
 
-export const allAdmins = [Bank, Bucket, Candle, Cheese, Clippy, Smoker, Compass, CreditCard, Crystal, Glasses, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Schoolbag, Seed, Slots, Sprinkler, StoneAge, Tempura, Nose, Sneakers, Bipolar, Chime, Abacus, Aesculapius, Appraisal, Balloon, Briefcase, Bubble, Cactus, Coin, Purse, Convenience, FireEngine, Heart, Hermes, Joker, Loot, Clover, Microscope, Newspaper, Pickup, Putter, Relay, Scarf, Stiletto, Mail, Bowling, Violin, Vitamins, Wings, AdminMap, Barber, Ace, AirSupport, Bone, Bouquet, Camp, Huzzah, Luggage, Chain, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Dice, Jammer, Roger, Juggler, Ladder, Puzzle, Razor, Sled, Rune, Shades, Stonks, Christmas, Telescope, Crown, Toolbox, Tracker, Ambulance, Backdoor, BionicArm, BionicLeg, Crash, Blood, Broom, DartBoard, Butler, Dove, Drunk, Evergreen, Eye, Discount, Fountain, Feather, Fuel, Spoon, Liberty, Lightbulb, Ollie, Palette, Pazzaz, PetriDish, Prayer, Wheel, Salt, Selfie, Pants, Variety, Volatile, Artic, BlackBelt, Lungs, Chemistry, Chivalry, Toilet, Copier, Daisy, Diamond, Hamsa, Skyscraper, Howzat, Inheritance, Cherries, Lotus, Brain, Meditation, Meteor, Monarch, Onion, PeaPod, Teddy, Pong, RollerBlades, Bell, Baseball, Taoism, Ice, Ballet, Umbrella, Bath, Cards, Disco, Lefty, Minerva, Needle, Pi, Osiris, Righty, Ring, School, Dharma ];
+export const allAdmins = [Bank, Bucket, Candle, Cheese, Clippy, Smoker, Compass, CreditCard, Crystal, Glasses, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Schoolbag, Seed, Slots, Sprinkler, StoneAge, Tempura, Nose, Sneakers, Bipolar, Chime, Abacus, Aesculapius, Appraisal, Balloon, Briefcase, Bubble, Cactus, Coin, Purse, Convenience, FireEngine, Heart, Joker, Loot, Clover, Microscope, Newspaper, Pickup, Putter, Relay, Scarf, Stiletto, Mail, Bowling, Violin, Vitamins, Wings, AdminMap, Barber, Ace, AirSupport, Bone, Bouquet, Camp, Huzzah, Luggage, Chain, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Dice, Jammer, Roger, Juggler, Ladder, Puzzle, Razor, Sled, Rune, Shades, Stonks, Christmas, Telescope, Crown, Toolbox, Tracker, Ambulance, Backdoor, BionicArm, BionicLeg, Crash, Blood, Broom, DartBoard, Butler, Dove, Drunk, Evergreen, Eye, Discount, Fountain, Feather, Fuel, Spoon, Liberty, Lightbulb, Ollie, Palette, Pazzaz, PetriDish, Prayer, Wheel, Salt, Selfie, Pants, Variety, Volatile, Artic, BlackBelt, Lungs, Chemistry, Chivalry, Toilet, Copier, Daisy, Diamond, Hamsa, Skyscraper, Hermes, Howzat, Inheritance, Cherries, Lotus, Brain, Meditation, Meteor, Monarch, Onion, PeaPod, Teddy, Pong, RollerBlades, Bell, Baseball, Taoism, Ice, Ballet, Umbrella, Bath, Cards, Disco, Lefty, Minerva, Needle, Pi, Osiris, Righty, Ring, School, Dharma ];
 console.log('admins length: ', allAdmins.length)
 let adminLogs = {
   rarity1: 0,
@@ -3510,9 +3516,8 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 // CLOWN FACE, U+1F921 Perkeo effect
 // SURFER, U+1F3C4 //move into a free space after taking damage (even defensive)
 //RECYCLING SYMBOL, U+2672 selling programs gives 1 of lower rarirty
-//pre rune - 1 range on attack?
 //BUTTER, U+1F9C8 moves your pieces randomly after health damage?
-//JEANS, U+1F456 effect compiler +1 defence for hybrids on creation
+//JEANS, U+1F456 all hidden nodes are compilers
 
 //SLEUTH OR SPY, U+1F575 
 //TEACUP WITHOUT HANDLE, U+1F375 calm down, removes enraged from enemies

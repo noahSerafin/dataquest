@@ -4051,7 +4051,7 @@ class Coat extends Piece {
 //UNICORN FACE, U+1F984
 class Unicorn extends Piece {
   static name = "Unicorn";
-  static description = "High attack. Loads hidden, and can charge to hide itself";
+  static description = "High attack. Loads hidden, and can charge, hiding itself if it deals no damage.";
   static unicode = "U+1F984";
   static color = "rgb(250, 200, 255)";
   static rarity = 6;
@@ -4065,7 +4065,7 @@ class Unicorn extends Piece {
   }
   //async special(_target: Coordinate):Promise<void>{
   async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
-    
+    let damageDealt = false;
     for (const tile of line) {
       const occupier = activePieces.find(p =>
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
@@ -4075,21 +4075,27 @@ class Unicorn extends Piece {
           this.statuses.hidden = true;
         }
         this.move(tile);
+        
         continue;
-      }
-      this.statuses.hidden = false;
-      await occupier.takeDamage(this.getStat('attack'));
-      const stillOccupied = activePieces.find(p =>
-        p.tiles.some(t => t.x === tile.x && t.y === tile.y)
-      );
-      if (!stillOccupied) {
-        if(!this.statuses.exposed){
-          this.statuses.hidden = true;
+      } else {
+        await occupier.takeDamage(this.getStat('attack'));
+        damageDealt = true;
+        const stillOccupied = activePieces.find(p =>
+          p.tiles.some(t => t.x === tile.x && t.y === tile.y)
+        );
+        if (!stillOccupied) {
+          this.move(tile);
+          continue;
         }
-        this.move(tile);
-        continue;
       }
       break;
+    }
+    if(!damageDealt){
+      if(!this.statuses.exposed){
+        this.statuses.hidden = true;
+      }
+    } else {
+      this.statuses.hidden = false;
     }
     this.actions--
   }

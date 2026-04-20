@@ -63,7 +63,11 @@ class Meteor extends Admin {
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
-    for (const p of activePieces) await p.takeDamage(2);
+    for (const p of activePieces){
+      if(p.team === 'enemy'){
+        await p.takeDamage(2);
+      }
+    }
   }
 }
 
@@ -1375,7 +1379,7 @@ class Spoon extends Admin {
   static name = "Silver Spoon";
   static description = "Gain $4 at the start of every round";
   static unicode = "U+1F944";
-  static color = "#c9a91dff";
+  static color = "rgb(255, 250, 226)";
   static rarity = 4;
   constructor() {
     super(Spoon.name, Spoon.description, Spoon.unicode, Spoon.color, 10, Spoon.rarity, 'player', 'onRoundStart')
@@ -1503,7 +1507,11 @@ class Barber extends Admin {
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
-    for (const p of activePieces) await p.takeDamage(1); //enemy pieces only?
+    for (const p of activePieces){
+      if(p.team === 'enemy'){
+        await p.takeDamage(1); //enemy pieces only?
+      }
+    }
   }
 }
 
@@ -2781,7 +2789,7 @@ export class Cherries extends Admin {//test
   static color = "#000000ff";
   static rarity = 5;
   constructor() {
-    super(Cherries.name, Cherries.description, Cherries.unicode, Cherries.color, 15, Cherries.rarity, 'playerAndGame', 'onPlacement')
+    super(Cherries.name, Cherries.description, Cherries.unicode, Cherries.color, 10, Cherries.rarity, 'playerAndGame', 'onPlacement')
   }
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     const idx = activePieces.findIndex(p => p.id === id);

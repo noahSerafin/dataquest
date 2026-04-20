@@ -101,8 +101,10 @@ class Mirror extends Admin {
             if (EnemyClass) {
                 const enemyInstance = new EnemyClass(piece.headPosition, 'enemy', piece.removeCallback, crypto.randomUUID());//check later
                 activePieces.push(enemyInstance);
-                piece.removeCallback?.(piece);
+                //piece.removeCallback?.(piece);//checks for round end    
             }
+            const idx = activePieces.findIndex(p => p.id === piece.id);
+            activePieces.splice(idx, 1);
         }  //does this always end the round??
     }
 }

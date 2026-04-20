@@ -1335,10 +1335,11 @@ const damagePieceAt = async (coord: Coordinate) => {
 
 const handleSpecialActionAt = async (target: Coordinate) => {
   //the enemy should also be able to use special moves, handle in enemy?
-  if (!selectedPiece.value || selectedPiece.value.actions <= 0) return
-  if ((selectedPiece.value.team === 'enemy' && !selectedPiece.value.statuses.charmed) || selectedPiece.value.team === 'player' && selectedPiece.value.statuses.charmed) return
+  if (!selectedPiece.value || selectedPiece.value.actions <= 0) return;
+  if ((selectedPiece.value.team === 'enemy' && !selectedPiece.value.statuses.charmed) || selectedPiece.value.team === 'player' && selectedPiece.value.statuses.charmed) return;
   boardRef.value.clearHighlights();
   // find piece at targeted coordinate
+  const piecesActions = selectedPiece.value.actions;
   const targetPiece = activePieces.value.find(piece =>
     piece.tiles.some(t => t.x === target.x && t.y === target.y)
   );
@@ -1436,6 +1437,9 @@ const handleSpecialActionAt = async (target: Coordinate) => {
         graveyard: graveyard.value
       });
     }
+  }
+  if(piecesActions !== selectedPiece.value.actions){
+    player.value.canPlace = false;
   }
   playerSpawns.value = newPlacementHighlights();
   selectedPiece.value = null;

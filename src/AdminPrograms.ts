@@ -270,6 +270,7 @@ class Eye extends Admin {
     for (const p of activePieces) {
       if (p.team === 'enemy') {
         p.addModifier({ defence: -1 })//enemy pieces only?
+        p.defenceRemaining -= 1;
       }
     }
   }

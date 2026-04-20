@@ -436,7 +436,7 @@ export class ShootingStar extends Item<PieceBlueprint> {
     static color = "#1e023dff";
     static rarity = 6;
     constructor() {
-        super(ShootingStar.name, ShootingStar.description, ShootingStar.unicode, ShootingStar.color, 2, ShootingStar.rarity, 'piece')
+        super(ShootingStar.name, ShootingStar.description, ShootingStar.unicode, ShootingStar.color, 9, ShootingStar.rarity, 'blueprint')
     }
     apply(target: PieceBlueprint, _itemMult: number) {
         target.immunities = {

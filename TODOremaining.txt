@@ -2,6 +2,11 @@ TUTORIAL - make more handholdy?
 variant tooltips
 -
 //IMPROVEMENTS
+large your turn text pulse center screen
+enemy turn text to right
+canplace tickbox in inventory
+slight turn on hover over pieceView/ItemView
+let items be used on blueprints OR Pieces
 enemies should attack their own charmed pieces
 make hybrids display how they do in compiler/blueprintcontroller
 losing a round should return you to the map?

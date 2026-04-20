@@ -2387,7 +2387,7 @@ class Oni extends Piece {
   }
 }
 
-class Ant extends Piece {//ant - bug can be higher and cause slow
+class Ant extends Piece {
   static name = "Ant";
   static description = "A very fast but small program";
   static unicode = "U+1F41C"; //high movement - lvl 2 bug
@@ -2398,7 +2398,7 @@ class Ant extends Piece {//ant - bug can be higher and cause slow
   }
 }
 
-class Bug extends Piece {//ant - bug can be higher and cause slow
+class Bug extends Piece {
   static name = "Bug";
   static description = "A fast small program that can slow others";
   static unicode = "U+1F47E";

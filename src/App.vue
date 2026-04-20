@@ -628,6 +628,7 @@ async function selectLevel(newLevel: Level, company: Company, difficultyMod: num
     clearFog();
   }
   showMap.value = false;
+  hasWonRound.value = false;
   roundHasStarted.value = true;
 }
 
@@ -651,6 +652,7 @@ async function handleProceed() {
   showMap.value = true;
   currentCompany.value.abbr = '';
   currentCompany.value.unicode = player.value.osunicode;
+  hasWonRound.value = false;
   saveGameState();
 }
 
@@ -1480,8 +1482,11 @@ const endRound = async (roundWon: boolean) => {
     else if (player.value.lives > 0) {
       player.value.lives -= 1;
       await handleApplyAdmins('onRoundLoss', '');
+      if(player.value.lives <= 0){
+        StorageManager.clearSaveGame();
+      }
     } else {
-      alert('game over!')
+      alert('game over!');
     }
   }
   renewBlueprints();//after applyadmins for school
@@ -1504,7 +1509,9 @@ async function onReceiveDamage(id: string, receiver: Piece) {
 async function enemyTurn(currentActivePieces: Piece[]) {
 
   const tileSet = new Set(level.value.tiles.map(t => `${t.x},${t.y}`));
-
+  console.log('enemyTurn...')
+  console.log(!roundHasStarted.value, hasWonRound.value);
+  //
   await runEnemyStateMachine(
     activePieces.value,
     //removePiece, // callback to remove dead pieces
@@ -1516,7 +1523,7 @@ async function enemyTurn(currentActivePieces: Piece[]) {
     onReceiveDamage,
     player.value,
     300,
-    () => activePieces.value !== currentActivePieces || !roundHasStarted.value || hasWonRound.value
+    () => !roundHasStarted.value || hasWonRound.value
   );
 
   if (activePieces.value !== currentActivePieces || !roundHasStarted.value || hasWonRound.value) return;
@@ -1535,9 +1542,6 @@ const endTurn = async () => {
   player.value.canMove = false;
   player.value.canAction = false;
   await handleApplyAdmins('onTurnEnd', '');//sprinkler
-
-  if (activePieces.value !== currentActivePieces || !roundHasStarted.value || hasWonRound.value) return;
-
   const statusMult = 1 + player.value.admins.filter(a => a.name === 'Volatile').length;
   for (const piece of activePieces.value) {
     if (piece.team === 'player') {
@@ -1552,9 +1556,7 @@ const endTurn = async () => {
       piece.willRetaliate = false;
     }
   };
-
   await enemyTurn(currentActivePieces);
-
   //player piece tempstats reset
   await handleApplyAdmins('onEnemyTurnEnd', '');
   for (const piece of activePieces.value) {

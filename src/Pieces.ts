@@ -4077,12 +4077,15 @@ class Unicorn extends Piece {
         this.move(tile);
         continue;
       }
-      await occupier.takeDamage(this.getStat('attack'));
       this.statuses.hidden = false;
+      await occupier.takeDamage(this.getStat('attack'));
       const stillOccupied = activePieces.find(p =>
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
       );
       if (!stillOccupied) {
+        if(!this.statuses.exposed){
+          this.statuses.hidden = true;
+        }
         this.move(tile);
         continue;
       }

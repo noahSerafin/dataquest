@@ -110,6 +110,13 @@
         rerollBossCost.value = rerollBossCost.value*2;
     }
 
+    defineExpose({
+        world,
+        currentNodeId,
+        boss,
+        skipsThisLevel
+    });
+
     const worldNodes = computed(() =>
         Object.values(world.value.nodes)
     );

@@ -10,6 +10,7 @@
 
     const emit = defineEmits<{
         (e: 'createNewPlayer', payload: { os: OS, seed: string, stake?: number }): void;
+        (e: 'resumeGame'): void;
     }>();
 
     const seedInput = ref<string>('');
@@ -77,8 +78,10 @@
         return null;
     }
 
+    const hasSave = ref<boolean>(false);
  
     onMounted(() => {
+        hasSave.value = StorageManager.hasSaveGame();
         const el = document.querySelector('.oses') as HTMLElement | null;
         if (!el) return;
 
@@ -198,6 +201,12 @@
             <button class="play-btn" :disabled="!seedInput" @click="startWithSeed">
                 Play
             </button>
+            <div class="resume-section" v-if="hasSave">
+                <span>OR </span>
+                <button class="resume-btn" @click="emit('resumeGame')">
+                    Resume Game
+                </button>
+            </div>
         </div>
     </div>
 </template>

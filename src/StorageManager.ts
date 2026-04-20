@@ -123,5 +123,29 @@ export const StorageManager = {
   hasStakeWin(stake: number): boolean {
     const stats = this.getStats();
     return Object.values(stats.osStats).some(os => (os.winsByStake[stake] || 0) > 0);
+  },
+
+  getSavedGame(): any | null {
+    const data = localStorage.getItem('dataquest_save_game');
+    if (data) {
+      try {
+        return JSON.parse(data);
+      } catch (e) {
+        console.error("Error parsing save game data", e);
+      }
+    }
+    return null;
+  },
+
+  saveGame(state: any) {
+    localStorage.setItem('dataquest_save_game', JSON.stringify(state));
+  },
+
+  hasSaveGame(): boolean {
+    return !!localStorage.getItem('dataquest_save_game');
+  },
+
+  clearSaveGame() {
+    localStorage.removeItem('dataquest_save_game');
   }
 };

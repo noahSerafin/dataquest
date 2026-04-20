@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, watch } from "vue";
+import { ref, onMounted, computed, watch, nextTick } from "vue";
 import Board from './components/Board.vue';
 import Leveleditor from './components/Leveleditor.vue';
 import { castled, level1Levels } from './level1Levels';
@@ -34,9 +34,9 @@ import Duplicator from "./components/Duplicator.vue";
 import Workbench from "./components/Workbench.vue";
 import { Random } from "./Random";
 import { allOSes } from "./Operators.ts";
+import { serializeGameState, rehydrateGameState, rehydratePieceArray } from "./saveSystem";
 
 const testSword = {
-  id: "274ec329-8c17-4265-8c12-e9a28bcf0833",
   name: "Knife",
   description: "A basic attack piece",
   unicode: "U+1F52A",
@@ -651,6 +651,7 @@ function handleProceed() {
   showMap.value = true;
   currentCompany.value.abbr = '';
   currentCompany.value.unicode = player.value.osunicode;
+  saveGameState();
 }
 
 async function reloadLevel() {
@@ -690,21 +691,122 @@ function retryLevel() {
 
 //game loop
 const shopDisabled = ref<boolean>(false);
+
+const worldMapRef = ref();
+
+function saveGameState() {
+  console.log('saving game');
+  if (!worldMapRef.value) return;
+  const uiState = {
+    showBoard: showBoard.value,
+    showMap: showMap.value,
+    showShop: showShop.value,
+    showCompiler: showCompiler.value,
+    showAltar: showAltar.value,
+    showDuplicator: showDuplicator.value,
+    showWorkbench: showWorkbench.value,
+    roundHasStarted: roundHasStarted.value,
+    isFirstTurn: isFirstTurn.value,
+    foggedTiles: foggedTiles.value,
+    currentCompany: currentCompany.value
+  };
+
+  const boardState = roundHasStarted.value ? {
+    activePieces: activePieces.value,
+    originalPieces: originalPieces.value,
+    lastTurnPieces: lastTurnPieces.value,
+    graveyard: graveyard.value,
+    bossAdmins: bossAdmins.value,
+    playerSpawns: playerSpawns.value,
+    originalSpawns: originalSpawns.value,
+    level: level.value
+  } : null;
+
+  const serialized = serializeGameState(
+    player.value,
+    worldMapRef.value.world,
+    worldMapRef.value.currentNodeId,
+    worldMapRef.value.skipsThisLevel,
+    worldMapRef.value.boss,
+    currentSeed.value,
+    boardState,
+    uiState
+  );
+  StorageManager.saveGame(serialized);
+}
+
+function loadSavedGame() {
+  const data = StorageManager.getSavedGame();
+
+  if (!data) return;
+
+  const state = rehydrateGameState(data);
+  
+  player.value = state.player;
+  currentSeed.value = state.seed;
+  
+  gameStarted.value = true;
+  showMainMenu.value = false;
+
+  const ui = state.uiState || {};
+  showBoard.value = ui.showBoard ?? false;
+  showMap.value = ui.showMap ?? true;
+  showShop.value = ui.showShop ?? false;
+  showCompiler.value = ui.showCompiler ?? false;
+  showAltar.value = ui.showAltar ?? false;
+  showDuplicator.value = ui.showDuplicator ?? false;
+  showWorkbench.value = ui.showWorkbench ?? false;
+  roundHasStarted.value = ui.roundHasStarted ?? false;
+  isFirstTurn.value = ui.isFirstTurn ?? true;
+  if (ui.foggedTiles) foggedTiles.value = ui.foggedTiles;
+  if (ui.currentCompany) currentCompany.value = ui.currentCompany;
+  
+  if (state.boardState) {
+    activePieces.value = state.boardState.activePieces || [];
+    originalPieces.value = state.boardState.originalPieces || [];
+    lastTurnPieces.value = state.boardState.lastTurnPieces || [];
+    graveyard.value = state.boardState.graveyard || [];
+    bossAdmins.value = state.boardState.bossAdmins || [];
+    playerSpawns.value = state.boardState.playerSpawns || [];
+    originalSpawns.value = state.boardState.originalSpawns || [];
+    level.value = state.boardState.level || castled;
+
+    activePieces.value.forEach(p => p.removeCallback = removePiece);
+    originalPieces.value.forEach(p => p.removeCallback = removePiece);
+    lastTurnPieces.value.forEach(p => p.removeCallback = removePiece);
+    graveyard.value.forEach(p => p.removeCallback = removePiece);
+  } else {
+    bossAdmins.value = []; // empty if saved in map
+  }
+
+  nextTick(() => {
+    if (worldMapRef.value) {
+       worldMapRef.value.world = state.world;
+       worldMapRef.value.currentNodeId = state.currentNodeId;
+       worldMapRef.value.skipsThisLevel = state.skipsThisLevel;
+       worldMapRef.value.boss = state.boss;
+    }
+  });
+}
+
 const openDisabledShop = () => {
   console.log('shop disabled')
   shopDisabled.value = true;
   showShop.value = true;
   canProceedFromShop.value = false;
+  saveGameState();
 }
 const toggleShop = () => {
   showShop.value = !showShop.value;
   shopDisabled.value = false;
   canProceedFromShop.value = false;
+  saveGameState();
 }
 const openShop = () => {
   showShop.value = true;
   canProceedFromShop.value = true;
   shopDisabled.value = false;
+  saveGameState();
 }
 const closeShop = () => {
   showShop.value = false;
@@ -712,30 +814,39 @@ const closeShop = () => {
     refreshShop(true);
   }
   canProceedFromShop.value = false;
+  saveGameState();
 }
 const toggleCompiler = () => {
   showCompiler.value = !showCompiler.value;
+  saveGameState();
 }
 const openCompiler = () => {
   showCompiler.value = true;
+  saveGameState();
 }
 const toggleAltar = () => {
   showAltar.value = !showAltar.value;
+  saveGameState();
 }
 const openAltar = () => {
   showAltar.value = true;
+  saveGameState();
 }
 const toggleDuplicator = () => {
   showDuplicator.value = !showDuplicator.value;
+  saveGameState();
 }
 const openDuplicator = () => {
   showDuplicator.value = true;
+  saveGameState();
 }
 const toggleWorkbench = () => {
   showWorkbench.value = !showWorkbench.value;
+  saveGameState();
 }
 const openWorkbench = () => {
   showWorkbench.value = true;
+  saveGameState();
 }
 
 const newPlacementHighlights = (): Coordinate[] => {//board should only show these if isPlacing
@@ -1456,6 +1567,7 @@ const endTurn = async () => {
   player.value.canAction = true;
   hasFinishedTurn.value = false;
   handleApplyAdmins('onTurnStart', '');
+  saveGameState();
 }
 
 // When editor exports a new level, shouldn't be needed in final
@@ -1659,15 +1771,15 @@ function toggleDebug() {
       </div>
     </div>
     <div class="stage">
-      <MainMenu v-if="showMainMenu && !displayEditor" @createNewPlayer="createNewPlayer" class="stage-panel"
+      <MainMenu v-if="showMainMenu && !displayEditor" @createNewPlayer="createNewPlayer" @resumeGame="loadSavedGame" class="stage-panel"
         :class="{ active: showMainMenu }" :debugMode="debugMode" />
       <RoundSummary v-if="showSummary" class="stage-panel" :class="{ active: showSummary }" :hasWonRound="hasWonRound"
         :player="player" :bosses="bossAdmins" @proceedFromEndOfRound="handleProceed" @reloadLevel="reloadLevel"
         @mainMenu="openMainMenu" />
-      <WorldMap v-if="!displayEditor" class="stage-panel" :class="{ active: showMap }" :allLevels="level1Levels"
+      <WorldMap ref="worldMapRef" v-if="!displayEditor" class="stage-panel" :class="{ active: showMap }" :allLevels="level1Levels"
         :player="player" :seed="combinedMapSeed" :cssclass="mapClass" :bosses="bossAdmins" @selectLevel="selectLevel"
         @openShop="openShop" @openDisabledShop="openDisabledShop" @openCompiler="openCompiler" @openAltar="openAltar"
-        @openDuplicator="openDuplicator" @openWorkbench="openWorkbench" @incrementProgress="incrementMapProgress"
+        @openDuplicator="openDuplicator" @openWorkbench="openWorkbench" @incrementProgress="incrementMapProgress(); saveGameState()"
         @addBoss="addBossAdmin" @replaceBosses="replaceBosses" @increaseDifficulty="increaseDifficulty" />
       <Shop v-if="!displayEditor" class="stage-panel" :class="{ active: showShop }" :cssclass="shopClass"
         :shopBlueprints="shopBlueprints" :shopItems="shopItems" :rerollCost="rerollCost" :target="shopTarget"

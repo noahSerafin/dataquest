@@ -2,6 +2,7 @@ TUTORIAL - make more handholdy?
 variant tooltips
 -
 //IMPROVEMENTS
+enemies should attack their own charmed pieces
 make hybrids display how they do in compiler/blueprintcontroller
 losing a round should return you to the map?
 level 1 always start the player inside the arena node???
@@ -24,6 +25,7 @@ nerf rosebud - pieces can't stay exposed after a special?
 variant should overide base piece color, (and tile colour???)
 
 // BUGS
+unicorn not hiding
 generated nodes not showing player spawn
 bee special is causing a win?
 pieces with pounce attacking themselves

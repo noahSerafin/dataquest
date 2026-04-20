@@ -34,9 +34,6 @@ import Duplicator from "./components/Duplicator.vue";
 import Workbench from "./components/Workbench.vue";
 import { Random } from "./Random";
 import { allOSes } from "./Operators.ts";
-import { serializePiece, rehydratePiece, serializePlayer, rehydratePlayer, serializeAdmin, rehydrateAdmin } from "./rehydration";
-import type { World, SavedGameState } from "./types";
-
 
 const testSword = {
   id: "274ec329-8c17-4265-8c12-e9a28bcf0833",
@@ -122,13 +119,6 @@ function toggleInventory() {
 }
 const showMainMenu = ref(true);
 const currentSeed = ref<string>("");
-const world = ref<World | null>(null);
-const currentNodeId = ref<string>("");
-const currentBoss = ref<Admin | null>(null);
-const skipsThisLevel = ref<number>(0);
-const rerollBossCost = ref<number>(5);
-const showResumeButton = ref(false);
-
 
 function createNewPlayer(payload: { os: OS, seed: string }) {
   let { os, seed } = payload;
@@ -179,78 +169,7 @@ function createNewPlayer(payload: { os: OS, seed: string }) {
   showMap.value = true;
   gameStarted.value = true;
   currentCompany.value = { name: 'Player', abbr: '', unicode: player.value.osunicode, pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "#9CC954" };
-  saveGame();
 }
-
-function saveGame() {
-  if (!gameStarted.value) return;
-
-  const state: SavedGameState = {
-    player: serializePlayer(player.value),
-    currentSeed: currentSeed.value,
-    activePieces: activePieces.value.map(p => serializePiece(p)),
-    originalSpawns: originalSpawns.value.map(s => ({ ...s })),
-    originalPieces: originalPieces.value.map(p => serializePiece(p)),
-    lastTurnPieces: lastTurnPieces.value.map(p => serializePiece(p)),
-    currentCompany: currentCompany.value,
-    roundHasStarted: roundHasStarted.value,
-    gameStarted: gameStarted.value,
-    bossAdmins: bossAdmins.value.map(a => serializeAdmin(a)),
-    graveyard: graveyard.value.map(p => serializePiece(p)),
-    foggedTiles: foggedTiles.value.map(t => ({ ...t })),
-
-    world: world.value || {},
-    currentNodeId: currentNodeId.value,
-    currentBoss: currentBoss.value ? serializeAdmin(currentBoss.value) : null,
-    skipsThisLevel: skipsThisLevel.value,
-    rerollBossCost: rerollBossCost.value,
-
-    timestamp: Date.now()
-  };
-
-  StorageManager.saveGameState(state);
-}
-
-function loadGame() {
-  const saved = StorageManager.getSavedGameState();
-  if (!saved) return;
-
-  // Rehydrate Player
-  player.value = rehydratePlayer(saved.player, allOSes);
-  currentSeed.value = saved.currentSeed;
-
-  // Reset PRNG seed
-  const rawSeed = currentSeed.value.length > 8 ? currentSeed.value.substring(1) : currentSeed.value;
-  Random.setSeed(rawSeed);
-
-  // Rehydrate World
-  world.value = saved.world;
-  currentNodeId.value = saved.currentNodeId;
-  currentBoss.value = saved.currentBoss ? rehydrateAdmin(saved.currentBoss) : null;
-  skipsThisLevel.value = saved.skipsThisLevel;
-  rerollBossCost.value = saved.rerollBossCost;
-
-  // Rehydrate Battle State
-  activePieces.value = saved.activePieces.map(p => rehydratePiece(p, removePiece));
-  originalSpawns.value = saved.originalSpawns;
-  originalPieces.value = saved.originalPieces.map(p => rehydratePiece(p, removePiece));
-  lastTurnPieces.value = saved.lastTurnPieces.map(p => rehydratePiece(p, removePiece));
-  currentCompany.value = saved.currentCompany;
-  roundHasStarted.value = saved.roundHasStarted;
-  gameStarted.value = saved.gameStarted;
-  bossAdmins.value = saved.bossAdmins.map(a => rehydrateAdmin(a));
-  graveyard.value = saved.graveyard.map(p => rehydratePiece(p, removePiece));
-  foggedTiles.value = saved.foggedTiles;
-
-  showMainMenu.value = false;
-  if (roundHasStarted.value) {
-    showBoard.value = true;
-    showMap.value = false;
-  } else {
-    showMap.value = true;
-  }
-}
-
 const showCollection = ref(false);
 
 function incrementMapProgress() {
@@ -260,7 +179,6 @@ function incrementMapProgress() {
   if (player.value.hasAdmin('Clippy')) {
     reapplyTutorialTooltips(200);
   }
-  saveGame();
 }
 
 function openMainMenu() {
@@ -269,15 +187,8 @@ function openMainMenu() {
   showMainMenu.value = true;
   //sessionStorage.clear();
   //localStorage.clear(); // only if you aren't using it yet
-  checkSavedGame();
   window.location.reload();
 }
-
-function checkSavedGame() {
-  const saved = StorageManager.getSavedGameState();
-  showResumeButton.value = !!saved;
-}
-
 const showFastControls = ref<boolean>(true);
 function toggleFastControls() {
   showFastControls.value = !showFastControls.value
@@ -295,9 +206,7 @@ function sellBlueprint(pieceId: string) {
   pieceToPlace.value = null;
   // refund money (e.g., half cost or some formula)
   player.value.money += piece.rarity;
-  saveGame();
 }
-
 
 function sellItem(itemId: string) {
   const idx = player.value.items.findIndex(i => i.id === itemId);
@@ -305,9 +214,7 @@ function sellItem(itemId: string) {
   const item = player.value.items[idx];
   player.value.items.splice(idx, 1);
   player.value.money += Math.round(item.cost / 2);
-  saveGame();
 }
-
 
 function sellAdmin(itemId: string) {//TODO NEXT
   const idx = player.value.admins.findIndex(i => i.id === itemId);
@@ -352,10 +259,8 @@ function handleApplyItem(payload: { item: Item, id: string }) {
     if (!piece) return;
     item.apply(piece, itemMult);
     player.value.removeItem(item)
-    saveGame();
     return;
   }
-
 
   if (item.targetType === "player") {
     item.apply(player.value, itemMult);
@@ -515,9 +420,7 @@ function buyBlueprint(bp: PieceBlueprint) {
   }
   player.value.addProgram(bp);
   shopTarget.value = null;
-  saveGame();
 }
-
 async function buyItem(item: Item) {
   shopItems.value = shopItems.value.filter(i => i.id !== item.id);
   if (player.value.hasAdmin('Five Finger Discount') && !hasStolenFromThisShop.value) {
@@ -540,9 +443,7 @@ async function buyItem(item: Item) {
     StorageManager.unlockItem(item.name);
   }
   shopTarget.value = null;
-  saveGame();
 }
-
 const showShop = ref(false)
 const showCompiler = ref(false)
 const showAltar = ref(false)
@@ -1468,7 +1369,6 @@ const endRound = async (roundWon: boolean) => {
   }*/
   player.value.fogged = false;
   roundHasStarted.value = false;
-  saveGame();
 }
 
 async function onReceiveDamage(id: string, receiver: Piece) {
@@ -1612,13 +1512,7 @@ watch(
 //HOTKEYS
 onMounted(() => {
   window.addEventListener('keydown', onKeydown);
-  checkSavedGame();
-  
-  if (player.value.hasAdmin('Clippy')) {
-    applyTutorialTooltips(allTips, 2000);
-  }
 });
-
 
 function onKeydown(e: KeyboardEvent) {
   // ignore typing in inputs
@@ -1753,7 +1647,7 @@ function toggleDebug() {
     </div>
     <div class="stage">
       <MainMenu v-if="showMainMenu && !displayEditor" @createNewPlayer="createNewPlayer" class="stage-panel"
-        :class="{ active: showMainMenu }" :debugMode="debugMode" :showResume="showResumeButton" @resumeGame="loadGame" />
+        :class="{ active: showMainMenu }" :debugMode="debugMode" />
       <RoundSummary v-if="showSummary" class="stage-panel" :class="{ active: showSummary }" :hasWonRound="hasWonRound"
         :player="player" :bosses="bossAdmins" @proceedFromEndOfRound="handleProceed" @reloadLevel="reloadLevel"
         @mainMenu="openMainMenu" />
@@ -1761,9 +1655,7 @@ function toggleDebug() {
         :player="player" :seed="combinedMapSeed" :cssclass="mapClass" :bosses="bossAdmins" @selectLevel="selectLevel"
         @openShop="openShop" @openDisabledShop="openDisabledShop" @openCompiler="openCompiler" @openAltar="openAltar"
         @openDuplicator="openDuplicator" @openWorkbench="openWorkbench" @incrementProgress="incrementMapProgress"
-        @addBoss="addBossAdmin" @replaceBosses="replaceBosses" @increaseDifficulty="increaseDifficulty"
-        v-model:world="world" v-model:currentNodeId="currentNodeId" v-model:currentBoss="currentBoss"
-        v-model:skipsThisLevel="skipsThisLevel" v-model:rerollBossCost="rerollBossCost" />
+        @addBoss="addBossAdmin" @replaceBosses="replaceBosses" @increaseDifficulty="increaseDifficulty" />
       <Shop v-if="!displayEditor" class="stage-panel" :class="{ active: showShop }" :cssclass="shopClass"
         :shopBlueprints="shopBlueprints" :shopItems="shopItems" :rerollCost="rerollCost" :target="shopTarget"
         :hasStolen="hasStolenFromThisShop" @refresh-shop="refreshShop(false)" @buy-blueprint="buyBlueprint"

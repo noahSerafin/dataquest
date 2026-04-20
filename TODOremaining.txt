@@ -4,7 +4,8 @@ variant tooltips
 //IMPROVEMENTS
 make hybrids display how they do in compiler/blueprintcontroller
 losing a round should return you to the map?
-checkforroundend in removePiece - test - bee special is causing a win?
+level 1 always start the player inside the arena node???
+checkforroundend in removePiece - testing - bee special is causing a win?
 visualise:
     ADMINS - animate admins testing, counts too?
     nerf taoism by applying zen instead - testing
@@ -15,7 +16,6 @@ check weighted randomess still applies
 SAVE GAME STATE for bugs 7.5
 
 PIECES - keep track of upgrades and display on piece 7
-always start the player inside the arena node???
 more + - trade off admins
 make some variants immunities?
 difficulty - add +1, +2 programs for variety, or make variants +- security level 9
@@ -24,11 +24,10 @@ nerf rosebud - pieces can't stay exposed after a special?
 variant should overide base piece color, (and tile colour???)
 
 // BUGS
-Mr bones crashing out
 generated nodes not showing player spawn
 bee special is causing a win?
 pieces with pounce attacking themselves
-stopwatch target itself
+stopwatch targeting itself
 spawn still sometimes dissapearing
 you win not dissapearing in endless mode
 enemies not pathing to player sometimes, are they looking for the head position???

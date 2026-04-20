@@ -6,9 +6,10 @@ large your turn text pulse center screen
 enemy turn text to right
 canplace tickbox in inventory
 slight turn on hover over pieceView/ItemView
-let items be used on blueprints OR Pieces
-enemies should attack their own charmed pieces
+let items be used on blueprints AND/OR Pieces
+enemies should attack their own charmed pieces / charmed enemies should attack you
 make hybrids display how they do in compiler/blueprintcontroller
+track run stats in player?
 losing a round should return you to the map?
 level 1 always start the player inside the arena node???
 checkforroundend in removePiece - testing - bee special is causing a win?

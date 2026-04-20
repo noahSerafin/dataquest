@@ -294,9 +294,10 @@
         background-color: #333;
         color: #777;
     }
-
+    .load-section{
+        margin: 0.5rem 0;
+    }
     .load-section, .seed-section {
-        margin: 1rem 0;
         display: flex;
         flex-direction: row;
         justify-content: center;

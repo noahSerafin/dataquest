@@ -1587,6 +1587,7 @@ const endTurn = async () => {
   player.value.canAction = true;
   hasFinishedTurn.value = false;
   handleApplyAdmins('onTurnStart', '');
+  checkForRoundEnd();
   saveGameState();
 }
 

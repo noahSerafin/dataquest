@@ -57,7 +57,7 @@ export abstract class Item<TTarget = any> {
 
 export class Mushroom extends Item<PieceBlueprint> {
     static name = "Mushroom";
-    static description = "Increases a program's attack by 1";
+    static description = "Increases a held program's attack by 1";
     static unicode = "U+1F344";
     static color = "#ff2222ff";
     static rarity = 1;
@@ -72,7 +72,7 @@ export class Mushroom extends Item<PieceBlueprint> {
 
 export class Meat extends Item<PieceBlueprint> {
     static name = "Meat";
-    static description = "Increases a program's attack by 2";
+    static description = "Increases a held program's attack by 2";
     static unicode = "U+1F356";//Meat "U+1F3CB"; //U+1F356 Large meat
     static color = "#ff5656ff";
     static rarity = 4;
@@ -86,7 +86,7 @@ export class Meat extends Item<PieceBlueprint> {
 
 export class Iron extends Item<PieceBlueprint> {
     static name = "Iron";
-    static description = "Increases a program's defence by 1";
+    static description = "Increases a held held program's defence by 1";
     static unicode = "U+1F96C"
     static color = "#54a4ffff"
     static rarity = 1;
@@ -101,7 +101,7 @@ export class Iron extends Item<PieceBlueprint> {
 
 export class Garlic extends Item<PieceBlueprint> {
     static name = "Garlic";
-    static description = "Increases a placed program's defence by 2";
+    static description = "Increases a held program's defence by 2";
     static unicode = "U+1F9C4";
     static color = "#26d0faff";
     static rarity = 4;
@@ -115,7 +115,7 @@ export class Garlic extends Item<PieceBlueprint> {
 
 export class Ginger extends Item<PieceBlueprint> {
     static name = "Ginger";
-    static description = "Increases a program's defence by 3";
+    static description = "Increases a held program's defence by 3";
     static unicode = "U+1FADA"
     static color = "#54a4ffff"
     static rarity = 6;
@@ -134,7 +134,7 @@ export class Ginger extends Item<PieceBlueprint> {
 
 export class Blueberry extends Item<PieceBlueprint> {
     static name = "Blueberry";
-    static description = "Increases a program's max size by 1";
+    static description = "Increases a held program's max size by 1";
     static unicode = "U+1FAD0";
     static color = "#1cffe1ff";
     static rarity = 1;
@@ -150,7 +150,7 @@ export class Blueberry extends Item<PieceBlueprint> {
 
 class Melon extends Item<PieceBlueprint> {
     static name = "Melon";
-    static description = "+2 max size";
+    static description = "+2 max size tot a held program";
     static unicode = "U+1F349";
     static color = "rgb(17, 110, 71)";
     static rarity = 3;
@@ -166,7 +166,7 @@ class Melon extends Item<PieceBlueprint> {
 
 class Pie extends Item<PieceBlueprint> {
     static name = "Pie";
-    static description = "+3 max size";
+    static description = "+3 max size to a held program";
     static unicode = "U+1F967";
     static color = "rgb(11, 122, 20)";
     static rarity = 4;
@@ -182,7 +182,7 @@ class Pie extends Item<PieceBlueprint> {
 
 class Pepper extends Item<PieceBlueprint> {
     static name = "Pepper";
-    static description = "Increases a program's range by 1";
+    static description = "Increases a held program's range by 1";
     static unicode = "U+1FAD1" //Radish U+1FADC
     static color = "rgb(255, 188, 43)";
     static rarity = 1;
@@ -198,7 +198,7 @@ class Pepper extends Item<PieceBlueprint> {
 
 export class Carrot extends Item<PieceBlueprint> {
     static name = "Carrot";
-    static description = "Increases a program's range by 2";
+    static description = "Increases a held program's range by 2";
     static unicode = "U+1F955"//scope "U+1F52D";
     static color = "#fff12bff";
     static rarity = 4;
@@ -214,7 +214,7 @@ export class Carrot extends Item<PieceBlueprint> {
 
 export class Juice extends Item<PieceBlueprint> {
     static name = "Juiced";
-    static description = "Increases a program's moves by 1";
+    static description = "Increases a held program's moves by 1";
     static unicode = "U+1F9C3";
     static color = "rgb(255, 227, 71)";
     static rarity = 1;
@@ -228,7 +228,7 @@ export class Juice extends Item<PieceBlueprint> {
 
 class Teapot extends Item<PieceBlueprint> {
     static name = "Teapot";//defence?
-    static description = "Increases a program's moves by 2";
+    static description = "Increases a held program's moves by 2";
     static unicode = "U+1FAD6";//BEANS, U+1FAD8
     static color = "#dc00e4ff";
     static rarity = 2;
@@ -243,7 +243,7 @@ class Teapot extends Item<PieceBlueprint> {
 
 export class Coffee extends Item<PieceBlueprint> {
     static name = "Coffee";
-    static description = "Increases a program's moves by 3";
+    static description = "Increases a held program's moves by 3";
     static unicode = "U+2615";
     static color = "#e346f1ff";
     static rarity = 5;
@@ -257,7 +257,7 @@ export class Coffee extends Item<PieceBlueprint> {
 
 export class Roids extends Item<PieceBlueprint> {
     static name = "Roids";
-    static description = "Increase a program's attack by 1, and moves by 1";//make a program?
+    static description = "Increase a held program's attack by 1, and moves by 1";//make a program?
     static unicode = "U+1F489";
     static color = "#00e4b3ff";
     static rarity = 3;
@@ -272,7 +272,7 @@ export class Roids extends Item<PieceBlueprint> {
 
 export class Formula extends Item<PieceBlueprint> {
     static name = "Formula";
-    static description = "Increases a program's max size by 1 and defence by 1";
+    static description = "Increases a held program's max size by 1 and defence by 1";
     static unicode = "U+1F37C";
     static color = "#27f743ff";
     static rarity = 2;
@@ -289,7 +289,7 @@ export class Formula extends Item<PieceBlueprint> {
 
 export class Blessing extends Item<PieceBlueprint> {
     static name = "Blessing";
-    static description = "Increases all a program's stats by 1";
+    static description = "Increases all a held program's stats by 1";
     static unicode = "U+1F389";
     static color = "#a9ffffff";
     static rarity = 6;
@@ -431,7 +431,7 @@ export class Beans extends Item<Piece> {
 
 export class ShootingStar extends Item<PieceBlueprint> {
     static name = "Shooting Star";
-    static description = "Make a program immune to all harmful statuses";
+    static description = "Make a held program immune to all harmful statuses";
     static unicode = "U+1F320";
     static color = "#1e023dff";
     static rarity = 6;
@@ -994,7 +994,7 @@ class Beer extends Item<Player> {
 
 export class Headphones extends Item<PieceBlueprint> {
     static name = "Locked In";
-    static description = "Make a program in your inventory permanently immune to being confused";
+    static description = "Make a held program in your inventory permanently immune to being confused";
     static unicode = "U+1F3A7";
     static color = "rgb(8, 5, 7)";
     static rarity = 1;
@@ -1007,7 +1007,7 @@ export class Headphones extends Item<PieceBlueprint> {
 }
 class Disguise extends Item<PieceBlueprint> {
     static name = "Disguise";
-    static description = "Make a program in your inventory permanently immune to being exposed";
+    static description = "Make a held program in your inventory permanently immune to being exposed";
     static unicode = "U+1F978";
     static color = "rgb(96, 96, 96)";
     static rarity = 5;
@@ -1020,7 +1020,7 @@ class Disguise extends Item<PieceBlueprint> {
 }
 class Goggles extends Item<PieceBlueprint> {
     static name = "Goggles";
-    static description = "Make a program in your inventory permanently immune to being Blinded";
+    static description = "Make a held program in your inventory permanently immune to being Blinded";
     static unicode = "U+1F97D";
     static color = "rgb(0, 104, 132)";
     static rarity = 4;
@@ -1033,7 +1033,7 @@ class Goggles extends Item<PieceBlueprint> {
 }
 class Gloves extends Item<PieceBlueprint> {
     static name = "Gloves";
-    static description = "Make a program in your inventory permanently immune to being frozen";
+    static description = "Make a held program in your inventory permanently immune to being frozen";
     static unicode = "U+1F9E4";
     static color = "rgb(156, 253, 248)";
     static rarity = 3;
@@ -1046,7 +1046,7 @@ class Gloves extends Item<PieceBlueprint> {
 }
 class Labcoat extends Item<PieceBlueprint> {
     static name = "Lab Coat";
-    static description = "Make a program in your inventory permanently immune to being diseased";
+    static description = "Make a held program in your inventory permanently immune to being diseased";
     static unicode = "U+1F97C";
     static color = "rgb(75, 209, 224)";
     static rarity = 2;
@@ -1059,7 +1059,7 @@ class Labcoat extends Item<PieceBlueprint> {
 }
 class Frogman extends Item<PieceBlueprint> {
     static name = "Frogman";
-    static description = "Make a program in your inventory permanently immune to being posioned";
+    static description = "Make a held program in your inventory permanently immune to being posioned";
     static unicode = "U+1F93F";
     static color = "#5b22dfff";
     static rarity = 2;
@@ -1072,7 +1072,7 @@ class Frogman extends Item<PieceBlueprint> {
 }
 class Blackheart extends Item<PieceBlueprint> {
     static name = "Blackheart";
-    static description = "Make a program in your inventory permanently immune to being charmed";
+    static description = "Make a held program in your inventory permanently immune to being charmed";
     static unicode = "U+1F5A4";
     static color = "rgb(147, 7, 116)";
     static rarity = 3;
@@ -1085,7 +1085,7 @@ class Blackheart extends Item<PieceBlueprint> {
 }
 class Plunger extends Item<PieceBlueprint> {//item remove??
     static name = "Plunger";
-    static description = "Make a program in your inventory permanently immune to being slowed";
+    static description = "Make a held program in your inventory permanently immune to being slowed";
     static unicode = "U+1FAA0";
     static color = "#82e2ffff";
     static rarity = 2;
@@ -1099,7 +1099,7 @@ class Plunger extends Item<PieceBlueprint> {//item remove??
 ////POURING LIQUID, U+1FAD7, spillage
 class Extinguisher extends Item<PieceBlueprint> {
     static name = "Extinguisher";
-    static description = "Make a program in your inventory permanently immune to burning";
+    static description = "Make a held program in your inventory permanently immune to burning";
     static unicode = "U+1F9EF";
     static color = "rgb(143, 237, 237)";
     static rarity = 2;

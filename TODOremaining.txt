@@ -30,9 +30,9 @@ nerf rosebud - pieces can't stay exposed after a special?
 variant should overide base piece color, (and tile colour???)
 
 // BUGS
+bee/bomb/mine etc. special is causing a win
 beating a boss savegame breaks
 enemy pathing long distance
-bee special is causing a win?
 pieces with pounce attacking themselves
 generated nodes not showing player spawn
 you win not dissapearing in endless mode

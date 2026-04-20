@@ -3312,7 +3312,7 @@ class Meditation extends Admin {//needs reviewing
 
 class Drunk extends Admin {
   static name = "Mean Drunk";
-  static description = "Your pieces are enraged on load, gaining +1 attack, as well as +0.5 damage mult. But are also confused.";
+  static description = "Your pieces gain +1 attack, as well as +0.5 damage mult on load. But are also confused.";
   static unicode = "U+1F943";
   static color = "rgb(166, 9, 9)";
   static rarity = 4;
@@ -3325,7 +3325,7 @@ class Drunk extends Admin {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].statuses.enraged = true;
+    activePieces[idx].addModifier({attack: 1});
     activePieces[idx].damageMult += 0.5;//enemy pieces only?  
     if (!activePieces[idx].immunities.confused){
       activePieces[idx].statuses.confused = true;

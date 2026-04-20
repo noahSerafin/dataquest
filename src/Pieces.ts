@@ -161,7 +161,6 @@ export abstract class Piece {
 
   async resetTempModifiers() {
     this.tempStatModifiers = {};
-    this.statuses.disarmed = false;
   }
 
   // --- Accessors for base / modifiers / total ---
@@ -321,9 +320,11 @@ export abstract class Piece {
   async applyStartingStatusEffects(mult: number){
     if(this.statuses.disarmed){
       this.actions = 0;
+      this.statuses.disarmed = false;
     }
     if(this.statuses.enraged){
       this.addTempModifier({attack: 1 * mult});
+      this.statuses.enraged = false;
     }
     if(this.statuses.zen){
       this.addTempModifier({maxSize: 1 * mult});

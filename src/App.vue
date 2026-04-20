@@ -179,6 +179,7 @@ function createNewPlayer(payload: { os: OS, seed: string, stake?: number }) {
   showMap.value = true;
   gameStarted.value = true;
   currentCompany.value = { name: 'Player', abbr: '', unicode: player.value.osunicode, pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "#9CC954" };
+  refreshShop(true);
 }
 const showCollection = ref(false);
 
@@ -819,13 +820,13 @@ function processSpawnPoints(pieces: Piece[], companyPieces: any[], mod: number) 
 
         const enemyInstance = new EnemyClass(piece.headPosition, 'enemy', removePiece);
         enemyInstance.tiles = piece.tiles.slice(0, enemyInstance.maxSize);//trims the larger spawn down, might be a problem on castled
-        enemyInstance.defenceRemaining = enemyInstance.getStat('defence');//not working??
-
+        
         const variantChance = Math.min((0.1 * trueDifficulty - 0.1), 1)
         const variant = rollVariant(variantChance, trueDifficulty);
         if (variant) {
           applyVariant(enemyInstance, variant);
         }
+        enemyInstance.defenceRemaining = enemyInstance.getStat('defence');//not working??
         //add tiles here? if spawn.tiles.length <= enemy.getStat(maxsize){ enemy.tiles = spawn.tiles }
 
         if (player.value.stake > 1) enemyInstance.maxSize += player.value.difficulty;
@@ -1435,7 +1436,6 @@ const endTurn = async () => {
     if (piece.team === 'enemy') {
       await piece.applyStatusEffects(statusMult);
       piece.resetDefence();
-      piece.statuses.enraged = false;
     }
     if (piece.team === 'player') {
       await piece.resetTempModifiers();

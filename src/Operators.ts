@@ -619,4 +619,4 @@ const Debugger : OS = {
     description: 'FOR TESTING'
 }
 
-export const allOSes = [Window95, Steam, Window, Apple, Penguin, Temple, Fortran, Cobol, Arch, GNU, Amiga, Beos, Explorer, Satoshi, Debugger];
+export const allOSes = [Debugger, Window95, Steam, Window, Apple, Penguin, Temple, Fortran, Cobol, Arch, GNU, Amiga, Beos, Explorer, Satoshi];

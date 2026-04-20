@@ -2,13 +2,14 @@ TUTORIAL - make more handholdy?
 variant tooltips
 -
 //IMPROVEMENTS
-checkforroundend in removePiece - test
+checkforroundend in removePiece - test - bee special is causing a win?
 visualise:
     ADMINS - animate admins testing, counts too?
     nerf taoism by applying zen instead - testing
 
 SEEDED RANDOMNESS - save seed functionality 6
 SAVE GAME STATE for bugs 7.5
+
 PIECES - keep track of upgrades and display on piece 7
 always start the player inside the arena node???
 more + - trade off admins
@@ -19,6 +20,7 @@ nerf rosebud - pieces can't stay exposed after a special?
 variant should overide base piece color, (and tile colour???)
 
 // BUGS
+variant defence not setting defenceRemaining
 spawn still sometimes dissapearing
 you win not dissapearing in endless mode
 enemies not pathing to player sometimes, are they looking for the head position???

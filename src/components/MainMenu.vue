@@ -40,6 +40,9 @@
     }
 
     function getUnlockRule(osName: string): string | null {
+        if (osName === 'Debugger') {
+            if (!props.debugMode) return "For debugging";
+        }
         if (osName === 'Penguin') {
             if (!props.debugMode && !StorageManager.hasAnyWin()) return "Win with any operator";
         }
@@ -65,10 +68,10 @@
             if (!props.debugMode && !StorageManager.hasStakeWin(4)) return "Win with at least 4 infamy";
         }
         if (osName === 'Explorer') {
-            if (!props.debugMode && StorageManager.getUniqueWinsCount(6) < 6) return "Win with at least 6 different operators";
+            if (!props.debugMode && StorageManager.getUniqueWinsCount() < 6) return "Win with at least 6 different operators";
         }
         if (osName === 'Satoshi') {
-            if (!props.debugMode && StorageManager.hasStakeWin(5)) return "Win with at least 5 infamy";
+            if (!props.debugMode && !StorageManager.hasStakeWin(5)) return "Win with at least 5 infamy";
         }
         //Explorer, Satoshi, Debugger
         return null;

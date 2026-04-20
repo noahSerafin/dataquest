@@ -9,7 +9,7 @@
     }>();
 
     const emit = defineEmits<{
-        (e: 'createNewPlayer', payload: { os: OS, seed: string }): void;
+        (e: 'createNewPlayer', payload: { os: OS, seed: string, stake?: number }): void;
     }>();
 
     const seedInput = ref<string>('');
@@ -19,12 +19,20 @@
         
         const input = seedInput.value.trim();
         const prefix = input.charAt(0);
-        const rawSeed = input.substring(1);
+        let rawSeed = input.substring(1);
+        let parsedStake: number | undefined = undefined;
+
+        // New seeds have the stake as the second character (e.g. S0, S1)
+        const possibleStake = parseInt(input.charAt(1), 10);
+        if (!isNaN(possibleStake)) {
+            parsedStake = possibleStake;
+            rawSeed = input.substring(2);
+        }
         
         // Find OS by prefix
         const os = allOSes.find(o => o.prefix === prefix) || allOSes[0];
         
-        emit('createNewPlayer', { os, seed: rawSeed });
+        emit('createNewPlayer', { os, seed: rawSeed, stake: parsedStake });
     }
 
     function returnUnicode(unicode: String){
@@ -39,28 +47,28 @@
             if (!props.debugMode && StorageManager.getUniqueWinsCount() < 3) return "Win with 3 different operators";
         }
         if (osName === 'Fortran') {
-            if (!props.debugMode && !StorageManager.hasStakeWin(2)) return "Win with at least 2 infamy";
+            if (!props.debugMode && !StorageManager.hasStakeWin(1)) return "Win with at least 1 infamy";
         }
         if (osName === 'Cobol') {
             if (!props.debugMode && StorageManager.getUniqueWinsCount() < 4) return "Win with 4 different operators";
         }
         if (osName === 'Arch') {
-            if (!props.debugMode && !StorageManager.hasStakeWin(3)) return "Win with at least 3 infamy";
+            if (!props.debugMode && !StorageManager.hasStakeWin(2)) return "Win with at least 2 infamy";
         }
         if (osName === 'GNU') {
             if (!props.debugMode && StorageManager.getUniqueWinsCount() < 5) return "Win with at least 5 different operators";
         }
         if (osName === 'Amiga') {
-            if (!props.debugMode && !StorageManager.hasStakeWin(4)) return "Win with at least 4 infamy";
+            if (!props.debugMode && !StorageManager.hasStakeWin(3)) return "Win with at least 3 infamy";
         }
         if (osName === 'BeOS') {
-            if (!props.debugMode && !StorageManager.hasStakeWin(5)) return "Win with at least 5 infamy";
+            if (!props.debugMode && !StorageManager.hasStakeWin(4)) return "Win with at least 4 infamy";
         }
         if (osName === 'Explorer') {
-            if (!props.debugMode && StorageManager.getUniqueWinsCount() < 6) return "Win with at least 6 different operators";
+            if (!props.debugMode && StorageManager.getUniqueWinsCount(6) < 6) return "Win with at least 6 different operators";
         }
         if (osName === 'Satoshi') {
-            if (!props.debugMode && StorageManager.getUniqueWinsCount() < 6) return "Win with at least 6 infamy";
+            if (!props.debugMode && StorageManager.hasStakeWin(5)) return "Win with at least 5 infamy";
         }
         //Explorer, Satoshi, Debugger
         return null;

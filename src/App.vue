@@ -91,7 +91,7 @@ const swapDisplay = () => {
   displayEditor.value = !displayEditor.value;//add map later, make shop an overlay?
 }
 
-const stake = ref(1);//player
+const stake = ref(0);//player
 const gameStarted = ref(false);
 
 const player = ref(new Player(
@@ -120,9 +120,13 @@ function toggleInventory() {
 const showMainMenu = ref(true);
 const currentSeed = ref<string>("");
 
-function createNewPlayer(payload: { os: OS, seed: string }) {
-  let { os, seed } = payload;
+function createNewPlayer(payload: { os: OS, seed: string, stake?: number }) {
+  let { os, seed, stake: payloadStake } = payload;
   let rawSeed = seed;
+
+  if (payloadStake !== undefined) {
+    stake.value = payloadStake;
+  }
 
   if (!rawSeed) {
     rawSeed = Math.random().toString(36).substring(2, 10).toUpperCase();
@@ -132,10 +136,16 @@ function createNewPlayer(payload: { os: OS, seed: string }) {
     const allPrefixes = allOSes.map(o => o.prefix).filter(p => !!p);
     if (allPrefixes.includes(rawSeed.charAt(0)) && rawSeed.length > 8) { // Seeds are usually 8 chars + 1 prefix
       rawSeed = rawSeed.substring(1);
+      // New seeds also contain the stake as the next character (e.g. S0, S1)
+      const possibleStake = parseInt(rawSeed.charAt(0), 10);
+      if (!isNaN(possibleStake)) {
+        stake.value = possibleStake;
+        rawSeed = rawSeed.substring(1);
+      }
     }
   }
 
-  currentSeed.value = (os.prefix || "") + rawSeed;
+  currentSeed.value = (os.prefix || "") + stake.value.toString() + rawSeed;
 
   Random.setSeed(rawSeed);
 
@@ -818,11 +828,11 @@ function processSpawnPoints(pieces: Piece[], companyPieces: any[], mod: number) 
         }
         //add tiles here? if spawn.tiles.length <= enemy.getStat(maxsize){ enemy.tiles = spawn.tiles }
 
-        if (player.value.stake > 2) enemyInstance.maxSize += player.value.difficulty;
-        if (player.value.stake > 3) enemyInstance.defence += player.value.difficulty;
-        if (player.value.stake > 4) enemyInstance.moves += player.value.difficulty;
-        if (player.value.stake > 5) enemyInstance.attack += player.value.difficulty;
-        if (player.value.stake > 6) enemyInstance.range += player.value.difficulty;
+        if (player.value.stake > 1) enemyInstance.maxSize += player.value.difficulty;
+        if (player.value.stake > 2) enemyInstance.defence += player.value.difficulty;
+        if (player.value.stake > 3) enemyInstance.moves += player.value.difficulty;
+        if (player.value.stake > 4) enemyInstance.attack += player.value.difficulty;
+        if (player.value.stake > 5) enemyInstance.range += player.value.difficulty;
 
         processed.push(enemyInstance);
         continue;
@@ -1465,14 +1475,14 @@ const mapClass = computed(() =>
 
 const worldSeed = ref(0);
 const combinedMapSeed = computed(() => {
-  // Extract raw seed (everything after the prefix)
-  const raw = currentSeed.value.length > 1 ? currentSeed.value.substring(1) : currentSeed.value;
+  // Extract raw seed (everything after the prefix and stake)
+  const raw = currentSeed.value.length > 2 ? currentSeed.value.substring(2) : currentSeed.value;
   // Combine with the world reroll counter
   return raw + (worldSeed.value || '');
 });
 const increaseDifficulty = () => {
   player.value.difficulty += 1;
-  if (player.value.difficulty < 7 && player.value.stake === 1) {//cumulate bosses in endless mode
+  if (player.value.difficulty < 7 || player.value.stake >= 1) {//cumulate bosses in endless mode
     bossAdmins.value = [];
   }
   refreshShop(true);
@@ -1488,7 +1498,7 @@ const increaseStake = () => {
   }
 }
 const decreaseStake = () => {
-  if (stake.value > 1) {
+  if (stake.value > 0) {
     stake.value -= 1;
   }
 }

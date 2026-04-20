@@ -180,6 +180,7 @@ function createNewPlayer(payload: { os: OS, seed: string, stake?: number }) {
   gameStarted.value = true;
   currentCompany.value = { name: 'Player', abbr: '', unicode: player.value.osunicode, pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "#9CC954" };
   refreshShop(true);
+  player.value.canPlace = false;
 }
 const showCollection = ref(false);
 
@@ -1378,6 +1379,7 @@ const endRound = async (roundWon: boolean) => {
   /*for (const admin of player.value.admins) {
     admin.onRoundEnd?.();
   }*/
+  player.value.canPlace = false;
   player.value.fogged = false;
   roundHasStarted.value = false;
 }

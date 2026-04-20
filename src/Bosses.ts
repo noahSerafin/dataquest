@@ -812,7 +812,7 @@ class Singularity extends Admin {
     static color = "rgb(59, 59, 59)";
     static rarity = 5;
     constructor() {
-        super(Singularity.name, Singularity.description, Singularity.unicode, Singularity.color, 5, 9, 'all', 'onTurnEnd')
+        super(Singularity.name, Singularity.description, Singularity.unicode, Singularity.color, 5, 5, 'all', 'onTurnEnd')
     }
     private count: number = 0
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {

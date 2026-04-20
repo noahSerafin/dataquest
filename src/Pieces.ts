@@ -4117,9 +4117,9 @@ class Poop extends Piece {
   static description = "A hidden trap program that spreads disease to whatever passes over it, removing itself.";
   static unicode = "U+1F4A9";
   static color = "rgb(166, 111, 29)";
-  static rarity = 2;
+  static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Poop.name, Poop.description, Poop.unicode, 1, 1, 0, 0, 0, Poop.color, headPosition, [headPosition], team, Poop.rarity, removeCallback, id)
+   super(Poop.name, Poop.description, Poop.unicode, 3, 2, 0, 0, 0, Poop.color, headPosition, [headPosition], team, Poop.rarity, removeCallback, id)
    this.targetType = 'trapPiece';
    this.statuses.hidden = true;
    this.statuses.negative = true;
@@ -4134,12 +4134,12 @@ class Poop extends Piece {
 }
 class Firework extends Piece {
   static name = "Firework";
-  static description = "A hidden trap program that burns whatever passes over it, removing itself.";
+  static description = "A hidden trap program applies burning to whatever passes over it, removing itself.";
   static unicode = "U+1F386";
   static color = "rgb(0, 0, 0)";
-  static rarity = 2;
+  static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Firework.name, Firework.description, Firework.unicode, 1, 1, 0, 0, 0, Firework.color, headPosition, [headPosition], team, Firework.rarity, removeCallback, id)
+   super(Firework.name, Firework.description, Firework.unicode, 2, 3, 0, 0, 0, Firework.color, headPosition, [headPosition], team, Firework.rarity, removeCallback, id)
    this.targetType = 'trapPiece';
    this.statuses.hidden = true;
    this.statuses.negative = true;
@@ -4237,7 +4237,7 @@ export class Dolls extends Piece {//finished? test, will have to be handled in a
 //Gong applies zen
 //taxi U+1F695 move other pieces (friendly) to it's tail?
 
-export const allPieces = [Ant, Banana, Bee, Egg, Knife, Potato, Rat, Shield, Sling, Snail, TP, Acorn, Aegis, Banner, Beetle, Bow, Bull, Chick, Chicken, Dagger, Decoy, Dog, Fence, Firework, Frond, Doctor, Gecko, Guard, Hedgehog, Jellyfish, Larva, Lance, Tree, Poop, Flute, Rooster, Saw, Snake, Tar, Vulture, Germ, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Buffalo, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, Hopper, LabRat, LadyBeetle, Magnet, Medic, Mosquito, Ninja, Octopus, Officer, Paladin, Wasp, Pawn, Peacock, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Alien, Arms, Axe, Cannon, Lightning, Palm, Bison, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Kite, Leopard, Lighthouse, Mammoth, Mine, Nerf, Oil, Puffer, Rabbit, Scarab, Shark, Snowman, Soldier, Squid, Stopwatch, Teargas, Tiger, Tradie, Bat, Wizard, Wolf, Zebra, Archdaemon, Recurve, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Gman, Giraffe, Hippo, Lion, Lovebomb, Orangutan, Paragon, Rhino, Screwdriver, Shovel, Shrike, Tank, Coat, UFO, Vampire, Bear, Helicopter, Gorilla, Greatshield, Nuke, Oni, Sol, Sponge, Super, Rex, Unicorn];//Dolls //100 +2 (web, ink)
+export const allPieces = [Ant, Banana, Bee, Egg, Knife, Potato, Rat, Shield, Sling, Snail, TP, Acorn, Aegis, Banner, Beetle, Bow, Bull, Chick, Chicken, Dagger, Decoy, Dog, Fence, Frond, Doctor, Gecko, Guard, Hedgehog, Jellyfish, Larva, Lance, Tree, Flute, Rooster, Saw, Snake, Tar, Vulture, Germ, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Buffalo, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, Hopper, LabRat, LadyBeetle, Magnet, Medic, Mosquito, Ninja, Octopus, Officer, Paladin, Wasp, Pawn, Peacock, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Alien, Arms, Axe, Cannon, Lightning, Palm, Poop, Bison, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Kite, Leopard, Lighthouse, Mammoth, Mine, Nerf, Oil, Puffer, Rabbit, Scarab, Shark, Snowman, Soldier, Squid, Stopwatch, Teargas, Tiger, Tradie, Bat, Wizard, Wolf, Zebra, Archdaemon, Recurve, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Firework, Gman, Giraffe, Hippo, Lion, Lovebomb, Orangutan, Paragon, Rhino, Screwdriver, Shovel, Shrike, Tank, Coat, UFO, Vampire, Bear, Helicopter, Gorilla, Greatshield, Nuke, Oni, Sol, Sponge, Super, Rex, Unicorn];//Dolls //100 +2 (web, ink)
 
 //companies
 /*

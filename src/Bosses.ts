@@ -282,6 +282,7 @@ class Castle extends Admin {
         for (const piece of activePieces) {
             if (piece.team === 'enemy') {
                 piece.addModifier({ defence: 1 })
+                piece.defenceRemaining += 1;
             }
         };
     }
@@ -339,6 +340,7 @@ class Lock extends Admin {
         for (const piece of activePieces) {
             if (piece.team === 'enemy') {
                 piece.addModifier({ defence: 2 })
+                piece.defenceRemaining += 2;
             }
         };
     }
@@ -536,6 +538,7 @@ class Omega extends Admin {
                     attack: 1,
                     defence: 1
                 })
+                piece.defenceRemaining += 1;
             }
         };
     }

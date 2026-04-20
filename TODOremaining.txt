@@ -2,6 +2,7 @@ TUTORIAL - make more handholdy?
 variant tooltips
 -
 //IMPROVEMENTS
+losing a round should return you to the map?
 checkforroundend in removePiece - test - bee special is causing a win?
 visualise:
     ADMINS - animate admins testing, counts too?
@@ -20,7 +21,9 @@ nerf rosebud - pieces can't stay exposed after a special?
 variant should overide base piece color, (and tile colour???)
 
 // BUGS
-variant defence not setting defenceRemaining
+bee special is causing a win?
+pieces with pounce attacking themselves
+stopwatch target itself
 spawn still sometimes dissapearing
 you win not dissapearing in endless mode
 enemies not pathing to player sometimes, are they looking for the head position???

@@ -741,10 +741,10 @@ function loadSavedGame() {
   if (!data) return;
 
   const state = rehydrateGameState(data);
-  
+
   player.value = state.player;
   currentSeed.value = state.seed;
-  
+
   gameStarted.value = true;
   showMainMenu.value = false;
 
@@ -760,7 +760,7 @@ function loadSavedGame() {
   isFirstTurn.value = ui.isFirstTurn ?? true;
   if (ui.foggedTiles) foggedTiles.value = ui.foggedTiles;
   if (ui.currentCompany) currentCompany.value = ui.currentCompany;
-  
+
   if (state.boardState) {
     activePieces.value = state.boardState.activePieces || [];
     originalPieces.value = state.boardState.originalPieces || [];
@@ -781,10 +781,10 @@ function loadSavedGame() {
 
   nextTick(() => {
     if (worldMapRef.value) {
-       worldMapRef.value.world = state.world;
-       worldMapRef.value.currentNodeId = state.currentNodeId;
-       worldMapRef.value.skipsThisLevel = state.skipsThisLevel;
-       worldMapRef.value.boss = state.boss;
+      worldMapRef.value.world = state.world;
+      worldMapRef.value.currentNodeId = state.currentNodeId;
+      worldMapRef.value.skipsThisLevel = state.skipsThisLevel;
+      worldMapRef.value.boss = state.boss;
     }
   });
 }
@@ -932,7 +932,7 @@ function processSpawnPoints(pieces: Piece[], companyPieces: any[], mod: number) 
 
         const enemyInstance = new EnemyClass(piece.headPosition, 'enemy', removePiece);
         enemyInstance.tiles = piece.tiles.slice(0, enemyInstance.maxSize);//trims the larger spawn down, might be a problem on castled
-        
+
         const variantChance = Math.min((0.1 * trueDifficulty - 0.1), 1)
         const variant = rollVariant(variantChance, trueDifficulty);
         if (variant) {
@@ -1500,7 +1500,7 @@ async function onReceiveDamage(id: string, receiver: Piece) {
 }
 
 //enemy moves
-async function enemyTurn() {
+async function enemyTurn(currentActivePieces: Piece[]) {
 
   const tileSet = new Set(level.value.tiles.map(t => `${t.x},${t.y}`));
 
@@ -1514,12 +1514,17 @@ async function enemyTurn() {
     tileSet,
     onReceiveDamage,
     player.value,
-    300
+    300,
+    () => activePieces.value !== currentActivePieces || !roundHasStarted.value || hasWonRound.value
   );
-  playerSpawns.value = newPlacementHighlights();
+
+  if (activePieces.value !== currentActivePieces || !roundHasStarted.value || hasWonRound.value) return;
+
+  playerSpawns.value = newPlacementHighlights();//guard this
 }
 
 const endTurn = async () => {
+  const currentActivePieces = activePieces.value;
   checkForRoundEnd();
   hasFinishedTurn.value = true;
   selectedPiece.value = null;
@@ -1529,6 +1534,9 @@ const endTurn = async () => {
   player.value.canMove = false;
   player.value.canAction = false;
   await handleApplyAdmins('onTurnEnd', '');//sprinkler
+
+  if (activePieces.value !== currentActivePieces || !roundHasStarted.value || hasWonRound.value) return;
+
   const statusMult = 1 + player.value.admins.filter(a => a.name === 'Volatile').length;
   for (const piece of activePieces.value) {
     if (piece.team === 'player') {
@@ -1543,7 +1551,9 @@ const endTurn = async () => {
       piece.willRetaliate = false;
     }
   };
-  await enemyTurn();
+
+  await enemyTurn(currentActivePieces);
+
   //player piece tempstats reset
   await handleApplyAdmins('onEnemyTurnEnd', '');
   for (const piece of activePieces.value) {
@@ -1559,7 +1569,7 @@ const endTurn = async () => {
       piece.willRetaliate = false;
     }
   };
-  if (isFirstTurn) {
+  if (isFirstTurn.value) {
     isFirstTurn.value = false;
   }
   player.value.canPlace = true;
@@ -1771,15 +1781,16 @@ function toggleDebug() {
       </div>
     </div>
     <div class="stage">
-      <MainMenu v-if="showMainMenu && !displayEditor" @createNewPlayer="createNewPlayer" @resumeGame="loadSavedGame" class="stage-panel"
-        :class="{ active: showMainMenu }" :debugMode="debugMode" />
+      <MainMenu v-if="showMainMenu && !displayEditor" @createNewPlayer="createNewPlayer" @resumeGame="loadSavedGame"
+        class="stage-panel" :class="{ active: showMainMenu }" :debugMode="debugMode" />
       <RoundSummary v-if="showSummary" class="stage-panel" :class="{ active: showSummary }" :hasWonRound="hasWonRound"
         :player="player" :bosses="bossAdmins" @proceedFromEndOfRound="handleProceed" @reloadLevel="reloadLevel"
         @mainMenu="openMainMenu" />
-      <WorldMap ref="worldMapRef" v-if="!displayEditor" class="stage-panel" :class="{ active: showMap }" :allLevels="level1Levels"
-        :player="player" :seed="combinedMapSeed" :cssclass="mapClass" :bosses="bossAdmins" @selectLevel="selectLevel"
-        @openShop="openShop" @openDisabledShop="openDisabledShop" @openCompiler="openCompiler" @openAltar="openAltar"
-        @openDuplicator="openDuplicator" @openWorkbench="openWorkbench" @incrementProgress="incrementMapProgress(); saveGameState()"
+      <WorldMap ref="worldMapRef" v-if="!displayEditor" class="stage-panel" :class="{ active: showMap }"
+        :allLevels="level1Levels" :player="player" :seed="combinedMapSeed" :cssclass="mapClass" :bosses="bossAdmins"
+        @selectLevel="selectLevel" @openShop="openShop" @openDisabledShop="openDisabledShop"
+        @openCompiler="openCompiler" @openAltar="openAltar" @openDuplicator="openDuplicator"
+        @openWorkbench="openWorkbench" @incrementProgress="incrementMapProgress(); saveGameState()"
         @addBoss="addBossAdmin" @replaceBosses="replaceBosses" @increaseDifficulty="increaseDifficulty" />
       <Shop v-if="!displayEditor" class="stage-panel" :class="{ active: showShop }" :cssclass="shopClass"
         :shopBlueprints="shopBlueprints" :shopItems="shopItems" :rerollCost="rerollCost" :target="shopTarget"

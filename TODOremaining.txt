@@ -25,12 +25,11 @@ nerf rosebud - pieces can't stay exposed after a special?
 variant should overide base piece color, (and tile colour???)
 
 // BUGS
-unicorn not hiding
+spawn still sometimes dissapearing
 generated nodes not showing player spawn
 bee special is causing a win?
 pieces with pounce attacking themselves
 stopwatch targeting itself
-spawn still sometimes dissapearing
 you win not dissapearing in endless mode
 enemies not pathing to player sometimes, are they looking for the head position???
 crystal ball stopping shop progression - once seed is sorted let it also preview node contents

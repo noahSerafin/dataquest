@@ -262,7 +262,8 @@ async function executeEnemyIntent(
     clearHighlights: () => void, 
     onReceiveDamage: (id: string, receiver: Piece) => void,
     delay: number 
-  }
+  },
+  isAborted: () => boolean = () => false
 ) {
   if(enemy.isBusy) return;
   enemy.isBusy = true;
@@ -273,6 +274,7 @@ async function executeEnemyIntent(
         helpers.highlightTargets(enemy);
       }
       await sleep(helpers.delay);
+      if (isAborted()) return;
       //count specialuses for loops
       await enemy.special(intent.target);
       //helpers.onReceiveDamage(intent.target.id);
@@ -282,6 +284,7 @@ async function executeEnemyIntent(
     case 'attack':
       helpers.highlightTargets(enemy);
       await sleep(helpers.delay);
+      if (isAborted()) return;
       await attackPiece(enemy, intent.target);
       helpers.onReceiveDamage(enemy.id, intent.target);
       helpers.clearHighlights();
@@ -290,11 +293,12 @@ async function executeEnemyIntent(
 
     case 'move': //moving over players?
       for (const step of intent.path.slice(1)) {//make sure a path is found once, and then stick to it
-        if (!enemy.movesRemaining || enemy.statuses.frozen || !activePieces.includes(enemy)) break;
+        if (isAborted() || !enemy.movesRemaining || enemy.statuses.frozen || !activePieces.includes(enemy)) break;
         if(!enemy.statuses.hidden){
           helpers.highlightMoves(enemy);
         }
         await sleep(helpers.delay);
+        if (isAborted()) return;
         if(enemy.statuses.confused){
           const allMoves = getAdjacentEmptySpaces(enemy.headPosition, activePieces, tileSet);
           if(allMoves){
@@ -349,7 +353,8 @@ export async function runEnemyStateMachine(
   tileSet: Set<string>,
   onReceiveDamage: (id: string, receiver: Piece) => void,
   player: Player,
-  delay = 200 // ms between moves for visibility
+  delay = 200, // ms between moves for visibility
+  isAborted: () => boolean = () => false
 ){
   let passCount = 0;
   let changed = true;
@@ -363,6 +368,7 @@ export async function runEnemyStateMachine(
   }
 
   while (changed && passCount < 3) {
+    if (isAborted()) return;
     changed = false;
     passCount++;
 
@@ -376,11 +382,13 @@ export async function runEnemyStateMachine(
     });
 
     for (const enemy of enemiesToProcess) {
+      if (isAborted()) return;
       if (!activePieces.includes(enemy)) continue;
       if (enemy.movesRemaining <= 0 && enemy.actions <= 0) continue;
       
       let specialAttempts = 0;
       while (enemy.movesRemaining > 0 || enemy.actions > 0) {
+        if (isAborted()) return;
         if (!activePieces.includes(enemy)) break;
 
         const enemyPieces = activePieces.filter(p => (p.team === 'enemy' && !p.statuses.charmed));
@@ -395,7 +403,8 @@ export async function runEnemyStateMachine(
         if(intent.type === 'special'){
           specialAttempts += 1;
         }
-        await executeEnemyIntent(enemy, activePieces, tileSet, intent, helpers);
+        await executeEnemyIntent(enemy, activePieces, tileSet, intent, helpers, isAborted);
+        if (isAborted()) return;
         await sleep(helpers.delay);
       } 
     }

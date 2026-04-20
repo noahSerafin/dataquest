@@ -235,7 +235,7 @@ import { createDefaultStatuses } from "./types";
         range: 1,
         attack: 2,
         defence: 1,
-        rarity: 1,
+        rarity: 2,
         // blueprint-only fields:
         isPlaced: false,
         cost: 1,
@@ -371,7 +371,7 @@ const Window95 : OS = {
     unicode: 'U+229E',
     prefix: 'C',
     money: 4,
-    memory: 5,
+    memory: 6,
     adminSlots: 5,
     blueprints: [lance, shield, banana],
     items: [new Voucher, new Mushroom],
@@ -619,4 +619,4 @@ const Debugger : OS = {
     description: 'FOR TESTING'
 }
 
-export const allOSes = [Debugger, Window95, Steam, Window, Apple, Penguin, Temple, Fortran, Cobol, Arch, GNU, Amiga, Beos, Explorer, Satoshi];
+export const allOSes = [Window95, Steam, Window, Apple, Penguin, Temple, Fortran, Cobol, Arch, GNU, Amiga, Beos, Explorer, Satoshi, Debugger];

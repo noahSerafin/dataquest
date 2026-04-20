@@ -189,18 +189,20 @@
                 </button>
             </div>
         </div>
-        <div class="seed-section flex">
-            <label for="seed-input">Seed (optional):</label>
-            <input 
-                id="seed-input"
-                type="text" 
-                v-model="seedInput" 
-                placeholder="Enter seed..."
-                class="seed-input"
-            />
-            <button class="play-btn" :disabled="!seedInput" @click="startWithSeed">
-                Play
-            </button>
+        <div class="load-section">
+            <div class="seed-section">
+                <label for="seed-input">Seed (optional):</label>
+                <input 
+                    id="seed-input"
+                    type="text" 
+                    v-model="seedInput" 
+                    placeholder="Enter seed..."
+                    class="seed-input"
+                />
+                <button class="play-btn" :disabled="!seedInput" @click="startWithSeed">
+                    Play
+                </button>
+            </div>
             <div class="resume-section" v-if="hasSave">
                 <span>OR </span>
                 <button class="resume-btn" @click="emit('resumeGame')">
@@ -293,7 +295,7 @@
         color: #777;
     }
 
-    .seed-section {
+    .load-section, .seed-section {
         margin: 1rem 0;
         display: flex;
         flex-direction: row;

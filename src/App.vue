@@ -786,6 +786,7 @@ function loadSavedGame() {
       worldMapRef.value.skipsThisLevel = state.skipsThisLevel;
       worldMapRef.value.boss = state.boss;
     }
+    refreshShop(true);//not deterministic, revise later. save shop in gameState after refreshShop?
   });
 }
 

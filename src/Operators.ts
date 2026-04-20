@@ -509,6 +509,7 @@ const Amiga : OS = {
     name: 'Amiga',
     unicode: 'U+2705',//HEAVY CHECK MARK, U+2714
     prefix: 'a',
+    money: 3,
     memory: 3,
     adminSlots: 4,
     blueprints: [bug, aegis],
@@ -522,7 +523,7 @@ const Beos : OS = {
     name: 'BeOS',
     unicode: 'U+1F41D',
     prefix: 'B',
-    money: 5,
+    money: 4,
     memory: 5,
     adminSlots: 4,
     blueprints: [bee, honey],

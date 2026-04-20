@@ -2,7 +2,6 @@ export class Random {
     private static originalSeed: string | number = '';
     private static currentSeed: number = 0;
     private static generator: () => number = () => Math.random();
-
     /**
      * Hashes a string into a 32-bit integer.
      * Based on cyrb128 logic or a simple string hash.
@@ -43,6 +42,9 @@ export class Random {
      */
     public static getSeed(): string | number {
         return this.originalSeed;
+    }
+    public static getCurrentSeed(): number {
+        return this.currentSeed;
     }
 
     /**

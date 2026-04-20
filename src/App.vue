@@ -34,9 +34,10 @@ import Duplicator from "./components/Duplicator.vue";
 import Workbench from "./components/Workbench.vue";
 import { Random } from "./Random";
 import { allOSes } from "./Operators.ts";
-import { serializeGameState, rehydrateGameState, rehydratePieceArray } from "./saveSystem";
+import { serializeGameState, rehydrateGameState } from "./saveSystem";
 
 const testSword = {
+  id: "274ec329-8c17-4265-8c12-e9a28bcf0110",
   name: "Knife",
   description: "A basic attack piece",
   unicode: "U+1F52A",

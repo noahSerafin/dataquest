@@ -631,7 +631,7 @@ async function selectLevel(newLevel: Level, company: Company, difficultyMod: num
   roundHasStarted.value = true;
 }
 
-function handleProceed() {
+async function handleProceed() {
   for (const admin of player.value.admins) {
     if (admin.onRoundEnd) admin.onRoundEnd();
   };
@@ -642,7 +642,7 @@ function handleProceed() {
   openSummary(false);
   incrementMapProgress();
   if (player.value.mapProgress >= 3) {
-    increaseDifficulty();
+    await increaseDifficulty();// make sure new world is generated before we save
     player.value.mapProgress = 0
     if (player.value.bossesCleared > 6) {
       player.value.hasWonGame = false;
@@ -1390,7 +1390,7 @@ const handleSpecialActionAt = async (target: Coordinate) => {
     const inRange = findAnyPiecesInRange(selectedPiece.value, activePieces.value);
     await selectedPiece.value.special(inRange);
   }
-  if (selectedPiece.value.targetType === 'line') {
+  if (selectedPiece.value.targetType === 'line') {// going null?
     const actor = selectedPiece.value;
     const ax = actor.headPosition.x;
     const ay = actor.headPosition.y;
@@ -1605,7 +1605,7 @@ const combinedMapSeed = computed(() => {
   // Combine with the world reroll counter
   return raw + (worldSeed.value || '');
 });
-const increaseDifficulty = () => {
+async function increaseDifficulty(){
   player.value.difficulty += 1;
   if (player.value.difficulty < 7 || player.value.stake >= 1) {//cumulate bosses in endless mode
     bossAdmins.value = [];

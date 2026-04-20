@@ -25,9 +25,8 @@ nerf rosebud - pieces can't stay exposed after a special?
 variant should overide base piece color, (and tile colour???)
 
 // BUGS
-spawn still sometimes dissapearing
-generated nodes not showing player spawn
 bee special is causing a win?
+generated nodes not showing player spawn
 pieces with pounce attacking themselves
 stopwatch targeting itself
 you win not dissapearing in endless mode

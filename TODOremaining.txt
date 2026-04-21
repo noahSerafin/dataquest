@@ -2,6 +2,7 @@ TUTORIAL - make more handholdy?
 variant tooltips
 -
 //IMPROVEMENTS
+Move node map tip to bottom
 large your turn text pulse center screen
 enemy turn text to right
 canplace tickbox in inventory

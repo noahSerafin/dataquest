@@ -1031,9 +1031,8 @@ async function removePiece(piece: Piece) {
         activePieces.value.push(NewDoll);
       }
     }
-    if(piece.name !== 'Bee' && piece.name !== 'Bomb' && piece.name !== 'Nuke' && piece.name !== 'Mine'){
-      checkForRoundEnd();
-    }
+    //await nextTick();
+    //checkForRoundEnd();
   }
 }
 
@@ -1223,10 +1222,11 @@ const movePiece = async (coord: Coordinate) => {
       trap.isTriggering = true;
       trap.statuses.hidden = false;
       await new Promise(resolve => setTimeout(resolve, 350));
-      removePiece(trap)
+      await removePiece(trap)
     } else {
       await trap.triggerTrap(selectedPiece.value);
     }
+    checkForRoundEnd();
   }
   if (selectedPiece.value.targetType === 'trapPiece') {
     //check for others
@@ -1331,6 +1331,7 @@ const damagePieceAt = async (coord: Coordinate) => {
   selectedPiece.value.damageMult = baseMult;
   //console.log(damageReceiver?.name, ' tiles afterdmg: ', damageReceiver.tiles)
   boardRef.value.clearHighlights();
+  checkForRoundEnd();
 }
 
 const handleSpecialActionAt = async (target: Coordinate) => {
@@ -1444,6 +1445,7 @@ const handleSpecialActionAt = async (target: Coordinate) => {
   playerSpawns.value = newPlacementHighlights();
   selectedPiece.value = null;
   clearFog();
+  checkForRoundEnd();
   return;
 };
 

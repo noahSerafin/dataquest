@@ -686,7 +686,7 @@ async function reloadLevel() {
   }
 }
 
-function retryLevel() {
+function retryLevel() {//if !roundhasstarted
   if (player.value.lives <= 1) return
   player.value.lives--
   reloadLevel();
@@ -1507,7 +1507,7 @@ const endRound = async (roundWon: boolean) => {
   }*/
   player.value.canPlace = false;
   player.value.fogged = false;
-  roundHasStarted.value = false;
+  roundHasStarted.value = false;//wait for this
 }
 
 async function onReceiveDamage(id: string, receiver: Piece) {
@@ -1518,7 +1518,7 @@ async function onReceiveDamage(id: string, receiver: Piece) {
 async function enemyTurn(currentActivePieces: Piece[]) {
 
   const tileSet = new Set(level.value.tiles.map(t => `${t.x},${t.y}`));
-  console.log('enemyTurn...')
+  console.log('enemy turn...')
   console.log(!roundHasStarted.value, hasWonRound.value);
   //
   await runEnemyStateMachine(
@@ -1536,7 +1536,7 @@ async function enemyTurn(currentActivePieces: Piece[]) {
   );
 
   if (activePieces.value !== currentActivePieces || !roundHasStarted.value || hasWonRound.value) return;
-
+  console.log('reclaculating spawns...');
   playerSpawns.value = newPlacementHighlights();//guard this
 }
 
@@ -1587,10 +1587,10 @@ const endTurn = async () => {
   player.value.canPlace = true;
   player.value.canMove = true;
   player.value.canAction = true;
-  hasFinishedTurn.value = false;
   handleApplyAdmins('onTurnStart', '');
   checkForRoundEnd();
   saveGameState();
+  hasFinishedTurn.value = false;
 }
 
 // When editor exports a new level, shouldn't be needed in final
@@ -1797,7 +1797,7 @@ function toggleDebug() {
       <MainMenu v-if="showMainMenu && !displayEditor" @createNewPlayer="createNewPlayer" @resumeGame="loadSavedGame"
         class="stage-panel" :class="{ active: showMainMenu }" :debugMode="debugMode" />
       <RoundSummary v-if="showSummary" class="stage-panel" :class="{ active: showSummary }" :hasWonRound="hasWonRound"
-        :player="player" :bosses="bossAdmins" @proceedFromEndOfRound="handleProceed" @reloadLevel="reloadLevel"
+        :player="player" :bosses="bossAdmins" :roundHasStarted="roundHasStarted" @proceedFromEndOfRound="handleProceed" @reloadLevel="reloadLevel"
         @mainMenu="openMainMenu" />
       <WorldMap ref="worldMapRef" v-if="!displayEditor" class="stage-panel" :class="{ active: showMap }"
         :allLevels="level1Levels" :player="player" :seed="combinedMapSeed" :cssclass="mapClass" :bosses="bossAdmins"

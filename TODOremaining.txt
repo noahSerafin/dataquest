@@ -2,10 +2,11 @@ TUTORIAL - make more handholdy?
 variant tooltips
 -
 //IMPROVEMENTS
-Move node map tip to bottom
+variant tooltip to show stat mods, use colored text
 large your turn text pulse center screen
 enemy turn text to right
 canplace tickbox in inventory
+Move node map tip to bottom
 slight turn on hover over pieceView/ItemView
 let items be used on blueprints AND/OR Pieces
 enemies should attack their own charmed pieces / charmed enemies should attack you
@@ -49,9 +50,6 @@ Other challenge nodes - challenge node file with custom maps of fixed pieces? - 
 ITEMS/admins shortand descriptions eg. +1 attack instead of "increases"
 VISUAL: 5
 show attack when selected?
-variant tooltip to show stat mods, use colored text
-add class to acting admins
--skipNode controller
 Onion Icon for life
 
 SHOP - 8

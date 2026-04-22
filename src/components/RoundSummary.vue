@@ -1,13 +1,14 @@
 <script setup lang="ts">
     import { Player } from '../Player';
     import { Admin } from '../AdminPrograms';
-import { computed, onMounted } from 'vue';
-import { reapplyTutorialTooltips } from '../tutorial';
+    import { computed, onMounted } from 'vue';
+    import { reapplyTutorialTooltips } from '../tutorial';
 
     interface Props{
         hasWonRound: boolean,
         player: Player,
-        bosses: Admin[]
+        bosses: Admin[],
+        roundHasStarted: boolean
     }
     const props = defineProps<Props>()
 
@@ -111,7 +112,7 @@ import { reapplyTutorialTooltips } from '../tutorial';
             <h3>
                 Round Over
             </h3>
-            <button @click="emit('reloadLevel')">Retry</button>
+            <button @click="emit('reloadLevel')" :disabled="roundHasStarted">Retry</button>
         </div>
         <div class="if-lost" v-if="!hasWonRound && player.lives <= 0">
             <h3>

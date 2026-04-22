@@ -568,7 +568,7 @@ function resolveMove(
       }"
     />
     <div
-      v-if="player.canPlace && (placementMode || props.isFirstTurn)" v-for="(tile, index) in placementHighlights"
+      v-if="player.canPlace && (placementMode || isFirstTurn)" v-for="(tile, index) in placementHighlights"
       :key="index"
       class="highlight-tile green placement-tile"
       @mouseup="onMouseUp"

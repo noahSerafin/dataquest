@@ -256,6 +256,7 @@ function handleApplyItem(payload: { item: Item, id: string }) {
   if (item.targetType === 'piecesAndBoard') {
     item.apply({ activePieces: activePieces.value, board: level.value.tiles }, itemMult);
     playerSpawns.value = newPlacementHighlights();
+    console.log('playerSpawns after item use:', playerSpawns.value);
     player.value.removeItem(item);
   }
   //check it is to be applied to playerBlueprints
@@ -671,19 +672,22 @@ async function reloadLevel() {
   //if piece has no tiles, use headposition
   graveyard.value = [];
   lastTurnPieces.value = originalPieces.value.map(p => p.clone());
-  console.log('originalspawns:', originalSpawns.value);
+  console.log('originalspawns on reload:', originalSpawns.value);
   playerSpawns.value = originalSpawns.value.map(s => ({ ...s }));//not working?
-  console.log('playerSpawns:', playerSpawns.value);
+  console.log('playerSpawns on reload:', playerSpawns.value);
   selectedPiece.value = null;
-  isPlacing.value = true;
+  isPlacing.value = true;//highlights should be highlighted be this
   openSummary(false);
   await handleApplyAdmins('onRoundStart', '');
   roundHasStarted.value = true;
-  isFirstTurn.value = true;
+  isFirstTurn.value = true;//playerSpawns should be fixed here
   if (player.value.fogged) {
     foggedTiles.value = [...level.value.tiles];
     clearFog();
   }
+  player.value.canPlace = true;
+  console.log('playerSpawns on reload 2:', playerSpawns.value);//still correct. Are they just not being displayed??
+  //player.canPlace && (placementMode || isFirstTurn)
 }
 
 function retryLevel() {//if !roundhasstarted
@@ -966,6 +970,7 @@ function processSpawnPoints(pieces: Piece[], companyPieces: any[], mod: number) 
     processed.push(piece);
   }
   playerSpawns.value = newPlayerSpawns;
+  console.log('playerSpawns after spawn processing:', playerSpawns.value);
   originalSpawns.value = newPlayerSpawns.map(s => ({ ...s }));
 
   return processed;
@@ -1002,6 +1007,7 @@ function highlightPlacements(pieceBlueprint: PieceBlueprint) {
   }
   else if (!isFirstTurn.value) {
     playerSpawns.value = newPlacementHighlights();
+    console.log('playerSpawns from highlightPlacements:', playerSpawns.value);
   }
   pieceToPlace.value = pieceBlueprint;
   isPlacing.value = true;
@@ -1098,6 +1104,7 @@ async function placePieceOnBoardAt(coord: Coordinate) {
   // Reset placement state
   await handleApplyAdmins('onPlacement', PieceInstance.id)
   playerSpawns.value = newPlacementHighlights();
+  console.log('playerSpawns after placement:', playerSpawns.value);
   clearFog();
 
   //applyStatModifications()
@@ -1243,6 +1250,7 @@ const movePiece = async (coord: Coordinate) => {
     boardRef.value.clearHighlights();
   }
   playerSpawns.value = newPlacementHighlights();
+  console.log('playerSpawns after movement:', playerSpawns.value);
   if (player.value.fogged) {
     foggedTiles.value = [...level.value.tiles];//non persistant clearance
     clearFog();
@@ -1443,6 +1451,7 @@ const handleSpecialActionAt = async (target: Coordinate) => {
     player.value.canPlace = false;
   }
   playerSpawns.value = newPlacementHighlights();
+  console.log('playerSpawns after special:', playerSpawns.value);
   selectedPiece.value = null;
   clearFog();
   checkForRoundEnd();
@@ -1538,6 +1547,7 @@ async function enemyTurn(currentActivePieces: Piece[]) {
   if (activePieces.value !== currentActivePieces || !roundHasStarted.value || hasWonRound.value) return;
   console.log('reclaculating spawns...');
   playerSpawns.value = newPlacementHighlights();//guard this
+  console.log('playerSpawns after enemyTurn:', playerSpawns.value);//still getting here after
 }
 
 const endTurn = async () => {

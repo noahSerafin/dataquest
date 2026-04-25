@@ -1077,7 +1077,7 @@ class Dataworm extends Piece {//test
 
 class Snake extends Piece {//test
   static name = "Snake";
-  static description = "A program that can move into others' tiles (head excluded), removing a piece of memory regardless of defence and adding to its own max size";
+  static description = "A program that can move into others' tiles (head excluded), removing a piece of memory regardless of defence and adding to its own max size and moves";
   static unicode = "U+1F40D";
   static color = "#034d22ff";
   static rarity = 2;
@@ -1106,6 +1106,7 @@ class Snake extends Piece {//test
     // --- 3. Remove that tile from the piece ---
     piece.tiles.splice(tileIndex, 1);
     this.addModifier({maxSize: 1});
+    this.addModifier({moves: 1});
     // --- 4. Move Snake into that tile ---
     this.move(target);
     this.actions --
@@ -1668,24 +1669,75 @@ class Tengu extends Piece {//not working
 
 class Elephant extends Piece {
   static name = "Elephant";
-  static description = "A large program with strong stats";
+  static description = "A large program with strong stats, that can trample a line of targets, reducing their max size by 1";
   static unicode = "U+1F418";
   static color = "rgb(228, 217, 195)";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Elephant.name, Elephant.description, Elephant.unicode, 5, 2, 1, 3, 2, Elephant.color, headPosition, [headPosition], team, Elephant.rarity, removeCallback, id)
+    this.specialName = 'Trample';
+    //this.targetType = 'piece';
+    this.targetType = 'line';
+  }  
+  //change so there must be an occupier at the end of the line
+  async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
+    for (const tile of line) {
+      const occupier = activePieces.find(p =>
+        p.tiles.some(t => t.x === tile.x && t.y === tile.y)
+      );
+      if(!occupier) {
+        this.move(tile);
+        continue;
+      }
+      occupier.addModifier({maxSize: -1})
+      await occupier.takeDamage(this.getStat('attack'));
+      const stillOccupied = activePieces.find(p =>
+        p.tiles.some(t => t.x === tile.x && t.y === tile.y)
+      );
+      if (!stillOccupied) {
+        // The enemy died → can move into the tile
+        this.move(tile);
+      }
+      break;
+    }
+    this.actions--
   }
-  //special - trample
 }
 
 class Mammoth extends Piece {
   static name = "Mammoth";
-  static description = "A larger, tougher Elephant";
+  static description = "A larger, tougher Elephant. Can trample a line of targets, reducing their max size by 2";
   static unicode = "U+1F9A3"
   static color = "rgb(206, 228, 236)";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Mammoth.name, Mammoth.description, Mammoth.unicode, 6, 2, 1, 3, 3, Mammoth.color, headPosition, [headPosition], team, Mammoth.rarity, removeCallback, id)
+    this.specialName = 'Trample';
+    //this.targetType = 'piece';
+    this.targetType = 'line';
+  }  
+  //change so there must be an occupier at the end of the line
+  async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
+    for (const tile of line) {
+      const occupier = activePieces.find(p =>
+        p.tiles.some(t => t.x === tile.x && t.y === tile.y)
+      );
+      if(!occupier) {
+        this.move(tile);
+        continue;
+      }
+      occupier.addModifier({maxSize: -2})
+      await occupier.takeDamage(this.getStat('attack'));
+      const stillOccupied = activePieces.find(p =>
+        p.tiles.some(t => t.x === tile.x && t.y === tile.y)
+      );
+      if (!stillOccupied) {
+        // The enemy died → can move into the tile
+        this.move(tile);
+      }
+      break;
+    }
+    this.actions--
   }
 }
 
@@ -1819,7 +1871,7 @@ class Larva extends Piece {
     if (tileIndex === 0) return; // cannot infect head
     // --- 3. Remove that tile from the piece ---
     targetPiece.tiles.splice(tileIndex, 1);
-    this.tiles.push(target);
+    this.moveTo(target);
     if(this.tiles.length >= this.getStat('maxSize')){
       //replace this with a new wasp
       const wasp = new Wasp(this.headPosition, this.team, this.removeCallback, crypto.randomUUID());

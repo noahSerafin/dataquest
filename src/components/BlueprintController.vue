@@ -133,7 +133,7 @@ defineEmits(["buy", "sell", "highlightPlacements", "close"])
         <p class="stat stat-maxsize text-green">Max Size: {{ piece.maxSize }}</p>
         <p class="stat stat-moves text-blue">Moves: {{ piece.moves }}</p>
         <p class="stat stat-range text-orange">Range: {{ piece.range }}</p>
-        <p class="stat stat-attack text-red">Attack: {{ piece.attack }} <span v-if="piece.variantName === 'Deadly'">x1.5</span></p>
+        <p class="stat stat-attack text-red">Attack: {{ piece.attack }} <span v-if="piece.variantName === 'Deadly'">x2</span><span v-if="piece.variantName === 'Holographic'">x1.5</span></p>
         <p class="stat stat-defence text-cyan">Defence: {{ piece.defence }}</p>
         <p v-if="activeImmunities.length > 0">Immune to:
           <span

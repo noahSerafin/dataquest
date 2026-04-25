@@ -133,7 +133,7 @@ function toggleTooltip(key: string) {
       <p class="stat stat-attack text-red">Attack: <span class='stat'>{{ piece.getStat('attack') }}</span><span v-if="piece.damageMult > 1"> x{{ piece.damageMult }}</span></p>
       <p class="stat stat-defence text-cyan">Defence: <span class='stat'>{{ piece.getStat('defence') }}</span> <span>Left: <span class="stat">{{ Math.max(0, piece.defenceRemaining) }}</span></span></p>
       <p class="stat stat-actions text-yellow">Actions: <span class='stat'>{{ piece.getStat('actions') }}</span></p>
-      <p v-if="activeImmunities.length > 0">Immune to:
+      <p class="immunities" v-if="activeImmunities.length > 0">Immune to:
         <span
         v-for="([key]) in activeImmunities"
         :key="key"
@@ -310,7 +310,7 @@ p{
     left: 0.5rem;
     p{
       font-size: 0.7rem;
-      margin: 0
+      margin: 0;
     }
   }
 }
@@ -318,7 +318,7 @@ p{
   position: relative;
 }
 
-.redacted-true .symbol::after, .redacted-true .variant::after, .redacted-true .name::after, .redacted-true .desc::after, .redacted-true .stat::after{
+.redacted-true .symbol::after, .redacted-true .variant::after, .redacted-true .name::after, .redacted-true .desc::after, .redacted-true .stat::after, .immunities::after{
   content: '';
   position: absolute;
   width: 100%;

@@ -508,7 +508,7 @@ export class Rune extends Admin {
   static description = "Your programs with a range of 1 on attacking get +1 damage multiplyer";//all programs?
   static unicode = "U+16B1";
   static color = "#640909ff";
-  static rarity = 3;
+  static rarity = 2;
   constructor() {
     super(Rune.name, Rune.description, Rune.unicode, Rune.color, 5, Rune.rarity, 'gameState', 'onDealDamage')
   }
@@ -2979,7 +2979,7 @@ class Chime extends Admin {
   static name = "Wind Chime";
   static description = "Enemies that have moved lose -1 defence for 1 turn";
   static unicode = "U+1F390";
-  static color = "rgb(232, 238, 238)";
+  static color = "rgb(19, 45, 161)";
   static rarity = 1;
   constructor() {
     super(Chime.name, Chime.description, Chime.unicode, Chime.color, 3, Chime.rarity, 'gameState', 'onEnemyTurnEnd')
@@ -3135,7 +3135,7 @@ class Nose extends Admin {
   static description = "Enemies that move are exposed";
   static unicode = "U+1F443";
   static color = "rgb(94, 117, 100)";
-  static rarity = 1;
+  static rarity = 2;
   constructor() {
     super(Nose.name, Nose.description, Nose.unicode, Nose.color, 2, Nose.rarity, 'gameState', 'onEnemyTurnEnd')
   }
@@ -3330,7 +3330,7 @@ class Drunk extends Admin {
   static description = "Your pieces gain +1 attack, as well as +0.5 damage mult on load. But are also confused.";
   static unicode = "U+1F943";
   static color = "rgb(166, 9, 9)";
-  static rarity = 4;
+  static rarity = 3;
   constructor() {
     super(Drunk.name, Drunk.description, Drunk.unicode, Drunk.color, 6, Drunk.rarity, 'gameState', 'onPlacement')
   }
@@ -3352,8 +3352,8 @@ export class StoneAge extends Admin {//needs reviewing
   static name = "Stone Age";
   static description = "Fixes all pieces' range to 1 on the start of every turn after the first";
   static unicode = "U+1FAA8";
-  static color = "rgb(109, 147, 159)";
-  static rarity = 2;
+  static color = "rgb(103, 124, 131)";
+  static rarity = 3;
   constructor() {
     super(StoneAge.name, StoneAge.description, StoneAge.unicode, StoneAge.color, 6, StoneAge.rarity, 'gameState', 'onTurnStart')
   }
@@ -3487,7 +3487,7 @@ export class Clippy extends Admin {
   //handle in player
 }
 
-export const allAdmins = [Bank, Bucket, Candle, Cheese, Clippy, Smoker, Compass, CreditCard, Crystal, Glasses, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Schoolbag, Seed, Slots, Sprinkler, StoneAge, Tempura, Nose, Sneakers, Chime, Abacus, Aesculapius, Appraisal, Balloon, Briefcase, Bubble, Cactus, Coin, Purse, Convenience, FireEngine, Heart, Joker, Loot, Clover, Microscope, Newspaper, Pickup, Putter, Relay, Scarf, Stiletto, Mail, Bowling, Bipolar, Violin, Vitamins, Wings, AdminMap, Barber, Ace, AirSupport, Bone, Bouquet, Camp, Huzzah, Luggage, Chain, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Dice, Jammer, Roger, Juggler, Ladder, Puzzle, Razor, Sled, Rune, Shades, Stonks, Christmas, Telescope, Crown, Toolbox, Tracker, Ambulance, Backdoor, BionicArm, BionicLeg, Crash, Blood, Broom, DartBoard, Butler, Dove, Drunk, Evergreen, Eye, Discount, Fountain, Feather, Fuel, Spoon, Liberty, Lightbulb, Ollie, Palette, Pazzaz, PetriDish, Prayer, Wheel, Salt, Selfie, Pants, Variety, Volatile, Artic, BlackBelt, Lungs, Chemistry, Chivalry, Toilet, Copier, Daisy, Diamond, Hamsa, Skyscraper, Hermes, Howzat, Inheritance, Cherries, Lotus, Brain, Meditation, Meteor, Monarch, Onion, PeaPod, Teddy, Pong, RollerBlades, Bell, Baseball, Taoism, Ice, Ballet, Umbrella, Bath, Cards, Disco, Lefty, Minerva, Needle, Pi, Osiris, Righty, Ring, School, Dharma ];
+export const allAdmins = [Bank, Bucket, Candle, Cheese, Clippy, Smoker, Compass, CreditCard, Crystal, Glasses, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Schoolbag, Seed, Slots, Sprinkler, Tempura, Sneakers, Chime, Abacus, Aesculapius, Appraisal, Balloon, Briefcase, Bubble, Cactus, Coin, Purse, Convenience, FireEngine, Heart, Joker, Loot, Clover, Microscope, Newspaper, Nose, Pickup, Putter, Relay, Rune, Scarf, Stiletto, Mail, Bowling, Bipolar, Violin, Vitamins, Wings, AdminMap, Barber, Ace, AirSupport, Bone, Bouquet, Camp, Huzzah, Luggage, Chain, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Dice, Jammer, Roger, Juggler, Ladder, Drunk, Puzzle, Razor, Sled, Shades, StoneAge, Stonks, Christmas, Telescope, Crown, Toolbox, Tracker, Ambulance, Backdoor, BionicArm, BionicLeg, Crash, Blood, Broom, DartBoard, Butler, Dove, Evergreen, Eye, Discount, Fountain, Feather, Fuel, Spoon, Liberty, Lightbulb, Ollie, Palette, Pazzaz, PetriDish, Prayer, Wheel, Salt, Selfie, Pants, Variety, Volatile, Artic, BlackBelt, Lungs, Chemistry, Chivalry, Toilet, Copier, Daisy, Diamond, Hamsa, Skyscraper, Hermes, Howzat, Inheritance, Cherries, Lotus, Brain, Meditation, Meteor, Monarch, Onion, PeaPod, Teddy, Pong, RollerBlades, Bell, Baseball, Taoism, Ice, Ballet, Umbrella, Bath, Cards, Disco, Lefty, Minerva, Needle, Pi, Osiris, Righty, Ring, School, Dharma ];
 console.log('admins length: ', allAdmins.length)
 let adminLogs = {
   rarity1: 0,

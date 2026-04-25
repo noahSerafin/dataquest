@@ -323,6 +323,11 @@ body,
   line-height: 20px;
 }
 
+.node-map .tutorial-help-btn {
+ top: unset;
+ bottom: -8px; 
+}
+
 .shop-container .tutorial-help-btn,
 .board .tutorial-help-btn {
   top: 0;

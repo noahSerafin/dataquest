@@ -129,6 +129,9 @@ export function applyVariant(piece: Piece, variant: PieceVariant) {
   }
   piece.variantName = variant.name;
   if(variant.name === 'Deadly'){
+    piece.damageMult += 1;
+  }
+  if(variant.name === 'Holographic'){
     piece.damageMult += 0.5;
   }
 }

@@ -40,7 +40,7 @@ export const PIECE_VARIANTS: PieceVariant[] = [ //have visual variants instead o
   {name: 'Glass', mods: {attack: +3, maxSize: -1, defence: -2}, minDifficulty: 4},
   {name: 'Overclocked', mods: {maxSize: -1, defence: -1, moves: +1, range: +1, attack: +1}, minDifficulty: 3}, //pink/purple shiny
   {name: 'Gold', mods: {maxSize: +1, defence: +1, moves: +1, range: +1, attack: +1}, minDifficulty: 5},  //gold + money to player
-  {name: 'Holographic', mods: {maxSize: +2, defence: +2, moves: +2, range: +2, attack: +2}, minDifficulty: 5},
+  {name: 'Holographic', mods: {maxSize: +2, defence: +2, moves: +2, range: +2, attack: +2}, minDifficulty: 5},//dmg mult also
   {name: 'Deadly', mods: {}, minDifficulty: 6},//red shiny +0.5 dmg mult
   {name: 'Modded', mods: {}, minDifficulty: 999},//red shiny +0.5 dmg mult
  

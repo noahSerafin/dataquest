@@ -19,11 +19,6 @@ visualise:
     ADMINS - animate admins testing, counts too?
     nerf taoism by applying zen instead - testing
 
-SEEDED RANDOMNESS - save seed functionality 6
-check weighted randomess still applies
-
-SAVE GAME STATE for bugs 7.5
-
 PIECES - keep track of upgrades and display on piece 7
 more + - trade off admins
 make some variants immunities?
@@ -33,14 +28,12 @@ nerf rosebud - pieces can't stay exposed after a special?
 variant should overide base piece color, (and tile colour???)
 
 // BUGS
-!!!bee/bomb/mine etc. special is causing a win
 enemy pathing long distance
-load save forrcing non deterministic shop
 pieces with pounce attacking themselves
 generated nodes not showing player spawn
 you win not dissapearing in endless mode
-enemies not pathing to player sometimes, are they looking for the head position???
-crystal ball stopping shop progression - once seed is sorted let it also preview node contents
+load save forcing non deterministic shop
+!!!bee/bomb/mine etc. special is causing a win when check is inside removePiece
 
 MAP/WORLD BUILDER
 Gladiator nodes - +1 or 2 security, place only once in arena node for reward - skippable
@@ -49,16 +42,11 @@ Other challenge nodes - challenge node file with custom maps of fixed pieces? - 
 
 ITEMS/admins shortand descriptions eg. +1 attack instead of "increases"
 VISUAL: 5
-show attack when selected?
 Onion Icon for life
 
 SHOP - 8
 - two piece/item slots
 piece packs/item packs/admin packs?
-
-EXPERIMENT:
-Spawn all enemies at all difficulties, but do not weight selection,
-enemies of lower rank get +1 to all stats for every rarity below the current security level
 
 CLEANUP 8
 worldmap, get seperate preview components for node/boss/skip

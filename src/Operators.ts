@@ -1,5 +1,5 @@
 import type { OS } from "./types";
-import { Voucher, Mushroom, Garlic, Juice, Meat, Genie, Pandora, Update2, Dupe, Jar, Iron} from "./Items";
+import { Voucher, Mushroom, Garlic, Meat, Genie, Pandora, Update2, Dupe, Jar, Iron} from "./Items";
 import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Clippy, Notepad, StoneAge, Rune, DartBoard, Taoism, OffRoader, AdminMap, Compass, Backdoor, Miner, Copier, Cherries, Sneakers, Palette} from "./AdminPrograms";
 import { createDefaultStatuses } from "./types";
 
@@ -429,7 +429,7 @@ const Apple : OS = {
     memory: 5,
     adminSlots: 4,
     blueprints: [ant, bee, shield],
-    items: [new Mushroom, new Juice],
+    items: [new Mushroom, new Iron],
     admins: [],
     lives: 3,
     description: 'Limited admin functionality, but start with excess money and some consumable items.'
@@ -556,8 +556,8 @@ const Satoshi : OS = {
     memory: 6,
     adminSlots: 6,
     blueprints: [bug, aegis],
-    items: [],
-    admins: [new Miner, new Bubble],
+    items: [new Dupe],
+    admins: [new Miner, new Bubble],//slots coin coin
     lives: 1,
     description: "Volatile currency generator, high memory and admin slots"
 }

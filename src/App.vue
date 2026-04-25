@@ -94,6 +94,7 @@ const swapDisplay = () => {
 
 const stake = ref(0);//player
 const gameStarted = ref(false);
+const yourTurnWarning = ref(false);
 
 const player = ref(new Player(
   'U+1F60A',
@@ -1601,6 +1602,8 @@ const endTurn = async () => {
   checkForRoundEnd();
   saveGameState();
   hasFinishedTurn.value = false;
+  yourTurnWarning.value = true;
+  setTimeout(() => yourTurnWarning.value = false, 500);
 }
 
 // When editor exports a new level, shouldn't be needed in final
@@ -1804,6 +1807,7 @@ function toggleDebug() {
       </div>
     </div>
     <div class="stage">
+      <h1 class="yourTurnWarning" v-if="yourTurnWarning">YOUR TURN</h1>
       <MainMenu v-if="showMainMenu && !displayEditor" @createNewPlayer="createNewPlayer" @resumeGame="loadSavedGame"
         class="stage-panel" :class="{ active: showMainMenu }" :debugMode="debugMode" />
       <RoundSummary v-if="showSummary" class="stage-panel" :class="{ active: showSummary }" :hasWonRound="hasWonRound"
@@ -1971,4 +1975,18 @@ function toggleDebug() {
 .infamy {
   position: relative;
 }
+
+@keyframes popout {
+  0% { transform: scale(1); filter: brightness(1) drop-shadow(0 0 0px yellow); }
+  50% { transform: scale(1.15); filter: brightness(1.3) drop-shadow(0 0 12px yellow); }
+  100% { transform: scale(1); filter: brightness(1) drop-shadow(0 0 0px yellow); }
+}
+
+.yourTurnWarning {
+  position: absolute;
+  margin: auto;
+  z-index: 9999 !important;
+  animation: popout 0.5s ease-in-out;
+}
+
 </style>

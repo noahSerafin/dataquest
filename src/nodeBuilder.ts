@@ -376,7 +376,7 @@ export function generateNode(difficulty: number): Level {
       });*/
 
     return {
-        name: `Generated-${difficulty}-${crypto.randomUUID()}`,
+        name: `Gen-${difficulty}-${crypto.randomUUID().substring(0, 7)}`,
         tiles: [...tiles],//.map(parseCoord),
         pieces: [
             {

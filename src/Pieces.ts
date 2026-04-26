@@ -3988,7 +3988,7 @@ class Scarab extends Piece {
 
 class Orangutan extends Piece {
   static name = "Orangutan";
-  static description = "Can strong program that can damage and then reduce another program's defence remaining to 0";
+  static description = "A strong program that can damage and then reduce another program's defence remaining to 0";
   static unicode = "U+1F9A7";
   static color = "rgb(118, 177, 0)";
   static rarity = 5;

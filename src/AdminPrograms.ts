@@ -3157,7 +3157,7 @@ class Wings extends Admin {
   static name = "Wings";
   static description = "Your programs are immune to traps";//and move over gaps?
   static unicode = "U+1FABD";
-  static color = "rgb(94, 117, 100)";
+  static color = "rgb(178, 194, 204)";
   static rarity = 2;
   constructor() {
     super(Wings.name, Wings.description, Wings.unicode, Wings.color, 3, Wings.rarity, 'player', 'other')

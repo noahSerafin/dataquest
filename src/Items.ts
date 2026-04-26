@@ -710,7 +710,7 @@ class Battery extends Item<Piece[]> {
     static name = "Fresh Batteries";
     static description = "All placed player programs replenish their moves remaining";
     static unicode = " U+1F50B";
-    static color = "#0dff35ff";
+    static color = "rgb(132, 180, 189)";
     static rarity = 1;
     constructor() {
         super(Battery.name, Battery.description, Battery.unicode, Battery.color, 1, Battery.rarity, 'gameState');

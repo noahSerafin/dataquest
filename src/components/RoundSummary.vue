@@ -42,7 +42,7 @@
 <template>
     <div class="container round-summary">
         <div class="if-won" v-if="hasWonRound">
-            <h1 v-if="player.hasWonGame">
+            <h1 v-if="player.hasWonGame && player.difficulty < 7">
                 You win!
             </h1>
             <h3>

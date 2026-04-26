@@ -1054,19 +1054,19 @@ function instantiatePieceFromBlueprint(//this goes in app
   bp.hybridName ? bp.hybridName : bp.name*/
 
   // Step 1: always instantiate PRIMARY class
-  const PieceClass = allPieces.find(p => p.name === bp.name)
+  const PieceClass = allPieces.find(p => p.name === bp.name);
   if (!PieceClass) {
-    throw new Error(`Unknown piece: ${bp.name}`)
+    throw new Error(`Unknown piece: ${bp.name}`);
   }
 
-  const piece = new PieceClass(coord, team, removeCallback, bp.id)
+  const piece = new PieceClass(coord, team, removeCallback, bp.id);
 
-  piece.maxSize = bp.maxSize
-  piece.moves = bp.moves
-  piece.range = bp.range
-  piece.attack = bp.attack
-  piece.defence = bp.defence
-  piece.defenceRemaining = bp.defence
+  piece.maxSize = bp.maxSize;
+  piece.moves = bp.moves;
+  piece.range = bp.range;
+  piece.attack = bp.attack;
+  piece.defence = bp.defence;
+  piece.defenceRemaining = bp.defence;
   piece.immunities = bp.immunities;
 
   // Step 3: hybrid-specific augmentation
@@ -1074,7 +1074,7 @@ function instantiatePieceFromBlueprint(//this goes in app
     piece.hybridName = bp.hybridName;
     piece.description = bp.description;
     //piece.unicode = bp.unicode //should already be the case
-    piece.extraUnicode = bp.extraUnicode
+    piece.extraUnicode = bp.extraUnicode;
   }
   if (bp.variantName) {
     piece.variantName = bp.variantName;
@@ -1084,13 +1084,13 @@ function instantiatePieceFromBlueprint(//this goes in app
 }
 
 async function placePieceOnBoardAt(coord: Coordinate) {
-  if (!pieceToPlace.value) return
+  if (!pieceToPlace.value) return;
 
   const bp = pieceToPlace.value;
   pieceToPlace.value = null;
 
-  const PieceInstance = instantiatePieceFromBlueprint(bp, coord, 'player', removePiece)
-  if (!PieceInstance) return
+  const PieceInstance = instantiatePieceFromBlueprint(bp, coord, 'player', removePiece);
+  if (!PieceInstance) return;
 
   //we're definitely making a move, so store pieces
   lastTurnPieces.value = activePieces.value.map(p => p.clone());
@@ -1100,10 +1100,10 @@ async function placePieceOnBoardAt(coord: Coordinate) {
   activePieces.value.push(PieceInstance);
 
   // Mark blueprint as placed so it greys in inventory
-  bp.isPlaced = true
+  bp.isPlaced = true;
 
   // Reset placement state
-  await handleApplyAdmins('onPlacement', PieceInstance.id)
+  await handleApplyAdmins('onPlacement', PieceInstance.id);
   playerSpawns.value = newPlacementHighlights();
   console.log('playerSpawns after placement:', playerSpawns.value);
   clearFog();
@@ -1144,10 +1144,10 @@ async function placePieceOnBoardAt(coord: Coordinate) {
 const isDraggingPlacement = ref(false)
 
 function startPlacementDrag(bp: PieceBlueprint) {
-  console.log('dragging')
-  pieceToPlace.value = bp
-  isPlacing.value = true
-  isDraggingPlacement.value = true
+  console.log('dragging');
+  pieceToPlace.value = bp;
+  isPlacing.value = true;
+  isDraggingPlacement.value = true;
   //debug here
 }
 
@@ -1602,8 +1602,10 @@ const endTurn = async () => {
   checkForRoundEnd();
   saveGameState();
   hasFinishedTurn.value = false;
-  yourTurnWarning.value = true;
-  setTimeout(() => yourTurnWarning.value = false, 500);
+  if(!roundHasStarted){
+    yourTurnWarning.value = true;
+    setTimeout(() => yourTurnWarning.value = false, 500);
+  }
 }
 
 // When editor exports a new level, shouldn't be needed in final
@@ -1789,7 +1791,7 @@ function toggleDebug() {
           <div>{{ currentCompany.unicode ? String.fromCodePoint(parseInt(currentCompany.unicode.replace('U+', ''), 16),
             0xFE0F) : '' }}</div>
         </span>
-        <p class="security"><strong>Security level: </strong>{{ player.difficulty + player.extraDifficulty }}</p>
+        <p class="security"><strong>Security level: </strong>{{ player.difficulty }}<span v-if="player.extraDifficulty > 0">+ {{ player.extraDifficulty }}</span></p>
         <p class="infamy"><strong>Infamy: </strong>{{ stake }}</p>
         <span class="enemy-bosses">
           <BossView v-if="bossAdmins.length > 0" :admins="bossAdmins" />
@@ -1807,7 +1809,7 @@ function toggleDebug() {
       </div>
     </div>
     <div class="stage">
-      <h1 class="yourTurnWarning" v-if="yourTurnWarning">YOUR TURN</h1>
+      <h1 class="yourTurnWarning" v-if="yourTurnWarning && !roundHasStarted">YOUR TURN</h1>
       <MainMenu v-if="showMainMenu && !displayEditor" @createNewPlayer="createNewPlayer" @resumeGame="loadSavedGame"
         class="stage-panel" :class="{ active: showMainMenu }" :debugMode="debugMode" />
       <RoundSummary v-if="showSummary" class="stage-panel" :class="{ active: showSummary }" :hasWonRound="hasWonRound"

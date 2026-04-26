@@ -28,6 +28,7 @@ nerf rosebud - pieces can't stay exposed after a special?
 variant should overide base piece color, (and tile colour???)
 
 // BUGS
+appraisal doesn't work
 enemy pathing long distance
 pieces with pounce attacking themselves
 generated nodes not showing player spawn

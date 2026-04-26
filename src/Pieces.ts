@@ -1121,12 +1121,12 @@ class Copycat extends Piece {
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Copycat.name, Copycat.description, Copycat.unicode, 1, 2, 2, 0, 0, Copycat.color, headPosition, [headPosition], team, Copycat.rarity, removeCallback, id)
-    this.targetType = 'piece'
-    this.specialName = 'Imitate'
+    this.targetType = 'piece';
+    this.specialName = 'Imitate';
+    this.hasNeutralSpecial = true;
     //neutral special
     //private count for enemy usage?
   }
-  //nerf
   async special(target: Piece): Promise<void> {
     //copy base stats or enhanced stats?
     this.maxSize = target.getStat('maxSize');
@@ -1137,9 +1137,7 @@ class Copycat extends Piece {
     this.actions --
     //this.statModifiers = target.statModifiers;
   }
-
   //check for programs in range, inheret methods from them
-  //take largest maxSize, moves, atk, def too
 }
 
 class Banana extends Piece {
@@ -4290,11 +4288,50 @@ export class Dolls extends Piece {//finished? test, will have to be handled in a
    super(Dolls.name, Dolls.description, Dolls.unicode, 3, 0, 1, 3, 0, Dolls.color, headPosition, [headPosition], team, Dolls.rarity, removeCallback, id)
   }
 }
-// ZOMBIE, U+1F9DF - only dies if head is attacked
+
+export class Parrot extends Piece {
+  static name = "Parrot";
+  static description = "Can temporarily take on the stats of any program in range without losing an action";//redundant unless it gets another move
+  static unicode = "U+1F99C";//"U+1F431";
+  static color = "#64edff";
+  static rarity = 3;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+    super(Parrot.name, Parrot.description, Parrot.unicode, 1, 3, 1, 0, 0, Parrot.color, headPosition, [headPosition], team, Parrot.rarity, removeCallback, id)
+    this.targetType = 'piece';
+    this.specialName = 'Imitate';
+    this.hasNeutralSpecial = true;
+    //neutral special
+    //private count for enemy usage?
+  }
+  async special(target: Piece): Promise<void> {
+    //copy base stats or enhanced stats?
+    this.addTempModifier({maxSize: target.getStat('maxSize')-this.getStat('maxSize')});
+    this.addTempModifier({moves: target.getStat('moves')-this.getStat('moves')});
+    this.addTempModifier({range: target.getStat('range')-this.getStat('range')});
+    this.addTempModifier({attack: target.getStat('attack')});
+    this.addTempModifier({defence: target.getStat('defence')})
+    //this.statModifiers = target.statModifiers;
+  }
+  //check for programs in range, inheret methods from them
+}
+
+export class Zombie extends Piece {//finished? test, will have to be handled in app for sure, and a custom flag for hybrids
+  static name = "Zombie";
+  static description = "Can only be destroyed by an attack to the head"
+  static unicode = "U+1F9DF";
+  static color = "#ff5a0dff";
+  static rarity = 6;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Zombie.name, Zombie.description, Zombie.unicode, 2, 1, 1, 3, 0, Zombie.color, headPosition, [headPosition], team, Zombie.rarity, removeCallback, id)
+  }
+}
+//dolls
+// PARROT, U+1F99C like copycat but temp modifiers
+// ZOMBIE, U+1F9DF - only dies if head is attacked - takedamage would need to change
+//
 //LICH - U+1F480 summon zombies, if graveyard has pieces in?
 //FISHING POLE AND FISH, U+1F3A3 long range - move a piece toward it - magnet with long range
 //Pentagram - U+269D summons daemons
-// PARROT, U+1F99C like copycat but temp modifiers
 //Gong applies zen
 //taxi U+1F695 move other pieces (friendly) to it's tail?
 

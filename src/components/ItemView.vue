@@ -199,9 +199,9 @@ const isDisabled = computed(() => {
   align-items: center;
   padding: 10px;
 }
-/*.item:hover {
-  transform: scale(1.03);
-}*/
+.item:hover {
+  transform: scale(1.3);
+}
 .close{
   position: absolute;
   top: 0.5rem;

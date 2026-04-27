@@ -253,6 +253,10 @@
         align-items: center;
         justify-content: space-around;
     }
+    .os:hover{
+        transform: scale(1.02);
+        transition: 0.1s ease;
+    }
     .logo{
         font-size: 36px;
     }

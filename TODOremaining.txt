@@ -3,11 +3,8 @@ variant tooltips
 -
 //IMPROVEMENTS
 variant tooltip to show stat mods, use colored text
-large your turn text pulse center screen
 enemy turn text to right
 canplace tickbox in inventory
-Move node map tip to bottom
-slight turn on hover over pieceView/ItemView
 let items be used on blueprints AND/OR Pieces
 enemies should attack their own charmed pieces / charmed enemies should attack you
 make hybrids display how they do in compiler/blueprintcontroller
@@ -28,6 +25,8 @@ nerf rosebud - pieces can't stay exposed after a special?
 variant should overide base piece color, (and tile colour???)
 
 // BUGS
+piece controller dissappearing
+apply admins applying to blueprints somehow
 appraisal doesn't work
 enemy pathing long distance
 pieces with pounce attacking themselves

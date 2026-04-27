@@ -142,7 +142,7 @@
                         @dragover.prevent
                         @drop="onDrop(index)"
                         class="p-1 border rounded mb-1 flex items-center">
-                        <ItemView 
+                        <ItemView
                             :item="item"
                             type="admin"
                             cssclass="inventory"

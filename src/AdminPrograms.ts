@@ -1567,7 +1567,7 @@ class Ballet extends Admin {//needs to reset
           piece.statuses.hidden = true
           this.isTriggering = true;
           setTimeout(() => this.isTriggering = false, 500);
-        } else {
+        } else if(piece.statuses.hidden && piece.targetType !== "trapPiece"){
           piece.statuses.hidden = false;
         }
       }

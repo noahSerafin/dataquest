@@ -96,7 +96,7 @@ const type = ((item: Item) => {
         v-for="bp in props.shopBlueprints"
         :key="bp.id"
         :blueprint="bp"
-        :tileSize="70"
+        :tileSize="76"
         cssclass="shop"
         :class="'placed-'+bp.isPlaced"
         @select="openShopController"
@@ -112,7 +112,7 @@ const type = ((item: Item) => {
           :item="item"
           :type="type(item)"
           cssclass="shop"
-          :tileSize="70"
+          :tileSize="76"
           :canBuy= "canBuyItem(item)"
           :showController="(props.target === item)"
           :canSteal = canSteal

@@ -36,7 +36,7 @@ export function useTilt(target: Ref<HTMLElement | null>, maxRotation = 15) {
 
   const tiltStyle = computed(() => {
     return {
-      transform: `perspective(1000px) rotateX(${rotateX.value}deg) rotateY(${rotateY.value}deg) scale(${isHovered.value ? 1.05 : 1})`,
+      transform: `perspective(1000px) rotateX(${rotateX.value}deg) rotateY(${rotateY.value}deg) scale(${isHovered.value ? 1.1 : 1})`,
       transition: isHovered.value ? 'none' : 'transform 0.5s ease',
       transformStyle: 'preserve-3d' as const,
       willChange: 'transform'

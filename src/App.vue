@@ -1809,7 +1809,7 @@ function toggleDebug() {
       </div>
     </div>
     <div class="stage">
-      <h1 class="yourTurnWarning" v-if="yourTurnWarning && !roundHasStarted">YOUR TURN</h1>
+      <h1 class="yourTurnWarning" v-if="yourTurnWarning && roundHasStarted">YOUR TURN</h1>
       <MainMenu v-if="showMainMenu && !displayEditor" @createNewPlayer="createNewPlayer" @resumeGame="loadSavedGame"
         class="stage-panel" :class="{ active: showMainMenu }" :debugMode="debugMode" />
       <RoundSummary v-if="showSummary" class="stage-panel" :class="{ active: showSummary }" :hasWonRound="hasWonRound"

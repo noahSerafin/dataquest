@@ -463,7 +463,7 @@ class Arms extends Piece {
 
 class Shield extends Piece {
   static name = "Shield";
-  static description = "A basic defensive piece";
+  static description = "A basic defensive piece";//can share defence?
   static unicode = "U+1F6E1";
   static color = "#2fa7ca";
   static rarity = 1;

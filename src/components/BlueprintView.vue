@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, useTemplateRef } from "vue";
+import { useTilt } from "../composables/useTilt";
 import type { Coordinate, PieceBlueprint } from "../types";
 
 //construction-------------
@@ -16,6 +17,8 @@ const props = defineProps<{
 
 //local state
 const showController = ref(false);//todo change to selected piece
+const blueprintRef = useTemplateRef<HTMLElement>('blueprintRef');
+const { tiltStyle, handleMouseMove, handleMouseEnter, handleMouseLeave } = useTilt(blueprintRef);
 
 //emits
 const emit = defineEmits<{ 
@@ -97,19 +100,33 @@ function handleSelect() {
 
 <template>
   <div
-  :class="`blueprint ${props.cssclass}-piece ${props.blueprint.hybridName ? 'hybrid' : ''} ${props.blueprint.variantName ? ('variant-program v_'+blueprint.variantName) : ''}`"
+    ref="blueprintRef"
+    class="blueprint-container"
+    :class="`${props.cssclass}-piece`"
     :name="props.blueprint?.name"
     :id="props.blueprint?.id"
-    :style="pieceStyle"
+    :style="{ width: pieceStyle.width, height: pieceStyle.height, cursor: 'pointer', position: 'relative' }"
     @click="handleSelect"
     @sell="$emit('sell', props.blueprint)"
+    @mousemove="handleMouseMove"
+    @mouseenter="handleMouseEnter"
+    @mouseleave="handleMouseLeave"
   >
-  <p class='top-left' v-if="cssclass==='shop' || cssclass==='skipReward'" :style="`top: -${((props.tileSize-10)/2 - 24)}px`">P</p>
-    <span v-if="blueprint.extraUnicode" class="extra-unicode">{{ ExtraUnicodeSymbol }}</span><span class="primary-unicode">{{ unicodeSymbol }}</span>
+    <div
+      class="blueprint-body blueprint"
+      :class="[props.blueprint.hybridName ? 'hybrid' : '', props.blueprint.variantName ? ('variant-program v_'+blueprint.variantName) : '']"
+      :style="[pieceStyle, tiltStyle]"
+    >
+      <p class='top-left' v-if="cssclass==='shop' || cssclass==='skipReward'" :style="`top: -${((props.tileSize-10)/2 - 24)}px`">P</p>
+      <span v-if="blueprint.extraUnicode" class="extra-unicode">{{ ExtraUnicodeSymbol }}</span><span class="primary-unicode">{{ unicodeSymbol }}</span>
+    </div>
   </div>
 </template>
 
 <style scoped>
+.blueprint-container {
+  display: inline-block;
+}
 .inventory-piece, .shop-piece{
   position: relative;
 }
@@ -117,6 +134,8 @@ function handleSelect() {
   text-align: center;
   transition: all 0.2s ease;
   border: outset;
+  width: 100%;
+  height: 100%;
 }
 .team-enemy{
   border: outset red;

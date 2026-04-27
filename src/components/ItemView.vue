@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, useTemplateRef } from "vue";
+import { useTilt } from "../composables/useTilt";
 import { Item } from "../Items"; // adjust path
 import { tutorialState, clearTooltips } from "../tutorial";
 import { proTips, proTipSuggestion } from "../tutorialSteps";
@@ -26,6 +27,9 @@ const emit = defineEmits<{
 }>();
 
 //const showController = ref(false);
+const itemRef = useTemplateRef<HTMLElement>('itemRef');
+const { tiltStyle, handleMouseMove, handleMouseEnter, handleMouseLeave } = useTilt(itemRef);
+
 function handleSelect() {
   emit("select", props.item);
 }
@@ -100,15 +104,26 @@ const isDisabled = computed(() => {
 
 <template>
   <div
+    ref="itemRef"
     :id="item.id"
-    class="item"
-    :class="[`item-${type}`, `itemName-${item.name.replace(/\s+/g, '')}`, {'is-clippy': item.name === 'Clippy'}, {'is-disabled': isDisabled}, {'is-triggering': (item as any).isTriggering}]"
+    class="item-container"
+    :class="[`item-${type}`, `itemName-${item.name.replace(/\s+/g, '')}`, {'is-clippy': item.name === 'Clippy'}]"
+    :style="{ width: itemStyle.width, height: itemStyle.height, cursor: 'pointer' }"
     @click="handleSelect"
-    :style="itemStyle"
+    
   >
-    <p class='top-left' v-if="cssclass==='shop' && type == 'consumable'" :style="`top: -${((props.tileSize-10)/2 -24)}px`">I</p>
-    <p class='top-left' v-if="cssclass==='shop' && type == 'admin'" :style="`top: -${((props.tileSize-10)/2 -24)}px`">A</p>
-    <div class="icon">{{ unicodeSymbol }}</div>
+    <div
+      class="item-body item"
+      :class="[{'is-disabled': isDisabled}, {'is-triggering': (item as any).isTriggering}]"
+      :style="[itemStyle, tiltStyle]"
+      @mousemove="handleMouseMove"
+      @mouseenter="handleMouseEnter"
+      @mouseleave="handleMouseLeave"
+    >
+      <p class='top-left' v-if="cssclass==='shop' && type == 'consumable'" :style="`top: -${((props.tileSize-10)/2 -24)}px`">I</p>
+      <p class='top-left' v-if="cssclass==='shop' && type == 'admin'" :style="`top: -${((props.tileSize-10)/2 -24)}px`">A</p>
+      <div class="icon">{{ unicodeSymbol }}</div>
+    </div>
 
     <!-- Speech bubble for Clippy admin -->
     <div v-if="cssclass !== 'shop' && cssclass !== 'collection' && item.name === 'Clippy' && tutorialState.message" class="clippy-speech-bubble-container" @click.stop>
@@ -152,13 +167,17 @@ const isDisabled = computed(() => {
 </template>
 
 <style scoped>
+.item-container {
+  position: relative;
+  display: inline-block;
+}
 .item{
-  text-align: center;
   transition: all 0.2s ease;
   border: outset;
   position: relative;
-  cursor: pointer;
-  transition: 0.15s;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
 }
 .item.is-disabled {
   opacity: 0.7;
@@ -180,9 +199,9 @@ const isDisabled = computed(() => {
   align-items: center;
   padding: 10px;
 }
-.item:hover {
+/*.item:hover {
   transform: scale(1.03);
-}
+}*/
 .close{
   position: absolute;
   top: 0.5rem;

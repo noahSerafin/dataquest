@@ -1791,7 +1791,7 @@ function toggleDebug() {
           <div>{{ currentCompany.unicode ? String.fromCodePoint(parseInt(currentCompany.unicode.replace('U+', ''), 16),
             0xFE0F) : '' }}</div>
         </span>
-        <p class="security"><strong>Security level: </strong>{{ player.difficulty }}<span v-if="player.extraDifficulty > 0">+ {{ player.extraDifficulty }}</span></p>
+        <p class="security"><strong>Security level: </strong>{{ player.difficulty }}<span v-if="player.extraDifficulty > 0"> + {{ player.extraDifficulty }}</span></p>
         <p class="infamy"><strong>Infamy: </strong>{{ stake }}</p>
         <span class="enemy-bosses">
           <BossView v-if="bossAdmins.length > 0" :admins="bossAdmins" />

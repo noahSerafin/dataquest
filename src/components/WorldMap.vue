@@ -104,8 +104,14 @@
         const newBosses = []
         for (let index = 0; index < props.bosses.length; index++) {
             newBosses.push(returnNewBoss());
-        }        
-        emit('replaceBosses', newBosses);
+        }
+        if(props.player.stake == 0 || props.player.difficulty >= 6){
+            emit('replaceBosses', newBosses);
+        } else {
+            for(const boss of newBosses){
+                emit('addBoss', boss);
+            }
+        }
         props.player.spend(rerollBossCost.value);
         rerollBossCost.value = rerollBossCost.value*2;
     }
@@ -479,7 +485,7 @@
             <BlueprintView
                 v-if="selectedPreviewNode.skipReward?.kind === 'blueprint'"
                 :blueprint="selectedPreviewNode.skipReward.value"
-                :tileSize="60"
+                :tileSize="70"
                 cssclass="skipReward"
                 @select="select(selectedPreviewNode.skipReward)"
                 @deselect="deselect"
@@ -498,7 +504,7 @@
                 v-if="selectedPreviewNode.skipReward?.kind === 'admin'"
                 type = "admin"
                 :item="selectedPreviewNode.skipReward.value"
-                :tileSize="60"
+                :tileSize="70"
                 :canBuy="false"
                 cssclass="shop"
                 :showController="checkTargetMatch(selectedPreviewNode.skipReward)"
@@ -510,7 +516,7 @@
                 v-if="selectedPreviewNode.skipReward?.kind === 'item'"
                 type = "consumable"
                 :item="selectedPreviewNode.skipReward.value"
-                :tileSize="60"
+                :tileSize="70"
                 :canBuy="false"
                 cssclass="shop"
                 :showController="checkTargetMatch(selectedPreviewNode.skipReward)"

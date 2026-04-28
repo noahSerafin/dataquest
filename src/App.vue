@@ -1793,7 +1793,7 @@ function toggleDebug() {
       </button>
     </div>
     <div class="top-hud">
-      <div class="enemy-info">
+      <div v-if="gameStarted || debugMode" class="enemy-info">
         <span v-if="currentCompany">
           <div>{{ currentCompany.abbr }}</div>
           <div>{{ currentCompany.unicode ? String.fromCodePoint(parseInt(currentCompany.unicode.replace('U+', ''), 16),
@@ -1858,7 +1858,7 @@ function toggleDebug() {
         :debugMode="debugMode" :currentSeed="currentSeed" />
     </div>
     <Leveleditor v-if="displayEditor" @export-level="handleExport" />
-    <div class="player-area">
+    <div v-if="gameStarted || debugMode" class="player-area">
       <!-- PlayerView + End Turn / Retry -->
       <PlayerView v-if="!displayEditor" :player="player" :showInventory="showInventory"
         @highlightPlacements="highlightPlacements" @sellBlueprint="sellBlueprint" @sellItem="sellItem"

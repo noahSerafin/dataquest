@@ -714,6 +714,8 @@ function saveGameState() {
     showDuplicator: showDuplicator.value,
     showWorkbench: showWorkbench.value,
     roundHasStarted: roundHasStarted.value,
+    showSummary: showSummary.value,
+    hasWonRound: hasWonRound.value,
     isFirstTurn: isFirstTurn.value,
     foggedTiles: foggedTiles.value,
     currentCompany: currentCompany.value
@@ -764,6 +766,8 @@ function loadSavedGame() {
   showAltar.value = ui.showAltar ?? false;
   showDuplicator.value = ui.showDuplicator ?? false;
   showWorkbench.value = ui.showWorkbench ?? false;
+  showSummary.value = ui.showSummary ?? false;
+  hasWonRound.value = ui.hasWonRound ?? true;
   roundHasStarted.value = ui.roundHasStarted ?? false;
   isFirstTurn.value = ui.isFirstTurn ?? true;
   if (ui.foggedTiles) foggedTiles.value = ui.foggedTiles;
@@ -1068,6 +1072,8 @@ function instantiatePieceFromBlueprint(//this goes in app
   piece.defence = bp.defence;
   piece.defenceRemaining = bp.defence;
   piece.immunities = bp.immunities;
+  
+  piece.damageMult = bp.damageMult ? bp.damageMult : 1;
 
   // Step 3: hybrid-specific augmentation
   if (bp.hybridName) {
@@ -1463,6 +1469,8 @@ const hasWonRound = ref<boolean>(false);
 
 const endRound = async (roundWon: boolean) => {
   //reset counts
+  yourTurnWarning.value = false;
+  roundHasStarted.value = false;//wait for this
   player.value.admins.forEach(admin => {
     if (admin.onRoundEnd) admin.onRoundEnd();
   });
@@ -1517,7 +1525,7 @@ const endRound = async (roundWon: boolean) => {
   }*/
   player.value.canPlace = false;
   player.value.fogged = false;
-  roundHasStarted.value = false;//wait for this
+  saveGameState();
 }
 
 async function onReceiveDamage(id: string, receiver: Piece) {
@@ -1602,7 +1610,7 @@ const endTurn = async () => {
   checkForRoundEnd();
   saveGameState();
   hasFinishedTurn.value = false;
-  if(!roundHasStarted){
+  if(roundHasStarted.value){
     yourTurnWarning.value = true;
     setTimeout(() => yourTurnWarning.value = false, 500);
   }
@@ -1809,7 +1817,7 @@ function toggleDebug() {
       </div>
     </div>
     <div class="stage">
-      <h1 class="yourTurnWarning" v-if="yourTurnWarning && roundHasStarted">YOUR TURN</h1>
+      <h1 class="yourTurnWarning" v-if="yourTurnWarning">YOUR TURN</h1>
       <MainMenu v-if="showMainMenu && !displayEditor" @createNewPlayer="createNewPlayer" @resumeGame="loadSavedGame"
         class="stage-panel" :class="{ active: showMainMenu }" :debugMode="debugMode" />
       <RoundSummary v-if="showSummary" class="stage-panel" :class="{ active: showSummary }" :hasWonRound="hasWonRound"

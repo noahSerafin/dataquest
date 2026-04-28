@@ -1,4 +1,4 @@
-import { ref, onMounted, onUnmounted, type Ref, computed } from 'vue'
+import { ref, type Ref, computed } from 'vue'
 
 export function useTilt(target: Ref<HTMLElement | null>, maxRotation = 15) {
   const rotateX = ref(0)

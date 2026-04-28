@@ -1588,7 +1588,7 @@ class Nuke extends Piece {
   static color = "#ff0000ff";
   static rarity = 6;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Nuke.name, Nuke.description, Nuke.unicode, 1, 1, 4, 25, 0, Nuke.color, headPosition, [headPosition], team, Nuke.rarity, removeCallback, id)
+   super(Nuke.name, Nuke.description, Nuke.unicode, 1, 1, 4, 15, 0, Nuke.color, headPosition, [headPosition], team, Nuke.rarity, removeCallback, id)
    this.specialName = 'Boom';
    this.targetType = 'group'
    this.canAttack = false;

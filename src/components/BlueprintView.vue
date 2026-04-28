@@ -105,7 +105,7 @@ function handleSelect() {
     :class="`${props.cssclass}-piece`"
     :name="props.blueprint?.name"
     :id="props.blueprint?.id"
-    :style="{ width: pieceStyle.width, height: pieceStyle.height, cursor: 'pointer', position: 'relative' }"
+    :style="{ cursor: 'pointer', position: 'relative' }"
     @click="handleSelect"
     @sell="$emit('sell', props.blueprint)"
     @mousemove="handleMouseMove"

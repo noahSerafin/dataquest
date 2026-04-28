@@ -22,7 +22,7 @@ import { createDefaultStatuses } from "./types";
     }
     const testPiece =  {
         id: crypto.randomUUID(),
-        name: "Dolls",
+        name: "Bug",
         description: '"testing this pieces special move"',
         unicode: 'U+1F47E',
         maxSize: 2,
@@ -49,6 +49,7 @@ import { createDefaultStatuses } from "./types";
             hidden: false,
             negative: false,
         },
+        damageMult: 1.5,
         variantName: 'Holographic'
     }
     const superKnife =  {

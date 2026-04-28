@@ -102,7 +102,8 @@ export function makeBlueprint(PieceClass: any, variant?: PieceVariant, costReduc
       isPlaced: false,
       cost: Math.max(0, temp.rarity*2-1 - (costReduction ? costReduction : 0)),
       variantName: temp.variantName,
-      immunities: temp.immunities
+      immunities: temp.immunities,
+      damageMult: temp.damageMult
     };
 }
 

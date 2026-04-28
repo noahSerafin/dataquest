@@ -1,6 +1,6 @@
 import type { OS } from "./types";
 import { Voucher, Mushroom, Garlic, Meat, Genie, Pandora, Update2, Dupe, Jar, Iron} from "./Items";
-import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Clippy, Notepad, StoneAge, Rune, DartBoard, Taoism, OffRoader, AdminMap, Compass, Backdoor, Miner, Copier, Cherries, Sneakers, Palette} from "./AdminPrograms";
+import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Clippy, Notepad, StoneAge, Rune, Taoism, OffRoader, AdminMap, Compass, Backdoor, Miner, Copier, Cherries, Sneakers, Palette, Hermes} from "./AdminPrograms";
 import { createDefaultStatuses } from "./types";
 
     const knife =  {
@@ -371,7 +371,7 @@ const Window95 : OS = {
     name: 'Classic95',
     unicode: 'U+229E',
     prefix: 'C',
-    money: 4,
+    money: 3,
     memory: 6,
     adminSlots: 5,
     blueprints: [lance, shield, banana],
@@ -384,7 +384,7 @@ const Steam : OS = {
     name: 'Steam',
     unicode: 'U+1F682',
     prefix: 'S',
-    money: 3,
+    money: 4,
     memory: 6,
     adminSlots: 5,
     blueprints: [knife, sling, shield],
@@ -487,8 +487,8 @@ const Arch : OS = {
     adminSlots: 5,
     blueprints: [sling, aegis],
     items: [new Mushroom, new Garlic],
-    admins: [new Backdoor],
-    lives: 1,
+    admins: [new Backdoor, new Hermes],
+    lives: 3,
     description: "The hackers choice, BTW..."
 }
 
@@ -616,7 +616,7 @@ const Debugger : OS = {
     adminSlots: 6,
     blueprints: [aegis, superKnife, testhybrid, testPiece],
     items: [new Genie, new Pandora, new Update2, new Dupe, new Jar],
-    admins: [new Crystal, new StoneAge, new Rune, new DartBoard, new Taoism],
+    admins: [new Crystal, new Taoism],
     lives: 9,
     description: 'FOR TESTING'
 }

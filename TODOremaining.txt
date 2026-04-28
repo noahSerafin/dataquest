@@ -3,7 +3,7 @@ variant tooltips
 -
 //IMPROVEMENTS
 variant tooltip to show stat mods, use colored text
-enemy turn text to right
+Track stats total - favourite admins, favourite programs, favourite items (pruchases only)
 canplace tickbox in inventory
 let items be used on blueprints AND/OR Pieces
 enemies should attack their own charmed pieces / charmed enemies should attack you
@@ -25,13 +25,11 @@ nerf rosebud - pieces can't stay exposed after a special?
 variant should overide base piece color, (and tile colour???)
 
 // BUGS
-apply admins applying to blueprints somehow
 reloading after round loss but before proceed wins level
 appraisal doesn't work
 enemy pathing long distance
 pieces with pounce attacking themselves
-generated nodes not showing player spawn
-you win not dissapearing in endless mode
+generated nodes not showing player spawn in map preview
 load save forcing non deterministic shop
 !!!bee/bomb/mine etc. special is causing a win when check is inside removePiece
 

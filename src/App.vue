@@ -1071,7 +1071,7 @@ function instantiatePieceFromBlueprint(//this goes in app
   piece.attack = bp.attack;
   piece.defence = bp.defence;
   piece.defenceRemaining = bp.defence;
-  piece.immunities = bp.immunities;
+  piece.immunities = { ...bp.immunities };
   
   piece.damageMult = bp.damageMult ? bp.damageMult : 1;
 
@@ -1806,7 +1806,7 @@ function toggleDebug() {
         </span>
       </div>
       <div v-if="!displayEditor && roundHasStarted" class="player-helper">
-        <div v-if="!hasFinishedTurn && !isPlacing" class="turn-info">Your turn</div>
+        <div v-if="roundHasStarted" class="turn-info">{{ (!hasFinishedTurn || isPlacing) ? "Your turn" : "Enemy turn" }}</div>
         <div v-if="isPlacing && pieceToPlace">
           <p>Placing:</p>
           <button @click="pieceToPlace = null">Cancel</button>

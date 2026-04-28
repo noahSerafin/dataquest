@@ -1391,7 +1391,7 @@ class Spoon extends Admin {
   }
 }
 
-class Hermes extends Admin {//moves
+export class Hermes extends Admin {//moves
   static name = "Hermes";// Wings";
   static description = "All your programs gain +1 moves on the end of each turn and are immune to being slowed";
   static unicode = "U+269A";//"U+1FABD";
@@ -2204,12 +2204,9 @@ class Bath extends Admin {
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces) {
-      p.statuses.exposed = false;
-      p.statuses.burning = false;
-      p.statuses.diseased = false;
-      p.statuses.slowed = false;
-      p.statuses.frozen = false;
-      p.statuses.poisoned = false;
+      for (const status in p.statuses) {
+        p.statuses[status] = false;
+      }
     };
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);

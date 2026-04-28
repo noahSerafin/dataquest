@@ -364,7 +364,14 @@ export abstract class Piece {
     copy.actions = this.actions;
     copy.movesRemaining = this.movesRemaining;
     copy.defenceRemaining = this.defenceRemaining;
+    copy.damageMult = this.damageMult;
     
+    // ---- copy objects
+    copy.immunities = { ...this.immunities };
+    copy.statModifiers = { ...this.statModifiers };
+    copy.tempStatModifiers = { ...this.tempStatModifiers };
+    copy.statuses = { ...this.statuses };
+
     if(this.hybridName){
       copy.hybridName = this.hybridName;
       copy.description = this.description;

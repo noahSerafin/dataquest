@@ -2027,14 +2027,16 @@ class Ring extends Admin {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
     for (const piece of activePieces) {
-      const id = piece.id;
-      for (const blueprint of player.programs) {
-        if (blueprint.id === id) {
-          blueprint.maxSize = (piece.getStat('maxSize'));
-          blueprint.moves = (piece.getStat('moves'));
-          blueprint.range = (piece.getStat('range'));
-          blueprint.attack = (piece.getStat('attack'));
-          blueprint.defence = (piece.getStat('defence'));
+      if(piece.team === 'player'){
+        const id = piece.id;
+        for (const blueprint of player.programs) {
+          if (blueprint.id === id && blueprint.isPlaced) {//not applying
+            blueprint.maxSize = (piece.getStat('maxSize'));
+            blueprint.moves = (piece.getStat('moves'));
+            blueprint.range = (piece.getStat('range'));
+            blueprint.attack = (piece.getStat('attack'));
+            blueprint.defence = (piece.getStat('defence'));
+          };
         };
       };
     };
@@ -2515,7 +2517,7 @@ class School extends Admin {//test
 
 class Dharma extends Admin {//test
   static name = "Wheel of Dharma";
-  static description = "Every kind of reroll is free"
+  static description = "Every kind of reroll is free"//reroll up to 10? //make piece and bp immune to a status on receiving it?
   static unicode = "U+2638"; //every kind of reroll is free (shop, bosses(roulette) ---- nodes(ferris), skips(dice-already free), )
   static color = "rgb(146, 100, 0)";
   static rarity = 6;

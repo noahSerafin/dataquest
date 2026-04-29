@@ -384,7 +384,7 @@ export function generateNode(difficulty: number): Level {
             "name": "Spawn",
             "team": "player",
             "headPosition": playerTile,
-            "tiles": [],
+            "tiles": [playerTile],
             "rarity": 1
             },
             ...enemySpawns

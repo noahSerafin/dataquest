@@ -362,7 +362,8 @@ import { createDefaultStatuses } from "./types";
         extraUnicode: 'U+1F994',
         immunities: createDefaultStatuses()
     }
-
+    bug.immunities.slowed = true;
+    labrat.immunities.diseased = true;
     //guard, snail, TP, Lance, Bug, Screwdriver
 //MINUS WHITE X, U+2756
 //
@@ -485,7 +486,7 @@ const Arch : OS = {
     money: 4,
     memory: 4,
     adminSlots: 5,
-    blueprints: [sling, aegis],
+    blueprints: [sling, banana, aegis],
     items: [new Mushroom, new Garlic],
     admins: [new Backdoor, new Hermes],
     lives: 3,

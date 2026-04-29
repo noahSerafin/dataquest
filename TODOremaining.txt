@@ -25,10 +25,11 @@ nerf rosebud - pieces can't stay exposed after a special?
 variant should overide base piece color, (and tile colour???)
 
 // BUGS
+cannon and laser can shoot themselves
+pieces with pounce attacking themselves
 reloading after round loss but before proceed wins level
 appraisal doesn't work
 enemy pathing long distance
-pieces with pounce attacking themselves
 generated nodes not showing player spawn in map preview
 load save forcing non deterministic shop
 !!!bee/bomb/mine etc. special is causing a win when check is inside removePiece

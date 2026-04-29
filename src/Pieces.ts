@@ -2929,7 +2929,7 @@ class Angel extends Piece {//not passive, same as fairy, remove?? unfinished
 // WATCH, U+231A
 class Stopwatch extends Piece {//not passive
   static name = "Stopwatch";
-  static description = "Can replenish another program's moves and actions remaining, or take away an enemy's moves and actions";
+  static description = "Can replenish another program's moves and give +1 action, or take away an enemy's actions";
   static unicode = "U+231A";//U+23F1";
   static color = "#ff5555";
   static rarity = 5;
@@ -2944,8 +2944,8 @@ class Stopwatch extends Piece {//not passive
       targetPiece.movesRemaining = targetPiece.getStat('moves');
       targetPiece.actions += 1;
     } else {
-      targetPiece.movesRemaining = 0;
-      targetPiece.actions = 0;
+      targetPiece.movesRemaining = 0;//get's reset anyway
+      targetPiece.statuses.disarmed = true;
     }
     this.actions --
   }

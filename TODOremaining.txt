@@ -25,9 +25,10 @@ nerf rosebud - pieces can't stay exposed after a special?
 variant should overide base piece color, (and tile colour???)
 
 // BUGS
+bosses need to go in savestate - testing fix
 cannon and laser can shoot themselves
 pieces with pounce attacking themselves
-reloading after round loss but before proceed wins level
+triggering a trap by moving it yourself wins round if it is the only one???
 appraisal doesn't work
 enemy pathing long distance
 generated nodes not showing player spawn in map preview

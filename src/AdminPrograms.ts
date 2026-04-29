@@ -1708,7 +1708,7 @@ class Harvest extends Admin {
   static name = "Harvest";
   static description = "Every 4 turns, +1 max size to all your placed programs";
   static unicode = "U+1F33E";
-  static color = "#ff5555";
+  static color = "#006941";
   static rarity = 1;
   constructor() {
     super(Harvest.name, Harvest.description, Harvest.unicode, Harvest.color, 3, Harvest.rarity, 'gameState', 'onTurnEnd')//playerandgame, we can +1 blueprints as well

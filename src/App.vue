@@ -721,7 +721,7 @@ function saveGameState() {
     currentCompany: currentCompany.value
   };
 
-  const boardState = roundHasStarted.value ? {
+  const boardState = {
     activePieces: activePieces.value,
     originalPieces: originalPieces.value,
     lastTurnPieces: lastTurnPieces.value,
@@ -730,7 +730,7 @@ function saveGameState() {
     playerSpawns: playerSpawns.value,
     originalSpawns: originalSpawns.value,
     level: level.value
-  } : null;
+  };
 
   const serialized = serializeGameState(
     player.value,

@@ -1842,11 +1842,13 @@ export class Pawn extends Piece {
     }
     
     activePieces.push(promoted);
-    this.actions--
-    this.removeCallback?.(this);
-    // Add to activePieces
     promoted.actions--
     promoted.movesRemaining = 0
+    this.actions--
+    const idx = activePieces.findIndex(p => p.id === this.id);
+    //this.removeCallback?.(this);//triggers mr bones
+    activePieces.splice(idx, 1);//so we splice ourselves
+    // Add to activePieces
   }
 }
 

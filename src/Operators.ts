@@ -6,7 +6,7 @@ import { createDefaultStatuses } from "./types";
     const knife =  {
         id: crypto.randomUUID(),
         name: "Knife",
-        description: '"A basic attack program"',
+        description: "A basic attack program",
         unicode: 'U+1F52A',
         maxSize: 3,
         moves: 2,
@@ -23,7 +23,7 @@ import { createDefaultStatuses } from "./types";
     const testPiece =  {
         id: crypto.randomUUID(),
         name: "Bug",
-        description: '"testing this pieces special move"',
+        description: "testing this pieces special move",
         unicode: 'U+1F47E',
         maxSize: 2,
         moves: 10,
@@ -55,7 +55,7 @@ import { createDefaultStatuses } from "./types";
     const superKnife =  {
         id: crypto.randomUUID(),
         name: "Arms",
-        description: '"A suped up attack program"',
+        description: "A suped up attack program for testing",
         unicode: 'U+2694',
         maxSize: 2,
         moves: 10,
@@ -73,7 +73,7 @@ import { createDefaultStatuses } from "./types";
     const shield =  {
         id: crypto.randomUUID(),
         name: "Shield",
-        description: '"A basic defensive program"',
+        description: "A basic defensive program",
         unicode: "U+1F6E1",
         maxSize: 3,
         moves: 1,
@@ -279,7 +279,7 @@ import { createDefaultStatuses } from "./types";
     const aegis =  {
         id: crypto.randomUUID(),
         name: "Aegis",
-        description: "An advanced defensive piece that can retaliate against attacks",
+        description: "An advanced defensive program that can retaliate against attacks",
         unicode: "U+26FB",
         color: "#06789bff",
         maxSize: 3,
@@ -296,7 +296,7 @@ import { createDefaultStatuses } from "./types";
     const screwdriver =  {
         id: crypto.randomUUID(),
         name: "Screwdriver",
-        description: "A program that can tinker with another, boosting a random stat by 1",
+        description: "A program that can tinker with another, boosting a random stat by 1 or reducing an enemy's by 1",
         unicode: "U+1FA9B",
         color: "#ff1d0dff",
         maxSize: 1,
@@ -313,7 +313,7 @@ import { createDefaultStatuses } from "./types";
     const lance = {
         id: crypto.randomUUID(),
         name: "Lance",
-        description: "An attacking piece that can charge, damaging targets in a staight line and moving forward until stopped",
+        description: "An attacking program that can charge, damaging targets in a staight line and moving forward until stopped",
         unicode: "U+1F3A0",
         maxSize: 3,
         moves: 2,
@@ -347,7 +347,7 @@ import { createDefaultStatuses } from "./types";
     const testhybrid = {
         id: "274ec329-8c17-4265-8c12-e9a28bcf0112",
         name: "Lance",
-        description: "A test piece",
+        description: "A test program",
         unicode: "U+1F3A0",
         maxSize: 3,
         moves: 2,

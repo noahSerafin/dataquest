@@ -486,7 +486,7 @@ const Arch : OS = {
     money: 4,
     memory: 4,
     adminSlots: 5,
-    blueprints: [sling, banana, aegis],
+    blueprints: [sling, banana, aegis],//wizard?
     items: [new Mushroom, new Garlic],
     admins: [new Backdoor, new Hermes],
     lives: 3,
@@ -500,7 +500,7 @@ const GNU : OS = {
     money: 5,
     memory: 3,
     adminSlots: 3,
-    blueprints: [ant],//buffalo?
+    blueprints: [ant, aegis],
     items: [],
     admins: [new Crystal, new StoneAge, new Rune],
     lives: 2,

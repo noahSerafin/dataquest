@@ -219,7 +219,8 @@ function sellBlueprint(pieceId: string) {
   player.value.programs.splice(idx, 1);
   pieceToPlace.value = null;
   // refund money (e.g., half cost or some formula)
-  player.value.money += piece.rarity;
+  const appraisalBonus = player.value.hasAdmin('Appraisal') ? 2 : 1;
+  player.value.money += piece.rarity * appraisalBonus;
 }
 
 function sellItem(itemId: string) {
@@ -227,7 +228,8 @@ function sellItem(itemId: string) {
   if (idx === -1) return;
   const item = player.value.items[idx];
   player.value.items.splice(idx, 1);
-  player.value.money += Math.round(item.cost / 2);
+  const appraisalBonus = player.value.hasAdmin('Appraisal') ? 1 : 2;
+  player.value.money += Math.round(item.cost / appraisalBonus);
 }
 
 function sellAdmin(itemId: string) {//TODO NEXT
@@ -238,7 +240,8 @@ function sellAdmin(itemId: string) {//TODO NEXT
     admin.remove({ player: player.value });
   }
   player.value.admins.splice(idx, 1);
-  player.value.money += Math.round(admin.cost / 2);
+  const appraisalBonus = player.value.hasAdmin('Appraisal') ? 1 : 2;
+  player.value.money += Math.round(admin.cost / appraisalBonus);
 }
 
 function handleApplyItem(payload: { item: Item, id: string }) {

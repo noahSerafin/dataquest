@@ -2256,7 +2256,7 @@ class Variety extends Admin {
 ////LEFT-POINTING MAGNIFYING GLASS, U+1F50D reveal secrets
 class Appraisal extends Admin {
   static name = "Appraisal";
-  static description = "All prices in the next shop are reduced by $2";
+  static description = "Sell your possesions for double their value. And all prices in the next shop are reduced by $2";
   static unicode = "U+1F50D";
   static color = "rgb(239, 222, 112)";
   static rarity = 2;
@@ -3526,13 +3526,14 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //RECYCLING SYMBOL, U+2672 selling programs gives 1 of lower rarirty
 //BUTTER, U+1F9C8 moves your pieces randomly after health damage?
 //JEANS, U+1F456 all hidden nodes are compilers
+//U+1F5BC Framed picture - copy items? collectors item mult based on sell value
 
+// LIPSTICK, U+1F484 retaliations charm enemies 
 //SLEUTH OR SPY, U+1F575 
 //TEACUP WITHOUT HANDLE, U+1F375 calm down, removes enraged from enemies
 //basketball and HOOP, U+1F3C0 - range of 3+ gets +3 attack
 //SNOWBOARDER, U+1F3C2
 //WOMANS BOOTS, U+1F462 +1 moves +1 max size
-// LIPSTICK, U+1F484 retaliations charm enemies
 
 // challenge nodes?
 //DESERT ISLAND, U+1F3DD
@@ -3542,7 +3543,7 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //U+26F0 mountain
 //landslide U+1F6D8 
 
-//U+1F5BC Framed picture - copy items?
+
 
 
 // ROUNDED SYMBOL FOR CAI, U+1F265 wealth + rand money admin?

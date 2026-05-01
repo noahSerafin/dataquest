@@ -1259,6 +1259,7 @@ class Mine extends Piece {
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Mine.name, Mine.description, Mine.unicode, 1, 1, 0, 5, 0, Mine.color, headPosition, [headPosition], team, Mine.rarity, removeCallback, id)
     this.targetType = 'trapPiece';
+    this.canAttack = false;
     this.statuses.hidden = true
     this.statuses.negative = true;
   }
@@ -2215,7 +2216,7 @@ class Greatshield extends Piece {//testt
 
 class Wizard extends Piece {
   static name = "Wizard";
-  static description = "A program that can summon random programs from the player's inventory, or programs equal to or -1 relative to the player's security level if no inventory pieces are available.";
+  static description = "A program that can summon random rograms equal to or -1 relative to the player's security level.";
   static unicode = "U+1F9D9";
   static color = "#7600c5ff";
   static rarity = 4;
@@ -2229,30 +2230,17 @@ class Wizard extends Piece {
     const targetRarity1 = difficulty;
     const targetRarity2 = Math.max(1, Math.min(6, difficulty - 1));
     const validPieces = allPieces.filter(PieceClass => {
-    if(this.team === 'enemy' && PieceClass.name === 'Nuke') return false;//don't let enemies summon nukes
+      if(this.team === 'enemy' && PieceClass.name === 'Nuke') return false;//don't let enemies summon nukes
       const temp = new PieceClass({x:-1,y:-1}, 'enemy', undefined);
       return temp.rarity === targetRarity1 || temp.rarity === targetRarity2;
     });
-    if(this.team === 'player' && player && player.programs.length > 0) {
-      const availableBlueprints = player.programs.filter(bp => !bp.isPlaced);
-      const randBlueprint = Random.pick(availableBlueprints);
-      const PieceClass = randBlueprint ? allPieces.find(p => p.name === randBlueprint.name) : Random.pick(validPieces);
-      if (PieceClass) {
-        const summonedPiece = new PieceClass(target, 'player', this.removeCallback, crypto.randomUUID());
-        summonedPiece.actions = 0;
-        summonedPiece.movesRemaining = 0;
-        activePieces.push(summonedPiece);
-        randBlueprint.isPlaced = true;
-      }
-    } else if (this.team === 'enemy') {
-      if (validPieces.length > 0) {
-        const EnemyClass = Random.pick(validPieces);
-        const summonedPiece = new EnemyClass(target, 'enemy', this.removeCallback, crypto.randomUUID());
-        summonedPiece.actions = 0;
-        summonedPiece.movesRemaining = 0;
-        activePieces.push(summonedPiece);
-      }
-    }
+  
+    const EnemyClass = Random.pick(validPieces);
+    const summonedPiece = new EnemyClass(target, this.team, this.removeCallback, crypto.randomUUID());
+    summonedPiece.actions = 0;
+    summonedPiece.movesRemaining = 0;
+    activePieces.push(summonedPiece);
+    
     this.actions--
   }
 }
@@ -2467,6 +2455,7 @@ class Bug extends Piece {
     super(Bug.name, Bug.description, Bug.unicode, 1, 5, 1, 2, 1, Bug.color, headPosition, [headPosition], team, Bug.rarity, removeCallback, id)
     this.specialName = 'Glitch'
     this.appliesStatuses = ['slowed'];
+    this.immunities.slowed = true;
   }
   async special(targetPiece: Piece):Promise<void>{
     if(!targetPiece.immunities.slowed){

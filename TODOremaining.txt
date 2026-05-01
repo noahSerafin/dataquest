@@ -10,6 +10,7 @@ enemies should attack their own charmed pieces / charmed enemies should attack y
 make hybrids display how they do in compiler/blueprintcontroller
 track run stats in player?
 losing a round should return you to the map?
+change appraisal, let it stack?
 level 1 always start the player inside the arena node???
 checkforroundend in removePiece - testing - bee special is causing a win?
 visualise:
@@ -25,6 +26,7 @@ nerf rosebud - pieces can't stay exposed after a special?
 variant should overide base piece color, (and tile colour???)
 
 // BUGS
+wizard not loading held variants, and not loading anything when inventory is empty
 bosses need to go in savestate - testing fix
 cannon and laser can shoot themselves
 pieces with pounce attacking themselves

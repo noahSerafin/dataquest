@@ -2582,8 +2582,8 @@ class Gman extends Piece {
     if(!targetPiece.immunities.frozen){
       targetPiece.statuses.frozen = true;
       //targetPiece.movesRemaining = 0;
-      targetPiece.statuses.disarmed = true;
     }
+    targetPiece.statuses.disarmed = true;
     targetPiece.actions = 0;
     this.actions--
   }

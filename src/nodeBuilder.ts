@@ -262,7 +262,7 @@ export function generateNode(difficulty: number): Level {
     const enemyCount = randInt(difficulty+1, difficulty + 2);
 
     const minSize = 6;
-    const maxSize = Math.max(6, enemyCount + 5);
+    const maxSize = Math.min(12, Math.max(6, enemyCount + 5));
 
     const widthIsMax = Random.bool(0.5);
 

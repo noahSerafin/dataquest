@@ -842,7 +842,7 @@ class Crown extends Admin {
   static description = "Gain $5 every round";// U+1FA8E
   static unicode = " U+1F451";
   static color = "rgb(119, 32, 122)";
-  static rarity = 3;
+  static rarity = 4;
   constructor() {
     super(Crown.name, Crown.description, Crown.unicode, Crown.color, 9, Crown.rarity, 'player', 'onRoundEnd')//maybe player
   }
@@ -1800,7 +1800,7 @@ class Loot extends Admin {
   static description = "Earn an extra $4 at the end of a round";
   static unicode = "U+1F4B0";
   static color = "#ffe555ff";
-  static rarity = 2;
+  static rarity = 3;
   constructor() {
     super(Loot.name, Loot.description, Loot.unicode, Loot.color, 7, Loot.rarity, 'player', 'onRoundEnd')
   }
@@ -3097,7 +3097,7 @@ class Butler extends Admin {
 //CHAIN reaction onPieceDestruction deal damage around head like bowling but deal +1 damage each time?
 class Chain extends Admin {//test
   static name = "Chain Reaction";
-  static description = "Destroying a program deals 1 damage to each enemy tile adjacent to it's head, +1 damage each time this is triggered. Resets to 1 each round.";//or enemy's attack???
+  static description = "Destroying a program deals 1 damage to each enemy adjacent to it's head, +1 damage each time this is triggered."// Resets to 1 each round.";//or enemy's attack???
   static unicode = "U+26D3";//U+26D3//U+1F517
   static color = "rgb(247, 222, 162)";
   static rarity = 3;
@@ -3105,29 +3105,26 @@ class Chain extends Admin {//test
     super(Chain.name, Chain.description, Chain.unicode, Chain.color, 4, Chain.rarity, 'gameState', 'onPieceDestruction')
   }
   private count = 0;
-  async apply({ activePieces, piece }: { activePieces: Piece[], piece?: Piece }) {
-    if (!piece) return;
-    const targetTile = piece.headPosition
-    const adjacent: Coordinate[] = [
-      { x: targetTile.x + 1, y: targetTile.y },
-      { x: targetTile.x - 1, y: targetTile.y },
-      { x: targetTile.x, y: targetTile.y + 1 },
-      { x: targetTile.x, y: targetTile.y - 1 }
-    ];
-    for (const piece of activePieces) {
-      const isAdjacent = piece.tiles.some(t =>
-        adjacent.some(c => c.x === t.x && c.y === t.y)
+  async apply({ id: _id, activePieces, piece }: { id: string; activePieces: Piece[], piece?: Piece }) {
+    if(!piece) return;
+    const enemies = activePieces.filter(p => p.team === 'enemy');
+
+    for (const enemy of enemies) {
+      const isAdjacent = piece.tiles.some(st =>
+        enemy.tiles.some(tt =>
+        Math.abs(st.x - tt.x) + Math.abs(st.y - tt.y) === 1)
       );
-      if (isAdjacent && piece.team === 'enemy') {//only attacks enemies
-        this.isTriggering = true;
-        setTimeout(() => this.isTriggering = false, 500);
-        await piece.takeDamage(1 + this.count);
-      }
-    };
+      if (!isAdjacent) continue;
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 250);
+      await piece.takeDamage(1 + this.count);
+      this.count++
+    }
   }
-  onRoundEnd() {
+  //situational so don't reset it
+  /*onRoundEnd() {
     this.count = 0;
-  }
+  }*/
 }
 class Nose extends Admin {
   static name = "Traffic Sniffer";
@@ -3271,7 +3268,7 @@ class Selfie extends Admin {
 
 class Daisy extends Admin {// test
   static name = "Daisy Chain";
-  static description = "Attacks damage enemy programs next to the damage receiver";//effect all programs??
+  static description = "Attacks also damage enemy programs next to the damage receiver";//effect all programs??
   static unicode = "U+1F33C";
   static color = "rgb(27, 230, 245)";
   static rarity = 5;

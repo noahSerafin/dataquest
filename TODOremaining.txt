@@ -1,6 +1,3 @@
-Bosses still not stacking!
-Shiny highlight has dissapeared
--
 //IMPROVEMENTS
 enemies should attack their own charmed pieces / charmed enemies should attack you
 Track stats total - favourite admins, favourite programs, favourite items (pruchases only)

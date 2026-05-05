@@ -1646,7 +1646,7 @@ const combinedMapSeed = computed(() => {
 });
 async function increaseDifficulty(){
   player.value.difficulty += 1;
-  if (player.value.difficulty < 7 || player.value.stake >= 1) {//cumulate bosses in endless mode
+  if (player.value.difficulty < 7 && player.value.stake < 1) {//cumulate bosses in endless mode or stake 1+
     bossAdmins.value = [];
   }
   refreshShop(true);

@@ -1,54 +1,48 @@
-TUTORIAL - make more handholdy?
-variant tooltips
+Bosses still not stacking!
+Shiny highlight has dissapeared
 -
 //IMPROVEMENTS
-variant tooltip to show stat mods, use colored text
-Track stats total - favourite admins, favourite programs, favourite items (pruchases only)
-canplace tickbox in inventory
-let items be used on blueprints AND/OR Pieces
 enemies should attack their own charmed pieces / charmed enemies should attack you
-make hybrids display how they do in compiler/blueprintcontroller
-track run stats in player?
+Track stats total - favourite admins, favourite programs, favourite items (pruchases only)
+variant tooltip to show stat mods, use colored text
+canplace tickbox in inventory
+Make a reason to use golden ticket, on bosses? allow it to be used in a node?
+make hybrids display how they do in compiler/blueprintcontroller - address manually
+Onion Icon for life with Onion admin
+level 1 always start the player inside the arena node???
+let items be used on blueprints AND/OR Pieces?
+track this run stats in player? and save them?
 losing a round should return you to the map?
 change appraisal, let it stack?
-level 1 always start the player inside the arena node???
-checkforroundend in removePiece - testing - bee special is causing a win?
-visualise:
-    ADMINS - animate admins testing, counts too?
-    nerf taoism by applying zen instead - testing
-
-PIECES - keep track of upgrades and display on piece 7
+ADMINS - animate admins counts too?
+-
+PIECES - keep track of upgrades and display on piece 7 (1.1, 1.2 etc.) 
+difficulty - add +1, +2 programs for variety, or make variants +- security level 9
 more + - trade off admins
 make some variants immunities?
-difficulty - add +1, +2 programs for variety, or make variants +- security level 9
 non stacking bosses should cycle through (mirror becomes too predicatable)//always remove mirror after and replace with another random boss
 nerf rosebud - pieces can't stay exposed after a special?
 variant should overide base piece color, (and tile colour???)
-
+-
+TUTORIAL - make more handholdy?
+-
 // BUGS
-wizard not loading held variants, and not loading anything when inventory is empty
 bosses need to go in savestate - testing fix
 cannon and laser can shoot themselves
 pieces with pounce attacking themselves
 triggering a trap by moving it yourself wins round if it is the only one???
 appraisal doesn't work
 enemy pathing long distance
-generated nodes not showing player spawn in map preview
-load save forcing non deterministic shop
-!!!bee/bomb/mine etc. special is causing a win when check is inside removePiece
-
+load save forcing non deterministic shop, track seed uses in save to fix
+-
 MAP/WORLD BUILDER
+vary map layouts more, start with bonus nodes being more off centre
 Gladiator nodes - +1 or 2 security, place only once in arena node for reward - skippable
-Other challenge nodes - challenge node file with custom maps of fixed pieces? - make with editor
- - deforester, wizard battle (w/pentagrams), trojan army, lich lair, man in the high castle (tradies gurading a watchman), etc.
-
+Other skippable challenge/bonus nodes - challenge node file with custom maps of fixed pieces? - make with editor
+Eg. deforester, wizard battle (w/pentagrams), trojan army, lich lair, man in the high castle (tradies gurading a watchman), etc.
+-
 ITEMS/admins shortand descriptions eg. +1 attack instead of "increases"
-VISUAL: 5
-Onion Icon for life
-
+-
 SHOP - 8
-- two piece/item slots
+two piece/item slots
 piece packs/item packs/admin packs?
-
-CLEANUP 8
-worldmap, get seperate preview components for node/boss/skip

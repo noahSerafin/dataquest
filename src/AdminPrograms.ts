@@ -133,7 +133,7 @@ export class Crystal extends Admin {//test
 
 class Clover extends Admin {
   static name = "Lucky Clover";
-  static description = "+30% chance of rarer items appearing";
+  static description = "+25% chance of rarer items appearing";
   static unicode = "U+1F340";
   static color = "#00ff0dff";
   static rarity = 2;
@@ -1756,7 +1756,7 @@ class Bipolar extends Admin {
 
 export class Taoism extends Admin {
   static name = "Taoism";
-  static description = "At the end of your turn, when the number of enemy programs equals the number of your programs, +1 to all your placed programs' stats";
+  static description = "Each round, after the first turn when the number of enemy programs equals the number of your programs, +1 to all your loaded programs' stats.";
   static unicode = "U+262F";
   static color = "rgba(92, 92, 92, 1)ff";
   static rarity = 5;
@@ -3153,7 +3153,7 @@ class Wings extends Admin {
   static name = "Wings";
   static description = "Your programs are immune to traps";//and move over gaps?
   static unicode = "U+1FABD";
-  static color = "rgb(178, 194, 204)";
+  static color = "rgb(136, 227, 255)";
   static rarity = 2;
   constructor() {
     super(Wings.name, Wings.description, Wings.unicode, Wings.color, 3, Wings.rarity, 'player', 'other')

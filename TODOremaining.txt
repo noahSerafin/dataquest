@@ -24,6 +24,7 @@ variant should overide base piece color, (and tile colour???)
 TUTORIAL - make more handholdy?
 -
 // BUGS
+can still sell after sacrificing - duping/sacrificing/hybriding needs to deselect
 bosses need to go in savestate - testing fix
 cannon and laser can shoot themselves
 pieces with pounce attacking themselves

@@ -112,6 +112,13 @@
         emit("highlightPlacements", bp)
         emit("startPlacementDrag", bp)
     }
+    function deselectPiece() {
+        selectedPiece.value = null;
+    }
+
+    defineExpose({
+        deselectPiece
+    });
 </script>
 
 <template>

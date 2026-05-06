@@ -1185,10 +1185,12 @@ function clearDrag() {//TODO reuse in board when we click normally
   pieceToPlace.value = null;
   isPlacing.value = false;
   isDraggingPlacement.value = false;
+  playerViewRef.value?.deselectPiece();
 }
 //previous board functions
 //highlight functions
 const boardRef = ref();
+const playerViewRef = ref();
 
 //selectedPiece functions
 function handlePieceSelect(piece: Piece) {
@@ -1863,7 +1865,7 @@ function toggleDebug() {
     <Leveleditor v-if="displayEditor" @export-level="handleExport" />
     <div v-if="gameStarted || debugMode" class="player-area">
       <!-- PlayerView + End Turn / Retry -->
-      <PlayerView v-if="!displayEditor" :player="player" :showInventory="showInventory"
+      <PlayerView v-if="!displayEditor" ref="playerViewRef" :player="player" :showInventory="showInventory"
         @highlightPlacements="highlightPlacements" @sellBlueprint="sellBlueprint" @sellItem="sellItem"
         @applyItem="handleApplyItem" @sellAdmin="sellAdmin" @reorderAdmins="player.admins = $event"
         @startPlacementDrag="startPlacementDrag" @closeInventory="toggleInventory" @openInventory="toggleInventory" />

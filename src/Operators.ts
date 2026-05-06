@@ -484,7 +484,7 @@ const Arch : OS = {
     unicode: 'U+394',
     prefix: 'A',
     money: 4,
-    memory: 4,
+    memory: 5,
     adminSlots: 5,
     blueprints: [sling, banana, aegis],//wizard?
     items: [new Mushroom, new Garlic],

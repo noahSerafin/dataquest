@@ -111,12 +111,15 @@
     }
 
     function cancel() {
-        if (primaryBP.value) primaryBP.value.isPlaced = false
-        primaryBP.value = null
-        resultBP.value = null
+        if (primaryBP.value) primaryBP.value.isPlaced = false;
+        primaryBP.value = null;
+        resultBP.value = null;
+        workingBP.value = null;
+        freePoints.value = 0;
     }
 
     function skip(){
+        cancel();
         emit('close')
     }
     function select(bp: PieceBlueprint){

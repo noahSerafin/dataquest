@@ -1016,19 +1016,19 @@ class ClipBoard extends Admin {
 //TRAFFIC LIGHT, U+1F6A6 pieces that take an action take 1 damage
 class TrafficLight extends Admin {
     static name = "Traffic Light";
-    static description = "Programs that move or action when the light is red take 1 damage at the end of your turn";//or lose 1 moves:
+    static description = "Programs that move or action when the light is red take damage equal to your security level at the end of your turn";//or lose 1 moves:
     static unicode = "U+1F6A6";
     static color = "hsl(0, 0%, 69%)";
     static rarity = 1;
     constructor() {
-        super(TrafficLight.name, TrafficLight.description, TrafficLight.unicode, TrafficLight.color, 3, TrafficLight.rarity, 'gameState', 'onTurnEnd')
+        super(TrafficLight.name, TrafficLight.description, TrafficLight.unicode, TrafficLight.color, 3, TrafficLight.rarity, 'playerAndGame', 'onTurnEnd')
     }
-    private count = 2;
-    async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-        if(this.count === 2){
+    private count = 0;
+    async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+            if(this.count === 2){
             for (const p of activePieces) {
                 if(p.team==='player' && (p.actions < 1 || p.getStat('moves') > p.movesRemaining)){
-                    await p.takeDamage(1)
+                    await p.takeDamage(player.difficulty)
                 }
             }
             this.color = 'green';

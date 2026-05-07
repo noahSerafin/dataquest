@@ -306,7 +306,7 @@ export abstract class Piece {
     }
     if (this.statuses.frozen) {
       //this.moves = 0;
-      this.movesRemaining = 0;
+      this.movesRemaining = 0;//change so you can't move instead
     }
     if (this.statuses.burning) {
       for (let i = 0; i < mult; i++) {
@@ -3038,6 +3038,7 @@ class UFO extends Piece {
     super(UFO.name, UFO.description, UFO.unicode, 4, 3, 3, 4, 2, UFO.color, headPosition, [headPosition], team, UFO.rarity, removeCallback, id)
     this.specialName = 'abduct'
     this.targetType = 'line'
+    this.immunities.confused = true;
     this.appliesStatuses = ['confused'];
   }
   async special({line, activePieces} : {line: Coordinate[], activePieces: Piece[]}):Promise<void>{
@@ -3736,6 +3737,7 @@ class Alien extends Piece {
   super(Alien.name, Alien.description, Alien.unicode, 2, 2, 3, 3, 1, Alien.color, headPosition, [headPosition], team, Alien.rarity, removeCallback, id)
     this.specialName = 'Bluebeam';
     this.targetType = 'group'
+    this.immunities.confused = true;
     this.appliesStatuses = ['confused'];
   }
   async special(targets: Piece[]):Promise<void>{

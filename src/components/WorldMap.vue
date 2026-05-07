@@ -105,7 +105,7 @@
         for (let index = 0; index < props.bosses.length; index++) {
             newBosses.push(returnNewBoss());
         }
-        if(props.player.stake == 0 && props.player.difficulty >= 6){
+        if(props.player.stake === 0 && props.player.difficulty >= 6){
             emit('replaceBosses', newBosses);
         } else {
             for(const boss of newBosses){

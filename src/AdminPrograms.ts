@@ -1393,12 +1393,12 @@ class Spoon extends Admin {
 
 export class Hermes extends Admin {//moves
   static name = "Hermes";// Wings";
-  static description = "All your programs gain +1 moves on the end of each turn and are immune to being slowed";
+  static description = "All your programs gain +1 moves and are immune to being slowed at the start of each turn";
   static unicode = "U+269A";//"U+1FABD";
   static color = "#083546ff";
   static rarity = 5;//6?
   constructor() {
-    super(Hermes.name, Hermes.description, Hermes.unicode, Hermes.color, 4, Hermes.rarity, 'gameState', 'onTurnEnd')//or gamestate?
+    super(Hermes.name, Hermes.description, Hermes.unicode, Hermes.color, 4, Hermes.rarity, 'gameState', 'onTurnStart')//or gamestate?
   }
 
   //on placement
@@ -1410,6 +1410,7 @@ export class Hermes extends Admin {//moves
     for(const p of activePieces){
       if(p.team === 'player'){
         p.addModifier({moves: 1})
+        p.movesRemaining += 1;
         p.immunities.slowed = true;
       }
     }

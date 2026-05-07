@@ -958,10 +958,10 @@ function processSpawnPoints(pieces: Piece[], companyPieces: any[], mod: number) 
         //add tiles here? if spawn.tiles.length <= enemy.getStat(maxsize){ enemy.tiles = spawn.tiles }
 
         if (player.value.stake > 1) enemyInstance.maxSize += player.value.difficulty;
-        if (player.value.stake > 2) enemyInstance.defence += player.value.difficulty;
-        if (player.value.stake > 3) enemyInstance.moves += player.value.difficulty;
+        if (player.value.stake > 2) enemyInstance.moves += player.value.difficulty;
+        if (player.value.stake > 3) enemyInstance.range += player.value.difficulty;
         if (player.value.stake > 4) enemyInstance.attack += player.value.difficulty;
-        if (player.value.stake > 5) enemyInstance.range += player.value.difficulty;
+        if (player.value.stake > 5) enemyInstance.defence += player.value.difficulty;
 
         processed.push(enemyInstance);
         continue;

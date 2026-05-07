@@ -7,6 +7,11 @@ export interface PlayerCollection {
 
 export interface PlayerStats {
   osStats: Record<string, { totalWins: number; winsByStake: Record<number, number> }>;
+  usageStats?: {
+    programs: Record<string, number>;
+    items: Record<string, number>;
+    admins: Record<string, number>;
+  };
 }
 
 const COLLECTION_KEY = 'dataquest_collection';
@@ -74,12 +79,16 @@ export const StorageManager = {
     const data = localStorage.getItem(STATS_KEY);
     if (data) {
       try {
-        return JSON.parse(data);
+        const stats = JSON.parse(data);
+        if (!stats.usageStats) {
+          stats.usageStats = { programs: {}, items: {}, admins: {} };
+        }
+        return stats;
       } catch (e) {
         console.error("Error parsing stats data", e);
       }
     }
-    return { osStats: {} };
+    return { osStats: {}, usageStats: { programs: {}, items: {}, admins: {} } };
   },
 
   saveStats(stats: PlayerStats) {
@@ -107,6 +116,18 @@ export const StorageManager = {
     }
     stats.osStats[osunicode].winsByStake[stake]++;
 
+    this.saveStats(stats);
+  },
+
+  recordUsage(type: 'programs' | 'items' | 'admins', name: string) {
+    const stats = this.getStats();
+    if (!stats.usageStats) {
+      stats.usageStats = { programs: {}, items: {}, admins: {} };
+    }
+    if (!stats.usageStats[type][name]) {
+      stats.usageStats[type][name] = 0;
+    }
+    stats.usageStats[type][name]++;
     this.saveStats(stats);
   },
 

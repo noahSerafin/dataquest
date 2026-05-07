@@ -437,6 +437,7 @@ function buyBlueprint(bp: PieceBlueprint) {
     }
   }
   player.value.addProgram(bp);
+  StorageManager.recordUsage('programs', bp.name);
   shopTarget.value = null;
 }
 async function buyItem(item: Item) {
@@ -453,12 +454,14 @@ async function buyItem(item: Item) {
   if (item instanceof Admin) {
     player.value.admins.push(item);
     StorageManager.unlockAdmin(item.name);
+    StorageManager.recordUsage('admins', item.name);
     if (item.targetType === 'player' && item.triggerType == 'other') {
       await item.apply({ player: player.value })
     }
   } else {
     player.value.items.push(item);
     StorageManager.unlockItem(item.name);
+    StorageManager.recordUsage('items', item.name);
   }
   shopTarget.value = null;
 }

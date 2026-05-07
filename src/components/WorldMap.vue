@@ -319,11 +319,13 @@
             case "blueprint":
             props.player.addProgram(node.skipReward.value); //player functions return false if there is not enough inventory space, could use these to prevent proceeding?
             StorageManager.unlockPiece(node.skipReward.value.name);
+            StorageManager.recordUsage('programs', node.skipReward.value.name);
             break;
 
             case "admin":
             props.player.addAdmin(node.skipReward.value);
             StorageManager.unlockAdmin(node.skipReward.value.name);
+            StorageManager.recordUsage('admins', node.skipReward.value.name);
             if(node.skipReward.value.triggerType === 'other' && node.skipReward.value.targetType==='player'){
                 node.skipReward.value.apply({player: props.player});
             }
@@ -332,6 +334,7 @@
             case "item":
             props.player.addItem(node.skipReward.value);
             StorageManager.unlockItem(node.skipReward.value.name);
+            StorageManager.recordUsage('items', node.skipReward.value.name);
             break;
         }
         world.value.nodes[currentNodeId.value].visited = true;

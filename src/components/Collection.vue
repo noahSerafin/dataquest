@@ -77,7 +77,49 @@ function getItemInstance(ItemClass: any) {
   return new ItemClass();
 }
 
-const activeTab = ref<'pieces' | 'items' | 'admins' | 'bosses' | 'stats' | 'run'>(props.currentSeed ? 'run' : 'stats');
+const activeTab = ref<'pieces' | 'items' | 'admins' | 'bosses' | 'stats' | 'run' | 'history'>(props.currentSeed ? 'run' : 'stats');
+const historySubTab = ref<'programs' | 'items' | 'admins'>('programs');
+const isHistoryExpanded = ref(false);
+
+const usageData = computed(() => {
+  if (!stats.value.usageStats) return { programs: [], items: [], admins: [] };
+  
+  const process = (data: Record<string, number>, type: 'programs' | 'items' | 'admins') => {
+    return Object.entries(data)
+      .map(([name, count]) => {
+        let visualData: any = null;
+        if (type === 'programs') {
+          const cls = allPieces.find(p => p.name === name);
+          if (cls) visualData = makeBlueprint(cls);
+        } else if (type === 'items') {
+          const cls = allItems.find(i => i.name === name);
+          if (cls) visualData = new cls();
+        } else if (type === 'admins') {
+          const cls = allAdmins.find(a => a.name === name);
+          if (cls) visualData = new cls();
+        }
+        return { name, count, visualData };
+      })
+      .filter(item => item.visualData !== null) // Only show items we can actually render
+      .sort((a, b) => b.count - a.count);
+  };
+
+  return {
+    programs: process(stats.value.usageStats.programs, 'programs'),
+    items: process(stats.value.usageStats.items, 'items'),
+    admins: process(stats.value.usageStats.admins, 'admins')
+  };
+});
+
+const currentUsageList = computed(() => {
+  const list = usageData.value[historySubTab.value];
+  return isHistoryExpanded.value ? list : list.slice(0, 10);
+});
+
+const maxCount = computed(() => {
+  const counts = currentUsageList.value.map(d => d.count);
+  return counts.length > 0 ? Math.max(...counts) : 1;
+});
 
 function copySeed() {
   navigator.clipboard.writeText(props.currentSeed);
@@ -96,6 +138,7 @@ function copySeed() {
       <div class="tabs">
         <button :class="{ active: activeTab === 'stats' }" @click="activeTab = 'stats'">Stats</button>
         <button v-if="currentSeed" :class="{ active: activeTab === 'run' }" @click="activeTab = 'run'">This Run</button>
+        <button :class="{ active: activeTab === 'history' }" @click="activeTab = 'history'">History</button>
         <button :class="{ active: activeTab === 'pieces' }" @click="activeTab = 'pieces'">Programs</button>
         <button :class="{ active: activeTab === 'items' }" @click="activeTab = 'items'">Items</button>
         <button :class="{ active: activeTab === 'admins' }" @click="activeTab = 'admins'">Admins</button>
@@ -202,6 +245,40 @@ function copySeed() {
             <span class="seed-value">{{ currentSeed }}</span>
             <button class="copy-btn" @click="copySeed">Copy Seed</button>
             <span v-if="seedCopied">Seed copied!</span>
+          </div>
+        </div>
+
+        <!-- HISTORY TAB -->
+        <div v-if="activeTab === 'history'" class="history-layout">
+          <div class="sub-tabs">
+            <button :class="{ active: historySubTab === 'programs' }" @click="historySubTab = 'programs'">Programs</button>
+            <button :class="{ active: historySubTab === 'items' }" @click="historySubTab = 'items'">Items</button>
+            <button :class="{ active: historySubTab === 'admins' }" @click="historySubTab = 'admins'">Admins</button>
+          </div>
+
+          <div class="graph-section">
+            <div class="graph-header">
+              <h3>{{ historySubTab.charAt(0).toUpperCase() + historySubTab.slice(1) }} Usage</h3>
+              <button class="expand-btn" @click="isHistoryExpanded = !isHistoryExpanded">
+                {{ isHistoryExpanded ? 'Collapse' : 'Show All' }}
+              </button>
+            </div>
+
+            <div v-if="currentUsageList.length === 0" class="no-stats">
+              No usage data recorded yet.
+            </div>
+            <div v-else class="graph-container" :class="{ expanded: isHistoryExpanded }">
+              <div v-for="item in currentUsageList" :key="item.name" class="graph-bar-item">
+                <div class="bar-column" :style="{ height: (item.count / maxCount * 100) + '%' }">
+                  <span class="bar-value">{{ item.count }}</span>
+                </div>
+                <div class="bar-visual">
+                  <BlueprintView v-if="historySubTab === 'programs'" :blueprint="item.visualData" :tileSize="40" cssclass="history" />
+                  <ItemView v-else :item="item.visualData" :type="historySubTab === 'admins' ? 'admin' : 'consumable'" :tileSize="40" cssclass="history" :canBuy="false" />
+                </div>
+                <span class="bar-name">{{ item.name }}</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -457,5 +534,171 @@ function copySeed() {
 
 .copy-btn:hover {
   background: #555;
+}
+
+/* History Tab Styles */
+.history-layout {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.sub-tabs {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.sub-tabs button {
+  background: #2a2a2a;
+  color: #aaa;
+  border: 1px solid #444;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.sub-tabs button.active {
+  background: #4facfe;
+  color: #fff;
+  border-color: #4facfe;
+  box-shadow: 0 0 10px rgba(79, 172, 254, 0.4);
+}
+
+.graph-section {
+  background: #222;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid #333;
+}
+
+.graph-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.graph-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #eee;
+}
+
+.expand-btn {
+  background: #333;
+  color: #ccc;
+  border: 1px solid #444;
+  padding: 0.3rem 0.8rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.expand-btn:hover {
+  background: #444;
+  color: #fff;
+}
+
+.graph-container {
+  display: flex;
+  align-items: flex-end;
+  gap: 1.5rem;
+  height: 250px;
+  padding-top: 2rem;
+  padding-bottom: 5rem; /* Space for rotated labels and icons */
+  margin-top: 1rem;
+  justify-content: center;
+}
+
+.graph-container.expanded {
+  overflow-x: auto;
+  justify-content: flex-start;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+/* Custom scrollbar for expanded graph */
+.graph-container::-webkit-scrollbar {
+  height: 6px;
+}
+
+.graph-container::-webkit-scrollbar-track {
+  background: #111;
+}
+
+.graph-container::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 3px;
+}
+
+.graph-bar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 50px;
+  flex: 1;
+  height: 100%;
+  position: relative;
+}
+
+.graph-container.expanded .graph-bar-item {
+  flex: 0 0 60px;
+}
+
+.bar-column {
+  width: 100%;
+  max-width: 30px;
+  background: linear-gradient(0deg, #4facfe 0%, #00f2fe 100%);
+  border-radius: 6px 6px 0 0;
+  position: relative;
+  transition: height 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.bar-column:hover {
+  filter: brightness(1.2);
+  transform: scaleX(1.1);
+}
+
+.bar-value {
+  position: absolute;
+  top: -22px;
+  width: 100%;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #4facfe;
+  font-weight: bold;
+}
+
+.bar-visual {
+  height: 44px;
+  width: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0.5rem;
+  background: #1a1a1a;
+  border-radius: 4px;
+  border: 1px solid #333;
+}
+
+.bar-name {
+  position: absolute;
+  bottom: -55px;
+  font-size: 0.65rem;
+  color: #888;
+  transform: rotate(-45deg);
+  transform-origin: top right;
+  white-space: nowrap;
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: right;
+  right: 0;
 }
 </style>

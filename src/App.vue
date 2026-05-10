@@ -1545,7 +1545,7 @@ async function enemyTurn(currentActivePieces: Piece[]) {
 
   const tileSet = new Set(level.value.tiles.map(t => `${t.x},${t.y}`));
   console.log('enemy turn...')
-  console.log(!roundHasStarted.value, hasWonRound.value);
+  console.log(roundHasStarted.value, hasWonRound.value);
   //
   await runEnemyStateMachine(
     activePieces.value,
@@ -1632,6 +1632,7 @@ const handleExport = (levelData: any) => {
   const initPieces = rehydratePieces(level.value.pieces);
   activePieces.value = processSpawnPoints(initPieces, allPieces, 0);
   displayEditor.value = false; // swap to board view
+  roundHasStarted.value = true;
 };
 
 //css

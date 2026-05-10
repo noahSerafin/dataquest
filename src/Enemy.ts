@@ -11,6 +11,17 @@ type EnemyIntent =
   | { type: 'wander'; space: Coordinate }
   | { type: 'wait' };
 
+function getSide(piece: Piece): 'player' | 'enemy' {
+  if (piece.statuses.charmed) {
+    return piece.team === 'player' ? 'enemy' : 'player';
+  }
+  return piece.team as 'player' | 'enemy';
+}
+
+function isAlly(p1: Piece, p2: Piece): boolean {
+  return getSide(p1) === getSide(p2);
+}
+
 function decideEnemyIntent(
   enemy: Piece,
   activePieces: Piece[],
@@ -98,7 +109,7 @@ function decideEnemyIntent(
       if(enemy.targetType === 'group'){//bomb type pieces
         const inRange = findAnyPiecesInRange(enemy, activePieces);
         if(enemy.appliesStatuses.length > 0 && inRange){
-          const playerTargets = inRange.filter(p => p.team === 'player' && !p.statuses.hidden);
+          const playerTargets = inRange.filter(p => getSide(p) === 'player' && !p.statuses.hidden);
           const allAlreadyHaveStatus = playerTargets.length > 0 && playerTargets.every(p => 
             enemy.appliesStatuses.every(s => p.statuses[s] || p.immunities[s])
           );
@@ -184,7 +195,7 @@ function decideEnemyIntent(
             currentLine.push({ x: tx, y: ty });
             const occupier = activePieces.find(p => p.tiles.some(t => t.x === tx && t.y === ty));
             if (occupier) {
-              if (occupier.team === enemy.team && occupier.id !== enemy.id) {
+              if (isAlly(occupier, enemy) && occupier.id !== enemy.id) {
                 blockedByFriendly = true;
               }
               break;
@@ -372,7 +383,7 @@ export async function runEnemyStateMachine(
     changed = false;
     passCount++;
 
-    const enemiesToProcess = activePieces.filter(p => (p.team === 'enemy' && !p.statuses.charmed));
+    const enemiesToProcess = activePieces.filter(p => getSide(p) === 'enemy');
 
     // Sort: hasFriendlySpecial should come first
     enemiesToProcess.sort((a, b) => {
@@ -391,8 +402,8 @@ export async function runEnemyStateMachine(
         if (isAborted()) return;
         if (!activePieces.includes(enemy)) break;
 
-        const enemyPieces = activePieces.filter(p => (p.team === 'enemy' && !p.statuses.charmed));
-        const playerPieces = activePieces.filter(p => p.team === 'player' && !p.statuses.charmed);
+        const enemyPieces = activePieces.filter(p => getSide(p) === 'enemy');
+        const playerPieces = activePieces.filter(p => getSide(p) === 'player');
 
         const intent = decideEnemyIntent(enemy, activePieces, playerPieces, enemyPieces, tileSet, specialAttempts, player);
         if (intent.type === 'wait') break;
@@ -548,8 +559,8 @@ function findShortestPath(
 
   const occupiedTiles = new Set<string>();
   for (const p of activePieces) {
-    if (p.statuses.negative && p.team === 'enemy' && p.hasFriendlySpecial) continue;
-    if (p.statuses.negative && p.statuses.hidden && p.team === 'player') continue;
+    if (p.statuses.negative && getSide(p) === 'enemy' && p.hasFriendlySpecial) continue;
+    if (p.statuses.negative && p.statuses.hidden && getSide(p) === 'player') continue;
     
     for (const t of p.tiles) {
       occupiedTiles.add(`${t.x},${t.y}`);
@@ -605,7 +616,7 @@ function getAdjacentEmptySpaces(
   // Build a fast lookup of occupied tiles
   const occupied = new Set<string>();
   for (const piece of activePieces) {
-    if (piece.statuses.negative && piece.team === 'enemy' && piece.hasFriendlySpecial) continue;
+    if (piece.statuses.negative && getSide(piece) === 'enemy' && piece.hasFriendlySpecial) continue;
 
     for (const t of piece.tiles) {
       occupied.add(`${t.x},${t.y}`);
@@ -723,7 +734,7 @@ function findStrongestInRange(//for pawn
   const candidates: { piece: Piece; place: Coordinate }[] = [];
 
   for (const piece of activePieces) {
-    if (piece.statuses.hidden && piece.team !== 'enemy' || piece.id === enemy.id || piece.name === enemy.name) continue;
+    if (piece.statuses.hidden && getSide(piece) !== 'enemy' || piece.id === enemy.id || piece.name === enemy.name) continue;
 
     for (const tile of piece.tiles) {
       const dist =

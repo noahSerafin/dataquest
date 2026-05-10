@@ -1,5 +1,4 @@
 //IMPROVEMENTS
-Track stats total - favourite admins, favourite programs, favourite items (pruchases only)
 enemies should attack their own charmed pieces / charmed enemies should attack you
 variant tooltip to show stat mods, use colored text
 canplace tickbox in inventory
@@ -24,6 +23,7 @@ variant should overide base piece color, (and tile colour???)
 TUTORIAL - make more handholdy?
 -
 // BUGS
+0 damage not dissappearing
 can still sell after sacrificing - duping/sacrificing/hybriding needs to deselect
 bosses need to go in savestate - testing fix
 cannon and laser can shoot themselves

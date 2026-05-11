@@ -199,7 +199,7 @@ class Wrath extends Admin {//⛈️//🌩️
 class Reaper extends Admin {
     static name = "Reaper";
     static description = "Takes a life every 10 turns";
-    static unicode = "U+1F480";
+    static unicode = "U+2620";
     static color = "#790a0aff";
     static rarity = 6;
     constructor() {

@@ -11,8 +11,7 @@ import { Admin } from "./AdminPrograms";
 import type { AdminTrigger } from "./AdminPrograms";
 import PlayerView from "./components/PlayerView.vue";
 import type { Piece } from "./Pieces"
-import { Spawn, Dolls } from './Pieces';
-import { allPieces } from "./Pieces"
+import { Spawn, allPieces } from "./Pieces"
 import type { Coordinate, PieceBlueprint, Level, OS, Company } from "./types";
 import { runEnemyStateMachine } from "./Enemy";
 import WorldMap from "./components/WorldMap.vue";
@@ -1036,18 +1035,6 @@ async function removePiece(piece: Piece) {
     }
     await handleApplyAdmins('onPieceDestruction', piece.id, piece);
     //graveyard?
-    if (piece.name == 'Dolls') {
-      if (piece.getStat('maxSize') > 1) {
-        const NewDoll = new Dolls(
-          piece.headPosition,
-          piece.team,
-          removePiece,
-          crypto.randomUUID()
-        );
-        NewDoll.maxSize = piece.getStat('maxSize') - 1;
-        activePieces.value.push(NewDoll);
-      }
-    }
     //await nextTick();
     //checkForRoundEnd();
   }

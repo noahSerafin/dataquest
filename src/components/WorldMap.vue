@@ -292,21 +292,40 @@ import FormattedDescription from "./FormattedDescription.vue";
                 const x2 = p2.x + 12;
                 const y2 = p2.y + 12;
 
-                // Circuitboard logic: Horizontal -> Vertical -> Diagonal (45deg)
                 const dxTotal = x2 - x1;
                 const dyTotal = y2 - y1;
+                const absDx = Math.abs(dxTotal);
+                const absDy = Math.abs(dyTotal);
+                const sx = Math.sign(dxTotal);
+                const sy = Math.sign(dyTotal);
 
-                // We'll use a split point for the horizontal/vertical transition
-                const xa = x1 + dxTotal * 0.5;
-                
-                // For the diagonal to be 45 degrees at the end, the diagonal part must have |dx| = |dy|
-                // The diagonal ends at (x2, y2). It starts at (xa, yb).
-                // So |x2 - xa| = |y2 - yb|
-                const diagDist = Math.abs(x2 - xa);
-                const yb = y2 - Math.sign(dyTotal) * diagDist;
+                let points = "";
+
+                // 1. V-D-V Strategy for unrevealed/offset nodes
+                if (node.hiddenUntilVisited || nextNode.hiddenUntilVisited) {
+                    const diagSize = absDx; 
+                    const verticalPadding = (absDy - diagSize) / 2;
+                    const ya = y1 + sy * verticalPadding;
+                    const yb = ya + sy * diagSize;
+                    points = `${x1},${y1} ${x1},${ya} ${x2},${yb} ${x2},${y2}`;
+                } 
+                // 2. V-D-H Strategy for final shop (enters from sides)
+                else if (nextNode.id === 'shop') {
+                    const diagSize = Math.min(absDx, absDy) * 0.7;
+                    const ya = y2 - sy * diagSize;
+                    const xb = x1 + sx * diagSize;
+                    points = `${x1},${y1} ${x1},${ya} ${xb},${y2} ${x2},${y2}`;
+                }
+                // 3. H-D-V Strategy for default levels (enters from bottom)
+                else {
+                    const diagSize = Math.min(absDx, absDy) * 0.7;
+                    const xa = x1 + (dxTotal - sx * diagSize);
+                    const yb = y1 + sy * diagSize;
+                    points = `${x1},${y1} ${xa},${y1} ${x2},${yb} ${x2},${y2}`;
+                }
 
                 paths.push({
-                    points: `${x1},${y1} ${xa},${y1} ${xa},${yb} ${x2},${y2}`
+                    points: points
                 });
             }
         }
@@ -521,7 +540,7 @@ import FormattedDescription from "./FormattedDescription.vue";
         <h4 v-if="selectedPreviewNode.type!=='boss' && selectedPreviewNode.type==='level'">{{ selectedPreviewNode.company.name}}</h4>
         <div v-if="selectedPreviewNode.type!=='boss' && selectedPreviewNode.type==='level'">{{String.fromCodePoint(parseInt(selectedPreviewNode.company.unicode.replace('U+', ''), 16), 0xFE0F)}}</div>
         <h5 v-if="selectedPreviewNode.type==='boss' || selectedPreviewNode.type==='level'">Security Level: {{ player.difficulty + selectedPreviewNode.difficultyMod}}</h5>
-        <h6 v-if="selectedPreviewNode.type==='boss' || selectedPreviewNode.type==='level'">Reward: ${{ selectedPreviewNode.reward }}</h6>
+        <h5 v-if="selectedPreviewNode.type==='boss' || selectedPreviewNode.type==='level'" class="text-yellow">Reward: ${{ selectedPreviewNode.reward }}</h5>
         <MiniMap v-if="selectedPreviewNode && selectedPreviewNode.level"
             :level="selectedPreviewNode.level"
             :company="selectedPreviewNode.company"
@@ -746,6 +765,9 @@ import FormattedDescription from "./FormattedDescription.vue";
         flex-direction: column;
         justify-content: center;
         align-items: center;
+    }
+    h5{
+        margin: 0.2rem;
     }
     .preview-modal.WFG {
         color: rgb(52, 12, 51);

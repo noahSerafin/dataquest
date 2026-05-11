@@ -23,7 +23,7 @@ export const STATUS_INFO: Record<string, string> = {
   poisoned: 'Loses 1 defence every tun',
   frozen: 'Moves set to 0',
   charmed: 'Is controlled by the opposition',
-  confused: 'Moves randomly.',
+  confused: 'Moves are randomised',
   exposed: 'Can no longer hide.',
   hidden: 'Invisible to enemies until next move or action.',
   negative: "Can move through other programs",

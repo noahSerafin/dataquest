@@ -1016,7 +1016,7 @@ class ClipBoard extends Admin {
 //TRAFFIC LIGHT, U+1F6A6 pieces that take an action take 1 damage
 class TrafficLight extends Admin {
     static name = "Traffic Light";
-    static description = "Programs that move or action when the light is red take damage equal to your security level at the end of your turn";//or lose 1 moves:
+    static description = "Programs that move or action when the light is red take damage equal to your security level at the end of your turn";
     static unicode = "U+1F6A6";
     static color = "hsl(0, 0%, 69%)";
     static rarity = 1;

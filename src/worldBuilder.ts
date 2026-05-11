@@ -423,7 +423,7 @@ export function generateWorld(
   }
 
   // --- Shop ---
-  const shopXOffset = Random.range(-50, 0);
+  const shopXOffset = Random.range(-65, 25);
   nodes[shopId] = {
     id: shopId,
     type: "shop",
@@ -440,7 +440,7 @@ export function generateWorld(
     type: "boss",
     level: pick(),
     next: [],
-    position: { x: 210, y: 50 },
+    position: { x: 200, y: 50 },
     company: bossCompany,
     difficultyMod: 0,
     reward: Math.min(10, difficulty * 2)// +5;

@@ -322,7 +322,7 @@ import FormattedDescription from "./FormattedDescription.vue";
                 }
                 // 3. H-D-V-D-H Strategy for split paths (enters from sides, preserves 45 deg)
                 else if (isSplitPath) {
-                    const ds = Math.min(absDx, absDy) * 0.35;
+                    const ds = Math.min(absDx, absDy) * 0.1;
                     const xa = x1 + (dxTotal - sx * 2 * ds) / 2;
                     const xb = xa + sx * ds;
                     const xc = xb + sx * ds;
@@ -467,7 +467,7 @@ import FormattedDescription from "./FormattedDescription.vue";
                 startNode: node.type === 'start',
                 shopNode: node.type === 'shop',
                 skipNode: node.type === 'skip',
-                levelNode: node.type === 'level' && node.id !== currentNodeId && !node.visited,
+                levelNode: node.type === 'level',
                 visited: node.visited
             }"
             :style="{
@@ -813,6 +813,7 @@ import FormattedDescription from "./FormattedDescription.vue";
     }
     .boss-info{
         top: -40px;
+        width: 150px;
     }
     .node.unrevealed {
         opacity: 0.6;

@@ -457,7 +457,7 @@ import FormattedDescription from "./FormattedDescription.vue";
                 visited: node.visited
             }"
             :style="{
-                left: nodeDisplayPositions[node.id].x + 'px',
+                left: nodeDisplayPositions[node.id].x - 8 + 'px',
                 top: nodeDisplayPositions[node.id].y + 'px'
             }"
             @click="trySelect(node)"
@@ -641,8 +641,8 @@ import FormattedDescription from "./FormattedDescription.vue";
     }
     .node {
         position: absolute;
-        width: 32px;
-        height: 42px;
+        width: 42px;
+        height: 32px;
         opacity: 0.4;
     }
     .levelNode {
@@ -687,22 +687,32 @@ import FormattedDescription from "./FormattedDescription.vue";
     .pins-top{
         left: 10%;
         top: -10%;
-        /*border-top: 3px dashed white;*/
+        border-top: 3px dashed white;
     }
     .pins-left{
         top: 10%;
         left: -10%;
-        border-left: 3px dashed white;
     }
     .pins-bottom{
         left: 10%;
         top: 22%;
-        /*border-bottom: 3px dashed white;*/
+        border-bottom: 3px dashed white;
     }
     .pins-right{
-        border-right: 3px dashed white;
         left: 26%;
         top: 10%;
+    }
+    .levelNode .pins-top {
+        display: none;
+    }
+    .levelNode .pins-bottom{
+        display: none;
+    }
+    .levelNode .pins-left{
+        border-left: 3px dashed white;
+    }
+    .levelNode .pins-right{
+        border-right: 3px dashed white;
     }
     .bossNode .pins-left, .bossNode .pins-right, .bossNode .pins-top, .bossNode .pins-bottom, .startNode .pins-left, .startNode .pins-right, .startNode .pins-top, .startNode .pins-bottom{
         top: 4%;

@@ -14,10 +14,6 @@ const visitedNodeTip: TutorialStep = {
     id: 'visited',
     tooltip: 'A previously visited node. You cannot enter it again.'
 }
-const currentNodeTip: TutorialStep = {
-    id: 'current',
-    tooltip: 'Your current position in cyberspace.'
-}
 const levelNodeTip: TutorialStep = {
     id: 'levelNode',
     tooltip: 'This is a privately controlled node, the icon shows us what company it is owned by. The $ amount below is the reward for clearing this node. The 🔒 number indicates security level of a Node. Rarer, higher level enemy programs appear at higher difficulties. Click to see the preview.'
@@ -45,6 +41,10 @@ const bossTip: TutorialStep = {
 const bossNodeTip: TutorialStep = {
     id: 'bossNode',
     tooltip: "This is the boss for this security level, it's effects are described on the right. Bosses act like admins for the enemy, they may boost enemy stats, nerf yours, or add some other challenging effect to a node. Beating it will load a new node map, and raise the security level of all future nodes by one."
+}
+const currentNodeTip: TutorialStep = {
+    id: 'current',
+    tooltip: 'Your current position in cyberspace.'
 }
 const boardTip: TutorialStep = {
     id: "board",

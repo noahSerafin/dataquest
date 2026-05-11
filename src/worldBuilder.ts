@@ -136,7 +136,7 @@ export function generateWorld(
   // --- Start node ---
   nodes[startId] = {
     id: startId,
-    type: "level",
+    type: "start",
     next: [],
     position: { x: 200, y: 500 },
     company: chooseRandomCompany(),

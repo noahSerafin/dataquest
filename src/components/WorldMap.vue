@@ -455,6 +455,7 @@ import FormattedDescription from "./FormattedDescription.vue";
                 unrevealed: !revealedNodeIds.has(node.id),
                 visible: true,
                 bossNode: node.type === 'boss',
+                startNode: node.type === 'start',
                 shopNode: node.type === 'shop',
                 skipNode: node.type === 'skip',
                 levelNode: node.type === 'level' && node.id !== currentNodeId && !node.visited,
@@ -473,24 +474,26 @@ import FormattedDescription from "./FormattedDescription.vue";
             <div class="pins-right"></div>
         </div>
         <div class="node-inner">
-            <div v-if="!node.visited && (node.type=='level' && node.id !== currentNodeId  && node.id !=='start')">
-                $ {{ node.reward }}
-            </div>
-            <div class="icon">
-                {{ displayIcon(node) }}
-            </div>
-            <div v-if="!node.visited && (node.type=='level' && node.id !== currentNodeId  && node.id !=='start')">
-                {{ String.fromCodePoint(parseInt("U+1F512".replace('U+', ''), 16), 0xFE0F) }} {{ node.difficultyMod + player.difficulty }}
-            </div>
-            <div v-if="node.type==='boss'"
-            class="boss-info"
-            >
-                <strong>
-                {{ boss.name }}:
-                </strong>
-                <span>
-                    <FormattedDescription :description="boss.description" />
-                </span>
+            <div class="node-inner-content" v-if="!(node.type === 'start' && node.visited)">
+                <div v-if="!node.visited && (node.type=='level' && node.id !== currentNodeId)" class='text-yellow'>
+                    ${{ node.reward }}
+                </div>
+                <div class="icon">
+                    {{ displayIcon(node) }}
+                </div>
+                <div v-if="!node.visited && (node.type=='level' && node.id !== currentNodeId)">
+                    {{ String.fromCodePoint(parseInt("U+1F512".replace('U+', ''), 16), 0xFE0F) }}{{ node.difficultyMod + player.difficulty }}
+                </div>
+                <div v-if="node.type==='boss'"
+                class="boss-info"
+                >
+                    <strong>
+                    {{ boss.name }}:
+                    </strong>
+                    <span>
+                        <FormattedDescription :description="boss.description" />
+                    </span>
+                </div>
             </div>
         </div>
         </div>
@@ -652,11 +655,12 @@ import FormattedDescription from "./FormattedDescription.vue";
         height: 70px;
         font-size: 14px;
     }
-    .bossNode{
+    .bossNode, .startNode{
         width: 36px;
         height: 36px;
     }
     .node-inner{
+        text-align: center;
         height: 100%;        
         background: #141414;
         color: white;
@@ -705,23 +709,22 @@ import FormattedDescription from "./FormattedDescription.vue";
         left: 26%;
         top: 10%;
     }
-    .bossNode .pins-left, .bossNode .pins-right, .bossNode .pins-top, .bossNode .pins-bottom{
-    /*.shopNode .pins-left, .shopNode .pins-right, .shopNode .pins-top, .shopNode .pins-bottom{*/
-        top: 5%;
+    .bossNode .pins-left, .bossNode .pins-right, .bossNode .pins-top, .bossNode .pins-bottom, .startNode .pins-left, .startNode .pins-right, .startNode .pins-top, .startNode .pins-bottom{
+        top: 4%;
         border-top: 2px dotted white;
         border-bottom: 2px dotted white;
         border-right: 2px dotted white;
         border-left: 2px dotted white;
     }
-    .bossNode .pins-top, .shopNode .pins-top{
-        left: 5%;
-        top: -10%;
+    .bossNode .pins-top, .startNode .pins-top{
+        left: 4%;
+        top: -9%;
     }
-    .bossNode .pins-bottom, .shopNode .pins-bottom{
-        top: 20%;
+    .bossNode .pins-bottom, .startNode .pins-bottom{
+        top: 19%;
     }
-    .bossNode .pins-right, .shopNode .pins-right{
-        left: 20%;
+    .bossNode .pins-right, .startNode .pins-right{
+        left: 19%;
     }
     /*
     .shopNode{
@@ -729,17 +732,16 @@ import FormattedDescription from "./FormattedDescription.vue";
         outline: 3px dashed white;
     }
     */
-    /*.skipNode{
-
-    }*/
     .node.clickable {
         opacity: 1;
         cursor: pointer;
         border-color: yellow;
     }
+    /*
     .node.current {
         border: 2px outset cyan;
     }
+    */
     .preview-modal {
         position: absolute;
         left: 10%;

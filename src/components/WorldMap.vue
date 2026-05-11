@@ -301,8 +301,8 @@ import FormattedDescription from "./FormattedDescription.vue";
 
                 let points = "";
 
-                // 1. V-D-V Strategy for unrevealed/offset nodes
-                if (node.hiddenUntilVisited || nextNode.hiddenUntilVisited) {
+                // 1. V-D-V Strategy for unrevealed/offset nodes and final shop-to-boss connection
+                if (node.hiddenUntilVisited || nextNode.hiddenUntilVisited || (node.id === 'shop' && nextId === 'boss')) {
                     const diagSize = absDx; 
                     const verticalPadding = (absDy - diagSize) / 2;
                     const ya = y1 + sy * verticalPadding;

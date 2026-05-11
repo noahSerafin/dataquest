@@ -2,6 +2,7 @@
 import { computed, ref } from "vue"
 import type { PieceBlueprint } from "../types"
 import { STATUS_ICONS } from "../statuses";
+import FormattedDescription from "./FormattedDescription.vue";
 
 const props = defineProps<{
   piece: PieceBlueprint;
@@ -126,7 +127,7 @@ defineEmits(["buy", "sell", "highlightPlacements", "close"])
       <div class='bp-rarity' :style="{ color: rarityInfo.color }">
         {{ rarityInfo.text }}
       </div>
-      <p class="desc">{{ piece.description }}</p>
+      <p class="desc"><FormattedDescription :description="piece.description" /></p>
     </div>
     <div class="right">
       <div class="stats">

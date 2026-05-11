@@ -296,7 +296,7 @@ export abstract class Piece {
       this.addModifier({maxSize: -(1 * Math.abs(mult))});
     }
     if (this.statuses.slowed) {
-      this.addModifier({moves: -(1 * Math.abs(mult))});
+      this.addModifier({moves: -(1 * Math.abs(mult))}); //limit to a minimum of 1?
     }
     if(this.statuses.blinded){
       this.addModifier({range: -(1 * Math.abs(mult))});
@@ -1225,7 +1225,7 @@ class Lovebomb extends Piece {
 
 class Tar extends Piece {
   static name = "Tar";
-  static description = "A program invisble to the enemy that applies slow to programs moving over it, removing itself";
+  static description = "A program invisble to the enemy that applies slowed to programs moving over it, removing itself";
   static unicode = "U+2668";
   static color = "#686026";
   static rarity = 2;
@@ -1628,7 +1628,7 @@ class Highwayman extends Piece {//not working
     if(!this.ids.includes(piece.id)){
       //await piece.takeDamage(this.getStat('attack'))
       if(piece.team === 'enemy'){
-        player.money += piece.rarity;
+        player.money += piece.rarity; // should compare to original pieces for summon abuse
       } else if(piece.team === 'player'){
         player.money -= piece.rarity;
       }
@@ -1642,7 +1642,7 @@ class Highwayman extends Piece {//not working
 
 class Tengu extends Piece {//not working
   static name = "Tengu";
-  static description = "A program that can slow an enemy and steal money once based on it's rarity, or steal money from the player";
+  static description = "A program that can apply slowed to an enemy and steal money once based on it's rarity, or steal money from the player";
   static unicode = "U+1F47A";
   static color = "rgb(90, 0, 60)";
   static rarity = 3;//buff?
@@ -1661,7 +1661,7 @@ class Tengu extends Piece {//not working
       }
       //await piece.takeDamage(this.getStat('attack'))
       if(piece.team === 'enemy'){
-        player.money += piece.rarity;
+        player.money += piece.rarity; // should compare to original pieces for summon abuse
       } else if(piece.team === 'player'){
         player.money -= piece.rarity;
       }
@@ -2409,7 +2409,7 @@ class Cupid extends Piece {
 
 class Oni extends Piece {
   static name = "Oni";
-  static description = "A strong but slow program that can inflict the slow status on a group of enemies, or damage already slowed ones";
+  static description = "A strong but slow program that can inflict the slowed status on a group of enemies, or damage already slowed ones";
   static unicode = "U+1F479";
   static color = "#9e0303ff";
   static rarity = 6;//6 target group
@@ -2447,7 +2447,7 @@ class Ant extends Piece {
 
 class Bug extends Piece {
   static name = "Bug";
-  static description = "A fast small program that can slow others";
+  static description = "A fast small program that can apply slowed others";
   static unicode = "U+1F47E";
   static color = "rgb(4, 202, 129)";
   static rarity = 3;
@@ -2568,7 +2568,7 @@ class Golem extends Piece {
 
 class Gman extends Piece {
   static name = "G-man";
-  static description = "A boss level program that can freeze enemies and reduce their actions to 0";
+  static description = "A boss level program that can freeze enemies and temporarily apply disarmed, reducing their actions to 0";
   static unicode = "U+1F574";
   static color = "#000000ff";
   static rarity = 5;
@@ -2795,7 +2795,7 @@ class Donkey extends Piece {
 
 class Jellyfish extends Piece {
   static name = "Jelly";
-  static description = "A slow program that can shock, damaging and applying the slow status";
+  static description = "A slow program that can shock, damaging and applying the slowed status";
   static unicode = "U+1FABC";
   static color = "#0d8affff";
   static rarity = 2;
@@ -2920,7 +2920,7 @@ class Angel extends Piece {//not passive, same as fairy, remove?? unfinished
 // WATCH, U+231A
 class Stopwatch extends Piece {//not passive
   static name = "Stopwatch";
-  static description = "Can replenish another program's moves and give +1 action, or take away an enemy's actions";
+  static description = "Can replenish another program's moves and give +1 action, or take away an enemy's actions by applying disarmed";
   static unicode = "U+231A";//U+23F1";
   static color = "#ff5555";
   static rarity = 5;
@@ -3296,7 +3296,7 @@ class Recurve extends Piece {
 
 class Daemon extends Piece {
   static name = "Daemon";
-  static description = "A program immune to being slowed that can apply slow to other programs";
+  static description = "A program immune to being slowed that can apply slowed to other programs";
   static unicode = "U+1F47F";//smiling: U+1F608
   static color = "#4e105eff";
   static rarity = 4;
@@ -3316,7 +3316,7 @@ class Daemon extends Piece {
 
 class Archdaemon extends Piece {
   static name = "Arch Daemon";
-  static description = "A stronger Daemon that can apply slow to other programs";
+  static description = "A stronger Daemon that can apply slowed to other programs";
   static unicode = "U+1F608"
   static color = "rgb(44, 5, 3)";
   static rarity = 5;

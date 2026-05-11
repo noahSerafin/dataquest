@@ -3,6 +3,7 @@
     import type { OS } from '../types';
     import { allOSes } from '../Operators';
     import { StorageManager } from '../StorageManager';
+    import FormattedDescription from './FormattedDescription.vue';
 
     const props = defineProps<{
         debugMode: boolean;
@@ -149,7 +150,7 @@
                 
                 <template v-if="!getUnlockRule(os.name)">
                     <p>
-                        {{ os.description }}
+                        <FormattedDescription :description="os.description" />
                     </p>
                     <div class="stats">
                         <span>M:{{os.memory }}</span>

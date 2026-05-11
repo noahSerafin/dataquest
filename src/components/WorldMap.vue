@@ -24,6 +24,7 @@
     import { level6Levels } from "../level6Levels";
     import { StorageManager } from "../StorageManager";
     import { Random } from "../Random";
+import FormattedDescription from "./FormattedDescription.vue";
 
     const props = defineProps<{
         player: Player;
@@ -439,7 +440,7 @@
              {{ boss.name }}:
             </strong>
             <span>
-                {{ boss.description }}
+                <FormattedDescription :description="boss.description" />
             </span>
         </div>
         </div>

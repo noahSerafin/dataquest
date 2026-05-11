@@ -5,6 +5,7 @@ import { Item } from "../Items"; // adjust path
 import { tutorialState, clearTooltips } from "../tutorial";
 import { proTips, proTipSuggestion } from "../tutorialSteps";
 import { Random } from "../Random";
+import FormattedDescription from "./FormattedDescription.vue";
 //import type { PieceVariant } from "../types";
 
 const props = defineProps<{
@@ -144,7 +145,7 @@ const isDisabled = computed(() => {
         <div class="rarity" :style="{ color: rarityStyle(item.rarity).color }">
           {{ rarityStyle(item.rarity).label }}
         </div>
-        <div class="desc">{{ item.description }}</div>
+        <div class="desc"><FormattedDescription :description="item.description" /></div>
         <div class="flex">
           <button v-if="(cssclass == 'shop')"
             @click="$emit('buy', item)"

@@ -2,6 +2,7 @@
 import { Piece } from "../Pieces"
 import { ref, computed } from "vue";
 import { STATUS_ICONS, STATUS_INFO } from "../statuses";
+import FormattedDescription from "./FormattedDescription.vue";
 
 const props = defineProps<{
   piece: InstanceType<typeof Piece>
@@ -105,7 +106,7 @@ function toggleTooltip(key: string) {
       <button class="close" @click="$emit('close', piece)">X</button>
     </div>
 
-    <p class="desc">{{ piece.description }}</p>
+    <p class="desc"><FormattedDescription :description="piece.description" /></p>
 
     <div class="controller-status-list">
       <span

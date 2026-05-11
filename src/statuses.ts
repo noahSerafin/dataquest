@@ -33,3 +33,20 @@ export const STATUS_INFO: Record<string, string> = {
 };
 
 // 🫨 SHAKING FACE, U+1FAE8
+
+export const STATUS_COLORS: Record<string, string> = {
+  diseased: "#aaff00",
+  slowed: "#00aaff",
+  blinded: "#888888",
+  burning: "#ff4400",
+  poisoned: "#00ff00",
+  frozen: "#00ffff",
+  charmed: "#ff00ff",
+  confused: "#ffff00",
+  exposed: "#ffffff",
+  hidden: "#aaaaaa",
+  negative: "#444444",
+  enraged: "#ff0000",
+  zen: "#ffcc00",
+  disarmed: "#ff9900",
+};

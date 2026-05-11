@@ -301,6 +301,10 @@ import FormattedDescription from "./FormattedDescription.vue";
 
                 let points = "";
 
+                // Detect split paths (connections between different path indices)
+                const isSplitPath = node.id.startsWith('path_') && nextId.startsWith('path_') && 
+                                    node.id.split('_')[1] !== nextId.split('_')[1];
+
                 // 1. V-D-V Strategy for unrevealed/offset nodes and final shop-to-boss connection
                 if (node.hiddenUntilVisited || nextNode.hiddenUntilVisited || (node.id === 'shop' && nextId === 'boss')) {
                     const diagSize = absDx; 
@@ -316,7 +320,17 @@ import FormattedDescription from "./FormattedDescription.vue";
                     const xb = x1 + sx * diagSize;
                     points = `${x1},${y1} ${x1},${ya} ${xb},${y2} ${x2},${y2}`;
                 }
-                // 3. H-D-V Strategy for default levels (enters from bottom)
+                // 3. H-D-V-D-H Strategy for split paths (enters from sides, preserves 45 deg)
+                else if (isSplitPath) {
+                    const ds = Math.min(absDx, absDy) * 0.35;
+                    const xa = x1 + (dxTotal - sx * 2 * ds) / 2;
+                    const xb = xa + sx * ds;
+                    const xc = xb + sx * ds;
+                    const yc = y1 + sy * ds;
+                    const yd = y2 - sy * ds;
+                    points = `${x1},${y1} ${xa},${y1} ${xb},${yc} ${xb},${yd} ${xc},${y2} ${x2},${y2}`;
+                }
+                // 4. H-D-V Strategy for default levels (enters from bottom)
                 else {
                     const diagSize = Math.min(absDx, absDy) * 0.7;
                     const xa = x1 + (dxTotal - sx * diagSize);
@@ -377,7 +391,7 @@ import FormattedDescription from "./FormattedDescription.vue";
             StorageManager.unlockPiece(node.skipReward.value.name);
             StorageManager.recordUsage('programs', node.skipReward.value.name);
             break;
-
+ 
             case "admin":
             props.player.addAdmin(node.skipReward.value);
             StorageManager.unlockAdmin(node.skipReward.value.name);
@@ -798,15 +812,7 @@ import FormattedDescription from "./FormattedDescription.vue";
         top: -30px;
     }
     .boss-info{
-        height: fit-content;
-        top: -35px;
-        left: 175%;
-        width: 120px;
-    }
-    @media (max-width: 768px) {
-        .world-map{
-            justify-content: flex-start;
-        }
+        top: -40px;
     }
     .node.unrevealed {
         opacity: 0.6;

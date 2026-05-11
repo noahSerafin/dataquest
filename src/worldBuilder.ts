@@ -406,6 +406,22 @@ export function generateWorld(
     nodes[startId].next.push(p1);
   });
 
+  // --- Split Paths ---
+  // Connect one node in the first row to a neighboring second node
+  if (pathSpecs.length >= 2) {
+    const splitPathIndex = Random.floor(pathSpecs.length);
+    const neighborIndex = splitPathIndex === 0 ? 1 : 
+                         (splitPathIndex === pathSpecs.length - 1 ? splitPathIndex - 1 : 
+                          (Random.bool(0.5) ? splitPathIndex - 1 : splitPathIndex + 1));
+    
+    const sourceId = `path_${splitPathIndex}_1`;
+    const targetId = `path_${neighborIndex}_2`;
+    
+    if (nodes[sourceId] && nodes[targetId]) {
+      nodes[sourceId].next.push(targetId);
+    }
+  }
+
   // --- Shop ---
   const shopXOffset = Random.range(-50, 0);
   nodes[shopId] = {

@@ -16,12 +16,12 @@ export const STATUS_ICONS: Record<string, string> = {
 };
 
 export const STATUS_INFO: Record<string, string> = {
-  diseased: "Loses -1 max size every turn",
+  diseased: "Lose -1 max size every turn",
   slowed: "Moves reduced -1 every turn",
-  blinded: 'Loses -1 range every turn',
-  burning: 'Loses 1 tile every turn',
-  poisoned: 'Loses 1 defence every tun',
-  frozen: 'Moves set to 0',
+  blinded: 'Lose -1 range every turn',
+  burning: 'Lose 1 tile every turn',
+  poisoned: 'Lose -1 defence every tun',
+  frozen: 'Moves remaining are set to 0',
   charmed: 'Is controlled by the opposition',
   confused: 'Moves are randomised',
   exposed: 'Can no longer hide.',

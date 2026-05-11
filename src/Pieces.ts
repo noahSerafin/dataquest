@@ -2042,7 +2042,7 @@ class LabRat extends Piece {
 
 class Bat extends Piece {
   static name = "Vampire Bat";
-  static description = "A program immune to disease and blinding. Can bite body tiles from other programs spread disease to them, gaining a move and increasing it's max size";//remove tile, +1 temp defence? spread statuess?
+  static description = "A program immune to disease and blinding. Can remove body tiles from other programs spread disease to them, gaining a move and increasing it's max size";//remove tile, +1 temp defence? spread statuess?
   static unicode = "U+1F987";
   static color = "#ff290dff";
   static rarity = 4;

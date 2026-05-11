@@ -457,7 +457,7 @@ import FormattedDescription from "./FormattedDescription.vue";
                 visited: node.visited
             }"
             :style="{
-                left: nodeDisplayPositions[node.id].x + 'px',
+                left: nodeDisplayPositions[node.id].x  - (node.type === 'level' ? 22 : 8) + 'px',
                 top: nodeDisplayPositions[node.id].y + 'px'
             }"
             @click="trySelect(node)"
@@ -470,12 +470,13 @@ import FormattedDescription from "./FormattedDescription.vue";
         </div>
         <div class="node-inner">
             <div class="node-inner-content" v-if="!(node.type === 'start' && node.visited)">
-                <div v-if="!node.visited && (node.type=='level' && node.id !== currentNodeId)" class='text-yellow'>
-                    ${{ node.reward }}
-                </div>
                 <div class="icon">
                     {{ displayIcon(node) }}
                 </div>
+                <div v-if="!node.visited && (node.type=='level' && node.id !== currentNodeId)" class="text-yellow m-2">
+                    ${{ node.reward }}
+                </div>
+                
                 <div v-if="!node.visited && (node.type=='level' && node.id !== currentNodeId)">
                     {{ String.fromCodePoint(parseInt("U+1F512".replace('U+', ''), 16), 0xFE0F) }}{{ node.difficultyMod + player.difficulty }}
                 </div>
@@ -616,6 +617,9 @@ import FormattedDescription from "./FormattedDescription.vue";
 
 
 <style scoped>
+    .mr-5{
+        margin-right: 5px;
+    }
     .visible {
         transform: translateY(0);
     }
@@ -633,7 +637,7 @@ import FormattedDescription from "./FormattedDescription.vue";
     .node-map{
         position: relative;
         width: 60%;
-        height: 80%;
+        height: 90%;
         left: -26px;
     }
     .map-lines{
@@ -641,13 +645,13 @@ import FormattedDescription from "./FormattedDescription.vue";
     }
     .node {
         position: absolute;
-        width: 32px;
-        height: 42px;
+        width: 42px;
+        height: 32px;
         opacity: 0.4;
     }
     .levelNode {
-        width: 40px;
-        height: 70px;
+        width: 70px;
+        height: 40px;
         font-size: 14px;
     }
     .bossNode, .startNode{
@@ -655,15 +659,17 @@ import FormattedDescription from "./FormattedDescription.vue";
         height: 36px;
     }
     .node-inner{
-        text-align: center;
         height: 100%;        
         background: #141414;
         color: white;
         display: flex;
         align-items: center;
         justify-content: center;
-        flex-direction: column;
         user-select: none;
+    }
+    .node-inner-content{
+        display: flex;
+        justify-content: space-between;
     }
     .bossNode, .shopNode{
         border-left: none;
@@ -687,20 +693,20 @@ import FormattedDescription from "./FormattedDescription.vue";
     .pins-top{
         left: 10%;
         top: -10%;
-        /*border-top: 3px dashed white;*/
+        border-top: 3px dashed white;
     }
     .pins-left{
         top: 10%;
         left: -10%;
-        border-left: 3px dashed white;
+        /*border-left: 3px dashed white;*/
     }
     .pins-bottom{
         left: 10%;
         top: 22%;
-        /*border-bottom: 3px dashed white;*/
+        border-bottom: 3px dashed white;
     }
     .pins-right{
-        border-right: 3px dashed white;
+        /*border-right: 3px dashed white;*/
         left: 26%;
         top: 10%;
     }

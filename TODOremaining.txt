@@ -1,6 +1,5 @@
 //IMPROVEMENTS
-enemies should attack their own charmed pieces / charmed enemies should attack you
-variant tooltip to show stat mods, use colored text
+make map more interesting
 canplace tickbox in inventory
 Make a reason to use golden ticket, on bosses? allow it to be used in a node?
 make hybrids display how they do in compiler/blueprintcontroller - address manually

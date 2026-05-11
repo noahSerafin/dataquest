@@ -22,6 +22,10 @@ const levelNodeTip: TutorialStep = {
     id: 'levelNode',
     tooltip: 'This is a privately controlled node, the title and picture show us what company it is owned by. The $ amount below is the reward for clearing this node. The 🔒 number indicates security level of a Node. Rarer, higher level enemy programs appear at higher difficulties. Click to see the preview.'
 }
+const hiddenNodeTip: TutorialStep = {
+    id: 'unrevealed',
+    tooltip: 'This is a hidden node, reach a connecting node to reveal it.'
+}
 const previewTip: TutorialStep = {
     id: 'preview-modal',
     tooltip: 'The preview panel shows more detailed information about a node.'
@@ -170,7 +174,7 @@ const rewardTip: TutorialStep = {
     id: 'reward-summary',
     tooltip: "You have earned a reward for completing this node. Plus any bonus rewards granted from your admin programs",
 }
-export const allTips: TutorialStep[] = [welcomeTip, mapTip, bossTip, visitedNodeTip, currentNodeTip, levelNodeTip, previewTip, skipNodeTip, shopNodeTip, bossNodeTip, boardTip, placementTip, programTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, actionsTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, infamyTip, bossesTip, summaryTip, lossTip, shopTip, rerollTip, shopbpTip, shopItemTip, adminTip, adminsTip, playerInfoTip, nodePreviewTip, interestTip, rewardTip, inventoryTip];
+export const allTips: TutorialStep[] = [welcomeTip, mapTip, bossTip, visitedNodeTip, currentNodeTip, levelNodeTip, hiddenNodeTip, previewTip, skipNodeTip, shopNodeTip, bossNodeTip, boardTip, placementTip, programTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, actionsTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, infamyTip, bossesTip, summaryTip, lossTip, shopTip, rerollTip, shopbpTip, shopItemTip, adminTip, adminsTip, playerInfoTip, nodePreviewTip, interestTip, rewardTip, inventoryTip];
 
 export const proTipSuggestion: TutorialStep = {
     id: 'proTip',

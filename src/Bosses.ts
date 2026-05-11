@@ -611,7 +611,7 @@ class Coral extends Admin {
 
 class REDACTED extends Admin {
     static name = "REDACTED";
-    static description = "All enemy programs information is hidden from you";//1 damage for security level?
+    static description = "All enemy programs information is obscured";//1 damage for security level?
     static unicode = "U+2B1B";
     static color = "rgb(255, 255, 255)";
     static rarity = 6;

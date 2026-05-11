@@ -216,7 +216,41 @@ import FormattedDescription from "./FormattedDescription.vue";
         }
     }
 
+    const revealedNodeIds = computed(() => {
+        const revealed = new Set<string>();
+
+        for (const node of Object.values(world.value.nodes)) {
+            if (!node.hiddenUntilVisited || node.visible || props.player.hasAdmin('Compass')) {
+                revealed.add(node.id);
+            }
+            if (node.hiddenUntilVisited === currentNodeId.value) {
+                node.visible = true;
+                revealed.add(node.id);
+            }
+        }
+        return revealed;
+    });
+
+    const nodeDisplayPositions = computed(() => {
+        const positions: Record<string, { x: number; y: number }> = {};
+        for (const node of worldNodes.value) {
+            let x = node.position.x;
+            let y = node.position.y;
+            // Offset x if it's an intermediate/hidden node to ensure circuitboard connections
+            if (node.hiddenUntilVisited) {
+                // Use a deterministic offset based on the node ID
+                const offset = node.id.includes('_0_') ? 40 : (node.id.includes('_2_') ? -40 : 25);
+                x += offset;
+            }
+            positions[node.id] = { x, y };
+        }
+        return positions;
+    });
+
     function displayIcon(node: WorldNode) {
+        if (!revealedNodeIds.value.has(node.id)) {
+            return "\u2754"; // ❔ White Question Mark Ornament
+        }
         if(node.id === currentNodeId.value){
             return String.fromCodePoint(parseInt(props.player.osunicode.replace('U+', ''), 16), 0xFE0F);
         }
@@ -228,53 +262,55 @@ import FormattedDescription from "./FormattedDescription.vue";
         switch (node.type) {
             case "start": return "⬤";
             case "shop": return "🛒";
-            case "sacrificial altar": return String.fromCodePoint(parseInt("U+1FAA6".replace('U+', ''), 16), 0xFE0F);//U+1F5E1
+            case "sacrificial altar": return String.fromCodePoint(parseInt("U+1FAA6".replace('U+', ''), 16), 0xFE0F);
             case "duplicator": return String.fromCodePoint(parseInt("U+1F46F".replace('U+', ''), 16), 0xFE0F);
-            case "workbench": return String.fromCodePoint(parseInt("U+2699".replace('U+', ''), 16), 0xFE0F);// NUT AND BOLT, U+1F529 //GEAR, U+2699
+            case "workbench": return String.fromCodePoint(parseInt("U+2699".replace('U+', ''), 16), 0xFE0F);
             case "hybrid compiler": return String.fromCodePoint(parseInt("U+1F9EC".replace('U+', ''), 16), 0xFE0F);
             case "level": return String.fromCodePoint(parseInt(node.company.unicode.replace('U+', ''), 16), 0xFE0F);
             case "boss": return  String.fromCodePoint(parseInt(boss.value.unicode.replace('U+', ''), 16), 0xFE0F);
-            case "skip": return 
+            case "skip": return "";
         }
     }
 
     const connections = computed(() => {
-        const list: { x1: number; y1: number; x2: number; y2: number }[] = [];
-
+        const paths: { points: string }[] = [];
         const nodes = world.value.nodes;
+        const positions = nodeDisplayPositions.value;
 
         for (const node of Object.values(nodes)) {
-            // Node → all its next connections
             for (const nextId of node.next) {
                 const nextNode = nodes[nextId];
                 if (!nextNode) continue;
 
+                const p1 = positions[node.id];
+                const p2 = positions[nextId];
+                if (!p1 || !p2) continue;
+
                 // Center the line on the node "dot"
-                const x1 = node.position.x + 12; // adjust if your node size changes
-                const y1 = node.position.y + 12;
-                const x2 = nextNode.position.x + 12;
-                const y2 = nextNode.position.y + 12;
+                const x1 = p1.x + 12;
+                const y1 = p1.y + 12;
+                const x2 = p2.x + 12;
+                const y2 = p2.y + 12;
 
-                list.push({ x1, y1, x2, y2 });
+                // Circuitboard logic: Horizontal -> Vertical -> Diagonal (45deg)
+                const dxTotal = x2 - x1;
+                const dyTotal = y2 - y1;
+
+                // We'll use a split point for the horizontal/vertical transition
+                const xa = x1 + dxTotal * 0.5;
+                
+                // For the diagonal to be 45 degrees at the end, the diagonal part must have |dx| = |dy|
+                // The diagonal ends at (x2, y2). It starts at (xa, yb).
+                // So |x2 - xa| = |y2 - yb|
+                const diagDist = Math.abs(x2 - xa);
+                const yb = y2 - Math.sign(dyTotal) * diagDist;
+
+                paths.push({
+                    points: `${x1},${y1} ${xa},${y1} ${xa},${yb} ${x2},${y2}`
+                });
             }
         }
-        return list;
-    });
-
-    const visibleNodeIds = computed(() => {
-        const visible = new Set<string>();
-
-        for (const node of Object.values(world.value.nodes)) {
-            //
-            if (!node.hiddenUntilVisited || node.visible || props.player.hasAdmin('Compass')) {
-                visible.add(node.id);
-            }
-            if (node.hiddenUntilVisited === currentNodeId.value) {
-                node.visible = true;
-                visible.add(node.id);
-            }
-        }
-        return visible;
+        return paths;
     });
 
     function generateSkipReward(): SkipReward{
@@ -397,8 +433,8 @@ import FormattedDescription from "./FormattedDescription.vue";
             :class="{
                 clickable: canClick(node),
                 current: node.id === currentNodeId,
-                hidden: !visibleNodeIds.has(node.id),
-                visible: visibleNodeIds.has(node.id),
+                unrevealed: !revealedNodeIds.has(node.id),
+                visible: true,
                 bossNode: node.type === 'boss',
                 shopNode: node.type === 'shop',
                 skipNode: node.type === 'skip',
@@ -406,8 +442,8 @@ import FormattedDescription from "./FormattedDescription.vue";
                 visited: node.visited
             }"
             :style="{
-                left: node.position.x + 'px',
-                top: node.position.y + 'px'
+                left: nodeDisplayPositions[node.id].x + 'px',
+                top: nodeDisplayPositions[node.id].y + 'px'
             }"
             @click="trySelect(node)"
         >
@@ -418,21 +454,27 @@ import FormattedDescription from "./FormattedDescription.vue";
             <div class="pins-right"></div>
         </div>
         <div class="node-inner">
+            <div v-if="!node.visited && (node.type=='level' && node.id !== currentNodeId  && node.id !=='start')">
+                $ {{ node.reward }}
+            </div>
+            <!--
+            -->
+        <!--
         <div v-if="!node.visited && (node.type=='boss' || node.type=='level' && node.id !== currentNodeId  && node.id !=='start')" class="company-info">
             <div>
                 {{ node.company.abbr }}
             </div>
-            <div>
-                {{ companyUnicode(node) }}
-            </div>
-            <div>
-                $ {{ node.reward }}
-            </div>
-            <div>
-                {{ String.fromCodePoint(parseInt("U+1F512".replace('U+', ''), 16), 0xFE0F) }} : {{ node.difficultyMod + player.difficulty }}
-            </div>
         </div>
+        -->
+        <div class="icon">
             {{ displayIcon(node) }}
+        </div>
+        <div v-if="!node.visited && (node.type=='level' && node.id !== currentNodeId  && node.id !=='start')">
+            {{ String.fromCodePoint(parseInt("U+1F512".replace('U+', ''), 16), 0xFE0F) }} {{ node.difficultyMod + player.difficulty }}
+        </div>
+        <!--
+            -->
+                
         <div v-if="node.type==='boss'"
         class="boss-info"
         >
@@ -446,16 +488,15 @@ import FormattedDescription from "./FormattedDescription.vue";
         </div>
         </div>
         <svg class="map-lines" style="position: absolute; inset: 0; width: 100vw; height: 100vh; pointer-events: none;">
-            <line
-            v-for="(conn, i) in connections"
-            :key="i"
-            :x1="conn.x1"
-            :y1="conn.y1"
-            :x2="conn.x2"
-            :y2="conn.y2"
-            stroke="#9CC954"
-            stroke-width="2"
-            stroke-linecap="round"
+            <polyline
+                v-for="(path, i) in connections"
+                :key="i"
+                :points="path.points"
+                fill="none"
+                stroke="#9CC954"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
             />
         </svg>
     </div>
@@ -599,9 +640,14 @@ import FormattedDescription from "./FormattedDescription.vue";
         height: 42px;
         opacity: 0.4;
     }
+    .levelNode {
+        width: 40px;
+        height: 70px;
+        font-size: 14px;
+    }
     .bossNode, .shopNode, .current{
-        width: 32px;
-        height: 32px;
+        width: 36px;
+        height: 36px;
     }
     .node-inner{
         height: 100%;        
@@ -610,9 +656,10 @@ import FormattedDescription from "./FormattedDescription.vue";
         display: flex;
         align-items: center;
         justify-content: center;
+        flex-direction: column;
         user-select: none;
     }
-    .bossNode{
+    .bossNode, .shopNode{
         border-left: none;
         border-right: none;    
     }
@@ -631,9 +678,6 @@ import FormattedDescription from "./FormattedDescription.vue";
         width: 100%;
         height: 100%;
     }
-    .shopNode .pins, .current .pins{
-        display: none;
-    }
     .pins-top{
         left: 10%;
         top: -10%;
@@ -651,30 +695,32 @@ import FormattedDescription from "./FormattedDescription.vue";
     }
     .pins-right{
         border-right: 3px dashed white;
-        left: 24%;
+        left: 26%;
         top: 10%;
     }
-    .bossNode .pins-left, .bossNode .pins-right, .bossNode .pins-top, .bossNode .pins-bottom{
+    .bossNode .pins-left, .bossNode .pins-right, .bossNode .pins-top, .bossNode .pins-bottom, .shopNode .pins-left, .shopNode .pins-right, .shopNode .pins-top, .shopNode .pins-bottom{
         top: 5%;
         border-top: 2px dotted white;
         border-bottom: 2px dotted white;
         border-right: 2px dotted white;
         border-left: 2px dotted white;
     }
-    .bossNode .pins-top{
+    .bossNode .pins-top, .shopNode .pins-top{
         left: 5%;
         top: -10%;
     }
-    .bossNode .pins-bottom{
+    .bossNode .pins-bottom, .shopNode .pins-bottom{
         top: 20%;
     }
-    .bossNode .pins-right{
+    .bossNode .pins-right, .shopNode .pins-right{
         left: 20%;
     }
+    /*
     .shopNode{
         border: 3px inset white;
-        /*outline: 3px dashed white;*/
+        outline: 3px dashed white;
     }
+    */
     /*.skipNode{
 
     }*/
@@ -744,10 +790,8 @@ import FormattedDescription from "./FormattedDescription.vue";
             justify-content: flex-start;
         }
     }
-    .node.hidden {
-        visibility: hidden;
-        pointer-events: none;
-        opacity: 0;
+    .node.unrevealed {
+        opacity: 0.6;
     }
 
     .node.visible {

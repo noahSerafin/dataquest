@@ -50,7 +50,7 @@
         const key = `${tile.x},${tile.y}`;
         let color = "#888"; // neutral default
         if (enemyTiles.has(key)) color = "red";
-        if (playerTiles.has(key)) color = "blue";
+        if (playerTiles.has(key)) color = "lightgreen";
             return {
                 ...tile,
                 color
@@ -131,6 +131,13 @@
         width: 6px;
         height: 6px;
         outline: 1px solid black;
+    }
+
+    .mini-tile .enemy{
+        border: 1px solid #666;
+    }
+    .mini-tile .player{
+        border: 1px solid white;
     }
 
     .visible {

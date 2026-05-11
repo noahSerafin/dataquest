@@ -476,34 +476,22 @@ import FormattedDescription from "./FormattedDescription.vue";
             <div v-if="!node.visited && (node.type=='level' && node.id !== currentNodeId  && node.id !=='start')">
                 $ {{ node.reward }}
             </div>
-            <!--
-            -->
-        <!--
-        <div v-if="!node.visited && (node.type=='boss' || node.type=='level' && node.id !== currentNodeId  && node.id !=='start')" class="company-info">
-            <div>
-                {{ node.company.abbr }}
+            <div class="icon">
+                {{ displayIcon(node) }}
             </div>
-        </div>
-        -->
-        <div class="icon">
-            {{ displayIcon(node) }}
-        </div>
-        <div v-if="!node.visited && (node.type=='level' && node.id !== currentNodeId  && node.id !=='start')">
-            {{ String.fromCodePoint(parseInt("U+1F512".replace('U+', ''), 16), 0xFE0F) }} {{ node.difficultyMod + player.difficulty }}
-        </div>
-        <!--
-            -->
-                
-        <div v-if="node.type==='boss'"
-        class="boss-info"
-        >
-            <strong>
-             {{ boss.name }}:
-            </strong>
-            <span>
-                <FormattedDescription :description="boss.description" />
-            </span>
-        </div>
+            <div v-if="!node.visited && (node.type=='level' && node.id !== currentNodeId  && node.id !=='start')">
+                {{ String.fromCodePoint(parseInt("U+1F512".replace('U+', ''), 16), 0xFE0F) }} {{ node.difficultyMod + player.difficulty }}
+            </div>
+            <div v-if="node.type==='boss'"
+            class="boss-info"
+            >
+                <strong>
+                {{ boss.name }}:
+                </strong>
+                <span>
+                    <FormattedDescription :description="boss.description" />
+                </span>
+            </div>
         </div>
         </div>
         <svg class="map-lines" style="position: absolute; inset: 0; width: 100vw; height: 100vh; pointer-events: none;">
@@ -539,7 +527,7 @@ import FormattedDescription from "./FormattedDescription.vue";
         <h6 v-if="selectedPreviewNode.type==='skip'">(Must have room)</h6>
         <h4 v-if="selectedPreviewNode.type!=='boss' && selectedPreviewNode.type==='level'">{{ selectedPreviewNode.company.name}}</h4>
         <div v-if="selectedPreviewNode.type!=='boss' && selectedPreviewNode.type==='level'">{{String.fromCodePoint(parseInt(selectedPreviewNode.company.unicode.replace('U+', ''), 16), 0xFE0F)}}</div>
-        <h5 v-if="selectedPreviewNode.type==='boss' || selectedPreviewNode.type==='level'">Security Level: {{ player.difficulty + selectedPreviewNode.difficultyMod}}</h5>
+        <h5 v-if="selectedPreviewNode.type==='boss' || selectedPreviewNode.type==='level'">Security Level 🔒: {{ player.difficulty + selectedPreviewNode.difficultyMod}}</h5>
         <h5 v-if="selectedPreviewNode.type==='boss' || selectedPreviewNode.type==='level'" class="text-yellow">Reward: ${{ selectedPreviewNode.reward }}</h5>
         <MiniMap v-if="selectedPreviewNode && selectedPreviewNode.level"
             :level="selectedPreviewNode.level"
@@ -664,7 +652,7 @@ import FormattedDescription from "./FormattedDescription.vue";
         height: 70px;
         font-size: 14px;
     }
-    .bossNode, .shopNode, .current{
+    .bossNode{
         width: 36px;
         height: 36px;
     }
@@ -717,7 +705,8 @@ import FormattedDescription from "./FormattedDescription.vue";
         left: 26%;
         top: 10%;
     }
-    .bossNode .pins-left, .bossNode .pins-right, .bossNode .pins-top, .bossNode .pins-bottom, .shopNode .pins-left, .shopNode .pins-right, .shopNode .pins-top, .shopNode .pins-bottom{
+    .bossNode .pins-left, .bossNode .pins-right, .bossNode .pins-top, .bossNode .pins-bottom{
+    /*.shopNode .pins-left, .shopNode .pins-right, .shopNode .pins-top, .shopNode .pins-bottom{*/
         top: 5%;
         border-top: 2px dotted white;
         border-bottom: 2px dotted white;

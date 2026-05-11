@@ -20,7 +20,7 @@ const currentNodeTip: TutorialStep = {
 }
 const levelNodeTip: TutorialStep = {
     id: 'levelNode',
-    tooltip: 'This is a privately controlled node, the title and picture show us what company it is owned by. The $ amount below is the reward for clearing this node. The 🔒 number indicates security level of a Node. Rarer, higher level enemy programs appear at higher difficulties. Click to see the preview.'
+    tooltip: 'This is a privately controlled node, the icon shows us what company it is owned by. The $ amount below is the reward for clearing this node. The 🔒 number indicates security level of a Node. Rarer, higher level enemy programs appear at higher difficulties. Click to see the preview.'
 }
 const hiddenNodeTip: TutorialStep = {
     id: 'unrevealed',
@@ -164,7 +164,7 @@ const inventoryTip: TutorialStep = {
 }
 const nodePreviewTip: TutorialStep = {
     id: 'map-wrapper',
-    tooltip: "The node preview shows your starting load point in green, and the enemies in red.",
+    tooltip: "The node preview shows your starting load point in green outlined in white, and the enemies in red.",
 }
 const interestTip: TutorialStep = {
     id: 'interest-summary',

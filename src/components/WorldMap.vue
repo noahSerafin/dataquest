@@ -432,11 +432,6 @@ import FormattedDescription from "./FormattedDescription.vue";
             newBoss();
         }
     );
-
-    function companyUnicode(node: WorldNode) {
-        return node.company.unicode ? String.fromCodePoint(parseInt(node.company.unicode.replace('U+', ''), 16), 0xFE0F) : ''
-    }
-    
 </script>
 
 <template>

@@ -274,7 +274,7 @@ function copySeed() {
                 </div>
                 <div class="bar-visual">
                   <BlueprintView v-if="historySubTab === 'programs'" :blueprint="item.visualData" :tileSize="40" cssclass="history" />
-                  <ItemView v-else :item="item.visualData" :type="historySubTab === 'admins' ? 'admin' : 'consumable'" :tileSize="40" cssclass="history" :canBuy="false" />
+                  <ItemView v-else :item="item.visualData" :type="historySubTab === 'admins' ? 'admin' : 'consumable'" :tileSize="40" cssclass="history" :canBuy="false" :showController="false" />
                 </div>
                 <span class="bar-name">{{ item.name }}</span>
               </div>

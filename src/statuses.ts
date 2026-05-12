@@ -28,7 +28,7 @@ export const STATUS_INFO: Record<string, string> = {
   hidden: 'Invisible to enemies until next move or action.',
   negative: "Can move through other programs",
   enraged: "Gains +1 attack on the start of it's turn",
-  zen: "Temporary +1 to all stats",
+  zen: "Temporary +1 to all stats at the start of the next turn",
   disarmed: "Has no actions for one turn",
 };
 

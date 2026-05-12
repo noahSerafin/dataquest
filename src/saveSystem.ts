@@ -14,6 +14,7 @@ export function serializeGameState(
   player: Player,
   world: WorldMap,
   currentNodeId: string,
+  previousNodeId: string | null,
   skipsThisLevel: number,
   boss: any,
   seed: string,
@@ -26,6 +27,7 @@ export function serializeGameState(
     player: JSON.parse(JSON.stringify(player)), // strip methods, keep plain fields
     world: JSON.parse(JSON.stringify(world)),
     currentNodeId,
+    previousNodeId,
     skipsThisLevel,
     bossName: boss?.name, // just store constructor name to grab from allBosses
     boardState: boardState ? JSON.parse(JSON.stringify(boardState)) : null,
@@ -125,6 +127,7 @@ export function rehydrateGameState(data: any): any {
     player,
     world,
     currentNodeId: data.currentNodeId,
+    previousNodeId: data.previousNodeId || null,
     skipsThisLevel: data.skipsThisLevel || 0,
     boss,
     seed: data.seed,

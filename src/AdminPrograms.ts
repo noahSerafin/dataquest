@@ -1786,9 +1786,9 @@ export class Taoism extends Admin {
             range: 1
           });*/
           p.statuses.zen=true;
-        } else {
+        }/*else {
           p.statuses.zen=false;
-        }
+        }*/
         this.isTriggering = true;
         setTimeout(() => this.isTriggering = false, 500);
       };
@@ -3314,9 +3314,9 @@ class Meditation extends Admin {//needs reviewing
           piece.statuses.zen = true;
           this.isTriggering = true;
           setTimeout(() => this.isTriggering = false, 500);
-        } else {
+        }/* else {
           piece.statuses.zen = false;
-        }
+        }*/
       }
     };
   }

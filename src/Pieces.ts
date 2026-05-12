@@ -332,6 +332,7 @@ export abstract class Piece {
       this.addTempModifier({attack: 1 * mult});
       this.addTempModifier({defence: 1 * mult});
       this.addTempModifier({moves: 1 * mult});
+      this.statuses.zen = false;
     }
   }
 

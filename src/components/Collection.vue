@@ -113,7 +113,7 @@ const usageData = computed(() => {
 
 const currentUsageList = computed(() => {
   const list = usageData.value[historySubTab.value];
-  return isHistoryExpanded.value ? list : list.slice(0, 10);
+  return isHistoryExpanded.value ? list : list.slice(0, 8);
 });
 
 const maxCount = computed(() => {
@@ -258,7 +258,7 @@ function copySeed() {
 
           <div class="graph-section">
             <div class="graph-header">
-              <h3>{{ historySubTab.charAt(0).toUpperCase() + historySubTab.slice(1) }} Usage</h3>
+              <h3>{{ historySubTab.charAt(0).toUpperCase() + historySubTab.slice(0, historySubTab.length -1).slice(1) }} Usage</h3>
               <button class="expand-btn" @click="isHistoryExpanded = !isHistoryExpanded">
                 {{ isHistoryExpanded ? 'Collapse' : 'Show All' }}
               </button>
@@ -638,6 +638,7 @@ function copySeed() {
 .graph-bar-item {
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
   align-items: center;
   gap: 0.5rem;
   min-width: 50px;

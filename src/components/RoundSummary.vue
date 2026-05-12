@@ -16,6 +16,7 @@
         (e: 'proceedFromEndOfRound'): void;
         (e: 'reloadLevel'): void;
         (e: 'mainMenu'): void;
+        (e: 'returnToMap'): void;
     }>();
    
     props.player.calcInterest(); //await?? for html
@@ -113,6 +114,7 @@
                 Round Over
             </h3>
             <button @click="emit('reloadLevel')" :disabled="roundHasStarted">Retry</button>
+            <button @click="emit('returnToMap')" :disabled="roundHasStarted">Return to Map</button>
         </div>
         <div class="if-lost" v-if="!hasWonRound && player.lives <= 0">
             <h3>

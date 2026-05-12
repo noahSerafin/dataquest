@@ -696,6 +696,16 @@ async function reloadLevel() {
   //player.canPlace && (placementMode || isFirstTurn)
 }
 
+async function handleReturnToMap() {
+  if (!worldMapRef.value) return;
+  worldMapRef.value.rollbackNode();
+  showBoard.value = false;
+  showSummary.value = false;
+  showMap.value = true;
+  roundHasStarted.value = false;
+  saveGameState();
+}
+
 function retryLevel() {//if !roundhasstarted
   if (player.value.lives <= 1) return
   player.value.lives--
@@ -741,6 +751,7 @@ function saveGameState() {
     player.value,
     worldMapRef.value.world,
     worldMapRef.value.currentNodeId,
+    worldMapRef.value.previousNodeId,
     worldMapRef.value.skipsThisLevel,
     worldMapRef.value.boss,
     currentSeed.value,
@@ -800,6 +811,7 @@ function loadSavedGame() {
     if (worldMapRef.value) {
       worldMapRef.value.world = state.world;
       worldMapRef.value.currentNodeId = state.currentNodeId;
+      worldMapRef.value.previousNodeId = state.previousNodeId;
       worldMapRef.value.skipsThisLevel = state.skipsThisLevel;
       worldMapRef.value.boss = state.boss;
     }
@@ -1818,7 +1830,7 @@ function toggleDebug() {
         class="stage-panel" :class="{ active: showMainMenu }" :debugMode="debugMode" />
       <RoundSummary v-if="showSummary" class="stage-panel" :class="{ active: showSummary }" :hasWonRound="hasWonRound"
         :player="player" :bosses="bossAdmins" :roundHasStarted="roundHasStarted" @proceedFromEndOfRound="handleProceed" @reloadLevel="reloadLevel"
-        @mainMenu="openMainMenu" />
+        @mainMenu="openMainMenu" @returnToMap="handleReturnToMap" />
       <WorldMap ref="worldMapRef" v-if="!displayEditor" class="stage-panel" :class="{ active: showMap }"
         :allLevels="level1Levels" :player="player" :seed="combinedMapSeed" :cssclass="mapClass" :bosses="bossAdmins"
         @selectLevel="selectLevel" @openShop="openShop" @openDisabledShop="openDisabledShop"

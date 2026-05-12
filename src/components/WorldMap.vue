@@ -770,6 +770,9 @@ watch(
 .text-gold{
     color: #fdbf13;
 }
+.preview-modal.ZEN .text-gold{
+    color: #864800;
+}
 
 /*
     .node.current {

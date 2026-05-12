@@ -194,7 +194,7 @@ export function generateWorld(
         next: [p2],
         position: {
           x: pos.node1.x,
-          y: (pos.node1.y + pos.node2.y) / 2
+          y: ((pos.node1.y + pos.node2.y) / 2) +16
         },
         company: shopCompany,
         difficultyMod: 0,
@@ -235,7 +235,7 @@ export function generateWorld(
         next: [p2],
         position: {
           x: pos.node1.x,
-          y: (pos.node1.y + pos.node2.y) / 2
+          y: ((pos.node1.y + pos.node2.y) / 2) +16
         },
         company: playerCompany,
         difficultyMod: 0,
@@ -276,7 +276,7 @@ export function generateWorld(
         next: [p2],
         position: {
           x: pos.node1.x,
-          y: (pos.node1.y + pos.node2.y) / 2
+          y: ((pos.node1.y + pos.node2.y) / 2) +16
         },
         company: playerCompany,
         difficultyMod: 0,
@@ -317,7 +317,7 @@ export function generateWorld(
         next: [p2],
         position: {
           x: pos.node1.x,
-          y: (pos.node1.y + pos.node2.y) / 2
+          y: ((pos.node1.y + pos.node2.y) / 2) +10
         },
         company: playerCompany,
         difficultyMod: 0,
@@ -358,7 +358,7 @@ export function generateWorld(
         next: [p2],
         position: {
           x: pos.node1.x,
-          y: (pos.node1.y + pos.node2.y) / 2
+          y: ((pos.node1.y + pos.node2.y) / 2) +16
         },
         company: playerCompany,
         difficultyMod: 0,

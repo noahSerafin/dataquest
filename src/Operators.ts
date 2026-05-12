@@ -228,7 +228,7 @@ import { createDefaultStatuses } from "./types";
     const bug =  {
         id: crypto.randomUUID(),
         name : "Bug",
-        description: "A fast but small program that can slow others",
+        description: "A fast but small program that can apply slowed others",
         unicode: "U+1F47E",
         color: "#04ca0eff",
         maxSize: 1,

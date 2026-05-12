@@ -554,7 +554,7 @@ export class Chemistry extends Admin {//test
 
 class Aesculapius extends Admin {
   static name = "Aesculapius";//CADUCEUS, U+2624
-  static description = "All placed programs are immune to posion and disease";
+  static description = "All placed programs are immune to poison and disease";
   static unicode = "U+2695";
   static color = "#084610ff";
   static rarity = 2;
@@ -874,7 +874,7 @@ class Cactus extends Admin {
 
 export class Compass extends Admin {
   static name = "Compass";
-  static description = "Shows nodes that are normally hidden";//make the path red/white? keep the hidden nodes hidden
+  static description = "Shows nodes that are normally secret until reaching them";//make the path red/white? keep the hidden nodes hidden
   static unicode = "U+1F9ED";
   static color = "#ff5555";
   static rarity = 1;

@@ -146,16 +146,26 @@ function canClick(node: WorldNode): boolean {
 }
 
 function trySelect(node: WorldNode) {
-    if (!props.player.hasAdmin('World Map') && node.type !== 'shop' || (!props.player.hasAdmin('Crystal Ball') && node.type === 'shop')) {
-        if (!canClick(node)) return;
-    }
-    if (props.player.hasAdmin('Crystal Ball') && node.type === 'shop' && (selectedPreviewNode.value && node.next.includes(selectedPreviewNode.value.id))) {//&& !node.next.includes(selectedPreviewNode.value.id ?? if shop is next node we actually want to open it regularly
-        emit('openDisabledShop')
-    } else {
-        selectedPreviewNode.value = node;
-        if (props.player.hasAdmin('Clippy')) {
-            reapplyTutorialTooltips(200);
+    const isHidden = node.hiddenUntilVisited && !node.visible && !props.player.hasAdmin('Compass');
+
+    if (node.type === 'shop') {
+        if (!canClick(node)) {
+            if (props.player.hasAdmin('Crystal Ball') && !isHidden) {
+                //emit('openDisabledShop');
+                selectedPreviewNode.value = node;
+                return;
+            } else {
+                return;
+            }
         }
+    } else {
+        if (isHidden && !canClick(node)) return;
+        if (!props.player.hasAdmin('World Map') && !canClick(node)) return;
+    }
+
+    selectedPreviewNode.value = node;
+    if (props.player.hasAdmin('Clippy')) {
+        reapplyTutorialTooltips(200);
     }
 }
 
@@ -544,7 +554,7 @@ watch(
             </div>
             <h5 v-if="selectedPreviewNode.type === 'boss' || selectedPreviewNode.type === 'level'">Security Level 🔒: {{
                 player.difficulty + selectedPreviewNode.difficultyMod}}</h5>
-            <h5 v-if="selectedPreviewNode.type === 'boss' || selectedPreviewNode.type === 'level'" class="text-yellow">
+            <h5 v-if="selectedPreviewNode.type === 'boss' || selectedPreviewNode.type === 'level'" class="text-gold">
                 Reward: ${{ selectedPreviewNode.reward }}</h5>
             <MiniMap v-if="selectedPreviewNode && selectedPreviewNode.level" :level="selectedPreviewNode.level"
                 :company="selectedPreviewNode.company" />

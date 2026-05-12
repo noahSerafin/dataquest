@@ -4290,7 +4290,7 @@ class Dolls extends Piece {//finished? test, will have to be handled in app for 
     this.targetType = 'space'
   }
   async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
-    if(this.getStat('defence') <= 0 || this.defenceRemaining <= 1 || this.tiles.length <= 1) return;
+    if(this.getStat('defence') <= 0 || this.defenceRemaining <= 1) return;//|| this.tiles.length <= 1 has to be bigger???
     const newTrojan = new Dolls(target, this.team, this.removeCallback, crypto.randomUUID())
     //should we allow copying of stats also?
     newTrojan.maxSize = this.maxSize -1;

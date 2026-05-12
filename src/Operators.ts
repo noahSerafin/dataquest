@@ -617,7 +617,7 @@ const Debugger : OS = {
     adminSlots: 6,
     blueprints: [aegis, superKnife, testhybrid, testPiece],
     items: [new Genie, new Pandora, new Update2, new Dupe, new Jar],
-    admins: [new Crystal, new Taoism],
+    admins: [new Crystal, new Compass, new Taoism],
     lives: 9,
     description: 'FOR TESTING'
 }

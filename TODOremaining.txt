@@ -1,7 +1,39 @@
+//SOUND FX
+selectPiece  - x1
+move - x4
+ready attack x1
+ready special x1
+attack mult increase
+blockDamage x3
+takeHealthDamage x1 
+useSpecial - x2?
+triggerTrap x1?
+pieceDestroyed x 2
+roundLoss/lifeLoss x1
+cashOut
+
+adminTrigger
+roundWon
+loading Level
+
+negativeStatusApplied
+Freeze
+Burn
+Slow
+Blind
+Poison
+Disease
+Charmed
+Exposed
+Hidden
+
 //IMPROVEMENTS
-make map more interesting
+processSpawnPoints -> nodeBuilder, store the pieces in levels, can also replace originalSpawns?
+forfeit round button
+make map more interesting visually
 canplace tickbox in inventory
 Make a reason to use golden ticket, on bosses? allow it to be used in a node?
+investigate bubble adding interest
 make hybrids display how they do in compiler/blueprintcontroller - address manually
 Onion Icon for life with Onion admin
 level 1 always start the player inside the arena node???
@@ -34,7 +66,7 @@ load save forcing non deterministic shop, track seed uses in save to fix
 -
 MAP/WORLD BUILDER
 vary map layouts more, start with bonus nodes being more off centre
-Gladiator nodes - +1 or 2 security, place only once in arena node for reward - skippable
+Gladiator nodes - +1 or 2 security, place only once in arena node for reward - skippable STADIUM, U+1F3DF
 Other skippable challenge/bonus nodes - challenge node file with custom maps of fixed pieces? - make with editor
 Eg. deforester, wizard battle (w/pentagrams), trojan army, lich lair, man in the high castle (tradies gurading a watchman), etc.
 -

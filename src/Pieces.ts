@@ -1614,7 +1614,7 @@ class Nuke extends Piece {
 
 class Highwayman extends Piece {//not working
   static name = "Highwayman";
-  static description = "A program that can generate money once from an enemy piece based on it's rarity, or steal money from the player";
+  static description = "A program that can generate money once from an enemy piece based on it's rarity, or steal money from the player (starting pieces only, will not work on summons)";
   static unicode = "U+1F9B9";
   static color = "#494646ff";
   static rarity = 3;
@@ -1643,7 +1643,7 @@ class Highwayman extends Piece {//not working
 
 class Tengu extends Piece {//not working
   static name = "Tengu";
-  static description = "A program that can apply slowed to an enemy and steal money once based on it's rarity, or steal money from the player";
+  static description = "A program that can apply slowed to an enemy and steal money once based on it's rarity, or steal money from the player (starting pieces only, will not work on summons)";
   static unicode = "U+1F47A";
   static color = "rgb(90, 0, 60)";
   static rarity = 3;//buff?

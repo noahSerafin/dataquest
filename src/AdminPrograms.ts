@@ -111,7 +111,8 @@ export class Bubble extends Admin {
       player.bonusInterest = 0
       //remove self?
     } else {
-      player.bonusInterest += this.count;
+      //player.bonusInterest = this.count;
+      player.bonusInterest += 1;
       this.count++
     }
 
@@ -692,7 +693,7 @@ class Dove extends Admin {// PEACE SYMBOL, U+262E // HERB, Olive branch U+1F33F
 
 class Stonks extends Admin {
   static name = "Stonks";
-  static description = "+1 interest for every $5 you have";
+  static description = "+1 bonus interest for every $5 you have";
   static unicode = "U+1F4C8";
   static color = "#55ff6cff";
   static rarity = 3;

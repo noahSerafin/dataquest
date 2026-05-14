@@ -140,11 +140,11 @@ const rerollTip: TutorialStep = {
 }
 const shopItemTip: TutorialStep = {
     id: 'item-consumable',
-    tooltip: "This is a consumable item, it takes up 1 memory in your inventory and can only be used once.",
+    tooltip: "This is a consumable item, it takes up 1 memory in your inventory and can only be used once. Click to see what it does.",
 }
 const adminTip: TutorialStep = {
     id: 'item-admin',
-    tooltip: 'This is an admin, it takes up an admin slot and will provide passive benefits when it is triggered.',
+    tooltip: 'This is an admin, it takes up an admin slot and will provide passive benefits when it is triggered. Click to see what it does.',
 }
 const adminsTip: TutorialStep = {
     id: 'admin-header',

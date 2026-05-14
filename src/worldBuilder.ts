@@ -49,6 +49,24 @@ function shuffle(array: PathSpec[]) {
   }
 }
 
+/*function getEasyPath(difficulty: number): PathSpec {
+  const options: PathSpec[] = [
+    
+    { type: 'level', mods: [0, 0], rewards: [3, 3] },
+    { type: 'hiddenAltar', mods: [0, 0], rewards: [3, 3] }
+  ];
+  if (difficulty > 1 ){
+    options.push({ type: 'skip',  mods: [0, 1], rewards: [0, 5] });//skip path
+    options.push({ type: 'level', mods: [0, 1], rewards: [3, 5] });// risky path
+    options.push({ type: 'hiddenShop',  mods: [0, 1], rewards: [3, 5] });
+  }
+  if (difficulty > 2 ){
+
+  }
+  shuffle(options);
+  return options[0];
+}*/
+
 function getIndividualPath(difficulty: number): PathSpec {
   const options: PathSpec[] = [
     { type: 'skip',  mods: [0, 1], rewards: [0, 5] },//skip path

@@ -6,7 +6,7 @@ import { Random } from "./Random";
 
 type EnemyIntent =
   | { type: 'attack'; target: Piece }
-  | { type: 'special'; target: Piece | Coordinate | Piece[] | {piece: Piece, target: Coordinate} | {piece: Piece, player: Player} | {line: Coordinate[], activePieces: Piece[]} | {target: Coordinate, activePieces: Piece[], player?: Player} | null }
+  | { type: 'special'; target: Piece | Coordinate | Piece[] | {piece: Piece, target: Coordinate} | {piece: Piece, player: Player, originalPieceIds?: string[]} | {line: Coordinate[], activePieces: Piece[]} | {target: Coordinate, activePieces: Piece[], player?: Player} | null }
   | { type: 'move'; path: Coordinate[] }
   | { type: 'wander'; space: Coordinate }
   | { type: 'wait' };
@@ -29,7 +29,8 @@ function decideEnemyIntent(
   enemyPieces: Piece[],
   tileSet: Set<string>,
   specialAttempts: number,
-  player: Player
+  player: Player,
+  originalPieceIds?: string[]
 ): EnemyIntent {
   //first look for a player to attack or use special on
   const target = findWeakestPlayerInRange(enemy, playerPieces);//returning null even when there is a piece??!!!
@@ -101,7 +102,7 @@ function decideEnemyIntent(
           return { type: 'attack', target: target.piece };
         } else {
           if (enemy.targetType === 'pieceAndPlayer') {
-            return { type: 'special', target: { piece: target.piece, player: player } };
+            return { type: 'special', target: { piece: target.piece, player: player, originalPieceIds: originalPieceIds } };
           }
           return { type: 'special', target: target.piece };
         }
@@ -143,7 +144,7 @@ function decideEnemyIntent(
       return { type: 'special', target: {target: friendlyTarget.place, activePieces: activePieces}}
     } else if(enemy.targetType === 'piece' || enemy.targetType === 'pieceAndPlayer'){//piece
       if (enemy.targetType === 'pieceAndPlayer') {
-        return { type: 'special', target: { piece: friendlyTarget.piece, player: player } };
+        return { type: 'special', target: { piece: friendlyTarget.piece, player: player, originalPieceIds: originalPieceIds } };
       }
       return {type: 'special', target: friendlyTarget.piece}
     }
@@ -235,7 +236,7 @@ function decideEnemyIntent(
         const ally = findWeakestPlayerInRange(enemy, enemyPieces)?.piece
         if(ally){
           if (enemy.targetType === 'pieceAndPlayer') {
-            return { type: 'special', target: { piece: ally, player: player } };
+            return { type: 'special', target: { piece: ally, player: player, originalPieceIds: originalPieceIds } };
           }
           return {type: 'special', target: ally};
         } //else find and path to an ally and move there
@@ -364,6 +365,8 @@ export async function runEnemyStateMachine(
   tileSet: Set<string>,
   onReceiveDamage: (id: string, receiver: Piece) => void,
   player: Player,
+  originalPieceIds: string[] = [],
+  originalSpawns: Coordinate[] = [],
   delay = 200, // ms between moves for visibility
   isAborted: () => boolean = () => false
 ){
@@ -405,7 +408,7 @@ export async function runEnemyStateMachine(
         const enemyPieces = activePieces.filter(p => getSide(p) === 'enemy');
         const playerPieces = activePieces.filter(p => getSide(p) === 'player');
 
-        const intent = decideEnemyIntent(enemy, activePieces, playerPieces, enemyPieces, tileSet, specialAttempts, player);
+        const intent = decideEnemyIntent(enemy, activePieces, playerPieces, enemyPieces, tileSet, specialAttempts, player, originalPieceIds);
         if (intent.type === 'wait') break;
 
         // If we are here, we are doing something other than wait

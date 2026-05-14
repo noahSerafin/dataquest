@@ -603,6 +603,7 @@ const renewBlueprints = async () => {
 const lastTurnPieces = ref<InstanceType<typeof Piece>[]>([]);//player
 const originalPieces = ref<InstanceType<typeof Piece>[]>([]);//player
 const originalSpawns = ref<Coordinate[]>([]);//player
+const originalPlayerPieceIds = ref<string[]>([]);
 const currentCompany = ref<Company>({ name: 'Player', abbr: '', unicode: player.value.osunicode || '', pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "#9CC954" });
 
 async function selectLevel(newLevel: Level, company: Company, difficultyMod: number, lReward: number) {//load level, start 
@@ -619,6 +620,7 @@ async function selectLevel(newLevel: Level, company: Company, difficultyMod: num
   player.value.canAction = true;
   isFirstTurn.value = true;
   activePieces.value = [];
+  originalPlayerPieceIds.value = [];
   graveyard.value = [];
   level.value = newLevel;
   player.value.nextReward = lReward;
@@ -675,6 +677,7 @@ async function reloadLevel() {
   };
   renewBlueprints();
   activePieces.value = originalPieces.value.map(p => p.clone());
+  originalPlayerPieceIds.value = [];
   //if piece has no tiles, use headposition
   graveyard.value = [];
   lastTurnPieces.value = originalPieces.value.map(p => p.clone());
@@ -1109,6 +1112,7 @@ async function placePieceOnBoardAt(coord: Coordinate) {
   //pass admin modifiers to the piece
   PieceInstance.movesRemaining = PieceInstance.getStat('moves');
   activePieces.value.push(PieceInstance);
+  originalPlayerPieceIds.value.push(PieceInstance.id);
 
   // Mark blueprint as placed so it greys in inventory
   bp.isPlaced = true;
@@ -1377,7 +1381,8 @@ const handleSpecialActionAt = async (target: Coordinate) => {
     if (targetPiece) {
       await selectedPiece.value.special({
         piece: targetPiece,
-        player: player.value
+        player: player.value,
+        originalPieceIds: [...originalPieces.value.map(p => p.id)]
       });
     }
   }
@@ -1556,6 +1561,8 @@ async function enemyTurn(currentActivePieces: Piece[]) {
     tileSet,
     onReceiveDamage,
     player.value,
+    originalPlayerPieceIds.value,
+    originalSpawns.value,
     300,
     () => !roundHasStarted.value || hasWonRound.value
   );

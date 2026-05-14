@@ -1625,15 +1625,19 @@ class Highwayman extends Piece {//not working
    //this.canAttack = false;
   }
   private ids: string[] = []//track already stolen pieces?
-  async special({piece, player} : {piece: Piece, player: Player}):Promise<void>{
+  async special({piece, player, originalPieceIds} : {piece: Piece, player: Player, originalPieceIds?: string[]}):Promise<void>{
     if(!this.ids.includes(piece.id)){
       //await piece.takeDamage(this.getStat('attack'))
-      if(piece.team === 'enemy'){
-        player.money += piece.rarity; // should compare to original pieces for summon abuse
-      } else if(piece.team === 'player'){
-        player.money -= piece.rarity;
+      if (originalPieceIds && originalPieceIds.includes(piece.id)) {
+        if(piece.team === 'enemy'){
+          player.money += piece.rarity; // should compare to original pieces for summon abuse
+        } else if(piece.team === 'player'){
+          player.money -= piece.rarity;
+        }
+      } else {
+        await piece.takeDamage(this.getStat('attack'));
       }
-      this.ids.push(piece.id)
+      this.ids.push(piece.id);
       this.actions--
     } else {
       await piece.takeDamage(this.getStat('attack'));
@@ -1655,20 +1659,22 @@ class Tengu extends Piece {//not working
    //this.canAttack = false;
   }
   private ids: string[] = []//track already stolen pieces?
-  async special({piece, player} : {piece: Piece, player: Player}):Promise<void>{
+  async special({piece, player, originalPieceIds} : {piece: Piece, player: Player, originalPieceIds?: string[]}):Promise<void>{
+    if(!piece.immunities.slowed){//confused?
+      piece.statuses.slowed = true; //confused = true;
+    }
     if(!this.ids.includes(piece.id)){
-      if(!piece.immunities.slowed){//confused?
-        piece.statuses.slowed = true; //confused = true;
-      }
       //await piece.takeDamage(this.getStat('attack'))
-      if(piece.team === 'enemy'){
-        player.money += piece.rarity; // should compare to original pieces for summon abuse
-      } else if(piece.team === 'player'){
-        player.money -= piece.rarity;
+      if (originalPieceIds && originalPieceIds.includes(piece.id)) {
+        if(piece.team === 'enemy'){
+          player.money += piece.rarity; // should compare to original pieces for summon abuse
+        } else if(piece.team === 'player'){
+          player.money -= piece.rarity;
+        }
       }
       this.ids.push(piece.id)
       this.actions--
-    } else {
+    } else if(piece.statuses.slowed){
       await piece.takeDamage(this.getStat('attack'));
     }
   }

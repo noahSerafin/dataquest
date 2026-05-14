@@ -35,7 +35,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-    (e: "selectLevel", level: Level, company: Company, difficultyMod: number, reward: number): void;
+    (e: "selectLevel", level: Level, company: Company, difficultyMod: number, reward: number, playerSpawns?: Coordinate[]): void;
     (e: "openShop"): void;
     (e: "openDisabledShop"): void;
     (e: "openAltar"): void;
@@ -71,7 +71,7 @@ const skipsThisLevel = ref<number>(0);
 // Explicitly seed the PRNG before any map generation starts to ensure reproducibility
 Random.setSeed(props.seed);
 
-const world = ref<WorldMap>(generateWorld(levelPool.value, props.player.difficulty));//should be called again with after boss after increase difficulty
+const world = ref<WorldMap>(generateWorld(levelPool.value, props.player.difficulty, props.player.stake));//should be called again with after boss after increase difficulty
 assignSkipRewards(world.value);
 
 const currentNodeId = ref(world.value.startNode);
@@ -228,7 +228,7 @@ function enterNode(node: WorldNode) {
     if (node.level) {
         showTutorialTip('board');
         //just pass the compamy for extra visual styling?
-        emit("selectLevel", node.level, node.company, node.difficultyMod, (node.reward + props.player.bonusReward));
+        emit("selectLevel", node.level, node.company, node.difficultyMod, (node.reward + props.player.bonusReward), node.playerSpawns);
     }
 }
 
@@ -466,7 +466,7 @@ watch(
         console.log('rebuilding deterministic map');
         Random.setSeed(props.seed);
 
-        world.value = generateWorld(levelPool.value, props.player.difficulty);
+        world.value = generateWorld(levelPool.value, props.player.difficulty, props.player.stake);
         assignSkipRewards(world.value);
         currentNodeId.value = world.value.startNode;
         // generate new boss

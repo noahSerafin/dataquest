@@ -606,7 +606,7 @@ const originalSpawns = ref<Coordinate[]>([]);//player
 const originalPlayerPieceIds = ref<string[]>([]);
 const currentCompany = ref<Company>({ name: 'Player', abbr: '', unicode: player.value.osunicode || '', pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "#9CC954" });
 
-async function selectLevel(newLevel: Level, company: Company, difficultyMod: number, lReward: number) {//load level, start 
+async function selectLevel(newLevel: Level, company: Company, difficultyMod: number, lReward: number, pSpawns?: Coordinate[]) {//load level, start 
   pieceToPlace.value = null;
   currentCompany.value = { ...company };
   showBoard.value = true;
@@ -626,7 +626,13 @@ async function selectLevel(newLevel: Level, company: Company, difficultyMod: num
   player.value.nextReward = lReward;
   const newPieces = rehydratePieces(newLevel.pieces);
   player.value.extraDifficulty = difficultyMod;
-  activePieces.value = processSpawnPoints(newPieces, company.pieceList, difficultyMod);
+  activePieces.value = newPieces;
+  
+  if (pSpawns) {
+    playerSpawns.value = pSpawns;
+    originalSpawns.value = pSpawns.map(s => ({ ...s }));
+  }
+  
   console.log('originalSpawns: ', originalSpawns.value);
   //originalSpawns.value = [...playerSpawns.value];
   originalPieces.value = activePieces.value.map(p => p.clone());
@@ -917,89 +923,8 @@ const newPlacementHighlights = (): Coordinate[] => {//board should only show the
   return uniqueHighlights;
 };
 
-//(pieces(already in level), companyPieceList, mod)
-function processSpawnPoints(pieces: Piece[], companyPieces: any[], mod: number) {
-  const processed: Piece[] = [];
-  const newPlayerSpawns: Coordinate[] = [];
+// processSpawnPoints logic moved to worldBuilder.ts
 
-  for (const piece of pieces) {
-    if (piece instanceof Spawn) {
-      const spawnSize = piece.tiles.length;
-      // Enemy spawn → replace with random enemy piece
-      if (piece.team === 'enemy') {
-        //difficulty from constants ramp
-        let trueDifficulty = 0;
-        if (player.value.difficulty + mod > 6) {
-          trueDifficulty = 6; //remove later when endless mode is done
-        } else if (player.value.difficulty + mod < 1) {
-          trueDifficulty = 1;
-        } else {
-          trueDifficulty = player.value.difficulty + mod;
-        }
-        const { min, max } = DIFFICULTY_RARITY[trueDifficulty];
-
-        // 1. Get all enemies that match the current difficulty rarity
-        const difficultyMatched = companyPieces.filter(EnemyClass => {
-          if (EnemyClass.name === "Nuke") return false;
-
-          // Create a temp instance to check rarity and maxSize
-          const temp = new EnemyClass(piece.headPosition, 'enemy', removePiece);
-          return temp.rarity >= min && temp.rarity <= max;
-        });
-        // 2. Try to find one from that group that fits the spawn size
-        let pool = difficultyMatched.filter(EnemyClass => {
-          const temp = new EnemyClass(piece.headPosition, 'enemy', removePiece);
-          return temp.maxSize >= spawnSize;
-        });
-        // 3. FALLBACK: If none fit the size, stay within the difficulty but allow smaller pieces
-        if (pool.length === 0) {
-          console.warn(`No enemy of rarity ${min}-${max} fits spawn size ${spawnSize}. Falling back to smaller units.`);
-          pool = difficultyMatched;
-        }
-        // 4. LAST RESORT: If no enemies match the rarity at all, only then use allPieces
-        /*if (pool.length === 0) {
-          pool = allPieces;
-        }*/
-
-        const EnemyClass = Random.pick(pool);
-
-        const enemyInstance = new EnemyClass(piece.headPosition, 'enemy', removePiece);
-        enemyInstance.tiles = piece.tiles.slice(0, enemyInstance.maxSize);//trims the larger spawn down, might be a problem on castled
-
-        const variantChance = Math.min((0.1 * trueDifficulty - 0.1), 1)
-        const variant = rollVariant(variantChance, trueDifficulty);
-        if (variant) {
-          applyVariant(enemyInstance, variant);
-        }
-        enemyInstance.defenceRemaining = enemyInstance.getStat('defence');//not working??
-        //add tiles here? if spawn.tiles.length <= enemy.getStat(maxsize){ enemy.tiles = spawn.tiles }
-
-        if (player.value.stake > 1) enemyInstance.maxSize += player.value.difficulty;
-        if (player.value.stake > 2) enemyInstance.moves += player.value.difficulty;
-        if (player.value.stake > 3) enemyInstance.range += player.value.difficulty;
-        if (player.value.stake > 4) enemyInstance.attack += player.value.difficulty;
-        if (player.value.stake > 5) enemyInstance.defence += player.value.difficulty;
-
-        processed.push(enemyInstance);
-        continue;
-      }
-
-      if (piece.team === 'player') {
-        //placementHighlights.value.push(piece.headPosition);
-        newPlayerSpawns.push(piece.headPosition);
-        // Do *not* add Spawn to active pieces — it is a marker, not a unit
-        continue;
-      }
-    }
-    //console.log("placementHighlights after:", playerSpawns.value);
-    processed.push(piece);
-  }
-  playerSpawns.value = newPlayerSpawns;
-  console.log('playerSpawns after spawn processing:', playerSpawns.value);
-  originalSpawns.value = newPlayerSpawns.map(s => ({ ...s }));
-
-  return processed;
-}
 
 function rehydratePieces(rawPieces: any[]): InstanceType<typeof Piece>[] {
   const pieceClasses = [...allPieces];
@@ -1012,7 +937,19 @@ function rehydratePieces(rawPieces: any[]): InstanceType<typeof Piece>[] {
 
 onMounted(() => {
   const initPieces = rehydratePieces(level.value.pieces);
-  activePieces.value = processSpawnPoints(initPieces, allPieces, 0); // sets placementHighlights internally
+  // Manual spawn point processing for initial level
+  const playerSpawnCoords: Coordinate[] = [];
+  const processedPieces: Piece[] = [];
+  for (const piece of initPieces) {
+    if (piece instanceof Spawn && piece.team === 'player') {
+      playerSpawnCoords.push(piece.headPosition);
+    } else {
+      processedPieces.push(piece);
+    }
+  }
+  activePieces.value = processedPieces;
+  playerSpawns.value = playerSpawnCoords;
+  originalSpawns.value = playerSpawnCoords.map(s => ({ ...s }));
   refreshShop(true)//handle in round, or don't for crystal ball
 });
 
@@ -1636,7 +1573,9 @@ const handleExport = (levelData: any) => {
   level.value.pieces = levelData.pieces;
   // Hydrate pieces once
   const initPieces = rehydratePieces(level.value.pieces);
-  activePieces.value = processSpawnPoints(initPieces, allPieces, 0);
+  activePieces.value = initPieces; // processSpawnPoints removed, assume pre-processed or markers handled in rehydrate
+  playerSpawns.value = initPieces.filter(p => p instanceof Spawn && p.team === 'player').map(p => p.headPosition);
+  originalSpawns.value = playerSpawns.value.map(s => ({ ...s }));
   displayEditor.value = false; // swap to board view
   roundHasStarted.value = true;
 };

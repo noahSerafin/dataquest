@@ -3404,7 +3404,7 @@ class Lefty extends Admin {
 
 class Righty extends Admin {
   static name = "Right Hand Path";
-  static description = "Your programs gain +1 defence for every node your enter that has a highter security level than your own";// too easy, make right hand instead
+  static description = "Your programs gain +1 defence for every node your enter that has a higher security level than your own";// too easy, make right hand instead
   static unicode = "U+1FAF1";//"U+1FAF7";//"U+1F91A";
   static color = "rgb(11, 0, 71)";
   static rarity = 6;

@@ -1,6 +1,7 @@
 import type { Company, Coordinate, SkipReward } from "./types";
-import type { Piece } from "./Pieces";
-import { bossCompany, companies, playerCompany, shopCompany } from "./companies";
+import { Spawn, allPieces } from "./Pieces";
+import { DIFFICULTY_RARITY } from "./constants";
+import { applyVariant, rollVariant } from "./helperFunctions";
 import { generateNode } from "./nodeBuilder";
 import { Random } from "./Random";
 
@@ -20,6 +21,7 @@ export interface WorldNode {
   difficultyMod: number;
   reward: number;
   level?: Level;             // Only for type: level
+  playerSpawns?: Coordinate[]; // Added to store player spawn points
   hiddenUntilVisited?: string; // node id that must be completed first
   visited?: boolean;
   skipReward?: SkipReward; //get shop function into helpers to create these
@@ -137,7 +139,8 @@ function getPathPositions(
 
 export function generateWorld(
   levelPool: Level[],
-  difficulty: number
+  difficulty: number,
+  stake: number
 ): WorldMap {
 
   //const pick = () => levelPool[Math.floor(Math.random() * levelPool.length)];
@@ -471,10 +474,96 @@ export function generateWorld(
     } else {
       node.visible = false;
     }
+    
+    // Process level spawns if node has a level
+    if (node.level && (node.type === 'level' || node.type === 'boss')) {
+      const { processedPieces, playerSpawns } = processSpawnPoints(
+        node.level.pieces, 
+        node.company.pieceList.length > 0 ? node.company.pieceList : allPieces, 
+        difficulty,
+        node.difficultyMod,
+        stake
+      );
+      node.level.pieces = processedPieces;
+      node.playerSpawns = playerSpawns;
+    }
   }
 
   return {
     startNode: startId,
     nodes
   };
+}
+
+function processSpawnPoints(
+  pieces: Piece[], 
+  companyPieces: any[], 
+  difficulty: number,
+  mod: number, 
+  stake: number
+) {
+  const processed: Piece[] = [];
+  const playerSpawns: Coordinate[] = [];
+
+  for (const piece of pieces) {
+    if (piece instanceof Spawn) {
+      const spawnSize = piece.tiles.length;
+      // Enemy spawn → replace with random enemy piece
+      if (piece.team === 'enemy') {
+        let trueDifficulty = 0;
+        if (difficulty + mod > 6) {
+          trueDifficulty = 6;
+        } else if (difficulty + mod < 1) {
+          trueDifficulty = 1;
+        } else {
+          trueDifficulty = difficulty + mod;
+        }
+        const { min, max } = DIFFICULTY_RARITY[trueDifficulty];
+
+        const difficultyMatched = companyPieces.filter(EnemyClass => {
+          if (EnemyClass.name === "Nuke") return false;
+          const temp = new EnemyClass(piece.headPosition, 'enemy');
+          return temp.rarity >= min && temp.rarity <= max;
+        });
+
+        let pool = difficultyMatched.filter(EnemyClass => {
+          const temp = new EnemyClass(piece.headPosition, 'enemy');
+          return temp.maxSize >= spawnSize;
+        });
+
+        if (pool.length === 0) {
+          pool = difficultyMatched;
+        }
+
+        const EnemyClass = Random.pick(pool);
+        const enemyInstance = new EnemyClass(piece.headPosition, 'enemy');
+        enemyInstance.tiles = piece.tiles.slice(0, enemyInstance.maxSize);
+
+        const variantChance = Math.min((0.1 * trueDifficulty - 0.1), 1);
+        const variant = rollVariant(variantChance, trueDifficulty);
+        if (variant) {
+          applyVariant(enemyInstance, variant);
+        }
+        
+        enemyInstance.defenceRemaining = enemyInstance.getStat('defence');
+
+        if (stake > 1) enemyInstance.maxSize += difficulty;
+        if (stake > 2) enemyInstance.moves += difficulty;
+        if (stake > 3) enemyInstance.range += difficulty;
+        if (stake > 4) enemyInstance.attack += difficulty;
+        if (stake > 5) enemyInstance.defence += difficulty;
+
+        processed.push(enemyInstance);
+        continue;
+      }
+
+      if (piece.team === 'player') {
+        playerSpawns.push(piece.headPosition);
+        continue;
+      }
+    }
+    processed.push(piece);
+  }
+
+  return { processedPieces: processed, playerSpawns };
 }

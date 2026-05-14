@@ -1394,7 +1394,7 @@ class Spoon extends Admin {
 
 export class Hermes extends Admin {//moves
   static name = "Hermes";// Wings";
-  static description = "All your programs gain +1 moves and are immune to being slowed at the start of each turn";
+  static description = "All your programs gain +1 moves remaining and are immune to being slowed at the start of each turn";
   static unicode = "U+269A";//"U+1FABD";
   static color = "#083546ff";
   static rarity = 5;//6?
@@ -2619,7 +2619,7 @@ export class Ferris extends Admin {
 // EVERGREEN TREE, U+1F332, cannot be frozen, scarf already does this
 class Evergreen extends Admin {
   static name = "Evergreen";
-  static description = "+1 max size to all your programs at the every 2 turns";
+  static description = "+1 max size to all your placed programs at the every 2 turns";
   static unicode = "U+1F332";
   static color = "#042703";
   static rarity = 4;

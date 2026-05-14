@@ -202,6 +202,14 @@ const lineSpecialsTipTip: TutorialStep = {
 }
 const hotkeysTip: TutorialStep = {
     id: 'hotkeysTip',
-    tooltip: 'Hotkeys: A to attack, S for special move, D to deselect, spacebar to end turn.'
+    tooltip: 'Hotkeys: A to attack, S for special move, D to deselect, Spacebar to end turn.'
 }
-export const proTips: TutorialStep[] = [proTipSuggestion, defenderTip, specialTip, damageMultTip, adminOrderTip, lineSpecialsTipTip, hotkeysTip];
+const statusesTip: TutorialStep = {
+    id: 'statusesTip',
+    tooltip: 'Negative statuses take effect at the end of your turn, remove them before if you can.'
+}
+const slowedTip: TutorialStep = {
+    id: 'slowedTip',
+    tooltip: 'Out of moves? Frozen? If your program has a special move like charging, you can use this to move for free.'
+}
+export const proTips: TutorialStep[] = [proTipSuggestion, defenderTip, specialTip, damageMultTip, adminOrderTip, lineSpecialsTipTip, hotkeysTip, statusesTip, slowedTip];

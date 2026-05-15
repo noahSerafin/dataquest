@@ -340,8 +340,49 @@ const connections = computed(() => {
             // 3. H-D-V-D-H Strategy for split paths (enters from sides, preserves 45 deg)
             else if (isSplitPath) {
                 const ds = Math.min(absDx, absDy) * 0.1;
-                const xa = x1 + (dxTotal - sx * 2 * ds) / 2;
-                const xb = xa + sx * ds;
+                // Vertical segment is at xb. It must not be within 25px of any other node's center.
+                // The nodes we care about are those between y1 and y2.
+                let xb = x1 + dxTotal / 2;
+
+                const otherNodes = Object.keys(positions).filter(id => id !== node.id && id !== nextId);
+                const minY = Math.min(y1, y2);
+                const maxY = Math.max(y1, y2);
+
+                // We only care about nodes that are vertically "in the way" of the vertical line
+                const nodesInWay = otherNodes.filter(id => {
+                    const pos = positions[id];
+                    const nodeY = pos.y + 16; // center y
+                    return nodeY > minY && nodeY < maxY;
+                });
+
+                // Function to check if xb is safe
+                const isSafe = (x: number) => {
+                    for (const id of nodesInWay) {
+                        const nodeX = positions[id].x + 16; // center x
+                        if (Math.abs(x - nodeX) < 32) return false;
+                    }
+                    return true;
+                };
+
+                if (!isSafe(xb)) {
+                    // Try shifting xb. We must keep xb at least ds away from x1 and x2.
+                    const minXLimit = Math.min(x1, x2) + ds;
+                    const maxXLimit = Math.max(x1, x2) - ds;
+
+                    // Try shifting in increments of 5px
+                    for (let offset = 5; offset < absDx / 2; offset += 5) {
+                        if (xb + offset <= maxXLimit && isSafe(xb + offset)) {
+                            xb += offset;
+                            break;
+                        }
+                        if (xb - offset >= minXLimit && isSafe(xb - offset)) {
+                            xb -= offset;
+                            break;
+                        }
+                    }
+                }
+
+                const xa = xb - sx * ds;
                 const xc = xb + sx * ds;
                 const yc = y1 + sy * ds;
                 const yd = y2 - sy * ds;
@@ -549,12 +590,12 @@ watch(
                 primary's special move.</h6>
             <h6 v-if="selectedPreviewNode.type === 'skip'">(Must have room)</h6>
             <h4 v-if="selectedPreviewNode.type !== 'boss' && selectedPreviewNode.type === 'level'">{{
-                selectedPreviewNode.company.name}}</h4>
+                selectedPreviewNode.company.name }}</h4>
             <div v-if="selectedPreviewNode.type !== 'boss' && selectedPreviewNode.type === 'level'">
                 {{ String.fromCodePoint(parseInt(selectedPreviewNode.company.unicode.replace('U+', ''), 16), 0xFE0F) }}
             </div>
             <h5 v-if="selectedPreviewNode.type === 'boss' || selectedPreviewNode.type === 'level'">Security Level 🔒: {{
-                player.difficulty + selectedPreviewNode.difficultyMod}}</h5>
+                player.difficulty + selectedPreviewNode.difficultyMod }}</h5>
             <h5 v-if="selectedPreviewNode.type === 'boss' || selectedPreviewNode.type === 'level'" class="text-gold">
                 Reward: ${{ selectedPreviewNode.reward }}</h5>
             <MiniMap v-if="selectedPreviewNode && selectedPreviewNode.level" :level="selectedPreviewNode.level"
@@ -778,10 +819,12 @@ watch(
     cursor: pointer;
     border-color: yellow;
 }
-.text-gold{
+
+.text-gold {
     color: #fdbf13;
 }
-.preview-modal.ZEN .text-gold{
+
+.preview-modal.ZEN .text-gold {
     color: #864800;
 }
 

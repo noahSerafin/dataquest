@@ -4,6 +4,8 @@ import { DIFFICULTY_RARITY } from "./constants";
 import { applyVariant, rollVariant } from "./helperFunctions";
 import { generateNode } from "./nodeBuilder";
 import { Random } from "./Random";
+import type { Piece } from "./Pieces"
+import { playerCompany, shopCompany, bossCompany, companies } from "./companies";
 
 interface Level {
   name: string;
@@ -479,7 +481,7 @@ export function generateWorld(
     if (node.level && (node.type === 'level' || node.type === 'boss')) {
       const { processedPieces, playerSpawns } = processSpawnPoints(
         node.level.pieces, 
-        node.company.pieceList.length > 0 ? node.company.pieceList : allPieces, 
+        (node.company && node.company.pieceList && node.company.pieceList.length > 0) ? node.company.pieceList : allPieces, 
         difficulty,
         node.difficultyMod,
         stake
@@ -506,7 +508,7 @@ function processSpawnPoints(
   const playerSpawns: Coordinate[] = [];
 
   for (const piece of pieces) {
-    if (piece instanceof Spawn) {
+    if (piece.name === 'Spawn') {
       const spawnSize = piece.tiles.length;
       // Enemy spawn → replace with random enemy piece
       if (piece.team === 'enemy') {
@@ -521,7 +523,7 @@ function processSpawnPoints(
         const { min, max } = DIFFICULTY_RARITY[trueDifficulty];
 
         const difficultyMatched = companyPieces.filter(EnemyClass => {
-          if (EnemyClass.name === "Nuke") return false;
+          if (!EnemyClass || EnemyClass.name === "Nuke") return false;
           const temp = new EnemyClass(piece.headPosition, 'enemy');
           return temp.rarity >= min && temp.rarity <= max;
         });

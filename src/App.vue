@@ -15,11 +15,10 @@ import { Spawn, allPieces } from "./Pieces"
 import type { Coordinate, PieceBlueprint, Level, OS, Company } from "./types";
 import { runEnemyStateMachine } from "./Enemy";
 import WorldMap from "./components/WorldMap.vue";
-import { applyVariant, coordKey, findAnyPiecesInRange, getOccupiedTileSet, getTilesInRange, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, rollVariant, isSoundEnabled } from "./helperFunctions";
+import { coordKey, findAnyPiecesInRange, getOccupiedTileSet, getTilesInRange, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, isSoundEnabled } from "./helperFunctions";
 import Shop from "./components/Shop.vue";
 import BossView from "./components/BossView.vue";
 import RoundSummary from "./components/RoundSummary.vue";
-import { DIFFICULTY_RARITY } from "./constants";
 import BlueprintView from "./components/BlueprintView.vue";
 import MainMenu from "./components/MainMenu.vue";
 import PieceController from "./components/PieceController.vue";
@@ -931,7 +930,11 @@ function rehydratePieces(rawPieces: any[]): InstanceType<typeof Piece>[] {
   pieceClasses.unshift(Spawn);
   return rawPieces.map(p => {
     const PieceClass = pieceClasses.find(cls => cls.name === p.name)
-    return PieceClass ? Object.assign(new PieceClass(p.headPosition, p.team, removePiece), p) : p
+    if (!PieceClass) return p;
+    const instance = new PieceClass(p.headPosition, p.team, removePiece);
+    Object.assign(instance, p);
+    instance.removeCallback = removePiece;
+    return instance;
   })
 }
 

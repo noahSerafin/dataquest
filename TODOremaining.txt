@@ -28,8 +28,11 @@ Exposed
 Hidden
 
 //IMPROVEMENTS
-processSpawnPoints -> nodeBuilder, store the pieces in levels, can also replace originalSpawns?
+bosses appearing twice on reload
 forfeit round button
+fix hybrid extraUnicode display
+processSpawnPoints -> nodeBuilder, store the pieces in levels, can also replace originalSpawns?
+negative admins
 make map more interesting visually
 canplace tickbox in inventory
 Make a reason to use golden ticket, on bosses? allow it to be used in a node?
@@ -55,6 +58,7 @@ TUTORIAL - make more handholdy?
 -
 // BUGS
 0 damage not dissappearing
+glass variant setting 50% opacity on controller
 can still sell after sacrificing - duping/sacrificing/hybriding needs to deselect
 bosses need to go in savestate - testing fix
 cannon and laser can shoot themselves

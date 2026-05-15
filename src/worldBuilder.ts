@@ -444,17 +444,42 @@ export function generateWorld(
   // --- Split Paths ---
   // Connect one node in the first row to a neighboring second node
   if (pathSpecs.length >= 2) {
-    const splitPathIndex = Random.floor(pathSpecs.length);
-    const neighborIndex = splitPathIndex === 0 ? 1 : 
-                         (splitPathIndex === pathSpecs.length - 1 ? splitPathIndex - 1 : 
-                          (Random.bool(0.5) ? splitPathIndex - 1 : splitPathIndex + 1));
-    
-    const sourceId = `path_${splitPathIndex}_1`;
-    const targetId = `path_${neighborIndex}_2`;
-    
-    if (nodes[sourceId] && nodes[targetId]) {
-      nodes[sourceId].next.push(targetId);
+    const possibleEdges: { from: number; to: number }[] = [];
+    for (let i = 0; i < pathSpecs.length; i++) {
+      if (i > 0) possibleEdges.push({ from: i, to: i - 1 });
+      if (i < pathSpecs.length - 1) possibleEdges.push({ from: i, to: i + 1 });
     }
+
+    const crosses = (e1: { from: number; to: number }, e2: { from: number; to: number }) => {
+      return (e1.from < e2.from && e1.to > e2.to) || (e1.from > e2.from && e1.to < e2.to);
+    };
+
+    const selectedEdges: { from: number; to: number }[] = [];
+
+    // First split path
+    const firstEdgeIndex = Random.floor(possibleEdges.length);
+    const firstEdge = possibleEdges.splice(firstEdgeIndex, 1)[0];
+    selectedEdges.push(firstEdge);
+
+    // Second split path (50% chance if paths > 2)
+    if (pathSpecs.length > 2 && Random.bool(0.5)) {
+      const remainingNonCrossing = possibleEdges.filter(e => !crosses(firstEdge, e));
+      if (remainingNonCrossing.length > 0) {
+        const secondEdge = Random.pick(remainingNonCrossing);
+        selectedEdges.push(secondEdge);
+      }
+    }
+
+    selectedEdges.forEach(edge => {
+      const sourceId = `path_${edge.from}_1`;
+      const targetId = `path_${edge.to}_2`;
+      
+      if (nodes[sourceId] && nodes[targetId]) {
+        if (!nodes[sourceId].next.includes(targetId)) {
+          nodes[sourceId].next.push(targetId);
+        }
+      }
+    });
   }
 
   // --- Shop ---

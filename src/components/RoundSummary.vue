@@ -114,7 +114,7 @@
                 Round Over
             </h3>
             <button @click="emit('reloadLevel')" :disabled="roundHasStarted">Retry</button>
-            <button @click="emit('returnToMap')" :disabled="roundHasStarted">Return to Map</button>
+            <button v-if="props.player.mapProgress < 2" @click="emit('returnToMap')" :disabled="roundHasStarted">Return to Map</button>
         </div>
         <div class="if-lost" v-if="!hasWonRound && player.lives <= 0">
             <h3>

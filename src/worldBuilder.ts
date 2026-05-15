@@ -68,14 +68,15 @@ function getEasyPath(difficulty: number): PathSpec {
     options.push({ type: 'hiddenShop',  mods: [0, 0], rewards: [3, 3] });
   }
   if (difficulty > 2 ){
+    options.push({ type: 'skip',  mods: [0, 0], rewards: [0, 3] }),//skip path
     options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
     options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
     options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
     options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
-    options.push({ type: 'hiddenAltar',  mods: [1, 2], rewards: [4, 7] });
-    options.push({ type: 'hiddenDuplicator',  mods: [0, 1], rewards: [3, 5] });
-    options.push({ type: 'hiddenWorkbench',  mods: [0, 1], rewards: [3, 5] });
-    options.push({ type: 'hiddenCompiler',  mods: [1, 2], rewards: [4, 7] });
+    options.push({ type: 'hiddenAltar',  mods: [0, 0], rewards: [3, 3] });
+    options.push({ type: 'hiddenDuplicator',  mods: [0, 0], rewards: [3, 3] });
+    options.push({ type: 'hiddenWorkbench',  mods: [0, 0], rewards: [3, 3] });
+    options.push({ type: 'hiddenCompiler',  mods: [0, 0], rewards: [3, 3] });
   }
   shuffle(options);
   return options[0];
@@ -167,6 +168,8 @@ export function generateWorld(
   const pathSpecs = getPathSpecsForDifficulty(difficulty);
 
   const nodes: Record<string, WorldNode> = {};
+  const middleNodeIds: (string | null)[] = new Array(pathSpecs.length).fill(null);
+
 
   // --- Start node ---
   nodes[startId] = {
@@ -211,6 +214,7 @@ export function generateWorld(
 
     if (spec.type === 'hiddenShop') {
       const hiddenShopId = `path_${i}_hidden_shop`;
+      middleNodeIds[i] = hiddenShopId;
 
       nodes[p1] = {
         id: p1,
@@ -252,6 +256,7 @@ export function generateWorld(
 
     if (spec.type === 'hiddenAltar') {
       const hiddenCompilerId = `path_${i}_hidden_altar`;
+      middleNodeIds[i] = hiddenCompilerId;
 
       nodes[p1] = {
         id: p1,
@@ -293,6 +298,7 @@ export function generateWorld(
 
     if (spec.type === 'hiddenDuplicator') {
       const hiddenCompilerId = `path_${i}_hidden_duplicator`;
+      middleNodeIds[i] = hiddenCompilerId;
 
       nodes[p1] = {
         id: p1,
@@ -334,6 +340,7 @@ export function generateWorld(
 
     if (spec.type === 'hiddenWorkbench') {
       const hiddenCompilerId = `path_${i}_hidden_workbench`;
+      middleNodeIds[i] = hiddenCompilerId;
 
       nodes[p1] = {
         id: p1,
@@ -375,6 +382,7 @@ export function generateWorld(
 
     if (spec.type === 'hiddenCompiler') {
       const hiddenCompilerId = `path_${i}_hidden_compiler`;
+      middleNodeIds[i] = hiddenCompilerId;
 
       nodes[p1] = {
         id: p1,
@@ -471,9 +479,18 @@ export function generateWorld(
     }
 
     selectedEdges.forEach(edge => {
-      const sourceId = `path_${edge.from}_1`;
-      const targetId = `path_${edge.to}_2`;
+      let sourceId = `path_${edge.from}_1`;
+      let targetId = `path_${edge.to}_2`;
       
+      const roll = Random.next();
+      // 30% chance to originate from middle node OR 30% chance to lead to middle node
+      // This ensures we never have middle-to-middle connections
+      if (roll < 0.3 && middleNodeIds[edge.from]) {
+        sourceId = middleNodeIds[edge.from]!;
+      } else if (roll < 0.6 && middleNodeIds[edge.to]) {
+        targetId = middleNodeIds[edge.to]!;
+      }
+
       if (nodes[sourceId] && nodes[targetId]) {
         if (!nodes[sourceId].next.includes(targetId)) {
           nodes[sourceId].next.push(targetId);

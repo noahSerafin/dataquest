@@ -322,7 +322,8 @@ const connections = computed(() => {
                 node.id.split('_')[1] !== nextId.split('_')[1];
 
             // 1. V-D-V Strategy for unrevealed/offset nodes and final shop-to-boss connection
-            if (node.hiddenUntilVisited || nextNode.hiddenUntilVisited || (node.id === 'shop' && nextId === 'boss')) {
+            // But NOT for split paths (those should use H-D-V-D-H)
+            if (!isSplitPath && (node.hiddenUntilVisited || nextNode.hiddenUntilVisited || (node.id === 'shop' && nextId === 'boss'))) {
                 const diagSize = absDx;
                 const verticalPadding = (absDy - diagSize) / 2;
                 const ya = y1 + sy * verticalPadding;

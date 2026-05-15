@@ -53,23 +53,33 @@ function shuffle(array: PathSpec[]) {
   }
 }
 
-/*function getEasyPath(difficulty: number): PathSpec {
+function getEasyPath(difficulty: number): PathSpec {
   const options: PathSpec[] = [
     
     { type: 'level', mods: [0, 0], rewards: [3, 3] },
     { type: 'hiddenAltar', mods: [0, 0], rewards: [3, 3] }
   ];
   if (difficulty > 1 ){
-    options.push({ type: 'skip',  mods: [0, 1], rewards: [0, 5] });//skip path
-    options.push({ type: 'level', mods: [0, 1], rewards: [3, 5] });// risky path
-    options.push({ type: 'hiddenShop',  mods: [0, 1], rewards: [3, 5] });
+    options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
+    options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
+    options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
+    options.push({ type: 'skip',  mods: [0, 0], rewards: [0, 3] });
+    options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] });
+    options.push({ type: 'hiddenShop',  mods: [0, 0], rewards: [3, 3] });
   }
   if (difficulty > 2 ){
-
+    options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
+    options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
+    options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
+    options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
+    options.push({ type: 'hiddenAltar',  mods: [1, 2], rewards: [4, 7] });
+    options.push({ type: 'hiddenDuplicator',  mods: [0, 1], rewards: [3, 5] });
+    options.push({ type: 'hiddenWorkbench',  mods: [0, 1], rewards: [3, 5] });
+    options.push({ type: 'hiddenCompiler',  mods: [1, 2], rewards: [4, 7] });
   }
   shuffle(options);
   return options[0];
-}*/
+}
 
 function getIndividualPath(difficulty: number): PathSpec {
   const options: PathSpec[] = [
@@ -109,7 +119,8 @@ function getPathSpecsForDifficulty(difficulty: number): PathSpec[] {
   */
   if (difficulty <= 1) {
     return [
-      Random.bool(0.5) ? { type: 'level', mods: [0, 0], rewards: [3, 3] } : { type: 'hiddenAltar', mods: [0, 0], rewards: [3, 3] }, // safe path
+      //Random.bool(0.5) ? { type: 'level', mods: [0, 0], rewards: [3, 3] } : { type: 'hiddenAltar', mods: [0, 0], rewards: [3, 3] }, // safe path
+      getEasyPath(difficulty),
       //getIndividualPath(difficulty)
       { type: 'skip',  mods: [0, 1], rewards: [0, 5] },
       //{ type: 'hiddenShop',  mods: [1, 2], rewards: [4, 7] }
@@ -119,7 +130,8 @@ function getPathSpecsForDifficulty(difficulty: number): PathSpec[] {
   // difficulty 3+
   //if (difficulty > 2) {
     return [
-      { type: 'level', mods: [0, 0], rewards: [3, 3] },
+      //{ type: 'level', mods: [0, 0], rewards: [3, 3] },
+      getEasyPath(difficulty),
       getIndividualPath(difficulty),
       getIndividualPath(difficulty),
     ];

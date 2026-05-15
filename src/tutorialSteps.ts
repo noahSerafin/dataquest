@@ -212,4 +212,12 @@ const slowedTip: TutorialStep = {
     id: 'slowedTip',
     tooltip: 'Out of moves? Frozen? If your program has a special move like charging, you can use this to move for free.'
 }
-export const proTips: TutorialStep[] = [proTipSuggestion, defenderTip, specialTip, damageMultTip, adminOrderTip, lineSpecialsTipTip, hotkeysTip, statusesTip, slowedTip];
+const hiddenNodesTip: TutorialStep = {
+    id: 'hiddenNodeTip',
+    tooltip: 'Hidden nodes can either be shops or altars when Security < 2. After this you might also find duplicators, workbenches, and hybrid compilers.'
+}
+const leftPathTip: TutorialStep = {
+    id: 'hiddenNodeTip',
+    tooltip: 'Hidden nodes can either be shops or altars when Security < 2. After this you might also find duplicators, workbenches, and hybrid compilers.'
+}
+export const proTips: TutorialStep[] = [proTipSuggestion, defenderTip, specialTip, damageMultTip, adminOrderTip, lineSpecialsTipTip, hotkeysTip, statusesTip, slowedTip, hiddenNodesTip];

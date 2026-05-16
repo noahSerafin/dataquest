@@ -28,21 +28,15 @@ Exposed
 Hidden
 
 //IMPROVEMENTS
-trojan not getting immunities
-processSpawnPoints -> nodeBuilder, store the pieces in levels, can also replace originalSpawns?
 forfeit round button
-fix hybrid extraUnicode display
+fix hybrid extraUnicode display - make hybrids display how they do in compiler/blueprintcontroller - address manually
 negative admins
 make map more interesting visually
 canplace tickbox in inventory
-Make a reason to use golden ticket, on bosses? allow it to be used in a node?
-investigate bubble adding interest
-make hybrids display how they do in compiler/blueprintcontroller - address manually
+Make a reason to use golden ticket, on bosses? allow it to be used in a node? Allow 1 free custom node starting each round?/instead of shop???
 Onion Icon for life with Onion admin
 level 1 always start the player inside the arena node???
-let items be used on blueprints AND/OR Pieces?
-track this run stats in player? and save them?
-losing a round should return you to the map?
+track this run stats in player?
 change appraisal, let it stack?
 ADMINS - animate admins counts too?
 -

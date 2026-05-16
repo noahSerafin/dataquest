@@ -4434,7 +4434,7 @@ class Pentagram extends Piece {//finished? test, will have to be handled in app 
   static description = "Summons Daemons"//does health damage??
   static unicode = "U+269D";
   static color = "rgb(126, 0, 0)";
-  static rarity = 4;
+  static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
     super(Pentagram.name, Pentagram.description, Pentagram.unicode, 1, 0, 2, 0, 3, Pentagram.color, headPosition, [headPosition], team, Pentagram.rarity, removeCallback, id)
     this.specialName = 'Summon';

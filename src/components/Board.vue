@@ -464,8 +464,8 @@ function resolveMove(
         gridTemplateRows: `repeat(${rows}, ${tileSize}px)`,
       }"
     >
-      <template v-for="row in rows" :key="row">
-        <template v-for="col in cols" :key="`${col},${row}`">
+      <template v-for="row in (Math.max(0, Math.floor(rows || 0)))" :key="row">
+        <template v-for="col in (Math.max(0, Math.floor(cols || 0)))" :key="`${col},${row}`">
           <div
             class="border border-black"
             :class="tileSet.has(`${col-1},${row-1}`) ? 'tile' : 'tile-empty'"
@@ -484,8 +484,8 @@ function resolveMove(
         gridTemplateColumns: `repeat(${cols}, ${tileSize}px)`,
         gridTemplateRows: `repeat(${rows}, ${tileSize}px)`,
       }">
-      <template v-for="row in rows" :key="row">
-        <template v-for="col in cols" :key="`${col},${row}`">
+      <template v-for="row in (Math.max(0, Math.floor(rows || 0)))" :key="row">
+        <template v-for="col in (Math.max(0, Math.floor(cols || 0)))" :key="`${col},${row}`">
           <div
           class="border border-black"
           :class="fogSet.has(`${col-1},${row-1}`) ? 'tile fog-tile' : 'tile-empty fog-cleared'"

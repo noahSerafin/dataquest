@@ -1,5 +1,5 @@
 import type { Company, Coordinate, SkipReward } from "./types";
-import { Spawn, allPieces } from "./Pieces";
+import { allPieces } from "./Pieces";
 import { DIFFICULTY_RARITY } from "./constants";
 import { applyVariant, rollVariant } from "./helperFunctions";
 import { generateNode } from "./nodeBuilder";

@@ -25,6 +25,7 @@ import { level6Levels } from "../level6Levels";
 import { StorageManager } from "../StorageManager";
 import { Random } from "../Random";
 import FormattedDescription from "./FormattedDescription.vue";
+import type { Coordinate } from "../types";
 
 const props = defineProps<{
     player: Player;

@@ -366,7 +366,6 @@ export async function runEnemyStateMachine(
   onReceiveDamage: (id: string, receiver: Piece) => void,
   player: Player,
   originalPieceIds: string[] = [],
-  originalSpawns: Coordinate[] = [],
   delay = 200, // ms between moves for visibility
   isAborted: () => boolean = () => false
 ){

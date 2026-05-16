@@ -1502,7 +1502,6 @@ async function enemyTurn(currentActivePieces: Piece[]) {
     onReceiveDamage,
     player.value,
     originalPlayerPieceIds.value,
-    originalSpawns.value,
     300,
     () => !roundHasStarted.value || hasWonRound.value
   );

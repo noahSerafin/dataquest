@@ -73,6 +73,7 @@ function getEasyPath(difficulty: number): PathSpec {
     options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
     options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
     options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
+    options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
     options.push({ type: 'hiddenAltar',  mods: [0, 0], rewards: [3, 3] });
     options.push({ type: 'hiddenDuplicator',  mods: [0, 0], rewards: [3, 3] });
     options.push({ type: 'hiddenWorkbench',  mods: [0, 0], rewards: [3, 3] });

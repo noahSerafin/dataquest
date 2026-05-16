@@ -911,6 +911,7 @@ class Trojan extends Piece {//test more
     newTrojan.defenceRemaining = this.getStat('defence');
     newTrojan.statModifiers = this.statModifiers;//this copies modifiers
     newTrojan.immunities = this.immunities;
+    newTrojan.damageMult = this.damageMult;
     newTrojan.movesRemaining = 0;
     newTrojan.actions = 0;
     newTrojan.hybridName = this.hybridName;
@@ -4311,6 +4312,7 @@ class Dolls extends Piece {//finished? test, will have to be handled in app for 
     //newTrojan.addModifier({defence: -1})
     //newTrojan.addModifier({maxSize: -1})
     newTrojan.immunities = this.immunities;
+    newTrojan.damageMult = this.damageMult;
     newTrojan.movesRemaining = 0;
     newTrojan.actions = 0;
     newTrojan.hybridName = this.hybridName;
@@ -4373,6 +4375,7 @@ class Zombie extends Piece {//finished? test, will have to be handled in app for
       newTrojan.defenceRemaining = this.getStat('defence');
       newTrojan.statModifiers = this.statModifiers;//this copies modifiers
       newTrojan.immunities = this.immunities;
+      newTrojan.damageMult = this.damageMult;
       newTrojan.movesRemaining = 0;
       newTrojan.actions = 0;
       newTrojan.hybridName = this.hybridName;

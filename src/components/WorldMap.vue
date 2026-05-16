@@ -197,9 +197,9 @@ function skipNode(node: WorldNode) {
 
 function enterNode(node: WorldNode) {
     const current = world.value.nodes[currentNodeId.value];
-    const shopisNext = node.id === current.next[0];
+    const isReachable = canClick(node);
     selectedPreviewNode.value = null;
-    if (node.type === 'shop' && !shopisNext) {
+    if (node.type === 'shop' && !isReachable) {
         emit('openDisabledShop')
     } else {
         previousNodeId.value = currentNodeId.value;
@@ -207,7 +207,7 @@ function enterNode(node: WorldNode) {
         currentNodeId.value = node.id;
         node.visible = true;
     }
-    if (node.type === 'shop' && shopisNext) {
+    if (node.type === 'shop' && isReachable) {
         emit('openShop')
     }
     if (node.type === 'sacrificial altar') {
@@ -234,12 +234,14 @@ function enterNode(node: WorldNode) {
 
 const revealedNodeIds = computed(() => {
     const revealed = new Set<string>();
+    const currentNode = world.value.nodes[currentNodeId.value];
 
     for (const node of Object.values(world.value.nodes)) {
         if (!node.hiddenUntilVisited || node.visible || props.player.hasAdmin('Compass')) {
             revealed.add(node.id);
         }
-        if (node.hiddenUntilVisited === currentNodeId.value) {
+        // Reveal if it's a "next" node for the current position
+        if (node.hiddenUntilVisited && currentNode?.next.includes(node.id)) {
             node.visible = true;
             revealed.add(node.id);
         }
@@ -351,15 +353,15 @@ const connections = computed(() => {
                 // We only care about nodes that are vertically "in the way" of the vertical line
                 const nodesInWay = otherNodes.filter(id => {
                     const pos = positions[id];
-                    const nodeY = pos.y + 16; // center y
+                    const nodeY = pos.y + 20; // center y 
                     return nodeY > minY && nodeY < maxY;
                 });
 
                 // Function to check if xb is safe
                 const isSafe = (x: number) => {
                     for (const id of nodesInWay) {
-                        const nodeX = positions[id].x + 16; // center x
-                        if (Math.abs(x - nodeX) < 32) return false;
+                        const nodeX = positions[id].x + 20; // center x
+                        if (Math.abs(x - nodeX) < 42) return false;
                     }
                     return true;
                 };

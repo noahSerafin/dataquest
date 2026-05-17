@@ -1073,8 +1073,24 @@ async function placePieceOnBoardAt(coord: Coordinate) {
   //we're definitely making a move, so store pieces
   lastTurnPieces.value = activePieces.value.map(p => p.clone());
 
-  //pass admin modifiers to the piece
-  PieceInstance.movesRemaining = PieceInstance.getStat('moves');
+  const hasDove = player.value.hasAdmin('Dove');
+  const hasPalette = player.value.hasAdmin('Palette');
+
+  // Check for isFirstTurn initially
+  if (isFirstTurn.value) {
+    // Dove admin: allow normal moves/actions on the first turn
+    if (hasDove) {
+      PieceInstance.movesRemaining = PieceInstance.getStat('moves');
+      PieceInstance.actions = 1;
+    } else {
+      PieceInstance.movesRemaining = 0;
+      PieceInstance.actions = 0;
+    }
+  } else {
+    // Not first turn
+    PieceInstance.movesRemaining = 0;
+    PieceInstance.actions = 0;
+  }
 
   // Remove the player spawn piece at this coordinate
   activePieces.value = activePieces.value.filter(p => !(p.team === 'player' && p.name === 'Spawn' && p.headPosition.x === coord.x && p.headPosition.y === coord.y));
@@ -1089,44 +1105,25 @@ async function placePieceOnBoardAt(coord: Coordinate) {
   await handleApplyAdmins('onPlacement', PieceInstance.id);
   clearFog();
 
-  //applyStatModifications()
-  //if(player.value.hasAdmin('Copier')){}
-
-  const hasDove = player.value.hasAdmin('Dove');
-  const hasPalette = player.value.hasAdmin('Palette');
-
-  // First-turn rules
+  // Reassign spawn highlights based on isFirstTurn and Palette admin
   if (isFirstTurn.value) {
-    player.value.canAction = false;//admin for attacking on first turn?
-    // palette: allow one extra placement
     if (hasPalette) {
-      player.value.canPlace = true; // allow next placement
+      playerSpawns.value = newPlacementHighlights();
     } else {
-      player.value.canPlace = false; // normally cannot place again
-    }
-    // dove: allow one move after placing
-    if (hasDove) {
-      player.value.canMove = true;
-    } else {
-      player.value.canMove = false;
-    }
-    isFirstTurn.value = false; //must set to false after to avoid a loop
-    // If neither admin, end immediately
-    if (!hasDove && !hasPalette) {
-      await endTurn();
+      playerSpawns.value = activePieces.value
+        .filter(p => p.team === 'player' && p.name === 'Spawn')
+        .map(p => p.headPosition);
     }
   } else {
-    // Not first turn -> normal behaviour
-    isPlacing.value = false;
+    playerSpawns.value = [];
+  }
+
+  // Do not force the turn to end unless there are no player spawns left in activePieces
+  const spawnsLeft = activePieces.value.some(p => p.team === 'player' && p.name === 'Spawn');
+  if (!spawnsLeft) {
     await endTurn();
   }
 
-  // If the player cannot place any more pieces, clean up any remaining unused Spawn pieces!
-  if (!player.value.canPlace) {
-    activePieces.value = activePieces.value.filter(p => !(p.team === 'player' && p.name === 'Spawn'));
-  }
-
-  playerSpawns.value = newPlacementHighlights();
   console.log('playerSpawns after placement:', playerSpawns.value);
 }
 
@@ -1547,6 +1544,17 @@ async function enemyTurn(currentActivePieces: Piece[]) {
 }
 
 const endTurn = async () => {
+  if (isPlacing.value) {
+    // Reset all player pieces' actions and moves before doing anything else
+    for (const piece of activePieces.value) {
+      if (piece.team === 'player') {
+        piece.resetMoves();
+        piece.actions = 1;
+      }
+    }
+    isPlacing.value = false;
+  }
+
   const currentActivePieces = activePieces.value;
   checkForRoundEnd();
   hasFinishedTurn.value = true;
@@ -1864,7 +1872,7 @@ function toggleDebug() {
         @highlightTargets="boardRef.highlightTargets" @highlightSpecials="boardRef.highlightSpecials"
         @close="deselectPiece" />
       <div v-if="!displayEditor" class="player-actions">
-        <button v-if="(!displayEditor && roundHasStarted && !hasFinishedTurn && !isFirstTurn) || debugMode"
+        <button v-if="(!displayEditor && roundHasStarted && !hasFinishedTurn) || debugMode"
           class="end-turn" v-on:click="endTurn()">End Turn</button>
         <!--<button class="mt-2 px-2 py-1 bg-blue-500 text-white rounded" @click="showInventory = !showInventory">{{showInventory ? 'Hide Inventory' : 'Inventory' }}</button>-->
         <!--<div v-if="!displayEditor && roundHasStarted" class="graveyard">

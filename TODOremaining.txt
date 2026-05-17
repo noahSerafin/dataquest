@@ -51,6 +51,7 @@ variant should overide base piece color, (and tile colour???)
 TUTORIAL - make more handholdy?
 -
 // BUGS
+traps making the player win a round.?
 0 damage not dissappearing
 glass variant setting 50% opacity on controller
 can still sell after sacrificing - duping/sacrificing/hybriding needs to deselect

@@ -1,5 +1,5 @@
 import type { Company, Coordinate, SkipReward } from "./types";
-import { allPieces } from "./Pieces";
+import { Spawn, allPieces } from "./Pieces";
 import { DIFFICULTY_RARITY } from "./constants";
 import { applyVariant, rollVariant } from "./helperFunctions";
 import { generateNode } from "./nodeBuilder";
@@ -23,7 +23,6 @@ export interface WorldNode {
   difficultyMod: number;
   reward: number;
   level?: Level;             // Only for type: level
-  playerSpawns?: Coordinate[]; // Added to store player spawn points
   hiddenUntilVisited?: string; // node id that must be completed first
   visited?: boolean;
   skipReward?: SkipReward; //get shop function into helpers to create these
@@ -160,7 +159,10 @@ export function generateWorld(
 ): WorldMap {
 
   //const pick = () => levelPool[Math.floor(Math.random() * levelPool.length)];
-  const pick = () => Random.bool(0.5) ? Random.pick(levelPool) : generateNode(difficulty);
+  const pick = () => {
+    const level = Random.bool(0.5) ? Random.pick(levelPool) : generateNode(difficulty);
+    return JSON.parse(JSON.stringify(level));
+  };
 
   const startId = "start";
   const shopId = "shop";
@@ -534,7 +536,7 @@ export function generateWorld(
     
     // Process level spawns if node has a level
     if (node.level && (node.type === 'level' || node.type === 'boss')) {
-      const { processedPieces, playerSpawns } = processSpawnPoints(
+      const { processedPieces } = processSpawnPoints(
         node.level.pieces, 
         (node.company && node.company.pieceList && node.company.pieceList.length > 0) ? node.company.pieceList : allPieces, 
         difficulty,
@@ -542,7 +544,6 @@ export function generateWorld(
         stake
       );
       node.level.pieces = processedPieces;
-      node.playerSpawns = playerSpawns;
     }
   }
 
@@ -560,7 +561,6 @@ function processSpawnPoints(
   stake: number
 ) {
   const processed: Piece[] = [];
-  const playerSpawns: Coordinate[] = [];
 
   for (const piece of pieces) {
     if (piece.name === 'Spawn') {
@@ -615,12 +615,14 @@ function processSpawnPoints(
       }
 
       if (piece.team === 'player') {
-        playerSpawns.push(piece.headPosition);
-        continue;
+        if (piece.headPosition) {
+          const PlayerInstance = new Spawn(piece.headPosition, 'player');
+          processed.push(PlayerInstance);
+        }
       }
     }
     processed.push(piece);
   }
 
-  return { processedPieces: processed, playerSpawns };
+  return { processedPieces: processed };
 }

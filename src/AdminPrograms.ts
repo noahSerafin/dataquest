@@ -814,7 +814,7 @@ class Slots extends Admin {
   static color = "#ff5555";
   static rarity = 1;
   constructor() {
-    super(Slots.name, Slots.description, Slots.unicode, Slots.color, 5, Slots.rarity, 'gameState', 'other')//shop
+    super(Slots.name, Slots.description, Slots.unicode, Slots.color, 3, Slots.rarity, 'gameState', 'other')//shop
   }
   //shop edit
 }
@@ -2998,7 +2998,7 @@ class Chime extends Admin {
 
 class Fuel extends Admin {
   static name = "Gassed";
-  static description = "Player programs get an extra 1 moves on the start of every turn.";
+  static description = "Player programs get an extra 1 moves remaining on the start of every turn.";
   static unicode = "U+26FD";
   static color = "rgb(185, 250, 255)";
   static rarity = 4;
@@ -3389,7 +3389,7 @@ class Lefty extends Admin {
   static color = "rgb(150, 30, 0)";
   static rarity = 6;
   constructor() {
-    super(Lefty.name, Lefty.description, Lefty.unicode, Lefty.color, 3, Lefty.rarity, 'player', 'onRoundStart')
+    super(Lefty.name, Lefty.description, Lefty.unicode, Lefty.color, 10, Lefty.rarity, 'player', 'onRoundStart')
   }
   async apply({ player }: { player: Player }) {
     if (player.mapProgress < 2 && (player.extraDifficulty === 0)) {
@@ -3409,7 +3409,7 @@ class Righty extends Admin {
   static color = "rgb(11, 0, 71)";
   static rarity = 6;
   constructor() {
-    super(Righty.name, Righty.description, Righty.unicode, Righty.color, 3, Righty.rarity, 'player', 'onRoundStart')
+    super(Righty.name, Righty.description, Righty.unicode, Righty.color, 9, Righty.rarity, 'player', 'onRoundStart')
   }
   async apply({ player }: { player: Player }) {
     if (player.mapProgress < 2 && (player.extraDifficulty !== 0)) {

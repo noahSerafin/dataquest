@@ -229,7 +229,7 @@ function enterNode(node: WorldNode) {
     if (node.level) {
         showTutorialTip('board');
         //just pass the compamy for extra visual styling?
-        emit("selectLevel", node.level, node.company, node.difficultyMod, (node.reward + props.player.bonusReward), node.playerSpawns);
+        emit("selectLevel", node.level, node.company, node.difficultyMod, (node.reward + props.player.bonusReward));
     }
 }
 

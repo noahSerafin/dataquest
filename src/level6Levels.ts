@@ -476,6 +476,38 @@ const floodgates: Level = {
         }
       ],
       "rarity": 1
+    },
+    {
+      "id": "8f01cd24-023d-43f6-a2f4-816bc069906a",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 0,
+        "y": 8
+      },
+      "tiles": [
+        {
+          "x": 0,
+          "y": 8
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "8f01cd24-023d-43f6-a2f4-816bc069906B",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 8,
+        "y": 8
+      },
+      "tiles": [
+        {
+          "x": 8,
+          "y": 8
+        }
+      ],
+      "rarity": 1
     }
   ]
 }
@@ -1282,6 +1314,38 @@ const island : Level = {
         }
       ],
       "rarity": 1
+    },
+    {
+      "id": "0b92a5e6-f9b0-4a51-a5cb-ae37e5a148ac",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 6,
+        "y": 8
+      },
+      "tiles": [
+        {
+          "x": 6,
+          "y": 8
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "0b92a5e6-f9b0-4a51-a5cb-ae37e5a148ab",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 4,
+        "y": 0
+      },
+      "tiles": [
+        {
+          "x": 4,
+          "y": 0
+        }
+      ],
+      "rarity": 1
     }
   ]
 }
@@ -1674,6 +1738,38 @@ const league: Level = {
         {
           "x": 0,
           "y": 8
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "3e31f15e-b8b0-4968-a040-4f7ad5a6216a",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 2,
+        "y": 8
+      },
+      "tiles": [
+        {
+          "x": 2,
+          "y": 8
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "3e31f15e-b8b0-4968-a040-4f7ad5a6216b",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 0,
+        "y": 6
+      },
+      "tiles": [
+        {
+          "x": 0,
+          "y": 6
         }
       ],
       "rarity": 1
@@ -2188,6 +2284,38 @@ const range: Level = {
         }
       ],
       "rarity": 1
+    },
+    {
+      "id": "ae59ebcb-712e-4c05-9256-79f358a02eab",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 1,
+        "y": 8
+      },
+      "tiles": [
+        {
+          "x": 1,
+          "y": 8
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "ae59ebcb-712e-4c05-9256-79f358a02eac",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 9,
+        "y": 8
+      },
+      "tiles": [
+        {
+          "x": 9,
+          "y": 8
+        }
+      ],
+      "rarity": 1
     }
   ]
 }
@@ -2440,6 +2568,38 @@ const deadlock: Level = {
         {
           "x": 1,
           "y": 6
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "065c182a-a066-4983-be8b-1b0de592d18a",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 0,
+        "y": 6
+      },
+      "tiles": [
+        {
+          "x": 0,
+          "y": 6
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "065c182a-a066-4983-be8b-1b0de592d18b",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 0,
+        "y": 5
+      },
+      "tiles": [
+        {
+          "x": 0,
+          "y": 5
         }
       ],
       "rarity": 1
@@ -2886,7 +3046,23 @@ const ruins: Level = {
         }
       ],
       "rarity": 1
-    }
+    },
+    {
+      "id": "a35518ef-3d03-49c6-8fb4-ce3ab938de4a",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 1,
+        "y": 7
+      },
+      "tiles": [
+        {
+          "x": 1,
+          "y": 7
+        }
+      ],
+      "rarity": 1
+    },
   ]
 }
 const crater: Level = {
@@ -3019,6 +3195,10 @@ const crater: Level = {
     {
       "x": 8,
       "y": 4
+    },
+    {
+      "x": 0,
+      "y": 5
     },
     {
       "x": 1,
@@ -3157,6 +3337,54 @@ const crater: Level = {
       "tiles": [
         {
           "x": 1,
+          "y": 8
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "a1cc7cbf-4483-4534-b0b5-f9cd41087c5a",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 1,
+        "y": 8
+      },
+      "tiles": [
+        {
+          "x": 1,
+          "y": 8
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "a1cc7cbf-4483-4534-b0b5-f9cd41087c5b",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 1,
+        "y": 8
+      },
+      "tiles": [
+        {
+          "x": 1,
+          "y": 8
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "a1cc7cbf-4483-4534-b0b5-f9cd41087c5b",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 0,
+        "y": 8
+      },
+      "tiles": [
+        {
+          "x": 0,
           "y": 8
         }
       ],
@@ -3656,6 +3884,22 @@ const pier: Level = {
         }
       ],
       "rarity": 1
+    },
+    {
+      "id": "07a1982d-d8e4-444f-8308-3b4df2f8f41a",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 0,
+        "y": 6
+      },
+      "tiles": [
+        {
+          "x": 0,
+          "y": 6
+        }
+      ],
+      "rarity": 1
     }
   ]
 }
@@ -3979,7 +4223,39 @@ const channel: Level = {
         }
       ],
       "rarity": 1
-    }
+    },
+    {
+      "id": "091f460c-511c-4444-bafb-3925d3bfd1fa",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 1,
+        "y": 8
+      },
+      "tiles": [
+        {
+          "x": 1,
+          "y": 8
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "091f460c-511c-4444-bafb-3925d3bfd1fb",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 5,
+        "y": 8
+      },
+      "tiles": [
+        {
+          "x": 5,
+          "y": 8
+        }
+      ],
+      "rarity": 1
+    },
   ]
 }
 const narrow: Level = {
@@ -4677,6 +4953,38 @@ const reactor: Level = {
       "tiles": [
         {
           "x": 4,
+          "y": 8
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "d431dfee-220c-4ad3-a297-111a4df5b57a",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 2,
+        "y": 8
+      },
+      "tiles": [
+        {
+          "x": 2,
+          "y": 8
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "d431dfee-220c-4ad3-a297-111a4df5b57b",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 6,
+        "y": 8
+      },
+      "tiles": [
+        {
+          "x": 6,
           "y": 8
         }
       ],

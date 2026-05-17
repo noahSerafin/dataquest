@@ -326,6 +326,38 @@ const field = {
       "rarity": 1
     },
     {
+      "id": "d3f5a8cf-d36c-4ad1-acec-c6392ef6460b",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 2,
+        "y": 7
+      },
+      "tiles": [
+        {
+          "x": 2,
+          "y": 7
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "d3f5a8cf-d36c-4ad1-acec-c6392ef6460c",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 6,
+        "y": 7
+      },
+      "tiles": [
+        {
+          "x": 6,
+          "y": 7
+        }
+      ],
+      "rarity": 1
+    },
+    {
       "id": "c6ecdf3b-742e-493b-a124-b247ad8fe7a4",
       "name": "Spawn",
       "team": "enemy",
@@ -379,10 +411,6 @@ const courtyard = {
       "y": 0
     },
     {
-      "x": 8,
-      "y": 0
-    },
-    {
       "x": 1,
       "y": 1
     },
@@ -400,10 +428,6 @@ const courtyard = {
     },
     {
       "x": 5,
-      "y": 1
-    },
-    {
-      "x": 8,
       "y": 1
     },
     {
@@ -573,10 +597,6 @@ const courtyard = {
     {
       "x": 6,
       "y": 8
-    },
-    {
-      "x": 7,
-      "y": 0
     },
     {
       "x": 7,
@@ -620,6 +640,38 @@ const courtyard = {
         {
           "x": 4,
           "y": 8
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "4406410a-9475-4479-b6ea-bb27785e858a",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 1,
+        "y": 6
+      },
+      "tiles": [
+        {
+          "x": 1,
+          "y": 6
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "4406410a-9475-4479-b6ea-bb27785e858c",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 0,
+        "y": 4
+      },
+      "tiles": [
+        {
+          "x": 0,
+          "y": 4
         }
       ],
       "rarity": 1
@@ -936,6 +988,38 @@ const garden = {
       "rarity": 1
     },
     {
+      "id": "be807695-14f7-487b-a9e6-1e64e6c62c9a",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 0,
+        "y": 8
+      },
+      "tiles": [
+        {
+          "x": 0,
+          "y": 8
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "be807695-14f7-487b-a9e6-1e64e6c62c9b",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 4,
+        "y": 8
+      },
+      "tiles": [
+        {
+          "x": 4,
+          "y": 8
+        }
+      ],
+      "rarity": 1
+    },
+    {
       "id": "a9378417-340e-4b77-8e03-3ca7a900fc42",
       "name": "Spawn",
       "team": "enemy",
@@ -1002,50 +1086,18 @@ const garden = {
   ]
 }
 const drain = {
-    name: 'drain',
+    name: 'The Drain',
   "tiles": [
     {
+      "x": 0,
+      "y": 1
+    },
+    {
       "x": 1,
-      "y": 0
-    },
-    {
-      "x": 2,
-      "y": 0
-    },
-    {
-      "x": 3,
-      "y": 0
-    },
-    {
-      "x": 4,
-      "y": 0
+      "y": 1
     },
     {
       "x": 5,
-      "y": 0
-    },
-    {
-      "x": 6,
-      "y": 0
-    },
-    {
-      "x": 7,
-      "y": 0
-    },
-    {
-      "x": 8,
-      "y": 0
-    },
-    {
-      "x": 1,
-      "y": 1
-    },
-    {
-      "x": 7,
-      "y": 1
-    },
-    {
-      "x": 8,
       "y": 1
     },
     {
@@ -1053,19 +1105,111 @@ const drain = {
       "y": 2
     },
     {
+      "x": 0,
+      "y": 3
+    },
+    {
+      "x": 2,
+      "y": 3
+    },
+    {
+      "x": 0,
+      "y": 4
+    },
+    {
+      "x": 6,
+      "y": 4
+    },
+    {
+      "x": 0,
+      "y": 5
+    },
+    {
+      "x": 6,
+      "y": 5
+    },
+    {
+      "x": 0,
+      "y": 6
+    },
+    {
       "x": 1,
-      "y": 2
+      "y": 6
+    },
+    {
+      "x": 5,
+      "y": 6
+    },
+    {
+      "x": 6,
+      "y": 6
+    },
+    {
+      "x": 1,
+      "y": 7
+    },
+    {
+      "x": 2,
+      "y": 7
+    },
+    {
+      "x": 3,
+      "y": 7
+    },
+    {
+      "x": 4,
+      "y": 7
+    },
+    {
+      "x": 5,
+      "y": 7
+    },
+    {
+      "x": 5,
+      "y": 0
+    },
+    {
+      "x": 4,
+      "y": 0
+    },
+    {
+      "x": 3,
+      "y": 0
+    },
+    {
+      "x": 2,
+      "y": 0
+    },
+    {
+      "x": 1,
+      "y": 0
     },
     {
       "x": 3,
       "y": 2
     },
     {
-      "x": 4,
+      "x": 5,
       "y": 2
     },
     {
+      "x": 3,
+      "y": 5
+    },
+    {
+      "x": 4,
+      "y": 4
+    },
+    {
       "x": 5,
+      "y": 3
+    },
+    {
+      "x": 4,
+      "y": 5
+    },
+    {
+      "x": 4,
       "y": 2
     },
     {
@@ -1073,205 +1217,45 @@ const drain = {
       "y": 2
     },
     {
-      "x": 7,
-      "y": 2
-    },
-    {
-      "x": 8,
-      "y": 2
-    },
-    {
-      "x": 0,
-      "y": 3
-    },
-    {
-      "x": 3,
-      "y": 3
-    },
-    {
-      "x": 7,
-      "y": 3
-    },
-    {
-      "x": 8,
-      "y": 3
-    },
-    {
-      "x": 0,
-      "y": 4
-    },
-    {
-      "x": 2,
-      "y": 4
-    },
-    {
-      "x": 3,
-      "y": 4
-    },
-    {
-      "x": 7,
-      "y": 4
-    },
-    {
-      "x": 8,
-      "y": 4
-    },
-    {
-      "x": 0,
-      "y": 5
-    },
-    {
-      "x": 2,
-      "y": 5
-    },
-    {
-      "x": 3,
-      "y": 5
-    },
-    {
-      "x": 4,
-      "y": 5
-    },
-    {
-      "x": 5,
-      "y": 5
-    },
-    {
-      "x": 7,
-      "y": 5
-    },
-    {
-      "x": 8,
-      "y": 5
-    },
-    {
-      "x": 0,
-      "y": 6
-    },
-    {
-      "x": 3,
-      "y": 6
-    },
-    {
-      "x": 4,
-      "y": 6
-    },
-    {
-      "x": 7,
-      "y": 6
-    },
-    {
-      "x": 8,
-      "y": 6
-    },
-    {
-      "x": 0,
-      "y": 7
-    },
-    {
-      "x": 1,
-      "y": 7
-    },
-    {
-      "x": 5,
-      "y": 7
-    },
-    {
       "x": 6,
-      "y": 7
-    },
-    {
-      "x": 7,
-      "y": 7
-    },
-    {
-      "x": 0,
-      "y": 8
-    },
-    {
-      "x": 1,
-      "y": 8
-    },
-    {
-      "x": 2,
-      "y": 8
-    },
-    {
-      "x": 3,
-      "y": 8
-    },
-    {
-      "x": 4,
-      "y": 8
-    },
-    {
-      "x": 5,
-      "y": 8
-    },
-    {
-      "x": 6,
-      "y": 8
-    },
-    {
-      "x": 0,
       "y": 1
     },
     {
-      "x": 5,
+      "x": 6,
+      "y": 3
+    },
+    {
+      "x": 2,
       "y": 4
+    },
+    {
+      "x": 2,
+      "y": 5
+    },
+    {
+      "x": 2,
+      "y": 2
     }
   ],
   "pieces": [
     {
-      "id": "d13cd6b8-8440-49c6-a26c-990dc3cccd2a",
+      "id": "aa71cd4c-2541-4305-aa93-5f83df262432",
       "name": "Spawn",
       "team": "player",
       "headPosition": {
-        "x": 5,
+        "x": 4,
         "y": 4
       },
       "tiles": [
         {
-          "x": 5,
+          "x": 4,
           "y": 4
         }
       ],
       "rarity": 1
     },
     {
-      "id": "23810688-c8e5-4e8f-9012-bbbac2ba02b6",
-      "name": "Spawn",
-      "team": "enemy",
-      "headPosition": {
-        "x": 0,
-        "y": 8
-      },
-      "tiles": [
-        {
-          "x": 0,
-          "y": 8
-        }
-      ],
-      "rarity": 1
-    },
-    {
-      "id": "d825142b-4b32-4e6d-9fe5-a265571354f7",
-      "name": "Spawn",
-      "team": "enemy",
-      "headPosition": {
-        "x": 8,
-        "y": 0
-      },
-      "tiles": [
-        {
-          "x": 8,
-          "y": 0
-        }
-      ],
-      "rarity": 1
-    },
-    {
-      "id": "80468e2a-ac35-4c46-8110-b40d1f2e2f22",
+      "id": "29474c86-25c1-4d48-bb7d-a2cb8c2e398c",
       "name": "Spawn",
       "team": "enemy",
       "headPosition": {
@@ -1282,6 +1266,86 @@ const drain = {
         {
           "x": 0,
           "y": 1
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "9de2e91c-06f4-47d4-a3ff-7db1775bda4d",
+      "name": "Spawn",
+      "team": "enemy",
+      "headPosition": {
+        "x": 1,
+        "y": 7
+      },
+      "tiles": [
+        {
+          "x": 1,
+          "y": 7
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "cb93e204-60b2-49b9-83bf-fb9a1ac89f55",
+      "name": "Spawn",
+      "team": "enemy",
+      "headPosition": {
+        "x": 6,
+        "y": 4
+      },
+      "tiles": [
+        {
+          "x": 6,
+          "y": 4
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "b7c7a3ee-92d2-4cee-9437-71663effb0da",
+      "name": "Spawn",
+      "team": "enemy",
+      "headPosition": {
+        "x": 4,
+        "y": 0
+      },
+      "tiles": [
+        {
+          "x": 4,
+          "y": 0
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "dc528653-d32d-426e-99bf-da01896954d1",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 2,
+        "y": 3
+      },
+      "tiles": [
+        {
+          "x": 2,
+          "y": 3
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "40a42e4f-2220-4da7-8314-9c15687b042d",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 2,
+        "y": 5
+      },
+      "tiles": [
+        {
+          "x": 2,
+          "y": 5
         }
       ],
       "rarity": 1
@@ -1580,11 +1644,43 @@ const lockup = {
         }
       ],
       "rarity": 1
+    },
+    {
+      "id": "c5bec60d-1a8e-4462-b46b-4e3ab7efa0aa",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 3,
+        "y": 7
+      },
+      "tiles": [
+        {
+          "x": 3,
+          "y": 7
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "c5bec60d-1a8e-4462-b46b-4e3ab7efa0ac",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 0,
+        "y": 4
+      },
+      "tiles": [
+        {
+          "x": 0,
+          "y": 4
+        }
+      ],
+      "rarity": 1
     }
   ]
 }
 const peninsula = {
-    name: 'peninsula',
+    name: 'The Peninsula',
   "tiles": [
     {
       "x": 1,
@@ -1798,12 +1894,44 @@ const peninsula = {
       "team": "player",
       "headPosition": {
         "x": 0,
-        "y": 3
+        "y": 4
       },
       "tiles": [
         {
           "x": 0,
-          "y": 3
+          "y": 4
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "8a15ae39-2fa7-4f11-a83a-e3e0080dc1cb",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 0,
+        "y": 2
+      },
+      "tiles": [
+        {
+          "x": 0,
+          "y": 2
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "8a15ae39-2fa7-4f11-a83a-e3e0080dc1ca",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "tiles": [
+        {
+          "x": 0,
+          "y": 0
         }
       ],
       "rarity": 1
@@ -1942,10 +2070,6 @@ const bunker = {
       "y": 5
     },
     {
-      "x": 0,
-      "y": 6
-    },
-    {
       "x": 1,
       "y": 6
     },
@@ -1974,18 +2098,6 @@ const bunker = {
       "y": 6
     },
     {
-      "x": 8,
-      "y": 6
-    },
-    {
-      "x": 0,
-      "y": 7
-    },
-    {
-      "x": 1,
-      "y": 7
-    },
-    {
       "x": 2,
       "y": 7
     },
@@ -1999,14 +2111,6 @@ const bunker = {
     },
     {
       "x": 6,
-      "y": 7
-    },
-    {
-      "x": 7,
-      "y": 7
-    },
-    {
-      "x": 8,
       "y": 7
     },
     {
@@ -2130,6 +2234,38 @@ const bunker = {
         }
       ],
       "rarity": 1
+    },
+    {
+      "id": "612c35ea-4a1f-4713-98cb-7aa61ec54e8a",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 6,
+        "y": 7
+      },
+      "tiles": [
+        {
+          "x": 6,
+          "y": 7
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "612c35ea-4a1f-4713-98cb-7aa61ec54e8b",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 2,
+        "y": 7
+      },
+      "tiles": [
+        {
+          "x": 2,
+          "y": 7
+        }
+      ],
+      "rarity": 1
     }
   ]
 }
@@ -2229,6 +2365,38 @@ const perimeter = {
       "tiles": [
         {
           "x": 2,
+          "y": 4
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "7e1b0bba-934d-443e-9f4d-8ee241bebc9a",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 0,
+        "y": 4
+      },
+      "tiles": [
+        {
+          "x": 0,
+          "y": 4
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "7e1b0bba-934d-443e-9f4d-8ee241bebc9b",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 4,
+        "y": 4
+      },
+      "tiles": [
+        {
+          "x": 4,
           "y": 4
         }
       ],
@@ -2400,6 +2568,54 @@ const safehouse = {
       "tiles": [
         {
           "x": 5,
+          "y": 5
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "0e938600-9500-4c77-89cb-829bfe320daa",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 5,
+        "y": 5
+      },
+      "tiles": [
+        {
+          "x": 5,
+          "y": 5
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "0e938600-9500-4c77-89cb-829bfe320dab",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 3,
+        "y": 5
+      },
+      "tiles": [
+        {
+          "x": 3,
+          "y": 5
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "0e938600-9500-4c77-89cb-829bfe320dac",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 4,
+        "y": 5
+      },
+      "tiles": [
+        {
+          "x": 4,
           "y": 5
         }
       ],
@@ -2711,7 +2927,7 @@ const beachhead = {
   ]
 }
 const funnel = {
-    name: 'Funnel',
+    name: 'The Funnel',
   "tiles": [
     {
       "x": 0,
@@ -2818,6 +3034,38 @@ const funnel = {
       "tiles": [
         {
           "x": 3,
+          "y": 6
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "9024e962-9f21-4209-b679-720c1ce0cdba",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 1,
+        "y": 6
+      },
+      "tiles": [
+        {
+          "x": 1,
+          "y": 6
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "9024e962-9f21-4209-b679-720c1ce0cdbb",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 5,
+        "y": 6
+      },
+      "tiles": [
+        {
+          "x": 5,
           "y": 6
         }
       ],
@@ -3105,6 +3353,38 @@ const network = {
       "tiles": [
         {
           "x": 3,
+          "y": 8
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "cc56ac97-481c-4ff7-a731-347fde3a07cb",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 1,
+        "y": 7
+      },
+      "tiles": [
+        {
+          "x": 1,
+          "y": 7
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "cc56ac97-481c-4ff7-a731-347fde3a07cc",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 5,
+        "y": 8
+      },
+      "tiles": [
+        {
+          "x": 5,
           "y": 8
         }
       ],

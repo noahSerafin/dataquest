@@ -28,6 +28,7 @@ Exposed
 Hidden
 
 //IMPROVEMENTS
+make spawns in nodepreview more obvious (outline)
 bosses appearing twice on reload
 forfeit round button
 fix hybrid extraUnicode display - make hybrids display how they do in compiler/blueprintcontroller - address manually

@@ -232,6 +232,22 @@ const blockage: Level = {
         }
       ],
       "rarity": 1
+    },
+    {
+      "id": "dd692854-7667-4f45-8b29-fdbfc9062c77",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 1,
+        "y": 6
+      },
+      "tiles": [
+        {
+          "x": 1,
+          "y": 6
+        }
+      ],
+      "rarity": 1
     }
   ]
 }
@@ -415,7 +431,55 @@ const conch: Level = {
         }
       ],
       "rarity": 1
-    }
+    },
+    {
+      "id": "8b8316b4-df98-4edc-9bad-f4a20bba7c8a",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 2,
+        "y": 2
+      },
+      "tiles": [
+        {
+          "x": 2,
+          "y": 2
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "8b8316b4-df98-4edc-9bad-f4a20bba7c8b",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 3,
+        "y": 2
+      },
+      "tiles": [
+        {
+          "x": 3,
+          "y": 2
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "8b8316b4-df98-4edc-9bad-f4a20bba7c8c",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 2,
+        "y": 3
+      },
+      "tiles": [
+        {
+          "x": 2,
+          "y": 3
+        }
+      ],
+      "rarity": 1
+    },
   ]
 }
 const flappy: Level = {
@@ -619,6 +683,38 @@ const flappy: Level = {
         {
           "x": 0,
           "y": 6
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "7924a0d7-0c75-49ab-8300-56ad904da68c",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 0,
+        "y": 3
+      },
+      "tiles": [
+        {
+          "x": 0,
+          "y": 3
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "7924a0d7-0c75-49ab-8300-56ad904da68a",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "tiles": [
+        {
+          "x": 0,
+          "y": 0
         }
       ],
       "rarity": 1
@@ -926,6 +1022,38 @@ const gate: Level = {
       ],
       "rarity": 1
     },
+    {
+      "id": "7924a0d7-0c75-49ab-8300-56ad904da68a",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 0,
+        "y": 7
+      },
+      "tiles": [
+        {
+          "x": 0,
+          "y": 7
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "7924a0d7-0c75-49ab-8300-56ad904da68a",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 4,
+        "y": 7
+      },
+      "tiles": [
+        {
+          "x": 4,
+          "y": 7
+        }
+      ],
+      "rarity": 1
+    },
   ]
 }
 const deep: Level = {
@@ -1220,6 +1348,38 @@ const deep: Level = {
         }
       ],
       "rarity": 1
+    },
+    {
+      "id": "4329b963-01c0-4927-aa1c-123fe23d53eb",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 2,
+        "y": 5
+      },
+      "tiles": [
+        {
+          "x": 2,
+          "y": 5
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "4329b963-01c0-4927-aa1c-123fe23d53ea",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 0,
+        "y": 5
+      },
+      "tiles": [
+        {
+          "x": 0,
+          "y": 5
+        }
+      ],
+      "rarity": 1
     }
   ]
 }
@@ -1471,6 +1631,38 @@ const burg: Level = {
         }
       ],
       "rarity": 1
+    },
+    {
+      "id": "fe4b31b4-c62d-451e-9af4-816381487b6a",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 0,
+        "y": 6
+      },
+      "tiles": [
+        {
+          "x": 0,
+          "y": 6
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "fe4b31b4-c62d-451e-9af4-816381487b6b",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 5,
+        "y": 6
+      },
+      "tiles": [
+        {
+          "x": 5,
+          "y": 6
+        }
+      ],
+      "rarity": 1
     }
   ]
 }
@@ -1618,6 +1810,38 @@ const box: Level = {
       "tiles": [
         {
           "x": 2,
+          "y": 4
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "90143c7d-7f6f-45cb-a211-88366a746aab",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 1,
+        "y": 4
+      },
+      "tiles": [
+        {
+          "x": 1,
+          "y": 4
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "90143c7d-7f6f-45cb-a211-88366a746aac",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 3,
+        "y": 4
+      },
+      "tiles": [
+        {
+          "x": 3,
           "y": 4
         }
       ],
@@ -1809,6 +2033,22 @@ const torrent: Level = {
       "tiles": [
         {
           "x": 2,
+          "y": 5
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "77a88226-c1ef-4e82-b38a-2e3b9c68c0aa",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 3,
+        "y": 5
+      },
+      "tiles": [
+        {
+          "x": 3,
           "y": 5
         }
       ],
@@ -2097,6 +2337,38 @@ const forest: Level = {
         {
           "x": 6,
           "y": 6
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "fe7d9b15-9987-44c1-b56e-f8b30a963d7a",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 5,
+        "y": 6
+      },
+      "tiles": [
+        {
+          "x": 5,
+          "y": 6
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "fe7d9b15-9987-44c1-b56e-f8b30a963d7b",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 6,
+        "y": 5
+      },
+      "tiles": [
+        {
+          "x": 6,
+          "y": 5
         }
       ],
       "rarity": 1
@@ -2423,6 +2695,38 @@ const siege: Level = {
         }
       ],
       "rarity": 1
+    },
+    {
+      "id": "fa043d90-cfed-4dcf-850c-e6b7b9adbb1a",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 3,
+        "y": 7
+      },
+      "tiles": [
+        {
+          "x": 3,
+          "y": 7
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "fa043d90-cfed-4dcf-850c-e6b7b9adbb1b",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 5,
+        "y": 7
+      },
+      "tiles": [
+        {
+          "x": 5,
+          "y": 7
+        }
+      ],
+      "rarity": 1
     }
   ]
 }
@@ -2694,6 +2998,38 @@ const cramper: Level = {
         }
       ],
       "rarity": 1
+    },
+    {
+      "id": "5a636621-d990-4c70-bbcf-8258c7247f1a",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 1,
+        "y": 5
+      },
+      "tiles": [
+        {
+          "x": 1,
+          "y": 5
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "5a636621-d990-4c70-bbcf-8258c7247f1b",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 0,
+        "y": 4
+      },
+      "tiles": [
+        {
+          "x": 0,
+          "y": 4
+        }
+      ],
+      "rarity": 1
     }
   ]
 }
@@ -2926,6 +3262,38 @@ const bottleneck: Level = {
         {
           "x": 3,
           "y": 6
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "d2f5c2e8-f419-4caa-abce-68ef3e17e30a",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 0,
+        "y": 3
+      },
+      "tiles": [
+        {
+          "x": 0,
+          "y": 3
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "d2f5c2e8-f419-4caa-abce-68ef3e17e30b",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 6,
+        "y": 3
+      },
+      "tiles": [
+        {
+          "x": 6,
+          "y": 3
         }
       ],
       "rarity": 1

@@ -704,7 +704,7 @@ async function reloadLevel() {
   graveyard.value = [];
   lastTurnPieces.value = originalPieces.value.map(p => p.clone());
   console.log('originalspawns on reload:', originalSpawns.value);
-  playerSpawns.value = originalSpawns.value.map(s => ({ ...s }));//not working?
+  playerSpawns.value = newPlacementHighlights();//originalSpawns.value.map(s => ({ ...s }));//not working?
   console.log('playerSpawns on reload:', playerSpawns.value);
   selectedPiece.value = null;
   isPlacing.value = true;//highlights should be highlighted be this

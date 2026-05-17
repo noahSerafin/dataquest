@@ -54,9 +54,17 @@ const placementTip: TutorialStep = {
     id: "placement-tile",
     tooltip: "Drag one of your programs here to load it. This will also end your turn, so be wary what you can be attacked by in this space."
 }
+const spawnTip: TutorialStep = {
+    id: 'spawnTip',
+    tooltip: "This is a load point into this node, it will dissappear after your first turn if not used. Drag one of your programs here to load it. This will also end your turn, so be wary what you can be attacked by in this space."
+}
 const programTip: TutorialStep = {
-    id: 'piece',
-    tooltip: "This a loaded program, click on it to see it's stats"
+    id: 'playerPieceTip',
+    tooltip: "This is one of your loaded programs, click on it to see it's stats"
+}
+const enemyProgramTip: TutorialStep = {
+    id: 'enemyPieceTip',
+    tooltip: "This is a loaded enemy program, click on it to see it's stats"
 }
 const shopbpTip: TutorialStep = {
     id: 'shop-piece',
@@ -178,7 +186,7 @@ const infoBtnTip: TutorialStep = {
     id: 'info-btn',
     tooltip: "Click here to see your past stats, current seed, and previously used programs and items",
 }
-export const allTips: TutorialStep[] = [infoBtnTip, welcomeTip, mapTip, bossTip, visitedNodeTip, currentNodeTip, levelNodeTip, hiddenNodeTip, previewTip, skipNodeTip, shopNodeTip, bossNodeTip, boardTip, placementTip, programTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, actionsTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, infamyTip, bossesTip, summaryTip, lossTip, shopTip, rerollTip, shopbpTip, shopItemTip, adminTip, adminsTip, playerInfoTip, nodePreviewTip, interestTip, rewardTip, inventoryTip];
+export const allTips: TutorialStep[] = [infoBtnTip, welcomeTip, mapTip, bossTip, visitedNodeTip, currentNodeTip, levelNodeTip, hiddenNodeTip, previewTip, skipNodeTip, shopNodeTip, bossNodeTip, boardTip, placementTip, spawnTip, programTip, enemyProgramTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, actionsTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, infamyTip, bossesTip, summaryTip, lossTip, shopTip, rerollTip, shopbpTip, shopItemTip, adminTip, adminsTip, playerInfoTip, nodePreviewTip, interestTip, rewardTip, inventoryTip];
 
 export const proTipSuggestion: TutorialStep = {
     id: 'proTip',

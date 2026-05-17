@@ -46,6 +46,9 @@ export function rehydrateGameState(data: any): any {
   
   Object.assign(player, pData); // merges flat stats (difficulty, fogged, etc.)
   
+  // Ensure numeric fields are valid
+  if (isNaN(player.lives)) player.lives = pData.lives ?? 0;
+  
   // Rehydrate player.items
   player.items = (pData.items || []).map((iData: any) => {
     const Cls = allItems.find(i => i.name === iData.name);
@@ -143,6 +146,13 @@ export function rehydratePieceArray(rawPieces: any[]): Piece[] {
     if (PieceClass) {
         const inst = new PieceClass(p.headPosition, p.team, undefined, p.id);
         Object.assign(inst, p); // restores modifiers, remaining moves, etc.
+        // Ensure critical stats are valid numbers
+        if (isNaN(inst.defenceRemaining)) {
+            inst.defenceRemaining = inst.getStat('defence') || 0;
+        }
+        if (isNaN(inst.movesRemaining)) {
+            inst.movesRemaining = inst.getStat('moves') || 0;
+        }
         return inst;
     }
     return p;

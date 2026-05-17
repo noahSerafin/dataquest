@@ -131,7 +131,7 @@
                 </span>
                 <span style="text-align: left;"><strong class="text-yellow">$:</strong> {{ props.player.money }}</span>
                 <p>
-                    <span v-for="_ in player.lives">
+                    <span v-for="_ in (Math.max(0, Math.floor(player.lives || 0)))">
                        {{ String.fromCodePoint(0x1FA77) }}
                     </span>
                 </p>

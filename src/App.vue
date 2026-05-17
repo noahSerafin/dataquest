@@ -15,11 +15,10 @@ import { Spawn, allPieces } from "./Pieces"
 import type { Coordinate, PieceBlueprint, Level, OS, Company } from "./types";
 import { runEnemyStateMachine } from "./Enemy";
 import WorldMap from "./components/WorldMap.vue";
-import { applyVariant, coordKey, findAnyPiecesInRange, getOccupiedTileSet, getTilesInRange, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, rollVariant, isSoundEnabled } from "./helperFunctions";
+import { coordKey, findAnyPiecesInRange, getOccupiedTileSet, getTilesInRange, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, isSoundEnabled } from "./helperFunctions";
 import Shop from "./components/Shop.vue";
 import BossView from "./components/BossView.vue";
 import RoundSummary from "./components/RoundSummary.vue";
-import { DIFFICULTY_RARITY } from "./constants";
 import BlueprintView from "./components/BlueprintView.vue";
 import MainMenu from "./components/MainMenu.vue";
 import PieceController from "./components/PieceController.vue";
@@ -626,7 +625,30 @@ async function selectLevel(newLevel: Level, company: Company, difficultyMod: num
   player.value.nextReward = lReward;
   const newPieces = rehydratePieces(newLevel.pieces);
   player.value.extraDifficulty = difficultyMod;
-  activePieces.value = processSpawnPoints(newPieces, company.pieceList, difficultyMod);
+  activePieces.value = newPieces;
+  
+  // Assign player spawn points in a completely foolproof way
+  /*let playerSpawnCoords = newPlacementHighlights();
+  if (pSpawns && pSpawns.length > 0) {
+    playerSpawnCoords = pSpawns;
+  } else {
+    // Fallback 1: Extract spawn coordinates from the player spawn pieces in newPieces (if any)
+    const piecesWithSpawns = newPieces.filter(p => p.team === 'player' && p.name === 'Spawn');
+    if (piecesWithSpawns.length > 0) {
+      playerSpawnCoords = piecesWithSpawns.map(p => p.headPosition);
+    }
+  }
+  
+  // Fallback 2: Last resort if still empty, use the first tile of the level
+  if (playerSpawnCoords.length === 0 && newLevel.tiles && newLevel.tiles.length > 0) {
+    playerSpawnCoords = [newLevel.tiles[0]];
+  }
+  */
+
+  playerSpawns.value = newPlacementHighlights();//playerSpawnCoords;
+  originalSpawns.value = newLevel.pieces.map(s => ({ ...s }));
+  console.log(playerSpawns.value);
+  
   console.log('originalSpawns: ', originalSpawns.value);
   //originalSpawns.value = [...playerSpawns.value];
   originalPieces.value = activePieces.value.map(p => p.clone());
@@ -682,7 +704,7 @@ async function reloadLevel() {
   graveyard.value = [];
   lastTurnPieces.value = originalPieces.value.map(p => p.clone());
   console.log('originalspawns on reload:', originalSpawns.value);
-  playerSpawns.value = originalSpawns.value.map(s => ({ ...s }));//not working?
+  playerSpawns.value = newPlacementHighlights();//originalSpawns.value.map(s => ({ ...s }));//not working?
   console.log('playerSpawns on reload:', playerSpawns.value);
   selectedPiece.value = null;
   isPlacing.value = true;//highlights should be highlighted be this
@@ -887,7 +909,7 @@ const newPlacementHighlights = (): Coordinate[] => {//board should only show the
   const tileSet = new Set(level.value.tiles.map(t => `${t.x},${t.y}`));
 
   activePieces.value.forEach(piece => {
-    if (piece.team === 'player') {
+    if (piece.team === 'player' && piece.name !== 'Spawn') {
       // For each tile of the piece, check the 4 orthogonal neighbors
       piece.tiles.forEach(tile => {
         const neighbors = [
@@ -900,9 +922,9 @@ const newPlacementHighlights = (): Coordinate[] => {//board should only show the
         neighbors.forEach(n => {
           // Skip tiles not on the board
           if (!tileSet.has(`${n.x},${n.y}`)) return;
-          // Skip if tile is already occupied
+          // Skip if tile is already occupied by a non-Spawn piece
           const isOccupied = activePieces.value.some(p =>
-            p.tiles.some(t => t.x === n.x && t.y === n.y)
+            p.name !== 'Spawn' && p.tiles.some(t => t.x === n.x && t.y === n.y)
           );
 
           if (!isOccupied) highlights.push(n);
@@ -910,6 +932,14 @@ const newPlacementHighlights = (): Coordinate[] => {//board should only show the
       });
     }
   });
+
+  // Add the positions of any active player Spawn pieces currently on the board
+  activePieces.value.forEach(piece => {
+    if (piece.team === 'player' && piece.name === 'Spawn') {
+      highlights.push(piece.headPosition);
+    }
+  });
+
   // Optional: remove duplicates
   const uniqueHighlights = Array.from(
     new Map(highlights.map(h => [`${h.x},${h.y}`, h])).values()
@@ -917,102 +947,36 @@ const newPlacementHighlights = (): Coordinate[] => {//board should only show the
   return uniqueHighlights;
 };
 
-//(pieces(already in level), companyPieceList, mod)
-function processSpawnPoints(pieces: Piece[], companyPieces: any[], mod: number) {
-  const processed: Piece[] = [];
-  const newPlayerSpawns: Coordinate[] = [];
+// processSpawnPoints logic moved to worldBuilder.ts
 
-  for (const piece of pieces) {
-    if (piece instanceof Spawn) {
-      const spawnSize = piece.tiles.length;
-      // Enemy spawn → replace with random enemy piece
-      if (piece.team === 'enemy') {
-        //difficulty from constants ramp
-        let trueDifficulty = 0;
-        if (player.value.difficulty + mod > 6) {
-          trueDifficulty = 6; //remove later when endless mode is done
-        } else if (player.value.difficulty + mod < 1) {
-          trueDifficulty = 1;
-        } else {
-          trueDifficulty = player.value.difficulty + mod;
-        }
-        const { min, max } = DIFFICULTY_RARITY[trueDifficulty];
-
-        // 1. Get all enemies that match the current difficulty rarity
-        const difficultyMatched = companyPieces.filter(EnemyClass => {
-          if (EnemyClass.name === "Nuke") return false;
-
-          // Create a temp instance to check rarity and maxSize
-          const temp = new EnemyClass(piece.headPosition, 'enemy', removePiece);
-          return temp.rarity >= min && temp.rarity <= max;
-        });
-        // 2. Try to find one from that group that fits the spawn size
-        let pool = difficultyMatched.filter(EnemyClass => {
-          const temp = new EnemyClass(piece.headPosition, 'enemy', removePiece);
-          return temp.maxSize >= spawnSize;
-        });
-        // 3. FALLBACK: If none fit the size, stay within the difficulty but allow smaller pieces
-        if (pool.length === 0) {
-          console.warn(`No enemy of rarity ${min}-${max} fits spawn size ${spawnSize}. Falling back to smaller units.`);
-          pool = difficultyMatched;
-        }
-        // 4. LAST RESORT: If no enemies match the rarity at all, only then use allPieces
-        /*if (pool.length === 0) {
-          pool = allPieces;
-        }*/
-
-        const EnemyClass = Random.pick(pool);
-
-        const enemyInstance = new EnemyClass(piece.headPosition, 'enemy', removePiece);
-        enemyInstance.tiles = piece.tiles.slice(0, enemyInstance.maxSize);//trims the larger spawn down, might be a problem on castled
-
-        const variantChance = Math.min((0.1 * trueDifficulty - 0.1), 1)
-        const variant = rollVariant(variantChance, trueDifficulty);
-        if (variant) {
-          applyVariant(enemyInstance, variant);
-        }
-        enemyInstance.defenceRemaining = enemyInstance.getStat('defence');//not working??
-        //add tiles here? if spawn.tiles.length <= enemy.getStat(maxsize){ enemy.tiles = spawn.tiles }
-
-        if (player.value.stake > 1) enemyInstance.maxSize += player.value.difficulty;
-        if (player.value.stake > 2) enemyInstance.moves += player.value.difficulty;
-        if (player.value.stake > 3) enemyInstance.range += player.value.difficulty;
-        if (player.value.stake > 4) enemyInstance.attack += player.value.difficulty;
-        if (player.value.stake > 5) enemyInstance.defence += player.value.difficulty;
-
-        processed.push(enemyInstance);
-        continue;
-      }
-
-      if (piece.team === 'player') {
-        //placementHighlights.value.push(piece.headPosition);
-        newPlayerSpawns.push(piece.headPosition);
-        // Do *not* add Spawn to active pieces — it is a marker, not a unit
-        continue;
-      }
-    }
-    //console.log("placementHighlights after:", playerSpawns.value);
-    processed.push(piece);
-  }
-  playerSpawns.value = newPlayerSpawns;
-  console.log('playerSpawns after spawn processing:', playerSpawns.value);
-  originalSpawns.value = newPlayerSpawns.map(s => ({ ...s }));
-
-  return processed;
-}
 
 function rehydratePieces(rawPieces: any[]): InstanceType<typeof Piece>[] {
   const pieceClasses = [...allPieces];
   pieceClasses.unshift(Spawn);
   return rawPieces.map(p => {
     const PieceClass = pieceClasses.find(cls => cls.name === p.name)
-    return PieceClass ? Object.assign(new PieceClass(p.headPosition, p.team, removePiece), p) : p
+    if (!PieceClass) return p;
+    const instance = new PieceClass(p.headPosition, p.team, removePiece);
+    Object.assign(instance, p);
+    instance.removeCallback = removePiece;
+    return instance;
   })
 }
 
 onMounted(() => {
   const initPieces = rehydratePieces(level.value.pieces);
-  activePieces.value = processSpawnPoints(initPieces, allPieces, 0); // sets placementHighlights internally
+  // Manual spawn point processing for initial level
+  const playerSpawnCoords: Coordinate[] = [];
+  const processedPieces: Piece[] = [];
+  for (const piece of initPieces) {
+    if (piece instanceof Spawn && piece.team === 'player') {
+      playerSpawnCoords.push(piece.headPosition);
+    }
+    processedPieces.push(piece);
+  }
+  activePieces.value = processedPieces;
+  playerSpawns.value = playerSpawnCoords;
+  originalSpawns.value = playerSpawnCoords.map(s => ({ ...s }));
   refreshShop(true)//handle in round, or don't for crystal ball
 });
 
@@ -1024,7 +988,7 @@ function highlightPlacements(pieceBlueprint: PieceBlueprint) {
     const unnocupiedSpaces: Coordinate[] = [];
     level.value.tiles.forEach(tile => {
       const isOccupied = activePieces.value.some(p =>
-        p.tiles.some(t => t.x === tile.x && t.y === tile.y)
+        p.name !== 'Spawn' && p.tiles.some(t => t.x === tile.x && t.y === tile.y)
       );
       if (!isOccupied) unnocupiedSpaces.push(tile);
     });
@@ -1111,6 +1075,10 @@ async function placePieceOnBoardAt(coord: Coordinate) {
 
   //pass admin modifiers to the piece
   PieceInstance.movesRemaining = PieceInstance.getStat('moves');
+
+  // Remove the player spawn piece at this coordinate
+  activePieces.value = activePieces.value.filter(p => !(p.team === 'player' && p.name === 'Spawn' && p.headPosition.x === coord.x && p.headPosition.y === coord.y));
+
   activePieces.value.push(PieceInstance);
   originalPlayerPieceIds.value.push(PieceInstance.id);
 
@@ -1119,8 +1087,6 @@ async function placePieceOnBoardAt(coord: Coordinate) {
 
   // Reset placement state
   await handleApplyAdmins('onPlacement', PieceInstance.id);
-  playerSpawns.value = newPlacementHighlights();
-  console.log('playerSpawns after placement:', playerSpawns.value);
   clearFog();
 
   //applyStatModifications()
@@ -1154,6 +1120,14 @@ async function placePieceOnBoardAt(coord: Coordinate) {
     isPlacing.value = false;
     await endTurn();
   }
+
+  // If the player cannot place any more pieces, clean up any remaining unused Spawn pieces!
+  if (!player.value.canPlace) {
+    activePieces.value = activePieces.value.filter(p => !(p.team === 'player' && p.name === 'Spawn'));
+  }
+
+  playerSpawns.value = newPlacementHighlights();
+  console.log('playerSpawns after placement:', playerSpawns.value);
 }
 
 const isDraggingPlacement = ref(false)
@@ -1170,7 +1144,7 @@ function startPlacementDrag(bp: PieceBlueprint) {
 
 function placeAt(coord: Coordinate) {
   const isOccupied = activePieces.value.some(p =>
-    p.tiles.some(t => t.x === coord.x && t.y === coord.y)
+    p.name !== 'Spawn' && p.tiles.some(t => t.x === coord.x && t.y === coord.y)
   );
   if (isOccupied) return;
   if (!playerSpawns.value.some(
@@ -1562,7 +1536,6 @@ async function enemyTurn(currentActivePieces: Piece[]) {
     onReceiveDamage,
     player.value,
     originalPlayerPieceIds.value,
-    originalSpawns.value,
     300,
     () => !roundHasStarted.value || hasWonRound.value
   );
@@ -1583,6 +1556,10 @@ const endTurn = async () => {
   player.value.canPlace = false;
   player.value.canMove = false;
   player.value.canAction = false;
+
+  // Clean up any remaining unused player spawn pieces just in case
+  activePieces.value = activePieces.value.filter(p => !(p.team === 'player' && p.name === 'Spawn'));
+
   await handleApplyAdmins('onTurnEnd', '');//sprinkler
   const statusMult = 1 + player.value.admins.filter(a => a.name === 'Volatile').length;
   for (const piece of activePieces.value) {
@@ -1636,7 +1613,9 @@ const handleExport = (levelData: any) => {
   level.value.pieces = levelData.pieces;
   // Hydrate pieces once
   const initPieces = rehydratePieces(level.value.pieces);
-  activePieces.value = processSpawnPoints(initPieces, allPieces, 0);
+  activePieces.value = initPieces; // processSpawnPoints removed, assume pre-processed or markers handled in rehydrate
+  playerSpawns.value = initPieces.filter(p => p instanceof Spawn && p.team === 'player').map(p => p.headPosition);
+  originalSpawns.value = playerSpawns.value.map(s => ({ ...s }));
   displayEditor.value = false; // swap to board view
   roundHasStarted.value = true;
 };
@@ -1749,7 +1728,7 @@ function toggleDebug() {
 <template>
   <div class="app-root">
     <div class="debug-controls">
-      <button @click="showCollection = !showCollection">Info</button>
+      <button @click="showCollection = !showCollection" class="info-btn">Info</button>
       <button v-if="debugMode === true" class="swap-display" @mousedown="swapDisplay()">
         {{ displayEditor ? "Show Board" : "Show Editor" }}
       </button>

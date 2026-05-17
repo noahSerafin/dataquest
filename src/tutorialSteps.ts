@@ -48,15 +48,23 @@ const currentNodeTip: TutorialStep = {
 }
 const boardTip: TutorialStep = {
     id: "board",
-    tooltip: "Now we're inside a Node. Your job is to clear all the enemy programs from it using your own programs. Each turn, you may either load a new program or move and take actions with your programs already inside the node. You may load your programs into the green tiles initially. Once you have a program down, you may load in next to any tile it occupies. Be careful, once you load a program in, the enemy programs will take their move, so don't place anything vunerable too close to an enemy. If all your loaded programs are cleared from a node, you will lose a life."
+    tooltip: "Now we're inside a Node. Your job is to clear all the enemy programs from it using your own programs. Each turn, you may either load a new program in each green 🔲, or move and take actions with your programs already inside the node. You may load your programs into the green tiles initially. Once you have a program down, you may load in next to any tile it occupies. Be careful, once you load a program in, the enemy programs will take their move, so don't place anything vunerable too close to an enemy. If all your loaded programs are cleared from a node, you will lose a life."
 }
 const placementTip: TutorialStep = {
     id: "placement-tile",
     tooltip: "Drag one of your programs here to load it. This will also end your turn, so be wary what you can be attacked by in this space."
 }
+const spawnTip: TutorialStep = {
+    id: 'spawnTip',
+    tooltip: "This is a load point into this node, it will dissappear after your first turn if not used. Drag one of your programs here to load it. This will also end your turn, so be wary what you can be attacked by in this space."
+}
 const programTip: TutorialStep = {
-    id: 'piece',
-    tooltip: "This a loaded program, click on it to see it's stats"
+    id: 'playerPieceTip',
+    tooltip: "This is one of your loaded programs, click on it to see it's stats"
+}
+const enemyProgramTip: TutorialStep = {
+    id: 'enemyPieceTip',
+    tooltip: "This is a loaded enemy program, click on it to see it's stats"
 }
 const shopbpTip: TutorialStep = {
     id: 'shop-piece',
@@ -174,7 +182,11 @@ const rewardTip: TutorialStep = {
     id: 'reward-summary',
     tooltip: "You have earned a reward for completing this node. Plus any bonus rewards granted from your admin programs",
 }
-export const allTips: TutorialStep[] = [welcomeTip, mapTip, bossTip, visitedNodeTip, currentNodeTip, levelNodeTip, hiddenNodeTip, previewTip, skipNodeTip, shopNodeTip, bossNodeTip, boardTip, placementTip, programTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, actionsTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, infamyTip, bossesTip, summaryTip, lossTip, shopTip, rerollTip, shopbpTip, shopItemTip, adminTip, adminsTip, playerInfoTip, nodePreviewTip, interestTip, rewardTip, inventoryTip];
+const infoBtnTip: TutorialStep = {
+    id: 'info-btn',
+    tooltip: "Click here to see your past stats, current seed, and previously used programs and items",
+}
+export const allTips: TutorialStep[] = [infoBtnTip, welcomeTip, mapTip, bossTip, visitedNodeTip, currentNodeTip, levelNodeTip, hiddenNodeTip, previewTip, skipNodeTip, shopNodeTip, bossNodeTip, boardTip, placementTip, spawnTip, programTip, enemyProgramTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, actionsTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, infamyTip, bossesTip, summaryTip, lossTip, shopTip, rerollTip, shopbpTip, shopItemTip, adminTip, adminsTip, playerInfoTip, nodePreviewTip, interestTip, rewardTip, inventoryTip];
 
 export const proTipSuggestion: TutorialStep = {
     id: 'proTip',
@@ -210,6 +222,11 @@ const statusesTip: TutorialStep = {
 }
 const slowedTip: TutorialStep = {
     id: 'slowedTip',
-    tooltip: 'Out of moves? Frozen? If your program has a special move like charging, you can use this to move for free.'
+    tooltip: 'Out of moves? Frozen? If your program has a special move like "charge", you can use this to move for free.'
 }
-export const proTips: TutorialStep[] = [proTipSuggestion, defenderTip, specialTip, damageMultTip, adminOrderTip, lineSpecialsTipTip, hotkeysTip, statusesTip, slowedTip];
+const hiddenNodesTip: TutorialStep = {
+    id: 'hiddenNodeTip',
+    tooltip: 'Hidden nodes can either be shops or altars when Security < 2. After this you might also find duplicators, workbenches, and hybrid compilers.'
+}
+
+export const proTips: TutorialStep[] = [proTipSuggestion, defenderTip, specialTip, damageMultTip, adminOrderTip, lineSpecialsTipTip, hotkeysTip, statusesTip, slowedTip, hiddenNodesTip];

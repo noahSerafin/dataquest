@@ -366,7 +366,6 @@ export async function runEnemyStateMachine(
   onReceiveDamage: (id: string, receiver: Piece) => void,
   player: Player,
   originalPieceIds: string[] = [],
-  originalSpawns: Coordinate[] = [],
   delay = 200, // ms between moves for visibility
   isAborted: () => boolean = () => false
 ){
@@ -434,9 +433,9 @@ function sleep(ms: number) {
 async function attackPiece(attacker: Piece, defender: Piece) {
   if(attacker.actions > 0 && attacker.canAttack){//!canAttack should do special
     const damage = attacker.getStat('attack');
-    await defender.takeDamage(damage * attacker.damageMult);
+    await defender.takeDamage(Math.floor(damage * attacker.damageMult));
     if(defender.willRetaliate || defender.name === 'Hedgehog'){
-      await attacker.takeDamage(defender.getStat('attack') * defender.damageMult);
+      await attacker.takeDamage(Math.floor(defender.getStat('attack') * defender.damageMult));
       if(defender.name === 'Puffer' && !attacker.immunities.poisoned){
         attacker.statuses.poisoned = true;
       }

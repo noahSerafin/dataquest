@@ -155,6 +155,8 @@ const type = ((item: Item) => {
   transition: transform 0.3s ease;
   z-index: 9;
   width: 96%;
+  height: 80%;
+  bottom: 1.5rem;
 }
 .shop-top{
   display: flex;

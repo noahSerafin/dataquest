@@ -135,11 +135,17 @@ const activeStatuses = computed((): [string, boolean][] => {
 const shieldIcon = String.fromCodePoint(
   parseInt("U+1F6E1".replace("U+", ""), 16)
 );
+
+function pieceTipClass(){
+  if(props.piece.name === 'Spawn') return 'spawnTip'
+  if(props.piece.team === 'player') return 'playerPieceTip'
+  if(props.piece.team === 'enemy') return 'enemyPieceTip'
+}
 </script>
 
 <template>
   <div
-  :class="`piece ${piece.headPosition.x}-${piece.headPosition.y} ${cssclass}-piece ${props.piece.variantName ? ('variant-program v_'+piece.variantName) : ''} ${props.piece.extraUnicode ? 'hybrid' : ''} team-${piece.team} taking-damage-${piece.isTakingDamage} triggering-${piece.isTriggering} hidden-${piece.statuses.hidden} tiles:(${piece.tiles.toString()}) redacted-${piece.redacted}`"
+  :class="`piece ${piece.headPosition.x}-${piece.headPosition.y} ${cssclass}-piece ${props.piece.variantName ? ('variant-program v_'+piece.variantName) : ''} ${props.piece.extraUnicode ? 'hybrid' : ''} team-${piece.team} taking-damage-${piece.isTakingDamage} triggering-${piece.isTriggering} hidden-${piece.statuses.hidden} tiles:(${piece.tiles.toString()}) redacted-${piece.redacted} ${pieceTipClass()}`"
     :name="piece?.hybridName? piece.hybridName : piece?.name"
     :id="piece?.id"
     :style="pieceStyle"
@@ -166,7 +172,7 @@ const shieldIcon = String.fromCodePoint(
     </div>
     <div class="piece-defence">
       <span class="piece-defence-shield"
-        v-for="n in Math.min(Math.max(0, piece.defenceRemaining), 2)"
+        v-for="n in (Math.min(Math.max(0, Math.floor(piece.defenceRemaining || 0)), 2))"
         :key="n"
       >
         {{ shieldIcon }}
@@ -175,7 +181,7 @@ const shieldIcon = String.fromCodePoint(
     </div>
     <div class="popups-container">
       <div
-        v-for="popup in piece.popups"
+        v-for="popup in (piece.popups || [])"
         :key="popup.id"
         :class="['damage-popup', { fixed: popup.isFixed }]"
         :style="{ color: popup.color }"
@@ -185,7 +191,7 @@ const shieldIcon = String.fromCodePoint(
     </div>
   </div>
   <div
-    v-for="(tile, index) in bodyTiles"
+    v-for="(tile, index) in (bodyTiles || [])"
     :key="index"
     :class="`piece-tile ${tile.x}-${tile.y} ${getDirectionClass(tile, index+1)} team-${piece.team} hidden-${piece.statuses.hidden} redacted-${piece.redacted}`"
     :style="{

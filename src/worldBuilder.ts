@@ -1,8 +1,11 @@
 import type { Company, Coordinate, SkipReward } from "./types";
-import type { Piece } from "./Pieces";
-import { bossCompany, companies, playerCompany, shopCompany } from "./companies";
+import { Spawn, allPieces } from "./Pieces";
+import { DIFFICULTY_RARITY } from "./constants";
+import { applyVariant, rollVariant } from "./helperFunctions";
 import { generateNode } from "./nodeBuilder";
 import { Random } from "./Random";
+import type { Piece } from "./Pieces"
+import { playerCompany, shopCompany, bossCompany, companies } from "./companies";
 
 interface Level {
   name: string;
@@ -49,23 +52,35 @@ function shuffle(array: PathSpec[]) {
   }
 }
 
-/*function getEasyPath(difficulty: number): PathSpec {
+function getEasyPath(difficulty: number): PathSpec {
   const options: PathSpec[] = [
     
     { type: 'level', mods: [0, 0], rewards: [3, 3] },
     { type: 'hiddenAltar', mods: [0, 0], rewards: [3, 3] }
   ];
   if (difficulty > 1 ){
-    options.push({ type: 'skip',  mods: [0, 1], rewards: [0, 5] });//skip path
-    options.push({ type: 'level', mods: [0, 1], rewards: [3, 5] });// risky path
-    options.push({ type: 'hiddenShop',  mods: [0, 1], rewards: [3, 5] });
+    options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
+    options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
+    options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
+    options.push({ type: 'skip',  mods: [0, 0], rewards: [0, 3] });
+    options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] });
+    options.push({ type: 'hiddenShop',  mods: [0, 0], rewards: [3, 3] });
   }
   if (difficulty > 2 ){
-
+    options.push({ type: 'skip',  mods: [0, 0], rewards: [0, 3] }),//skip path
+    options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
+    options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
+    options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
+    options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
+    options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
+    options.push({ type: 'hiddenAltar',  mods: [0, 0], rewards: [3, 3] });
+    options.push({ type: 'hiddenDuplicator',  mods: [0, 0], rewards: [3, 3] });
+    options.push({ type: 'hiddenWorkbench',  mods: [0, 0], rewards: [3, 3] });
+    options.push({ type: 'hiddenCompiler',  mods: [0, 0], rewards: [3, 3] });
   }
   shuffle(options);
   return options[0];
-}*/
+}
 
 function getIndividualPath(difficulty: number): PathSpec {
   const options: PathSpec[] = [
@@ -105,7 +120,8 @@ function getPathSpecsForDifficulty(difficulty: number): PathSpec[] {
   */
   if (difficulty <= 1) {
     return [
-      Random.bool(0.5) ? { type: 'level', mods: [0, 0], rewards: [3, 3] } : { type: 'hiddenAltar', mods: [0, 0], rewards: [3, 3] }, // safe path
+      //Random.bool(0.5) ? { type: 'level', mods: [0, 0], rewards: [3, 3] } : { type: 'hiddenAltar', mods: [0, 0], rewards: [3, 3] }, // safe path
+      getEasyPath(difficulty),
       //getIndividualPath(difficulty)
       { type: 'skip',  mods: [0, 1], rewards: [0, 5] },
       //{ type: 'hiddenShop',  mods: [1, 2], rewards: [4, 7] }
@@ -115,7 +131,8 @@ function getPathSpecsForDifficulty(difficulty: number): PathSpec[] {
   // difficulty 3+
   //if (difficulty > 2) {
     return [
-      { type: 'level', mods: [0, 0], rewards: [3, 3] },
+      //{ type: 'level', mods: [0, 0], rewards: [3, 3] },
+      getEasyPath(difficulty),
       getIndividualPath(difficulty),
       getIndividualPath(difficulty),
     ];
@@ -137,11 +154,15 @@ function getPathPositions(
 
 export function generateWorld(
   levelPool: Level[],
-  difficulty: number
+  difficulty: number,
+  stake: number
 ): WorldMap {
 
   //const pick = () => levelPool[Math.floor(Math.random() * levelPool.length)];
-  const pick = () => Random.bool(0.5) ? Random.pick(levelPool) : generateNode(difficulty);
+  const pick = () => {
+    const level = Random.bool(0.5) ? Random.pick(levelPool) : generateNode(difficulty);
+    return JSON.parse(JSON.stringify(level));
+  };
 
   const startId = "start";
   const shopId = "shop";
@@ -150,6 +171,8 @@ export function generateWorld(
   const pathSpecs = getPathSpecsForDifficulty(difficulty);
 
   const nodes: Record<string, WorldNode> = {};
+  const middleNodeIds: (string | null)[] = new Array(pathSpecs.length).fill(null);
+
 
   // --- Start node ---
   nodes[startId] = {
@@ -194,6 +217,7 @@ export function generateWorld(
 
     if (spec.type === 'hiddenShop') {
       const hiddenShopId = `path_${i}_hidden_shop`;
+      middleNodeIds[i] = hiddenShopId;
 
       nodes[p1] = {
         id: p1,
@@ -235,6 +259,7 @@ export function generateWorld(
 
     if (spec.type === 'hiddenAltar') {
       const hiddenCompilerId = `path_${i}_hidden_altar`;
+      middleNodeIds[i] = hiddenCompilerId;
 
       nodes[p1] = {
         id: p1,
@@ -276,6 +301,7 @@ export function generateWorld(
 
     if (spec.type === 'hiddenDuplicator') {
       const hiddenCompilerId = `path_${i}_hidden_duplicator`;
+      middleNodeIds[i] = hiddenCompilerId;
 
       nodes[p1] = {
         id: p1,
@@ -317,6 +343,7 @@ export function generateWorld(
 
     if (spec.type === 'hiddenWorkbench') {
       const hiddenCompilerId = `path_${i}_hidden_workbench`;
+      middleNodeIds[i] = hiddenCompilerId;
 
       nodes[p1] = {
         id: p1,
@@ -358,6 +385,7 @@ export function generateWorld(
 
     if (spec.type === 'hiddenCompiler') {
       const hiddenCompilerId = `path_${i}_hidden_compiler`;
+      middleNodeIds[i] = hiddenCompilerId;
 
       nodes[p1] = {
         id: p1,
@@ -427,17 +455,51 @@ export function generateWorld(
   // --- Split Paths ---
   // Connect one node in the first row to a neighboring second node
   if (pathSpecs.length >= 2) {
-    const splitPathIndex = Random.floor(pathSpecs.length);
-    const neighborIndex = splitPathIndex === 0 ? 1 : 
-                         (splitPathIndex === pathSpecs.length - 1 ? splitPathIndex - 1 : 
-                          (Random.bool(0.5) ? splitPathIndex - 1 : splitPathIndex + 1));
-    
-    const sourceId = `path_${splitPathIndex}_1`;
-    const targetId = `path_${neighborIndex}_2`;
-    
-    if (nodes[sourceId] && nodes[targetId]) {
-      nodes[sourceId].next.push(targetId);
+    const possibleEdges: { from: number; to: number }[] = [];
+    for (let i = 0; i < pathSpecs.length; i++) {
+      if (i > 0) possibleEdges.push({ from: i, to: i - 1 });
+      if (i < pathSpecs.length - 1) possibleEdges.push({ from: i, to: i + 1 });
     }
+
+    const crosses = (e1: { from: number; to: number }, e2: { from: number; to: number }) => {
+      return (e1.from < e2.from && e1.to > e2.to) || (e1.from > e2.from && e1.to < e2.to);
+    };
+
+    const selectedEdges: { from: number; to: number }[] = [];
+
+    // First split path
+    const firstEdgeIndex = Random.floor(possibleEdges.length);
+    const firstEdge = possibleEdges.splice(firstEdgeIndex, 1)[0];
+    selectedEdges.push(firstEdge);
+
+    // Second split path (50% chance if paths > 2)
+    if (pathSpecs.length > 2 && Random.bool(0.5)) {
+      const remainingNonCrossing = possibleEdges.filter(e => !crosses(firstEdge, e));
+      if (remainingNonCrossing.length > 0) {
+        const secondEdge = Random.pick(remainingNonCrossing);
+        selectedEdges.push(secondEdge);
+      }
+    }
+
+    selectedEdges.forEach(edge => {
+      let sourceId = `path_${edge.from}_1`;
+      let targetId = `path_${edge.to}_2`;
+      
+      const roll = Random.next();
+      // 30% chance to originate from middle node OR 30% chance to lead to middle node
+      // This ensures we never have middle-to-middle connections
+      if (roll < 0.3 && middleNodeIds[edge.from]) {
+        sourceId = middleNodeIds[edge.from]!;
+      } else if (roll < 0.6 && middleNodeIds[edge.to]) {
+        targetId = middleNodeIds[edge.to]!;
+      }
+
+      if (nodes[sourceId] && nodes[targetId]) {
+        if (!nodes[sourceId].next.includes(targetId)) {
+          nodes[sourceId].next.push(targetId);
+        }
+      }
+    });
   }
 
   // --- Shop ---
@@ -471,10 +533,96 @@ export function generateWorld(
     } else {
       node.visible = false;
     }
+    
+    // Process level spawns if node has a level
+    if (node.level && (node.type === 'level' || node.type === 'boss')) {
+      const { processedPieces } = processSpawnPoints(
+        node.level.pieces, 
+        (node.company && node.company.pieceList && node.company.pieceList.length > 0) ? node.company.pieceList : allPieces, 
+        difficulty,
+        node.difficultyMod,
+        stake
+      );
+      node.level.pieces = processedPieces;
+    }
   }
 
   return {
     startNode: startId,
     nodes
   };
+}
+
+function processSpawnPoints(
+  pieces: Piece[], 
+  companyPieces: any[], 
+  difficulty: number,
+  mod: number, 
+  stake: number
+) {
+  const processed: Piece[] = [];
+
+  for (const piece of pieces) {
+    if (piece.name === 'Spawn') {
+      const spawnSize = piece.tiles.length;
+      // Enemy spawn → replace with random enemy piece
+      if (piece.team === 'enemy') {
+        let trueDifficulty = 0;
+        if (difficulty + mod > 6) {
+          trueDifficulty = 6;
+        } else if (difficulty + mod < 1) {
+          trueDifficulty = 1;
+        } else {
+          trueDifficulty = difficulty + mod;
+        }
+        const { min, max } = DIFFICULTY_RARITY[trueDifficulty];
+
+        const difficultyMatched = companyPieces.filter(EnemyClass => {
+          if (!EnemyClass || EnemyClass.name === "Nuke") return false;
+          const temp = new EnemyClass(piece.headPosition, 'enemy');
+          return temp.rarity >= min && temp.rarity <= max;
+        });
+
+        let pool = difficultyMatched.filter(EnemyClass => {
+          const temp = new EnemyClass(piece.headPosition, 'enemy');
+          return temp.maxSize >= spawnSize;
+        });
+
+        if (pool.length === 0) {
+          pool = difficultyMatched;
+        }
+
+        const EnemyClass = Random.pick(pool);
+        const enemyInstance = new EnemyClass(piece.headPosition, 'enemy');
+        enemyInstance.tiles = piece.tiles.slice(0, enemyInstance.maxSize);
+
+        const variantChance = Math.min((0.1 * trueDifficulty - 0.1), 1);
+        const variant = rollVariant(variantChance, trueDifficulty);
+        if (variant) {
+          applyVariant(enemyInstance, variant);
+        }
+        
+        enemyInstance.defenceRemaining = enemyInstance.getStat('defence');
+
+        if (stake > 1) enemyInstance.maxSize += difficulty;
+        if (stake > 2) enemyInstance.moves += difficulty;
+        if (stake > 3) enemyInstance.range += difficulty;
+        if (stake > 4) enemyInstance.attack += difficulty;
+        if (stake > 5) enemyInstance.defence += difficulty;
+
+        processed.push(enemyInstance);
+        continue;
+      }
+
+      if (piece.team === 'player') {
+        if (piece.headPosition) {
+          const PlayerInstance = new Spawn(piece.headPosition, 'player');
+          processed.push(PlayerInstance);
+        }
+      }
+    }
+    processed.push(piece);
+  }
+
+  return { processedPieces: processed };
 }

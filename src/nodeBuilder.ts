@@ -375,6 +375,66 @@ export function generateNode(difficulty: number): Level {
         availableTiles.delete(key(tile.x, tile.y));//remove from available for next enemy
       });*/
 
+    // Build a set of all occupied tile keys so we don't spawn on them
+    const occupiedKeys = new Set<string>();
+    occupiedKeys.add(key(playerTile.x, playerTile.y));
+    enemySpawns.forEach(enemy => {
+      if (enemy.headPosition) {
+        occupiedKeys.add(key(enemy.headPosition.x, enemy.headPosition.y));
+      }
+      if (enemy.tiles) {
+        enemy.tiles.forEach((t: Coordinate) => {
+          occupiedKeys.add(key(t.x, t.y));
+        });
+      }
+    });
+
+    const extraPlayerSpawns: any[] = [];
+    
+    // First 50% chance to add a spawn within 2 spaces of the first generated spawn
+    if (Random.bool(0.8)) {
+      const candidates = tiles.filter(t => {
+        const dist = Math.abs(t.x - playerTile.x) + Math.abs(t.y - playerTile.y);
+        return dist >= 1 && dist <= 2 && !occupiedKeys.has(key(t.x, t.y));
+      });
+      
+      if (candidates.length > 0) {
+        const pickedTile = Random.pick(candidates);
+        occupiedKeys.add(key(pickedTile.x, pickedTile.y));
+        
+        extraPlayerSpawns.push({
+          "id": crypto.randomUUID(),
+          "name": "Spawn",
+          "team": "player",
+          "headPosition": pickedTile,
+          "tiles": [pickedTile],
+          "rarity": 1
+        });
+        
+        // Second 50% chance to spawn another in the same range in a different spot if the first was successful
+        if (Random.bool(0.5)) {
+          const secondCandidates = tiles.filter(t => {
+            const dist = Math.abs(t.x - playerTile.x) + Math.abs(t.y - playerTile.y);
+            return dist >= 1 && dist <= 2 && !occupiedKeys.has(key(t.x, t.y));
+          });
+          
+          if (secondCandidates.length > 0) {
+            const secondPickedTile = Random.pick(secondCandidates);
+            occupiedKeys.add(key(secondPickedTile.x, secondPickedTile.y));
+            
+            extraPlayerSpawns.push({
+              "id": crypto.randomUUID(),
+              "name": "Spawn",
+              "team": "player",
+              "headPosition": secondPickedTile,
+              "tiles": [secondPickedTile],
+              "rarity": 1
+            });
+          }
+        }
+      }
+    }
+
     return {
         name: `Gen-${difficulty}-${crypto.randomUUID().substring(0, 7)}`,
         tiles: [...tiles],//.map(parseCoord),
@@ -387,6 +447,7 @@ export function generateNode(difficulty: number): Level {
             "tiles": [playerTile],
             "rarity": 1
             },
+            ...extraPlayerSpawns,
             ...enemySpawns
         ]
     };

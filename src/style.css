@@ -260,7 +260,7 @@ body,
 }
 
 .text-blue {
-  color: #1b4ceb;
+  color: #1b9feb;
   ;
 }
 
@@ -275,7 +275,7 @@ body,
 }
 
 .text-cyan {
-  color: #1bc1eb;
+  color: #70e2ff;
   ;
 }
 
@@ -324,8 +324,8 @@ body,
 }
 
 .node-map .tutorial-help-btn {
- top: unset;
- bottom: -8px; 
+  top: unset;
+  bottom: -8px;
 }
 
 .shop-container .tutorial-help-btn,
@@ -612,9 +612,11 @@ steel
 .v_Beserker .variant {
   color: #a00303;
 }
+
 .v_Deadly .variant {
   color: #ff0000;
 }
+
 .v_Deadly {
   box-shadow: inset 0 0 10px #480000, inset 0 3px 30px #ff4e4e, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
 }
@@ -701,6 +703,7 @@ steel
 
   /*mix-blend-mode: color-dodge;*/
 }
+
 /*.v_Holographic::after{//can be done with a secondary image
   content: ''; // needs to be a textured copy of the emoji
   position: absolute;
@@ -714,7 +717,7 @@ steel
   
 }
 */
-.v_Holographic.piece-controller{
+.v_Holographic.piece-controller {
   filter: unset;
 }
 

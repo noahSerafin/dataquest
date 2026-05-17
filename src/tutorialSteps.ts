@@ -48,15 +48,15 @@ const currentNodeTip: TutorialStep = {
 }
 const boardTip: TutorialStep = {
     id: "board",
-    tooltip: "Now we're inside a Node. Your job is to clear all the enemy programs from it using your own programs. Each turn, you may either load a new program in each green 🔲, or move and take actions with your programs already inside the node. You may load your programs into the green tiles initially. Once you have a program down, you may load in next to any tile it occupies. Be careful, once you load a program in, the enemy programs will take their move, so don't place anything vunerable too close to an enemy. If all your loaded programs are cleared from a node, you will lose a life."
+    tooltip: "Now we're inside a Node. Your job is to clear all the enemy programs from it using your own programs. Each turn, you may either load a new program in each green 🔲, or move and take actions with your programs already inside the node. Once you have a program down, you may load in next to any tile it occupies next turn. Be careful, once you finish loading your programs in, the enemy programs will take their move, so don't place anything vunerable too close to an enemy. If all your loaded programs are cleared from a node, you will lose a life and be kicked from the node."
 }
 const placementTip: TutorialStep = {
-    id: "placement-tile",
+    id: "placement-tile-tip",
     tooltip: "Drag one of your programs here to load it. This will also end your turn, so be wary what you can be attacked by in this space."
 }
 const spawnTip: TutorialStep = {
     id: 'spawnTip',
-    tooltip: "This is a load point into this node, it will dissappear after your first turn if not used. Drag one of your programs here to load it. This will also end your turn, so be wary what you can be attacked by in this space."
+    tooltip: "This is a load point into this node, drag one of your programs here to load it. All 🔲 will dissapear after this turn, but you can still node next to your ither programs later instead of moving."
 }
 const programTip: TutorialStep = {
     id: 'playerPieceTip',

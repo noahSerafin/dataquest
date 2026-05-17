@@ -7,9 +7,9 @@ import { Piece } from "../Pieces"
 import { Player } from "../Player";
 import { Random } from "../Random";
 
-interface Props{
-  tiles : Coordinate[]
-  foggedTiles : Coordinate[]
+interface Props {
+  tiles: Coordinate[]
+  foggedTiles: Coordinate[]
   pieces: Piece[]
   selectedPiece: InstanceType<typeof Piece> | null
   placementHighlights: Coordinate[]
@@ -38,7 +38,7 @@ const emit = defineEmits<{
   (e: 'placeAt', coord: Coordinate): void
   (e: 'hoverPlacement', coord: Coordinate): void
 }>()
-  
+
 function handlePlaceClick(tile: Coordinate) {
   if (!props.placementMode) return
   if (!props.placementHighlights.some(h => h.x === tile.x && h.y === tile.y)) return
@@ -96,7 +96,7 @@ function findHoveredPlacement(
 }
 
 const ghostStyle = computed(() => {
-   if (!mousePos.value) return { display: 'none' }
+  if (!mousePos.value) return { display: 'none' }
 
   if (snapPos.value) {
     return {
@@ -106,9 +106,9 @@ const ghostStyle = computed(() => {
       width: (tileSize.value - 16) + 'px',
       border: '1px solid outset',
       fontSize: (tileSize.value * 0.6) + 'px',
-      lineHeight: (tileSize.value -24) + 'px',
+      lineHeight: (tileSize.value - 24) + 'px',
       backgroundColor: props.pieceToPlace?.color,
-      }
+    }
   }
 
   return {
@@ -135,7 +135,7 @@ function onMouseUp() {
 
 // Make a Set for fast lookup
 const tileSet = computed(() => new Set(props.tiles.map(t => `${t.x},${t.y}`)))
-const fogSet = computed(() => {return new Set(props.foggedTiles.map(t => `${t.x},${t.y}`))});
+const fogSet = computed(() => { return new Set(props.foggedTiles.map(t => `${t.x},${t.y}`)) });
 console.log('set: ', [...fogSet.value])
 
 // Get cols/rows from tiles
@@ -152,7 +152,7 @@ const vh = ref(window.innerHeight * 0.7)
 
 // Update on resize
 const updateSize = () => {
-  if(boardEl.value){
+  if (boardEl.value) {
     vw.value = boardEl.value?.clientWidth
     vh.value = boardEl.value?.clientHeight
   }
@@ -209,7 +209,7 @@ watch(
 const pieceMap = computed(() => {
   const map = new Map<string, InstanceType<typeof Piece>>()
   props.pieces.forEach(piece => {
-    if(!piece.statuses.negative){
+    if (!piece.statuses.negative) {
       piece.tiles.forEach(tile => {
         map.set(`${tile.x},${tile.y}`, piece)
       })
@@ -234,24 +234,24 @@ function getAvailableMoves(
   if (piece.movesRemaining <= 0) return [] // no moves left
 
   const { x, y } = piece.headPosition
-  const potentialMoves =  [
+  const potentialMoves = [
     { x: x + 1, y, direction: "right" },
     { x: x - 1, y, direction: "left" },
     { x, y: y + 1, direction: "down" },
     { x, y: y - 1, direction: "up" },//include regular moves too?? push these on instead of ternary
-  ] 
-  if(props.player.hasAdmin('Ollie') || piece.name === 'Helicopter'){
+  ]
+  if (props.player.hasAdmin('Ollie') || piece.name === 'Helicopter') {
     const ollies =
-    [
-      { x: x + 2, y, direction: "right" },
-      { x: x - 2, y, direction: "left" },
-      { x, y: y + 2, direction: "down" },
-      { x, y: y - 2, direction: "up" },
-    ];
+      [
+        { x: x + 2, y, direction: "right" },
+        { x: x - 2, y, direction: "left" },
+        { x, y: y + 2, direction: "down" },
+        { x, y: y - 2, direction: "up" },
+      ];
     potentialMoves.push(...ollies);
   }
 
-  if(props.player.hasAdmin('Edge Case')){
+  if (props.player.hasAdmin('Edge Case')) {
     const diagonals = [
       { x: x + 1, y: y - 1, direction: "up-right" },
       { x: x - 1, y: y - 1, direction: "up-left" },
@@ -395,31 +395,31 @@ function getTilesInStraightLine(
 
 const highlightTargets = (piece: InstanceType<typeof Piece>) => {
   clearHighlights();
-  if(piece.actions <= 0) return;
+  if (piece.actions <= 0) return;
   inRangeHighlights.value = getTilesInRange(
     piece.headPosition,
     piece.getStat('range'),
     tileSet.value,
-  ); 
+  );
 }
 const highlightSpecials = (piece: InstanceType<typeof Piece>) => {
   //console.log('specialtargets', piece.name)
   clearHighlights();
-  if(piece.actions <= 0) return;
-  if(piece.targetType === 'line'){
+  if (piece.actions <= 0) return;
+  if (piece.targetType === 'line') {
     specialHighlights.value = getTilesInStraightLine(
       piece.headPosition,
       piece.getStat('range'),
       tileSet.value,
     )
-  } else if(piece.targetType === 'self'){
+  } else if (piece.targetType === 'self') {
     specialHighlights.value = piece.tiles
   } else {
     specialHighlights.value = getTilesInRange(
       piece.headPosition,
       piece.getStat('range'),
       tileSet.value,
-    ); 
+    );
   }
 }
 
@@ -436,11 +436,11 @@ function resolveMove(
 ) {
   // Not confused → behave normally
   if (!props.selectedPiece?.statuses.confused || allMoves.length <= 1) {
-    emit('movePiece', {x: chosenMove.x, y: chosenMove.y});
-  } else { 
+    emit('movePiece', { x: chosenMove.x, y: chosenMove.y });
+  } else {
     // Confused → random valid move
     const randomMove = Random.pick(allMoves);
-    emit('movePiece', {x: randomMove.x, y: randomMove.y});
+    emit('movePiece', { x: randomMove.x, y: randomMove.y });
   }
 }
 //onclick = "resolveMove(tile, moveButtons)""
@@ -450,159 +450,102 @@ function resolveMove(
 
 
 <template>
-  <div class="container board-container"
-    v-on:mousemove="onMouseMove"
-    >
-    <div
-      ref="boardEl"
-      v-if="cols > 0 && rows > 0"
-      class="grid board"
-      :style="{
-        width: '100%',
-        height: '100%',
-        gridTemplateColumns: `repeat(${cols}, ${tileSize}px)`,
-        gridTemplateRows: `repeat(${rows}, ${tileSize}px)`,
-      }"
-    >
+  <div class="container board-container" v-on:mousemove="onMouseMove">
+    <div ref="boardEl" v-if="cols > 0 && rows > 0" class="grid board" :style="{
+      width: '100%',
+      height: '100%',
+      gridTemplateColumns: `repeat(${cols}, ${tileSize}px)`,
+      gridTemplateRows: `repeat(${rows}, ${tileSize}px)`,
+    }">
       <template v-for="row in (Math.max(0, Math.floor(rows || 0)))" :key="row">
         <template v-for="col in (Math.max(0, Math.floor(cols || 0)))" :key="`${col},${row}`">
-          <div
-            class="border border-black"
-            :class="tileSet.has(`${col-1},${row-1}`) ? 'tile' : 'tile-empty'"
-            :id="col-1+', '+(row-1)"
-            :style="tileSet.has(`${col-1},${row-1}`) ? { 
-                  backgroundColor: tileColor, 
-                  border: `2px solid ${edgeColor}` 
-                } : {}"          />
+          <div class="border border-black" :class="tileSet.has(`${col - 1},${row - 1}`) ? 'tile' : 'tile-empty'"
+            :id="col - 1 + ', ' + (row - 1)" :style="tileSet.has(`${col - 1},${row - 1}`) ? {
+              backgroundColor: tileColor,
+              border: `2px solid ${edgeColor}`
+            } : {}" />
         </template>
       </template>
     </div>
-    <div v-if="player.fogged" class="fog-container"
-      :style="{
-        width: '100%',
-        height: '100%',
-        gridTemplateColumns: `repeat(${cols}, ${tileSize}px)`,
-        gridTemplateRows: `repeat(${rows}, ${tileSize}px)`,
-      }">
+    <div v-if="player.fogged" class="fog-container" :style="{
+      width: '100%',
+      height: '100%',
+      gridTemplateColumns: `repeat(${cols}, ${tileSize}px)`,
+      gridTemplateRows: `repeat(${rows}, ${tileSize}px)`,
+    }">
       <template v-for="row in (Math.max(0, Math.floor(rows || 0)))" :key="row">
         <template v-for="col in (Math.max(0, Math.floor(cols || 0)))" :key="`${col},${row}`">
-          <div
-          class="border border-black"
-          :class="fogSet.has(`${col-1},${row-1}`) ? 'tile fog-tile' : 'tile-empty fog-cleared'"
-          :id="(col-1)+', '+(row-1)"
-          />
+          <div class="border border-black"
+            :class="fogSet.has(`${col - 1},${row - 1}`) ? 'tile fog-tile' : 'tile-empty fog-cleared'"
+            :id="(col - 1) + ', ' + (row - 1)" />
         </template>
       </template>
     </div>
     <!-- Render pieces -->
-    <div
-      v-for="piece in pieces"
-      class="piece-layer"
-      :key="piece.id"
-    >
-      <PieceView
-      :piece="piece"
-      :selectedPiece="selectedPiece"
-      :tileSize=tileSize
-      :mapTiles = props.tiles
-      cssclass = "board"
-      :showFastControls = showFastControls
-      @select="$emit('handlePieceSelect', piece)"
-      @highlightTargets="highlightTargets"
-      @highlightSpecials="highlightSpecials"
-      @deselect="$emit('deselect')"
-      />
+    <div v-for="piece in pieces" class="piece-layer" :key="piece.id">
+      <PieceView :piece="piece" :selectedPiece="selectedPiece" :tileSize=tileSize :mapTiles=props.tiles cssclass="board"
+        :showFastControls=showFastControls @select="$emit('handlePieceSelect', piece)"
+        @highlightTargets="highlightTargets" @highlightSpecials="highlightSpecials" @deselect="$emit('deselect')" />
     </div>
     <!-- 
       @highlightMoves="highlightMoves"
     Highlights -->
-    <div
-      v-for="(tile, index) in moveHighlights"
-      :key="index"
-      class="highlight-tile"
-      :style="{
-        left: (tile.x * tileSize) + 1 + 'px',
-        top: (tile.y * tileSize) + 1 + 'px',
-        width: (tileSize - 5) + 'px',
-        height: (tileSize - 5) + 'px',
-      }"
-    />
-    <div
-      v-for="(tile, index) in moveButtons"
+    <div v-for="(tile, index) in moveHighlights" :key="index" class="highlight-tile" :style="{
+      left: (tile.x * tileSize) + 1 + 'px',
+      top: (tile.y * tileSize) + 1 + 'px',
+      width: (tileSize - 5) + 'px',
+      height: (tileSize - 5) + 'px',
+    }" />
+    <div v-for="(tile, index) in moveButtons"
       v-if="(selectedPiece?.team === 'player' && !selectedPiece?.statuses.charmed) || (selectedPiece?.statuses.charmed && selectedPiece?.team === 'enemy')"
-      :key="index"
-      class="highlight-tile"
-      :class="['move-button', `move-button-${tile.direction}`]"
-      v-on:click="resolveMove(tile, moveButtons);"
-      :style="{
+      :key="index" class="highlight-tile" :class="['move-button', `move-button-${tile.direction}`]"
+      v-on:click="resolveMove(tile, moveButtons);" :style="{
         left: (tile.x * tileSize) + 1 + 'px',
         top: (tile.y * tileSize) + 1 + 'px',
         width: (tileSize - 5) + 'px',
         height: (tileSize - 5) + 'px',
-      }"
-    />
-    <div
-    v-for="(tile, index) in inRangeHighlights"
-    :key="index"
-    :id="`atk-${tile.x}-${tile.y}`"
-      class="highlight-tile red"
-      v-on:click="$emit('damagePieceAt', tile)"
-      :style="{
+      }" />
+    <div v-for="(tile, index) in inRangeHighlights" :key="index" :id="`atk-${tile.x}-${tile.y}`"
+      class="highlight-tile red" v-on:click="$emit('damagePieceAt', tile)" :style="{
         left: (tile.x * tileSize) + 1 + 'px',
         top: (tile.y * tileSize) + 1 + 'px',
         width: (tileSize - 5) + 'px',
         height: (tileSize - 5) + 'px',
-      }"
-    />
-    <div
-    v-for="(tile, index) in specialHighlights"
-    :key="index"
-    :id="`atk-${tile.x}-${tile.y}`"
-      class="highlight-tile yellow"
-      v-on:click="$emit('specialActionAt', tile)"
-      :style="{
+      }" />
+    <div v-for="(tile, index) in specialHighlights" :key="index" :id="`atk-${tile.x}-${tile.y}`"
+      class="highlight-tile yellow" v-on:click="$emit('specialActionAt', tile)" :style="{
         left: (tile.x * tileSize) + 1 + 'px',
         top: (tile.y * tileSize) + 1 + 'px',
         width: (tileSize - 5) + 'px',
         height: (tileSize - 5) + 'px',
-      }"
-    />
-    <div
-      v-if="player.canPlace && (placementMode || isFirstTurn)" v-for="(tile, index) in placementHighlights"
-      :key="index"
-      class="highlight-tile green placement-tile"
-      @mouseup="onMouseUp"
-      v-on:click="handlePlaceClick(tile)"
-      :data-x="tile.x"
-      :data-y="tile.y"
-      :style="{
+      }" />
+    <div v-if="player.canPlace && (placementMode || isFirstTurn)" v-for="(tile, index) in placementHighlights"
+      :key="index" :class="`highlight-tile green placement-tile ${!props.isFirstTurn ? 'placement-tile-tip' : ''}`"
+      @mouseup="onMouseUp" v-on:click="handlePlaceClick(tile)" :data-x="tile.x" :data-y="tile.y" :style="{
         left: (tile.x * tileSize) + 1 + 'px',
         top: (tile.y * tileSize) + 1 + 'px',
         width: (tileSize - 5) + 'px',
         height: (tileSize - 5) + 'px',
-      }"
-    />
-    <div
-      v-if="pieceToPlace"
-      class="ghost-piece"
-      :style="ghostStyle"
-    >
-    {{ String.fromCodePoint(parseInt(pieceToPlace.unicode.replace("U+", ""), 16), 0xFE0F) }}
+      }" />
+    <div v-if="pieceToPlace" class="ghost-piece" :style="ghostStyle">
+      {{ String.fromCodePoint(parseInt(pieceToPlace.unicode.replace("U+", ""), 16), 0xFE0F) }}
     </div>
   </div>
 </template>
 
 <style scoped>
-.board-container{
+.board-container {
   position: relative;
 }
+
 .grid {
   display: grid;
   position: relative;
   top: 0;
   width: 100%;
 }
-.tile{
+
+.tile {
   background-color: gainsboro;
   background-color: rgb(8, 47, 0);
   background-color: rgb(17, 31, 15);
@@ -611,10 +554,12 @@ function resolveMove(
   aspect-ratio: 1/1;
   margin: -0.5px;
 }
-.tile-empty{
+
+.tile-empty {
   background-color: black;
   z-index: -1;
 }
+
 .highlight-tile {
   position: absolute;
   background-color: rgba(0, 200, 255, 0.3);
@@ -622,14 +567,15 @@ function resolveMove(
   cursor: pointer;
   z-index: 999;
 }
-.move-button{
 
-}
+.move-button {}
+
 .move-button:before {
   position: absolute;
   content: '';
   background-color: aliceblue;
 }
+
 .move-button-up:before {
   left: 10%;
   bottom: 4%;
@@ -637,6 +583,7 @@ function resolveMove(
   height: 32%;
   clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
 }
+
 .move-button-down:before {
   width: 80%;
   height: 32%;
@@ -644,6 +591,7 @@ function resolveMove(
   top: 4%;
   clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
 }
+
 .move-button-right:before {
   left: 4%;
   top: 10%;
@@ -651,6 +599,7 @@ function resolveMove(
   height: 80%;
   clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
 }
+
 .move-button-left:before {
   right: 4%;
   top: 10%;
@@ -658,6 +607,7 @@ function resolveMove(
   height: 80%;
   clip-path: polygon(0% 50%, 100% 0%, 100% 100%);
 }
+
 .move-button-up-left:before {
   left: 10%;
   bottom: 4%;
@@ -666,6 +616,7 @@ function resolveMove(
   clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
   transform: translateY(-100%) rotate(-45deg);
 }
+
 .move-button-up-right:before {
   left: 10%;
   bottom: 4%;
@@ -674,6 +625,7 @@ function resolveMove(
   clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
   transform: translateY(-100%) rotate(45deg);
 }
+
 .move-button-down-left:before {
   width: 80%;
   height: 32%;
@@ -682,6 +634,7 @@ function resolveMove(
   clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
   transform: translateY(100%) rotate(45deg);
 }
+
 .move-button-down-right:before {
   width: 80%;
   height: 32%;
@@ -690,42 +643,51 @@ function resolveMove(
   clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
   transform: translateY(100%) rotate(-45deg);
 }
+
 .move-button:after {
   right: 0;
 }
-.piece-layer{
+
+.piece-layer {
   z-index: auto;
 }
-.green{
+
+.green {
   background-color: rgba(21, 255, 0, 0.432);
   z-index: 1;
 }
-.yellow{
+
+.yellow {
   background-color: rgba(255, 251, 0, 0.432);
   z-index: 3;
 }
-.red{
+
+.red {
   background-color: rgba(255, 0, 0, 0.432);
   z-index: 3;
 }
+
 .ghost-piece {
   position: absolute;
   opacity: 0.5;
   pointer-events: none;
   z-index: 10;
 }
-.fog-container{
+
+.fog-container {
   position: absolute;
   top: 0;
   display: grid;
   background-color: transparent;
 }
-.fog-tile{
+
+.fog-tile {
   border: 1px dashed lightgray;
   background-color: grey;
   z-index: 4;
 }
-.fog-cleared{
+
+.fog-cleared {
   background-color: transparent;
 }
 </style>

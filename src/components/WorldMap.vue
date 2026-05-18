@@ -834,7 +834,9 @@ watch(
 
 .current .icon{
     border: 2px outset white;
-    background-color: rgb(197, 197, 197);
+    background-color: rgb(46, 46, 46);
+    width: 20px;
+    height: 20px;
 }
 .preview-modal {
     position: absolute;

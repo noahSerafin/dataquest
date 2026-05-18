@@ -1229,20 +1229,25 @@ const movePiece = async (coord: Coordinate) => {
       await trap.triggerTrap(selectedPiece.value);
     }
     checkForRoundEnd();
+    if (!roundHasStarted.value) return;
   }
-  if (selectedPiece.value.targetType === 'trapPiece') {
+  if (selectedPiece.value && selectedPiece.value.targetType === 'trapPiece') {
     //check for others
     const trapTarget = activePieces.value.find(p =>
       (p.tiles.some(t => t.x === coord.x && t.y === coord.y) && p.id !== selectedPiece.value?.id)
     );
     if (trapTarget) {
       await selectedPiece.value.triggerTrap(trapTarget);
+      checkForRoundEnd();
+      if (!roundHasStarted.value) return;
     }
   }
-  if (selectedPiece.value.movesRemaining > 0) {
+  const isStillAlive = selectedPiece.value && activePieces.value.some(p => p.id === selectedPiece.value?.id);
+  if (isStillAlive && (selectedPiece.value?.movesRemaining ?? 0) > 0) {
     boardRef.value.highlightMoves(selectedPiece.value);
   } else {
     boardRef.value.clearHighlights();
+    if (!isStillAlive) selectedPiece.value = null;
   }
   playerSpawns.value = newPlacementHighlights(); 
   console.log('playerSpawns after movement:', playerSpawns.value);
@@ -1563,6 +1568,7 @@ const endTurn = async () => {
 
   const currentActivePieces = activePieces.value;
   checkForRoundEnd();
+  if (!roundHasStarted.value) return;
   hasFinishedTurn.value = true;
   selectedPiece.value = null;
   pieceToPlace.value = null;
@@ -1590,6 +1596,7 @@ const endTurn = async () => {
     }
   };
   await enemyTurn(currentActivePieces);
+  if (!roundHasStarted.value) return;
   //player piece tempstats reset
   await handleApplyAdmins('onEnemyTurnEnd', '');
   for (const piece of activePieces.value) {
@@ -1613,6 +1620,7 @@ const endTurn = async () => {
   player.value.canAction = true;
   handleApplyAdmins('onTurnStart', '');
   checkForRoundEnd();
+  if (!roundHasStarted.value) return;
   saveGameState();
   hasFinishedTurn.value = false;
   if(roundHasStarted.value){

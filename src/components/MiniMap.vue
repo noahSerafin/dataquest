@@ -49,11 +49,16 @@
         const tileData = props.level.tiles.map(tile => {
         const key = `${tile.x},${tile.y}`;
         let color = "#888"; // neutral default
+        let outline = "none";
         if (enemyTiles.has(key)) color = "red";
-        if (playerTiles.has(key)) color = "lightgreen";
+        if (playerTiles.has(key)){
+            color = "lightgreen";
+            outline = "1px solid white"
+        }
             return {
                 ...tile,
-                color
+                color,
+                outline
             };
         });
 
@@ -86,7 +91,8 @@
             :style="{
                 backgroundColor: tile.color,
                 left: tile.x * 8 + 'px',
-                top: tile.y * 8 + 'px'
+                top: tile.y * 8 + 'px',
+                outline: tile.outline
             }"
             ></div>
         </div>

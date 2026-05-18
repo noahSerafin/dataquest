@@ -28,10 +28,6 @@ Exposed
 Hidden
 
 //IMPROVEMENTS
-node complete on trap only 1 trap trigger
-make spawns in nodepreview more obvious (outline)
-bosses appearing twice on reload
-variant tooltips using status tooltip
 make distinct boss tooltip from admin tooltip
 deselect from inventory on placement
 forfeit round button

@@ -30,8 +30,30 @@ export const STATUS_INFO: Record<string, string> = {
   enraged: "Gains +1 attack on the start of it's turn",
   zen: "Temporary +1 to all stats at the start of the next turn",
   disarmed: "Has no actions for one turn",
+  Large: "+1 max size",
+  Giant: "+2 max size",
+  Fast: "+1 moves",
+  Speedy: "+2 moves",
+  Longshot: "+1 range",
+  Sharp: "+1 attack",
+  Bronze: "+1 defence",
+  Bloated: "+1 max size, -1 moves",
+  Lightweight: "-1 max size, +1 moves",
+  Reaching: "+1 range, -1 attack",
+  Beserker: "+1 moves, +1 attack, -1 defence",
+  Lead: "-1 moves, +1 defence",
+  Towering: "+1 range, -1 moves",
+  Vicious: "+1 moves, +1 attack",
+  Savage: "-1 max size, -1 range, +1 attack, +1 defence",
+  Cautious: "+2 defence, -1 attack",
+  Stone: "+2 defence, -1 moves",
+  Steel: "+2 defence",
+  Glass: "+3 attack, -1 max size, -2 defence",
+  Overclocked: "-1 max size, -1 defence, +1 moves, +1 range, +1 attack",
+  Gold: "+1 max size, +1 defence, +1 moves, +1 range, +1 attack",
+  Holographic: "+2 max size, +2 defence, +2 moves, +2 range, +2 attack, +0.5 dmg mult",
+  Deadly: "+1 dmg mult",
 };
-
 // 🫨 SHAKING FACE, U+1FAE8
 
 export const STATUS_COLORS: Record<string, string> = {

@@ -101,7 +101,7 @@ function toggleTooltip(key: string) {
           {{ piece.extraUnicode ? String.fromCodePoint(parseInt(piece.extraUnicode.replace("U+", ""), 16), 0xFE0F) : '' }}
         </span>
       </div>
-      <span v-if="piece.variantName" class="variant">{{ piece.variantName }}</span>
+      <span v-if="piece.variantName" class="variant"><FormattedDescription :description="piece.variantName" :isHeader="true" /></span>
       <span class="name">{{ piece.hybridName ? piece.hybridName : piece.name }}</span>
       <button class="close" @click="$emit('close', piece)">X</button>
     </div>

@@ -2,9 +2,15 @@
 import { computed } from 'vue';
 import { STATUS_INFO, STATUS_ICONS, STATUS_COLORS } from '../statuses';
 
-const props = defineProps<{
-  description: string;
-}>();
+const props = withDefaults(
+  defineProps<{
+    description: string;
+    isHeader?: boolean;
+  }>(),
+  {
+    isHeader: false,
+  }
+);
 
 const statusKeys = Object.keys(STATUS_INFO);
 
@@ -24,7 +30,30 @@ const statusAliases: Record<string, string> = {
   'expose': 'exposed',
   'exposing': 'exposed',
   'enrage': 'enraged',
-  'disarm': 'disarmed'
+  'disarm': 'disarmed',
+  'Large': 'Large',
+  'Longshot': 'Longshot',
+  'Holographic': 'Holographic',
+  'Deadly': 'Deadly',
+  'Gold': 'Gold',
+  'Overclocked': 'Overclocked',
+  'Stone': 'Stone',
+  'Steel': 'Steel',
+  'Savage': 'Savage',
+  'Cautious': 'Cautious',
+  'Towering': 'Towering',
+  'Lead': 'Lead',
+  'Beserker': 'Beserker',
+  'Reaching': 'Reaching',
+  'Lightweight': 'Lightweight',
+  'Bloated': 'Bloated',
+  'Bronze': 'Bronze',
+  'Sharp': 'Sharp',
+  'Speedy': 'Speedy',
+  'Fast': 'Fast',
+  'Giant': 'Giant',
+  'Glass': 'Glass',
+  'Vicious': 'Vicious',
 };
 
 const allSearchTerms = [...statusKeys, ...Object.keys(statusAliases)];
@@ -54,17 +83,38 @@ const chunks = computed(() => {
 
     // Add the status match
     const keyword = match[0];
-    const lowerKeyword = keyword.toLowerCase();
-    const statusKey = statusAliases[lowerKeyword] || lowerKeyword;
+    let statusKey: string | undefined = undefined;
 
-    result.push({
-      type: 'status',
-      content: keyword,
-      key: statusKey,
-      info: STATUS_INFO[statusKey],
-      icon: STATUS_ICONS[statusKey],
-      color: STATUS_COLORS[statusKey]
-    });
+    // Check statusAliases first (exact case)
+    if (statusAliases[keyword]) {
+      statusKey = statusAliases[keyword];
+    } else if (STATUS_INFO[keyword]) {
+      statusKey = keyword;
+    } else {
+      // Check lowercase fallback (for case-insensitive status words)
+      const lowerKeyword = keyword.toLowerCase();
+      if (statusAliases[lowerKeyword]) {
+        statusKey = statusAliases[lowerKeyword];
+      } else if (STATUS_INFO[lowerKeyword]) {
+        statusKey = lowerKeyword;
+      }
+    }
+
+    if (statusKey && STATUS_INFO[statusKey]) {
+      result.push({
+        type: 'status',
+        content: keyword,
+        key: statusKey,
+        info: STATUS_INFO[statusKey],
+        icon: STATUS_ICONS[statusKey],
+        color: STATUS_COLORS[statusKey]
+      });
+    } else {
+      result.push({
+        type: 'text',
+        content: keyword
+      });
+    }
 
     lastIndex = statusRegex.lastIndex;
   }
@@ -86,14 +136,14 @@ const chunks = computed(() => {
     <template v-for="(chunk, index) in chunks" :key="index">
       <span v-if="chunk.type === 'text'">{{ chunk.content }}</span>
       <span v-else class="status-wrapper">
-        <span class="status-keyword" :style="{ color: chunk.color }">
+        <span :class="['status-keyword', { 'header-mode': isHeader }]" :style="{ color: chunk.color }">
           {{ chunk.content }}
-          <span class="status-icon-inline">{{ chunk.icon }}</span>
+          <span v-if="!isHeader && chunk.icon" class="status-icon-inline">{{ chunk.icon }}</span>
 
           <span class="status-tooltip-distinct">
-            <div class="tooltip-header" :style="{ borderBottomColor: chunk.color }">
-              <span class="tooltip-icon">{{ chunk.icon }}</span>
-              <span class="tooltip-title" :style="{ color: chunk.color }">{{ chunk.key }}</span>
+            <div class="tooltip-header" :style="{ borderBottomColor: chunk.color || '#00ffcc' }">
+              <span v-if="chunk.icon" class="tooltip-icon">{{ chunk.icon }}</span>
+              <span class="tooltip-title" :style="{ color: chunk.color || '#00ffcc' }">{{ chunk.key }}</span>
             </div>
             <div class="tooltip-body">
               {{ chunk.info }}
@@ -127,6 +177,17 @@ const chunks = computed(() => {
 .status-keyword:hover {
   filter: brightness(1.2);
   text-decoration: underline solid;
+}
+
+.status-keyword.header-mode {
+  font-weight: inherit;
+  cursor: help;
+  text-decoration: none;
+}
+
+.status-keyword.header-mode:hover {
+  text-decoration: none;
+  filter: brightness(1.2);
 }
 
 .status-icon-inline {

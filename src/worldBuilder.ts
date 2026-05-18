@@ -619,6 +619,7 @@ function processSpawnPoints(
           const PlayerInstance = new Spawn(piece.headPosition, 'player');
           processed.push(PlayerInstance);
         }
+        continue;
       }
     }
     processed.push(piece);

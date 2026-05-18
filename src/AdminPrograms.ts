@@ -1154,12 +1154,15 @@ export class Copier extends Admin {
         }
         //clear the Spawn if it is there
         activePieces.push(copy);
-        const spawnIndex = activePieces.findIndex(p =>
-          p.tiles.some(t => t.x === newHead.x && t.y === newHead.y) && p.name === 'Spawn'
+        // Remove the player spawn piece at the new coordinate
+        // We use filter instead of findIndex/splice to match the logic in App.vue
+        // and ensure we catch any duplicate raw/instantiated spawns.
+        const filteredPieces = activePieces.filter(p => 
+          !(p.team === 'player' && p.name === 'Spawn' && p.headPosition.x === newHead.x && p.headPosition.y === newHead.y)
         );
-        if (spawnIndex !== -1) {
-          activePieces.splice(spawnIndex, 1);
-        }
+        // Mutate the original array (since we are passed a reference)
+        activePieces.length = 0;
+        activePieces.push(...filteredPieces);
 
       }
     }

@@ -237,7 +237,13 @@ export abstract class Piece {
   }
 
   async takeDamage(damage: number, existingPopup?: any) {
-    if (damage <= 0) return;
+    if (damage <= 0) {
+      if (existingPopup) {
+        existingPopup.text = "0";
+        this.releasePopup(existingPopup);
+      }
+      return;
+    }
     if (existingPopup) {
       existingPopup.text = damage.toString();
       this.releasePopup(existingPopup);

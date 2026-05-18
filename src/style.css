@@ -650,7 +650,11 @@ steel
 
 .v_Glass {
   box-shadow: inset 0 0 10px #0f2c49, inset 0 3px 30px #69fff5, 0 0 50px rgba(0, 0, 0, 0.8), 0 30px 30px rgba(0, 0, 0, 0.7);
-  opacity: 0.7;
+}
+
+.piece.v_Glass,
+.blueprint.v_Glass {
+  opacity: 0.5;
 }
 
 .v_Modded {
@@ -716,8 +720,4 @@ steel
 */
 .v_Holographic.piece-controller {
   filter: unset;
-}
-
-.v_Glass.piece-controller {
-  opacity: 0.7;
 }

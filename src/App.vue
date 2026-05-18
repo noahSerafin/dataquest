@@ -626,7 +626,7 @@ async function selectLevel(newLevel: Level, company: Company, difficultyMod: num
   const newPieces = rehydratePieces(newLevel.pieces);
   player.value.extraDifficulty = difficultyMod;
   activePieces.value = newPieces;
-  
+
   // Assign player spawn points in a completely foolproof way
   /*let playerSpawnCoords = newPlacementHighlights();
   if (pSpawns && pSpawns.length > 0) {
@@ -648,7 +648,7 @@ async function selectLevel(newLevel: Level, company: Company, difficultyMod: num
   playerSpawns.value = newPlacementHighlights();//playerSpawnCoords;
   originalSpawns.value = newLevel.pieces.map(s => ({ ...s }));
   console.log(playerSpawns.value);
-  
+
   console.log('originalSpawns: ', originalSpawns.value);
   //originalSpawns.value = [...playerSpawns.value];
   originalPieces.value = activePieces.value.map(p => p.clone());
@@ -908,7 +908,7 @@ const newPlacementHighlights = (): Coordinate[] => {//board should only show the
   const highlights: Coordinate[] = [];
   const tileSet = new Set(level.value.tiles.map(t => `${t.x},${t.y}`));
 
-  if(!isFirstTurn.value || player.value.hasAdmin('Palette')){
+  if (!isFirstTurn.value || player.value.hasAdmin('Palette')) {
     activePieces.value.forEach(piece => {
       if (piece.team === 'player' && piece.name !== 'Spawn') {
         // For each tile of the piece, check the 4 orthogonal neighbors
@@ -1046,7 +1046,7 @@ function instantiatePieceFromBlueprint(//this goes in app
   piece.defence = bp.defence;
   piece.defenceRemaining = bp.defence;
   piece.immunities = { ...bp.immunities };
-  
+
   piece.damageMult = bp.damageMult ? bp.damageMult : 1;
 
   // Step 3: hybrid-specific augmentation
@@ -1099,7 +1099,7 @@ async function placePieceOnBoardAt(coord: Coordinate) {
   activePieces.value = activePieces.value.filter(p => !(p.team === 'player' && p.name === 'Spawn' && p.headPosition.x === coord.x && p.headPosition.y === coord.y));
 
   activePieces.value.push(PieceInstance);
- 
+
   originalPlayerPieceIds.value.push(PieceInstance.id);
 
   // Mark blueprint as placed so it greys in inventory
@@ -1207,7 +1207,7 @@ const deselectPiece = () => {
 const movePiece = async (coord: Coordinate) => {
   if (!selectedPiece.value || !player.value.canMove) return;
   isPlacing.value = false;
-  if(!isFirstTurn.value || (isFirstTurn.value && !player.value.hasAdmin('Dove')) ){
+  if (!isFirstTurn.value || (isFirstTurn.value && !player.value.hasAdmin('Dove'))) {
     player.value.canPlace = false;
   }
   //we're definitely making a move, so store pieces
@@ -1249,7 +1249,7 @@ const movePiece = async (coord: Coordinate) => {
     boardRef.value.clearHighlights();
     if (!isStillAlive) selectedPiece.value = null;
   }
-  playerSpawns.value = newPlacementHighlights(); 
+  playerSpawns.value = newPlacementHighlights();
   console.log('playerSpawns after movement:', playerSpawns.value);
   if (player.value.fogged) {
     foggedTiles.value = [...level.value.tiles];//non persistant clearance
@@ -1448,7 +1448,7 @@ const handleSpecialActionAt = async (target: Coordinate) => {
       });
     }
   }
-  if(piecesActions !== selectedPiece.value.actions){
+  if (piecesActions !== selectedPiece.value.actions) {
     player.value.canPlace = false;
   }
   playerSpawns.value = newPlacementHighlights();
@@ -1503,7 +1503,7 @@ const endRound = async (roundWon: boolean) => {
     else if (player.value.lives > 0) {
       player.value.lives -= 1;
       await handleApplyAdmins('onRoundLoss', '');
-      if(player.value.lives <= 0){
+      if (player.value.lives <= 0) {
         StorageManager.clearSaveGame();
       }
     } else {
@@ -1623,7 +1623,7 @@ const endTurn = async () => {
   if (!roundHasStarted.value) return;
   saveGameState();
   hasFinishedTurn.value = false;
-  if(roundHasStarted.value){
+  if (roundHasStarted.value) {
     yourTurnWarning.value = true;
     setTimeout(() => yourTurnWarning.value = false, 500);
   }
@@ -1657,7 +1657,7 @@ const combinedMapSeed = computed(() => {
   // Combine with the world reroll counter
   return raw + (worldSeed.value || '');
 });
-async function increaseDifficulty(){
+async function increaseDifficulty() {
   player.value.difficulty += 1;
   if (player.value.difficulty < 7 && player.value.stake < 1) {//cumulate bosses in endless mode or stake 1+
     bossAdmins.value = [];
@@ -1815,14 +1815,16 @@ function toggleDebug() {
           <div>{{ currentCompany.unicode ? String.fromCodePoint(parseInt(currentCompany.unicode.replace('U+', ''), 16),
             0xFE0F) : '' }}</div>
         </span>
-        <p class="security"><strong>Security level: </strong>{{ player.difficulty }}<span v-if="player.extraDifficulty > 0"> + {{ player.extraDifficulty }}</span></p>
+        <p class="security"><strong>Security level: </strong>{{ player.difficulty }}<span
+            v-if="player.extraDifficulty > 0"> + {{ player.extraDifficulty }}</span></p>
         <p class="infamy"><strong>Infamy: </strong>{{ stake }}</p>
         <span class="enemy-bosses">
           <BossView v-if="bossAdmins.length > 0" :admins="bossAdmins" />
         </span>
       </div>
       <div v-if="!displayEditor && roundHasStarted" class="player-helper">
-        <div v-if="roundHasStarted" class="turn-info">{{ (!hasFinishedTurn || isPlacing) ? "Your turn" : "Enemy turn" }}</div>
+        <div v-if="roundHasStarted" class="turn-info">{{ (!hasFinishedTurn || isPlacing) ? "Your turn" : "Enemy turn" }}
+        </div>
         <div v-if="isPlacing && pieceToPlace">
           <p>Placing:</p>
           <button @click="pieceToPlace = null">Cancel</button>
@@ -1837,8 +1839,8 @@ function toggleDebug() {
       <MainMenu v-if="showMainMenu && !displayEditor" @createNewPlayer="createNewPlayer" @resumeGame="loadSavedGame"
         class="stage-panel" :class="{ active: showMainMenu }" :debugMode="debugMode" />
       <RoundSummary v-if="showSummary" class="stage-panel" :class="{ active: showSummary }" :hasWonRound="hasWonRound"
-        :player="player" :bosses="bossAdmins" :roundHasStarted="roundHasStarted" @proceedFromEndOfRound="handleProceed" @reloadLevel="reloadLevel"
-        @mainMenu="openMainMenu" @returnToMap="handleReturnToMap" />
+        :player="player" :bosses="bossAdmins" :roundHasStarted="roundHasStarted" @proceedFromEndOfRound="handleProceed"
+        @reloadLevel="reloadLevel" @mainMenu="openMainMenu" @returnToMap="handleReturnToMap" />
       <WorldMap ref="worldMapRef" v-if="!displayEditor" class="stage-panel" :class="{ active: showMap }"
         :allLevels="level1Levels" :player="player" :seed="combinedMapSeed" :cssclass="mapClass" :bosses="bossAdmins"
         @selectLevel="selectLevel" @openShop="openShop" @openDisabledShop="openDisabledShop"
@@ -1886,16 +1888,16 @@ function toggleDebug() {
         @highlightTargets="boardRef.highlightTargets" @highlightSpecials="boardRef.highlightSpecials"
         @close="deselectPiece" />
       <div v-if="!displayEditor" class="player-actions">
-        <button v-if="(!displayEditor && roundHasStarted && !hasFinishedTurn) || debugMode"
-          class="end-turn" v-on:click="endTurn()">End Turn</button>
+        <button v-if="(!displayEditor && roundHasStarted && !hasFinishedTurn) || debugMode" class="end-turn"
+          v-on:click="endTurn()">End Turn</button>
         <!--<button class="mt-2 px-2 py-1 bg-blue-500 text-white rounded" @click="showInventory = !showInventory">{{showInventory ? 'Hide Inventory' : 'Inventory' }}</button>-->
         <!--<div v-if="!displayEditor && roundHasStarted" class="graveyard">
         <button>🪦</button>
       </div>-->
         <button :disabled="hasFinishedTurn" v-if="!displayEditor && roundHasStarted && player.lives > 1"
           class="retry-btn" v-on:click="retryLevel()">Retry</button>
-        <button :disabled="hasFinishedTurn" v-if="!displayEditor && roundHasStarted"
-          class="forfeit-btn" v-on:click="endRound(false)">Forfeit</button>
+        <button :disabled="hasFinishedTurn" v-if="!displayEditor && roundHasStarted" class="forfeit-btn"
+          v-on:click="endRound(false)">Forfeit</button>
       </div>
     </div>
   </div>
@@ -2005,9 +2007,20 @@ function toggleDebug() {
 }
 
 @keyframes popout {
-  0% { transform: scale(1); filter: brightness(1) drop-shadow(0 0 0px yellow); }
-  50% { transform: scale(1.15); filter: brightness(1.3) drop-shadow(0 0 12px yellow); }
-  100% { transform: scale(1); filter: brightness(1) drop-shadow(0 0 0px yellow); }
+  0% {
+    transform: scale(1);
+    filter: brightness(1) drop-shadow(0 0 0px yellow);
+  }
+
+  50% {
+    transform: scale(1.15);
+    filter: brightness(1.3) drop-shadow(0 0 12px yellow);
+  }
+
+  100% {
+    transform: scale(1);
+    filter: brightness(1) drop-shadow(0 0 0px yellow);
+  }
 }
 
 .yourTurnWarning {
@@ -2016,5 +2029,4 @@ function toggleDebug() {
   z-index: 9999 !important;
   animation: popout 0.5s ease-in-out;
 }
-
 </style>

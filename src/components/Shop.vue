@@ -52,7 +52,8 @@ const canSteal = computed(() => props.player.hasAdmin('Five Finger Discount') &&
 const canBuyItem = ((item: Item) => {
   if(props.shopDisabled) return false;
   if (item instanceof Admin) {
-    return (props.player.effectiveMoney >= item.cost || canSteal.value ) && props.player.admins.length < props.player.adminSlots;
+    const hasAdminSpace = item.compressed || props.player.usedAdminSlots < props.player.adminSlots;
+    return (props.player.effectiveMoney >= item.cost || canSteal.value ) && hasAdminSpace;
   }
   const hasSchoolbag = props.player.hasAdmin('Schoolbag');
   const hasSpace = hasSchoolbag ? props.player.usedMemory <= props.player.memory-0.5 : props.player.usedMemory <= props.player.memory-1;

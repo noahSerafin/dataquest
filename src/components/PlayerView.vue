@@ -138,7 +138,7 @@
             </div>
             <div class="admin-middle-container">
                 <div class="admin-header flex">
-                    <span class=""><strong>Admins:</strong> {{ props.player.admins.length }}/{{ props.player.adminSlots }}</span>
+                    <span class=""><strong>Admins:</strong> {{ props.player.usedAdminSlots }}/{{ props.player.adminSlots }}</span>
                 </div>
                 <ul class="admins">
                     <li v-for="(item, index) in props.player.admins"

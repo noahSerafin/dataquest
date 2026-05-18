@@ -52,15 +52,15 @@ const unicodeSymbol = computed(() =>
     ? String.fromCodePoint(parseInt(props.item.unicode.replace('U+', ''), 16), 0xFE0F)
     : ''
 )
-  
+
 const itemStyle = computed(() => {
   const widthAdjustment = props.type === 'admin' ? 22 : 16
   const heightAdjustment = props.type === 'consumable' ? 22 : 16
   let styles = {
-    width: props.tileSize-widthAdjustment + 'px',
-    height: props.tileSize-heightAdjustment + 'px',
+    width: props.tileSize - widthAdjustment + 'px',
+    height: props.tileSize - heightAdjustment + 'px',
     fontSize: props.tileSize * 0.6 + 'px',
-    lineHeight: props.tileSize -24 + 'px',
+    lineHeight: props.tileSize - 24 + 'px',
     backgroundColor: props.item.color,
     '--piece-color': props.item.color,
     'z-index': 2,
@@ -104,30 +104,24 @@ const isDisabled = computed(() => {
 </script>
 
 <template>
-  <div
-    ref="itemRef"
-    :id="item.id"
-    class="item-container"
-    :class="[`item-${type}`, `itemName-${item.name.replace(/\s+/g, '')}`, {'is-clippy': item.name === 'Clippy'}]"
-    :style="{ width: itemStyle.width, height: itemStyle.height, cursor: 'pointer' }"
-    @click="handleSelect"
-    
-  >
-    <div
-      class="item-body item"
-      :class="[{'is-disabled': isDisabled}, {'is-triggering': (item as any).isTriggering}]"
-      :style="[itemStyle, tiltStyle]"
-      @mousemove="handleMouseMove"
-      @mouseenter="handleMouseEnter"
-      @mouseleave="handleMouseLeave"
-    >
-      <p class='top-left' v-if="cssclass==='shop' && type == 'consumable'" :style="`top: -${((props.tileSize-10)/2 -24)}px`">I</p>
-      <p class='top-left' v-if="cssclass==='shop' && type == 'admin'" :style="`top: -${((props.tileSize-10)/2 -24)}px`">A</p>
+  <div ref="itemRef" :id="item.id" class="item-container"
+    :class="[`item-${type}`, `itemName-${item.name.replace(/\s+/g, '')}`, { 'is-clippy': item.name === 'Clippy' }, { 'compressed': type === 'admin' && (item as any).compressed }]"
+    :style="{ width: itemStyle.width, height: itemStyle.height, cursor: 'pointer' }" @click="handleSelect">
+    <div class="item-body item"
+      :class="[{ 'is-disabled': isDisabled }, { 'is-triggering': (item as any).isTriggering }]"
+      :style="[itemStyle, tiltStyle]" @mousemove="handleMouseMove" @mouseenter="handleMouseEnter"
+      @mouseleave="handleMouseLeave">
+      <p class='top-left' v-if="cssclass === 'shop' && type == 'consumable'"
+        :style="`top: -${((props.tileSize - 10) / 2 - 24)}px`">I</p>
+      <p class='top-left' v-if="cssclass === 'shop' && type == 'admin'"
+        :style="`top: -${((props.tileSize - 10) / 2 - 24)}px`">
+        A</p>
       <div class="icon">{{ unicodeSymbol }}</div>
     </div>
 
     <!-- Speech bubble for Clippy admin -->
-    <div v-if="cssclass !== 'shop' && cssclass !== 'collection' && item.name === 'Clippy' && tutorialState.message" class="clippy-speech-bubble-container" @click.stop>
+    <div v-if="cssclass !== 'shop' && cssclass !== 'collection' && item.name === 'Clippy' && tutorialState.message"
+      class="clippy-speech-bubble-container" @click.stop>
       <div v-if="!tutorialState.collapsed" class="clippy-speech-bubble">
         <button class="clippy-toggle" @click="tutorialState.collapsed = true">X</button>
         <div class="clippy-message" v-html="tutorialState.message"></div>
@@ -138,31 +132,32 @@ const isDisabled = computed(() => {
       </div>
     </div>
     <!--<Teleport to="body">-->
-      <div v-if="props.showController" class="info" @click.stop >
-        <button @click="emit('deselect')" class="close">X</button>
-        <div class="name">{{ item.name }}</div>
-        <div v-if="(cssclass == 'shop')" class="type">- {{ type }} -</div>
-        <div class="rarity" :style="{ color: rarityStyle(item.rarity).color }">
-          {{ rarityStyle(item.rarity).label }}
-        </div>
-        <div class="desc"><FormattedDescription :description="item.description" /></div>
-        <div class="flex">
-          <button v-if="(cssclass == 'shop')"
-            @click="$emit('buy', item)"
-            :disabled="!canBuy"
-            >
-            {{canSteal ? 'Steal' : 'Buy($'+item.cost+')'}}
-          </button>
-            <button v-if="(cssclass == 'inventory' && type == 'consumable')"  @click="handleUse">
-              Use
-            </button>
-            <button v-if="(cssclass == 'inventory')"
-            @click="handleSell"
-            >
-            Sell ${{ Math.round(item.cost / 2) }}
-          </button>
-        </div>
+    <div v-if="props.showController" class="info" @click.stop>
+      <button @click="emit('deselect')" class="close">X</button>
+      <div class="name">{{ item.name }}</div>
+      <div v-if="(cssclass == 'shop')" class="type">- {{ type }} -</div>
+      <div class="rarity" :style="{ color: rarityStyle(item.rarity).color }">
+        {{ rarityStyle(item.rarity).label }}
       </div>
+      <div v-if="type === 'admin' && (item as any).compressed"
+        style="color: black; font-weight: bold; font-family: Courier;">
+        <FormattedDescription description="Compressed" :isHeader="true" />
+      </div>
+      <div class="desc">
+        <FormattedDescription :description="item.description" />
+      </div>
+      <div class="flex">
+        <button v-if="(cssclass == 'shop')" @click="$emit('buy', item)" :disabled="!canBuy">
+          {{ canSteal ? 'Steal' : 'Buy($' + item.cost + ')' }}
+        </button>
+        <button v-if="(cssclass == 'inventory' && type == 'consumable')" @click="handleUse">
+          Use
+        </button>
+        <button v-if="(cssclass == 'inventory')" @click="handleSell">
+          Sell ${{ Math.round(item.cost / 2) }}
+        </button>
+      </div>
+    </div>
     <!--</Teleport>-->
   </div>
 </template>
@@ -172,7 +167,8 @@ const isDisabled = computed(() => {
   position: relative;
   display: inline-block;
 }
-.item{
+
+.item {
   transition: all 0.2s ease;
   border: outset;
   position: relative;
@@ -180,9 +176,11 @@ const isDisabled = computed(() => {
   height: 100%;
   box-sizing: border-box;
 }
+
 .item.is-disabled {
   opacity: 0.7;
 }
+
 .item.is-disabled::before {
   content: "";
   position: absolute;
@@ -194,24 +192,30 @@ const isDisabled = computed(() => {
   z-index: 10;
   pointer-events: none;
 }
+
 .item-card {
-  display: flex; 
+  display: flex;
   flex-direction: row;
   align-items: center;
   padding: 10px;
 }
+
 .item:hover {
   transform: scale(1.3);
 }
-.close{
+
+.close {
   position: absolute;
   top: 0.5rem;
   right: 0.5rem;
 }
-.type, .name{
+
+.type,
+.name {
   margin-bottom: 5px;
   font-weight: bold;
 }
+
 .icon {
   font-size: 36px;
   margin-right: 12px;
@@ -232,7 +236,8 @@ const isDisabled = computed(() => {
   width: 100px;
   text-align: left;
 }
-.desc{
+
+.desc {
   text-align: left;
 }
 
@@ -249,16 +254,19 @@ const isDisabled = computed(() => {
   margin-top: 4px;
   font-size: 14px;
 }
-button{
+
+button {
   padding: 4px;
   margin: auto;
   margin-top: 5px;
 }
+
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
-.top-left{
+
+.top-left {
   background-color: black;
   border-radius: 50%;
   width: 12px;
@@ -270,13 +278,15 @@ button:disabled {
   right: 0px;
   margin: 0;
 }
-.inventory-item{
-  .info{
+
+.inventory-item {
+  .info {
     position: fixed;
     z-index: 9999;
   }
 }
-.enemy-info .info{
+
+.enemy-info .info {
   top: 0;
   height: fit-content;
 }
@@ -298,7 +308,7 @@ button:disabled {
   padding: 10px 14px;
   width: 180px;
   font-size: 13px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
   text-align: left;
   line-height: normal;
 }
@@ -331,6 +341,7 @@ button:disabled {
   border: 1px solid black;
   border-radius: 1px;
 }
+
 .clippy-toggle:hover {
   color: #000;
   cursor: pointer;
@@ -352,7 +363,7 @@ button:disabled {
   font-weight: bold;
   font-size: 14px;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   line-height: 20px;
 }
 
@@ -377,9 +388,20 @@ button:disabled {
 }
 
 @keyframes adminTrigger {
-  0% { transform: scale(1); filter: brightness(1) drop-shadow(0 0 0px yellow); }
-  50% { transform: scale(1.15); filter: brightness(1.3) drop-shadow(0 0 12px yellow); }
-  100% { transform: scale(1); filter: brightness(1) drop-shadow(0 0 0px yellow); }
+  0% {
+    transform: scale(1);
+    filter: brightness(1) drop-shadow(0 0 0px yellow);
+  }
+
+  50% {
+    transform: scale(1.15);
+    filter: brightness(1.3) drop-shadow(0 0 12px yellow);
+  }
+
+  100% {
+    transform: scale(1);
+    filter: brightness(1) drop-shadow(0 0 0px yellow);
+  }
 }
 
 .is-triggering {

@@ -476,9 +476,17 @@ steel
 }
 
 @keyframes shine-bg {
-  0% { background-position: -200% 0; }
-  20% { background-position: 300% 0; }
-  100% { background-position: 300% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+
+  20% {
+    background-position: 300% 0;
+  }
+
+  100% {
+    background-position: 300% 0;
+  }
 }
 
 .v_Bronze {
@@ -681,7 +689,9 @@ steel
   background-color: white !important;
 }
 
-.v_Holographic {
+.piece.v_Holographic,
+.blueprint.v_Holographic,
+.item-admin.compressed {
   filter: invert(1);
   background: linear-gradient(to left, black, rgba(255, 255, 255, 0));
   background-image: linear-gradient(0deg,
@@ -703,6 +713,10 @@ steel
   -webkit-text-fill-color: black;*/
 
   /*mix-blend-mode: color-dodge;*/
+}
+
+.item-admin.compressed .info {
+  filter: invert(1)
 }
 
 /*.v_Holographic::after{//can be done with a secondary image

@@ -3,6 +3,7 @@ import { Box, Gift, Item, Pinata, upgradeItems } from "./Items";
 import { Piece, allPieces } from "./Pieces";
 import { Player } from "./Player";
 import type { Coordinate, PieceBlueprint, StatModifier, StatusKey } from "./types";
+import { Random } from "./Random";
 
 export type AdminTrigger =
   | 'onPlacement'
@@ -23,6 +24,7 @@ export abstract class Admin<
 > extends Item<TTarget> {
   triggerType: TTrigger;
   disabled: boolean = false;
+  compressed: boolean = false;
 
   constructor(
     name: string,
@@ -36,6 +38,7 @@ export abstract class Admin<
   ) {
     super(name, description, unicode, color, cost, rarity, targetType);
     this.triggerType = triggerType;
+    this.compressed = Random.bool(0.1);//0.05?
   }
 
   async apply(_target: any): Promise<void> {

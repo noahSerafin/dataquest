@@ -54,6 +54,7 @@ const statusAliases: Record<string, string> = {
   'Giant': 'Giant',
   'Glass': 'Glass',
   'Vicious': 'Vicious',
+  'Compressed': 'Compressed'
 };
 
 const allSearchTerms = [...statusKeys, ...Object.keys(statusAliases)];

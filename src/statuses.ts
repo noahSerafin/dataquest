@@ -53,6 +53,7 @@ export const STATUS_INFO: Record<string, string> = {
   Gold: "+1 max size, +1 defence, +1 moves, +1 range, +1 attack",
   Holographic: "+2 max size, +2 defence, +2 moves, +2 range, +2 attack, +0.5 dmg mult",
   Deadly: "+1 dmg mult",
+  Compressed: "Uses 0 Admin slots",
 };
 // 🫨 SHAKING FACE, U+1FAE8
 

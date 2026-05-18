@@ -28,7 +28,7 @@ Exposed
 Hidden
 
 //IMPROVEMENTS
-compressed pieces/admins
+compressed pieces
 infamy stackBosses, reduce spawns to 2, reduce spawns to 1...
 deselect from inventory on placement
 canplace tickbox in inventory

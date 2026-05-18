@@ -79,13 +79,17 @@ export class Player {
     return this.usedMemory < this.memory;
   }
 
+  get usedAdminSlots(): number {
+    return this.admins.filter(a => !a.compressed).length;
+  }
+
   get hasAdminSpace(): boolean {
-    return this.admins.length < this.adminSlots;
+    return this.usedAdminSlots < this.adminSlots;
   }
 
   addAdmin(admin: Admin) {
     StorageManager.unlockAdmin(admin.name);
-    if(this.hasAdminSpace){
+    if(admin.compressed || this.hasAdminSpace){
       this.admins.push(admin)
       if(admin.targetType === 'player' && admin.triggerType === 'other'){
         admin.apply(this);

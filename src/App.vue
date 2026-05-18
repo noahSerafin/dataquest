@@ -1894,6 +1894,8 @@ function toggleDebug() {
       </div>-->
         <button :disabled="hasFinishedTurn" v-if="!displayEditor && roundHasStarted && player.lives > 1"
           class="retry-btn" v-on:click="retryLevel()">Retry</button>
+        <button :disabled="hasFinishedTurn" v-if="!displayEditor && roundHasStarted"
+          class="forfeit-btn" v-on:click="endRound(false)">Forfeit</button>
       </div>
     </div>
   </div>

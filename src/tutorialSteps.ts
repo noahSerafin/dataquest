@@ -36,7 +36,7 @@ const shopNodeTip: TutorialStep = {
 }
 const bossTip: TutorialStep = {
     id: 'item-boss',
-    tooltip: "This is an active boss, click on it to read it's effect. Defeating it will load a new node map, and raise the security level of all future nodes by one."
+    tooltip: "This is an active boss, click on it to read it's effect."
 }
 const bossNodeTip: TutorialStep = {
     id: 'bossNode',

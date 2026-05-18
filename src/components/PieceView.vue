@@ -151,7 +151,8 @@ function pieceTipClass(){
     :style="pieceStyle"
     @click="handleSelect"
   >
-    <span v-if="piece.extraUnicode" class="extra-unicode">{{ ExtraUnicodeSymbol }}</span><span class="primary-unicode">{{ unicodeSymbol }}</span>
+    <span class="primary-unicode">{{ unicodeSymbol }}</span>
+    <span v-if="piece.extraUnicode" class="extra-unicode">{{ ExtraUnicodeSymbol }}</span>
     <button v-if="showFastControls && selectedPiece === piece" class="deselect-btn"
     @click.stop = "$emit('deselect')"
     >x
@@ -348,9 +349,10 @@ function pieceTipClass(){
 }
 .hybrid .extra-unicode{
   position: absolute;
-  left: 10%;
-  top: 5%;
-  z-index: 0;
+  left: 5%;
+  top: -15%;
+  z-index: 1;
+  transform: scale(0.5);
 }
 .redacted-true{
   background-color: black;

@@ -28,15 +28,14 @@ Exposed
 Hidden
 
 //IMPROVEMENTS
-make distinct boss tooltip from admin tooltip
-deselect from inventory on placement
-forfeit round button
-fix hybrid extraUnicode display - make hybrids display how they do in compiler/blueprintcontroller - address manually
+0 damage not dissappearing
+glass variant setting 50% opacity on controller
 negative admins
 infamy stackBosses, reduce spawns to 2, reduce spawns to 1...
-make map more interesting visually
+deselect from inventory on placement
 canplace tickbox in inventory
 Make a reason to use golden ticket, on bosses? allow it to be used in a node? Allow 1 free custom node starting each round?/instead of shop???
+let worldMap admin see full board now that pieces are fixed?
 Onion Icon for life with Onion admin
 level 1 always start the player inside the arena node???
 track this run stats in player?
@@ -54,20 +53,11 @@ variant should overide base piece color, (and tile colour???)
 TUTORIAL - make more handholdy?
 -
 // BUGS
-traps making the player win a round.?
-0 damage not dissappearing
-glass variant setting 50% opacity on controller
-can still sell after sacrificing - duping/sacrificing/hybriding needs to deselect
-bosses need to go in savestate - testing fix
 cannon and laser can shoot themselves
 pieces with pounce attacking themselves
-triggering a trap by moving it yourself wins round if it is the only one???
-appraisal doesn't work
 enemy pathing long distance
-load save forcing non deterministic shop, track seed uses in save to fix
 -
 MAP/WORLD BUILDER
-vary map layouts more, start with bonus nodes being more off centre
 Gladiator nodes - +1 or 2 security, place only once in arena node for reward - skippable STADIUM, U+1F3DF
 Other skippable challenge/bonus nodes - challenge node file with custom maps of fixed pieces? - make with editor
 Eg. deforester, wizard battle (w/pentagrams), trojan army, lich lair, man in the high castle (tradies gurading a watchman), etc.

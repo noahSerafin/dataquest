@@ -10,7 +10,7 @@ import FormattedDescription from "./FormattedDescription.vue";
 
 const props = defineProps<{
   item: InstanceType<typeof Item>;
-  type: 'consumable' | 'admin';
+  type: 'consumable' | 'admin' | 'boss';
   cssclass?: string;
   tileSize: number;
   canBuy: boolean;       // for custom styling (shop / inventory)

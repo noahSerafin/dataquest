@@ -29,7 +29,7 @@
                 >
                 <ItemView 
                     :item="item"
-                    type="admin"
+                    type="boss"
                     cssclass="boss"
                     :tileSize="60"
                     :canBuy="false"

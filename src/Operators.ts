@@ -1,6 +1,6 @@
 import type { OS } from "./types";
 import { Voucher, Mushroom, Garlic, Meat, Genie, Pandora, Update2, Dupe, Jar, Iron} from "./Items";
-import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Clippy, Notepad, StoneAge, Rune, Taoism, OffRoader, AdminMap, Compass, Backdoor, Miner, Copier, Cherries, Sneakers, Palette, Hermes} from "./AdminPrograms";
+import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Clippy, Notepad, StoneAge, Rune, Taoism, OffRoader, AdminMap, Compass, Backdoor, Miner, Copier, Cherries, Sneakers, Palette, Hermes, Dove} from "./AdminPrograms";
 import { createDefaultStatuses } from "./types";
 
     const knife =  {
@@ -261,7 +261,7 @@ import { createDefaultStatuses } from "./types";
     }
     const honey =  {
         id: crypto.randomUUID(),
-        name: "HoneyPot",
+        name: "Honeypot",
         description: "A program that can summon Bees",
         unicode: "U+1F36F",
         color: "#ffb20dff",
@@ -269,11 +269,11 @@ import { createDefaultStatuses } from "./types";
         moves: 0,
         range: 1,
         attack: 0,
-        defence: 0,
-        rarity: 1,
+        defence: 1,
+        rarity: 2,
         // blueprint-only fields:
         isPlaced: false,
-        cost: 2,
+        cost: 3,
         immunities: createDefaultStatuses()
     }
     const aegis =  {
@@ -617,7 +617,7 @@ const Debugger : OS = {
     adminSlots: 6,
     blueprints: [aegis, superKnife, testhybrid, testPiece],
     items: [new Genie, new Pandora, new Update2, new Dupe, new Jar],
-    admins: [new Crystal, new Compass, new Taoism],
+    admins: [new Crystal, new Compass, new Dove, new Palette],
     lives: 9,
     description: 'FOR TESTING'
 }

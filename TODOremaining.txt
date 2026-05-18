@@ -28,11 +28,16 @@ Exposed
 Hidden
 
 //IMPROVEMENTS
+node complete on trap only 1 trap trigger
 make spawns in nodepreview more obvious (outline)
 bosses appearing twice on reload
+variant tooltips using status tooltip
+make distinct boss tooltip from admin tooltip
+deselect from inventory on placement
 forfeit round button
 fix hybrid extraUnicode display - make hybrids display how they do in compiler/blueprintcontroller - address manually
 negative admins
+infamy stackBosses, reduce spawns to 2, reduce spawns to 1...
 make map more interesting visually
 canplace tickbox in inventory
 Make a reason to use golden ticket, on bosses? allow it to be used in a node? Allow 1 free custom node starting each round?/instead of shop???

@@ -568,8 +568,6 @@ function resolveMove(
   z-index: 999;
 }
 
-.move-button {}
-
 .move-button:before {
   position: absolute;
   content: '';

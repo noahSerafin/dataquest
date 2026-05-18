@@ -484,7 +484,7 @@ class Needle extends Admin {//needs some kind of nerf, increase max size only?
   async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     for (const p of activePieces) {
       const playerPieces = [];
-      if (p.team === 'player') {
+      if (p.team === 'player' && p.name !== 'Spawn') {
         playerPieces.push(p)
         //p.addModifier({lives: 1})
       }
@@ -679,9 +679,9 @@ class GoldenTicket extends Admin {
   }
 }
 
-class Dove extends Admin {// PEACE SYMBOL, U+262E // HERB, Olive branch U+1F33F
+export class Dove extends Admin {// PEACE SYMBOL, U+262E // HERB, Olive branch U+1F33F
   static name = "Dove";
-  static description = "1 free move after placing at the start of every round";
+  static description = "You may move and action after placing at the start of every round";
   static unicode = "U+1F54A";//🕊️ ////CHURCH, sanctuary U+26EA
   static color = "rgb(77, 156, 170)";
   static rarity = 4;
@@ -776,7 +776,7 @@ class Communism extends Admin {
 
 export class Palette extends Admin {
   static name = "Palette";
-  static description = "Place twice at the start of a round";
+  static description = "Load extra programs at the start of a round";
   static unicode = "U+1F3A8";
   static color = "rgb(255, 241, 214)";
   static rarity = 4;
@@ -800,7 +800,7 @@ class Osiris extends Admin {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
     for (const p of activePieces) {
-      if (p.team === 'player') {
+      if (p.team === 'player' && p.name !== 'Spawn') {
         p.addModifier({ attack: 1 })
       }
     }
@@ -929,7 +929,7 @@ class Puzzle extends Admin {
       if (p.team !== 'player') continue;
       const hasAdjacentAlly = activePieces.some(other =>
         other !== p &&
-        other.team === 'player' &&
+        other.team === 'player' && other.name !== 'Spawn' &&
         Math.abs(other.headPosition.x - p.headPosition.x) +
         Math.abs(other.headPosition.y - p.headPosition.y) === 1
       )
@@ -959,7 +959,7 @@ class Chivalry extends Admin {
 
       const hasAdjacentAlly = activePieces.some(other =>
         other !== p &&
-        other.team === 'player' &&
+        other.team === 'player' && other.name !== 'Spawn' &&
         Math.abs(other.headPosition.x - p.headPosition.x) +
         Math.abs(other.headPosition.y - p.headPosition.y) === 1
       )
@@ -1122,7 +1122,7 @@ export class Copier extends Admin {
   async apply({ activePieces, board }: { activePieces: Piece[], board: Coordinate[] }) {
     const playerPieces: Piece[] = [];
     for (const p of activePieces) {
-      if (p.team === 'player') {
+      if (p.team === 'player' && p.name !== 'Spawn') {
         playerPieces.push(p)
       }
     }
@@ -1133,7 +1133,7 @@ export class Copier extends Admin {
     const tile = board.some(t => t.x === newHead.x && t.y === newHead.y);
     if(tile){
       const isOccupied = activePieces.some(p =>
-        p.tiles.some(t => t.x === newHead.x && t.y === newHead.y)
+        p.tiles.some(t => t.x === newHead.x && t.y === newHead.y) && p.name !== 'Spawn'//and name is not spawn
       );
       if (!isOccupied) {
         this.isTriggering = true;
@@ -1152,7 +1152,15 @@ export class Copier extends Admin {
         if(playerPieces[0].variantName){
           copy.variantName = playerPieces[0].variantName;
         }
+        //clear the Spawn if it is there
         activePieces.push(copy);
+        const spawnIndex = activePieces.findIndex(p =>
+          p.tiles.some(t => t.x === newHead.x && t.y === newHead.y) && p.name === 'Spawn'
+        );
+        if (spawnIndex !== -1) {
+          activePieces.splice(spawnIndex, 1);
+        }
+
       }
     }
   }
@@ -1409,7 +1417,7 @@ export class Hermes extends Admin {//moves
     //const idx = activePieces.findIndex(p => p.id === id);
     //activePieces[idx].immunities.slowed = true;
     for(const p of activePieces){
-      if(p.team === 'player'){
+      if(p.team === 'player' && p.name !== 'Spawn'){
         p.addModifier({moves: 1})
         p.movesRemaining += 1;
         p.immunities.slowed = true;
@@ -1448,7 +1456,7 @@ export class Ambulance extends Admin {//a promoted piece dying should recover th
   async apply({ activePieces, player, piece }: { activePieces: Piece[], player: Player, piece?: Piece }) {
     if (!piece) return;
     const bpIdx = player.programs.findIndex(bp => bp.id === piece.id)
-    if (piece.team === 'player') {
+    if (piece.team === 'player' && piece.name !== 'Spawn') {
       this.isTriggering = true;
       setTimeout(() => this.isTriggering = false, 500);
       if (piece.name === 'Pawn') {
@@ -1596,7 +1604,7 @@ class Pants extends Admin {
       this.isTriggering = true;
       setTimeout(() => this.isTriggering = false, 500);
       const bpIdx = player.programs.findIndex(bp => bp.id === piece.id)
-      if (piece.team === 'player') {
+      if (piece.team === 'player' && piece.name !== 'Spawn') {
         if (bpIdx !== -1) player.programs[bpIdx].isPlaced = false;
       }
       this.count += 1;//must be reset at end of round;
@@ -1750,7 +1758,7 @@ class Bipolar extends Admin {
     if (piece.team === 'enemy') {
       player.money += 1
     }
-    if (piece.team === 'player') {
+    if (piece.team === 'player' && piece.name !== 'Spawn') {
       player.money -= 5
     }
   }
@@ -1769,7 +1777,7 @@ export class Taoism extends Admin {
     const playerPieces: Piece[] = [];//are these reset every apply?
     const enemyPieces = [];
     for (const p of activePieces) {
-      if (p.team === 'player') {
+      if (p.team === 'player' && p.name !== 'Spawn') {
         playerPieces.push(p);
       }
       if (p.team === 'enemy') {
@@ -1778,7 +1786,7 @@ export class Taoism extends Admin {
     };
     if (enemyPieces.length === playerPieces.length) {
       for (const p of activePieces) {
-        if (p.team === 'player') {//add zen status? might be an appropriate nerf
+        if (p.team === 'player' && p.name !== 'Spawn') {//add zen status? might be an appropriate nerf
           /*p.addModifier({
             attack: 1,
             defence: 1,
@@ -2029,7 +2037,7 @@ class Ring extends Admin {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
     for (const piece of activePieces) {
-      if(piece.team === 'player'){
+      if(piece.team === 'player' && piece.name !== 'Spawn'){
         const id = piece.id;
         for (const blueprint of player.programs) {
           if (blueprint.id === id && blueprint.isPlaced) {//not applying
@@ -2059,7 +2067,7 @@ class Minerva extends Admin {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
     for (const p of activePieces) {
-      if (p.team === 'player') {
+      if (p.team === 'player' && p.name !== 'Spawn') {
         p.addModifier({ range: 1 })
       }
     }
@@ -2282,7 +2290,7 @@ class Camp extends Admin {//needs reviewing
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     this.count++;
     for (const piece of activePieces) {
-      if (piece.team === 'player' && !piece.statuses.hidden) {
+      if (piece.team === 'player' && piece.name !== 'Spawn' && !piece.statuses.hidden) {
         if (piece.movesRemaining === piece.getStat('moves')) {
           if (this.count === 2) {
             piece.addModifier({ range: 1 });//encourages camping, seemingly only temporary. If so change to attack
@@ -2477,7 +2485,7 @@ export class Skyscraper extends Admin {//test not working
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     //const idx = activePieces.findIndex(p => p.id === id);
     for (const piece of activePieces) {
-      if (piece.team === 'player') {
+      if (piece.team === 'player' && piece.name !== 'Spawn') {
         const noOfTwos = Math.floor(piece.tiles.length / 2);
         piece.addTempModifier({ defence: noOfTwos });
         this.isTriggering = true;
@@ -2631,7 +2639,7 @@ class Evergreen extends Admin {
     this.count += 1;
     if (this.count === 2) {
       for (const p of activePieces) {
-        if (p.team === 'player') {
+        if (p.team === 'player' && p.name !== 'Spawn') {
           p.addModifier({ maxSize: 1 })
           this.isTriggering = true;
           setTimeout(() => this.isTriggering = false, 500);
@@ -2743,17 +2751,17 @@ class Ice extends Admin {//needs to reset
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     this.count += 1;
     for (const piece of activePieces) {
-      //if(piece.team === 'player'){
-      if (this.count <= 1 && !piece.immunities.frozen) {
-        piece.statuses.frozen = true
-        this.isTriggering = true;
-        setTimeout(() => this.isTriggering = false, 500);
-      } else {
-        piece.statuses.frozen = false;
-        this.isTriggering = true;
-        setTimeout(() => this.isTriggering = false, 500);
+      if(piece.name !== 'Spawn'){
+        if (this.count <= 1 && !piece.immunities.frozen) {
+          piece.statuses.frozen = true
+          this.isTriggering = true;
+          setTimeout(() => this.isTriggering = false, 500);
+        } else {
+          piece.statuses.frozen = false;
+          this.isTriggering = true;
+          setTimeout(() => this.isTriggering = false, 500);
+        }
       }
-      //}
     };
   }
   onRoundEnd() {
@@ -2876,7 +2884,7 @@ class BlackBelt extends Admin {
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (let index = 0; index < activePieces.length; index++) {
       const p = activePieces[index];
-      if (p.team === 'player' && p.actions >= 1) {
+      if (p.team === 'player' && p.name !== 'Spawn' && p.actions >= 1) {
         p.willRetaliate = true;
         this.isTriggering = true;
         setTimeout(() => this.isTriggering = false, 500);
@@ -2923,7 +2931,7 @@ class Violin extends Admin {//test
   async apply({ player, piece }: { activePieces?: Piece[], player: Player, piece?: Piece }) {
     if (!piece) return;
     const idbp = player.programs.findIndex(bp => bp.id === piece.id);
-    if (idbp !== -1 && piece.team === 'player') {
+    if (idbp !== -1 && piece.team === 'player' && piece.name !== 'Spawn') {
       this.isTriggering = true;
       setTimeout(() => this.isTriggering = false, 500);
       player.money += 3;
@@ -3007,7 +3015,7 @@ class Fuel extends Admin {
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces) {
-      if (p.team === 'player') {
+      if (p.team === 'player' && p.name !== 'Spawn') {
         p.movesRemaining += 1;
       }
     };
@@ -3310,7 +3318,7 @@ class Meditation extends Admin {//needs reviewing
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const piece of activePieces) {
-      if (piece.team === 'player' && !piece.statuses.hidden) {
+      if (piece.team === 'player' && piece.name !== 'Spawn' && !piece.statuses.hidden) {
         if (piece.movesRemaining === piece.getStat('moves')) {
           piece.statuses.zen = true;
           this.isTriggering = true;

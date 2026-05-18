@@ -392,7 +392,7 @@ export function generateNode(difficulty: number): Level {
     const extraPlayerSpawns: any[] = [];
     
     // First 50% chance to add a spawn within 2 spaces of the first generated spawn
-    if (Random.bool(0.8)) {
+    //if (Random.bool(0.8)) { base off player infamy
       const candidates = tiles.filter(t => {
         const dist = Math.abs(t.x - playerTile.x) + Math.abs(t.y - playerTile.y);
         return dist >= 1 && dist <= 2 && !occupiedKeys.has(key(t.x, t.y));
@@ -412,7 +412,7 @@ export function generateNode(difficulty: number): Level {
         });
         
         // Second 50% chance to spawn another in the same range in a different spot if the first was successful
-        if (Random.bool(0.5)) {
+        //if (Random.bool(0.5)) { base off player infamy
           const secondCandidates = tiles.filter(t => {
             const dist = Math.abs(t.x - playerTile.x) + Math.abs(t.y - playerTile.y);
             return dist >= 1 && dist <= 2 && !occupiedKeys.has(key(t.x, t.y));
@@ -431,9 +431,9 @@ export function generateNode(difficulty: number): Level {
               "rarity": 1
             });
           }
-        }
+        //}
       }
-    }
+    //}
 
     return {
         name: `Gen-${difficulty}-${crypto.randomUUID().substring(0, 7)}`,

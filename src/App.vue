@@ -908,30 +908,32 @@ const newPlacementHighlights = (): Coordinate[] => {//board should only show the
   const highlights: Coordinate[] = [];
   const tileSet = new Set(level.value.tiles.map(t => `${t.x},${t.y}`));
 
-  activePieces.value.forEach(piece => {
-    if (piece.team === 'player' && piece.name !== 'Spawn') {
-      // For each tile of the piece, check the 4 orthogonal neighbors
-      piece.tiles.forEach(tile => {
-        const neighbors = [
-          { x: tile.x + 1, y: tile.y },
-          { x: tile.x - 1, y: tile.y },
-          { x: tile.x, y: tile.y + 1 },
-          { x: tile.x, y: tile.y - 1 },
-        ];
+  if(!isFirstTurn.value || player.value.hasAdmin('Palette')){
+    activePieces.value.forEach(piece => {
+      if (piece.team === 'player' && piece.name !== 'Spawn') {
+        // For each tile of the piece, check the 4 orthogonal neighbors
+        piece.tiles.forEach(tile => {
+          const neighbors = [
+            { x: tile.x + 1, y: tile.y },
+            { x: tile.x - 1, y: tile.y },
+            { x: tile.x, y: tile.y + 1 },
+            { x: tile.x, y: tile.y - 1 },
+          ];
 
-        neighbors.forEach(n => {
-          // Skip tiles not on the board
-          if (!tileSet.has(`${n.x},${n.y}`)) return;
-          // Skip if tile is already occupied by a non-Spawn piece
-          const isOccupied = activePieces.value.some(p =>
-            p.name !== 'Spawn' && p.tiles.some(t => t.x === n.x && t.y === n.y)
-          );
+          neighbors.forEach(n => {
+            // Skip tiles not on the board
+            if (!tileSet.has(`${n.x},${n.y}`)) return;
+            // Skip if tile is already occupied by a non-Spawn piece
+            const isOccupied = activePieces.value.some(p =>
+              p.name !== 'Spawn' && p.tiles.some(t => t.x === n.x && t.y === n.y)
+            );
 
-          if (!isOccupied) highlights.push(n);
+            if (!isOccupied) highlights.push(n);
+          });
         });
-      });
-    }
-  });
+      }
+    });
+  }
 
   // Add the positions of any active player Spawn pieces currently on the board
   activePieces.value.forEach(piece => {
@@ -1075,6 +1077,7 @@ async function placePieceOnBoardAt(coord: Coordinate) {
 
   const hasDove = player.value.hasAdmin('Dove');
   const hasPalette = player.value.hasAdmin('Palette');
+  const hasCopier = player.value.hasAdmin('Copier');
 
   // Check for isFirstTurn initially
   if (isFirstTurn.value) {
@@ -1096,6 +1099,7 @@ async function placePieceOnBoardAt(coord: Coordinate) {
   activePieces.value = activePieces.value.filter(p => !(p.team === 'player' && p.name === 'Spawn' && p.headPosition.x === coord.x && p.headPosition.y === coord.y));
 
   activePieces.value.push(PieceInstance);
+ 
   originalPlayerPieceIds.value.push(PieceInstance.id);
 
   // Mark blueprint as placed so it greys in inventory
@@ -1107,7 +1111,7 @@ async function placePieceOnBoardAt(coord: Coordinate) {
 
   // Reassign spawn highlights based on isFirstTurn and Palette admin
   if (isFirstTurn.value) {
-    if (hasPalette) {
+    if (hasPalette || hasCopier) {
       playerSpawns.value = newPlacementHighlights();
     } else {
       playerSpawns.value = activePieces.value
@@ -1120,7 +1124,7 @@ async function placePieceOnBoardAt(coord: Coordinate) {
 
   // Do not force the turn to end unless there are no player spawns left in activePieces
   const spawnsLeft = activePieces.value.some(p => p.team === 'player' && p.name === 'Spawn');
-  if (!spawnsLeft) {
+  if (!spawnsLeft && !player.value.hasAdmin('Dove')) {
     await endTurn();
   }
 
@@ -1203,7 +1207,9 @@ const deselectPiece = () => {
 const movePiece = async (coord: Coordinate) => {
   if (!selectedPiece.value || !player.value.canMove) return;
   isPlacing.value = false;
-  player.value.canPlace = false;
+  if(!isFirstTurn.value || (isFirstTurn.value && !player.value.hasAdmin('Dove')) ){
+    player.value.canPlace = false;
+  }
   //we're definitely making a move, so store pieces
   lastTurnPieces.value = activePieces.value.map(p => p.clone());
 
@@ -1238,7 +1244,7 @@ const movePiece = async (coord: Coordinate) => {
   } else {
     boardRef.value.clearHighlights();
   }
-  playerSpawns.value = newPlacementHighlights();
+  playerSpawns.value = newPlacementHighlights(); 
   console.log('playerSpawns after movement:', playerSpawns.value);
   if (player.value.fogged) {
     foggedTiles.value = [...level.value.tiles];//non persistant clearance

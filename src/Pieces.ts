@@ -1424,7 +1424,8 @@ class Watchman extends Piece {
           target.statuses.exposed = true;
         }
         if(target.getStat('defence') > 0){
-          target.defence -= 1
+          target.defence -= 1;
+          target.defenceRemaining = Math.max(0, target.defenceRemaining - 1);
         } else {
           await target.takeDamage(this.getStat('attack'))
         }
@@ -2732,7 +2733,7 @@ class Honeypot extends Piece {
   static color = "#ffb20dff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-    super(Honeypot.name, Honeypot.description, Honeypot.unicode, 1, 0, 1, 0, 0, Honeypot.color, headPosition, [headPosition], team, Honeypot.rarity, removeCallback, id)
+    super(Honeypot.name, Honeypot.description, Honeypot.unicode, 1, 0, 1, 0, 1, Honeypot.color, headPosition, [headPosition], team, Honeypot.rarity, removeCallback, id)
     this.specialName='Summon Bee'
     this.canAttack = false;
     this.targetType='space'

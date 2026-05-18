@@ -8,7 +8,7 @@ const welcomeTip: TutorialStep = {
 }
 const mapTip: TutorialStep = {
     id: 'node-map',
-    tooltip: 'This is the Node map. Choose your path forward, there will always be an easier path to the left with two nodes at your currently security level(difficulty). Alternatively, there may also be a harder path with greater rewards, an option receive a free program or item followed by a harder level, or other hidden rewards along it.'
+    tooltip: 'This is the Node map. Choose your path forward, there will always be an easier path to the left with two nodes at your currently security level(difficulty). Alternatively, there may also be a harder path with greater rewards, an option receive a free program or item followed by a harder level, or other hidden rewards.'
 }
 const visitedNodeTip: TutorialStep = {
     id: 'visited',
@@ -44,11 +44,11 @@ const bossNodeTip: TutorialStep = {
 }
 const currentNodeTip: TutorialStep = {
     id: 'current',
-    tooltip: 'Your current position in cyberspace.'
+    tooltip: 'Your current position in cyberspace, the only way is up from here.'
 }
 const boardTip: TutorialStep = {
     id: "board",
-    tooltip: "Now we're inside a Node. Your job is to clear all the enemy programs from it using your own programs. Each turn, you may either load a new program in each green 🔲, or move and take actions with your programs already inside the node. Once you have a program down, you may load in next to any tile it occupies next turn. Be careful, once you finish loading your programs in, the enemy programs will take their move, so don't place anything vunerable too close to an enemy. If all your loaded programs are cleared from a node, you will lose a life and be kicked from the node."
+    tooltip: "Now we're inside a Node. Your job is to clear all the enemy programs from it using your own programs. First, you may either load a new program in each green 🔲. After the first turn, you may move and take actions with your loaded programs, or load in one new program next to any tile you occupy. Be careful, once you finish loading your programs in, the enemy programs will take their move, so don't place anything vunerable too close to an enemy. If all your loaded programs are cleared from a node, you will lose a life and be kicked from the node."
 }
 const placementTip: TutorialStep = {
     id: "placement-tile-tip",
@@ -56,7 +56,7 @@ const placementTip: TutorialStep = {
 }
 const spawnTip: TutorialStep = {
     id: 'spawnTip',
-    tooltip: "This is a load point into this node, drag one of your programs here to load it. All 🔲 will dissapear after this turn, but you can still node next to your ither programs later instead of moving."
+    tooltip: "This is a load point into this node, drag one of your programs here to load it. All 🔲 will dissapear after this turn, but you can still load next to your other programs later instead of moving."
 }
 const programTip: TutorialStep = {
     id: 'playerPieceTip',

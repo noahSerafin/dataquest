@@ -831,11 +831,11 @@ watch(
     color: #864800;
 }
 
-/*
-    .node.current {
-        border: 2px outset cyan;
-    }
-    */
+
+.current .icon{
+    border: 2px outset white;
+    background-color: rgb(197, 197, 197);
+}
 .preview-modal {
     position: absolute;
     left: 10%;

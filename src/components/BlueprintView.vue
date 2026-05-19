@@ -118,7 +118,8 @@ function handleSelect() {
       :style="[pieceStyle, tiltStyle]"
     >
       <p class='top-left' v-if="cssclass==='shop' || cssclass==='skipReward'" :style="`top: -${((props.tileSize-10)/2 - 24)}px`">P</p>
-      <span v-if="blueprint.extraUnicode" class="extra-unicode">{{ ExtraUnicodeSymbol }}</span><span class="primary-unicode">{{ unicodeSymbol }}</span>
+      <span class="primary-unicode">{{ unicodeSymbol }}</span>
+      <span v-if="blueprint.extraUnicode" class="extra-unicode">{{ ExtraUnicodeSymbol }}</span>
     </div>
   </div>
 </template>
@@ -209,11 +210,14 @@ function handleSelect() {
   position: absolute;
   left: 5%;
   z-index: 1;
+  width: 100%;
+  transform: scale(1.5);
 }
 .hybrid .extra-unicode{
     position: absolute;
     left: 20%;
-    top: 10%;
-    z-index: 0;
+    top: -15%;
+    z-index: 1;
+    
 }
 </style>

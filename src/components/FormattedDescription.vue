@@ -28,6 +28,7 @@ const statusAliases: Record<string, string> = {
   'hide': 'hidden',
   'hiding': 'hidden',
   'expose': 'exposed',
+  'exposes': 'exposed',
   'exposing': 'exposed',
   'enrage': 'enraged',
   'disarm': 'disarmed',

@@ -1412,7 +1412,7 @@ class Vice extends Piece {
 //	U+1F441 U+FE0F U+200D U+1F5E8 U+FE0F eye
 class Watchman extends Piece {
   static name = "Watchman";
-  static description = "A program that spots other programs, making them unable to hide, also reduces their defence by 1 or damages if defence is already 0";
+  static description = "A program that exposes other programs and reduces their defence by 1. Or damages already exposed programs with no defence";
   static unicode = "U+1F441";
   static color = "#6730cf";
   static rarity = 2;
@@ -1425,14 +1425,14 @@ class Watchman extends Piece {
   async special(targets: Piece[]):Promise<void>{
     for (const target of targets) {
       if(target.team !== this.team){
-        if(!target.immunities.exposed){
-          target.statuses.hidden = false;
-          target.statuses.exposed = true;
-        }
-        if(target.getStat('defence') > 0){
-          target.defence -= 1;
+        if(target.getStat('defence') > 0 || target.defenceRemaining > 0 || !target.statuses.exposed){
+          if(!target.immunities.exposed){
+            target.statuses.hidden = false;
+            target.statuses.exposed = true;
+          }
+          target.addModifier({defence: -1});
           target.defenceRemaining = Math.max(0, target.defenceRemaining - 1);
-        } else {
+        } else if(target.defenceRemaining <= 0 && target.statuses.exposed){
           await target.takeDamage(this.getStat('attack'))
         }
       }

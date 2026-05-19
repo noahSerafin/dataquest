@@ -68,7 +68,7 @@ const enemyProgramTip: TutorialStep = {
 }
 const shopbpTip: TutorialStep = {
     id: 'shop-piece',
-    tooltip: "This is a program blueprint, click on it to see it's stats. Purchase it to add it to your inventory."
+    tooltip: "This is a program blueprint, click on it to see it's stats and special function. Purchase it to add it to your inventory."
 }
 const bpTip: TutorialStep = {
     id: 'inventory-piece',

@@ -941,6 +941,8 @@ class Lightning extends Item<Piece[]> {//lighting remove 1 tile from all enemy p
     apply(activePieces: Piece[], _itemMult: number) {
         activePieces.forEach(piece => {
             if (piece.team === 'enemy') {
+                piece.defenceRemaining = 0;
+                piece.addModifier({defence: -piece.getStat('defence')});
                 piece.takeDamage(piece.defenceRemaining + 1);
             }
         });

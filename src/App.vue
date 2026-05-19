@@ -421,6 +421,12 @@ function refreshShop(isFree: boolean) {
     const extraA = pickWeightedRandomItem(availableAdmins, player.value, appraisalDiscount);
     shopItems.value.push(extraI, extraA);
   }
+  
+  shopItems.value.forEach(item => {
+    if (item instanceof Admin) {
+      item.compressed = Random.bool(0.1);
+    }
+  });
   //if triggered by player
 }
 

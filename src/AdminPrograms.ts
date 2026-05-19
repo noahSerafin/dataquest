@@ -38,7 +38,6 @@ export abstract class Admin<
   ) {
     super(name, description, unicode, color, cost, rarity, targetType);
     this.triggerType = triggerType;
-    this.compressed = Random.bool(0.1);//0.05?
   }
 
   async apply(_target: any): Promise<void> {

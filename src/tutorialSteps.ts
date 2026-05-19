@@ -8,7 +8,7 @@ const welcomeTip: TutorialStep = {
 }
 const mapTip: TutorialStep = {
     id: 'node-map',
-    tooltip: 'This is the Node map. Choose your path forward, there will always be an easier path to the left with two nodes at your currently security level(difficulty). Alternatively, there may also be a harder path with greater rewards, an option receive a free program or item followed by a harder level, or other hidden rewards.'
+    tooltip: 'This is the Node map. Choose your path forward, there will always be an easier path to the left with two nodes at your current security level(difficulty). Alternatively, there may also be a harder path with greater rewards, an option receive a free program or item followed by a harder level, or other hidden rewards.'
 }
 const visitedNodeTip: TutorialStep = {
     id: 'visited',
@@ -16,7 +16,7 @@ const visitedNodeTip: TutorialStep = {
 }
 const levelNodeTip: TutorialStep = {
     id: 'levelNode',
-    tooltip: 'This is a privately controlled node, the icon shows us what company it is owned by. The $ amount below is the reward for clearing this node. The 🔒 number indicates security level of a Node. Rarer, higher level enemy programs appear at higher difficulties. Click to see the preview.'
+    tooltip: 'This is a privately controlled node, the icon shows us what company it is owned by. The $ amount below is the reward for clearing this node. The 🔒 number indicates security level of a Node. Rarer, higher level enemy programs appear at higher difficulties. Click on it to see the preview.'
 }
 const hiddenNodeTip: TutorialStep = {
     id: 'unrevealed',
@@ -28,7 +28,7 @@ const previewTip: TutorialStep = {
 }
 const skipNodeTip: TutorialStep = {
     id: 'skipNode',
-    tooltip: 'Choosing this node will reward you with the pictured program/item. Click to see the details.'
+    tooltip: 'Choosing this node will reward you with the pictured program/item. Click on it to see the details.'
 }
 const shopNodeTip: TutorialStep = {
     id: 'shopNode',
@@ -148,11 +148,11 @@ const rerollTip: TutorialStep = {
 }
 const shopItemTip: TutorialStep = {
     id: 'item-consumable',
-    tooltip: "This is a consumable item, it takes up 1 memory in your inventory and can only be used once. Click to see what it does.",
+    tooltip: "This is a consumable item, it takes up 1 memory in your inventory and can only be used once. Click on it to see what it does.",
 }
 const adminTip: TutorialStep = {
     id: 'item-admin',
-    tooltip: 'This is an admin, it takes up an admin slot and will provide passive benefits when it is triggered. Click to see what it does.',
+    tooltip: 'This is an admin, it takes up an admin slot and will provide passive benefits when it is triggered. Click on it to see what it does.',
 }
 const adminsTip: TutorialStep = {
     id: 'admin-header',

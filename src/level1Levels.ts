@@ -1038,6 +1038,24 @@ export const alley = {
       "range": 0
     },
     {
+      "id": "949c6834-3f75-4210-ac32-01ebd3a4ecca",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 0,
+        "y": 7
+      },
+      "tiles": [
+        {
+          "x": 0,
+          "y": 7
+        }
+      ],
+    
+      "moves": 0,
+      "range": 0
+    },
+    {
       "id": "db460510-7c03-43cd-9b30-7df926b2f639",
       "name": "Spawn",
       "team": "enemy",

@@ -205,6 +205,10 @@ const showFastControls = ref<boolean>(true);
 function toggleFastControls() {
   showFastControls.value = !showFastControls.value
 }
+const showStats = ref<boolean>(true);
+function toggleStats() {
+  showStats.value = !showStats.value;
+}
 
 function sellBlueprint(pieceId: string) {
   // find the index
@@ -1798,6 +1802,9 @@ function toggleDebug() {
       <button class="phone-hide" @mousedown="toggleFastControls()">
         Fast Controls
       </button>
+      <button class="phone-hide" @mousedown="toggleStats()">
+        Live Stats: {{ showStats ? 'ON' : 'OFF' }}
+      </button>
       <div v-if="!gameStarted" class="flex">
         <button class="phone-hide" @mousedown="decreaseStake()">
           -
@@ -1874,7 +1881,7 @@ function toggleDebug() {
         :tiles="level.tiles" :foggedTiles="foggedTiles" :pieces="activePieces" :selectedPiece="selectedPiece"
         :placementHighlights="playerSpawns" :isFirstTurn="isFirstTurn" :placementMode="isPlacing"
         :movementMode="isMoving" :hasFinishedTurn="hasFinishedTurn" :player="player"
-        :showFastControls="showFastControls" :isDraggingPlacement="isDraggingPlacement" :pieceToPlace="pieceToPlace"
+        :showFastControls="showFastControls" :showStats="showStats" :isDraggingPlacement="isDraggingPlacement" :pieceToPlace="pieceToPlace"
         :tileColor="currentCompany.tileColor" :edgeColor="currentCompany.edgeColor" @placeOnBoard="placePieceOnBoardAt"
         @handlePieceSelect="handlePieceSelect" @deselect="deselectPiece" @movePiece="movePiece"
         @damagePieceAt="damagePieceAt" @specialActionAt="handleSpecialActionAt" @placeAt="placeAt" gameStart="true" />

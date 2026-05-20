@@ -18,6 +18,7 @@ interface Props {
   hasFinishedTurn: boolean
   player: Player
   showFastControls: boolean
+  showStats?: boolean
   isDraggingPlacement: boolean
   pieceToPlace: PieceBlueprint | null
   tileColor: string
@@ -484,7 +485,7 @@ function resolveMove(
     <!-- Render pieces -->
     <div v-for="piece in pieces" class="piece-layer" :key="piece.id">
       <PieceView :piece="piece" :selectedPiece="selectedPiece" :tileSize=tileSize :mapTiles=props.tiles cssclass="board"
-        :showFastControls=showFastControls @select="$emit('handlePieceSelect', piece)"
+        :showFastControls=showFastControls :showStats="showStats" @select="$emit('handlePieceSelect', piece)"
         @highlightTargets="highlightTargets" @highlightSpecials="highlightSpecials" @deselect="$emit('deselect')" />
     </div>
     <!-- 

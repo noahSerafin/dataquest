@@ -4568,7 +4568,7 @@ const narrow: Level = {
       "rarity": 1
     },
     {
-      "id": "633683e9-5dac-4f4b-9d1d-eee97224e9a9",
+      "id": "633683e9-5dac-4f4b-9d1d-eee97224e9ac",
       "name": "Spawn",
       "team": "player",
       "headPosition": {
@@ -4584,7 +4584,7 @@ const narrow: Level = {
       "rarity": 1
     },
     {
-      "id": "633683e9-5dac-4f4b-9d1d-eee97224e9a9",
+      "id": "633683e9-5dac-4f4b-9d1d-eee97224e9ab",
       "name": "Spawn",
       "team": "player",
       "headPosition": {

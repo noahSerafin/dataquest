@@ -330,8 +330,8 @@ body,
 
 .shop-container .tutorial-help-btn,
 .board .tutorial-help-btn {
-  top: 0;
-  right: 0;
+  top: -15px;
+  right: -15px;
 }
 
 .enemy-info .tutorial-help-btn,
@@ -340,9 +340,9 @@ body,
 .piece-controller .tutorial-help-btn,
 .shop-piece .tutorial-help-btn,
 .item-shop .tutorial-help-btn {
-  top: 0;
+  top: -16px;
   right: unset;
-  left: 0;
+  left: -16px;
 }
 
 .admin-header .tutorial-help-btn {
@@ -734,4 +734,7 @@ steel
 */
 .v_Holographic.piece-controller {
   filter: unset;
+}
+.stage, .container, .board-container{
+  overflow: visible !important;
 }

@@ -186,7 +186,11 @@ const infoBtnTip: TutorialStep = {
     id: 'info-btn',
     tooltip: "Click here to see your past stats, current seed, and previously used programs and items",
 }
-export const allTips: TutorialStep[] = [infoBtnTip, welcomeTip, mapTip, bossTip, visitedNodeTip, currentNodeTip, levelNodeTip, hiddenNodeTip, previewTip, skipNodeTip, shopNodeTip, bossNodeTip, boardTip, placementTip, spawnTip, programTip, enemyProgramTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, actionsTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, infamyTip, bossesTip, summaryTip, lossTip, shopTip, rerollTip, shopbpTip, shopItemTip, adminTip, adminsTip, playerInfoTip, nodePreviewTip, interestTip, rewardTip, inventoryTip];
+const quickStatsTip: TutorialStep = {
+    id: 'piece-stats-left',
+    tooltip: "👋 will appear for every action this program has left. ⚔ number is It's attack. 🦶 is it's remaining moves. 🛡 is it's remaining defence.",
+}
+export const allTips: TutorialStep[] = [infoBtnTip, welcomeTip, mapTip, bossTip, visitedNodeTip, currentNodeTip, levelNodeTip, hiddenNodeTip, previewTip, skipNodeTip, shopNodeTip, bossNodeTip, boardTip, placementTip, spawnTip, programTip, enemyProgramTip, bpTip, controllerTip, maxsizeTip, movesTip, rangeTip, attackTip, defenceTip, actionsTip, moveBtnTip, atkBtnTip, specialBtnTip, securityTip, infamyTip, bossesTip, summaryTip, lossTip, shopTip, rerollTip, shopbpTip, shopItemTip, adminTip, adminsTip, playerInfoTip, nodePreviewTip, interestTip, rewardTip, inventoryTip, quickStatsTip];
 
 export const proTipSuggestion: TutorialStep = {
     id: 'proTip',

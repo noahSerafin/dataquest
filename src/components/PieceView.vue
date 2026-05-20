@@ -7,14 +7,20 @@ import { STATUS_ICONS } from "../statuses";
 //construction-------------
 
 // Props
-const props = defineProps<{
-  piece: InstanceType<typeof Piece>
-  selectedPiece: InstanceType<typeof Piece> | null
-  tileSize: number//provided by board.vue
-  mapTiles?: Coordinate[] // optional when in inventory
-  cssclass: string
-  showFastControls: boolean
-}>();
+const props = withDefaults(
+  defineProps<{
+    piece: InstanceType<typeof Piece>
+    selectedPiece: InstanceType<typeof Piece> | null
+    tileSize: number//provided by board.vue
+    mapTiles?: Coordinate[] // optional when in inventory
+    cssclass: string
+    showFastControls: boolean
+    showStats?: boolean
+  }>(),
+  {
+    showStats: true
+  }
+);
 
 
 //local state
@@ -170,6 +176,19 @@ function pieceTipClass(){
       >
         {{ STATUS_ICONS[key] ?? '?' }}
       </span>
+    </div>
+    <div v-if="showStats && piece.name !== 'Spawn'" class="piece-stats-left">
+      <div class="stat-actions" v-if="piece.actions > 0">
+        <span v-for="n in piece.actions" :key="n">👋</span>
+      </div>
+      <div class="stat-attack">
+        <span class="red-sword">⚔</span>
+        <span class="stat-value">{{ piece.getStat('attack') }}</span>
+      </div>
+      <div class="stat-moves">
+        <span>🦶</span>
+        <span class="stat-value">{{ piece.movesRemaining }}</span>
+      </div>
     </div>
     <div class="piece-defence">
       <span class="piece-defence-shield"
@@ -405,5 +424,39 @@ function pieceTipClass(){
   0% { transform: scale(1); }
   50% { transform: scale(1.4); }
   100% { transform: scale(1); }
+}
+
+.piece-stats-left {
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  z-index: 10;
+  pointer-events: none;
+  line-height: 1;
+}
+
+.stat-actions {
+  font-size: 15px;
+  display: flex;
+  gap: 1px;
+}
+
+.stat-attack, .stat-moves {
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  color: white;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px black;
+}
+
+.red-sword {
+  color: #ff3b30;
+  font-weight: bold;
 }
 </style>

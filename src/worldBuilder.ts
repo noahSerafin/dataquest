@@ -65,6 +65,7 @@ function getEasyPath(difficulty: number): PathSpec {
     options.push({ type: 'skip',  mods: [0, 0], rewards: [0, 3] });
     options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] });
     options.push({ type: 'hiddenShop',  mods: [0, 0], rewards: [3, 3] });
+    options.push({ type: 'hiddenAltar',  mods: [0, 0], rewards: [3, 3] });
   }
   if (difficulty > 2 ){
     options.push({ type: 'skip',  mods: [0, 0], rewards: [0, 3] }),//skip path
@@ -73,6 +74,7 @@ function getEasyPath(difficulty: number): PathSpec {
     options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
     options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
     options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
+    options.push({ type: 'hiddenShop',  mods: [0, 0], rewards: [3, 3] });
     options.push({ type: 'hiddenAltar',  mods: [0, 0], rewards: [3, 3] });
     options.push({ type: 'hiddenDuplicator',  mods: [0, 0], rewards: [3, 3] });
     options.push({ type: 'hiddenWorkbench',  mods: [0, 0], rewards: [3, 3] });
@@ -640,11 +642,13 @@ function processSpawnPoints(
         
         enemyInstance.defenceRemaining = enemyInstance.getStat('defence');
 
+        /*OLD STAKE MODIFIERS
         if (stake > 1) enemyInstance.maxSize += difficulty;
         if (stake > 2) enemyInstance.moves += difficulty;
         if (stake > 3) enemyInstance.range += difficulty;
         if (stake > 4) enemyInstance.attack += difficulty;
         if (stake > 5) enemyInstance.defence += difficulty;
+        */
 
         processed.push(enemyInstance);
         continue;

@@ -28,9 +28,11 @@ Exposed
 Hidden
 
 //IMPROVEMENTS/bugs
+variants formats showing outside header
+infamy stackBosses, reduce spawns to 2, reduce spawns to 1...
+display actions, atk, and moves on piece
 defence showing on redacted pieces
 compressed pieces
-infamy stackBosses, reduce spawns to 2, reduce spawns to 1...
 deselect from inventory on placement
 canplace tickbox in inventory
 Make a reason to use golden ticket, on bosses? allow it to be used in a node? Allow 1 free custom node starting each round?/instead of shop???

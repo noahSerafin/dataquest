@@ -32,7 +32,6 @@ const statusAliases: Record<string, string> = {
   'exposing': 'exposed',
   'enrage': 'enraged',
   'disarm': 'disarmed',
-  'Large': 'Large',
   'Longshot': 'Longshot',
   'Holographic': 'Holographic',
   'Deadly': 'Deadly',

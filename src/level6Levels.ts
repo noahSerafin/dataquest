@@ -4566,6 +4566,38 @@ const narrow: Level = {
         }
       ],
       "rarity": 1
+    },
+    {
+      "id": "633683e9-5dac-4f4b-9d1d-eee97224e9a9",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 0,
+        "y": 5
+      },
+      "tiles": [
+        {
+          "x": 0,
+          "y": 5
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "633683e9-5dac-4f4b-9d1d-eee97224e9a9",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 1,
+        "y": 6
+      },
+      "tiles": [
+        {
+          "x": 1,
+          "y": 6
+        }
+      ],
+      "rarity": 1
     }
   ]
 }

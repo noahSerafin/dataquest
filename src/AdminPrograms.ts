@@ -2060,7 +2060,7 @@ class Ring extends Admin {
 
 class Minerva extends Admin {
   static name = "Minerva";
-  static description = "+1 range for all your placed programs each time a program is destroyed";
+  static description = "+1 range for all your placed programs each time one of your program is destroyed";//player programs only?
   static unicode = "U+1F989";//horus: "U+1314A";
   static color = "rgb(211, 169, 31)";
   static rarity = 6;
@@ -2068,12 +2068,15 @@ class Minerva extends Admin {
     super(Minerva.name, Minerva.description, Minerva.unicode, Minerva.color, 9, Minerva.rarity, 'gameState', 'onPieceDestruction')
   }
   //on receive damage //on piece destrcution
-  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id: id, activePieces }: { id: string, activePieces: Piece[] }) {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
-    for (const p of activePieces) {
-      if (p.team === 'player' && p.name !== 'Spawn') {
-        p.addModifier({ range: 1 })
+    const idx = activePieces.findIndex(p => p.id === id);
+    if(activePieces[idx].team ==='enemy'){
+      for (const p of activePieces) {
+        if (p.team === 'player' && p.name !== 'Spawn') {
+          p.addModifier({ range: 1 })
+        }
       }
     }
   }

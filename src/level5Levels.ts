@@ -1073,12 +1073,12 @@ const databank: Level = {
       "team": "player",
       "headPosition": {
         "x": 0,
-        "y": 6
+        "y": 5
       },
       "tiles": [
         {
           "x": 0,
-          "y": 6
+          "y": 5
         }
       ],
       "rarity": 1

@@ -3,7 +3,6 @@ import { Box, Gift, Item, Pinata, upgradeItems } from "./Items";
 import { Piece, allPieces } from "./Pieces";
 import { Player } from "./Player";
 import type { Coordinate, PieceBlueprint, StatModifier, StatusKey } from "./types";
-import { Random } from "./Random";
 
 export type AdminTrigger =
   | 'onPlacement'

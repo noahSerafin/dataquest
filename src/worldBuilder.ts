@@ -578,8 +578,7 @@ export function generateWorld(
         node.level.pieces, 
         (node.company && node.company.pieceList && node.company.pieceList.length > 0) ? node.company.pieceList : allPieces, 
         difficulty,
-        node.difficultyMod,
-        stake
+        node.difficultyMod
       );
       node.level.pieces = processedPieces;
     }
@@ -595,8 +594,8 @@ function processSpawnPoints(
   pieces: Piece[], 
   companyPieces: any[], 
   difficulty: number,
-  mod: number, 
-  stake: number
+  mod: number
+  //stake: number
 ) {
   const processed: Piece[] = [];
 

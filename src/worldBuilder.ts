@@ -152,6 +152,37 @@ function getPathPositions(
   };
 }
 
+function adjustImportedLevelSpawns(level: Level, stake: number = 0): Level {
+  if (stake < 1) return level;
+
+  let spawnsToRemove = 0;
+  if (stake >= 3) {
+    spawnsToRemove = 2;
+  } else if (stake >= 1) {
+    spawnsToRemove = 1;
+  }
+
+  // Count existing player spawns
+  const playerSpawns = level.pieces.filter(p => p.name === "Spawn" && p.team === "player");
+  let currentSpawns = playerSpawns.length;
+
+  // We must leave at least 1 player spawn
+  while (spawnsToRemove > 0 && currentSpawns > 1) {
+    // Find the last player spawn in the pieces array
+    for (let i = level.pieces.length - 1; i >= 0; i--) {
+      const piece = level.pieces[i];
+      if (piece.name === "Spawn" && piece.team === "player") {
+        level.pieces.splice(i, 1);
+        currentSpawns--;
+        spawnsToRemove--;
+        break; // Break the for-loop, continue the while-loop
+      }
+    }
+  }
+
+  return level;
+}
+
 export function generateWorld(
   levelPool: Level[],
   difficulty: number,
@@ -160,8 +191,13 @@ export function generateWorld(
 
   //const pick = () => levelPool[Math.floor(Math.random() * levelPool.length)];
   const pick = () => {
-    const level = Random.bool(0.5) ? Random.pick(levelPool) : generateNode(difficulty);
-    return JSON.parse(JSON.stringify(level));
+    const isImported = Random.bool(0.5);
+    let level = isImported ? Random.pick(levelPool) : generateNode(difficulty, stake);
+    level = JSON.parse(JSON.stringify(level));
+    if (isImported) {
+      level = adjustImportedLevelSpawns(level, stake);
+    }
+    return level;
   };
 
   const startId = "start";

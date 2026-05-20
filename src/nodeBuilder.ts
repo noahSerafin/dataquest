@@ -258,7 +258,7 @@ function growEnemy(
   return result;
 }
 
-export function generateNode(difficulty: number): Level {
+export function generateNode(difficulty: number, stake: number = 0): Level {
     const enemyCount = randInt(difficulty+1, difficulty + 2);
 
     const minSize = 6;
@@ -391,9 +391,18 @@ export function generateNode(difficulty: number): Level {
 
     const extraPlayerSpawns: any[] = [];
     
-    // First 50% chance to add a spawn within 2 spaces of the first generated spawn
-    //if (Random.bool(0.8)) { base off player infamy
-      const candidates = tiles.filter(t => {
+    // Check stake limits for generated extra spawns
+    let maxExtraSpawns = 2; // base stake 0
+    if (stake >= 3) {
+      maxExtraSpawns = 0;
+    } else if (stake >= 1) {
+      maxExtraSpawns = 1;
+    }
+
+    if (maxExtraSpawns > 0) {
+      // First 50% chance to add a spawn within 2 spaces of the first generated spawn
+      //if (Random.bool(0.8)) { base off player infamy
+        const candidates = tiles.filter(t => {
         const dist = Math.abs(t.x - playerTile.x) + Math.abs(t.y - playerTile.y);
         return dist >= 1 && dist <= 2 && !occupiedKeys.has(key(t.x, t.y));
       });
@@ -411,30 +420,31 @@ export function generateNode(difficulty: number): Level {
           "rarity": 1
         });
         
-        // Second 50% chance to spawn another in the same range in a different spot if the first was successful
-        //if (Random.bool(0.5)) { base off player infamy
-          const secondCandidates = tiles.filter(t => {
-            const dist = Math.abs(t.x - playerTile.x) + Math.abs(t.y - playerTile.y);
-            return dist >= 1 && dist <= 2 && !occupiedKeys.has(key(t.x, t.y));
-          });
-          
-          if (secondCandidates.length > 0) {
-            const secondPickedTile = Random.pick(secondCandidates);
-            occupiedKeys.add(key(secondPickedTile.x, secondPickedTile.y));
-            
-            extraPlayerSpawns.push({
-              "id": crypto.randomUUID(),
-              "name": "Spawn",
-              "team": "player",
-              "headPosition": secondPickedTile,
-              "tiles": [secondPickedTile],
-              "rarity": 1
+          if (maxExtraSpawns > 1) {
+            // Second 50% chance to spawn another in the same range in a different spot if the first was successful
+            //if (Random.bool(0.5)) { base off player infamy
+              const secondCandidates = tiles.filter(t => {
+              const dist = Math.abs(t.x - playerTile.x) + Math.abs(t.y - playerTile.y);
+              return dist >= 1 && dist <= 2 && !occupiedKeys.has(key(t.x, t.y));
             });
-          }
-        //}
+            
+            if (secondCandidates.length > 0) {
+              const secondPickedTile = Random.pick(secondCandidates);
+              occupiedKeys.add(key(secondPickedTile.x, secondPickedTile.y));
+              
+              extraPlayerSpawns.push({
+                "id": crypto.randomUUID(),
+                "name": "Spawn",
+                "team": "player",
+                "headPosition": secondPickedTile,
+                "tiles": [secondPickedTile],
+                "rarity": 1
+              });
+            }
+          //}
+        }
       }
-    //}
-
+    }
     return {
         name: `Gen-${difficulty}-${crypto.randomUUID().substring(0, 7)}`,
         tiles: [...tiles],//.map(parseCoord),
@@ -452,4 +462,3 @@ export function generateNode(difficulty: number): Level {
         ]
     };
 }
-

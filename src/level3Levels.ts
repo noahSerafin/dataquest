@@ -248,6 +248,22 @@ const blockage: Level = {
         }
       ],
       "rarity": 1
+    },
+    {
+      "id": "dd692854-7667-4f45-8b29-fdbfc9062c77",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 1,
+        "y": 5
+      },
+      "tiles": [
+        {
+          "x": 1,
+          "y": 5
+        }
+      ],
+      "rarity": 1
     }
   ]
 }

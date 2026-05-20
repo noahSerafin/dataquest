@@ -1734,7 +1734,7 @@ class Mammoth extends Piece {
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Mammoth.name, Mammoth.description, Mammoth.unicode, 6, 2, 1, 3, 3, Mammoth.color, headPosition, [headPosition], team, Mammoth.rarity, removeCallback, id)
-    this.specialName = 'Trample';
+    this.specialName = 'Trample2.0';
     //this.targetType = 'piece';
     this.targetType = 'line';
   }  

@@ -8,6 +8,10 @@
     import BlueprintView from "./BlueprintView.vue";
     import BlueprintController from "./BlueprintController.vue";
     import { reapplyTutorialTooltips } from "../tutorial";
+    import { playSoundFx, preloadSound } from "../helperFunctions";
+    import selectSoundUrl from "../../sfx/select.ogg";
+
+    preloadSound(selectSoundUrl);
 
     const props = defineProps<{
         player: Player,
@@ -32,6 +36,9 @@
     const selectedAdmin = ref<Item | null>(null)
     
     function openInventoryController(piece: PieceBlueprint) {///TODO SORT OUT IMPORTS
+        if (selectedPiece.value?.id !== piece.id) {
+            playSoundFx(selectSoundUrl, 1.0);
+        }
         selectedPiece.value = piece;
         if(props.player.hasAdmin('Clippy')){
             reapplyTutorialTooltips(200);

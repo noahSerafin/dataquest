@@ -15,7 +15,49 @@ import { Spawn, allPieces } from "./Pieces"
 import type { Coordinate, PieceBlueprint, Level, OS, Company } from "./types";
 import { runEnemyStateMachine } from "./Enemy";
 import WorldMap from "./components/WorldMap.vue";
-import { coordKey, findAnyPiecesInRange, getOccupiedTileSet, getTilesInRange, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, isSoundEnabled } from "./helperFunctions";
+import { coordKey, findAnyPiecesInRange, getOccupiedTileSet, getTilesInRange, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, isSoundEnabled, playSoundFx, preloadSound, resumeAudioContext } from "./helperFunctions";
+import dieSoundUrl from '../sfx/die.ogg';
+import dieAltSoundUrl from '../sfx/dieAlt.ogg';
+import selectSoundUrl from '../sfx/select.ogg';
+import musicUrl from '../sfx/dataDriven_wip.mp3';
+
+preloadSound(dieSoundUrl);
+preloadSound(dieAltSoundUrl);
+preloadSound(selectSoundUrl);
+
+const backgroundAudio = new Audio(musicUrl);
+backgroundAudio.loop = true;
+const isMusicEnabled = ref(true);
+
+onMounted(() => {
+  if (isMusicEnabled.value) {
+    backgroundAudio.play().catch(err => {
+      console.log("Autoplay prevented. Waiting for interaction...");
+      const onInteract = () => {
+        if (isMusicEnabled.value) backgroundAudio.play().catch(e => console.warn("Music playback failed:", e));
+        document.removeEventListener('click', onInteract);
+      };
+      document.addEventListener('click', onInteract);
+    });
+  }
+});
+
+function toggleMusic() {
+  isMusicEnabled.value = !isMusicEnabled.value;
+  if (isMusicEnabled.value) {
+    backgroundAudio.play().catch(e => console.warn("Music playback failed:", e));
+  } else {
+    backgroundAudio.pause();
+  }
+}
+
+function toggleSound() {
+  isSoundEnabled.value = !isSoundEnabled.value;
+  if (isSoundEnabled.value) {
+    resumeAudioContext();
+  }
+}
+
 import Shop from "./components/Shop.vue";
 import BossView from "./components/BossView.vue";
 import RoundSummary from "./components/RoundSummary.vue";
@@ -1024,6 +1066,11 @@ async function removePiece(piece: Piece) {
     if (idx !== -1) {
       activePieces.value.splice(idx, 1);
     }
+    if (piece.team === 'enemy') {
+      playSoundFx(dieSoundUrl, 1.0);
+    } else if (piece.team === 'player') {
+      playSoundFx(dieAltSoundUrl, 1.0);
+    }
     await handleApplyAdmins('onPieceDestruction', piece.id, piece);
     //graveyard?
     //await nextTick();
@@ -1185,6 +1232,9 @@ const playerViewRef = ref();
 
 //selectedPiece functions
 function handlePieceSelect(piece: Piece) {
+  if (selectedPiece.value?.id !== piece.id) {
+    playSoundFx(selectSoundUrl, 1.0);
+  }
   if (isPlacing.value) {
     isPlacing.value = false;
     pieceToPlace.value = null;
@@ -1817,8 +1867,11 @@ function toggleDebug() {
       <button class="phone-hide" @mousedown="toggleDebug()">
         Debug mode
       </button>
-      <button class="phone-hide" @mousedown="isSoundEnabled = !isSoundEnabled">
+      <button class="phone-hide" @mousedown="toggleSound">
         Sound FX: {{ isSoundEnabled ? 'ON' : 'OFF' }}
+      </button>
+      <button class="phone-hide" @mousedown="toggleMusic">
+        Music: {{ isMusicEnabled ? 'ON' : 'OFF' }}
       </button>
     </div>
     <div class="top-hud">

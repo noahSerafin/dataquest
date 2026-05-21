@@ -9,23 +9,63 @@ import { Random } from "./Random";
 
 export const isSoundEnabled = ref(false);
 
-export function playSoundFx(url: string, pieceName: string) {
-  if (!isSoundEnabled.value) return;
-  const audio = new Audio(url);
-  // Disable pitch preservation so changing rate changes pitch
-  (audio as any).preservesPitch = false;
-  (audio as any).mozPreservesPitch = false;
-  (audio as any).webkitPreservesPitch = false;
-  // Generate a simple deterministic hash from the piece's name
-  let hash = 0;
-  for (let i = 0; i < pieceName.length; i++) {
-    hash = pieceName.charCodeAt(i) + ((hash << 5) - hash);
+let audioCtx: AudioContext | null = null;
+const audioBufferCache = new Map<string, AudioBuffer>();
+
+function getAudioContext() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
   }
-    
-  // Normalize hash to a playback rate between 0.2 and 2.5
-  const rate = 0.2 + (Math.abs(hash) % 100) / 100 * 2.3;
-  audio.playbackRate = rate;
-  audio.play().catch(e => console.warn("Audio play failed:", e));
+  return audioCtx;
+}
+
+export function resumeAudioContext() {
+  const ctx = getAudioContext();
+  if (ctx.state === 'suspended') {
+    ctx.resume().catch(e => console.warn("AudioContext resume failed:", e));
+  }
+}
+
+export async function preloadSound(url: string) {
+  if (audioBufferCache.has(url)) return;
+  try {
+    const response = await fetch(url);
+    const arrayBuffer = await response.arrayBuffer();
+    const ctx = getAudioContext();
+    const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
+    audioBufferCache.set(url, audioBuffer);
+  } catch (err) {
+    console.error("Failed to preload sound:", url, err);
+  }
+}
+
+function playBuffer(ctx: AudioContext, buffer: AudioBuffer, rate: number) {
+  const source = ctx.createBufferSource();
+  source.buffer = buffer;
+  source.playbackRate.value = rate;
+  source.connect(ctx.destination);
+  source.start(0);
+}
+
+export function playSoundFx(url: string, rate: number = 1.0) {
+  if (!isSoundEnabled.value) return;
+  
+  const ctx = getAudioContext();
+  resumeAudioContext();
+  
+  const buffer = audioBufferCache.get(url);
+  if (!buffer) {
+    // Fallback: preload and play once ready
+    preloadSound(url).then(() => {
+      const fallbackBuffer = audioBufferCache.get(url);
+      if (fallbackBuffer && isSoundEnabled.value) {
+        playBuffer(ctx, fallbackBuffer, rate);
+      }
+    });
+    return;
+  }
+  
+  playBuffer(ctx, buffer, rate);
 }
 
 export function coordKey(c: Coordinate): string {

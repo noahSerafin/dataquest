@@ -28,7 +28,6 @@ Exposed
 Hidden
 
 //IMPROVEMENTS/bugs
-display actions, atk, and moves on piece
 nerf sponge: 1 of every stat at a time
 variants formats showing outside header
 defence showing on redacted pieces

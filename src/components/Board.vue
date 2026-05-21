@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount, watch, nextTick } from "vue"
 import type { Coordinate, PieceBlueprint } from "../types"
-import { getTilesInRange } from "../helperFunctions";
+import { getTilesInRange, playSoundFx, preloadSound } from "../helperFunctions";
+import targetSoundUrl from '../../sfx/target.ogg';
+import specialSoundUrl from '../../sfx/special.ogg';
+
+preloadSound(targetSoundUrl);
+preloadSound(specialSoundUrl);
 import PieceView from "./PieceView.vue";
 import { Piece } from "../Pieces"
 import { Player } from "../Player";
@@ -397,6 +402,7 @@ function getTilesInStraightLine(
 const highlightTargets = (piece: InstanceType<typeof Piece>) => {
   clearHighlights();
   if (piece.actions <= 0) return;
+  playSoundFx(targetSoundUrl, 1.0);
   inRangeHighlights.value = getTilesInRange(
     piece.headPosition,
     piece.getStat('range'),
@@ -407,6 +413,7 @@ const highlightSpecials = (piece: InstanceType<typeof Piece>) => {
   //console.log('specialtargets', piece.name)
   clearHighlights();
   if (piece.actions <= 0) return;
+  playSoundFx(specialSoundUrl, 1.0);
   if (piece.targetType === 'line') {
     specialHighlights.value = getTilesInStraightLine(
       piece.headPosition,

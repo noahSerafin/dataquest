@@ -402,7 +402,9 @@ function getTilesInStraightLine(
 const highlightTargets = (piece: InstanceType<typeof Piece>) => {
   clearHighlights();
   if (piece.actions <= 0) return;
-  playSoundFx(targetSoundUrl, 1.0);
+  if(piece.team === 'player' || piece.team === 'enemy' && piece.statuses.charmed){
+    playSoundFx(targetSoundUrl, 1.0);
+  }
   inRangeHighlights.value = getTilesInRange(
     piece.headPosition,
     piece.getStat('range'),

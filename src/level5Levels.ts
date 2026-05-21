@@ -693,6 +693,22 @@ const filter: Level = {
       "rarity": 1
     },
     {
+      "id": "59d06211-4124-40c9-a66f-23718c88397a",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 0,
+        "y": 5
+      },
+      "tiles": [
+        {
+          "x": 0,
+          "y": 5
+        }
+      ],
+      "rarity": 1
+    },
+    {
       "id": "96594c0d-4834-4105-99be-689f3aeb4ef6",
       "name": "Spawn",
       "team": "enemy",

@@ -122,7 +122,7 @@ export abstract class Piece {
 
     // Wrap special method to play sound effect dynamically
     const originalSpecial = this.special;
-    this.special = async (target: any) => {
+    this.special = async function (target: any) {
       if (this.specialName) {
         if (this.targetType === 'trapPiece') {
           playSoundFx(trapSoundUrl, 1.0);
@@ -257,8 +257,10 @@ export abstract class Piece {
   moveTo(newPosition: Coordinate): void {//make a free version
     this.move(newPosition)
     this.useMove();
-    const randomMoveSound = moveSoundUrls[Math.floor(Math.random() * moveSoundUrls.length)];
-    playSoundFx(randomMoveSound, 1.0);
+    if(!this.statuses.hidden){
+      const randomMoveSound = moveSoundUrls[Math.floor(Math.random() * moveSoundUrls.length)];
+      playSoundFx(randomMoveSound, 1.0);
+    }
   }
 
   async takeDamage(damage: number, existingPopup?: any) {
@@ -3090,7 +3092,12 @@ class UFO extends Piece {
       const occupierHere = activePieces.find(p =>
         p.tiles.some(t => t.x === here.x && t.y === here.y)
       );
-      if (occupierHere) continue;
+      if (occupierHere){
+        if (!occupierHere.immunities.confused && occupierHere.team !== this.team) {
+          occupierHere.statuses.confused = true;
+        }
+        continue;
+      }
       // Tile is *not* empty → cannot pull anything into it
       const occupierNext = activePieces.find(p =>
         p.tiles.some(t => t.x === next.x && t.y === next.y)

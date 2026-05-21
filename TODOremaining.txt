@@ -28,6 +28,7 @@ Exposed
 Hidden
 
 //IMPROVEMENTS/bugs
+make hrybid/duplicator/workbench cost money to use
 nerf sponge: 1 of every stat at a time
 variants formats showing outside header
 defence showing on redacted pieces

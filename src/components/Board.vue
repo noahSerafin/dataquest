@@ -401,7 +401,11 @@ function getTilesInStraightLine(
 
 const highlightTargets = (piece: InstanceType<typeof Piece>) => {
   clearHighlights();
-  if (piece.actions <= 0) return;
+  if (piece.actions <= 0) {
+    if (piece.team === 'player' || (piece.team === 'enemy' && piece.statuses.charmed)) {
+      return;
+    }
+  }
   if(piece.team === 'player' || piece.team === 'enemy' && piece.statuses.charmed){
     playSoundFx(targetSoundUrl, 1.0);
   }
@@ -516,7 +520,7 @@ function resolveMove(
         height: (tileSize - 5) + 'px',
       }" />
     <div v-for="(tile, index) in inRangeHighlights" :key="index" :id="`atk-${tile.x}-${tile.y}`"
-      class="highlight-tile red" v-on:click="$emit('damagePieceAt', tile)" :style="{
+      class="highlight-tile red" :class="{ 'disabled-target': selectedPiece?.team === 'enemy' && !selectedPiece?.statuses.charmed }" v-on:click="$emit('damagePieceAt', tile)" :style="{
         left: (tile.x * tileSize) + 1 + 'px',
         top: (tile.y * tileSize) + 1 + 'px',
         width: (tileSize - 5) + 'px',
@@ -697,5 +701,10 @@ function resolveMove(
 
 .fog-cleared {
   background-color: transparent;
+}
+
+.disabled-target {
+  pointer-events: none;
+  opacity: 0.6;
 }
 </style>

@@ -1879,7 +1879,7 @@ class Liberty extends Admin {
 
 class Punching extends Admin {
   static name = "Punching";
-  static description = "+1 security level, +5 reward from nodes";
+  static description = "+1 security level, +$5 reward from nodes";
   static unicode = "U+1F94A";
   static color = "#420e0eff";
   static rarity = 1;

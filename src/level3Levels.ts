@@ -2071,6 +2071,22 @@ const torrent: Level = {
       "rarity": 1
     },
     {
+      "id": "77a88226-c1ef-4e82-b38a-2e3b9c68c0aa",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 3,
+        "y": 4
+      },
+      "tiles": [
+        {
+          "x": 3,
+          "y": 4
+        }
+      ],
+      "rarity": 1
+    },
+    {
       "id": "6924e99c-57c9-4a8e-a568-f341c926e5fd",
       "name": "Spawn",
       "team": "enemy",

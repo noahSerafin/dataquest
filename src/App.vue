@@ -27,7 +27,7 @@ preloadSound(selectSoundUrl);
 
 const backgroundAudio = new Audio(musicUrl);
 backgroundAudio.loop = true;
-const isMusicEnabled = ref(true);
+const isMusicEnabled = ref(false);
 
 onMounted(() => {
   if (isMusicEnabled.value) {
@@ -38,6 +38,7 @@ onMounted(() => {
         document.removeEventListener('click', onInteract);
       };
       document.addEventListener('click', onInteract);
+      console.log('audio error: ', err);
     });
   }
 });

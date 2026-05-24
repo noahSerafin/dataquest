@@ -90,8 +90,8 @@ class Mirror extends Admin {
         setTimeout(() => this.isTriggering = false, 500);
         const enemyPieces: Piece[] = []
         for (const piece of activePieces) {
-            enemyPieces.push(piece)
             if (piece.team === 'enemy') {
+                enemyPieces.push(piece)
             }
         };
 

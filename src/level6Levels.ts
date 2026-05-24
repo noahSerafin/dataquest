@@ -3900,6 +3900,22 @@ const pier: Level = {
         }
       ],
       "rarity": 1
+    },
+    {
+      "id": "07a1982d-d8e4-444f-8308-3b4df2f8f41b",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 1,
+        "y": 7
+      },
+      "tiles": [
+        {
+          "x": 1,
+          "y": 7
+        }
+      ],
+      "rarity": 1
     }
   ]
 }

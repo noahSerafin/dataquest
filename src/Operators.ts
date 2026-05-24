@@ -373,7 +373,7 @@ const Window95 : OS = {
     unicode: 'U+229E',
     prefix: 'C',
     money: 3,
-    memory: 6,
+    memory: 6,//increase for all ops
     adminSlots: 5,
     blueprints: [lance, shield, banana],
     items: [new Voucher, new Mushroom],

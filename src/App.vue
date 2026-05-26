@@ -2072,7 +2072,7 @@ function cancelConfirm() {
 }
 
 .enemy-info {
-  min-height: 80px;
+  min-height: 50px;
   display: flex;
   gap: 2rem;
 }

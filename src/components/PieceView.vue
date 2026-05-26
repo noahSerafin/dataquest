@@ -459,4 +459,24 @@ function pieceTipClass(){
   color: #ff3b30;
   font-weight: bold;
 }
+
+@media (max-width: 500px) {
+  .piece-stats-left {
+    gap: 0px;
+    left: 1px;
+    top: 1px;
+  }
+  .stat-actions, .stat-moves {
+    font-size: 9px !important;
+  }
+  .stat-attack {
+    display: none !important;
+  }
+  .piece-defence-shield {
+    font-size: 8px !important;
+  }
+  .piece-defence {
+    bottom: -15px !important;
+  }
+}
 </style>

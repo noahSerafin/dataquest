@@ -183,7 +183,16 @@ function recomputeTileSize() {
   const maxTileWidth = rect.width / cols.value
   const maxTileHeight = rect.height / rows.value
 
-  tileSize.value = Math.floor(Math.min(maxTileWidth, maxTileHeight))
+  let size = Math.floor(Math.min(maxTileWidth, maxTileHeight));
+
+  if (window.innerWidth < 500) {
+    const minPlayableSize = 44;
+    if (size < minPlayableSize) {
+      size = minPlayableSize;
+    }
+  }
+
+  tileSize.value = size;
 }
 
 let observer: ResizeObserver | null = null
@@ -550,6 +559,10 @@ function resolveMove(
 <style scoped>
 .board-container {
   position: relative;
+  overflow: auto !important;
+  max-width: 100%;
+  max-height: 100%;
+  -webkit-overflow-scrolling: touch;
 }
 
 .grid {

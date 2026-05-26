@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, watchEffect} from "vue"
+import {computed, watchEffect, ref, onMounted, onUnmounted} from "vue"
 import type { PieceBlueprint } from "../types"
 import { Player } from "../Player.ts";
 import BlueprintView from "./BlueprintView.vue";
@@ -7,6 +7,24 @@ import { Item } from "../Items.ts";
 import ItemView from "./ItemView.vue";
 import { Admin } from "../AdminPrograms.ts";
 import BlueprintController from "./BlueprintController.vue";
+
+const isMobile = ref(false);
+const updateSize = () => {
+  isMobile.value = window.innerWidth < 500;
+};
+
+onMounted(() => {
+  updateSize();
+  window.addEventListener('resize', updateSize);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateSize);
+});
+
+const currentTileSize = computed(() => {
+  return isMobile.value ? 52 : 76;
+});
 
 const emit = defineEmits<{
   (e: 'buy-blueprint', blueprint: PieceBlueprint): void;
@@ -97,7 +115,7 @@ const type = ((item: Item) => {
         v-for="bp in props.shopBlueprints"
         :key="bp.id"
         :blueprint="bp"
-        :tileSize="76"
+        :tileSize="currentTileSize"
         cssclass="shop"
         :class="'placed-'+bp.isPlaced"
         @select="openShopController"
@@ -113,7 +131,7 @@ const type = ((item: Item) => {
           :item="item"
           :type="type(item)"
           cssclass="shop"
-          :tileSize="76"
+          :tileSize="currentTileSize"
           :canBuy= "canBuyItem(item)"
           :showController="(props.target === item)"
           :canSteal = canSteal
@@ -206,5 +224,22 @@ button:disabled {
 .z-top {
   position: relative;
   z-index: 1000;
+}
+
+@media (max-width: 500px) {
+  .blueprint-row, .item-row {
+    width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+  }
+  .shop-container {
+    height: 85%;
+    bottom: 0.5rem;
+    width: 98%;
+  }
+  .shop-reroll-btn {
+    padding: 0.4em 0.8em;
+    font-size: 0.85rem;
+  }
 }
 </style>

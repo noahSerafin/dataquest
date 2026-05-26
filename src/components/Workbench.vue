@@ -374,4 +374,43 @@
 .btn-cancel-slot:hover {
     background-color: #552222;
 }
+
+@media (max-width: 500px) {
+  .workbench {
+    gap: 0.75rem;
+    padding: 0.5rem;
+  }
+  .slots {
+    gap: 2rem;
+  }
+  .stats-row {
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .stat-control {
+    min-width: 45px;
+    gap: 0.1rem;
+  }
+  .stat-value {
+    font-size: 1.1rem;
+  }
+  .btns {
+    gap: 0.5rem;
+  }
+  .stat-btns {
+    gap: 0.25rem;
+  }
+  .small-btn {
+    padding: 1px 5px;
+    font-size: 0.8rem;
+  }
+  h4 {
+    margin: 0.2rem 0;
+  }
+  .slot {
+    height: 70px;
+    width: 70px;
+  }
+}
 </style>

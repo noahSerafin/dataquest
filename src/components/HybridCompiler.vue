@@ -310,4 +310,29 @@
 .padded{
     padding: 20px;
 }
+
+@media (max-width: 500px) {
+  .hybrid-compiler {
+    gap: 0.75rem;
+    padding: 0.5rem;
+  }
+  .slots {
+    gap: 2rem;
+  }
+  .btns {
+    gap: 1rem;
+  }
+  h4 {
+    margin: 0.2rem 0;
+  }
+  .padded {
+    padding: 5px;
+    font-size: 0.8rem;
+    margin: 0;
+  }
+  .slot {
+    height: 70px;
+    width: 70px;
+  }
+}
 </style>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Piece } from "../Pieces"
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { STATUS_ICONS, STATUS_INFO } from "../statuses";
 import FormattedDescription from "./FormattedDescription.vue";
 
@@ -17,6 +17,15 @@ const props = defineProps<{
 const position = ref({
   x: props.defaultPosition?.x ?? 20,
   y: props.defaultPosition?.y ?? 20
+});
+
+onMounted(() => {
+  if ((position.value.x === 0 && position.value.y === 0) || window.innerWidth < 500) {
+    const width = 240;
+    const height = 300;
+    position.value.x = Math.max(10, (window.innerWidth - width) / 2);
+    position.value.y = Math.max(10, (window.innerHeight - height) / 2);
+  }
 });
 
 let dragging = false
@@ -274,6 +283,8 @@ p{
 }
 .desc{
   border-bottom: none;
+  word-break: break-word;
+  white-space: normal;
 }
 
 .status-row {
@@ -308,11 +319,12 @@ p{
 @media (max-width: 500px) {
   .piece-controller, .inventory-controller{
     position: fixed;
-    top: 85vh;
-    width: fit-content;
+    top: 0;
+    left: 0;
+    width: 240px;
+    max-width: 90vw;
     z-index: 999;
-    padding: 0.5rem;
-    left: 0.5rem;
+    padding: 0.75rem;
     p{
       font-size: 0.7rem;
       margin: 0;

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref, onMounted, onUnmounted } from 'vue';
 import { STATUS_INFO, STATUS_ICONS, STATUS_COLORS } from '../statuses';
 
 const props = withDefaults(
@@ -130,6 +130,29 @@ const chunks = computed(() => {
 
   return result;
 });
+
+const activeTooltipIndex = ref<number | null>(null);
+
+function handleKeywordClick(index: number, event: Event) {
+  event.stopPropagation();
+  if (activeTooltipIndex.value === index) {
+    activeTooltipIndex.value = null;
+  } else {
+    activeTooltipIndex.value = index;
+  }
+}
+
+const handleDocumentClick = () => {
+  activeTooltipIndex.value = null;
+};
+
+onMounted(() => {
+  document.addEventListener('click', handleDocumentClick);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleDocumentClick);
+});
 </script>
 
 <template>
@@ -137,7 +160,11 @@ const chunks = computed(() => {
     <template v-for="(chunk, index) in chunks" :key="index">
       <span v-if="chunk.type === 'text'">{{ chunk.content }}</span>
       <span v-else class="status-wrapper">
-        <span :class="['status-keyword', { 'header-mode': isHeader }]" :style="{ color: chunk.color }">
+        <span 
+          :class="['status-keyword', { 'header-mode': isHeader, 'click-active': activeTooltipIndex === index }]" 
+          :style="{ color: chunk.color }"
+          @click="handleKeywordClick(index, $event)"
+        >
           {{ chunk.content }}
           <span v-if="!isHeader && chunk.icon" class="status-icon-inline">{{ chunk.icon }}</span>
 
@@ -221,7 +248,8 @@ const chunks = computed(() => {
   font-style: normal;
 }
 
-.status-keyword:hover .status-tooltip-distinct {
+.status-keyword:hover .status-tooltip-distinct,
+.status-keyword.click-active .status-tooltip-distinct {
   visibility: visible;
   opacity: 1;
   transform: translateX(-50%) translateY(0);

@@ -1806,11 +1806,19 @@ const debugMode = ref<boolean>(false);
 function toggleDebug() {
   debugMode.value = !debugMode.value;
 }
+
+const isMobileMenuOpen = ref(false);
+
+function confirmForfeit() {
+  if (confirm("Are you sure you want to forfeit this round? You will lose a life!")) {
+    endRound(false);
+  }
+}
 </script>
 
 <template>
   <div class="app-root">
-    <div class="debug-controls">
+    <div class="debug-controls" :class="{ 'mobile-open': isMobileMenuOpen }">
       <button @click="showCollection = !showCollection" class="info-btn">Info</button>
       <button v-if="debugMode === true" class="swap-display" @mousedown="swapDisplay()">
         {{ displayEditor ? "Show Board" : "Show Editor" }}
@@ -1876,13 +1884,16 @@ function toggleDebug() {
       </button>
     </div>
     <div class="top-hud">
+      <button class="mobile-menu-toggle" @click="isMobileMenuOpen = !isMobileMenuOpen">
+        Menu ☰
+      </button>
       <div v-if="gameStarted || debugMode" class="enemy-info">
         <span v-if="currentCompany">
           <div>{{ currentCompany.abbr }}</div>
           <div>{{ currentCompany.unicode ? String.fromCodePoint(parseInt(currentCompany.unicode.replace('U+', ''), 16),
             0xFE0F) : '' }}</div>
         </span>
-        <p class="security"><strong>Security level: </strong>{{ player.difficulty }}<span
+        <p class="security"><strong>Security: </strong>{{ player.difficulty }}<span
             v-if="player.extraDifficulty > 0"> + {{ player.extraDifficulty }}</span></p>
         <p class="infamy"><strong>Infamy: </strong>{{ stake }}</p>
         <span class="enemy-bosses">
@@ -1964,7 +1975,7 @@ function toggleDebug() {
         <button :disabled="hasFinishedTurn" v-if="!displayEditor && roundHasStarted && player.lives > 1"
           class="retry-btn" v-on:click="retryLevel()">Retry</button>
         <button :disabled="hasFinishedTurn" v-if="!displayEditor && roundHasStarted" class="forfeit-btn"
-          v-on:click="endRound(false)">Forfeit</button>
+          v-on:click="confirmForfeit()">Forfeit</button>
       </div>
     </div>
   </div>
@@ -2034,17 +2045,71 @@ function toggleDebug() {
   top: 100%;
 }
 
+.mobile-menu-toggle {
+  display: none;
+}
+
 @media (max-width: 500px) {
+  .mobile-menu-toggle {
+    display: block;
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    z-index: 10001;
+    background: #1e1e1e;
+    color: #e5e7eb;
+    border: 1px solid #444;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    cursor: pointer;
+    pointer-events: auto;
+  }
+
   .enemy-info {
     display: block;
   }
 
   .debug-controls {
+    display: none;
+  }
+
+  .debug-controls.mobile-open {
+    display: flex !important;
+    margin: auto;
+    width: 180px;
+    max-height: 70vh;
+    overflow-y: auto;
+    background: rgba(17, 17, 17, 0.95);
+    border: 2px solid #333;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+    border-radius: 8px;
+    z-index: 10000;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 10px;
     left: unset;
-    right: 2%;
-    font-size: 0.9rem;
-    padding: 0.5rem;
-    border: unset;
+  }
+
+  .debug-controls.mobile-open .phone-hide {
+    display: block !important;
+  }
+
+  .debug-controls.mobile-open button {
+    width: 100%;
+    text-align: left;
+    padding: 8px 12px;
+    background: #222;
+    border: 1px solid #444;
+    color: #fff;
+    border-radius: 6px;
+    font-size: 0.85rem;
+  }
+
+  .debug-controls.mobile-open button:hover {
+    background: #333;
+    border-color: #555;
   }
 
   .top-hud p {

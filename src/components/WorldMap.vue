@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, onMounted } from "vue";
 import MiniMap from "./MiniMap.vue";
 import { Admin } from "../AdminPrograms";
 import { Item, Box, Genie, Gift, Pinata, Pandora, Voucher, Jar, Update2, Update3, Floppy, Life, Cake, Wand, Hourglass, Dupe } from "../Items";
@@ -518,10 +518,65 @@ watch(
         newBoss();
     }
 );
+
+const mapContainer = ref<HTMLDivElement | null>(null);
+let isDraggingMap = false;
+let startXMap = 0;
+let startYMap = 0;
+
+function handleMapMouseDown(e: MouseEvent) {
+  if (e.button !== 0) return;
+  if ((e.target as HTMLElement).closest('.node') || (e.target as HTMLElement).closest('.btns') || (e.target as HTMLElement).closest('button')) {
+    return;
+  }
+  isDraggingMap = true;
+  startXMap = e.pageX + (mapContainer.value?.scrollLeft ?? 0);
+  startYMap = e.pageY + (mapContainer.value?.scrollTop ?? 0);
+}
+
+function handleMapMouseMove(e: MouseEvent) {
+  if (!isDraggingMap || !mapContainer.value) return;
+  e.preventDefault();
+  const x = startXMap - e.pageX;
+  const y = startYMap - e.pageY;
+  mapContainer.value.scrollLeft = x;
+  mapContainer.value.scrollTop = y;
+}
+
+function handleMapMouseUpOrLeave() {
+  isDraggingMap = false;
+}
+
+function scrollToCurrentNode() {
+  if (!mapContainer.value) return;
+  const currentNode = world.value.nodes[currentNodeId.value];
+  if (!currentNode) return;
+  
+  const pos = nodeDisplayPositions.value[currentNode.id];
+  if (!pos) return;
+  
+  const containerWidth = mapContainer.value.clientWidth;
+  const containerHeight = mapContainer.value.clientHeight;
+  
+  mapContainer.value.scrollLeft = pos.x - containerWidth / 2;
+  mapContainer.value.scrollTop = pos.y - containerHeight / 2;
+}
+
+onMounted(() => {
+  setTimeout(scrollToCurrentNode, 100);
+});
+
+watch(currentNodeId, () => {
+  setTimeout(scrollToCurrentNode, 50);
+});
 </script>
 
 <template>
-    <div class="container world-map" :class="props.cssclass">
+    <div class="container world-map" :class="props.cssclass" ref="mapContainer"
+        @mousedown="handleMapMouseDown"
+        @mousemove="handleMapMouseMove"
+        @mouseup="handleMapMouseUpOrLeave"
+        @mouseleave="handleMapMouseUpOrLeave">
         <div class="node-map">
             <!-- Nodes -->
             <div v-for="node in worldNodes" :key="node.id" class="node " :class="{
@@ -923,5 +978,22 @@ h6 {
     background-color: rgba(0, 0, 0, 0.5);
     pointer-events: none;
     z-index: 5;
+}
+
+@media (max-width: 500px) {
+  .world-map {
+    display: block;
+    overflow: auto !important;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+  }
+
+  .node-map {
+    min-width: 300px;
+    left: 0;
+    margin: 0 auto;
+  }
 }
 </style>

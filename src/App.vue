@@ -1888,17 +1888,19 @@ function confirmForfeit() {
         Menu ☰
       </button>
       <div v-if="gameStarted || debugMode" class="enemy-info">
-        <span v-if="currentCompany">
-          <div>{{ currentCompany.abbr }}</div>
-          <div>{{ currentCompany.unicode ? String.fromCodePoint(parseInt(currentCompany.unicode.replace('U+', ''), 16),
+        <div class="enemy-left">
+          <span v-if="currentCompany">
+            <div>{{ currentCompany.abbr }}</div>
+            <div>{{ currentCompany.unicode ? String.fromCodePoint(parseInt(currentCompany.unicode.replace('U+', ''), 16),
             0xFE0F) : '' }}</div>
-        </span>
-        <p class="security"><strong>Security: </strong>{{ player.difficulty }}<span
-            v-if="player.extraDifficulty > 0"> + {{ player.extraDifficulty }}</span></p>
-        <p class="infamy"><strong>Infamy: </strong>{{ stake }}</p>
-        <span class="enemy-bosses">
+          </span>
+          <p class="security"><strong>Security: </strong>{{ player.difficulty }}<span
+          v-if="player.extraDifficulty > 0"> + {{ player.extraDifficulty }}</span></p>
+          <p class="infamy"><strong>Infamy: </strong>{{ stake }}</p>
+        </div>
+        <div class="enemy-bosses">
           <BossView v-if="bossAdmins.length > 0" :admins="bossAdmins" />
-        </span>
+        </div>
       </div>
       <div v-if="!displayEditor && roundHasStarted" class="player-helper">
         <div v-if="roundHasStarted" class="turn-info">{{ (!hasFinishedTurn || isPlacing) ? "Your turn" : "Enemy turn" }}
@@ -2065,10 +2067,6 @@ function confirmForfeit() {
     font-weight: bold;
     cursor: pointer;
     pointer-events: auto;
-  }
-
-  .enemy-info {
-    display: block;
   }
 
   .debug-controls {

@@ -109,8 +109,10 @@ const type = ((item: Item) => {
       Reroll {{ props.rerollCost }}
     </button>
   </div>
-    <div class="blueprint-row">
-      Programs:
+  <div class="blueprint-row">
+      <div class="programs-header">
+        Programs:
+      </div>
       <BlueprintView
         v-for="bp in props.shopBlueprints"
         :key="bp.id"
@@ -123,7 +125,10 @@ const type = ((item: Item) => {
       />
     </div>
     <div class="item-row">
-      Items/Admins:
+      <div class="items-header">
+        <div>Items/</div>
+        <div>Admins:</div>
+      </div>
       <li 
       v-for="item in props.shopItems"
       :class="{ 'z-top': target === item }">
@@ -236,6 +241,9 @@ button:disabled {
     height: 85%;
     bottom: 0.5rem;
     width: 98%;
+  }
+  .item-row{
+    padding-right: 100px;
   }
   .shop-reroll-btn {
     padding: 0.4em 0.8em;

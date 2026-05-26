@@ -170,7 +170,7 @@
                     </li>
                 </ul>
             </div>
-            <button class="inv-btn mt-2 px-2 py-1 bg-blue-500 text-white rounded" @click="$emit('openInventory')">{{showInventory ? 'Hide Inv' : 'Inv' }}<span class="phone-hide">entory</span></button>
+            <button class="inv-btn mt-2 px-2 py-1 bg-blue-500 text-white rounded" @click="$emit('openInventory')">{{showInventory ? 'Hide' : 'Inv' }}<span class="phone-hide">entory</span></button>
         </div>
 
     </div>

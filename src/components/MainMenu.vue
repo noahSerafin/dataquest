@@ -238,12 +238,6 @@
         border-radius: 10px;
         width: 90%;
     }
-    @media only screen and (max-width: 760px) {
-        .oses{
-            left: 0;
-            width: 90%;
-        }
-    }
     .os{
         border: 1px solid white;
         padding: 1rem;
@@ -280,6 +274,10 @@
             h3, p{
                 margin: 0;
             }
+        }
+        .oses{
+            width: 90vw;
+            margin-left: 8vw;
         }
     }
 

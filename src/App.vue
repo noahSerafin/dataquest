@@ -1809,10 +1809,34 @@ function toggleDebug() {
 
 const isMobileMenuOpen = ref(false);
 
-function confirmForfeit() {
-  if (confirm("Are you sure you want to forfeit this round? You will lose a life!")) {
+const showConfirmModal = ref(false);
+const confirmModalAction = ref<"forfeit" | "retry" | null>(null);
+
+function requestForfeit() {
+  confirmModalAction.value = "forfeit";
+  showConfirmModal.value = true;
+}
+
+function requestRetry() {
+  if (player.value.lives <= 1) return;
+  confirmModalAction.value = "retry";
+  showConfirmModal.value = true;
+}
+
+function handleConfirm() {
+  if (confirmModalAction.value === "forfeit") {
     endRound(false);
+  } else if (confirmModalAction.value === "retry") {
+    player.value.lives--;
+    reloadLevel();
   }
+  showConfirmModal.value = false;
+  confirmModalAction.value = null;
+}
+
+function cancelConfirm() {
+  showConfirmModal.value = false;
+  confirmModalAction.value = null;
 }
 </script>
 
@@ -1887,8 +1911,8 @@ function confirmForfeit() {
       <button class="mobile-menu-toggle" @click="isMobileMenuOpen = !isMobileMenuOpen">
         Menu ☰
       </button>
-      <div v-if="gameStarted || debugMode" class="enemy-info">
-        <div class="enemy-left">
+      <div class="enemy-info">
+        <div v-if="gameStarted || debugMode" class="enemy-left">
           <span v-if="currentCompany">
             <div>{{ currentCompany.abbr }}</div>
             <div>{{ currentCompany.unicode ? String.fromCodePoint(parseInt(currentCompany.unicode.replace('U+', ''), 16),
@@ -1975,15 +1999,67 @@ function confirmForfeit() {
         <button>🪦</button>
       </div>-->
         <button :disabled="hasFinishedTurn" v-if="!displayEditor && roundHasStarted && player.lives > 1"
-          class="retry-btn" v-on:click="retryLevel()">Retry</button>
+          class="retry-btn" v-on:click="requestRetry()">Retry</button>
         <button :disabled="hasFinishedTurn" v-if="!displayEditor && roundHasStarted" class="forfeit-btn"
-          v-on:click="confirmForfeit()">Forfeit</button>
+          v-on:click="requestForfeit()">Forfeit</button>
+      </div>
+    </div>
+    
+    <div v-if="showConfirmModal" class="confirm-modal-overlay">
+      <div class="confirm-modal">
+        <h2>{{ confirmModalAction === 'forfeit' ? 'Forfeit Round?' : 'Retry Round?' }}</h2>
+        <p v-if="confirmModalAction === 'forfeit'">Are you sure you want to forfeit this round? You will lose a life!</p>
+        <p v-if="confirmModalAction === 'retry'">Are you sure you want to retry this round? <strong style="color: red;">Warning: This will cost you 1 life.</strong></p>
+        <div class="modal-actions">
+          <button @click="handleConfirm">Yes</button>
+          <button @click="cancelConfirm">Cancel</button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+.confirm-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100000;
+}
+.confirm-modal {
+  background: #222;
+  color: white;
+  padding: 2rem;
+  border: 2px solid #ccc;
+  border-radius: 12px;
+  text-align: center;
+  max-width: 400px;
+}
+.confirm-modal h2 {
+  margin-top: 0;
+}
+.confirm-modal .modal-actions {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 1.5rem;
+}
+.confirm-modal button {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  background: #555;
+  color: white;
+  border: 1px solid #777;
+  border-radius: 6px;
+}
+.confirm-modal button:hover {
+  background: #777;
+}
 .player-helper {
   position: absolute;
   top: 10px;
@@ -1996,6 +2072,7 @@ function confirmForfeit() {
 }
 
 .enemy-info {
+  min-height: 80px;
   display: flex;
   gap: 2rem;
 }

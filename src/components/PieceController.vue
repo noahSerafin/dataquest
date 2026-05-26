@@ -20,7 +20,7 @@ const position = ref({
 });
 
 onMounted(() => {
-  if ((position.value.x === 0 && position.value.y === 0) || window.innerWidth < 500) {
+  if ((position.value.x === 20 && position.value.y === 20) || window.innerWidth < 500) {
     const width = 240;
     const height = 300;
     position.value.x = Math.max(10, (window.innerWidth - width) / 2);

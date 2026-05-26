@@ -28,8 +28,9 @@ Exposed
 Hidden
 
 //IMPROVEMENTS/bugs
-
+Force tutorial
 display infamy on main menu page instead of in debug menu - disable until has won at infamy 0
+
 move inventory up
 
 make hidden hand apply immunities also

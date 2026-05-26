@@ -264,22 +264,6 @@
         justify-content: center;
         margin-bottom: 0.5rem;
     }
-    @media (max-width: 500px) {
-        .mm-heading, .mm-heading2{
-            display: none;
-        }
-        .oses, .os{
-            padding: 0.5rem;
-            gap: 0.5rem;
-            h3, p{
-                margin: 0;
-            }
-        }
-        .oses{
-            width: 90vw;
-            margin-left: 8vw;
-        }
-    }
 
     .os.locked {
         opacity: 0.6;
@@ -344,5 +328,26 @@
         background-color: #333;
         color: #777;
         cursor: not-allowed;
+    }
+
+    @media (max-width: 500px) {
+        .mm-heading, .mm-heading2{
+            font-size: 1rem;
+        }
+        .oses, .os{
+            padding: 0.5rem;
+            gap: 0.5rem;
+            h3, p{
+                margin: 0;
+            }
+        }
+        .oses{
+            width: 90vw;
+            margin-left: 3vw;
+        }
+        .load-section{
+            width: 90vw;
+            display: block;
+        }
     }
 </style>

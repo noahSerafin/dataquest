@@ -1174,6 +1174,22 @@ export const gauntlet = {
       },
       "tiles": [
         {
+          "x": 1,
+          "y": 4
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "245c918f-6b21-4139-a670-4d7a03412b7b",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 1,
+        "y": 4
+      },
+      "tiles": [
+        {
           "x": 2,
           "y": 4
         }

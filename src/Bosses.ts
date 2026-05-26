@@ -1210,3 +1210,6 @@ console.log("Bosses of rarity 6: ", adminLogs.rarity6)
 
 
 //EXPRESSIONLESS FACE, U+1F611 sleepy
+
+//BUTTER, U+1F9C8 moves enemy pieces randomly after damage?
+//landslide U+1F6D8 

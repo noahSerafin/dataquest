@@ -3437,8 +3437,9 @@ class Righty extends Admin {
   }
 }
 
-/*
-class Booty extends Admin {
+/*New Admins:
+
+export class Booty extends Admin {
   static name = "Booty";
   static description = "Earn an extra $7 at the end of a round";
   static unicode = "U+1FA8E";
@@ -3448,17 +3449,25 @@ class Booty extends Admin {
     super(Booty.name, Booty.description, Booty.unicode, Booty.color, 7, Booty.rarity, 'player', 'onRoundEnd')
   }
   async apply({ player }: { player: Player }) {
-    player.bonusReward += 7;
+    player.bonusReward += 7;//add to RoundSummary
   }
 }*/
 
 /*
-//SPLATTER, U+1FADF
-//SPLASHING SWEAT SYMBOL, U+1F4A6
+//PROBING CANE, U+1F9AF //onTurnEnd Trigger traps within 1 range of all your pieces early on the end of your turn.
+
+//Bassline, U+1F4FE //other Your stats cannot go below 1. change addmodifier fnc in pieces
+
+//Silly, U+1F921 //onRoundEnd Makes a copy of items but compressed on the end of a round. Allow compressed on items, but when not admins they effect memory instead of adminslots
+
+//Surfer, U+1F3C4 //onReceiveDamage Your pieces move into a space for free(no moves expended) after taking damage (even defensive)
+
+//Collector, U+1F5BC //other Common(rarity 1) classes no longer appear in the shop (rollRarity) 
+
 export class Splash extends Admin {
   static name = "Splash Damage";
   static description = "Damage dealt by your programs also applies to tiles adjacent to the target";//change to coord adjacency, need coord instead of id
-  static unicode = "U+1FADF";
+  static unicode = "U+1FADF"; //SPLASHING SWEAT SYMBOL, U+1F4A6
   static color = "rgb(31, 5, 125)";
   static rarity = 4;
   constructor() {
@@ -3535,29 +3544,21 @@ console.log("Admins of rarity 4: ", adminLogs.rarity4)
 console.log("Admins of rarity 5: ", adminLogs.rarity5)
 console.log("Admins of rarity 6: ", adminLogs.rarity6)
 
-// CLOWN FACE, U+1F921 Perkeo effect
-// SURFER, U+1F3C4 //move into a free space after taking damage (even defensive)
+//JEANS, U+1F456 all hidden nodes are compilers - cost gets more expensive each time
+// LIPSTICK, U+1F484 retaliations charm enemies - piece.willRetaliate: hedgehog, fencer, puffer. Admins: Blackbelt(willRetaliate) Cactus Pong 
 //RECYCLING SYMBOL, U+2672 selling programs gives 1 of lower rarirty
-//BUTTER, U+1F9C8 moves your pieces randomly after health damage?
-//JEANS, U+1F456 all hidden nodes are compilers
-//U+1F5BC Framed picture - copy items? collectors item mult based on sell value
 
-// LIPSTICK, U+1F484 retaliations charm enemies 
 //SLEUTH OR SPY, U+1F575 
 //TEACUP WITHOUT HANDLE, U+1F375 calm down, removes enraged from enemies
-//basketball and HOOP, U+1F3C0 - range of 3+ gets +3 attack
+//Swish, U+1F3C0 - range of 3+ gets +3 attack
 //SNOWBOARDER, U+1F3C2
-//WOMANS BOOTS, U+1F462 +1 moves +1 max size
+//Boots, U+1F462 +1 moves +1 max size
 
 // challenge nodes?
 //DESERT ISLAND, U+1F3DD
 //DESERT, U+1F3DC
 //DERELICT HOUSE BUILDING, U+1F3DA
 //STADIUM, U+1F3DF colloseum -  1 on 1
-//U+26F0 mountain
-//landslide U+1F6D8 
-
-
 
 
 // ROUNDED SYMBOL FOR CAI, U+1F265 wealth + rand money admin?
@@ -3588,7 +3589,7 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //HEAR-NO-EVIL MONKEY, U+1F649 -1 moves
 //SPEAK-NO-EVIL MONKEY, U+1F64A -1 attack/actions?
 
-//PROBING CANE, U+1F9AF trigger traps early
+
 
 //GOAT, U+1F410 charge line piece, or GOAT admin
 

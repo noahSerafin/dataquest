@@ -1997,7 +1997,6 @@ class Flute extends Piece {//not working
     super(Flute.name, Flute.description, Flute.unicode, 1, 1, 1, 0, 0, Flute.color, headPosition, [headPosition], team, Flute.rarity, removeCallback, id)
     this.specialName = 'Summon'
     this.targetType = 'space'
-    this.canAttack = false;
   }
   async special({ target, activePieces }: { target: Coordinate, activePieces: Piece[] }): Promise<void> {
     const newRat = new Rat(target, this.team, this.removeCallback, crypto.randomUUID());
@@ -2768,7 +2767,6 @@ class Honeypot extends Piece {
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
     super(Honeypot.name, Honeypot.description, Honeypot.unicode, 1, 0, 1, 0, 1, Honeypot.color, headPosition, [headPosition], team, Honeypot.rarity, removeCallback, id)
     this.specialName = 'Summon Bee'
-    this.canAttack = false;
     this.targetType = 'space'
   }
 
@@ -2930,7 +2928,7 @@ class Axe extends Piece {
 
 class Boomerang extends Piece {
   static name = "Boomerang";
-  static description = "A mobile program that can attack a target and reset it's own moves remaining";
+  static description = "A mobile program that can damage a target and reset it's own moves remaining";
   static unicode = "U+1FA83";
   static color = "#ffcf4bff";
   static rarity = 3;

@@ -80,27 +80,27 @@ const controllerTip: TutorialStep = {
 }
 const maxsizeTip: TutorialStep = {
     id: 'stat-maxsize',
-    tooltip: "Max size: Maximum size  a program can reach, essentially it's max HP."
+    tooltip: "<strong>Max size</strong>: Maximum size  a program can reach, essentially it's max HP."
 }
 const movesTip: TutorialStep = {
     id: 'stat-moves',
-    tooltip: "Moves: How many spaces a program can move each turn."
+    tooltip: "<strong>Moves</strong>: How many spaces a program can move each turn."
 }
 const rangeTip: TutorialStep = {
     id: 'stat-range',
-    tooltip: "Range: The orthagonal distance a program can target attacks or it's special move."
+    tooltip: "<strong>Range</strong>: The orthagonal distance a program can target attacks or it's special move."
 }
 const attackTip: TutorialStep = {
     id: 'stat-attack',
-    tooltip: "Attack: How much damage a program will do to another on attacking."
+    tooltip: "<strong>Attack</strong>: How much damage a program will do to another on attacking."
 }
 const defenceTip: TutorialStep = {
     id: 'stat-defence',
-    tooltip: "Defence: How much damage a program can take before losing tiles. Like moves, this resets each turn."
+    tooltip: "<strong>Defence</strong>: How much damage a program can take before losing tiles. Like moves, this resets each turn."
 }
 const actionsTip: TutorialStep = {
     id: 'stat-actions',
-    tooltip: "Actions: How many attacks or special moves this program can do this turn, usually 1 unless boosted."
+    tooltip: "<strong>Actions</strong>: How many attacks or special moves this program can do this turn, usually 1 unless boosted."
 }
 const moveBtnTip: TutorialStep = {
     id: 'mv-btn',

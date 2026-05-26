@@ -11,6 +11,63 @@
     import { playSoundFx, preloadSound } from "../helperFunctions";
     import selectSoundUrl from "../../sfx/select.ogg";
 
+    // Drag state
+    const isDragging = ref(false);
+    const dragState = ref({ x: 0, y: 0, startX: 0, startY: 0 });
+
+    function startDrag(e: MouseEvent | TouchEvent) {
+        const target = e.target as HTMLElement;
+        if (target.tagName.toLowerCase() === 'button') return;
+        
+        e.stopPropagation();
+        
+        isDragging.value = true;
+        
+        let clientX, clientY;
+        if (window.TouchEvent && e instanceof TouchEvent) {
+            clientX = e.touches[0].clientX;
+            clientY = e.touches[0].clientY;
+        } else {
+            clientX = (e as MouseEvent).clientX;
+            clientY = (e as MouseEvent).clientY;
+        }
+        
+        dragState.value.startX = clientX - dragState.value.x;
+        dragState.value.startY = clientY - dragState.value.y;
+
+        window.addEventListener('mousemove', onDrag, { passive: false });
+        window.addEventListener('mouseup', stopDrag);
+        window.addEventListener('touchmove', onDrag, { passive: false });
+        window.addEventListener('touchend', stopDrag);
+    }
+    
+    function onDrag(e: MouseEvent | TouchEvent) {
+        if (!isDragging.value) return;
+        
+        e.preventDefault();
+        e.stopPropagation();
+        
+        let clientX, clientY;
+        if (window.TouchEvent && e instanceof TouchEvent) {
+            clientX = e.touches[0].clientX;
+            clientY = e.touches[0].clientY;
+        } else {
+            clientX = (e as MouseEvent).clientX;
+            clientY = (e as MouseEvent).clientY;
+        }
+        
+        dragState.value.x = clientX - dragState.value.startX;
+        dragState.value.y = clientY - dragState.value.startY;
+    }
+    
+    function stopDrag() {
+        isDragging.value = false;
+        window.removeEventListener('mousemove', onDrag);
+        window.removeEventListener('mouseup', stopDrag);
+        window.removeEventListener('touchmove', onDrag);
+        window.removeEventListener('touchend', stopDrag);
+    }
+
     preloadSound(selectSoundUrl);
 
     const props = defineProps<{
@@ -176,9 +233,9 @@
     </div>
     <!-- Inventory Popup -->
     <Teleport to="#overlay-root">
-    <div v-if="showInventory" class="inventory mt-3 border-t pt-2">
+    <div v-if="showInventory" class="inventory mt-3 border-t pt-2" :style="{ transform: `translate(${dragState.x}px, ${dragState.y}px)` }">
         <!-- Memory -->
-        <div class="inventory-head">
+        <div class="inventory-head" @mousedown="startDrag" @touchstart="startDrag" :style="{ cursor: isDragging ? 'grabbing' : 'grab' }">
             <p><strong>Memory:</strong> {{ memoryUsage }}</p>
             <button class="top-right" @click="$emit('closeInventory')">X</button>
         </div>
@@ -298,7 +355,11 @@
         
     }
     .inventory-head{
-        background-color: transparent;
+        background-color: #4a4a4a;
+        padding: 0.5rem;
+        margin: -1rem -1rem 1rem -1rem;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
         p{
             background-color: transparent;
             margin: 0;
@@ -340,10 +401,11 @@
         }
         .inventory{
             position: fixed;
-            left: 45%;
+            left: 7.5vw;
+            top: 30vh;
             width: 85vw;
-            height: 40%;
-            bottom: 0;
+            height: 40vh;
+            bottom: unset;
         }
     }
 </style>

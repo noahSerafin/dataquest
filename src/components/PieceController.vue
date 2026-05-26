@@ -14,17 +14,33 @@ const props = defineProps<{
   }
 }>()
 
+const STORAGE_KEY = 'pieceControllerPosition';
+
 const position = ref({
   x: props.defaultPosition?.x ?? 20,
   y: props.defaultPosition?.y ?? 20
 });
 
 onMounted(() => {
+  const savedPos = localStorage.getItem(STORAGE_KEY);
+  if (savedPos) {
+    try {
+      const parsed = JSON.parse(savedPos);
+      position.value.x = Math.min(Math.max(10, parsed.x), window.innerWidth - 40);
+      position.value.y = Math.min(Math.max(10, parsed.y), window.innerHeight - 40);
+      return;
+    } catch(e) {}
+  }
+
   if ((position.value.x === 20 && position.value.y === 20) || window.innerWidth < 500) {
     const width = 240;
     const height = 300;
     position.value.x = Math.max(10, (window.innerWidth - width) / 2);
-    position.value.y = Math.max(10, (window.innerHeight - height) / 2);
+    if (window.innerWidth < 500) {
+      position.value.y = Math.max(10, window.innerHeight - height - 20);
+    } else {
+      position.value.y = Math.max(10, (window.innerHeight - height) / 2);
+    }
   }
 });
 
@@ -61,6 +77,8 @@ function stopDrag() {
   window.removeEventListener('mouseup', stopDrag)
   window.removeEventListener('touchmove', onMove)
   window.removeEventListener('touchend', stopDrag)
+
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(position.value));
 }
 
 defineEmits([

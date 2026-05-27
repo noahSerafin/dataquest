@@ -91,12 +91,14 @@ body,
   color: #e5e7eb;
   font-family: system-ui, sans-serif;
 }
-@-moz-document url-prefix() {
-  html,
-  body,
-  #app {
-    transform: translateY(13px);
-  }
+#app::before{
+  content: '';
+  background-color: #000;
+  width: 100vw;
+  z-index: -5;
+  height: 100px;
+  bottom: -100px;
+  position: absolute;
 }
 
 .app-root {

@@ -13,7 +13,7 @@
 
     // Drag state
     const isDragging = ref(false);
-    const dragState = ref({ x: 0, y: 0, startX: 0, startY: 0 });
+    const dragState = ref({ x: 0, y: 0, startX: 0, startY: 0 }); //move left on desktop widths
 
     function startDrag(e: MouseEvent | TouchEvent) {
         const target = e.target as HTMLElement;
@@ -340,6 +340,7 @@
         width: 100%;
         z-index: 99999;
         margin: 0;
+        left: -2%;
         background: rgba(0,0,0,0.85);
         backdrop-filter: blur(4px);
         .top-right{

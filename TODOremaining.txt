@@ -28,9 +28,13 @@ Exposed
 Hidden
 
 //IMPROVEMENTS/bugs
+move inventory left on desktop
+move piececontroller up on desktop
+deadly cocktail should remove itself on round end
+
+check single spawn is always first on premade levels
 Force tutorial
 display infamy on main menu page instead of in debug menu - disable until has won at infamy 0
-move inventory left on desktop
 
 make hidden hand apply immunities also
 statuses not obvious on holographic pieces

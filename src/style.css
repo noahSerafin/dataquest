@@ -197,7 +197,7 @@ body,
   display: flex;
   gap: 12px;
   position: relative;
-  height: 12vh;
+  height: 10vh;
   left: 0.3rem;
   bottom: 0.3rem;
 }
@@ -233,7 +233,7 @@ body,
 .inventory {
   position: absolute;
   bottom: 0;
-  left: 50%;
+  left: -2%;
   transform: translateX(-50%);
   width: min(100%, 720px);
   background: #020617;

@@ -6,6 +6,7 @@ import { allAdmins } from "./AdminPrograms";
 import { allBosses } from "./Bosses";
 import type { WorldMap } from "./worldBuilder";
 import { companies, bossCompany, playerCompany, shopCompany } from "./companies";
+import { StorageManager } from "./StorageManager";
 
 // Create a combined admins array to search when rehydrating bosses & admins
 const allPossibleAdmins = [...allAdmins, ...allBosses];
@@ -21,6 +22,7 @@ export function serializeGameState(
   boardState: any, // null if not in a level, or an object if mid-level
   uiState: any
 ) {
+  StorageManager.setHasPlayedOnce();
   return {
     version: 1,
     seed,

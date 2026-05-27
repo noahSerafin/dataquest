@@ -28,10 +28,7 @@ Exposed
 Hidden
 
 //IMPROVEMENTS/bugs
-Force tutorial with play check
 check single spawn is always first on premade levels
-display infamy on main menu page instead of in debug menu - disable until has won at infamy 0
-
 make hidden hand apply immunities also
 statuses not obvious on holographic pieces
 show if piece can attack in controller icon with tooltip?

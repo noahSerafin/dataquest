@@ -12,6 +12,7 @@ export interface PlayerStats {
     items: Record<string, number>;
     admins: Record<string, number>;
   };
+  hasPlayedOnce?: boolean;
 }
 
 const COLLECTION_KEY = 'dataquest_collection';
@@ -134,6 +135,19 @@ export const StorageManager = {
   hasAnyWin(): boolean {
     const stats = this.getStats();
     return Object.values(stats.osStats).some(os => os.totalWins > 0);
+  },
+
+  getHasPlayedOnce(): boolean {
+    const stats = this.getStats();
+    return !!stats.hasPlayedOnce;
+  },
+
+  setHasPlayedOnce() {
+    const stats = this.getStats();
+    if (!stats.hasPlayedOnce) {
+      stats.hasPlayedOnce = true;
+      this.saveStats(stats);
+    }
   },
 
   getUniqueWinsCount(): number {

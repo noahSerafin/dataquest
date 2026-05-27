@@ -53,6 +53,9 @@
     }
 
     function getUnlockRule(osName: string): string | null {
+        if (osName === 'Steam' || osName === 'Window' || osName === 'Apple') {
+            if (!props.debugMode && !hasPlayedOnce.value) return "Play at least one game to unlock";
+        }
         if (osName === 'Debugger') {
             if (!props.debugMode) return "For debugging";
         }
@@ -91,9 +94,11 @@
     }
 
     const hasSave = ref<boolean>(false);
+    const hasPlayedOnce = ref<boolean>(false);
  
     onMounted(() => {
         hasSave.value = StorageManager.hasSaveGame();
+        hasPlayedOnce.value = StorageManager.getHasPlayedOnce();
         const el = document.querySelector('.oses') as HTMLElement | null;
         if (!el) return;
 
@@ -201,7 +206,7 @@
                 </button>
             </div>
         </div>
-        <div class="flex m-auto">
+        <div class="flex m-auto" v-if="hasPlayedOnce || debugMode">
             <button @mousedown="decreaseStake()">
             -
             </button>

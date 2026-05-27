@@ -277,12 +277,12 @@ function sellItem(itemId: string) {
   player.value.money += Math.round(item.cost / appraisalBonus);
 }
 
-function sellAdmin(itemId: string) {//TODO NEXT
+async function sellAdmin(itemId: string) {//TODO NEXT
   const idx = player.value.admins.findIndex(i => i.id === itemId);
   if (idx === -1) return;
   const admin = player.value.admins[idx];
   if (admin.triggerType === 'other' && admin.targetType === 'player') {
-    admin.remove({ player: player.value });
+    await admin.remove({ player: player.value, increaseDifficulty, decreaseDifficulty });
   }
   player.value.admins.splice(idx, 1);
   const appraisalBonus = player.value.hasAdmin('Appraisal') ? 1 : 2;
@@ -507,7 +507,7 @@ async function buyItem(item: Item) {
     StorageManager.unlockAdmin(item.name);
     StorageManager.recordUsage('admins', item.name);
     if (item.targetType === 'player' && item.triggerType == 'other') {
-      await item.apply({ player: player.value })
+      await item.apply({ player: player.value, increaseDifficulty, decreaseDifficulty })
     }
   } else {
     player.value.items.push(item);
@@ -784,11 +784,7 @@ async function handleReturnToMap() {
   saveGameState();
 }
 
-function retryLevel() {//if !roundhasstarted
-  if (player.value.lives <= 1) return
-  player.value.lives--
-  reloadLevel();
-}
+
 
 //game loop
 const shopDisabled = ref<boolean>(false);

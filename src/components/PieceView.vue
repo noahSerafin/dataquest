@@ -177,7 +177,7 @@ function pieceTipClass(){
         {{ STATUS_ICONS[key] ?? '?' }}
       </span>
     </div>
-    <div v-if="showStats && piece.name !== 'Spawn'" class="piece-stats-left">
+    <div v-if="!piece.redacted && showStats && piece.name !== 'Spawn'" class="piece-stats-left">
       <div class="stat-actions" v-if="piece.actions > 0">
         <span v-for="n in piece.actions" :key="n">👋</span>
       </div>
@@ -190,7 +190,7 @@ function pieceTipClass(){
         <span class="stat-value">{{ piece.movesRemaining }}</span>
       </div>
     </div>
-    <div class="piece-defence">
+    <div v-if="!piece.redacted" class="piece-defence">
       <span class="piece-defence-shield"
         v-for="n in (Math.min(Math.max(0, Math.floor(piece.defenceRemaining || 0)), 2))"
         :key="n"

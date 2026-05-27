@@ -42,7 +42,7 @@ export abstract class Admin<
   async apply(_target: any): Promise<void> {
     //do not destroy the admin
   }
-  remove(_target: any): void {
+  remove(_target: any): void | Promise<void> {
 
   }
   getModifier(): StatModifier {//remove this???
@@ -1886,12 +1886,20 @@ class Punching extends Admin {
   constructor() {
     super(Punching.name, Punching.description, Punching.unicode, Punching.color, 5, Punching.rarity, 'player', 'other')
   }
-  async apply({ player }: { player: Player }) {
-    player.difficulty += 1
+  async apply({ player, increaseDifficulty }: { player: Player, increaseDifficulty?: () => Promise<void> }) {
+    if (increaseDifficulty) {
+      await increaseDifficulty();
+    } else {
+      player.difficulty += 1;
+    }
     player.bonusReward += 5;
   }
-  remove({ player }: { player: Player }) {
-    player.difficulty -= 1
+  async remove({ player, decreaseDifficulty }: { player: Player, decreaseDifficulty?: () => Promise<void> }) {
+    if (decreaseDifficulty) {
+      await decreaseDifficulty();
+    } else {
+      player.difficulty -= 1;
+    }
     player.bonusReward -= 5;
   }
 }
@@ -1905,11 +1913,19 @@ class Teddy extends Admin {//handle in app
   constructor() {
     super(Teddy.name, Teddy.description, Teddy.unicode, Teddy.color, 7, Teddy.rarity, 'player', 'other')
   }
-  async apply({ player }: { player: Player }) {
-    player.difficulty -= 1;
+  async apply({ player, decreaseDifficulty }: { player: Player, decreaseDifficulty?: () => Promise<void> }) {
+    if (decreaseDifficulty) {
+      await decreaseDifficulty();
+    } else {
+      player.difficulty -= 1;
+    }
   }
-  remove({ player }: { player: Player }) {
-    player.difficulty += 1;
+  async remove({ player, increaseDifficulty }: { player: Player, increaseDifficulty?: () => Promise<void> }) {
+    if (increaseDifficulty) {
+      await increaseDifficulty();
+    } else {
+      player.difficulty += 1;
+    }
   }
 }
 

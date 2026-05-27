@@ -193,7 +193,6 @@ defineEmits(["buy", "sell", "highlightPlacements", "close"])
     display: block;
     flex-direction: row;
     width: 66%;
-    padding-right: 2.5rem;
   }
 }
 

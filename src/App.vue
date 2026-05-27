@@ -1731,7 +1731,7 @@ const decreaseDifficulty = () => {
   worldSeed.value--
 }
 const increaseStake = () => {
-  if (stake.value < 6) {
+  if (stake.value < 3) {
     stake.value += 1;
   }
 }
@@ -1888,15 +1888,6 @@ function cancelConfirm() {
       <button class="phone-hide" @mousedown="toggleStats()">
         Live Stats: {{ showStats ? 'ON' : 'OFF' }}
       </button>
-      <div v-if="!gameStarted" class="flex">
-        <button class="phone-hide" @mousedown="decreaseStake()">
-          -
-        </button>
-        <span>Infamy: {{ stake }}</span>
-        <button class="phone-hide" @mousedown="increaseStake()">
-          +
-        </button>
-      </div>
       <button class="phone-hide" @mousedown="toggleDebug()">
         Debug mode
       </button>
@@ -1941,7 +1932,8 @@ function cancelConfirm() {
     <div class="stage">
       <h1 class="yourTurnWarning" v-if="yourTurnWarning">YOUR TURN</h1>
       <MainMenu v-if="showMainMenu && !displayEditor" @createNewPlayer="createNewPlayer" @resumeGame="loadSavedGame"
-        class="stage-panel" :class="{ active: showMainMenu }" :debugMode="debugMode" />
+        class="stage-panel" :class="{ active: showMainMenu }" :debugMode="debugMode" :stake="stake"
+        @increaseStake="increaseStake" @decreaseStake="decreaseStake" />
       <RoundSummary v-if="showSummary" class="stage-panel" :class="{ active: showSummary }" :hasWonRound="hasWonRound"
         :player="player" :bosses="bossAdmins" :roundHasStarted="roundHasStarted" @proceedFromEndOfRound="handleProceed"
         @reloadLevel="reloadLevel" @mainMenu="openMainMenu" @returnToMap="handleReturnToMap" />
@@ -2072,7 +2064,6 @@ function cancelConfirm() {
 }
 
 .enemy-info {
-  min-height: 50px;
   display: flex;
   gap: 2rem;
 }
@@ -2187,6 +2178,9 @@ function cancelConfirm() {
     border-color: #555;
   }
 
+  .top-hud {
+    min-height: 80px;
+  }
   .top-hud p {
     margin: 0;
     min-height: 30px;

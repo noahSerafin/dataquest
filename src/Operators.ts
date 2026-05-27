@@ -448,7 +448,7 @@ const Temple : OS = {
     items: [new Pandora],
     admins: [],
     lives: 3,
-    description: "Overclocked memory and admin slots, low money. Some unique starting programs, and a Pandora's Box."
+    description: "Extra memory and admin slots, low money. Some unique starting programs, and a Pandora's Box."
 }
 
 const Fortran : OS = {

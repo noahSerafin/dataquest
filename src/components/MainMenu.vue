@@ -7,12 +7,23 @@
 
     const props = defineProps<{
         debugMode: boolean;
+        stake: number;
     }>();
 
     const emit = defineEmits<{
         (e: 'createNewPlayer', payload: { os: OS, seed: string, stake?: number }): void;
         (e: 'resumeGame'): void;
+        (e: 'increaseStake'): void;
+        (e: 'decreaseStake'): void;
     }>();
+
+    function decreaseStake() {
+        emit('decreaseStake');
+    }
+
+    function increaseStake() {
+        emit('increaseStake');
+    }
 
     const seedInput = ref<string>('');
 
@@ -190,6 +201,15 @@
                 </button>
             </div>
         </div>
+        <div class="flex m-auto">
+            <button @mousedown="decreaseStake()">
+            -
+            </button>
+            <strong>Infamy: {{ stake }}</strong>
+            <button @mousedown="increaseStake()">
+            +
+            </button>
+        </div>    
         <div class="load-section">
             <div class="seed-section">
                 <label for="seed-input">Seed (optional):</label>
@@ -328,6 +348,12 @@
         background-color: #333;
         color: #777;
         cursor: not-allowed;
+    }
+    .flex{
+        margin: auto;
+        display: flex;
+        justify-content: space-around;
+        width: 60%;
     }
 
     @media (max-width: 500px) {

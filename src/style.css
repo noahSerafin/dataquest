@@ -91,6 +91,13 @@ body,
   color: #e5e7eb;
   font-family: system-ui, sans-serif;
 }
+@-moz-document url-prefix() {
+  html,
+  body,
+  #app {
+    transform: translateY(13px);
+  }
+}
 
 .app-root {
   display: flex;

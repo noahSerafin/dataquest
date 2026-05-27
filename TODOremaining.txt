@@ -28,9 +28,8 @@ Exposed
 Hidden
 
 //IMPROVEMENTS/bugs
-move inventory left on desktop
-move piececontroller up on desktop
 deadly cocktail should remove itself on round end
+add blinding to status aliases
 
 check single spawn is always first on premade levels
 Force tutorial

@@ -175,6 +175,9 @@ const isDisabled = computed(() => {
   width: 100%;
   height: 100%;
   box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .item.is-disabled {
@@ -217,8 +220,11 @@ const isDisabled = computed(() => {
 }
 
 .icon {
-  font-size: 36px;
-  margin-right: 12px;
+  font-size: inherit;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .info {

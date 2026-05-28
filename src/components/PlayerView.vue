@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { computed, ref } from "vue";
+    import { computed, ref, onMounted, onUnmounted } from "vue";
     import type { Player } from "../Player";
     import type { PieceBlueprint } from "../types";
     import { Item } from "../Items";
@@ -153,6 +153,53 @@
 
     const dragIndex = ref<number | null>(null);
 
+    const adminContainerRef = ref<HTMLElement | null>(null);
+    const containerWidth = ref(0);
+    let resizeObserver: ResizeObserver | null = null;
+
+    onMounted(() => {
+        if (adminContainerRef.value) {
+            containerWidth.value = adminContainerRef.value.getBoundingClientRect().width;
+            resizeObserver = new ResizeObserver((entries) => {
+                for (let entry of entries) {
+                    containerWidth.value = entry.contentRect.width;
+                }
+            });
+            resizeObserver.observe(adminContainerRef.value);
+        }
+    });
+
+    onUnmounted(() => {
+        if (resizeObserver) {
+            resizeObserver.disconnect();
+        }
+    });
+
+    const adminLayout = computed(() => {
+        const count = props.player.admins.length;
+        if (count === 0) {
+            return { size: 70, overlap: 0 };
+        }
+        
+        const available = containerWidth.value > 0 ? Math.max(0, containerWidth.value - 16) : 9999;
+        const idealS = (available - 5 * (count - 1)) / count;
+        const size = Math.max(30, Math.min(70, Math.floor(idealS)));
+        
+        let overlap = 0;
+        if (size === 30 && count > 1) {
+            const minRequired = count * 30 + 5 * (count - 1);
+            if (minRequired > available) {
+                const excess = minRequired - available;
+                overlap = excess / (count - 1);
+            }
+        }
+        
+        return {
+            size,
+            overlap
+        };
+    });
+
     function onDragStart(index: number) {
         console.log('dragging');
     dragIndex.value = index;
@@ -200,7 +247,7 @@
                     </span>
                 </p>
             </div>
-            <div class="admin-middle-container">
+            <div class="admin-middle-container" ref="adminContainerRef">
                 <div class="admin-header flex">
                     <span class=""><strong>Admins:</strong> {{ props.player.usedAdminSlots }}/{{ props.player.adminSlots }}</span>
                 </div>
@@ -212,12 +259,13 @@
                         @dragstart="onDragStart(index)"
                         @dragover.prevent
                         @drop="onDrop(index)"
+                        :style="index > 0 && adminLayout.overlap > 0 ? { marginLeft: `-${adminLayout.overlap}px` } : {}"
                         class="p-1 border rounded mb-1 flex items-center">
                         <ItemView
                             :item="item"
                             type="admin"
                             cssclass="inventory"
-                            :tileSize="70"
+                            :tileSize="adminLayout.size"
                             :canBuy="false"
                             :showController="(selectedAdmin === item)"
                             @sell="$emit('sellAdmin', item.id)"
@@ -396,6 +444,13 @@
     .admin-middle-container{
         width: 80%;
     }
+    .admins li {
+        transition: transform 0.2s ease, margin 0.2s ease, z-index 0.2s ease;
+        position: relative;
+    }
+    .admins li:hover {
+        z-index: 100 !important;
+    }
     @media (max-width: 500px) {
         .phone-hide{
             display: none;
@@ -407,6 +462,10 @@
             width: 85vw;
             height: 40vh;
             bottom: unset;
+        }
+        .inv-btn{
+            padding: 1px;
+            font-size: 10px;
         }
     }
 </style>

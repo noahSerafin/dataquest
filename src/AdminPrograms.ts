@@ -1534,7 +1534,7 @@ class Umbrella extends Admin {
   static description = "Disables boss admin effects";
   static unicode = "U+2614";
   static color = "#0e107eff";
-  static rarity = 5;
+  static rarity = 6;
   constructor() {
     super(Umbrella.name, Umbrella.description, Umbrella.unicode, Umbrella.color, 10, Umbrella.rarity, 'gameState', 'other')
   }
@@ -2399,10 +2399,10 @@ class Stiletto extends Admin {
 
 class Disco extends Admin {
   static name = "Disco Ball";
-  static description = "Damage received from enemies also applies to enemies adjacent to the attacker's head";
+  static description = "Damage received from enemies also applies to enemies adjacent to the attacker";
   static unicode = "U+1FAA9";
   static color = "rgb(59, 8, 92)";
-  static rarity = 6;
+  static rarity = 5;
   constructor() {
     super(Disco.name, Disco.description, Disco.unicode, Disco.color, 7, Disco.rarity, 'gameState', 'onReceiveDamage')//pieces?
   }
@@ -2410,17 +2410,11 @@ class Disco extends Admin {
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
     //activePieces[idx].takeDamage(activePieces[idx].getStat('attack'));
-    const targetTile = activePieces[idx].headPosition
-    const adjacent: Coordinate[] = [
-      { x: targetTile.x + 1, y: targetTile.y },
-      { x: targetTile.x - 1, y: targetTile.y },
-      { x: targetTile.x, y: targetTile.y + 1 },
-      { x: targetTile.x, y: targetTile.y - 1 }
-    ];
     for (const piece of activePieces) {
       if (piece.id === id || piece.team === 'player') return;//skip the attacker?, and only reflect damage to enemies
-      const isAdjacent = piece.tiles.some(t =>
-        adjacent.some(c => c.x === t.x && c.y === t.y)
+      const isAdjacent = piece.tiles.some(st =>
+        activePieces[idx].tiles.some(tt =>
+        Math.abs(st.x - tt.x) + Math.abs(st.y - tt.y) === 1)
       );
       if (isAdjacent) {
         this.isTriggering = true;
@@ -3525,7 +3519,7 @@ export class Clippy extends Admin {
   //handle in player
 }
 
-export const allAdmins = [Bank, Bucket, Candle, Cheese, Clippy, Smoker, Compass, CreditCard, Crystal, Glasses, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Schoolbag, Seed, Slots, Sprinkler, Tempura, Sneakers, Chime, Abacus, Aesculapius, Appraisal, Balloon, Briefcase, Bubble, Cactus, Coin, Purse, Convenience, FireEngine, Heart, Joker, Clover, Microscope, Newspaper, Nose, Pickup, Putter, Relay, Rune, Scarf, Stiletto, Mail, Bowling, Bipolar, Violin, Vitamins, Wings, AdminMap, Barber, Ace, AirSupport, Bone, Bouquet, Camp, Huzzah, Luggage, Chain, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Dice, Jammer, Roger, Juggler, Ladder, Loot, Drunk, Puzzle, Razor, Sled, Shades, StoneAge, Stonks, Christmas, Telescope, Toolbox, Tracker, Ambulance, Backdoor, BionicArm, BionicLeg, Crash, Blood, Broom, DartBoard, Butler, Dove, Evergreen, Eye, Discount, Fountain, Feather, Fuel, Spoon, Liberty, Lightbulb, Ollie, Palette, Pazzaz, PetriDish, Prayer, Wheel, Salt, Selfie, Pants, Variety, Volatile, Artic, BlackBelt, Lungs, Chemistry, Chivalry, Toilet, Copier, Daisy, Diamond, Hamsa, Skyscraper, Hermes, Howzat, Inheritance, Cherries, Lotus, Brain, Meditation, Meteor, Monarch, Onion, PeaPod, Teddy, Pong, RollerBlades, Bell, Baseball, Taoism, Ice, Crown, Ballet, Umbrella, Bath, Cards, Disco, Lefty, Minerva, Needle, Pi, Osiris, Righty, Ring, School, Dharma ];
+export const allAdmins = [Bank, Bucket, Candle, Cheese, Clippy, Smoker, Compass, CreditCard, Crystal, Glasses, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Schoolbag, Seed, Slots, Sprinkler, Tempura, Sneakers, Chime, Abacus, Aesculapius, Appraisal, Balloon, Briefcase, Bubble, Cactus, Coin, Purse, Convenience, FireEngine, Heart, Joker, Clover, Microscope, Newspaper, Nose, Pickup, Putter, Relay, Rune, Scarf, Stiletto, Mail, Bowling, Bipolar, Violin, Vitamins, Wings, AdminMap, Barber, Ace, AirSupport, Bone, Bouquet, Camp, Huzzah, Luggage, Chain, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Dice, Jammer, Roger, Juggler, Ladder, Loot, Drunk, Puzzle, Razor, Sled, Shades, StoneAge, Stonks, Christmas, Telescope, Toolbox, Tracker, Ambulance, Backdoor, BionicArm, BionicLeg, Crash, Blood, Broom, DartBoard, Butler, Dove, Evergreen, Eye, Discount, Fountain, Feather, Fuel, Spoon, Liberty, Lightbulb, Ollie, Palette, Pazzaz, PetriDish, Prayer, Wheel, Salt, Selfie, Pants, Variety, Volatile, Artic, BlackBelt, Lungs, Chemistry, Chivalry, Toilet, Copier, Daisy, Diamond, Disco, Hamsa, Skyscraper, Hermes, Howzat, Inheritance, Cherries, Lotus, Brain, Meditation, Meteor, Monarch, Onion, PeaPod, Teddy, Pong, RollerBlades, Bell, Baseball, Taoism, Ice, Crown, Ballet, Bath, Cards, Lefty, Minerva, Needle, Pi, Osiris, Righty, Ring, School, Umbrella, Dharma ];
 console.log('admins length: ', allAdmins.length)
 let adminLogs = {
   rarity1: 0,

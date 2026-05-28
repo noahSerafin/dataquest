@@ -1,14 +1,15 @@
 //SOUND FX
+roundWon - x1
+cashOut - x1
 ready attack x1 - use a different one
 ready special x1 - make shorter
-adminTrigger - x1
+adminTrigger - x1 / bossTrigger - x1
 attack mult increase - pitch up with each admin
 blockDamage x3
 takeHealthDamage x1 
 useSpecial - x2? -leave
-cashOut - x1
-roundWon - x1
 loading Level- x1
+3 more music tracks
 
 negativeStatusApplied
 Freeze
@@ -22,7 +23,6 @@ Exposed
 Hidden
 
 //IMPROVEMENTS/bugs
-admins too wide on phone
 skipreward controller
 close controller on placement
 start inventory closed

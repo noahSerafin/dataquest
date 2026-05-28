@@ -1,20 +1,14 @@
 //SOUND FX
-selectPiece  - x1
-move - x4
-ready attack x1
-ready special x1
-attack mult increase
+ready attack x1 - use a different one
+ready special x1 - make shorter
+adminTrigger - x1
+attack mult increase - pitch up with each admin
 blockDamage x3
 takeHealthDamage x1 
-useSpecial - x2?
-triggerTrap x1?
-pieceDestroyed x 2
-roundLoss/lifeLoss x1
-cashOut
-
-adminTrigger
-roundWon
-loading Level
+useSpecial - x2? -leave
+cashOut - x1
+roundWon - x1
+loading Level- x1
 
 negativeStatusApplied
 Freeze
@@ -28,39 +22,34 @@ Exposed
 Hidden
 
 //IMPROVEMENTS/bugs
+admins too wide on phone
+skipreward controller
+close controller on placement
+start inventory closed
+enemy pathing long distance, they might be choosing the target first and then not pathing to them
+show if piece can attack in controller icon with tooltip?
 check single spawn is always first on premade levels
 make hidden hand apply immunities also
 statuses not obvious on holographic pieces
-show if piece can attack in controller icon with tooltip?
 make hrybid/duplicator/workbench cost money to use?
 nerf sponge: 1 of every stat at a time
-variants formats showing outside header
-defence showing on redacted pieces
 compressed pieces
-deselect from inventory on placement
 canplace tickbox in inventory
 Make a reason to use golden ticket, on bosses? allow it to be used in a node? Allow 1 free custom node starting each round?/instead of shop???
 let worldMap admin see full board now that pieces are fixed?
 Onion Icon for life with Onion admin
-level 1 always start the player inside the arena node???
 track this run stats in player?
 change appraisal, let it stack?
 ADMINS - animate admins counts too?
--
 PIECES - keep track of upgrades and display on piece 7 (1.1, 1.2 etc.) 
 difficulty - add +1, +2 programs for variety, or make variants +- security level 9
-more + - trade off admins
-make some variants immunities?
 non stacking bosses should cycle through (mirror becomes too predicatable)//always remove mirror after and replace with another random boss
 nerf rosebud - pieces can't stay exposed after a special?
-variant should overide base piece color, (and tile colour???)
--
 TUTORIAL - make more handholdy?
 -
 // BUGS
 cannon and laser can shoot themselves
 pieces with pounce attacking themselves
-enemy pathing long distance
 -
 MAP/WORLD BUILDER
 Gladiator nodes - +1 or 2 security, place only once in arena node for reward - skippable STADIUM, U+1F3DF

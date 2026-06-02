@@ -559,7 +559,6 @@ function resolveMove(
 <style scoped>
 .board-container {
   position: relative;
-  overflow: auto !important;
   max-width: 100%;
   max-height: 100%;
   -webkit-overflow-scrolling: touch;

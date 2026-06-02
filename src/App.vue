@@ -20,6 +20,7 @@ import dieSoundUrl from '../sfx/die.ogg';
 import dieAltSoundUrl from '../sfx/dieAlt.ogg';
 import selectSoundUrl from '../sfx/select.ogg';
 import musicUrl from '../sfx/dataDriven_wip.mp3';
+//import musicUrl2 from 'dataDriveS4_wip.mp3';
 
 preloadSound(dieSoundUrl);
 preloadSound(dieAltSoundUrl);
@@ -1900,10 +1901,9 @@ function cancelConfirm() {
       </button>
       <div class="enemy-info">
         <div v-if="gameStarted || debugMode" class="enemy-left">
-          <span v-if="currentCompany">
+          <span v-if="currentCompany" class="flex">
             <div>{{ currentCompany.abbr }}</div>
-            <div>{{ currentCompany.unicode ? String.fromCodePoint(parseInt(currentCompany.unicode.replace('U+', ''), 16),
-            0xFE0F) : '' }}</div>
+            <div>{{ currentCompany.unicode ? String.fromCodePoint(parseInt(currentCompany.unicode.replace('U+', ''), 16), 0xFE0F) : '' }}</div>
           </span>
           <p class="security"><strong>Security: </strong>{{ player.difficulty }}<span
           v-if="player.extraDifficulty > 0"> + {{ player.extraDifficulty }}</span></p>
@@ -2226,4 +2226,12 @@ function cancelConfirm() {
   z-index: 9999 !important;
   animation: popout 0.5s ease-in-out;
 }
+
+.flex{
+  display: flex;
+}
+.security, .infamy{
+  margin: 0;
+}
+
 </style>

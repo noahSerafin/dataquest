@@ -23,11 +23,11 @@ Exposed
 Hidden
 
 //IMPROVEMENTS/bugs
-skipreward controller
-close controller on placement
-start inventory closed
+skipreward controller on mobile
+close controller on placement /m
+start inventory closed on mobile
 enemy pathing long distance, they might be choosing the target first and then not pathing to them
-show if piece can attack in controller icon with tooltip?
+show if piece can attack in controller icon with tooltip
 check single spawn is always first on premade levels
 make hidden hand apply immunities also
 statuses not obvious on holographic pieces

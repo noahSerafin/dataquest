@@ -1758,6 +1758,38 @@ const seige: Level = {
       "rarity": 1
     },
     {
+      "id": "99871e41-9d3d-4981-b591-208a58e690da",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 0,
+        "y": 8
+      },
+      "tiles": [
+        {
+          "x": 0,
+          "y": 8
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "99871e41-9d3d-4981-b591-208a58e690db",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 8,
+        "y": 8
+      },
+      "tiles": [
+        {
+          "x": 8,
+          "y": 8
+        }
+      ],
+      "rarity": 1
+    },
+    {
       "id": "ec250f9e-8b7a-4463-b5cb-e11a83d3a98e",
       "name": "Gate",
       "team": "enemy",

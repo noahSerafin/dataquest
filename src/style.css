@@ -373,6 +373,10 @@ body,
   right: 0;
 }
 
+.enemy-bosses .tutorial-help-btn{
+  top: 50%;
+}
+
 .tutorial-help-btn:hover {
   background: #2563eb;
 }

@@ -20,15 +20,26 @@ import dieSoundUrl from '../sfx/die.ogg';
 import dieAltSoundUrl from '../sfx/dieAlt.ogg';
 import selectSoundUrl from '../sfx/select.ogg';
 import musicUrl from '../sfx/dataDriven_wip.mp3';
-//import musicUrl2 from 'dataDriveS4_wip.mp3';
+import musicUrl2 from '../sfx/dataDriveS4_wip.mp3';
 
 preloadSound(dieSoundUrl);
 preloadSound(dieAltSoundUrl);
 preloadSound(selectSoundUrl);
 
-const backgroundAudio = new Audio(musicUrl);
-backgroundAudio.loop = true;
+const playlist = [musicUrl, musicUrl2];
+let currentTrackIndex = 0;
+
+const backgroundAudio = new Audio(playlist[currentTrackIndex]);
+backgroundAudio.loop = false;
 const isMusicEnabled = ref(false);
+
+backgroundAudio.addEventListener('ended', () => {
+  currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+  backgroundAudio.src = playlist[currentTrackIndex];
+  if (isMusicEnabled.value) {
+    backgroundAudio.play().catch(e => console.warn("Playlist playback failed:", e));
+  }
+});
 
 onMounted(() => {
   if (isMusicEnabled.value) {
@@ -491,6 +502,9 @@ function buyBlueprint(bp: PieceBlueprint) {
   player.value.addProgram(bp);
   StorageManager.recordUsage('programs', bp.name);
   shopTarget.value = null;
+  if (player.value.hasAdmin('Clippy')) {
+    reapplyTutorialTooltips(200);
+  }
 }
 async function buyItem(item: Item) {
   shopItems.value = shopItems.value.filter(i => i.id !== item.id);
@@ -516,6 +530,9 @@ async function buyItem(item: Item) {
     StorageManager.recordUsage('items', item.name);
   }
   shopTarget.value = null;
+  if (player.value.hasAdmin('Clippy')) {
+    reapplyTutorialTooltips(200);
+  }
 }
 const showShop = ref(false)
 const showCompiler = ref(false)

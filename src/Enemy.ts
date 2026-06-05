@@ -162,13 +162,16 @@ function decideEnemyIntent(
   }
 
   //otherwise we look for another target
-  let nearest = (enemy.specialName && !enemy.hasFriendlySpecial && enemy.targetType !== 'trapPiece') ? findNearestPieceCoordinate(enemy, playerPieces) : findNearestAttackableCoordinate(enemy, playerPieces);
+  let nearestCoords = (enemy.specialName && !enemy.hasFriendlySpecial && enemy.targetType !== 'trapPiece') ? findAllPieceCoordinatesSorted(enemy, playerPieces) : findAllAttackableCoordinatesSorted(enemy, playerPieces);
+  let nearest = nearestCoords.length > 0 ? nearestCoords[0] : null;
 
-  if ((!target || enemy.targetType === 'trapPiece') && nearest && enemy.movesRemaining > 0 && !enemy.statuses.frozen) {
-    const path = findShortestPath(enemy, enemy.headPosition, nearest, tileSet, activePieces, enemy.targetType === 'trapPiece');
-    if (path && path.length > 1) {
-      console.log('found a path to the player')
-      return { type: 'move', path: path };//move toward a target
+  if ((!target || enemy.targetType === 'trapPiece') && nearestCoords.length > 0 && enemy.movesRemaining > 0 && !enemy.statuses.frozen) {
+    for (const coord of nearestCoords) {
+      const path = findShortestPath(enemy, enemy.headPosition, coord, tileSet, activePieces, enemy.targetType === 'trapPiece');
+      if (path && path.length > 1) {
+        console.log('found a path to the player')
+        return { type: 'move', path: path };//move toward a target
+      }
     }
   }
 
@@ -445,52 +448,44 @@ async function attackPiece(attacker: Piece, defender: Piece) {
   }
 }
 
-function findNearestAttackableCoordinate(
+function findAllAttackableCoordinatesSorted(
   enemy: Piece,
   playerPieces: Piece[]
-): Coordinate | null {
+): Coordinate[] {
   // Filter out pieces that the enemy can't damage
   const attackable = playerPieces.filter(p => !p.statuses.hidden);//&& enemy.attack > p.defence 
-  if (attackable.length === 0) return null;
+  if (attackable.length === 0) return [];
 
-  let minDist = Infinity;
-  let nearestCoord: Coordinate | null = null;
+  const allCoords: {coord: Coordinate, dist: number}[] = [];
 
   for (const player of attackable) {
     for (const tile of player.tiles) {
       const dist = Math.abs(enemy.headPosition.x - tile.x)
                  + Math.abs(enemy.headPosition.y - tile.y);
-      if (dist < minDist) {
-        minDist = dist;
-        nearestCoord = tile;
-      }
+      allCoords.push({coord: tile, dist: dist});
     }
   }
 
-  return nearestCoord;
+  return allCoords.sort((a, b) => a.dist - b.dist).map(c => c.coord);
 }
 
-function findNearestPieceCoordinate(//player/ enemy
+function findAllPieceCoordinatesSorted(//player/ enemy
   enemy: Piece,
   otherPieces: Piece[]
-): Coordinate | null {
+): Coordinate[] {
 
-  let minDist = Infinity;
-  let nearestCoord: Coordinate | null = null;
+  const allCoords: {coord: Coordinate, dist: number}[] = [];
 
   for (const player of otherPieces) {
     for (const tile of player.tiles) {
       if(player.statuses.hidden) continue;
       const dist = Math.abs(enemy.headPosition.x - tile.x)
       + Math.abs(enemy.headPosition.y - tile.y);
-      if (dist < minDist) {
-        minDist = dist;
-        nearestCoord = tile;
-      }
+      allCoords.push({coord: tile, dist: dist});
     }
   }
 
-  return nearestCoord;
+  return allCoords.sort((a, b) => a.dist - b.dist).map(c => c.coord);
 }
 
 // Check if a player piece is in range

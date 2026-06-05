@@ -21,13 +21,14 @@ import dieAltSoundUrl from '../sfx/dieAlt.ogg';
 import selectSoundUrl from '../sfx/select.ogg';
 import musicUrl from '../sfx/dataDriven_wip.mp3';
 import musicUrl2 from '../sfx/dataDriveS4_wip.mp3';
+import musicUrl3 from '../sfx/dataDrivenSparkle.mp3';
 
 preloadSound(dieSoundUrl);
 preloadSound(dieAltSoundUrl);
 preloadSound(selectSoundUrl);
 
-const playlist = [musicUrl, musicUrl2];
-let currentTrackIndex = 1;
+const playlist = [musicUrl, musicUrl2, musicUrl3];
+let currentTrackIndex = 2;
 
 const backgroundAudio = new Audio(playlist[currentTrackIndex]);
 backgroundAudio.loop = false;
@@ -1866,11 +1867,11 @@ function cancelConfirm() {
       </button>
       <button v-if="player.hasAdmin('Convenience Store') || debugMode === true" class="shop-toggle"
         @mousedown="toggleShop()">
-        Toggle Shop
+        Toggle Shop 🛒
       </button>
       <button v-if="player.hasAdmin('Gene Splicing') || debugMode === true" class="compiler-toggle"
         @mousedown="toggleCompiler()">
-        Toggle Compiler
+        Toggle Compiler 🧬
       </button>
       <button v-if="debugMode === true" class="altar-toggle" @mousedown="toggleAltar()">
         Toggle Altar

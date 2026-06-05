@@ -236,5 +236,9 @@ const chargeTip: TutorialStep = {
     id: 'chargeTip',
     tooltip: "Be careful with your positioning against programs that can charge, cannon or laser. They may be able to damage twice if you are in a straight line in their range."
 }
+const hiddenTip: TutorialStep = {
+    id: 'chargeTip',
+    tooltip: "Attacking with a hidden program will reveal it."
+}
 
-export const proTips: TutorialStep[] = [proTipSuggestion, defenderTip, specialTip, damageMultTip, adminOrderTip, lineSpecialsTipTip, hotkeysTip, statusesTip, slowedTip, hiddenNodesTip, chargeTip];
+export const proTips: TutorialStep[] = [proTipSuggestion, defenderTip, specialTip, damageMultTip, adminOrderTip, lineSpecialsTipTip, hotkeysTip, statusesTip, slowedTip, hiddenNodesTip, chargeTip, hiddenTip];

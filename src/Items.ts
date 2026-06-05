@@ -150,7 +150,7 @@ export class Blueberry extends Item<PieceBlueprint> {
 
 class Melon extends Item<PieceBlueprint> {
     static name = "Melon";
-    static description = "+2 max size tot a held program";
+    static description = "+2 max size to a held program";
     static unicode = "U+1F349";
     static color = "rgb(17, 110, 71)";
     static rarity = 3;

@@ -2926,7 +2926,7 @@ class Bell extends Admin {//test
     if (!dealer || dealer.statuses.frozen || dealer.immunities.frozen) return;
     // Only filter if we actually need to check the win/trigger condition
     const playerPieces = activePieces.filter(p => p.team === 'player');
-    if (playerPieces.length === 1) {
+    if (playerPieces.length === 1 && dealer.team !== 'player') {
       this.isTriggering = true;
       setTimeout(() => this.isTriggering = false, 500);
       dealer.statuses.frozen = true;
@@ -3315,10 +3315,10 @@ class Daisy extends Admin {// test
         enemy.tiles.some(tt =>
         Math.abs(st.x - tt.x) + Math.abs(st.y - tt.y) === 1)
       );
-      if (!isAdjacent) continue;
+      if (!isAdjacent || enemy.id === piece.id) continue;
       enemy.takeDamage(dealer.getStat('attack'));
       this.isTriggering = true;
-      setTimeout(() => this.isTriggering = false, 250);
+      setTimeout(() => this.isTriggering = false, 250); 
     }
   }
 }

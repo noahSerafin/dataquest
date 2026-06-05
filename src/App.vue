@@ -28,7 +28,7 @@ preloadSound(dieAltSoundUrl);
 preloadSound(selectSoundUrl);
 
 const playlist = [musicUrl, musicUrl2, musicUrl3];
-let currentTrackIndex = 2;
+let currentTrackIndex = 1;
 
 const backgroundAudio = new Audio(playlist[currentTrackIndex]);
 backgroundAudio.loop = false;

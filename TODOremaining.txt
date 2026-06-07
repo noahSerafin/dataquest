@@ -24,6 +24,7 @@ Hidden
 
 //IMPROVEMENTS/bugs
 allow end turn on no lives
+fix immunity items applying to duped programs
 nerf archer to adjacent enemies only
 toggle shop button outside menu on mobile (use emoji)
 add Moddifier (and statuses) cap min at 0, modifiers after this should add from 0

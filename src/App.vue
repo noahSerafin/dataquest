@@ -22,6 +22,7 @@ import selectSoundUrl from '../sfx/select.ogg';
 import musicUrl from '../sfx/dataDriven_wip.mp3';
 import musicUrl2 from '../sfx/dataDriveS4_wip.mp3';
 import musicUrl3 from '../sfx/dataDrivenSparkle.mp3';
+import ambienceUrl from '../sfx/ambience.mp3';
 
 preloadSound(dieSoundUrl);
 preloadSound(dieAltSoundUrl);
@@ -32,6 +33,12 @@ let currentTrackIndex = 1;
 
 const backgroundAudio = new Audio(playlist[currentTrackIndex]);
 backgroundAudio.loop = false;
+backgroundAudio.volume = 0;
+
+const ambientAudio = new Audio(ambienceUrl);
+ambientAudio.loop = true;
+ambientAudio.volume = 0;
+
 const isMusicEnabled = ref(false);
 
 backgroundAudio.addEventListener('ended', () => {
@@ -42,12 +49,73 @@ backgroundAudio.addEventListener('ended', () => {
   }
 });
 
+const activeFades = new Map<HTMLAudioElement, number>();
+
+function fadeAudio(audio: HTMLAudioElement, targetVolume: number, duration: number = 1000) {
+  const name = audio === ambientAudio ? "ambientAudio" : "backgroundAudio";
+  console.log(`[AudioFade] fadeAudio called for ${name} from ${audio.volume} to ${targetVolume}`);
+  if (activeFades.has(audio)) {
+    cancelAnimationFrame(activeFades.get(audio)!);
+    activeFades.delete(audio);
+  }
+
+  const startVolume = audio.volume;
+  const volumeDiff = targetVolume - startVolume;
+  if (Math.abs(volumeDiff) < 0.01) {
+    audio.volume = targetVolume;
+    console.log(`[AudioFade] ${name} already at/near target. Direct set to ${targetVolume}`);
+    if (targetVolume === 0) {
+      audio.pause();
+    } else if (isMusicEnabled.value && audio.paused) {
+      audio.play().catch(e => console.warn(`${name} playback failed:`, e));
+    }
+    return;
+  }
+
+  if (targetVolume > 0 && isMusicEnabled.value && audio.paused) {
+    audio.play().catch(e => console.warn(`${name} playback failed:`, e));
+  }
+
+  const startTime = performance.now();
+
+  function tick(now: number) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    
+    const nextVolume = startVolume + volumeDiff * progress;
+    audio.volume = Math.max(0, Math.min(1, nextVolume));
+
+    if (progress < 1) {
+      const id = requestAnimationFrame(tick);
+      activeFades.set(audio, id);
+    } else {
+      activeFades.delete(audio);
+      console.log(`[AudioFade] ${name} fade complete. Final volume: ${audio.volume}`);
+      if (targetVolume === 0) {
+        audio.pause();
+      }
+    }
+  }
+
+  const id = requestAnimationFrame(tick);
+  activeFades.set(audio, id);
+}
+
 onMounted(() => {
   if (isMusicEnabled.value) {
-    backgroundAudio.play().catch(err => {
+    const playBoth = () => {
+      if (backgroundAudio.volume > 0) backgroundAudio.play().catch(e => console.warn("Playlist playback failed:", e));
+      if (ambientAudio.volume > 0) ambientAudio.play().catch(e => console.warn("Ambient playback failed:", e));
+    };
+    backgroundAudio.play().then(() => {
+      if (ambientAudio.volume > 0) ambientAudio.play().catch(e => console.warn("Ambient playback failed:", e));
+      if (backgroundAudio.volume === 0) backgroundAudio.pause();
+    }).catch(err => {
       console.log("Autoplay prevented. Waiting for interaction...");
       const onInteract = () => {
-        if (isMusicEnabled.value) backgroundAudio.play().catch(e => console.warn("Music playback failed:", e));
+        if (isMusicEnabled.value) {
+          playBoth();
+        }
         document.removeEventListener('click', onInteract);
       };
       document.addEventListener('click', onInteract);
@@ -59,9 +127,15 @@ onMounted(() => {
 function toggleMusic() {
   isMusicEnabled.value = !isMusicEnabled.value;
   if (isMusicEnabled.value) {
-    backgroundAudio.play().catch(e => console.warn("Music playback failed:", e));
+    if (backgroundAudio.volume > 0) {
+      backgroundAudio.play().catch(e => console.warn("Playlist playback failed:", e));
+    }
+    if (ambientAudio.volume > 0) {
+      ambientAudio.play().catch(e => console.warn("Ambient playback failed:", e));
+    }
   } else {
     backgroundAudio.pause();
+    ambientAudio.pause();
   }
 }
 
@@ -542,6 +616,17 @@ const showDuplicator = ref(false)
 const showWorkbench = ref(false)
 const showMap = ref(false)
 const showBoard = ref(false)
+
+watch(showBoard, (isOpen) => {
+  console.log(`[AudioFade] showBoard watcher triggered! isOpen = ${isOpen}`);
+  if (isOpen) {
+    fadeAudio(ambientAudio, 0);
+    fadeAudio(backgroundAudio, 1);
+  } else {
+    fadeAudio(ambientAudio, 1);
+    fadeAudio(backgroundAudio, 0);
+  }
+}, { immediate: true });
 //--shop-----
 
 //round logic
@@ -753,6 +838,7 @@ async function handleProceed() {
       player.value.hasWonGame = false;
     }
   }
+  showBoard.value = false;
   showMap.value = true;
   currentCompany.value.abbr = '';
   currentCompany.value.unicode = player.value.osunicode;

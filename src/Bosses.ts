@@ -691,7 +691,7 @@ class Biohazard extends Admin {
 
 class Nofun extends Admin {
     static name = "No Fun Allowed";
-    static description = "Disables 1 random admin each turn";
+    static description = "Disables 1 random admin after each turn";
     static unicode = "U+1F6D1"; //NO ENTRY, U+26D4
     static color = "rgb(244, 152, 16)";
     static rarity = 6;

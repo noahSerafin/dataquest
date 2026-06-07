@@ -51,7 +51,7 @@ backgroundAudio.addEventListener('ended', () => {
 
 const activeFades = new Map<HTMLAudioElement, number>();
 
-function fadeAudio(audio: HTMLAudioElement, targetVolume: number, duration: number = 1000) {
+function fadeAudio(audio: HTMLAudioElement, targetVolume: number, duration: number = 4000) {
   const name = audio === ambientAudio ? "ambientAudio" : "backgroundAudio";
   console.log(`[AudioFade] fadeAudio called for ${name} from ${audio.volume} to ${targetVolume}`);
   if (activeFades.has(audio)) {
@@ -82,7 +82,17 @@ function fadeAudio(audio: HTMLAudioElement, targetVolume: number, duration: numb
     const elapsed = now - startTime;
     const progress = Math.min(elapsed / duration, 1);
     
-    const nextVolume = startVolume + volumeDiff * progress;
+    // Non-linear easing for more natural perceived volume changes
+    let easedProgress = progress;
+    if (targetVolume < startVolume) {
+      // Fade out: fast initial drop, long tail
+      easedProgress = 1 - Math.pow(1 - progress, 2);
+    } else {
+      // Fade in: slow initial rise
+      easedProgress = Math.pow(progress, 2);
+    }
+    
+    const nextVolume = startVolume + volumeDiff * easedProgress;
     audio.volume = Math.max(0, Math.min(1, nextVolume));
 
     if (progress < 1) {

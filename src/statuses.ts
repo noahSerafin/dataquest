@@ -25,7 +25,7 @@ export const STATUS_INFO: Record<string, string> = {
   charmed: 'Is controlled by the opposition',
   confused: 'Moves are randomised',
   exposed: 'Can no longer hide.',
-  hidden: 'Invisible to enemies until next move or action.',
+  hidden: 'Invisible to enemies until exposed or next attack.',
   negative: "Can move through other programs",
   enraged: "Gains +1 attack on the start of it's turn",
   zen: "Temporary +1 to all stats at the start of the next turn",

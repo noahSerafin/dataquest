@@ -1516,7 +1516,7 @@ class Barber extends Admin {
   static color = "#4a4a4aff";
   static rarity = 3;
   constructor() {
-    super(Barber.name, Barber.description, Barber.unicode, Barber.color, 8, Barber.rarity, 'gameState', 'onRoundStart')
+    super(Barber.name, Barber.description, Barber.unicode, Barber.color, 7, Barber.rarity, 'gameState', 'onRoundStart')
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     this.isTriggering = true;
@@ -3350,7 +3350,7 @@ class Meditation extends Admin {//needs reviewing
 
 class Drunk extends Admin {
   static name = "Mean Drunk";
-  static description = "Your pieces gain +1 attack, as well as +0.5 damage mult on load. But are also confused.";
+  static description = "Your pieces gain +1 attack, and +0.5 damage mult on load. But are also confused.";
   static unicode = "U+1F943";
   static color = "rgb(166, 9, 9)";
   static rarity = 3;
@@ -3472,7 +3472,9 @@ export class Booty extends Admin {
 
 //Surfer, U+1F3C4 //onReceiveDamage Your pieces move into a space for free(no moves expended) after taking damage (even defensive)
 
-//Collector, U+1F5BC //other Common(rarity 1) classes no longer appear in the shop (rollRarity) 
+//Collector, U+1F5BC //other Common(rarity 1) classes no longer appear in the shop (rollRarity)
+
+//war drum (item) move here
 
 export class Splash extends Admin {
   static name = "Splash Damage";

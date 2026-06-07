@@ -2416,9 +2416,6 @@ class Paragon extends Piece {
           targetPiece.statuses[key] = false;
         }
         targetPiece.addTempModifier({ defence: 1 });
-      } else {
-        targetPiece.takeDamage(this.getStat('attack'))
-        if (targetPiece.willRetaliate) await this.takeDamage(targetPiece.getStat('attack'))
       }
       this.actions--
     }

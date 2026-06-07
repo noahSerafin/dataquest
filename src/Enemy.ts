@@ -410,6 +410,7 @@ export async function runEnemyStateMachine(
         const enemyPieces = activePieces.filter(p => getSide(p) === 'enemy');
         const playerPieces = activePieces.filter(p => getSide(p) === 'player');
 
+        if ((enemy.team === 'player' && !enemy.statuses.charmed) || (enemy.statuses.charmed && enemy.team === 'enemy')) break;
         const intent = decideEnemyIntent(enemy, activePieces, playerPieces, enemyPieces, tileSet, specialAttempts, player, originalPieceIds);
         if (intent.type === 'wait') break;
 

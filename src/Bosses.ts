@@ -1085,23 +1085,24 @@ class Concussion extends Admin {
 class Taxman extends Admin {
     static rarity = 1;
     static name = "Taxman";
-    static description = "Your program's attack is nerfed by -1 for every $5 you have on load";
+    static description = "Your program's max size is nerfed by -1 for every $5 you have on load";
     static unicode = "U+1F4D2";
     static color = "rgb(70, 70, 70)";
     constructor() {
         super(Taxman.name, Taxman.description, Taxman.unicode, Taxman.color, 5, Taxman.rarity, 'playerAndGame', 'onPlacement')
     }
 
-    async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+    async apply({ id: id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
         const noOfFives = Math.floor(player.money / 5) //round down
         if(noOfFives > 0){
             this.isTriggering = true;
             setTimeout(() => this.isTriggering = false, 500);
-            for(const p of activePieces){
-                if(p.team === 'player'){
-                    p.addModifier({attack: -noOfFives})
-                }
-            }
+            const idx = activePieces.findIndex(p => p.id === id);
+            const p = activePieces[idx]
+            if(p.team === 'player'){
+                p.addModifier({maxSize: -noOfFives});
+                //p.addModifier({attack: -noOfFives})
+            }     
         }
     }
 }

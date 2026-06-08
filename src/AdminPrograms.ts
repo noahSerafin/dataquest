@@ -1145,6 +1145,9 @@ export class Copier extends Admin {
         copy.range = playerPieces[0].getStat('range');
         copy.attack = playerPieces[0].getStat('attack');
         copy.defence = playerPieces[0].getStat('defence');
+        copy.actions = playerPieces[0].actions;
+        copy.movesRemaining = playerPieces[0].movesRemaining;
+        copy.defenceRemaining = playerPieces[0].defenceRemaining;
         if (playerPieces[0].hybridName) {
           copy.hybridName = playerPieces[0].hybridName;
           copy.description = playerPieces[0].description;
@@ -3475,6 +3478,25 @@ export class Booty extends Admin {
 //Collector, U+1F5BC //other Common(rarity 1) classes no longer appear in the shop (rollRarity)
 
 //war drum (item) move here
+class Djembe extends Item<Piece[]> {
+    static name = "War Drum";
+    static description = "All placed player programs gain +1 attack and +1 moves";
+    static unicode = "U+1FA98";//djembe LONG DRUM,
+    static color = "rgb(111, 32, 8)";
+    static rarity = 4;
+    constructor() {
+        super(Djembe.name, Djembe.description, Djembe.unicode, Djembe.color, 3, Djembe.rarity, 'gameState');
+        //name desc utf || maxsize moves range atk def
+    }
+    apply(activePieces: Piece[], itemMult: number) {
+        activePieces.forEach(piece => {
+            if (piece.team === 'player') {
+                piece.addModifier({ attack: 1 * itemMult })//test
+                piece.addModifier({ moves: 1 * itemMult })//test
+            }
+        })
+    }
+}
 
 export class Splash extends Admin {
   static name = "Splash Damage";

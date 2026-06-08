@@ -1244,14 +1244,14 @@ async function placePieceOnBoardAt(coord: Coordinate) {
   //we're definitely making a move, so store pieces
   lastTurnPieces.value = activePieces.value.map(p => p.clone());
 
-  const hasDove = player.value.hasAdmin('Dove');
+
   const hasPalette = player.value.hasAdmin('Palette');
   const hasCopier = player.value.hasAdmin('Copier');
 
-  // Check for isFirstTurn initially
+  //first turn rules
   if (isFirstTurn.value) {
     // Dove admin: allow normal moves/actions on the first turn
-    if (hasDove) {
+    if (player.value.hasAdmin('Dove')) {
       PieceInstance.movesRemaining = PieceInstance.getStat('moves');
       PieceInstance.actions = 1;
     } else {
@@ -1379,7 +1379,7 @@ const deselectPiece = () => {
 const movePiece = async (coord: Coordinate) => {
   if (!selectedPiece.value || !player.value.canMove) return;
   isPlacing.value = false;
-  if (!isFirstTurn.value || (isFirstTurn.value && !player.value.hasAdmin('Dove'))) {
+  if (selectedPiece.value.team === 'player' && (!isFirstTurn.value)){//} || (isFirstTurn.value && !player.value.hasAdmin('Dove')))) {
     player.value.canPlace = false;
   }
   //we're definitely making a move, so store pieces
@@ -1461,7 +1461,9 @@ const damagePieceAt = async (coord: Coordinate) => {
   if (!selectedPiece.value) return
   if ((selectedPiece.value.team === 'enemy' && !selectedPiece.value.statuses.charmed)) return; //don't wan't control of enemies pieces
   if (selectedPiece.value.actions <= 0) return
-  player.value.canPlace = false;
+  if (selectedPiece.value.team === 'player' && (!isFirstTurn.value || (isFirstTurn.value && !player.value.hasAdmin('Dove')))) {
+    player.value.canPlace = false;
+  }
   //if (selectedPiece.value.team !== 'player') return //damaging your own pieces is actually useful sometimes
   const damageReceiver = activePieces.value.find(piece =>
     piece.tiles.some(t => t.x === coord.x && t.y === coord.y)
@@ -1621,7 +1623,9 @@ const handleSpecialActionAt = async (target: Coordinate) => {
     }
   }
   if (piecesActions !== selectedPiece.value.actions) {
-    player.value.canPlace = false;
+    if (selectedPiece.value.team === 'player' && (!isFirstTurn.value || (isFirstTurn.value && !player.value.hasAdmin('Dove')))) {
+      player.value.canPlace = false;
+    }
   }
   playerSpawns.value = newPlacementHighlights();
   console.log('playerSpawns after special:', playerSpawns.value);

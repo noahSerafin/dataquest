@@ -598,6 +598,21 @@ class Makeover extends Item<Piece> {
     }
 }
 
+class Lips extends Item<Piece> {
+    static name = "Seduction";
+    static description = "Charm an enemy program";
+    static unicode = "U+1F484";
+    static color = "rgb(230, 47, 223)";
+    static rarity = 3;
+    constructor() {
+        super(Lips.name, Lips.description, Lips.unicode, Lips.color, 3, Lips.rarity, 'piece')
+        //name desc utf || maxsize moves range atk def
+    }
+    apply(target: Piece, _itemMult: number) {
+        target.statuses.charmed = true;
+    }
+}
+
 export class Wand extends Item<Piece[]> {//TODO test
     static name = "Magic Wand";
     static description = "Undo a turn";
@@ -662,26 +677,6 @@ class Bugle extends Item<Piece[]> {
         activePieces.forEach(piece => {
             if (piece.team === 'player') {
                 piece.addModifier({ attack: 1 * itemMult })//test
-            }
-        })
-    }
-}
-
-class Djembe extends Item<Piece[]> {
-    static name = "War Drum";
-    static description = "All placed player programs gain +1 attack and +1 moves";
-    static unicode = "U+1FA98";//djembe LONG DRUM,
-    static color = "rgb(111, 32, 8)";
-    static rarity = 4;
-    constructor() {
-        super(Djembe.name, Djembe.description, Djembe.unicode, Djembe.color, 3, Djembe.rarity, 'gameState');
-        //name desc utf || maxsize moves range atk def
-    }
-    apply(activePieces: Piece[], itemMult: number) {
-        activePieces.forEach(piece => {
-            if (piece.team === 'player') {
-                piece.addModifier({ attack: 1 * itemMult })//test
-                piece.addModifier({ moves: 1 * itemMult })//test
             }
         })
     }
@@ -1118,7 +1113,7 @@ class Extinguisher extends Item<PieceBlueprint> {
 //PUSHPIN, U+1F4CC save node(+game?) state, return to it later.
 //SLEEPING ACCOMMODATION, U+1F6CC reroll next node?
 
-export const allItems = [Blueberry, Battery, Iron, Headphones, Juice, Mushroom, Box, Pepper, Floppy, Voucher, Bandage, Extinguisher, Formula, Frogman, Gift, Hotline, Labcoat, Plunger, Soap, Teapot, Toothbrush, Beans, Blackheart, Bugle, Gloves, Jar, Keygen, Makeover, Melon, Megaphone, Pinata, Rations, Roids, Spanner, Update2, Chili, Cake, Carrot, Garlic, Goggles, Wand, Lightning, Meat, Pie, Supplement, Djembe, Coffee, Disguise, Dupe, Genie, Hourglass, Sandwich, Life, Blessing, Feast, Ginger, Beer, Pandora, Update3, ShootingStar];
+export const allItems = [Blueberry, Battery, Iron, Headphones, Juice, Mushroom, Box, Pepper, Floppy, Voucher, Bandage, Extinguisher, Formula, Frogman, Gift, Hotline, Labcoat, Plunger, Soap, Teapot, Toothbrush, Beans, Blackheart, Bugle, Gloves, Jar, Keygen, Makeover, Melon, Megaphone, Pinata, Rations, Roids, Spanner, Update2, Chili, Cake, Carrot, Garlic, Goggles, Wand, Lightning, Meat, Pie, Lips, Supplement, Coffee, Disguise, Dupe, Genie, Hourglass, Sandwich, Life, Blessing, Feast, Ginger, Beer, Pandora, Update3, ShootingStar];
 export const upgradeItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Roids, Formula]
 
 /*Items.forEach(i => {

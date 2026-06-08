@@ -2349,7 +2349,7 @@ class Piggy extends Admin {
 
 class Bowling extends Admin {//test
   static name = "Strike";
-  static description = "Destroying a program deals 1 damage to each enemy tile adjacent to it's head";
+  static description = "Destroyed programs deal 1 damage to each enemy tile adjacent to it's head position";
   static unicode = "U+1F3B3"; // damage adjacent tiles
   static color = "rgb(247, 222, 162)";
   static rarity = 2;//3?

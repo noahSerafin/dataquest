@@ -292,7 +292,7 @@ function displayIcon(node: WorldNode) {
 }
 
 const connections = computed(() => {
-    const paths: { points: string }[] = [];
+    const paths: { d: string, isActive: boolean, length: number }[] = [];
     const nodes = world.value.nodes;
     const positions = nodeDisplayPositions.value;
 
@@ -399,8 +399,22 @@ const connections = computed(() => {
                 points = `${x1},${y1} ${xa},${y1} ${x2},${yb} ${x2},${y2}`;
             }
 
+            const pts = points.split(' ').map(p => {
+                const [px, py] = p.split(',').map(Number);
+                return {x: px, y: py};
+            });
+            let length = 0;
+            for (let j = 0; j < pts.length - 1; j++) {
+                length += Math.hypot(pts[j+1].x - pts[j].x, pts[j+1].y - pts[j].y);
+            }
+
+            const d = "M " + points.replace(/ /g, " L ");
+            const isActive = node.id === currentNodeId.value;
+
             paths.push({
-                points: points
+                d,
+                isActive,
+                length
             });
         }
     }
@@ -626,8 +640,18 @@ watch(currentNodeId, () => {
             </div>
             <svg class="map-lines"
                 style="position: absolute; inset: 0; width: 100vw; height: 100vh; pointer-events: none;">
-                <polyline v-for="(path, i) in connections" :key="i" :points="path.points" fill="none" stroke="#9CC954"
-                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                <g v-for="(path, i) in connections" :key="i">
+                    <path :d="path.d" fill="none" :stroke="path.isActive ? '#34ffff' : '#9CC954'"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path v-if="path.isActive" :d="path.d" fill="none" stroke="white"
+                        stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                        :stroke-dasharray="`20 ${path.length + 20}`"
+                        :style="{
+                            '--dash-offset-to': `-${path.length + 20}px`,
+                            animationDuration: `${(path.length + 20) / 100}s`
+                        }"
+                        class="active-band" />
+                </g>
             </svg>
         </div>
 
@@ -733,6 +757,19 @@ watch(currentNodeId, () => {
     width: 60%;
     height: 80%;
     left: -26px;
+}
+
+@keyframes moveBand {
+    from {
+        stroke-dashoffset: 0;
+    }
+    to {
+        stroke-dashoffset: var(--dash-offset-to);
+    }
+}
+
+.active-band {
+    animation: moveBand linear infinite;
 }
 
 .map-lines {
@@ -879,20 +916,13 @@ watch(currentNodeId, () => {
 }
 
 .text-gold {
-    color: #fdbf13;
+    color: rgb(52, 255, 255);
 }
 
 .preview-modal.ZEN .text-gold {
     color: #864800;
 }
 
-
-.current .icon{
-    border: 2px outset white;
-    background-color: rgb(46, 46, 46);
-    width: 20px;
-    height: 20px;
-}
 .preview-modal {
     position: absolute;
     left: 10%;

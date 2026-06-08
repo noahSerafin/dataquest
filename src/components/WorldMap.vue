@@ -648,7 +648,7 @@ watch(currentNodeId, () => {
                         :stroke-dasharray="`20 ${path.length + 20}`"
                         :style="{
                             '--dash-offset-to': `-${path.length + 20}px`,
-                            animationDuration: `${(path.length + 20) / 100}s`
+                            animationDuration: `${(path.length + 20) / 170}s`
                         }"
                         class="active-band" />
                 </g>

@@ -4469,7 +4469,7 @@ class Harp extends Piece {
 class Pentagram extends Piece {//finished? test, will have to be handled in app for sure, and a custom flag for hybrids
   static name = "Pentagram";
   static description = "Summons Daemons"//does health damage??
-  static unicode = "U+269D";
+  static unicode = "U+26E4";
   static color = "rgb(126, 0, 0)";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {

@@ -160,6 +160,16 @@ export const StorageManager = {
     return Object.values(stats.osStats).some(os => (os.winsByStake[stake] || 0) > 0);
   },
 
+  getWinningStakesForOS(osunicode: string): number[] {
+    const stats = this.getStats();
+    if (!stats.osStats[osunicode]) return [];
+    const wins = stats.osStats[osunicode].winsByStake;
+    return Object.keys(wins)
+      .map(k => parseInt(k, 10))
+      .filter(k => wins[k] > 0)
+      .sort((a, b) => a - b);
+  },
+
   getSavedGame(): any | null {
     const data = localStorage.getItem('dataquest_save_game');
     if (data) {

@@ -95,6 +95,15 @@
 
     const hasSave = ref<boolean>(false);
     const hasPlayedOnce = ref<boolean>(false);
+
+    function getWinsForOS(unicode: string): number[] {
+        return StorageManager.getWinningStakesForOS(unicode);
+    }
+
+    function getStakeSymbol(stake: number): string {
+        const symbols = ['♺', '♳', '♴', '♵'];
+        return symbols[stake] || `[${stake}]`;
+    }
  
     onMounted(() => {
         hasSave.value = StorageManager.hasSaveGame();
@@ -159,9 +168,13 @@
             <div class="os"
             v-for="os in allOSes"
             :class="{ locked: getUnlockRule(os.name) }">
-                <h3>{{ os.name }}</h3>
+                <h3 class="mb-0">{{ os.name }}</h3>
                 <div class="logo">
                     {{ returnUnicode(os.unicode) }}
+                </div>
+
+                <div class="os-wins" v-if="getWinsForOS(os.unicode).length > 0">
+                    <FormattedDescription v-for="winStake in getWinsForOS(os.unicode)" :key="winStake" :description="getStakeSymbol(winStake)" />
                 </div>
                 
                 <template v-if="!getUnlockRule(os.name)">
@@ -174,7 +187,7 @@
                         <span>$:{{os.money }}</span>
                         <span>{{returnUnicode("U+1FA77")}}:{{os.lives }}</span>
                     </div>
-                    <h5>Starts with:</h5>
+                    <h5 class="mb-0">Starts with:</h5>
                     <div class="bps">
                         <div class="logo" 
                             v-for="bp in os.blueprints">
@@ -207,13 +220,17 @@
             </div>
         </div>
         <div class="flex m-auto" v-if="hasPlayedOnce || debugMode">
-            <button @mousedown="decreaseStake()">
-            -
-            </button>
+            <div class="stake-btn-container">
+                <button @mousedown="decreaseStake()" v-if="stake > 0">
+                    -
+                </button>
+            </div>
             <strong>Infamy: {{ stake }}</strong>
-            <button @mousedown="increaseStake()">
-            +
-            </button>
+            <div class="stake-btn-container">
+                <button @mousedown="increaseStake()" v-if="StorageManager.hasStakeWin(stake)">
+                +
+                </button>
+            </div>
         </div>    
         <div class="load-section">
             <div class="seed-section">
@@ -272,6 +289,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: space-around;
+        position: relative;
     }
     .os:hover{
         transform: scale(1.02);
@@ -281,6 +299,7 @@
         font-size: 36px;
     }
     .stats span{
+        font-weight: bold;
         margin-left: 0.5rem;
         margin-right: 0.5rem;
     }
@@ -288,6 +307,16 @@
         display: flex;
         justify-content: center;
         margin-bottom: 0.5rem;
+    }
+
+    .os-wins {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        display: flex;
+        gap: 4px;
+        font-size: 1.2rem;
+        flex-direction: column;
     }
 
     .os.locked {
@@ -359,6 +388,9 @@
         display: flex;
         justify-content: space-around;
         width: 60%;
+    }
+    .mb-0{
+        margin-bottom: 0;
     }
 
     @media (max-width: 500px) {

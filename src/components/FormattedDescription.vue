@@ -61,7 +61,10 @@ const allSearchTerms = [...statusKeys, ...Object.keys(statusAliases)];
 // Sort by length descending to match longer terms first (e.g. "poisoned" before "poison")
 allSearchTerms.sort((a, b) => b.length - a.length);
 
-const statusRegex = new RegExp(`\\b(${allSearchTerms.join('|')})\\b`, 'gi');
+// Escape search terms
+const escapedTerms = allSearchTerms.map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+// Use lookarounds instead of \b to properly match non-word characters like emojis
+const statusRegex = new RegExp(`(?<!\\w)(${escapedTerms.join('|')})(?!\\w)`, 'gi');
 
 const chunks = computed(() => {
   if (!props.description) return [];
@@ -132,6 +135,24 @@ const chunks = computed(() => {
 });
 
 const activeTooltipIndex = ref<number | null>(null);
+const hoverIndex = ref<number | null>(null);
+const mouseX = ref(0);
+const mouseY = ref(0);
+
+function handleMouseMove(event: MouseEvent) {
+  mouseX.value = event.clientX;
+  mouseY.value = event.clientY;
+}
+
+function handleMouseEnter(index: number) {
+  hoverIndex.value = index;
+}
+
+function handleMouseLeave(index: number) {
+  if (hoverIndex.value === index) {
+    hoverIndex.value = null;
+  }
+}
 
 function handleKeywordClick(index: number, event: Event) {
   event.stopPropagation();
@@ -164,19 +185,26 @@ onUnmounted(() => {
           :class="['status-keyword', { 'header-mode': isHeader, 'click-active': activeTooltipIndex === index }]" 
           :style="{ color: chunk.color }"
           @click="handleKeywordClick(index, $event)"
+          @mouseenter="handleMouseEnter(index)"
+          @mouseleave="handleMouseLeave(index)"
+          @mousemove="handleMouseMove"
         >
           {{ chunk.content }}
           <span v-if="!isHeader && chunk.icon" class="status-icon-inline">{{ chunk.icon }}</span>
 
-          <span class="status-tooltip-distinct">
-            <div class="tooltip-header" :style="{ borderBottomColor: chunk.color || '#00ffcc' }">
-              <span v-if="chunk.icon" class="tooltip-icon">{{ chunk.icon }}</span>
-              <span class="tooltip-title" :style="{ color: chunk.color || '#00ffcc' }">{{ chunk.key }}</span>
-            </div>
-            <div class="tooltip-body">
-              {{ chunk.info }}
-            </div>
-          </span>
+          <Teleport to="body">
+            <span class="status-tooltip-distinct"
+                  :class="{ 'is-visible': activeTooltipIndex === index || hoverIndex === index }"
+                  :style="{ left: mouseX + 'px', top: (mouseY - 15) + 'px' }">
+              <div class="tooltip-header" :style="{ borderBottomColor: chunk.color || '#00ffcc' }">
+                <span v-if="chunk.icon" class="tooltip-icon">{{ chunk.icon }}</span>
+                <span class="tooltip-title" :style="{ color: chunk.color || '#00ffcc' }">{{ chunk.key }}</span>
+              </div>
+              <div class="tooltip-body">
+                {{ chunk.info }}
+              </div>
+            </span>
+          </Teleport>
         </span>
       </span>
     </template>
@@ -227,10 +255,8 @@ onUnmounted(() => {
 /* Premium Tooltip Styling */
 .status-tooltip-distinct {
   visibility: hidden;
-  position: absolute;
-  bottom: 125%;
-  left: 50%;
-  transform: translateX(-50%) translateY(10px);
+  position: fixed;
+  transform: translateX(-50%) translateY(-90%);
   width: 200px;
   background: rgba(20, 20, 20, 0.98);
   backdrop-filter: blur(12px);
@@ -239,7 +265,7 @@ onUnmounted(() => {
   padding: 0;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6),
     0 0 0 1px rgba(255, 255, 255, 0.1);
-  z-index: 10000;
+  z-index: 100000;
   opacity: 0;
   transition: opacity 0.25s ease, transform 0.25s ease;
   pointer-events: none;
@@ -248,11 +274,10 @@ onUnmounted(() => {
   font-style: normal;
 }
 
-.status-keyword:hover .status-tooltip-distinct,
-.status-keyword.click-active .status-tooltip-distinct {
+.status-tooltip-distinct.is-visible {
   visibility: visible;
   opacity: 1;
-  transform: translateX(-50%) translateY(0);
+  transform: translateX(-50%) translateY(-100%);
 }
 
 .tooltip-header {

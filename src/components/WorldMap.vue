@@ -916,7 +916,7 @@ watch(currentNodeId, () => {
 }
 
 .text-gold {
-    color: rgb(52, 255, 255);
+    color: rgb(255, 214, 78);
 }
 
 .preview-modal.ZEN .text-gold {

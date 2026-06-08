@@ -1633,6 +1633,10 @@ const handleSpecialActionAt = async (target: Coordinate) => {
 
 const hasWonRound = ref<boolean>(false);
 
+const hasPlacedPiece = computed(() => {
+  return activePieces.value.some(p => p.team === 'player' && p.name !== 'Spawn');
+});
+
 const endRound = async (roundWon: boolean) => {
   //reset counts
   yourTurnWarning.value = false;
@@ -2094,7 +2098,7 @@ function cancelConfirm() {
         @highlightTargets="boardRef.highlightTargets" @highlightSpecials="boardRef.highlightSpecials"
         @close="deselectPiece" />
       <div v-if="!displayEditor" class="player-actions">
-        <button v-if="(!displayEditor && roundHasStarted && !hasFinishedTurn) || debugMode" class="end-turn"
+        <button v-if="(!displayEditor && roundHasStarted && !hasFinishedTurn && hasPlacedPiece) || debugMode" class="end-turn"
           v-on:click="endTurn()">End Turn</button>
         <!--<button class="mt-2 px-2 py-1 bg-blue-500 text-white rounded" @click="showInventory = !showInventory">{{showInventory ? 'Hide Inventory' : 'Inventory' }}</button>-->
         <!--<div v-if="!displayEditor && roundHasStarted" class="graveyard">

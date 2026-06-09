@@ -3006,7 +3006,7 @@ class Sol extends Piece {//not passive
 
 class Vampire extends Piece {
   static name = "Dracula";
-  static description = "Removes tiles of other programs, increasing its own max size, attack, moves remaining, and providing defence equal to the target's for 1 turn";
+  static description = "Removes tiles of other programs, increasing its own max size, attack, moves, moves remaining, and extra defence equal to the target's for 1 turn";
   static unicode = "U+1F9DB";
   static color = "#000000ff";
   static rarity = 6;
@@ -3027,6 +3027,7 @@ class Vampire extends Piece {
     this.addModifier({ maxSize: 1 });
     this.addModifier({ attack: 1 });
     this.addTempModifier({ defence: piece.getStat('defence') });
+    this.addModifier({moves: 1});
     this.movesRemaining += 1;
     //this.tiles.push(target);
     this.actions--

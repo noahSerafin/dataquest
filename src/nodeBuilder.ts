@@ -268,10 +268,10 @@ export function generateNode(difficulty: number, stake: number = 0): Level {
 
     const width = widthIsMax
     ? maxSize
-    : Math.min(10, randInt(Math.max(enemyCount, minSize), maxSize));
+    : Math.min(7, randInt(Math.max(enemyCount, minSize), maxSize));
 
     const height = widthIsMax
-    ? Math.min(10, randInt(Math.max(enemyCount, minSize), maxSize))
+    ? Math.min(7, randInt(Math.max(enemyCount, minSize), maxSize))
     : maxSize;
 
     //3

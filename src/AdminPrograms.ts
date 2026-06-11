@@ -669,7 +669,7 @@ class Brain extends Admin {//unfinished, actionsHandler in Piececontroller playi
   }
 }
 
-class GoldenTicket extends Admin {
+class GoldenTicket extends Admin {//make item
   static name = "Golden Ticket";
   static description = "Skip a non boss level for $5 (no reward or interest earned)";
   static unicode = "U+1F3AB";
@@ -3491,8 +3491,8 @@ class Djembe extends Item<Piece[]> {
     apply(activePieces: Piece[], itemMult: number) {
         activePieces.forEach(piece => {
             if (piece.team === 'player') {
-                piece.addModifier({ attack: 1 * itemMult })//test
-                piece.addModifier({ moves: 1 * itemMult })//test
+                piece.addModifier({ attack: 1 })//test
+                piece.addModifier({ moves: 1 })//test
             }
         })
     }

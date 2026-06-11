@@ -708,7 +708,7 @@ function resolveMove(
 .fog-tile {
   border: 1px dashed lightgray;
   background-color: grey;
-  z-index: 4;
+  z-index: 11;
 }
 
 .fog-cleared {

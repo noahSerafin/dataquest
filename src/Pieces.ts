@@ -1792,19 +1792,20 @@ class Mammoth extends Piece {
 
 class Snowman extends Piece {
   static name = "Snowman";
-  static description = "A program that can snowball, increasing it's max size and moves";
+  static description = "A program that can snowball, increasing it's max size, moves, and attack";
   static unicode = "U+26C4";
   static color = "#4e4e4eff";
-  static rarity = 4;
+  static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
-    super(Snowman.name, Snowman.description, Snowman.unicode, 2, 1, 1, 3, 0, Snowman.color, headPosition, [headPosition], team, Snowman.rarity, removeCallback, id)
+    super(Snowman.name, Snowman.description, Snowman.unicode, 2, 1, 1, 0, 0, Snowman.color, headPosition, [headPosition], team, Snowman.rarity, removeCallback, id)
     this.specialName = 'Snowball';
     this.targetType = 'space'
     //this.canMove = false;
   }
   async special({ target, activePieces: _activePieces }: { target: Coordinate, activePieces: Piece[] }): Promise<void> {
     this.addModifier({ maxSize: 1 });
-    this.addModifier({ moves: 1 })
+    this.addModifier({ moves: 1 });
+    this.addModifier({ attack: 1 });
     this.move(target);
     this.actions--
   }
@@ -3006,7 +3007,7 @@ class Sol extends Piece {//not passive
 
 class Vampire extends Piece {
   static name = "Dracula";
-  static description = "Removes tiles of other programs, increasing its own max size, attack, moves, moves remaining, and extra defence equal to the target's for 1 turn";
+  static description = "Removes tiles of other programs, stealing an action and move off them if possible, and increasing all it's stats (except range) by 1";
   static unicode = "U+1F9DB";
   static color = "#000000ff";
   static rarity = 6;
@@ -3026,9 +3027,15 @@ class Vampire extends Piece {
     piece.tiles.splice(tileIndex, 1);
     this.addModifier({ maxSize: 1 });
     this.addModifier({ attack: 1 });
-    this.addTempModifier({ defence: piece.getStat('defence') });
     this.addModifier({moves: 1});
-    this.movesRemaining += 1;
+    this.addModifier({ defence: 1 });
+    this.defenceRemaining += 1;
+    if(piece.movesRemaining > 0){
+      this.movesRemaining += 1;
+    }
+    if(piece.actions > 0){
+      this.actions += 1
+    }
     //this.tiles.push(target);
     this.actions--
   }
@@ -4497,7 +4504,7 @@ class Pentagram extends Piece {//finished? test, will have to be handled in app 
 
 //FISHING POLE AND FISH, U+1F3A3 long range - move a piece toward it - magnet with long range
 
-export const allPieces = [Ant, Banana, Bee, Egg, Knife, Potato, Rat, Shield, Sling, Snail, TP, Acorn, Aegis, Banner, Beetle, Bow, Bull, Chick, Chicken, Dagger, Decoy, Dog, Fence, Frond, Doctor, Gecko, Guard, Hedgehog, Jellyfish, Larva, Lance, Tree, Flute, Rooster, Saw, Snake, Tar, Vulture, Germ, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Buffalo, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, Hopper, LabRat, LadyBeetle, Magnet, Medic, Mosquito, Ninja, Octopus, Officer, Paladin, Wasp, Pawn, Peacock, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Alien, Arms, Axe, Bison, Cannon, Lightning, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Kite, Leopard, Lighthouse, Mammoth, Mine, Nerf, Oil, Palm, Parrot, Pentagram, Poop, Puffer, Rabbit, Scarab, Shark, Snowman, Soldier, Squid, Stopwatch, Teargas, Tiger, Tradie, Bat, Wizard, Wolf, Zebra, Archdaemon, Recurve, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Firework, Gman, Giraffe, Hippo, Lion, Lovebomb, Harp, Orangutan, Paragon, Rhino, Screwdriver, Shovel, Shrike, Tank, Coat, UFO, Zombie, Vampire, Greatshield, Bear, Helicopter, Gorilla, Lich, Dolls, Nuke, Oni, Sol, Sponge, Super, Rex, Unicorn]; //100 +2 (web, ink)
+export const allPieces = [Ant, Banana, Bee, Egg, Knife, Potato, Rat, Shield, Sling, Snail, TP, Acorn, Aegis, Banner, Beetle, Bow, Bull, Chick, Chicken, Dagger, Decoy, Dog, Fence, Frond, Doctor, Gecko, Guard, Hedgehog, Jellyfish, Larva, Lance, Tree, Flute, Rooster, Saw, Snake, Tar, Vulture, Germ, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Buffalo, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, Hopper, LabRat, LadyBeetle, Magnet, Medic, Mosquito, Ninja, Octopus, Officer, Paladin, Wasp, Pawn, Peacock, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Alien, Arms, Axe, Bison, Cannon, Lightning, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Kite, Leopard, Lighthouse, Mammoth, Mine, Nerf, Oil, Palm, Parrot, Pentagram, Poop, Puffer, Rabbit, Scarab, Shark, Soldier, Squid, Stopwatch, Teargas, Tiger, Tradie, Bat, Wizard, Wolf, Zebra, Archdaemon, Recurve, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Firework, Gman, Giraffe, Hippo, Lion, Lovebomb, Harp, Orangutan, Paragon, Rhino, Screwdriver, Shovel, Shrike, Snowman, Tank, Coat, UFO, Zombie, Vampire, Greatshield, Bear, Helicopter, Gorilla, Lich, Dolls, Nuke, Oni, Sol, Sponge, Super, Rex, Unicorn]; //100 +2 (web, ink)
 
 //companies
 /*

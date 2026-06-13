@@ -736,10 +736,11 @@ class Tornado extends Admin {
             unoccupiedTiles.splice(randIdx, 1);
         }
 
-        for (const spawn of playerSpawnPieces) {
-            for (const coord of newSpawns){
-                spawn.headPosition = coord;
-                spawn.tiles = [coord];
+        for (let i = 0; i < playerSpawnPieces.length; i++) {
+            const coord = newSpawns[i];
+            if (coord) {
+                playerSpawnPieces[i].headPosition = coord;
+                playerSpawnPieces[i].tiles = [coord];
             }
         }
 

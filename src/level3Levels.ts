@@ -449,22 +449,6 @@ const conch: Level = {
       "rarity": 1
     },
     {
-      "id": "8b8316b4-df98-4edc-9bad-f4a20bba7c8a",
-      "name": "Spawn",
-      "team": "player",
-      "headPosition": {
-        "x": 2,
-        "y": 2
-      },
-      "tiles": [
-        {
-          "x": 2,
-          "y": 2
-        }
-      ],
-      "rarity": 1
-    },
-    {
       "id": "8b8316b4-df98-4edc-9bad-f4a20bba7c8b",
       "name": "Spawn",
       "team": "player",

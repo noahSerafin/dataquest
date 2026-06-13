@@ -903,7 +903,40 @@ const watchhouse: Level = {
         }
       ],
       "rarity": 1
-    }
+    },
+    {
+      "id": "9f9999ab-ef04-4e49-b1b9-3e130f1ad77a",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 0,
+        "y": 6
+      },
+      "tiles": [
+        {
+          "x": 0,
+          "y": 6
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "9f9999ab-ef04-4e49-b1b9-3e130f1ad77b",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 1,
+        "y": 7
+      },
+      "tiles": [
+        {
+          "x": 1,
+          "y": 7
+        }
+      ],
+      "rarity": 1
+    },
+    //add 2
   ]
 }
 const island : Level = {
@@ -3048,6 +3081,22 @@ const ruins: Level = {
       "rarity": 1
     },
     {
+      "id": "a35518ef-3d03-49c6-8fb4-ce3ab938de4b",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 0,
+        "y": 7
+      },
+      "tiles": [
+        {
+          "x": 0,
+          "y": 7
+        }
+      ],
+      "rarity": 1
+    },
+    {
       "id": "a35518ef-3d03-49c6-8fb4-ce3ab938de4a",
       "name": "Spawn",
       "team": "player",
@@ -5104,4 +5153,4 @@ const reactor: Level = {
     }
   ]
 }
-export const level6Levels: Level [] = [floodgates, watchhouse, island, league, range, deadlock, ruins, crater, pier, channel, narrow, reactor]
+export const level6Levels: Level [] = [floodgates, watchhouse, island, league, range, deadlock, ruins, crater, pier, channel, narrow, reactor];

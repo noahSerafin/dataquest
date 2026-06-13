@@ -64,8 +64,8 @@ class Meteor extends Admin {
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
-    for (const p of activePieces){
-      if(p.team === 'enemy'){
+    for (const p of activePieces) {
+      if (p.team === 'enemy') {
         await p.takeDamage(2);
       }
     }
@@ -705,7 +705,7 @@ class Stonks extends Admin {
   //on end of round
   async apply({ player }: { player: Player }) {
     const noOfFives = Math.floor(player.money / 5) //round down
-    if(noOfFives > 0){
+    if (noOfFives > 0) {
       this.isTriggering = true;
       setTimeout(() => this.isTriggering = false, 500);
       player.bonusInterest += noOfFives//reset after round
@@ -1023,7 +1023,7 @@ class Diamond extends Admin {
       if (p.team === 'player') {
         //from the headposition, look for adjacent player tiles
         const noOfTwentys = Math.max(0, Math.floor(player.money / 20)); //rounded down
-        if(noOfTwentys > 0){
+        if (noOfTwentys > 0) {
           this.isTriggering = true;
           setTimeout(() => this.isTriggering = false, 500);
           p.addModifier({ defence: noOfTwentys })
@@ -1132,7 +1132,7 @@ export class Copier extends Admin {
     if (!PieceClass) return
     const newHead: Coordinate = { x: playerPieces[0].headPosition.x + 1, y: playerPieces[0].headPosition.y }
     const tile = board.some(t => t.x === newHead.x && t.y === newHead.y);
-    if(tile){
+    if (tile) {
       const isOccupied = activePieces.some(p =>
         p.tiles.some(t => t.x === newHead.x && t.y === newHead.y) && p.name !== 'Spawn'//and name is not spawn
       );
@@ -1153,7 +1153,7 @@ export class Copier extends Admin {
           copy.description = playerPieces[0].description;
           copy.extraUnicode = playerPieces[0].extraUnicode;
         }
-        if(playerPieces[0].variantName){
+        if (playerPieces[0].variantName) {
           copy.variantName = playerPieces[0].variantName;
         }
         //clear the Spawn if it is there
@@ -1161,7 +1161,7 @@ export class Copier extends Admin {
         // Remove the player spawn piece at the new coordinate
         // We use filter instead of findIndex/splice to match the logic in App.vue
         // and ensure we catch any duplicate raw/instantiated spawns.
-        const filteredPieces = activePieces.filter(p => 
+        const filteredPieces = activePieces.filter(p =>
           !(p.team === 'player' && p.name === 'Spawn' && p.headPosition.x === newHead.x && p.headPosition.y === newHead.y)
         );
         // Mutate the original array (since we are passed a reference)
@@ -1423,9 +1423,9 @@ export class Hermes extends Admin {//moves
     setTimeout(() => this.isTriggering = false, 500);
     //const idx = activePieces.findIndex(p => p.id === id);
     //activePieces[idx].immunities.slowed = true;
-    for(const p of activePieces){
-      if(p.team === 'player' && p.name !== 'Spawn'){
-        p.addModifier({moves: 1})
+    for (const p of activePieces) {
+      if (p.team === 'player' && p.name !== 'Spawn') {
+        p.addModifier({ moves: 1 })
         p.movesRemaining += 1;
         p.immunities.slowed = true;
       }
@@ -1524,8 +1524,8 @@ class Barber extends Admin {
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
-    for (const p of activePieces){
-      if(p.team === 'enemy'){
+    for (const p of activePieces) {
+      if (p.team === 'enemy') {
         await p.takeDamage(1); //enemy pieces only?
       }
     }
@@ -1584,7 +1584,7 @@ class Ballet extends Admin {//needs to reset
           piece.statuses.hidden = true
           this.isTriggering = true;
           setTimeout(() => this.isTriggering = false, 500);
-        } else if(piece.statuses.hidden && piece.targetType !== "trapPiece"){
+        } else if (piece.statuses.hidden && piece.targetType !== "trapPiece") {
           piece.statuses.hidden = false;
         }
       }
@@ -1682,7 +1682,7 @@ class Pazzaz extends Admin {
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     const idx = activePieces.findIndex(p => p.id === id);
     const noOfTens = Math.max(0, Math.floor(player.money / 10));
-    if(noOfTens > 0){
+    if (noOfTens > 0) {
       this.isTriggering = true;
       setTimeout(() => this.isTriggering = false, 500);
       activePieces[idx].addModifier({ moves: noOfTens })
@@ -1706,7 +1706,7 @@ class Toilet extends Admin {
         noOfCommons += 1;
       }
     };
-    if(noOfCommons > 0){
+    if (noOfCommons > 0) {
       this.isTriggering = true;
       setTimeout(() => this.isTriggering = false, 500);
       const idx = activePieces.findIndex(p => p.id === id);
@@ -1801,7 +1801,7 @@ export class Taoism extends Admin {
             moves: 1,
             range: 1
           });*/
-          p.statuses.zen=true;
+          p.statuses.zen = true;
         }/*else {
           p.statuses.zen=false;
         }*/
@@ -1943,7 +1943,7 @@ export class Abacus extends Admin {
   }
   async apply({ player }: { player: Player }) {
     const amount = Math.floor(6 / player.difficulty)
-    if(amount > 0){
+    if (amount > 0) {
       this.isTriggering = true;
       setTimeout(() => this.isTriggering = false, 500);
       player.bonusReward += amount;
@@ -2060,7 +2060,7 @@ class Ring extends Admin {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
     for (const piece of activePieces) {
-      if(piece.team === 'player' && piece.name !== 'Spawn'){
+      if (piece.team === 'player' && piece.name !== 'Spawn') {
         const id = piece.id;
         for (const blueprint of player.programs) {
           if (blueprint.id === id && blueprint.isPlaced) {//not applying
@@ -2090,7 +2090,7 @@ class Minerva extends Admin {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
-    if(activePieces[idx].team ==='enemy'){
+    if (activePieces[idx].team === 'enemy') {
       for (const p of activePieces) {
         if (p.team === 'player' && p.name !== 'Spawn') {
           p.addModifier({ range: 1 })
@@ -2417,7 +2417,7 @@ class Disco extends Admin {
       if (piece.id === id || piece.team === 'player') return;//skip the attacker?, and only reflect damage to enemies
       const isAdjacent = piece.tiles.some(st =>
         activePieces[idx].tiles.some(tt =>
-        Math.abs(st.x - tt.x) + Math.abs(st.y - tt.y) === 1)
+          Math.abs(st.x - tt.x) + Math.abs(st.y - tt.y) === 1)
       );
       if (isAdjacent) {
         this.isTriggering = true;
@@ -2692,8 +2692,17 @@ class Cards extends Admin {//test
     const attackMod = player.items.filter(i => i.name === 'Roids').length + player.items.filter(i => i.name === 'Mushroom').length + (2 * player.items.filter(i => i.name === 'Meat').length);
     const defenceMod = player.items.filter(i => i.name === 'Formula').length + player.items.filter(i => i.name === 'Iron').length + (2 * player.items.filter(i => i.name === 'Garlic').length) + (3 * player.items.filter(i => i.name === 'Ginger').length);
     const blessingBonus = player.items.filter(i => i.name === 'Blessing').length;
+    const burnImmunity = player.items.some(i => i.name === 'Extinguisher');
+    const freezeImmunity = player.items.some(i => i.name === 'Gloves');
+    const slowImmunity = player.items.some(i => i.name === 'Plunger');
+    const diseaseImmunity = player.items.some(i => i.name === 'Lab Coat');
+    const poisonImmunity = player.items.some(i => i.name === 'Frogman');
+    const blindImmunity = player.items.some(i => i.name === 'Goggles');
+    const charmImmunity = player.items.some(i => i.name === 'Blackheart');
+    const confuseImmunity = player.items.some(i => i.name === 'Locked In');
+    const exposeImmunity = player.items.some(i => i.name === 'Disguise');
 
-    if(maxSizeMod > 0 || movesMod > 0 || rangeMod > 0 || attackMod > 0 || defenceMod > 0 || blessingBonus > 0){
+    if (maxSizeMod > 0 || movesMod > 0 || rangeMod > 0 || attackMod > 0 || defenceMod > 0 || blessingBonus > 0) {
       this.isTriggering = true;
       setTimeout(() => this.isTriggering = false, 500);
       //[Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Roids, Formula]
@@ -2704,6 +2713,16 @@ class Cards extends Admin {//test
         attack: attackMod + blessingBonus,
         defence: defenceMod + blessingBonus
       });
+
+      if (burnImmunity) activePieces[idx].immunities.burning = true;
+      if (freezeImmunity) activePieces[idx].immunities.frozen = true;
+      if (slowImmunity) activePieces[idx].immunities.slowed = true;
+      if (diseaseImmunity) activePieces[idx].immunities.diseased = true;
+      if (poisonImmunity) activePieces[idx].immunities.poisoned = true;
+      if (blindImmunity) activePieces[idx].immunities.blinded = true;
+      if (charmImmunity) activePieces[idx].immunities.charmed = true;
+      if (confuseImmunity) activePieces[idx].immunities.confused = true;
+      if (exposeImmunity) activePieces[idx].immunities.exposed = true;
     }
   }
 }
@@ -2771,7 +2790,7 @@ class Ice extends Admin {//needs to reset
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     this.count += 1;
     for (const piece of activePieces) {
-      if(piece.name !== 'Spawn'){
+      if (piece.name !== 'Spawn') {
         if (this.count <= 1 && !piece.immunities.frozen) {
           piece.statuses.frozen = true
           this.isTriggering = true;
@@ -3136,13 +3155,13 @@ class Chain extends Admin {//test
   }
   private count = 0;
   async apply({ id: _id, activePieces, piece }: { id: string; activePieces: Piece[], piece?: Piece }) {
-    if(!piece) return;
+    if (!piece) return;
     const enemies = activePieces.filter(p => p.team === 'enemy');
 
     for (const enemy of enemies) {
       const isAdjacent = piece.tiles.some(st =>
         enemy.tiles.some(tt =>
-        Math.abs(st.x - tt.x) + Math.abs(st.y - tt.y) === 1)
+          Math.abs(st.x - tt.x) + Math.abs(st.y - tt.y) === 1)
       );
       if (!isAdjacent) continue;
       this.isTriggering = true;
@@ -3219,7 +3238,7 @@ class Salt extends Admin {
     super(Salt.name, Salt.description, Salt.unicode, Salt.color, 2, Salt.rarity, 'player', 'onRoundLoss')
   }
   async apply({ player }: { player: Player }) {
-    for(const bp of player.programs){
+    for (const bp of player.programs) {
       bp.attack += 1;
     }
   }
@@ -3237,11 +3256,11 @@ class Baseball extends Admin {
   //on receive damage
   private candidates: Record<string, number> = {};
   async apply({ id, activePieces, piece }: { id: string, activePieces: Piece[], piece?: Piece }) {
-    if(!piece) return;
+    if (!piece) return;
     // 1. Find the attacker piece
     const attackerIdx = activePieces.findIndex(p => p.id === id);
     if (attackerIdx === -1) return;
-    
+
     const attacker = activePieces[attackerIdx];
 
     // 2. Only track if an ENEMY fails to damage a PLAYER program
@@ -3284,10 +3303,10 @@ class Selfie extends Admin {
     super(Selfie.name, Selfie.description, Selfie.unicode, Selfie.color, 7, Selfie.rarity, 'gameState', 'onReceiveDamage')//pieces?
   }
   async apply({ id, activePieces: _activePieces, piece }: { id: string, activePieces: Piece[], piece?: Piece }) {
-    if(piece && id === piece.id){
+    if (piece && id === piece.id) {
       this.isTriggering = true;
       setTimeout(() => this.isTriggering = false, 500);
-      piece.addModifier({attack: 1})
+      piece.addModifier({ attack: 1 })
     }
   }
 }
@@ -3307,7 +3326,7 @@ class Daisy extends Admin {// test
   }
   //on turn end
   async apply({ id: id, activePieces, piece }: { id: string; activePieces: Piece[], piece?: Piece }) {
-    if(!piece) return;
+    if (!piece) return;
     const idx = activePieces.findIndex(p => p.id === id);
     const dealer = activePieces[idx];
     const enemies = activePieces.filter(p => p.team === 'enemy');
@@ -3316,12 +3335,12 @@ class Daisy extends Admin {// test
     for (const enemy of enemies) {
       const isAdjacent = piece.tiles.some(st =>
         enemy.tiles.some(tt =>
-        Math.abs(st.x - tt.x) + Math.abs(st.y - tt.y) === 1)
+          Math.abs(st.x - tt.x) + Math.abs(st.y - tt.y) === 1)
       );
       if (!isAdjacent || enemy.id === piece.id) continue;
       enemy.takeDamage(dealer.getStat('attack'));
       this.isTriggering = true;
-      setTimeout(() => this.isTriggering = false, 250); 
+      setTimeout(() => this.isTriggering = false, 250);
     }
   }
 }
@@ -3366,9 +3385,9 @@ class Drunk extends Admin {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({attack: 1});
+    activePieces[idx].addModifier({ attack: 1 });
     activePieces[idx].damageMult += 0.5;//enemy pieces only?  
-    if (!activePieces[idx].immunities.confused){
+    if (!activePieces[idx].immunities.confused) {
       activePieces[idx].statuses.confused = true;
     }
   }
@@ -3385,8 +3404,8 @@ export class StoneAge extends Admin {//needs reviewing
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const piece of activePieces) {
-      const effectiveRangeMinusOne = piece.getStat('range') -1;
-      piece.addModifier({range: -effectiveRangeMinusOne})
+      const effectiveRangeMinusOne = piece.getStat('range') - 1;
+      piece.addModifier({ range: -effectiveRangeMinusOne })
     };
   }
 }
@@ -3423,7 +3442,7 @@ class Lefty extends Admin {
     if (player.mapProgress < 2 && (player.extraDifficulty === 0)) {
       this.isTriggering = true;
       setTimeout(() => this.isTriggering = false, 500);
-      for(const bp of player.programs){
+      for (const bp of player.programs) {
         bp.attack += 1;
       }
     }
@@ -3443,7 +3462,7 @@ class Righty extends Admin {
     if (player.mapProgress < 2 && (player.extraDifficulty !== 0)) {
       this.isTriggering = true;
       setTimeout(() => this.isTriggering = false, 500);
-      for(const bp of player.programs){
+      for (const bp of player.programs) {
         bp.defence += 1;
       }
     }
@@ -3543,7 +3562,7 @@ export class Clippy extends Admin {
   //handle in player
 }
 
-export const allAdmins = [Bank, Bucket, Candle, Cheese, Clippy, Smoker, Compass, CreditCard, Crystal, Glasses, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Schoolbag, Seed, Slots, Sprinkler, Tempura, Sneakers, Chime, Abacus, Aesculapius, Appraisal, Balloon, Briefcase, Bubble, Cactus, Coin, Purse, Convenience, FireEngine, Heart, Joker, Clover, Microscope, Newspaper, Nose, Pickup, Putter, Relay, Rune, Scarf, Stiletto, Mail, Bowling, Bipolar, Violin, Vitamins, Wings, AdminMap, Barber, Ace, AirSupport, Bone, Bouquet, Camp, Huzzah, Luggage, Chain, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Dice, Jammer, Roger, Juggler, Ladder, Loot, Drunk, Puzzle, Razor, Sled, Shades, StoneAge, Stonks, Christmas, Telescope, Toolbox, Tracker, Ambulance, Backdoor, BionicArm, BionicLeg, Crash, Blood, Broom, DartBoard, Butler, Dove, Evergreen, Eye, Discount, Fountain, Feather, Fuel, Spoon, Liberty, Lightbulb, Ollie, Palette, Pazzaz, PetriDish, Prayer, Wheel, Salt, Selfie, Pants, Variety, Volatile, Artic, BlackBelt, Lungs, Chemistry, Chivalry, Toilet, Copier, Daisy, Diamond, Disco, Hamsa, Skyscraper, Hermes, Howzat, Inheritance, Cherries, Lotus, Brain, Meditation, Meteor, Monarch, Onion, PeaPod, Teddy, Pong, RollerBlades, Bell, Baseball, Taoism, Ice, Crown, Ballet, Bath, Cards, Lefty, Minerva, Needle, Pi, Osiris, Righty, Ring, School, Umbrella, Dharma ];
+export const allAdmins = [Bank, Bucket, Candle, Cheese, Clippy, Smoker, Compass, CreditCard, Crystal, Glasses, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Schoolbag, Seed, Slots, Sprinkler, Tempura, Sneakers, Chime, Abacus, Aesculapius, Appraisal, Balloon, Briefcase, Bubble, Cactus, Coin, Purse, Convenience, FireEngine, Heart, Joker, Clover, Microscope, Newspaper, Nose, Pickup, Putter, Relay, Rune, Scarf, Stiletto, Mail, Bowling, Bipolar, Violin, Vitamins, Wings, AdminMap, Barber, Ace, AirSupport, Bone, Bouquet, Camp, Huzzah, Luggage, Chain, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Dice, Jammer, Roger, Juggler, Ladder, Loot, Drunk, Puzzle, Razor, Sled, Shades, StoneAge, Stonks, Christmas, Telescope, Toolbox, Tracker, Ambulance, Backdoor, BionicArm, BionicLeg, Crash, Blood, Broom, DartBoard, Butler, Dove, Evergreen, Eye, Discount, Fountain, Feather, Fuel, Spoon, Liberty, Lightbulb, Ollie, Palette, Pazzaz, PetriDish, Prayer, Wheel, Salt, Selfie, Pants, Variety, Volatile, Artic, BlackBelt, Lungs, Chemistry, Chivalry, Toilet, Copier, Daisy, Diamond, Disco, Hamsa, Skyscraper, Hermes, Howzat, Inheritance, Cherries, Lotus, Brain, Meditation, Meteor, Monarch, Onion, PeaPod, Teddy, Pong, RollerBlades, Bell, Baseball, Taoism, Ice, Crown, Ballet, Bath, Cards, Lefty, Minerva, Needle, Pi, Osiris, Righty, Ring, School, Umbrella, Dharma];
 console.log('admins length: ', allAdmins.length)
 let adminLogs = {
   rarity1: 0,

@@ -725,6 +725,9 @@ class Tornado extends Admin {
         setTimeout(() => this.isTriggering = false, 500);
         const unoccupiedTiles = board.filter(t => !activePieces.some(p => p.tiles.some(pt => pt.x === t.x && pt.y === pt.y)));
 
+        const playerSpawnPieces = activePieces.filter(p => p.team === 'player' && p.name === 'Spawn');
+
+
         const newSpawns: Coordinate[] = [];
         for (let i = 0; i < playerSpawns.length; i++) {
             if (unoccupiedTiles.length === 0) break;
@@ -732,6 +735,14 @@ class Tornado extends Admin {
             newSpawns.push(unoccupiedTiles[randIdx]);
             unoccupiedTiles.splice(randIdx, 1);
         }
+
+        for (const spawn of playerSpawnPieces) {
+            for (const coord of newSpawns){
+                spawn.headPosition = coord;
+                spawn.tiles = [coord];
+            }
+        }
+
         playerSpawns.splice(0, playerSpawns.length, ...newSpawns);
     }
 }

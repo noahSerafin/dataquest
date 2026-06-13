@@ -23,7 +23,7 @@ Exposed
 Hidden
 
 //IMPROVEMENTS/bugs
-send to alex + karol
+tornado needs to move player spawns pieces as well
 -fix immunity items applying to duped programs
 -nerf archer to adjacent enemies only
 music optional include in memory

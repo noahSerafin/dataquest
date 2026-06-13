@@ -1738,7 +1738,9 @@ class Elephant extends Piece {
         this.move(tile);
         continue;
       }
-      occupier.addModifier({ maxSize: -1 })
+      if(this.getStat('attack') > occupier.getStat('defence')){
+        occupier.addModifier({ maxSize: -1 })
+      }
       await occupier.takeDamage(this.getStat('attack'));
       const stillOccupied = activePieces.find(p =>
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)
@@ -1775,7 +1777,9 @@ class Mammoth extends Piece {
         this.move(tile);
         continue;
       }
-      occupier.addModifier({ maxSize: -2 })
+      if(this.getStat('attack') > occupier.getStat('defence')){
+        occupier.addModifier({ maxSize: -2 })
+      }
       await occupier.takeDamage(this.getStat('attack'));
       const stillOccupied = activePieces.find(p =>
         p.tiles.some(t => t.x === tile.x && t.y === tile.y)

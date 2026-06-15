@@ -74,11 +74,12 @@ onMounted(() => {
 
     const float timeDiv = 1.5;
 
-    float voronoi(vec2 uv) 
+    vec2 voronoi(vec2 uv) 
     {
         vec2 cell = floor(uv);
         vec2 frac = fract(uv);
-        float ret = 100.;
+        float d1 = 100.;
+        float d2 = 100.;
         
         float change = uProgress;
         
@@ -88,19 +89,26 @@ onMounted(() => {
                 vec2 rand = random2(cell + neighbor);
                 rand = 0.5 + 0.5 * sin(change * 4. + 2. * pi * rand);
                 vec2 toCenter = neighbor + rand - frac;
-                ret = min(ret, max(abs(toCenter.x), abs(toCenter.y)));
+                float d = max(abs(toCenter.x), abs(toCenter.y));
+                
+                if (d < d1) {
+                    d2 = d1;
+                    d1 = d;
+                } else if (d < d2) {
+                    d2 = d;
+                }
             }
         }
         
-        return ret;
+        return vec2(d1, d2);
     }
 
     // variant of iq's gradient function for even-thickness lines
     vec2 gradient(in vec2 x, float thickness)
     {
         vec2 h = vec2(thickness, 0.);
-        return vec2(voronoi(x + h.xy) - voronoi(x - h.xy),
-                   voronoi(x + h.yx) - voronoi(x - h.yx)) / (2. * h.x);
+        return vec2(voronoi(x + h.xy).x - voronoi(x - h.xy).x,
+                   voronoi(x + h.yx).x - voronoi(x - h.yx).x) / (2. * h.x);
     }
 
     void mainImage( out vec4 fragColor, in vec2 fragCoord )
@@ -117,10 +125,29 @@ onMounted(() => {
         
         uv *= 2.85;
         
-        float val = voronoi(uv) / length(gradient(uv, .02));
+        vec2 v = voronoi(uv);
+        float val = v.x / length(gradient(uv, .02));
         float colVal = pow(val, 1.1) * 1.05;
         
         fragColor.rgb = mix(uTileColor, uEdgeColor, clamp(colVal, 0.0, 1.0));
+        
+        // Calculate exact cell borders using difference between 1st and 2nd closest centers
+        float edgeDist = v.y - v.x;
+        // Create a crisp mask for the borders
+        float borderMask = smoothstep(0.08, 0.0, edgeDist);
+        
+        // Create the "Holographic Scanner" sweeping field
+        float scanField = sin(uv.x * 8.0 + change * 15.0) * sin(uv.y * 8.0 - change * 12.0);
+        
+        // Threshold the field to get discrete dashes
+        float dashes = smoothstep(0.6, 0.9, scanField);
+        
+        // Intersect dashes with border mask
+        float segments = borderMask * dashes;
+        
+        // Add the white segments over the existing color
+        fragColor.rgb += vec3(1.0) * segments;
+        
         fragColor.a = 1.0;
     }
 

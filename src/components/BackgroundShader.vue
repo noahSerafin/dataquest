@@ -1,7 +1,24 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 
-const props = defineProps<{ progress: number }>();
+const props = defineProps<{ 
+  progress: number,
+  edgeColor: string,
+  tileColor: string
+}>();
+
+function parseRGB(colorStr: string): [number, number, number] {
+  if (!colorStr) return [0, 0, 0];
+  const match = colorStr.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+  if (match) {
+    return [
+      parseInt(match[1], 10) / 255,
+      parseInt(match[2], 10) / 255,
+      parseInt(match[3], 10) / 255
+    ];
+  }
+  return [0, 0, 0];
+}
 
 const canvasRef = ref<HTMLCanvasElement | null>(null);
 let animationFrameId: number;
@@ -43,6 +60,8 @@ onMounted(() => {
     precision highp float;
     uniform float uProgress;
     uniform vec2 iResolution;
+    uniform vec3 uEdgeColor;
+    uniform vec3 uTileColor;
 
     #define pi  3.14159
     #define tau 6.28318
@@ -101,13 +120,7 @@ onMounted(() => {
         float val = voronoi(uv) / length(gradient(uv, .02));
         float colVal = pow(val, 1.1) * 1.05;
         
-        fragColor.rgb = mix(vec3(0., colVal, 0.), 
-                            mix(vec3(0., 0., colVal), vec3(colVal, 0., 0.), clamp(colSwitch, .0, 1.)),
-                            clamp(colSwitch + 1., 0., 1.));
-        fragColor.rgb = mix(mix(vec3(.45, .0, .8), 
-                            mix(vec3(.85, .2, .2), vec3(.5, .85, .55), clamp(colSwitch, .0, 1.)),
-                            clamp(colSwitch + 1., 0., 1.)),
-                            fragColor.rgb, colVal);
+        fragColor.rgb = mix(uTileColor, uEdgeColor, clamp(colVal, 0.0, 1.0));
         fragColor.a = 1.0;
     }
 
@@ -141,6 +154,8 @@ onMounted(() => {
     uniformLocations: {
       progress: gl.getUniformLocation(shaderProgram, 'uProgress'),
       resolution: gl.getUniformLocation(shaderProgram, 'iResolution'),
+      edgeColor: gl.getUniformLocation(shaderProgram, 'uEdgeColor'),
+      tileColor: gl.getUniformLocation(shaderProgram, 'uTileColor'),
     },
   };
 
@@ -187,6 +202,11 @@ onMounted(() => {
 
     gl.uniform1f(programInfo.uniformLocations.progress, currentProgress);
     gl.uniform2f(programInfo.uniformLocations.resolution, canvas.width, canvas.height);
+    
+    const parsedEdge = parseRGB(props.edgeColor);
+    const parsedTile = parseRGB(props.tileColor);
+    gl.uniform3fv(programInfo.uniformLocations.edgeColor, parsedEdge);
+    gl.uniform3fv(programInfo.uniformLocations.tileColor, parsedTile);
 
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 

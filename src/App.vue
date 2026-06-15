@@ -321,7 +321,7 @@ function createNewPlayer(payload: { os: OS, seed: string, stake?: number }) {
   showMainMenu.value = false;
   showMap.value = true;
   gameStarted.value = true;
-  currentCompany.value = { name: 'Player', abbr: '', unicode: player.value.osunicode, pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "#9CC954" };
+  currentCompany.value = { name: 'Player', abbr: '', unicode: player.value.osunicode, pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "rgb(156, 201, 84)" };
   refreshShop(true);
   player.value.canPlace = false;
 }
@@ -771,7 +771,7 @@ const lastTurnPieces = ref<InstanceType<typeof Piece>[]>([]);//player
 const originalPieces = ref<InstanceType<typeof Piece>[]>([]);//player
 const originalSpawns = ref<Coordinate[]>([]);//player
 const originalPlayerPieceIds = ref<string[]>([]);
-const currentCompany = ref<Company>({ name: 'Player', abbr: '', unicode: player.value.osunicode || '', pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "#9CC954" });
+const currentCompany = ref<Company>({ name: 'Player', abbr: '', unicode: player.value.osunicode || '', pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "rgb(156, 201, 84)" });
 
 async function selectLevel(newLevel: Level, company: Company, difficultyMod: number, lReward: number) {//load level, start 
   bgProgress.value++;
@@ -1970,7 +1970,11 @@ function cancelConfirm() {
 
 <template>
   <div class="app-root">
-    <BackgroundShader :progress="bgProgress" />
+    <BackgroundShader 
+      :progress="bgProgress" 
+      :edgeColor="currentCompany?.edgeColor || 'rgb(156, 201, 84)'" 
+      :tileColor="currentCompany?.tileColor || 'rgb(17, 31, 15)'" 
+    />
     <div class="debug-controls" :class="{ 'mobile-open': isMobileMenuOpen }">
       <button @click="showCollection = !showCollection" class="info-btn">Info</button>
       <button v-if="debugMode === true" class="swap-display" @mousedown="swapDisplay()">

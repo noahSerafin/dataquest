@@ -2087,7 +2087,7 @@ class Minerva extends Admin {
   }
   //on receive damage //on piece destrcution
   async apply({ id: _id, activePieces, piece }: { id: string, activePieces: Piece[], piece: Piece }) {
-    if (piece.id === 'player') {
+    if (piece.team === 'player') {
       setTimeout(() => this.isTriggering = false, 500);
       this.isTriggering = true;
       for (const p of activePieces) {

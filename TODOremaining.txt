@@ -23,8 +23,6 @@ Exposed
 Hidden
 
 //IMPROVEMENTS/bugs
-end turn not available after retry
-slots fixing reroll at 2?
 show counts on admins
 look into enemy blinded bug
 -fix immunity items applying to duped programs

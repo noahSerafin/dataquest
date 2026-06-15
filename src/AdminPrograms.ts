@@ -797,7 +797,7 @@ class Osiris extends Admin {
     super(Osiris.name, Osiris.description, Osiris.unicode, Osiris.color, 8, Osiris.rarity, 'gameState', 'onPieceDestruction')
   }
   //on receive damage //on piece destrcution
-  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {//piece is passed too
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
     for (const p of activePieces) {
@@ -2078,7 +2078,7 @@ class Ring extends Admin {
 
 class Minerva extends Admin {
   static name = "Minerva";
-  static description = "+1 range for all your placed programs each time one of your program is destroyed";//player programs only?
+  static description = "+1 range for all your placed programs each time one of your programs is destroyed";//player programs only?
   static unicode = "U+1F989";//horus: "U+1314A";
   static color = "rgb(211, 169, 31)";
   static rarity = 6;
@@ -2086,11 +2086,10 @@ class Minerva extends Admin {
     super(Minerva.name, Minerva.description, Minerva.unicode, Minerva.color, 9, Minerva.rarity, 'gameState', 'onPieceDestruction')
   }
   //on receive damage //on piece destrcution
-  async apply({ id: id, activePieces }: { id: string, activePieces: Piece[] }) {
-    this.isTriggering = true;
-    setTimeout(() => this.isTriggering = false, 500);
-    const idx = activePieces.findIndex(p => p.id === id);
-    if (activePieces[idx].team === 'enemy') {
+  async apply({ id: _id, activePieces, piece }: { id: string, activePieces: Piece[], piece: Piece }) {
+    if (piece.id === 'player') {
+      setTimeout(() => this.isTriggering = false, 500);
+      this.isTriggering = true;
       for (const p of activePieces) {
         if (p.team === 'player' && p.name !== 'Spawn') {
           p.addModifier({ range: 1 })

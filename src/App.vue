@@ -530,14 +530,12 @@ function refreshShop(isFree: boolean) {
       rerollCost.value += currentFib.value;
     }
   } else { //boss/level has been defeated
-    rerollCost.value = player.value.hasAdmin('Wheel of Dharma') ? 0 : 5;
+    rerollCost.value = player.value.hasAdmin('Slots') ? 3 : 5;
     prevFib.value = 0;
     currentFib.value = 1;
     hasStolenFromThisShop.value = false;
   }
-  if (player.value.hasAdmin("Slots")) {
-    rerollCost.value = Math.max(0, rerollCost.value - 2);
-  }
+  rerollCost.value = player.value.hasAdmin('Wheel of Dharma') ? 0 : rerollCost.value;
 
   const appraisalDiscount = 2 * player.value.admins.filter(a => a.name === 'Appraisal').length;
 
@@ -885,6 +883,9 @@ async function reloadLevel() {
     clearFog();
   }
   player.value.canPlace = true;
+  player.value.canMove = true;
+  player.value.canAction = true;
+  hasFinishedTurn.value = false;
   console.log('playerSpawns on reload 2:', playerSpawns.value);//still correct. Are they just not being displayed??
   //player.canPlace && (placementMode || isFirstTurn)
 }
@@ -2029,7 +2030,7 @@ function cancelConfirm() {
           </span>
           <p class="security"><strong>Security: </strong>{{ player.difficulty }}<span
           v-if="player.extraDifficulty > 0"> + {{ player.extraDifficulty }}</span></p>
-          <p class="infamy"><strong>Infamy: </strong>{{ stake }}</p>
+          <p class="infamy"><strong>Infamy: </strong>{{ player.stake }}</p>
         </div>
         <div class="enemy-bosses">
           <BossView v-if="bossAdmins.length > 0" :admins="bossAdmins" />

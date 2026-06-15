@@ -59,6 +59,7 @@ onMounted(() => {
   const fsSource = `
     precision highp float;
     uniform float uProgress;
+    uniform float uTime;
     uniform vec2 iResolution;
     uniform vec3 uEdgeColor;
     uniform vec3 uTileColor;
@@ -136,8 +137,8 @@ onMounted(() => {
         // Create a crisp mask for the borders
         float borderMask = smoothstep(0.08, 0.0, edgeDist);
         
-        // Create the "Holographic Scanner" sweeping field
-        float scanField = sin(uv.x * 8.0 + change * 15.0) * sin(uv.y * 8.0 - change * 12.0);
+        // Create the "Holographic Scanner" sweeping field (animated by time instead of progress)
+        float scanField = sin(uv.x * 8.0 + uTime * 3.0) * sin(uv.y * 8.0 - uTime * 2.4);
         
         // Threshold the field to get discrete dashes
         float dashes = smoothstep(0.6, 0.9, scanField);
@@ -180,6 +181,7 @@ onMounted(() => {
     },
     uniformLocations: {
       progress: gl.getUniformLocation(shaderProgram, 'uProgress'),
+      time: gl.getUniformLocation(shaderProgram, 'uTime'),
       resolution: gl.getUniformLocation(shaderProgram, 'iResolution'),
       edgeColor: gl.getUniformLocation(shaderProgram, 'uEdgeColor'),
       tileColor: gl.getUniformLocation(shaderProgram, 'uTileColor'),
@@ -228,6 +230,7 @@ onMounted(() => {
     gl.useProgram(programInfo.program);
 
     gl.uniform1f(programInfo.uniformLocations.progress, currentProgress);
+    gl.uniform1f(programInfo.uniformLocations.time, now * 0.001);
     gl.uniform2f(programInfo.uniformLocations.resolution, canvas.width, canvas.height);
     
     const parsedEdge = parseRGB(props.edgeColor);

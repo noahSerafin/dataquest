@@ -112,7 +112,7 @@
                 </span>
 
             </div>
-            <button class="btn-grey" @click="collectAndProceed">Collect <span class="text-gold">$</span> and proceed</button>
+            <button class="btn-grey" @click="collectAndProceed">Collect <span class="text-yellow">$</span> and proceed</button>
         </div>
         <div class="if-lost" v-if="!hasWonRound && player.lives > 0">
             <h3>

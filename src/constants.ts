@@ -19,7 +19,7 @@ export const STAT_MIN: Record<StatKey, number> = {
 //Giant, Fast/Speedy, Longshot, Vicious/Savage, Stalwart
 //Lumbering +MS -moves, lightweight +moves -MS, overreaching +range -atk, beserker +atk -def, Ironclad +def - moves
 export const PIECE_VARIANTS: PieceVariant[] = [ //have visual variants instead of text?
-  {name: 'Large', mods: {maxSize: 1}, minDifficulty: 1}, ///green
+  {name: 'Big', mods: {maxSize: 1}, minDifficulty: 1}, ///green
   {name: 'Giant', mods: {maxSize: 2}, minDifficulty: 2}, //shiny green
   {name: 'Fast', mods: {moves: 1}, minDifficulty: 2}, //blue/yellow??
   {name: 'Speedy', mods: {moves: 2}, minDifficulty: 3}, //shiny blue/yellow

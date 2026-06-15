@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, watch, nextTick } from "vue";
+import BackgroundShader from "./components/BackgroundShader.vue";
 import Board from './components/Board.vue';
 import Leveleditor from './components/Leveleditor.vue';
 import { castled, level1Levels } from './level1Levels';
@@ -1964,6 +1965,7 @@ function cancelConfirm() {
 
 <template>
   <div class="app-root">
+    <BackgroundShader />
     <div class="debug-controls" :class="{ 'mobile-open': isMobileMenuOpen }">
       <button @click="showCollection = !showCollection" class="info-btn">Info</button>
       <button v-if="debugMode === true" class="swap-display" @mousedown="swapDisplay()">

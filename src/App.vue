@@ -260,8 +260,10 @@ function toggleInventory() {
 }
 const showMainMenu = ref(true);
 const currentSeed = ref<string>("");
+const bgProgress = ref(0);
 
 function createNewPlayer(payload: { os: OS, seed: string, stake?: number }) {
+  bgProgress.value++;
   let { os, seed, stake: payloadStake } = payload;
   let rawSeed = seed;
 
@@ -772,6 +774,7 @@ const originalPlayerPieceIds = ref<string[]>([]);
 const currentCompany = ref<Company>({ name: 'Player', abbr: '', unicode: player.value.osunicode || '', pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "#9CC954" });
 
 async function selectLevel(newLevel: Level, company: Company, difficultyMod: number, lReward: number) {//load level, start 
+  bgProgress.value++;
   pieceToPlace.value = null;
   currentCompany.value = { ...company };
   showBoard.value = true;
@@ -831,6 +834,7 @@ async function selectLevel(newLevel: Level, company: Company, difficultyMod: num
 }
 
 async function handleProceed() {
+  bgProgress.value++;
   for (const admin of player.value.admins) {
     if (admin.onRoundEnd) admin.onRoundEnd();
   };
@@ -856,6 +860,7 @@ async function handleProceed() {
 }
 
 async function reloadLevel() {
+  bgProgress.value++;
   for (const admin of player.value.admins) {
     admin.disabled = false;
     if (admin.onRoundEnd) admin.onRoundEnd();
@@ -1965,7 +1970,7 @@ function cancelConfirm() {
 
 <template>
   <div class="app-root">
-    <BackgroundShader />
+    <BackgroundShader :progress="bgProgress" />
     <div class="debug-controls" :class="{ 'mobile-open': isMobileMenuOpen }">
       <button @click="showCollection = !showCollection" class="info-btn">Info</button>
       <button v-if="debugMode === true" class="swap-display" @mousedown="swapDisplay()">

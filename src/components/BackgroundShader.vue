@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 
+const props = defineProps<{ progress: number }>();
+
 const canvasRef = ref<HTMLCanvasElement | null>(null);
 let animationFrameId: number;
 let gl: WebGLRenderingContext | null = null;
@@ -38,16 +40,79 @@ onMounted(() => {
 
   // Fragment shader
   const fsSource = `
-    precision mediump float;
-    uniform float uTime;
+    precision highp float;
+    uniform float uProgress;
+    uniform vec2 iResolution;
+
+    #define pi  3.14159
+    #define tau 6.28318
+    #define rot(a) mat2(cos(a), -sin(a), sin(a), cos(a)) // col1a col1b col2a col2b
+
+    // random2 function by Patricio Gonzalez
+    vec2 random2( vec2 p ) {
+        return fract(sin(vec2(dot(p,vec2(127.1,311.7)),dot(p,vec2(269.5,183.3))))*43758.5453);
+    }
+
+    const float timeDiv = 1.5;
+
+    float voronoi(vec2 uv) 
+    {
+        vec2 cell = floor(uv);
+        vec2 frac = fract(uv);
+        float ret = 100.;
+        
+        float change = uProgress;
+        
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <=1; j++) {
+                vec2 neighbor = vec2(float(i), float(j));
+                vec2 rand = random2(cell + neighbor);
+                rand = 0.5 + 0.5 * sin(change * 4. + 2. * pi * rand);
+                vec2 toCenter = neighbor + rand - frac;
+                ret = min(ret, max(abs(toCenter.x), abs(toCenter.y)));
+            }
+        }
+        
+        return ret;
+    }
+
+    // variant of iq's gradient function for even-thickness lines
+    vec2 gradient(in vec2 x, float thickness)
+    {
+        vec2 h = vec2(thickness, 0.);
+        return vec2(voronoi(x + h.xy) - voronoi(x - h.xy),
+                   voronoi(x + h.yx) - voronoi(x - h.yx)) / (2. * h.x);
+    }
+
+    void mainImage( out vec4 fragColor, in vec2 fragCoord )
+    {    
+        vec2 uv = fragCoord / iResolution.xy;
+        uv.x *= iResolution.x / iResolution.y;
+        
+        float change = uProgress;
+        float colSwitch = sin(change * pi / 2.);
+        
+        uv -= .5;
+        uv *= rot(change * pi / 2.);
+        uv += .5;
+        
+        uv *= 2.85;
+        
+        float val = voronoi(uv) / length(gradient(uv, .02));
+        float colVal = pow(val, 1.1) * 1.05;
+        
+        fragColor.rgb = mix(vec3(0., colVal, 0.), 
+                            mix(vec3(0., 0., colVal), vec3(colVal, 0., 0.), clamp(colSwitch, .0, 1.)),
+                            clamp(colSwitch + 1., 0., 1.));
+        fragColor.rgb = mix(mix(vec3(.45, .0, .8), 
+                            mix(vec3(.85, .2, .2), vec3(.5, .85, .55), clamp(colSwitch, .0, 1.)),
+                            clamp(colSwitch + 1., 0., 1.)),
+                            fragColor.rgb, colVal);
+        fragColor.a = 1.0;
+    }
+
     void main() {
-      // Slow pulsing colors
-      float r = sin(uTime * 0.2) * 0.3 + 0.3;
-      float g = sin(uTime * 0.15 + 2.0) * 0.3 + 0.3;
-      float b = sin(uTime * 0.25 + 4.0) * 0.3 + 0.4;
-      
-      // Make it slightly darker for a background
-      gl_FragColor = vec4(r * 0.5, g * 0.5, b * 0.5, 1.0);
+        mainImage(gl_FragColor, gl_FragCoord.xy);
     }
   `;
 
@@ -74,7 +139,8 @@ onMounted(() => {
       vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
     },
     uniformLocations: {
-      time: gl.getUniformLocation(shaderProgram, 'uTime'),
+      progress: gl.getUniformLocation(shaderProgram, 'uProgress'),
+      resolution: gl.getUniformLocation(shaderProgram, 'iResolution'),
     },
   };
 
@@ -96,12 +162,12 @@ onMounted(() => {
     position: positionBuffer,
   };
 
-  let startTime = performance.now();
+  let currentProgress = 0;
 
   const render = (now: number) => {
     if (!gl || !programInfo) return;
 
-    const time = (now - startTime) * 0.001; // Convert to seconds
+    currentProgress += (props.progress - currentProgress) * 0.05;
 
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -119,7 +185,8 @@ onMounted(() => {
 
     gl.useProgram(programInfo.program);
 
-    gl.uniform1f(programInfo.uniformLocations.time, time);
+    gl.uniform1f(programInfo.uniformLocations.progress, currentProgress);
+    gl.uniform2f(programInfo.uniformLocations.resolution, canvas.width, canvas.height);
 
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 

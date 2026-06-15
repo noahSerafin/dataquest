@@ -205,9 +205,6 @@ const type = ((item: Item) => {
   width: 100%;
   height: 100%;
 }
-.tile-empty{
-  background-color: black;
-}
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;

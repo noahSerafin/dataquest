@@ -582,7 +582,6 @@ function resolveMove(
 }
 
 .tile-empty {
-  background-color: black;
   z-index: -1;
 }
 

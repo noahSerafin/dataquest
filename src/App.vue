@@ -855,6 +855,8 @@ async function handleProceed() {
   showMap.value = true;
   currentCompany.value.abbr = '';
   currentCompany.value.unicode = player.value.osunicode;
+  currentCompany.value.tileColor = 'rgb(17, 31, 15)';
+  currentCompany.value.edgeColor = 'rgb(156, 201, 84)';
   hasWonRound.value = false;
   saveGameState();
 }

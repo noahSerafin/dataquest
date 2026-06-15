@@ -915,10 +915,6 @@ watch(currentNodeId, () => {
     border-color: yellow;
 }
 
-.text-gold {
-    color: rgb(255, 214, 78);
-}
-
 .preview-modal.ZEN .text-gold {
     color: #864800;
 }

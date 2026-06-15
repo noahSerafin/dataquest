@@ -3,6 +3,10 @@
     import { Admin } from '../AdminPrograms';
     import { computed, onMounted } from 'vue';
     import { reapplyTutorialTooltips } from '../tutorial';
+    import cashOutSound from '../../sfx/cash.ogg';
+    import { playSoundFx, preloadSound } from '../helperFunctions';
+
+    preloadSound(cashOutSound);
 
     interface Props{
         hasWonRound: boolean,
@@ -28,13 +32,14 @@
     });
 
     const bonus = computed(() => 
-        props.player.hasAdmin('Pot of Gold') && props.bosses.length > 0 ? 10 : 0
+        props.player.hasAdmin('Pot of Gold') && props.bosses.length > 0 ? 10 * props.player.adminCount('Pot of Gold') : 0
     )
 
     function collectAndProceed(){
         props.player.collectMoney(bonus.value);
         emit('proceedFromEndOfRound');
         props.player.resetInterestAndReward();
+        playSoundFx(cashOutSound, 1.0);
     }
 
     //duplicate admins later??
@@ -72,42 +77,42 @@
                 </span>
                 <span v-if="player.hasAdmin('Chedda')">+ Chedda 
                     <span class="text-yellow">
-                        $1
+                        ${{ 1 * player.adminCount('Chedda') }}
                     </span>
                 </span>
                 <span v-if="player.hasAdmin('Miner')">+ Miner 
                     <span class="text-yellow">
-                        $2
+                        ${{ 2 * player.adminCount('Miner') }}
                     </span>
                 </span>
                 <span v-if="player.hasAdmin('Abacus')">+ Abacus 
                     <span class="text-yellow">
-                        ${{ Math.floor(3/player.difficulty) }}
+                        ${{ Math.floor(6/player.difficulty) * player.adminCount('Abacus') }}
                     </span>
                 </span>
                 <span v-if="player.hasAdmin('Punching')">+ Punching
                     <span class="text-yellow">
-                        $5
+                        ${{ 5 * player.adminCount('Punching') }}
                     </span>
                 </span>
                 <span v-if="player.hasAdmin('Loot')">+ Loot 
                     <span class="text-yellow">
-                        $4
+                        ${{ 4 * player.adminCount('Loot') }}
                     </span>
                 </span>
                 <span v-if="player.hasAdmin('Tithe')">+ Tithe 
                     <span class="text-yellow">
-                        $5
+                        ${{ 5 * player.adminCount('Tithe') }}
                     </span>
                 </span>
                 <span v-if="player.hasAdmin('Pot of Gold') && bosses.length > 0">+ Pot of Gold 
                     <span class="text-yellow">
-                        $10
+                        ${{ 10 * player.adminCount('Pot of Gold') }}
                     </span>
                 </span>
 
             </div>
-            <button @click="collectAndProceed">Collect and proceed</button>
+            <button class="btn-grey" @click="collectAndProceed">Collect <span class="text-gold">$</span> and proceed</button>
         </div>
         <div class="if-lost" v-if="!hasWonRound && player.lives > 0">
             <h3>
@@ -147,5 +152,9 @@
         background-color: black;
         border-radius: 15px;
         position: relative;
+    }
+    .btn-grey{
+        background-color: #acacac;
+        border: 1px solid white;
     }
 </style>

@@ -22,14 +22,14 @@ import { createDefaultStatuses } from "./types";
     }
     const testPiece =  {
         id: crypto.randomUUID(),
-        name: "Bug",
+        name: "Lighthouse",
         description: "testing this pieces special move",
         unicode: 'U+1F47E',
         maxSize: 2,
         moves: 10,
-        range: 2,
+        range: 20,
         attack: 2,
-        defence: 0,
+        defence: 20,
         rarity: 5,
         color: "#ee74eeff",
         // blueprint-only fields:

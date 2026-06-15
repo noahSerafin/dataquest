@@ -267,6 +267,10 @@ body,
   color: #ebeb1b;
 }
 
+.text-gold {
+    color: rgb(243, 194, 32);
+}
+
 .text-blue {
   color: #1b9feb;
 }

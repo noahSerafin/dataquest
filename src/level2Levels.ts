@@ -2923,6 +2923,38 @@ const beachhead = {
         }
       ],
       "rarity": 1
+    },
+    {
+      "id": "b49108d4-845c-48b8-ae57-0b012c5518ba",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 3,
+        "y": 6
+      },
+      "tiles": [
+        {
+          "x": 2,
+          "y": 6
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "b49108d4-845c-48b8-ae57-0b012c5518bb",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 4,
+        "y": 6
+      },
+      "tiles": [
+        {
+          "x": 3,
+          "y": 6
+        }
+      ],
+      "rarity": 1
     }
   ]
 }

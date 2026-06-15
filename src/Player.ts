@@ -186,6 +186,10 @@ export class Player {
     return this.admins.some(a => a.name === name);
   }
 
+  adminCount(name: string): number {
+    return this.admins.filter(a => a.name === name).length;
+  }
+
   calcInterest(){
     const baseMoney = Math.max(0, this.money);   // ← prevents negative interest
     const noOfFives = Math.floor(baseMoney / 5);

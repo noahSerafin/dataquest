@@ -104,7 +104,10 @@ onMounted(() => {
             for(int i = -1; i <= 1; i ++)
             {
                 vec2 b = vec2(i, j);
-                vec2 r = vec2(b) - f + rand2(p + b) * voronoiRandK;
+                vec2 cellRand = rand2(p + b);
+                // Morph the cell position smoothly based on uProgress
+                vec2 cellOffset = 0.5 + 0.5 * sin(uProgress * 4.0 + 2.0 * PI * cellRand);
+                vec2 r = vec2(b) - f + cellOffset * voronoiRandK;
 
                 float d = (abs(r.x) + abs(r.y));
 

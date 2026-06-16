@@ -2344,7 +2344,7 @@ class Piggy extends Admin {
   static color = "rgb(203, 25, 215)";
   static rarity = 1;
   constructor() {
-    super(Piggy.name, Piggy.description, Piggy.unicode, Piggy.color, 2, Piggy.rarity, 'player', 'other')
+    super(Piggy.name, Piggy.description, Piggy.unicode, Piggy.color, 5, Piggy.rarity, 'player', 'other')
   }
   //handle in player
 }

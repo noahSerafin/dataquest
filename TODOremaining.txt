@@ -24,6 +24,7 @@ Hidden
 
 //IMPROVEMENTS/bugs
 show counts on admins
+salty dmgmult instead of atk?
 look into enemy blinded bug
 -fix immunity items applying to duped programs
 -nerf archer to adjacent enemies only

@@ -850,8 +850,10 @@ class Shovel extends Piece {
     this.targetType = 'space';
   }
   async special({ target, activePieces }: { target: Coordinate, activePieces: Piece[] }): Promise<void> {
-    const newAcorn = new Pitfall(target, this.team, this.removeCallback, crypto.randomUUID())//removecallback might be wrong here
-    activePieces.push(newAcorn)
+    const newPitfall = new Pitfall(target, this.team, this.removeCallback, crypto.randomUUID())//removecallback might be wrong here
+    activePieces.push(newPitfall);
+    newPitfall.actions = 0;
+    newPitfall.movesRemaining = 0;
     this.actions--
   }
 }

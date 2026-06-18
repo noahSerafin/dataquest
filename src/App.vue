@@ -2197,6 +2197,11 @@ function cancelConfirm() {
   color: red;
 }
 
+.top-hud{
+  border-radius: 8px;
+  border: 2px solid white;
+}
+
 .enemy-info {
   display: flex;
   gap: 2rem;

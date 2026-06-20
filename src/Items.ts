@@ -569,7 +569,7 @@ export class Pinata extends Item<Player> {//untested
 
 export class Spanner extends Item<Piece> {
     static name = "Spanner";
-    static description = "Prevent a program from moving or taking action for one turn";
+    static description = "Prevent a program from moving, and taking action for one turn";
     static unicode = "U+1F527";
     static color = "#5a0505ff";
     static rarity = 3;
@@ -578,8 +578,10 @@ export class Spanner extends Item<Piece> {
         //name desc utf || maxsize moves range atk def
     }
     apply(target: Piece, _itemMult: number) {
-        target.movesRemaining = 0;
-        target.actions = 0;
+        if(!target.immunities.frozen){
+            target.statuses.frozen = true;
+        }
+        target.statuses.disarmed = true;
     }
 }
 

@@ -13,6 +13,7 @@ export const STATUS_ICONS: Record<string, string> = {
   enraged: "💢",     // ANGER SYMBOL, U+1F4A2
   zen: "😌", //U+1F60C
   disarmed: "🤐", //U+1F910
+  juiced: "😤"
 };
 
 export const STATUS_INFO: Record<string, string> = {
@@ -30,6 +31,7 @@ export const STATUS_INFO: Record<string, string> = {
   enraged: "Gains +1 attack on the start of it's turn",
   zen: "Temporary +1 to all stats at the start of the next turn",
   disarmed: "Has no actions for one turn",
+  juiced: "Starts the next turn with 2 actions",
   Large: "+1 max size",
   Giant: "+2 max size",
   Fast: "+1 moves",

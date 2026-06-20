@@ -1,6 +1,5 @@
 //SOUND FX
 roundWon - x1
-cashOut - x1
 ready attack x1 - use a different one
 ready special x1 - make shorter
 adminTrigger - x1 / bossTrigger - x1
@@ -12,17 +11,11 @@ loading Level- x1
 3 more music tracks
 
 negativeStatusApplied
-Freeze
-Burn
-Slow
-Blind
-Poison
-Disease
-Charmed
-Exposed
-Hidden
+Freeze, Burn, Slow, Blind, Poison, Disease, Charmed, Exposed, Hidden
 
 //IMPROVEMENTS/bugs
+zombie not always duping when attack head on piece bigger than 1
+add fake loading screens
 show counts on admins
 look into enemy blinded bug
 -fix immunity items applying to duped programs

@@ -1435,7 +1435,7 @@ export class Hermes extends Admin {//moves
 
 class Scarf extends Admin {
   static name = "Scarf";
-  static description = "All programs are immune to being frozen";
+  static description = "All your programs are immune to being frozen on load";
   static unicode = "U+1F9E3";
   static color = "rgb(216, 248, 244)";
   static rarity = 2;

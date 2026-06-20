@@ -1778,9 +1778,7 @@ const endTurn = async () => {
     }
     if (piece.team === 'enemy') {
       await piece.resetTempModifiers();
-      if(piece.actions < 1){//for singularity
-        piece.actions = 1;
-      }
+      piece.actions = 1;
       await piece.applyStartingStatusEffects(statusMult);
       piece.resetMoves();
       piece.willRetaliate = false;

@@ -2929,12 +2929,12 @@ const beachhead = {
       "name": "Spawn",
       "team": "player",
       "headPosition": {
-        "x": 3,
+        "x": 1,
         "y": 6
       },
       "tiles": [
         {
-          "x": 2,
+          "x": 1,
           "y": 6
         }
       ],
@@ -2945,12 +2945,12 @@ const beachhead = {
       "name": "Spawn",
       "team": "player",
       "headPosition": {
-        "x": 4,
+        "x": 5,
         "y": 6
       },
       "tiles": [
         {
-          "x": 3,
+          "x": 5,
           "y": 6
         }
       ],

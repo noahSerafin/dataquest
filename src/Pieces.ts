@@ -367,6 +367,9 @@ export abstract class Piece {
       this.addTempModifier({ moves: 1 * mult });
       this.statuses.zen = false;
     }
+    if (this.statuses.juiced) {
+      this.actions = 2;
+    }
   }
 
   clone(): Piece {

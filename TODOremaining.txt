@@ -11,7 +11,7 @@ loading Level- x1
 3 more music tracks
 
 negativeStatusApplied
-Freeze, Burn, Slow, Blind, Poison, Disease, Charmed, Exposed, Hidden
+Freeze,, Burn,, Slow,, Blind,, Poison, Disease, Charmed,, Exposed,, Hidden
 
 //IMPROVEMENTS/bugs
 zombie not always duping when attack head on piece bigger than 1

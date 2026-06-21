@@ -2765,7 +2765,7 @@ class Juggler extends Admin {//test
     for (const bp of player.programs) {
       if (bp.isPlaced) placedBps.push(bp.id)
     };
-    if (placedBps.length < 1 && this.firstId !== id) {
+    if (placedBps.length <= 1 && this.firstId !== id) {
       const idx = activePieces.findIndex(p => p.id === id);
       activePieces[idx].addModifier({ maxSize: 1, moves: 1, range: 1, attack: 1, defence: 1 })
       activePieces[idx].movesRemaining += 1;

@@ -384,7 +384,7 @@ export abstract class Piece {
       { ...this.headPosition },
       this.team,
       this.removeCallback,
-      crypto.randomUUID()
+      this.id
     );
 
     // ---- copy tiles (deep copy)
@@ -2152,7 +2152,7 @@ class Dragon extends Piece {//line?
 
 class Ink extends Piece {
   static name = "Ink";
-  static description = "An ink decoy that lasts for one turn";
+  static description = "An ink decoy that reduces range by 1 and applies blinded";
   static unicode = "U+1F322";//"U+26AB";
   static color = "#303030ff";
   static rarity = 1;//should never appear on its own
@@ -2163,6 +2163,7 @@ class Ink extends Piece {
   }
   async special(target: Piece): Promise<void> {
     if (!target.immunities.blinded) {
+      target.range -= 1;
       target.statuses.blinded = true;
     }
     this.actions--
@@ -2174,7 +2175,7 @@ class Ink extends Piece {
 
 class Squid extends Piece {
   static name = "Squid";
-  static description = "A program that can creat ink decoy tiles that blind enemies, immune to being blinded itself";
+  static description = "A program that can creat ink decoy tiles that blinds enemies and reduces their range by 1 immediately, immune to being blinded itself";
   static unicode = "U+1F991";
   static color = "#08004dff";
   static rarity = 4;

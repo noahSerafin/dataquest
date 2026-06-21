@@ -140,7 +140,7 @@ class Clover extends Admin {
   static color = "#00ff0dff";
   static rarity = 2;
   constructor() {
-    super(Clover.name, Clover.description, Clover.unicode, Clover.color, 7, Clover.rarity, 'gameState', 'other')//shop state, on round end? on OpenShop?
+    super(Clover.name, Clover.description, Clover.unicode, Clover.color, 5, Clover.rarity, 'gameState', 'other')//shop state, on round end? on OpenShop?
   }
   //interact with shop, modify shop for this
 }
@@ -671,7 +671,7 @@ class Brain extends Admin {//unfinished, actionsHandler in Piececontroller playi
 
 class GoldenTicket extends Admin {//make item
   static name = "Golden Ticket";
-  static description = "Skip a non boss level for $5 (no reward or interest earned)";
+  static description = "Skip one non boss level for $5 (no reward or interest earned)";
   static unicode = "U+1F3AB";
   static color = "#dfba42ff";
   static rarity = 1;
@@ -917,7 +917,7 @@ export class Seed extends Admin {
 
 class Puzzle extends Admin {
   static name = "Puzzle Piece";
-  static description = "Pieces with an ally adjacent to their head temporarily gain +1 defence until the start of your next turn";
+  static description = "Pieces with an ally adjacent to their head temporarily gain +1 defence until the start of your next turn";//for each piece adjacent?
   static unicode = "U+1F9E9";
   static color = "#55b0ff";
   static rarity = 3;

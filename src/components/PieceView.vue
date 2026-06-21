@@ -138,10 +138,6 @@ const activeStatuses = computed((): [string, boolean][] => {
     .filter(([, active]) => active);
 });
 
-const shieldIcon = String.fromCodePoint(
-  parseInt("U+1F6E1".replace("U+", ""), 16)
-);
-
 function pieceTipClass(){
   if(props.piece.name === 'Spawn') return 'spawnTip'
   if(props.piece.team === 'player') return 'playerPieceTip'
@@ -189,15 +185,10 @@ function pieceTipClass(){
         <span>🦶</span>
         <span class="stat-value">{{ piece.movesRemaining }}</span>
       </div>
-    </div>
-    <div v-if="!piece.redacted" class="piece-defence">
-      <span class="piece-defence-shield"
-        v-for="n in (Math.min(Math.max(0, Math.floor(piece.defenceRemaining || 0)), 2))"
-        :key="n"
-      >
-        {{ shieldIcon }}
-      </span>
-      <span class="piece-defence-shield" v-if="Math.max(0, piece.defenceRemaining) > 2">+</span>
+      <div class="stat-defence" v-if="piece.defenceRemaining > 0">
+        <span>🛡️</span>
+        <span class="stat-value">{{ piece.defenceRemaining }}</span>
+      </div>
     </div>
     <div class="popups-container">
       <div
@@ -349,18 +340,6 @@ function pieceTipClass(){
      opacity: 1;
   }
 }
-.piece-defence{
-  position: absolute;
-  bottom: -40px;
-  left: 0;
-  bottom: -24px;
-}
-.piece-defence-shield{
-  background-color: rgb(130, 226, 226);
-  color: black;
-  border: 1px solid white;
-  font-size: 12px;
-}
 .hybrid .primary-unicode{
   position: absolute;
   left: 5%;
@@ -445,7 +424,7 @@ function pieceTipClass(){
   gap: 1px;
 }
 
-.stat-attack, .stat-moves {
+.stat-attack, .stat-moves, .stat-defence {
   font-size: 15px;
   display: flex;
   align-items: center;
@@ -469,14 +448,8 @@ function pieceTipClass(){
   .stat-actions, .stat-moves {
     font-size: 9px !important;
   }
-  .stat-attack {
+  .stat-attack, .stat-defence {
     display: none !important;
-  }
-  .piece-defence-shield {
-    font-size: 8px !important;
-  }
-  .piece-defence {
-    bottom: -15px !important;
   }
 }
 </style>

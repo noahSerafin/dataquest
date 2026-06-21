@@ -32,7 +32,7 @@ export const STATUS_INFO: Record<string, string> = {
   zen: "Temporary +1 to all stats at the start of the next turn",
   disarmed: "Has no actions for one turn",
   juiced: "Starts the next turn with 2 actions",
-  Large: "+1 max size",
+  Big: "+1 max size",
   Giant: "+2 max size",
   Fast: "+1 moves",
   Speedy: "+2 moves",

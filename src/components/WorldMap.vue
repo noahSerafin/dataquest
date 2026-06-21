@@ -193,7 +193,7 @@ function skipNode(node: WorldNode) {
     //node.visible = true;
     previousNodeId.value = currentNodeId.value;
     currentNodeId.value = node.id;
-    emit('incrementProgress')
+    emit('incrementProgress');
 }
 
 function enterNode(node: WorldNode) {

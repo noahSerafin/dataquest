@@ -316,14 +316,6 @@ export abstract class Piece {
     this.isTriggering = false;
   }
 
-  //cloaked
-  //checkStatuses
-  //burning take 1 damage regardless of def
-  //posion defence -1
-  //disease - maxsize -1
-  //drugged - moves - 1
-  //oil range -1
-
   async applyStatusEffects(mult: number) {
     if (this.statuses.diseased) {
       this.addModifier({ maxSize: -(1 * Math.abs(mult)) });
@@ -1207,7 +1199,7 @@ class Banana extends Piece {
 
 class Trap extends Piece {
   static name = "Trap";
-  static description = "A program hidden to the enemy that freezes programs moving over it and applies posion to them, removing itself";
+  static description = "A program hidden to the enemy that freezes programs moving over it and applies poison to them, removing itself";
   static unicode = "U+1FAA4";
   static color = "#686026";
   static rarity = 3;
@@ -2433,7 +2425,7 @@ class Paragon extends Piece {
 
 class Cupid extends Piece {
   static name = "Cupid";
-  static description = "Can charm an enemy on the board, putting it under your control for the round";
+  static description = "Can reduce it's own attack to charm an enemy, putting it under your control for the round";
   static unicode = "U+1F47C";
   static color = "rgb(250, 250, 250)";
   static rarity = 5;
@@ -2443,10 +2435,11 @@ class Cupid extends Piece {
     this.targetType = 'piece'
     this.appliesStatuses = ['charmed'];
   }
-
+  //private count = 0;
   async special(targetPiece: Piece): Promise<void> {
-    if (!targetPiece.immunities.charmed) {
+    if (!targetPiece.immunities.charmed && this.getStat('attack') > 1) {
       targetPiece.statuses.charmed = true;
+      this.addModifier({attack: -1});
     } else if (targetPiece.statuses.charmed) {
       targetPiece.takeDamage(this.getStat('attack'))
       if (targetPiece.willRetaliate) await this.takeDamage(targetPiece.getStat('attack'))

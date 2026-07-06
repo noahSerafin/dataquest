@@ -15,6 +15,7 @@ Freeze,, Burn,, Slow,, Blind,, Poison, Disease, Charmed,, Exposed,, Hidden
 
 //IMPROVEMENTS/bugs
 music optional include in memory
+stylisise highlights (red arrows inward, green upload symbol)
 zombie not always duping when attack head on piece bigger than 1
 add fake loading screens
 show counts on admins

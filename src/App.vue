@@ -1951,11 +1951,12 @@ function requestRetry() {
   showConfirmModal.value = true;
 }
 
-function handleConfirm() {
+async function handleConfirm() {
   if (confirmModalAction.value === "forfeit") {
     endRound(false);
   } else if (confirmModalAction.value === "retry") {
     player.value.lives--;
+    await handleApplyAdmins('onRoundLoss', '');
     reloadLevel();
   }
   showConfirmModal.value = false;

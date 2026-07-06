@@ -116,6 +116,9 @@ const isDisabled = computed(() => {
       <p class='top-left' v-if="cssclass === 'shop' && type == 'admin'"
         :style="`top: -${((props.tileSize - 10) / 2 - 24)}px`">
         A</p>
+      <p class='bottom-left' v-if="type === 'admin' && (item as any).count !== undefined"
+        :style="`bottom: -${((props.tileSize - 10) / 2 - 24)}px`">
+        {{ (item as any).count }}</p>
       <div class="icon">{{ unicodeSymbol }}</div>
     </div>
 
@@ -282,6 +285,20 @@ button:disabled {
   font-size: 12px;
   position: absolute;
   right: 0px;
+  margin: 0;
+}
+
+.bottom-left {
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  line-height: 12px;
+  color: white;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px black;
+  font-size: 12px;
+  position: absolute;
+  left: 0px;
   margin: 0;
 }
 

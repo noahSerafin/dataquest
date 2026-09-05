@@ -228,6 +228,9 @@ const isDisabled = computed(() => {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  z-index: 1;
+  transform: translateZ(0);
 }
 
 .info {

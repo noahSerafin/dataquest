@@ -206,6 +206,12 @@ function handleSelect() {
 .skipReward-piece{
   margin-bottom: 2rem;
 }
+.primary-unicode {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  transform: translateZ(0);
+}
 .hybrid .primary-unicode{
   position: absolute;
   left: 5%;

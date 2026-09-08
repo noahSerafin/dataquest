@@ -160,25 +160,54 @@ export abstract class Piece {
   // --- Methods to handle modifiers ---
   addModifier(mod: StatModifier) {
     Object.entries(mod).forEach(([key, val]) => {
-      this.statModifiers[key as keyof StatModifier] =
-        (this.statModifiers[key as keyof StatModifier] ?? 0) + val;
+      if (val === undefined) return;
+      const k = key as keyof StatModifier;
+      let newMod = (this.statModifiers[k] ?? 0) + val;
+      const minVal = k === 'maxSize' ? 1 : 0;
+      const base = this.getBaseStat(k);
+      
+      if (base + newMod < minVal) {
+        newMod = minVal - base;
+      }
+      this.statModifiers[k] = newMod;
     });
   }
 
   removeModifier(mod: StatModifier) {
     Object.entries(mod).forEach(([key, val]) => {
-      if (!this.statModifiers[key as keyof StatModifier]) return;
-      this.statModifiers[key as keyof StatModifier]! -= val;
-      if (this.statModifiers[key as keyof StatModifier]! <= 0) {
-        delete this.statModifiers[key as keyof StatModifier];
+      if (val === undefined) return;
+      const k = key as keyof StatModifier;
+      if (this.statModifiers[k] === undefined) return;
+      
+      let newMod = this.statModifiers[k]! - val;
+      const minVal = k === 'maxSize' ? 1 : 0;
+      const base = this.getBaseStat(k);
+      
+      if (base + newMod < minVal) {
+        newMod = minVal - base;
+      }
+      
+      if (newMod === 0) {
+        delete this.statModifiers[k];
+      } else {
+        this.statModifiers[k] = newMod;
       }
     });
   }
 
   addTempModifier(mod: StatModifier) {
     Object.entries(mod).forEach(([key, val]) => {
-      this.tempStatModifiers[key as keyof StatModifier] =
-        (this.tempStatModifiers[key as keyof StatModifier] ?? 0) + val;
+      if (val === undefined) return;
+      const k = key as keyof StatModifier;
+      let newTempMod = (this.tempStatModifiers[k] ?? 0) + val;
+      const minVal = k === 'maxSize' ? 1 : 0;
+      const base = this.getBaseStat(k);
+      const permMod = this.getModifier(k);
+      
+      if (base + permMod + newTempMod < minVal) {
+        newTempMod = minVal - (base + permMod);
+      }
+      this.tempStatModifiers[k] = newTempMod;
     });
   }
 

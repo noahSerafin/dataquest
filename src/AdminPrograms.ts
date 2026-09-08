@@ -2494,9 +2494,9 @@ class Crash extends Admin {//test
 
 export class Skyscraper extends Admin {//test not working
   static name = "Highrise";
-  static description = "Each placed program gains +1 temporary defence for every 2 tiles of currently occupied on the end of your turn";//every 3? can make larger to nerf
+  static description = "Each placed program gains +1 temporary defence for every 2 tiles currently occupied at the end of your turn";//every 3? can make larger to nerf
   static unicode = "U+1F3E2";
-  static color = "rgb(215, 44, 25)";
+  static color = "rgba(140, 209, 218, 1)";
   static rarity = 5;
   constructor() {
     super(Skyscraper.name, Skyscraper.description, Skyscraper.unicode, Skyscraper.color, 7, Skyscraper.rarity, 'gameState', 'onTurnEnd')
@@ -3597,10 +3597,10 @@ console.log("Admins of rarity 5: ", adminLogs.rarity5)
 console.log("Admins of rarity 6: ", adminLogs.rarity6)
 
 //JEANS, U+1F456 all hidden nodes are compilers - cost gets more expensive each time
-// LIPSTICK, U+1F484 retaliations charm enemies - piece.willRetaliate: hedgehog, fencer, puffer. Admins: Blackbelt(willRetaliate) Cactus Pong 
+// LIPSTICK, U+1F484 retaliations charm enemies - piece.willRetaliate: hedgehog, fencer, puffer. Admins: Blackbelt(willRetaliate) Cactus Pong
 //RECYCLING SYMBOL, U+2672 selling programs gives 1 of lower rarirty
 
-//SLEUTH OR SPY, U+1F575 
+//SLEUTH OR SPY, U+1F575
 //TEACUP WITHOUT HANDLE, U+1F375 calm down, removes enraged from enemies
 //Swish, U+1F3C0 - range of 3+ gets +3 attack
 //SNOWBOARDER, U+1F3C2

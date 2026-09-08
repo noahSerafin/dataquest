@@ -23,6 +23,7 @@ const emit = defineEmits<{
   select: [item: Item];
   deselect: [];
   buy: [item: Item];
+  steal: [item: Item];
   sell: [item: Item];
   use: [item: Item];
 }>();
@@ -151,7 +152,10 @@ const isDisabled = computed(() => {
       </div>
       <div class="flex">
         <button v-if="(cssclass == 'shop')" @click="$emit('buy', item)" :disabled="!canBuy">
-          {{ canSteal ? 'Steal' : 'Buy($' + item.cost + ')' }}
+         {{ 'Buy($' + item.cost + ')' }}
+        </button>
+        <button v-if="(cssclass == 'shop' && canSteal)" @click="$emit('steal', item)" :disabled="!canBuy">
+          Steal
         </button>
         <button v-if="(cssclass == 'inventory' && type == 'consumable')" @click="handleUse">
           Use

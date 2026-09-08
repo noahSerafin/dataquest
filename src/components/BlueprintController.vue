@@ -151,7 +151,10 @@ defineEmits(["buy", "sell", "highlightPlacements", "close"])
       <div class="actions">
         <template v-if="mode === 'shop'">
           <button :disabled="!canBuy" @click="$emit('buy', piece)">
-            {{canSteal ? 'Steal' : 'Buy($'+piece.cost+')'}}
+            {{'Buy($'+piece.cost+')'}}
+          </button>
+          <button v-if="(cssclass == 'shop' && canSteal)" @click="$emit('steal', item)" :disabled="!canBuy">
+            Steal
           </button>
         </template>
 

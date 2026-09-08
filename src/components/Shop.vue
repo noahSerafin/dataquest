@@ -28,7 +28,9 @@ const currentTileSize = computed(() => {
 
 const emit = defineEmits<{
   (e: 'buy-blueprint', blueprint: PieceBlueprint): void;
+  (e: 'steal-blueprint', blueprint: PieceBlueprint): void;
   (e: 'buy-item', item: Item): void;
+  (e: 'steal-item', item: Item): void;
   (e: 'refresh-shop'): void;
   (e: 'selectTarget', target: Item | PieceBlueprint | null): void;
   (e: 'clearTarget'): void;
@@ -61,6 +63,12 @@ function handleBuyBlueprint(blueprint: PieceBlueprint) {
 }
 function handleBuyItem(item: Item) {
   emit("buy-item", item);
+}
+function handleStealItem(item: Item) {
+  emit("steal-item", item);
+}
+function handleStealBluePrint(blueprint: PieceBlueprint) {
+  emit("steal-blueprint", blueprint);
 }
 //        @select="openItemController"
 
@@ -141,6 +149,7 @@ const type = ((item: Item) => {
           :showController="(props.target === item)"
           :canSteal = canSteal
           @buy="handleBuyItem"
+          @steal="handleStealItem"
           @select="openShopController"
           @deselect="deselect"
         />

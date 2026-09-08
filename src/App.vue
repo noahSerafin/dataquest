@@ -575,16 +575,7 @@ function refreshShop(isFree: boolean) {
   //if triggered by player
 }
 
-function buyBlueprint(bp: PieceBlueprint) {
-  shopBlueprints.value = shopBlueprints.value.filter(b => b.id !== bp.id);
-  if (player.value.hasAdmin('Five Finger Discount') && !hasStolenFromThisShop.value) {
-    hasStolenFromThisShop.value = true;
-  } else {
-    player.value.spend(bp.cost);
-    if (player.value.hasAdmin('Piggy')) {
-      player.value.money += 2;
-    }
-  }
+function addBlueprintToInventory(bp: PieceBlueprint){
   player.value.addProgram(bp);
   StorageManager.recordUsage('programs', bp.name);
   shopTarget.value = null;
@@ -592,16 +583,21 @@ function buyBlueprint(bp: PieceBlueprint) {
     reapplyTutorialTooltips(200);
   }
 }
-async function buyItem(item: Item) {
-  shopItems.value = shopItems.value.filter(i => i.id !== item.id);
+function buyBlueprint(bp: PieceBlueprint) {
+  shopBlueprints.value = shopBlueprints.value.filter(b => b.id !== bp.id);
+  player.value.spend(bp.cost);
+  if (player.value.hasAdmin('Piggy')) {
+    player.value.money += 2;
+  }
+  addBlueprintToInventory(bp);
+}
+function stealBlueprint(bp: PieceBlueprint) {
   if (player.value.hasAdmin('Five Finger Discount') && !hasStolenFromThisShop.value) {
     hasStolenFromThisShop.value = true;
-  } else {
-    player.value.spend(item.cost);
-    if (player.value.hasAdmin('Piggy')) {
-      player.value.money += 2;
-    }
   }
+  addBlueprintToInventory(bp);
+}
+async function addItemToinventory(item: Item) {
   // decide which inventory to place it in
   if (item instanceof Admin) {
     player.value.admins.push(item);
@@ -620,6 +616,21 @@ async function buyItem(item: Item) {
     reapplyTutorialTooltips(200);
   }
 }
+async function buyItem(item: Item) {
+  shopItems.value = shopItems.value.filter(i => i.id !== item.id);
+  player.value.spend(item.cost);
+  if (player.value.hasAdmin('Piggy')) {
+    player.value.money += 2;
+  }
+  addItemToinventory(item);
+}
+async function stealItem(item: Item) {
+  if (player.value.hasAdmin('Five Finger Discount') && !hasStolenFromThisShop.value) {
+    hasStolenFromThisShop.value = true;
+  }
+  addItemToinventory(item);
+}
+
 const showShop = ref(false)
 const showCompiler = ref(false)
 const showAltar = ref(false)

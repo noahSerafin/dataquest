@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 
 const props = defineProps<{ 
   progress: number,
@@ -26,6 +26,17 @@ let gl: WebGLRenderingContext | null = null;
 let programInfo: any = null;
 let bufferInfo: any = null;
 
+let parsedEdgeColor = parseRGB(props.edgeColor);
+let parsedTileColor = parseRGB(props.tileColor);
+
+watch(() => props.edgeColor, (newColor) => {
+  parsedEdgeColor = parseRGB(newColor);
+});
+
+watch(() => props.tileColor, (newColor) => {
+  parsedTileColor = parseRGB(newColor);
+});
+
 onMounted(() => {
   const canvas = canvasRef.value;
   if (!canvas) return;
@@ -36,8 +47,8 @@ onMounted(() => {
     return;
   }
 
-  // Handle high DPI displays
-  const dpr = window.devicePixelRatio || 1;
+  // Handle high DPI displays - capped for performance
+  const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
   const resizeCanvas = () => {
     canvas.width = window.innerWidth * dpr;
     canvas.height = window.innerHeight * dpr;
@@ -296,10 +307,8 @@ onMounted(() => {
     gl.uniform1f(programInfo.uniformLocations.time, now / 1000.0);
     gl.uniform2f(programInfo.uniformLocations.resolution, canvas.width, canvas.height);
     
-    const parsedEdge = parseRGB(props.edgeColor);
-    const parsedTile = parseRGB(props.tileColor);
-    gl.uniform3fv(programInfo.uniformLocations.edgeColor, parsedEdge);
-    gl.uniform3fv(programInfo.uniformLocations.tileColor, parsedTile);
+    gl.uniform3fv(programInfo.uniformLocations.edgeColor, parsedEdgeColor);
+    gl.uniform3fv(programInfo.uniformLocations.tileColor, parsedTileColor);
 
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 

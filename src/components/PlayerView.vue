@@ -232,7 +232,7 @@
     });
 
     function getAdminCount() {
-        return props.player.admins.length() - props.player.admins.filter(a => a.compressed).length();
+        return props.player.admins.length - props.player.admins.filter(a => a.compressed).length;
     }
 </script>
 

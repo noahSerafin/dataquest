@@ -64,11 +64,11 @@ function handleBuyBlueprint(blueprint: PieceBlueprint) {
 function handleBuyItem(item: Item) {
   emit("buy-item", item);
 }
+function handleStealBlueprint(blueprint: PieceBlueprint) {
+  emit("steal-blueprint", blueprint);
+}
 function handleStealItem(item: Item) {
   emit("steal-item", item);
-}
-function handleStealBluePrint(blueprint: PieceBlueprint) {
-  emit("steal-blueprint", blueprint);
 }
 //        @select="openItemController"
 
@@ -163,6 +163,7 @@ const type = ((item: Item) => {
       :defaultPosition="{ x: 0, y: 0 }"
       :canSteal = "canSteal"
       @buy="handleBuyBlueprint"
+      @steal="handleStealBlueprint"
       @close="deselect"
     />
     <div class="btn-container-centered">

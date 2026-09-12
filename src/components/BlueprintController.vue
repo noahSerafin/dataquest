@@ -101,7 +101,7 @@ function toggleTooltip(key: string) {
   openTooltip.value = key;
 }
 
-defineEmits(["buy", "sell", "highlightPlacements", "close"])
+defineEmits(["buy", "steal", "sell", "highlightPlacements", "close"])
 </script>
 
 <template>
@@ -153,7 +153,7 @@ defineEmits(["buy", "sell", "highlightPlacements", "close"])
           <button :disabled="!canBuy" @click="$emit('buy', piece)">
             {{'Buy($'+piece.cost+')'}}
           </button>
-          <button v-if="(cssclass == 'shop' && canSteal)" @click="$emit('steal', item)" :disabled="!canBuy">
+          <button v-if="(mode == 'shop' && canSteal)" @click="$emit('steal', piece)" :disabled="!canSteal">
             Steal
           </button>
         </template>

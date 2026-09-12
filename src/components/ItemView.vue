@@ -154,7 +154,7 @@ const isDisabled = computed(() => {
         <button v-if="(cssclass == 'shop')" @click="$emit('buy', item)" :disabled="!canBuy">
          {{ 'Buy($' + item.cost + ')' }}
         </button>
-        <button v-if="(cssclass == 'shop' && canSteal)" @click="$emit('steal', item)" :disabled="!canBuy">
+        <button v-if="(cssclass == 'shop' && canSteal)" @click="$emit('steal', item)" :disabled="!canSteal">
           Steal
         </button>
         <button v-if="(cssclass == 'inventory' && type == 'consumable')" @click="handleUse">

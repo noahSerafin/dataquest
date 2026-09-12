@@ -2262,7 +2262,7 @@ class Purse extends Admin {
   //handle in player
 }
 
-class Discount extends Admin {
+export class Discount extends Admin {
   static name = "Five Finger Discount";
   static description = "Steal once from every shop";
   static unicode = "U+1FAF3";

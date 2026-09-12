@@ -592,6 +592,7 @@ function buyBlueprint(bp: PieceBlueprint) {
   addBlueprintToInventory(bp);
 }
 function stealBlueprint(bp: PieceBlueprint) {
+  shopBlueprints.value = shopBlueprints.value.filter(b => b.id !== bp.id);
   if (player.value.hasAdmin('Five Finger Discount') && !hasStolenFromThisShop.value) {
     hasStolenFromThisShop.value = true;
   }
@@ -625,6 +626,7 @@ async function buyItem(item: Item) {
   addItemToinventory(item);
 }
 async function stealItem(item: Item) {
+  shopItems.value = shopItems.value.filter(i => i.id !== item.id);
   if (player.value.hasAdmin('Five Finger Discount') && !hasStolenFromThisShop.value) {
     hasStolenFromThisShop.value = true;
   }
@@ -2089,8 +2091,8 @@ function cancelConfirm() {
         @addBoss="addBossAdmin" @replaceBosses="replaceBosses" @increaseDifficulty="increaseDifficulty" />
       <Shop v-if="!displayEditor" class="stage-panel" :class="{ active: showShop }" :cssclass="shopClass"
         :shopBlueprints="shopBlueprints" :shopItems="shopItems" :rerollCost="rerollCost" :target="shopTarget"
-        :hasStolen="hasStolenFromThisShop" @refresh-shop="refreshShop(false)" @buy-blueprint="buyBlueprint"
-        @buy-item="buyItem" @selectTarget="selectShopTarget" @clearTarget="clearShopTarget" @closeShop="closeShop"
+        :hasStolen="hasStolenFromThisShop" @refresh-shop="refreshShop(false)" @buy-blueprint="buyBlueprint" @steal-blueprint="stealBlueprint"
+        @buy-item="buyItem" @steal-item="stealItem" @selectTarget="selectShopTarget" @clearTarget="clearShopTarget" @closeShop="closeShop"
         :player="player" :shop-disabled="shopDisabled" :canProceed="canProceedFromShop" />
       <HybridCompiler v-if="!displayEditor" class="stage-panel" :class="{ active: showCompiler }" :player="player"
         :pieceToPlace="pieceToPlace" :isDraggingPlacement="isDraggingPlacement" @openCompiler="openCompiler"

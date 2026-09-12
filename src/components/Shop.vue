@@ -73,28 +73,39 @@ function handleStealItem(item: Item) {
 //        @select="openItemController"
 
 const canReroll = computed(() => props.player.effectiveMoney >= props.rerollCost && !props.shopDisabled);
-const canSteal = computed(() => props.player.hasAdmin('Five Finger Discount') && !props.hasStolen && !props.shopDisabled);
+const canStealGeneral = computed(() => props.player.hasAdmin('Five Finger Discount') && !props.hasStolen && !props.shopDisabled);
+
+const hasItemSpace = (item: Item) => {
+  if (item instanceof Admin) {
+    return item.compressed || props.player.usedAdminSlots < props.player.adminSlots;
+  }
+  const hasSchoolbag = props.player.hasAdmin('Schoolbag');
+  return hasSchoolbag ? props.player.usedMemory <= props.player.memory - 0.5 : props.player.usedMemory <= props.player.memory - 1;
+};
+
+const hasPieceSpace = () => {
+  const hasToolbox = props.player.hasAdmin('Toolbox');
+  return hasToolbox ? props.player.usedMemory <= props.player.memory - 0.5 : props.player.usedMemory <= props.player.memory - 1;
+};
 
 const canBuyItem = ((item: Item) => {
   if(props.shopDisabled) return false;
-  if (item instanceof Admin) {
-    const hasAdminSpace = item.compressed || props.player.usedAdminSlots < props.player.adminSlots;
-    return (props.player.effectiveMoney >= item.cost || canSteal.value ) && hasAdminSpace;
-  }
-  const hasSchoolbag = props.player.hasAdmin('Schoolbag');
-  const hasSpace = hasSchoolbag ? props.player.usedMemory <= props.player.memory-0.5 : props.player.usedMemory <= props.player.memory-1;
-  
-  return (props.player.effectiveMoney >= item.cost || canSteal.value ) && hasSpace;
+  return (props.player.effectiveMoney >= item.cost || canStealGeneral.value) && hasItemSpace(item);
+});
+
+const canStealItem = ((item: Item) => {
+  return canStealGeneral.value && hasItemSpace(item);
 });
 
 const canBuyTargetPiece = ((blueprint: PieceBlueprint) => {//wrong??? not being recalculated after purchase
   //if (!props.target) return false;
   //if (props.target instanceof Item) return false;
   if(props.shopDisabled) return false;
-  const hasToolbox = props.player.hasAdmin('Toolbox');
-  const hasSpace = hasToolbox ? props.player.usedMemory <= props.player.memory-0.5 : props.player.usedMemory <= props.player.memory-1;
+  return (props.player.effectiveMoney >= blueprint.cost || canStealGeneral.value) && hasPieceSpace();
+});
 
-  return (props.player.effectiveMoney >= blueprint.cost || canSteal.value ) && hasSpace;
+const canStealTargetPiece = ((blueprint: PieceBlueprint) => {
+  return canStealGeneral.value && hasPieceSpace();
 });
 
 watchEffect(() => {
@@ -147,7 +158,7 @@ const type = ((item: Item) => {
           :tileSize="currentTileSize"
           :canBuy= "canBuyItem(item)"
           :showController="(props.target === item)"
-          :canSteal = canSteal
+          :canSteal="canStealItem(item)"
           @buy="handleBuyItem"
           @steal="handleStealItem"
           @select="openShopController"
@@ -161,7 +172,7 @@ const type = ((item: Item) => {
       mode="shop"
       :canBuy= "canBuyTargetPiece(props.target)"
       :defaultPosition="{ x: 0, y: 0 }"
-      :canSteal = "canSteal"
+      :canSteal="canStealTargetPiece(props.target)"
       @buy="handleBuyBlueprint"
       @steal="handleStealBlueprint"
       @close="deselect"

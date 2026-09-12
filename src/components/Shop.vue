@@ -104,7 +104,7 @@ const canBuyTargetPiece = ((blueprint: PieceBlueprint) => {//wrong??? not being 
   return (props.player.effectiveMoney >= blueprint.cost || canStealGeneral.value) && hasPieceSpace();
 });
 
-const canStealTargetPiece = ((blueprint: PieceBlueprint) => {
+const canStealTargetPiece = (() => {
   return canStealGeneral.value && hasPieceSpace();
 });
 
@@ -172,7 +172,7 @@ const type = ((item: Item) => {
       mode="shop"
       :canBuy= "canBuyTargetPiece(props.target)"
       :defaultPosition="{ x: 0, y: 0 }"
-      :canSteal="canStealTargetPiece(props.target)"
+      :canSteal="canStealTargetPiece()"
       @buy="handleBuyBlueprint"
       @steal="handleStealBlueprint"
       @close="deselect"

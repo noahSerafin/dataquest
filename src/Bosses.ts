@@ -401,7 +401,7 @@ class Customs extends Admin {//remove
             activePieces[idx].statuses.exposed = true;
             activePieces[idx].statuses.hidden = false;
         }
-        activePieces[idx].addModifier({moves: -1})
+        activePieces[idx].addModifier({ moves: -1 })
     }
 }
 
@@ -556,7 +556,7 @@ class Bones extends Admin {
         super(Bones.name, Bones.description, Bones.unicode, Bones.color, 4, Bones.rarity, 'gameState', 'onPieceDestruction')
     }
     async apply({ activePieces, piece }: { activePieces: Piece[], piece?: Piece }) {
-        if(!piece) return;
+        if (!piece) return;
         if (piece.team === 'player') {
             const EnemyClass = allPieces.find(p => p.name === piece.name);
             if (EnemyClass) {
@@ -723,7 +723,7 @@ class Tornado extends Admin {
         if (!playerSpawns) return;
         this.isTriggering = true;
         setTimeout(() => this.isTriggering = false, 500);
-        const unoccupiedTiles = board.filter(t => !activePieces.some(p => p.tiles.some(pt => pt.x === t.x && pt.y === pt.y)));
+        const unoccupiedTiles = board.filter(t => !activePieces.some(p => p.tiles.some(pt => pt.x === t.x && pt.y === t.y)));
 
         const playerSpawnPieces = activePieces.filter(p => p.team === 'player' && p.name === 'Spawn');
 
@@ -794,7 +794,7 @@ class Tsunami extends Admin {
 
 class Coaster extends Admin {
     static name = "Up and Up";//cranking up
-    static description = "Every player piece takes a cumulating +1 damage after each turn after the first";//turn count is damage?
+    static description = "Every player piece takes a cumulating +1 damage after every 2 turns";//turn count is damage?
     static unicode = "U+1F3A2";//"U+1F3D4";//mountain
     static color = "rgb(196, 233, 245)";
     static rarity = 4;
@@ -803,10 +803,10 @@ class Coaster extends Admin {
     }
     private count: number = 0
     async apply({ id: _id, activePieces, player: _player }: { id: string, activePieces: Piece[], player: Player }) {
-        if (this.count >= 1) {
+        if (this.count % 2 == 0 && this.count > 0) {
             for (const piece of activePieces) {
                 if (piece.team === 'player') {
-                    piece.takeDamage(this.count);
+                    piece.takeDamage(this.count / 2);
                     this.isTriggering = true;
                     setTimeout(() => this.isTriggering = false, 500);
                 }
@@ -868,10 +868,10 @@ class Cocktail extends Admin {
 
         const Boss1 = Random.pick(possibleBosses);
         const Boss2 = Random.pick(possibleBosses);
-        
+
         const b1 = new Boss1();
         const b2 = new Boss2();
-        
+
         this.addedBosses.push(b1, b2);
 
         const cocktailIndex = bosses.indexOf(this);
@@ -884,8 +884,8 @@ class Cocktail extends Admin {
     onRoundEnd(bosses?: Admin[]) {
         if (!bosses || this.addedBosses.length === 0) return;
         this.addedBosses.forEach(b => {
-             const idx = bosses.indexOf(b);
-             if (idx !== -1) bosses.splice(idx, 1);
+            const idx = bosses.indexOf(b);
+            if (idx !== -1) bosses.splice(idx, 1);
         });
         this.addedBosses = [];
     }
@@ -912,25 +912,25 @@ class Mountain extends Admin {
 }
 //quicksand BEACH WITH UMBRELLA, U+1F3D6 //THONG SANDAL, U+1FA74 //HOURGLASS WITH FLOWING SAND,// U+23F3 DESERT, U+1F3DC
 class Quicksand extends Admin {
-  static name = "Quicksand";
-  static description = "Programs that move temporarily lose -1 moves at the end of enemy's turn";
-  static unicode = "U+1F3D6";
-  static color = "rgb(252, 230, 148)";
-  static rarity = 1;
-  constructor() {
-    super(Quicksand.name, Quicksand.description, Quicksand.unicode, Quicksand.color, 3, Quicksand.rarity, 'gameState', 'onEnemyTurnEnd')
-  }
-  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-    for (const p of activePieces) {
-      if(p.team==='player' && p.movesRemaining < p.getStat('moves')){
-        p.quickSanded = true;
-        this.isTriggering = true;
-        setTimeout(() => this.isTriggering = false, 500);
-      } else {
-        p.quickSanded = false;
-      }
-    };
-  }
+    static name = "Quicksand";
+    static description = "Programs that move temporarily lose -1 moves at the end of enemy's turn";
+    static unicode = "U+1F3D6";
+    static color = "rgb(252, 230, 148)";
+    static rarity = 1;
+    constructor() {
+        super(Quicksand.name, Quicksand.description, Quicksand.unicode, Quicksand.color, 3, Quicksand.rarity, 'gameState', 'onEnemyTurnEnd')
+    }
+    async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+        for (const p of activePieces) {
+            if (p.team === 'player' && p.movesRemaining < p.getStat('moves')) {
+                p.quickSanded = true;
+                this.isTriggering = true;
+                setTimeout(() => this.isTriggering = false, 500);
+            } else {
+                p.quickSanded = false;
+            }
+        };
+    }
 }
 //CLOUD WITH SNOW, U+1F328 - white out -1 moves -1 range 5
 class Snow extends Admin {
@@ -1037,19 +1037,19 @@ class TrafficLight extends Admin {
     }
     private count = 0;
     async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
-            if(this.count === 2){
+        if (this.count === 2) {
             for (const p of activePieces) {
-                if(p.team==='player' && (p.actions < 1 || p.getStat('moves') > p.movesRemaining)){
+                if (p.team === 'player' && (p.actions < 1 || p.getStat('moves') > p.movesRemaining)) {
                     await p.takeDamage(player.difficulty)
                 }
             }
             this.color = 'green';
             this.count = 0;
         } else {
-            this.count ++
-            if(this.count === 1){
+            this.count++
+            if (this.count === 1) {
                 this.color = 'orange';
-            } else  if(this.count === 2){
+            } else if (this.count === 2) {
                 this.color = 'red';
                 this.isTriggering = true;
                 setTimeout(() => this.isTriggering = false, 500);
@@ -1073,16 +1073,16 @@ class Concussion extends Admin {
     }
     private candidates: Record<string, number> = {};
     async apply({ id: _id, activePieces: _activePieces, piece }: { id: string, activePieces: Piece[], piece?: Piece }) {
-        if(!piece) return;
-        
-        if(piece.defenceRemaining < 0){
+        if (!piece) return;
+
+        if (piece.defenceRemaining < 0) {
             // Increment hit count for this program
             this.candidates[piece.id] = (this.candidates[piece.id] || 0) + 1;
         }
         if (this.candidates[piece.id] >= 2) {
             this.isTriggering = true;
             setTimeout(() => this.isTriggering = false, 500);
-            if(!piece.immunities.confused){
+            if (!piece.immunities.confused) {
                 piece.statuses.confused = true;
                 // Clean up tracking for this specific ID
                 delete this.candidates[piece.id];
@@ -1106,15 +1106,15 @@ class Taxman extends Admin {
 
     async apply({ id: id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
         const noOfFives = Math.floor(player.money / 5) //round down
-        if(noOfFives > 0){
+        if (noOfFives > 0) {
             this.isTriggering = true;
             setTimeout(() => this.isTriggering = false, 500);
             const idx = activePieces.findIndex(p => p.id === id);
             const p = activePieces[idx]
-            if(p.team === 'player'){
-                p.addModifier({maxSize: -noOfFives});
+            if (p.team === 'player') {
+                p.addModifier({ maxSize: -noOfFives });
                 //p.addModifier({attack: -noOfFives})
-            }     
+            }
         }
     }
 }
@@ -1129,12 +1129,12 @@ class Rage extends Admin {
         super(Rage.name, Rage.description, Rage.unicode, Rage.color, 3, Rage.rarity, 'gameState', 'onDealDamage')//onTurnEnd?
     }
     async apply({ id, activePieces, piece }: { id: string, activePieces: Piece[], piece: Piece }) {
-        if(!piece) return;
+        if (!piece) return;
         console.log('rage receiver')
         const idx = activePieces.findIndex(p => p.id === id);
-        if(piece.team === 'enemy' && piece.defenceRemaining < (activePieces[idx].getStat('attack') * activePieces[idx].damageMult)){
+        if (piece.team === 'enemy' && piece.defenceRemaining < (activePieces[idx].getStat('attack') * activePieces[idx].damageMult)) {
             piece.statuses.enraged = true;
-            piece.addTempModifier({attack: 1})
+            piece.addTempModifier({ attack: 1 })
             this.isTriggering = true;
             setTimeout(() => this.isTriggering = false, 500);
         };
@@ -1172,8 +1172,8 @@ class Snoozefest extends Admin {
     }
     private candidates: Record<string, number> = {};
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-        for(const piece of activePieces){
-            if(piece.team==='player'){
+        for (const piece of activePieces) {
+            if (piece.team === 'player') {
                 this.candidates[piece.id] = (this.candidates[piece.id] || 0) + 1;
                 if (this.candidates[piece.id] < 2) {
                     piece.statuses.disarmed = true;

@@ -165,7 +165,7 @@ export abstract class Piece {
       let newMod = (this.statModifiers[k] ?? 0) + val;
       const minVal = k === 'maxSize' ? 1 : 0;
       const base = this.getBaseStat(k);
-      
+
       if (base + newMod < minVal) {
         newMod = minVal - base;
       }
@@ -178,15 +178,15 @@ export abstract class Piece {
       if (val === undefined) return;
       const k = key as keyof StatModifier;
       if (this.statModifiers[k] === undefined) return;
-      
+
       let newMod = this.statModifiers[k]! - val;
       const minVal = k === 'maxSize' ? 1 : 0;
       const base = this.getBaseStat(k);
-      
+
       if (base + newMod < minVal) {
         newMod = minVal - base;
       }
-      
+
       if (newMod === 0) {
         delete this.statModifiers[k];
       } else {
@@ -203,7 +203,7 @@ export abstract class Piece {
       const minVal = k === 'maxSize' ? 1 : 0;
       const base = this.getBaseStat(k);
       const permMod = this.getModifier(k);
-      
+
       if (base + permMod + newTempMod < minVal) {
         newTempMod = minVal - (base + permMod);
       }
@@ -286,7 +286,7 @@ export abstract class Piece {
   moveTo(newPosition: Coordinate): void {//make a free version
     this.move(newPosition)
     this.useMove();
-    if(!this.statuses.hidden){
+    if (!this.statuses.hidden) {
       const randomMoveSound = moveSoundUrls[Math.floor(Math.random() * moveSoundUrls.length)];
       playSoundFx(randomMoveSound, 1.0);
     }
@@ -983,7 +983,7 @@ class Trojan extends Piece {//test more
 
 class Cannon extends Piece {
   static name = "Cannon";
-  static description = "a slow ranged program that can damage multiple targets in a straight line";
+  static description = "A slow ranged program that can damage multiple targets in a straight line";
   static unicode = "U+1F3B1";//TODO change this
   static color = "#bb3030ff";
   static rarity = 4;
@@ -1762,7 +1762,7 @@ class Elephant extends Piece {
         this.move(tile);
         continue;
       }
-      if(this.getStat('attack') > occupier.getStat('defence')){
+      if (this.getStat('attack') > occupier.getStat('defence')) {
         occupier.addModifier({ maxSize: -1 })
       }
       await occupier.takeDamage(this.getStat('attack'));
@@ -1801,7 +1801,7 @@ class Mammoth extends Piece {
         this.move(tile);
         continue;
       }
-      if(this.getStat('attack') > occupier.getStat('defence')){
+      if (this.getStat('attack') > occupier.getStat('defence')) {
         occupier.addModifier({ maxSize: -2 })
       }
       await occupier.takeDamage(this.getStat('attack'));
@@ -2468,7 +2468,7 @@ class Cupid extends Piece {
   async special(targetPiece: Piece): Promise<void> {
     if (!targetPiece.immunities.charmed && this.getStat('attack') > 1) {
       targetPiece.statuses.charmed = true;
-      this.addModifier({attack: -1});
+      this.addModifier({ attack: -1 });
     } else if (targetPiece.statuses.charmed) {
       targetPiece.takeDamage(this.getStat('attack'))
       if (targetPiece.willRetaliate) await this.takeDamage(targetPiece.getStat('attack'))
@@ -3057,13 +3057,13 @@ class Vampire extends Piece {
     piece.tiles.splice(tileIndex, 1);
     this.addModifier({ maxSize: 1 });
     this.addModifier({ attack: 1 });
-    this.addModifier({moves: 1});
+    this.addModifier({ moves: 1 });
     this.addModifier({ defence: 1 });
     this.defenceRemaining += 1;
-    if(piece.movesRemaining > 0){
+    if (piece.movesRemaining > 0) {
       this.movesRemaining += 1;
     }
-    if(piece.actions > 0){
+    if (piece.actions > 0) {
       this.actions += 1
     }
     //this.tiles.push(target);
@@ -3125,7 +3125,7 @@ class UFO extends Piece {
       const occupierHere = activePieces.find(p =>
         p.tiles.some(t => t.x === here.x && t.y === here.y)
       );
-      if (occupierHere){
+      if (occupierHere) {
         if (!occupierHere.immunities.confused && occupierHere.team !== this.team) {
           occupierHere.statuses.confused = true;
         }

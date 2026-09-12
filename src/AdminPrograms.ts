@@ -917,7 +917,7 @@ export class Seed extends Admin {
 
 class Puzzle extends Admin {
   static name = "Puzzle Piece";
-  static description = "Pieces with an ally adjacent to their head temporarily gain +1 defence until the start of your next turn";//for each piece adjacent?
+  static description = "Programs with an ally adjacent to their head temporarily gain +1 defence until the start of your next turn";//for each piece adjacent?
   static unicode = "U+1F9E9";
   static color = "#55b0ff";
   static rarity = 3;
@@ -946,7 +946,7 @@ class Puzzle extends Admin {
 
 class Chivalry extends Admin {
   static name = "Chivalry";
-  static description = "Pieces with an ally adjacent to their head gain +1 attack at the end of your turn";
+  static description = "Programs with an ally adjacent to their head gain +1 attack at the end of your turn";
   static unicode = "U+1F3F0";
   static color = "#33bcfcff";
   static rarity = 5;
@@ -2232,7 +2232,7 @@ class Wheel extends Admin {
 
 class Bath extends Admin {
   static name = "Decontamination";
-  static description = "Removes all negative statuses from all programs at the end of each turn";
+  static description = "Removes all statuses from all programs at the end of each turn";
   static unicode = "U+1F6C1";
   static color = "rgb(168, 255, 245)";
   static rarity = 6;//5,4?

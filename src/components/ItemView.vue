@@ -439,4 +439,8 @@ button:disabled {
   animation: adminTrigger 0.5s ease-in-out;
   border-style: double !important;
 }
+
+.is-triggering .icon {
+  transform: none;
+}
 </style>

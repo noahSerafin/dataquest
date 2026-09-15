@@ -1,374 +1,374 @@
 import type { OS } from "./types";
-import { Voucher, Mushroom, Garlic, Meat, Genie, Pandora, Update2, Dupe, Jar, Iron} from "./Items";
-import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Clippy, Notepad, StoneAge, Rune, OffRoader, AdminMap, Compass, Backdoor, Miner, Copier, Cherries, Sneakers, Palette, Hermes, Dove, Discount} from "./AdminPrograms";
+import { Voucher, Mushroom, Garlic, Meat, Genie, Pandora, Update2, Dupe, Jar, Iron } from "./Items";
+import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Clippy, Notepad, StoneAge, Rune, OffRoader, AdminMap, Compass, Backdoor, Miner, Copier, Cherries, Sneakers, Palette, Hermes, Dove, Discount } from "./AdminPrograms";
 import { createDefaultStatuses } from "./types";
 
-    const knife =  {
-        id: crypto.randomUUID(),
-        name: "Knife",
-        description: "A basic attack program",
-        unicode: 'U+1F52A',
-        maxSize: 3,
-        moves: 2,
-        range: 1,
-        attack: 2,
-        defence: 0,
-        rarity: 1,
-        color: '#2fc5ebff',
-        // blueprint-only fields:
-        isPlaced: false,
-        cost: 1 ,
-        immunities: createDefaultStatuses()
-    }
-    const testPiece =  {
-        id: crypto.randomUUID(),
-        name: "Lighthouse",
-        description: "testing this pieces special move",
-        unicode: 'U+1F47E',
-        maxSize: 2,
-        moves: 10,
-        range: 20,
-        attack: 2,
-        defence: 20,
-        rarity: 5,
-        color: "#ee74eeff",
-        // blueprint-only fields:
-        isPlaced: false,
-        cost: 10 ,
-        immunities: {
-            diseased: false,
-            slowed: true,
-            blinded: false,
-            burning: false,
-            poisoned: false,
-            frozen: false,
-            charmed: false,
-            confused: false,
-            exposed: false,
+const knife = {
+    id: crypto.randomUUID(),
+    name: "Knife",
+    description: "A basic attack program",
+    unicode: 'U+1F52A',
+    maxSize: 3,
+    moves: 2,
+    range: 1,
+    attack: 2,
+    defence: 0,
+    rarity: 1,
+    color: '#2fc5ebff',
+    // blueprint-only fields:
+    isPlaced: false,
+    cost: 1,
+    immunities: createDefaultStatuses()
+}
+const testPiece = {
+    id: crypto.randomUUID(),
+    name: "Lighthouse",
+    description: "testing this pieces special move",
+    unicode: 'U+1F47E',
+    maxSize: 2,
+    moves: 10,
+    range: 20,
+    attack: 2,
+    defence: 20,
+    rarity: 5,
+    color: "#ee74eeff",
+    // blueprint-only fields:
+    isPlaced: false,
+    cost: 10,
+    immunities: {
+        diseased: false,
+        slowed: true,
+        blinded: false,
+        burning: false,
+        poisoned: false,
+        frozen: false,
+        charmed: false,
+        confused: false,
+        exposed: false,
 
-            hidden: false,
-            negative: false,
-        },
-        damageMult: 1.5,
-        variantName: 'Holographic'
-    }
-    const superKnife =  {
-        id: crypto.randomUUID(),
-        name: "Arms",
-        description: "A suped up attack program for testing",
-        unicode: 'U+2694',
-        maxSize: 2,
-        moves: 10,
-        range: 10,
-        attack: 20,
-        defence: 50,
-        rarity: 1,
-        color: '#902febff',
-        // blueprint-only fields:
-        isPlaced: false,
-        cost: 1 ,
-        immunities: createDefaultStatuses()
-    }
+        hidden: false,
+        negative: false,
+    },
+    damageMult: 1.5,
+    variantName: 'Holographic'
+}
+const superKnife = {
+    id: crypto.randomUUID(),
+    name: "Arms",
+    description: "A suped up attack program for testing",
+    unicode: 'U+2694',
+    maxSize: 2,
+    moves: 10,
+    range: 10,
+    attack: 20,
+    defence: 50,
+    rarity: 1,
+    color: '#902febff',
+    // blueprint-only fields:
+    isPlaced: false,
+    cost: 1,
+    immunities: createDefaultStatuses()
+}
 
-    const shield =  {
-        id: crypto.randomUUID(),
-        name: "Shield",
-        description: "A basic defensive program",
-        unicode: "U+1F6E1",
-        maxSize: 3,
-        moves: 1,
-        range: 0,
-        attack: 0,
-        defence: 1,
-        rarity: 1,
-        color: "#2fa7ca",
-        // blueprint-only fields:
-        isPlaced: false,
-        cost: 1 ,
-        immunities: createDefaultStatuses()
-    }
+const shield = {
+    id: crypto.randomUUID(),
+    name: "Shield",
+    description: "A basic defensive program",
+    unicode: "U+1F6E1",
+    maxSize: 3,
+    moves: 1,
+    range: 0,
+    attack: 0,
+    defence: 1,
+    rarity: 1,
+    color: "#2fa7ca",
+    // blueprint-only fields:
+    isPlaced: false,
+    cost: 1,
+    immunities: createDefaultStatuses()
+}
 
-    const sling =  {
-        id: crypto.randomUUID(),
-        name: "Sling",
-        description: '"A basic ranged program"',
-        unicode: "U+1F94F",
-        maxSize: 2,
-        moves: 2,
-        range: 2,
-        attack: 1,
-        defence: 0,
-        rarity: 1,
-        color: "#019700",
-        // blueprint-only fields:
-        isPlaced: false,
-        cost: 1 ,
-        immunities: createDefaultStatuses()
-    }
+const sling = {
+    id: crypto.randomUUID(),
+    name: "Sling",
+    description: '"A basic ranged program"',
+    unicode: "U+1F94F",
+    maxSize: 2,
+    moves: 2,
+    range: 2,
+    attack: 1,
+    defence: 0,
+    rarity: 1,
+    color: "#019700",
+    // blueprint-only fields:
+    isPlaced: false,
+    cost: 1,
+    immunities: createDefaultStatuses()
+}
 
-    const potato =  {
-        id: crypto.randomUUID(),
-        name: "Potato",
-        description: '"A basic all around program"',
-        unicode: "U+1F954",
-        maxSize: 3,
-        moves: 1,
-        range: 1,
-        attack: 1,
-        defence: 0,
-        rarity: 1,
-        color: "#ad8226ff",
-        // blueprint-only fields:
-        isPlaced: false,
-        cost: 1 ,
-        immunities: createDefaultStatuses()
-    }
-    const tp =  {
-        id: crypto.randomUUID(),
-        name: "TP",
-        description: "A large program with high movement",
-        unicode: "U+1F9FB",
-        color: "#0d92ffff",
-        maxSize: 6,
-        moves: 3,
-        range: 0,
-        attack: 0,
-        defence: 0,
-        rarity: 1,
-        // blueprint-only fields:
-        isPlaced: false,
-        cost: 1,
-        immunities: createDefaultStatuses()
-    }
-    const rat =  {
-        id: crypto.randomUUID(),
-        name: "Rat",
-        description: "A small and fast program",
-        unicode: "U+1F400",
-        color: "#6e6e6eff",
-        maxSize: 2,
-        moves: 3,
-        range: 1,
-        attack: 1,
-        defence: 0,
-        rarity: 1,
-        // blueprint-only fields:
-        isPlaced: false,
-        cost: 1,
-        immunities: createDefaultStatuses()
-    }
-    const ant =  {
-        id: crypto.randomUUID(),
-        name: "Ant",
-        description: "A very fast but small program",
-        unicode: "U+1F41C",
-        color: "rgb(4, 156, 202",
-        maxSize: 1,
-        moves: 5,
-        range: 1,
-        attack: 1,
-        defence: 0,
-        rarity: 1,
-        // blueprint-only fields:
-        isPlaced: false,
-        cost: 1,
-        immunities: createDefaultStatuses()
-    }
-    const labrat =  {
-        id: crypto.randomUUID(),
-        name: "Lab Rat",
-        description: "A small and fast program that can spread disease, reducing max size",
-        unicode: "U+1F401",
-        color: "rgb(190, 214, 81)",
-        maxSize: 2,
-        moves: 3,
-        range: 1,
-        attack: 2,
-        defence: 0,
-        rarity: 3,
-        // blueprint-only fields:
-        isPlaced: false,
-        cost: 1,
-        immunities: createDefaultStatuses()
-    }
-    /*const egg =  {
-        id: crypto.randomUUID(),
-        name: "Egg",
-        description: "What came first? Spawns a Chick",
-        unicode: "U+1F95A",
-        color: "rgb(240, 232, 216)",
-        maxSize: 1,
-        moves: 0,
-        range: 1,
-        attack: 0,
-        defence: 1,
-        rarity: 1,
-        // blueprint-only fields:
-        isPlaced: false,
-        cost: 1,
-        immunities: createDefaultStatuses()
-    }*/
-    const snail =  {
-        id: crypto.randomUUID(),
-        name: "Snail",
-        description: "A slow program that can retract itself to boost its defence",
-        unicode: "U+1F40C",
-        color: "#4d3502ff",
-        maxSize: 2,
-        moves: 1,
-        range: 1,
-        attack: 1,
-        defence: 1,
-        rarity: 1,
-        // blueprint-only fields:
-        isPlaced: false,
-        cost: 1,
-        immunities: createDefaultStatuses()
-    }
-    const bug =  {
-        id: crypto.randomUUID(),
-        name : "Bug",
-        description: "A fast but small program that can apply slowed others",
-        unicode: "U+1F47E",
-        color: "#04ca0eff",
-        maxSize: 1,
-        moves: 5,
-        range: 1,
-        attack: 2,
-        defence: 1,
-        rarity: 2,
-        // blueprint-only fields:
-        isPlaced: false,
-        cost: 1,
-        immunities: createDefaultStatuses()
-    }
-    const bee =  {
-        id: crypto.randomUUID(),
-        name: "Bee",
-        description: "A small program which can sting, sacrificing itself for a high damage attack",
-        unicode: "U+1F41D",
-        color: "#eeff00ff",
-        maxSize: 1,
-        moves: 2,
-        range: 1,
-        attack: 3,
-        defence: 0,
-        rarity: 1,
-        // blueprint-only fields:
-        isPlaced: false,
-        cost: 1,
-        immunities: createDefaultStatuses()
-    }
-    const honey =  {
-        id: crypto.randomUUID(),
-        name: "Honeypot",
-        description: "A program that can summon Bees",
-        unicode: "U+1F36F",
-        color: "#ffb20dff",
-        maxSize: 1,
-        moves: 0,
-        range: 1,
-        attack: 0,
-        defence: 1,
-        rarity: 2,
-        // blueprint-only fields:
-        isPlaced: false,
-        cost: 3,
-        immunities: createDefaultStatuses()
-    }
-    const aegis =  {
-        id: crypto.randomUUID(),
-        name: "Aegis",
-        description: "An advanced defensive program that can retaliate against attacks",
-        unicode: "U+26FB",
-        color: "#06789bff",
-        maxSize: 3,
-        moves: 2,
-        range: 0,
-        attack: 1,
-        defence: 2,
-        rarity: 2,
-        // blueprint-only fields:
-        isPlaced: false,
-        cost: 1,
-        immunities: createDefaultStatuses()
-    }
-    const screwdriver =  {
-        id: crypto.randomUUID(),
-        name: "Screwdriver",
-        description: "A program that can tinker with another, boosting a random stat by 1 or reducing an enemy's by 1",
-        unicode: "U+1FA9B",
-        color: "#ff1d0dff",
-        maxSize: 1,
-        moves: 1,
-        range: 1,
-        attack: 0,
-        defence: 0,
-        rarity: 5,
-        // blueprint-only fields:
-        isPlaced: false,
-        cost: 1,
-        immunities: createDefaultStatuses()
-    }
-    const lance = {
-        id: crypto.randomUUID(),
-        name: "Lance",
-        description: "An attacking program that can charge, damaging targets in a staight line and moving forward until stopped",
-        unicode: "U+1F3A0",
-        maxSize: 3,
-        moves: 2,
-        range: 2,
-        attack: 2,
-        defence: 0,
-        rarity: 2,
-        color: "#2fc5ebff",
-        isPlaced: false,
-        cost: 2,
-        immunities: createDefaultStatuses()
-    }
-    const banana = {
-        id: crypto.randomUUID(),
-        name: "Banana Peel",
-        description: "A program hidden to the enemy that immobilises programs moving over it for 1 turn, and strips them of any actions, removing itself in the process",
-        unicode: "U+1F34C",
-        maxSize: 1,
-        moves: 1,
-        range: 0,
-        attack: 0,
-        defence: 0,
-        rarity: 1,
-        color: "#2f724b",
-        isPlaced: false,
-        cost: 1,
-        immunities: createDefaultStatuses()
-    }
-    //1, 1, 0, 0, 0,
+const potato = {
+    id: crypto.randomUUID(),
+    name: "Potato",
+    description: '"A basic all around program"',
+    unicode: "U+1F954",
+    maxSize: 3,
+    moves: 1,
+    range: 1,
+    attack: 1,
+    defence: 0,
+    rarity: 1,
+    color: "#ad8226ff",
+    // blueprint-only fields:
+    isPlaced: false,
+    cost: 1,
+    immunities: createDefaultStatuses()
+}
+const tp = {
+    id: crypto.randomUUID(),
+    name: "TP",
+    description: "A large program with high movement",
+    unicode: "U+1F9FB",
+    color: "#0d92ffff",
+    maxSize: 6,
+    moves: 3,
+    range: 0,
+    attack: 0,
+    defence: 0,
+    rarity: 1,
+    // blueprint-only fields:
+    isPlaced: false,
+    cost: 1,
+    immunities: createDefaultStatuses()
+}
+const rat = {
+    id: crypto.randomUUID(),
+    name: "Rat",
+    description: "A small and fast program",
+    unicode: "U+1F400",
+    color: "#6e6e6eff",
+    maxSize: 2,
+    moves: 3,
+    range: 1,
+    attack: 1,
+    defence: 0,
+    rarity: 1,
+    // blueprint-only fields:
+    isPlaced: false,
+    cost: 1,
+    immunities: createDefaultStatuses()
+}
+const ant = {
+    id: crypto.randomUUID(),
+    name: "Ant",
+    description: "A very fast but small program",
+    unicode: "U+1F41C",
+    color: "rgb(4, 156, 202",
+    maxSize: 1,
+    moves: 5,
+    range: 1,
+    attack: 1,
+    defence: 0,
+    rarity: 1,
+    // blueprint-only fields:
+    isPlaced: false,
+    cost: 1,
+    immunities: createDefaultStatuses()
+}
+const labrat = {
+    id: crypto.randomUUID(),
+    name: "Lab Rat",
+    description: "A small and fast program that can spread disease, reducing max size",
+    unicode: "U+1F401",
+    color: "rgb(190, 214, 81)",
+    maxSize: 2,
+    moves: 3,
+    range: 1,
+    attack: 2,
+    defence: 0,
+    rarity: 3,
+    // blueprint-only fields:
+    isPlaced: false,
+    cost: 1,
+    immunities: createDefaultStatuses()
+}
+/*const egg =  {
+    id: crypto.randomUUID(),
+    name: "Egg",
+    description: "What came first? Spawns a Chick",
+    unicode: "U+1F95A",
+    color: "rgb(240, 232, 216)",
+    maxSize: 1,
+    moves: 0,
+    range: 1,
+    attack: 0,
+    defence: 1,
+    rarity: 1,
+    // blueprint-only fields:
+    isPlaced: false,
+    cost: 1,
+    immunities: createDefaultStatuses()
+}*/
+const snail = {
+    id: crypto.randomUUID(),
+    name: "Snail",
+    description: "A slow program that can retract itself to boost its defence",
+    unicode: "U+1F40C",
+    color: "#4d3502ff",
+    maxSize: 2,
+    moves: 1,
+    range: 1,
+    attack: 1,
+    defence: 1,
+    rarity: 1,
+    // blueprint-only fields:
+    isPlaced: false,
+    cost: 1,
+    immunities: createDefaultStatuses()
+}
+const bug = {
+    id: crypto.randomUUID(),
+    name: "Bug",
+    description: "A fast but small program that can apply slowed others",
+    unicode: "U+1F47E",
+    color: "#04ca0eff",
+    maxSize: 1,
+    moves: 5,
+    range: 1,
+    attack: 2,
+    defence: 1,
+    rarity: 2,
+    // blueprint-only fields:
+    isPlaced: false,
+    cost: 1,
+    immunities: createDefaultStatuses()
+}
+const bee = {
+    id: crypto.randomUUID(),
+    name: "Bee",
+    description: "A small program which can sting, sacrificing itself for a high damage attack",
+    unicode: "U+1F41D",
+    color: "#eeff00ff",
+    maxSize: 1,
+    moves: 2,
+    range: 1,
+    attack: 3,
+    defence: 0,
+    rarity: 1,
+    // blueprint-only fields:
+    isPlaced: false,
+    cost: 1,
+    immunities: createDefaultStatuses()
+}
+const honey = {
+    id: crypto.randomUUID(),
+    name: "Honeypot",
+    description: "A program that can summon Bees",
+    unicode: "U+1F36F",
+    color: "#ffb20dff",
+    maxSize: 1,
+    moves: 0,
+    range: 1,
+    attack: 0,
+    defence: 1,
+    rarity: 2,
+    // blueprint-only fields:
+    isPlaced: false,
+    cost: 3,
+    immunities: createDefaultStatuses()
+}
+const aegis = {
+    id: crypto.randomUUID(),
+    name: "Aegis",
+    description: "An advanced defensive program that can retaliate against attacks",
+    unicode: "U+26FB",
+    color: "#06789bff",
+    maxSize: 3,
+    moves: 2,
+    range: 0,
+    attack: 1,
+    defence: 2,
+    rarity: 2,
+    // blueprint-only fields:
+    isPlaced: false,
+    cost: 1,
+    immunities: createDefaultStatuses()
+}
+const screwdriver = {
+    id: crypto.randomUUID(),
+    name: "Screwdriver",
+    description: "A program that can tinker with another, boosting a random stat by 1 or reducing an enemy's by 1",
+    unicode: "U+1FA9B",
+    color: "#ff1d0dff",
+    maxSize: 1,
+    moves: 1,
+    range: 1,
+    attack: 0,
+    defence: 0,
+    rarity: 5,
+    // blueprint-only fields:
+    isPlaced: false,
+    cost: 1,
+    immunities: createDefaultStatuses()
+}
+const lance = {
+    id: crypto.randomUUID(),
+    name: "Lance",
+    description: "An attacking program that can charge, damaging targets in a staight line and moving forward until stopped",
+    unicode: "U+1F3A0",
+    maxSize: 3,
+    moves: 2,
+    range: 2,
+    attack: 2,
+    defence: 0,
+    rarity: 2,
+    color: "#2fc5ebff",
+    isPlaced: false,
+    cost: 2,
+    immunities: createDefaultStatuses()
+}
+const banana = {
+    id: crypto.randomUUID(),
+    name: "Banana Peel",
+    description: "A program hidden to the enemy that immobilises programs moving over it for 1 turn, and strips them of any actions, removing itself in the process",
+    unicode: "U+1F34C",
+    maxSize: 1,
+    moves: 1,
+    range: 0,
+    attack: 0,
+    defence: 0,
+    rarity: 1,
+    color: "#2f724b",
+    isPlaced: false,
+    cost: 1,
+    immunities: createDefaultStatuses()
+}
+//1, 1, 0, 0, 0,
 
-    const testhybrid = {
-        id: "274ec329-8c17-4265-8c12-e9a28bcf0112",
-        name: "Lance",
-        description: "A test program",
-        unicode: "U+1F3A0",
-        maxSize: 3,
-        moves: 2,
-        range: 3,
-        attack: 2,
-        defence: 0,
-        rarity: 1,
-        color: "#2fc5ebff",
-        isPlaced: false,
-        cost: 1,
-        hybridName: 'LanceHog',
-        extraUnicode: 'U+1F994',
-        immunities: createDefaultStatuses()
-    }
-    bug.immunities.slowed = true;
-    labrat.immunities.diseased = true;
-    //guard, snail, TP, Lance, Bug, Screwdriver
+const testhybrid = {
+    id: "274ec329-8c17-4265-8c12-e9a28bcf0112",
+    name: "Lance",
+    description: "A test program",
+    unicode: "U+1F3A0",
+    maxSize: 3,
+    moves: 2,
+    range: 3,
+    attack: 2,
+    defence: 0,
+    rarity: 1,
+    color: "#2fc5ebff",
+    isPlaced: false,
+    cost: 1,
+    hybridName: 'LanceHog',
+    extraUnicode: 'U+1F994',
+    immunities: createDefaultStatuses()
+}
+bug.immunities.slowed = true;
+labrat.immunities.diseased = true;
+//guard, snail, TP, Lance, Bug, Screwdriver
 //MINUS WHITE X, U+2756
 //
 
-const Window95 : OS = {
+const Window95: OS = {
     name: 'Classic95',
     unicode: 'U+229E',
     prefix: 'C',
@@ -381,7 +381,7 @@ const Window95 : OS = {
     lives: 3,
     description: 'The intro to cyberspace, comes with a helpful assistant.'
 }
-const Steam : OS = {
+const Steam: OS = {
     name: 'Steam',
     unicode: 'U+1F682',
     prefix: 'S',
@@ -394,7 +394,7 @@ const Steam : OS = {
     lives: 3,
     description: 'The Gamers choice. High starting memory, comes with all the essential base programs, and one voucher to redeem a free shop item.'
 }
-const Penguin : OS = {//potato //shield
+const Penguin: OS = {//potato //shield
     name: 'Penguin',
     unicode: 'U+1F427',
     prefix: 'P',
@@ -408,7 +408,7 @@ const Penguin : OS = {//potato //shield
     description: 'A versatile system with extra lives. Start with some upgrade items.'
 }
 
-const Window : OS = {//knife //shield //snail
+const Window: OS = {//knife //shield //snail
     name: 'Window',
     unicode: ' U+1FA9F',
     prefix: 'w',
@@ -423,7 +423,7 @@ const Window : OS = {//knife //shield //snail
 
 }
 
-const Apple : OS = {
+const Apple: OS = {
     name: 'Apple',
     unicode: 'U+1F34F',
     prefix: 'l',
@@ -437,7 +437,7 @@ const Apple : OS = {
     description: 'Limited admin functionality, but start with excess money and some consumable items.'
 }
 
-const Temple : OS = {
+const Temple: OS = {
     name: 'Temple',
     unicode: 'U+2696',
     prefix: 'T',
@@ -451,7 +451,7 @@ const Temple : OS = {
     description: "Extra memory and admin slots, low money. Some unique starting programs, and a Pandora's Box."
 }
 
-const Fortran : OS = {
+const Fortran: OS = {
     name: 'Fortran',
     unicode: 'U+2697',
     prefix: 'F',
@@ -465,7 +465,7 @@ const Fortran : OS = {
     description: "Ancient alchemical technology, heavily focused on statuses."
 }
 
-const Cobol : OS = {
+const Cobol: OS = {
     name: 'Cobol',
     unicode: 'U+1F3DB',
     prefix: 'C',
@@ -479,7 +479,7 @@ const Cobol : OS = {
     description: "All about money"
 }
 
-const Arch : OS = {
+const Arch: OS = {
     name: 'Arch',
     unicode: 'U+394',
     prefix: 'A',
@@ -493,7 +493,7 @@ const Arch : OS = {
     description: "The hackers choice, BTW..."
 }
 
-const GNU : OS = {
+const GNU: OS = {
     name: 'GNU',
     unicode: 'U+1F403',
     prefix: 'G',
@@ -507,7 +507,7 @@ const GNU : OS = {
     description: "Progenitor technology"
 }
 
-const Amiga : OS = {
+const Amiga: OS = {
     name: 'Amiga',
     unicode: 'U+2705',//HEAVY CHECK MARK, U+2714
     prefix: 'a',
@@ -516,12 +516,12 @@ const Amiga : OS = {
     adminSlots: 4,
     blueprints: [bug, aegis],
     items: [new Jar],
-    admins: [new Copier, new Cherries],
+    admins: [new Cherries, new Copier],
     lives: 2,
     description: "Bonus Multimedia tool"
 }
 
-const Beos : OS = {
+const Beos: OS = {
     name: 'BeOS',
     unicode: 'U+1F41D',
     prefix: 'B',
@@ -536,7 +536,7 @@ const Beos : OS = {
 }
 
 // ROUND PUSHPIN, U+1F4CD
-const Explorer : OS = {
+const Explorer: OS = {
     name: 'Explorer',
     unicode: 'U+1F30D',
     prefix: 'E',
@@ -550,7 +550,7 @@ const Explorer : OS = {
     description: "Gets around the overworld with ease. Start with some pocket money."
 }
 
-const Satoshi : OS = {
+const Satoshi: OS = {
     name: 'Satoshi',
     unicode: 'U+20BF',
     prefix: 's',
@@ -608,7 +608,7 @@ Inferno
 give programs that create their own other programs
 */
 
-const Debugger : OS = {
+const Debugger: OS = {
     name: 'Debugger',
     unicode: 'U+1F41B',
     prefix: 'D',

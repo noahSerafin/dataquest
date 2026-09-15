@@ -17,9 +17,7 @@ Freeze,, Burn,, Slow,, Blind,, Poison, Disease, Charmed,, Exposed,, Hidden
 music optional include in memory
 stylisise highlights (red arrows inward, green upload symbol)
 zombie not always duping when attack head on piece bigger than 1
-add fake loading screens
-show counts on admins
-look into enemy blinded bug
+
 -fix immunity items applying to duped programs
 -nerf archer to adjacent enemies only
 toggle shop button outside menu on mobile (use emoji)
@@ -47,7 +45,12 @@ PIECES - keep track of upgrades and display on piece 7 (1.1, 1.2 etc.)
 difficulty - add +1, +2 programs for variety, or make variants +- security level 9
 non stacking bosses should cycle through (mirror becomes too predicatable)//always remove mirror after and replace with another random boss
 nerf rosebud - pieces can't stay exposed after a special?
+
 TUTORIAL - make more handholdy?
+add fake loading screens
+Have a messages tab for story, significance of companies?
+swap $ for crypto inside game?
+Fast mode
 -
 // BUGS
 cannon and laser can shoot themselves

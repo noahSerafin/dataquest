@@ -2252,7 +2252,7 @@ class Bath extends Admin {
 
 class Purse extends Admin {
   static name = "Coinpurse";
-  static description = "Save $1 every time youe spend money";
+  static description = "Save $1 every time you spend money";
   static unicode = "U+1F45B";
   static color = "rgb(230, 61, 230)";
   static rarity = 2;

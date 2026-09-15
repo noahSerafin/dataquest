@@ -3600,6 +3600,8 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 // LIPSTICK, U+1F484 retaliations charm enemies - piece.willRetaliate: hedgehog, fencer, puffer. Admins: Blackbelt(willRetaliate) Cactus Pong
 //RECYCLING SYMBOL, U+2672 selling programs gives 1 of lower rarirty
 
+//U+1F4FA TELEVISION
+//U+1F4FB RADIO 
 //SLEUTH OR SPY, U+1F575
 //TEACUP WITHOUT HANDLE, U+1F375 calm down, removes enraged from enemies
 //Swish, U+1F3C0 - range of 3+ gets +3 attack

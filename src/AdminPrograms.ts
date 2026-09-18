@@ -2679,7 +2679,7 @@ class Cards extends Admin {//test
   static description = "Held upgrade item's effects apply to all your programs on load";
   static unicode = "U+1FAAD"; //FOLDING HAND FAN, 
   static color = "rgb(250, 54, 230)";
-  static rarity = 6;
+  static rarity = 5;
   constructor() {
     super(Cards.name, Cards.description, Cards.unicode, Cards.color, 7, Cards.rarity, 'playerAndGame', 'onPlacement')
   }
@@ -3468,32 +3468,32 @@ class Righty extends Admin {
   }
 }
 
-/*New Admins:
+//New Admins:
 
 export class Booty extends Admin {
   static name = "Booty";
-  static description = "Earn an extra $7 at the end of a round";
+  static description = "Earn an extra $6 at the end of a round";
   static unicode = "U+1FA8E";
   static color = "rgb(85, 193, 255)";
-  static rarity = 2;
+  static rarity = 5;
   constructor() {
     super(Booty.name, Booty.description, Booty.unicode, Booty.color, 7, Booty.rarity, 'player', 'onRoundEnd')
   }
   async apply({ player }: { player: Player }) {
-    player.bonusReward += 7;//add to RoundSummary
+    player.bonusReward += 6;//add to RoundSummary
   }
-}*/
+}
 
 /*
-//PROBING CANE, U+1F9AF //onTurnEnd Trigger traps within 1 range of all your pieces early on the end of your turn.
+//PROBING CANE, U+1F9AF (rarity 2) //onTurnEnd Trigger traps within 1 range of all your pieces early on the end of your turn.
 
-//Bassline, U+1F4FE //other Your stats cannot go below 1. change addmodifier fnc in pieces
+//Bassline, U+1F4FE (rarity 4) //other Your stats cannot go below 1. changes addmodifier fnc in pieces
 
-//Silly, U+1F921 //onRoundEnd Makes a copy of items but compressed on the end of a round. Allow compressed on items, but when not admins they effect memory instead of adminslots
+//Silly, U+1F921 (rarity 6) //onRoundEnd Makes a copy of items but compressed on the end of a round. Allow compressed on items, but when not admins they effect memory instead of adminslots
 
-//Surfer, U+1F3C4 //onReceiveDamage Your pieces move into a space for free(no moves expended) after taking damage (even defensive)
+//Surfer, U+1F3C4 (rarity 2) //onReceiveDamage Your pieces move into a space for free(no moves expended) after taking damage (even defensive)
 
-//Collector, U+1F5BC //other Common(rarity 1) classes no longer appear in the shop (rollRarity)
+//Collector, U+1F5BC (rarity 1) //other Common(rarity 1) classes no longer appear in the shop (rollRarity)
 
 //war drum (item) move here
 class Djembe extends Item<Piece[]> {
@@ -3561,7 +3561,7 @@ export class Clippy extends Admin {
   //handle in player
 }
 
-export const allAdmins = [Bank, Bucket, Candle, Cheese, Clippy, Smoker, Compass, CreditCard, Crystal, Glasses, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Schoolbag, Seed, Slots, Sprinkler, Tempura, Sneakers, Chime, Abacus, Aesculapius, Appraisal, Balloon, Briefcase, Bubble, Cactus, Coin, Purse, Convenience, FireEngine, Heart, Joker, Clover, Microscope, Newspaper, Nose, Pickup, Putter, Relay, Rune, Scarf, Stiletto, Mail, Bowling, Bipolar, Violin, Vitamins, Wings, AdminMap, Barber, Ace, AirSupport, Bone, Bouquet, Camp, Huzzah, Luggage, Chain, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Dice, Jammer, Roger, Juggler, Ladder, Loot, Drunk, Puzzle, Razor, Sled, Shades, StoneAge, Stonks, Christmas, Telescope, Toolbox, Tracker, Ambulance, Backdoor, BionicArm, BionicLeg, Crash, Blood, Broom, DartBoard, Butler, Dove, Evergreen, Eye, Discount, Fountain, Feather, Fuel, Spoon, Liberty, Lightbulb, Ollie, Palette, Pazzaz, PetriDish, Prayer, Wheel, Salt, Selfie, Pants, Variety, Volatile, Artic, BlackBelt, Lungs, Chemistry, Chivalry, Toilet, Copier, Daisy, Diamond, Disco, Hamsa, Skyscraper, Hermes, Howzat, Inheritance, Cherries, Lotus, Brain, Meditation, Meteor, Monarch, Onion, PeaPod, Teddy, Pong, RollerBlades, Bell, Baseball, Taoism, Ice, Crown, Ballet, Bath, Cards, Lefty, Minerva, Needle, Pi, Osiris, Righty, Ring, School, Umbrella, Dharma];
+export const allAdmins = [Bank, Bucket, Candle, Cheese, Clippy, Smoker, Compass, CreditCard, Crystal, Glasses, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Schoolbag, Seed, Slots, Sprinkler, Tempura, Sneakers, Chime, Abacus, Aesculapius, Appraisal, Balloon, Briefcase, Bubble, Cactus, Coin, Purse, Convenience, FireEngine, Heart, Joker, Clover, Microscope, Newspaper, Nose, Pickup, Putter, Relay, Rune, Scarf, Stiletto, Mail, Bowling, Bipolar, Violin, Vitamins, Wings, AdminMap, Barber, Ace, AirSupport, Bone, Bouquet, Camp, Huzzah, Luggage, Chain, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Dice, Jammer, Roger, Juggler, Ladder, Loot, Drunk, Puzzle, Razor, Sled, Shades, StoneAge, Stonks, Christmas, Telescope, Toolbox, Tracker, Ambulance, Backdoor, BionicArm, BionicLeg, Crash, Blood, Broom, DartBoard, Butler, Dove, Evergreen, Eye, Discount, Fountain, Feather, Fuel, Spoon, Liberty, Lightbulb, Ollie, Palette, Pazzaz, PetriDish, Prayer, Wheel, Salt, Selfie, Pants, Variety, Volatile, Artic, BlackBelt, Lungs, Chemistry, Chivalry, Toilet, Copier, Daisy, Diamond, Disco, Hamsa, Skyscraper, Hermes, Cards, Howzat, Inheritance, Cherries, Lotus, Brain, Meditation, Meteor, Monarch, Onion, PeaPod, Teddy, Pong, RollerBlades, Bell, Baseball, Taoism, Ice, Crown, Ballet, Bath, Lefty, Minerva, Needle, Pi, Osiris, Righty, Ring, School, Umbrella, Dharma];
 console.log('admins length: ', allAdmins.length)
 let adminLogs = {
   rarity1: 0,

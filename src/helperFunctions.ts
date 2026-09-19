@@ -177,7 +177,7 @@ export function applyVariant(piece: Piece, variant: PieceVariant) {
   }
 }
 
-function rollRarity(clovers:number) {
+function rollRarity(clovers:number, hasCollector: boolean = false) {
 
   const base = [40,30,14,9,5,2];
   //36,27,18,10,6,3 balatro-esque
@@ -199,7 +199,11 @@ function rollRarity(clovers:number) {
 
   for (let i=0;i<adjusted.length;i++) {
     sum += adjusted[i];
-    if (roll < sum) return i+1;
+    if (roll < sum) {
+      const rarity = i + 1;
+      if (hasCollector && rarity === 1) return 2;
+      return rarity;
+    }
   }
 }
 
@@ -232,8 +236,9 @@ function rollRarity(clovers:number) {
 export function pickWeightedRandom(PieceClasses: any[], player: Player) {
 
   const cloverCount = player.admins.filter(a => a.name === 'Clover').length;
+  const hasCollector = player.admins.some(a => a.name === 'Collector');
 
-  const rarity = rollRarity(cloverCount);
+  const rarity = rollRarity(cloverCount, hasCollector);
 
   const piecesOfRarity = PieceClasses.filter(PieceClass => {
     const temp = new PieceClass({x:-1,y:-1}, "player");
@@ -255,7 +260,8 @@ export function pickWeightedRandom(PieceClasses: any[], player: Player) {
 export function pickWeightedRandomItem(itemClasses: any[], player: Player, costReduction?: number) {//move to items.ts?
 
     const cloverCount = player.admins.filter(a => a.name === 'Clover').length;
-    const rarity = rollRarity(cloverCount);
+    const hasCollector = player.admins.some(a => a.name === 'Collector');
+    const rarity = rollRarity(cloverCount, hasCollector);
 
     const itemsOfRarity = itemClasses.filter(ItemClass => {//can be empty, needs a guard
       const temp = new ItemClass({x:-1,y:-1}, "player");

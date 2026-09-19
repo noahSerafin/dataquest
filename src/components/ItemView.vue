@@ -143,7 +143,7 @@ const isDisabled = computed(() => {
       <div class="rarity" :style="{ color: rarityStyle(item.rarity).color }">
         {{ rarityStyle(item.rarity).label }}
       </div>
-      <div v-if="type === (item as any).compressed"
+      <div v-if="(item as any).compressed"
         style="color: black; font-weight: bold; font-family: Courier;">
         <FormattedDescription description="Compressed" :isHeader="true" />
       </div>

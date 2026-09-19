@@ -92,7 +92,8 @@ body,
   color: #e5e7eb;
   font-family: system-ui, sans-serif;
 }
-#app::before{
+
+#app::before {
   content: '';
   background-color: #000;
   width: 100vw;
@@ -269,7 +270,7 @@ body,
 }
 
 .text-gold {
-    color: rgb(243, 194, 32);
+  color: rgb(243, 194, 32);
 }
 
 .text-blue {
@@ -372,7 +373,9 @@ body,
   right: 0;
 }
 
-.enemy-bosses .tutorial-help-btn, .security .tutorial-help-btn, .infamy .tutorial-help-btn{
+.enemy-bosses .tutorial-help-btn,
+.security .tutorial-help-btn,
+.infamy .tutorial-help-btn {
   top: 50%;
   left: -24px;
 }
@@ -704,6 +707,7 @@ steel
 
 .piece.v_Holographic,
 .blueprint.v_Holographic,
+.item-consumable.compressed,
 .item-admin.compressed {
   filter: invert(1);
   background: linear-gradient(to left, black, rgba(255, 255, 255, 0));
@@ -748,6 +752,9 @@ steel
 .v_Holographic.piece-controller {
   filter: unset;
 }
-.stage, .container, .board-container{
+
+.stage,
+.container,
+.board-container {
   overflow: visible !important;
 }

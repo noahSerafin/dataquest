@@ -1,6 +1,6 @@
 import type { OS } from "./types";
 import { Voucher, Mushroom, Garlic, Meat, Genie, Pandora, Update2, Dupe, Jar, Iron } from "./Items";
-import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Clippy, Notepad, StoneAge, Rune, OffRoader, AdminMap, Compass, Backdoor, Miner, Copier, Cherries, Sneakers, Palette, Hermes, Dove, Discount, Booty, Djembe } from "./AdminPrograms";
+import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Clippy, Notepad, StoneAge, Rune, OffRoader, AdminMap, Compass, Backdoor, Miner, Copier, Cherries, Sneakers, Palette, Hermes, Dove, Discount, Booty, Djembe, Silly, Cane, Collector } from "./AdminPrograms";
 import { createDefaultStatuses } from "./types";
 
 const knife = {
@@ -617,7 +617,7 @@ const Debugger: OS = {
     adminSlots: 6,
     blueprints: [banana, superKnife, testhybrid, testPiece],
     items: [new Genie, new Pandora, new Update2, new Dupe, new Jar],
-    admins: [new Djembe, new Booty],
+    admins: [new Djembe, new Booty, new Silly, new Cane, new Collector],
     lives: 9,
     description: 'FOR TESTING'
 }

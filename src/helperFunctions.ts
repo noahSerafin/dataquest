@@ -49,10 +49,10 @@ function playBuffer(ctx: AudioContext, buffer: AudioBuffer, rate: number) {
 
 export function playSoundFx(url: string, rate: number = 1.0) {
   if (!isSoundEnabled.value) return;
-  
+
   const ctx = getAudioContext();
   resumeAudioContext();
-  
+
   const buffer = audioBufferCache.get(url);
   if (!buffer) {
     // Fallback: preload and play once ready
@@ -64,7 +64,7 @@ export function playSoundFx(url: string, rate: number = 1.0) {
     });
     return;
   }
-  
+
   playBuffer(ctx, buffer, rate);
 }
 
@@ -90,7 +90,7 @@ export function getRandomUnoccupiedTile(
 ): Coordinate | null {
   const occupied = getOccupiedTileSet(activePieces);
 
-  const freeTiles = tiles.filter(tile => 
+  const freeTiles = tiles.filter(tile =>
     !occupied.has(coordKey(tile))
   );
 
@@ -122,40 +122,40 @@ export function findAnyPiecesInRange(piece: Piece, pieces: Piece[]): Piece[] | n
 }
 
 export function makeBlueprint(PieceClass: any, variant?: PieceVariant, costReduction?: number): PieceBlueprint {
-    const temp = new PieceClass({ x: -1, y: -1 }, "player");
-    if (variant) {
-      applyVariant(temp, variant);
-    }
+  const temp = new PieceClass({ x: -1, y: -1 }, "player");
+  if (variant) {
+    applyVariant(temp, variant);
+  }
 
-    return {
-      id: crypto.randomUUID(),
-      name: PieceClass.name,
-      description: PieceClass.description,
-      unicode: PieceClass.unicode,
-      maxSize: temp.maxSize,//get stat?
-      moves: temp.moves,
-      range: temp.range,
-      attack: temp.attack,
-      defence: temp.defence,
-      rarity: temp.rarity,
-      color: PieceClass.color,
-      isPlaced: false,
-      cost: Math.max(0, (temp.rarity*2-1) - (costReduction ? costReduction : 0)),
-      variantName: temp.variantName,
-      immunities: temp.immunities,
-      damageMult: temp.damageMult
-    };
+  return {
+    id: crypto.randomUUID(),
+    name: PieceClass.name,
+    description: PieceClass.description,
+    unicode: PieceClass.unicode,
+    maxSize: temp.maxSize,//get stat?
+    moves: temp.moves,
+    range: temp.range,
+    attack: temp.attack,
+    defence: temp.defence,
+    rarity: temp.rarity,
+    color: PieceClass.color,
+    isPlaced: false,
+    cost: Math.max(0, (temp.rarity * 2 - 1) - (costReduction ? costReduction : 0)),
+    variantName: temp.variantName,
+    immunities: temp.immunities,
+    damageMult: temp.damageMult
+  };
 }
 
 const BASE_VARIANT_CHANCE = 0.15; // 15% chance a piece gets a variant
-export function rollVariant(chance: number, difficulty: number): PieceVariant | null{
+export function rollVariant(chance: number, difficulty: number): PieceVariant | null {
   if (Random.next() > chance) return null;
 
   const pool: PieceVariant[] = [];
   for (const v of PIECE_VARIANTS) {
     const w = Math.max(1, Math.floor((v.weight ?? 1) * 10));
     for (let i = 0; i < w; i++) {
-      if(v.minDifficulty <= difficulty) pool.push(v);  
+      if (v.minDifficulty <= difficulty) pool.push(v);
     }
   }
 
@@ -169,17 +169,18 @@ export function applyVariant(piece: Piece, variant: PieceVariant) {
     piece[stat] = Math.max(min, next);
   }
   piece.variantName = variant.name;
-  if(variant.name === 'Deadly'){
+  if (variant.name === 'Deadly') {
     piece.damageMult += 1;
   }
-  if(variant.name === 'Holographic'){
+  if (variant.name === 'Holographic') {
     piece.damageMult += 0.5;
   }
 }
 
-function rollRarity(clovers:number, hasCollector: boolean = false) {
+function rollRarity(clovers: number, hasCollector: boolean = false) {
 
-  const base = [40,30,14,9,5,2];
+  const base = [40, 30, 14, 9, 5, 2];
+  //const wCollector = [0,35,19,14,10,3];
   //36,27,18,10,6,3 balatro-esque
   //40,30,16,8,4,2 doubling
 
@@ -191,13 +192,13 @@ function rollRarity(clovers:number, hasCollector: boolean = false) {
     return chance * Math.pow(luck, rarity - 1);
   });
 
-  const total = adjusted.reduce((a,b)=>a+b,0);
+  const total = adjusted.reduce((a, b) => a + b, 0);
 
   const roll = Random.next() * total;
 
   let sum = 0;
 
-  for (let i=0;i<adjusted.length;i++) {
+  for (let i = 0; i < adjusted.length; i++) {
     sum += adjusted[i];
     if (roll < sum) {
       const rarity = i + 1;
@@ -241,7 +242,7 @@ export function pickWeightedRandom(PieceClasses: any[], player: Player) {
   const rarity = rollRarity(cloverCount, hasCollector);
 
   const piecesOfRarity = PieceClasses.filter(PieceClass => {
-    const temp = new PieceClass({x:-1,y:-1}, "player");
+    const temp = new PieceClass({ x: -1, y: -1 }, "player");
     return temp.rarity === rarity;
   });
 
@@ -259,21 +260,21 @@ export function pickWeightedRandom(PieceClasses: any[], player: Player) {
 
 export function pickWeightedRandomItem(itemClasses: any[], player: Player, costReduction?: number) {//move to items.ts?
 
-    const cloverCount = player.admins.filter(a => a.name === 'Clover').length;
-    const hasCollector = player.admins.some(a => a.name === 'Collector');
-    const rarity = rollRarity(cloverCount, hasCollector);
+  const cloverCount = player.admins.filter(a => a.name === 'Clover').length;
+  const hasCollector = player.admins.some(a => a.name === 'Collector');
+  const rarity = rollRarity(cloverCount, hasCollector);
 
-    const itemsOfRarity = itemClasses.filter(ItemClass => {//can be empty, needs a guard
-      const temp = new ItemClass({x:-1,y:-1}, "player");
-      return temp.rarity === rarity;//add a gaurd for no result for lists with missing rarities
-    });
+  const itemsOfRarity = itemClasses.filter(ItemClass => {//can be empty, needs a guard
+    const temp = new ItemClass({ x: -1, y: -1 }, "player");
+    return temp.rarity === rarity;//add a gaurd for no result for lists with missing rarities
+  });
 
-    const SelectedClass = Random.pick(itemsOfRarity);
-    if(costReduction){
-      SelectedClass.cost = Math.max(0, (SelectedClass.cost - costReduction));
-    }
+  const SelectedClass = Random.pick(itemsOfRarity);
+  if (costReduction) {
+    SelectedClass.cost = Math.max(0, (SelectedClass.cost - costReduction));
+  }
 
-    return new SelectedClass(); // RETURN INSTANCE
+  return new SelectedClass(); // RETURN INSTANCE
   /*
     const weighted: any[] = [];
     const cloverCount = player.admins.filter(a => a.name === 'Clover').length;
@@ -295,7 +296,7 @@ export function pickWeightedRandomItem(itemClasses: any[], player: Player, costR
     PickedClass.cost -= costReduction ? costReduction : 0;
 
     return new PickedClass();  // RETURN INSTANCE*/
-  }
+}
 
 export function addProgramsUntilFull(//not working, "PieceClass is not a constructor"
   player: Player,
@@ -304,7 +305,7 @@ export function addProgramsUntilFull(//not working, "PieceClass is not a constru
   let attempts = 0;
   let freeMemory = player.memory - player.usedMemory
 
-  while ((freeMemory >=1 || player.hasAdmin('Toolbox') && freeMemory >= 0.5) && attempts < maxAttempts) {
+  while ((freeMemory >= 1 || player.hasAdmin('Toolbox') && freeMemory >= 0.5) && attempts < maxAttempts) {
     const bp = makeBlueprint(pickWeightedRandom(allPieces, player))
 
     // If addProgram returns false when full, even better
@@ -321,8 +322,8 @@ export function addItemsUntilFull(
 ) {
   let attempts = 0;
   let freeMemory = player.freeMemory
-  
-  while ((freeMemory >= 1 || player.hasAdmin('Schoolbag') && freeMemory >= 0.5)&& attempts < maxAttempts) {
+
+  while ((freeMemory >= 1 || player.hasAdmin('Schoolbag') && freeMemory >= 0.5) && attempts < maxAttempts) {
     const item = pickWeightedRandomItem(upgradeItems, player);
     StorageManager.unlockItem(item);
     // If addProgram returns false when full, even better

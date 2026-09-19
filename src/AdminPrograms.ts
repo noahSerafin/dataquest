@@ -23,7 +23,6 @@ export abstract class Admin<
 > extends Item<TTarget> {
   triggerType: TTrigger;
   disabled: boolean = false;
-  compressed: boolean = false;
 
   constructor(
     name: string,
@@ -3486,35 +3485,95 @@ export class Booty extends Admin {
 
 /*
 //PROBING CANE, U+1F9AF (rarity 2) //onTurnEnd Trigger traps within 1 range of all your pieces early on the end of your turn.
-
+export class Cane extends Admin {
+  static name = "Cane";
+  static description = "Triggers all enemy traps within 1 range of your programs on the end of your turn";
+  static unicode = "U+1F9AF";
+  static color = "rgba(235, 235, 235, 1)";
+  static rarity = 2;
+  constructor() {
+    super(Cane.name, Cane.description, Cane.unicode, Cane.color, 3, Cane.rarity, 'gameState', 'onTurnEnd');
+  }
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    for (const p of activePieces) {
+      if (p.team === 'player') {
+        //find adjacent tiles to the player
+        //look for enemys with targetType 'trapPiece' that occupy thos tiles
+        //trigger them
+      }
+    }
+  }
+}
 //Bassline, U+1F4FE (rarity 4) //other Your stats cannot go below 1. changes addmodifier fnc in pieces
+export class Bassline extends Admin {
+  static name = "Bassline";
+  static description = "Sets all your programs stats that are 0 to 1 after the enemy's turn."
+  static unicode = "U+1F4FE";
+  static color = "rgba(54, 54, 54, 1)";
+  static rarity = 4;
+  constructor() {
+    super(Bassline.name, Bassline.description, Bassline.unicode, Bassline.color, 3, Cane.rarity, 'gameState', 'onEnemyTurnEnd');
+  }
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    for (const p of activePieces) {
+      if (p.team === 'player') {
+
+      }
+    }
+  }
+}
 
 //Silly, U+1F921 (rarity 6) //onRoundEnd Makes a copy of items but compressed on the end of a round. Allow compressed on items, but when not admins they effect memory instead of adminslots
-
-//Surfer, U+1F3C4 (rarity 2) //onReceiveDamage Your pieces move into a space for free(no moves expended) after taking damage (even defensive)
+export class Silly extends Admin {
+  static name = "Silly";
+  static description = "Creates a compressed copy of a random item in your inventory at the end of a round";
+  static unicode = "U+1F921";
+  static color = "rgba(187, 43, 163, 1)";
+  static rarity = 6;
+  constructor() {
+    super(Silly.name, Silly.description, Silly.unicode, Silly.color, 3, Silly.rarity, 'player', 'onRoundEnd');
+  }
+  async apply({ player }: { player: Player }) {
+    //if player.items.legth > 0
+    //pick a random item
+    //new class of that item, set compressed to true.
+    //add to player.items    
+  }
+}
 
 //Collector, U+1F5BC (rarity 1) //other Common(rarity 1) classes no longer appear in the shop (rollRarity)
-
-//war drum (item) move here
-class Djembe extends Item<Piece[]> {
-    static name = "War Drum";
-    static description = "All placed player programs gain +1 attack and +1 moves";
-    static unicode = "U+1FA98";//djembe LONG DRUM,
-    static color = "rgb(111, 32, 8)";
-    static rarity = 4;
-    constructor() {
-        super(Djembe.name, Djembe.description, Djembe.unicode, Djembe.color, 3, Djembe.rarity, 'gameState');
-        //name desc utf || maxsize moves range atk def
-    }
-    apply(activePieces: Piece[], itemMult: number) {
-        activePieces.forEach(piece => {
-            if (piece.team === 'player') {
-                piece.addModifier({ attack: 1 })//test
-                piece.addModifier({ moves: 1 })//test
-            }
-        })
-    }
+export class Collector extends Admin {
+  static name = "Collector";
+  static description = "Other common items can no longer appear in the shop";
+  static unicode = "U+1F5BC";//painting
+  static color = "rgba(8, 56, 111, 1)";
+  static rarity = 2;
+  constructor() {
+    super(Collector.name, Collector.description, Collector.unicode, Collector.color, 1, Collector.rarity, 'gameState', 'other');
+  }
+  async apply({ id: _id, activePieces: _activePieces }: { id: string, activePieces: Piece[] }) {
+    //do nothing - rarity changes should happen in rollRarity
+  }
 }
+  */
+
+export class Djembe extends Admin {
+  static name = "War Drum";
+  static description = "All player programs gain +1 attack and +1 moves on load";
+  static unicode = "U+1FA98";//djembe LONG DRUM,
+  static color = "rgb(111, 32, 8)";
+  static rarity = 4;
+  constructor() {
+    super(Djembe.name, Djembe.description, Djembe.unicode, Djembe.color, 3, Djembe.rarity, 'gameState', 'onPlacement');
+  }
+  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const idx = activePieces.findIndex(p => p.id === id);
+    activePieces[idx].addModifier({ attack: 1 });
+    activePieces[idx].addModifier({ moves: 1 });
+  }
+}
+/*
+//Surfer, U+1F3C4 (rarity 2) //onReceiveDamage Your pieces move into a space for free(no moves expended) after taking damage (even defensive)
 
 export class Splash extends Admin {
   static name = "Splash Damage";

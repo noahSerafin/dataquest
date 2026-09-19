@@ -105,6 +105,11 @@
                         ${{ 5 * player.adminCount('Tithe') }}
                     </span>
                 </span>
+                <span v-if="player.hasAdmin('Booty') && bosses.length > 0">+ Booty 
+                    <span class="text-yellow">
+                        ${{ 6 * player.adminCount('Booty') }}
+                    </span>
+                </span>
                 <span v-if="player.hasAdmin('Pot of Gold') && bosses.length > 0">+ Pot of Gold 
                     <span class="text-yellow">
                         ${{ 10 * player.adminCount('Pot of Gold') }}

@@ -106,7 +106,7 @@ const isDisabled = computed(() => {
 
 <template>
   <div ref="itemRef" :id="item.id" class="item-container"
-    :class="[`item-${type}`, `itemName-${item.name.replace(/\s+/g, '')}`, { 'is-clippy': item.name === 'Clippy' }, { 'compressed': type === 'admin' && (item as any).compressed }]"
+    :class="[`item-${type}`, `itemName-${item.name.replace(/\s+/g, '')}`, { 'is-clippy': item.name === 'Clippy' }, { 'compressed': (item as any).compressed }]"
     :style="{ width: itemStyle.width, height: itemStyle.height, cursor: 'pointer' }" @click="handleSelect">
     <div class="item-body item"
       :class="[{ 'is-disabled': isDisabled }, { 'is-triggering': (item as any).isTriggering }]"
@@ -143,7 +143,7 @@ const isDisabled = computed(() => {
       <div class="rarity" :style="{ color: rarityStyle(item.rarity).color }">
         {{ rarityStyle(item.rarity).label }}
       </div>
-      <div v-if="type === 'admin' && (item as any).compressed"
+      <div v-if="type === (item as any).compressed"
         style="color: black; font-weight: bold; font-family: Courier;">
         <FormattedDescription description="Compressed" :isHeader="true" />
       </div>

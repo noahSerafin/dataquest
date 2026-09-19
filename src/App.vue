@@ -568,9 +568,7 @@ function refreshShop(isFree: boolean) {
   }
   
   shopItems.value.forEach(item => {
-    if (item instanceof Admin) {
-      item.compressed = Random.bool(0.02);
-    }
+    item.compressed = Random.bool(0.02);
   });
   //if triggered by player
 }

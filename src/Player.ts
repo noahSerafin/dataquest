@@ -65,7 +65,8 @@ export class Player {
 
     /** Total "memory" usage from items + programs */
   get usedMemory(): number {
-    const itemUsage = this.hasAdmin('Schoolbag') ? (this.items.length/2) : this.items.length 
+    const uncompressedItems = this.items.filter(i => !i.compressed).length;
+    const itemUsage = this.hasAdmin('Schoolbag') ? (uncompressedItems/2) : uncompressedItems 
     const bpUsage = this.hasAdmin('Toolbox') ? (this.programs.length/2) : this.programs.length 
     return itemUsage + bpUsage;
   }

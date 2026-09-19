@@ -76,8 +76,9 @@ const canReroll = computed(() => props.player.effectiveMoney >= props.rerollCost
 const canStealGeneral = computed(() => props.player.hasAdmin('Five Finger Discount') && !props.hasStolen && !props.shopDisabled);
 
 const hasItemSpace = (item: Item) => {
+  if (item.compressed) return true;
   if (item instanceof Admin) {
-    return item.compressed || props.player.usedAdminSlots < props.player.adminSlots;
+    return props.player.usedAdminSlots < props.player.adminSlots;
   }
   const hasSchoolbag = props.player.hasAdmin('Schoolbag');
   return hasSchoolbag ? props.player.usedMemory <= props.player.memory - 0.5 : props.player.usedMemory <= props.player.memory - 1;

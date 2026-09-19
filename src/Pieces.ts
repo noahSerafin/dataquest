@@ -337,11 +337,15 @@ export abstract class Piece {
 
   }
 
-  async triggerTrap(target: any): Promise<void> {
+  async triggerTrap(target?: any): Promise<void> {
     this.isTriggering = true;
     this.statuses.hidden = false;
     await new Promise(resolve => setTimeout(resolve, 450));
-    await this.special(target);
+    if (target) {
+      await this.special(target);
+    } else {
+      this.removeCallback?.(this);
+    }
     this.isTriggering = false;
   }
 

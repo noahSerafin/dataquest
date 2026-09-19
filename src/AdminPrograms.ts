@@ -3483,7 +3483,6 @@ export class Booty extends Admin {
   }
 }
 
-/*
 //PROBING CANE, U+1F9AF (rarity 2) //onTurnEnd Trigger traps within 1 range of all your pieces early on the end of your turn.
 export class Cane extends Admin {
   static name = "Cane";
@@ -3495,15 +3494,34 @@ export class Cane extends Admin {
     super(Cane.name, Cane.description, Cane.unicode, Cane.color, 3, Cane.rarity, 'gameState', 'onTurnEnd');
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const trapsToTrigger = new Set<Piece>();
     for (const p of activePieces) {
       if (p.team === 'player') {
-        //find adjacent tiles to the player
-        //look for enemys with targetType 'trapPiece' that occupy thos tiles
-        //trigger them
+        for (const enemy of activePieces) {
+          if (enemy.team === 'enemy' && enemy.targetType === 'trapPiece') {
+            const isAdjacent = p.tiles.some(st =>
+              enemy.tiles.some(tt =>
+                Math.abs(st.x - tt.x) + Math.abs(st.y - tt.y) <= 1
+              )
+            );
+            if (isAdjacent) {
+              trapsToTrigger.add(enemy);
+            }
+          }
+        }
+      }
+    }
+
+    if (trapsToTrigger.size > 0) {
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
+      for (const trap of trapsToTrigger) {
+        await trap.triggerTrap();
       }
     }
   }
 }
+
 //Bassline, U+1F4FE (rarity 4) //other Your stats cannot go below 1. changes addmodifier fnc in pieces
 export class Bassline extends Admin {
   static name = "Bassline";
@@ -3515,9 +3533,15 @@ export class Bassline extends Admin {
     super(Bassline.name, Bassline.description, Bassline.unicode, Bassline.color, 3, Cane.rarity, 'gameState', 'onEnemyTurnEnd');
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     for (const p of activePieces) {
       if (p.team === 'player') {
-
+        if (p.getStat('maxSize') === 0) p.addModifier({ maxSize: 1 });
+        if (p.getStat('moves') === 0) p.addModifier({ moves: 1 });
+        if (p.getStat('range') === 0) p.addModifier({ range: 1 });
+        if (p.getStat('attack') === 0) p.addModifier({ attack: 1 });
+        if (p.getStat('defence') === 0) p.addModifier({ defence: 1 });
       }
     }
   }
@@ -3534,17 +3558,22 @@ export class Silly extends Admin {
     super(Silly.name, Silly.description, Silly.unicode, Silly.color, 3, Silly.rarity, 'player', 'onRoundEnd');
   }
   async apply({ player }: { player: Player }) {
-    //if player.items.legth > 0
-    //pick a random item
-    //new class of that item, set compressed to true.
-    //add to player.items    
+    if (player.items.length > 0) {
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
+      const randomItem = player.items[Math.floor(Math.random() * player.items.length)];
+      const ItemClass = Object.getPrototypeOf(randomItem).constructor;
+      const newItem = new ItemClass();
+      newItem.compressed = true;
+      player.items.push(newItem);
+    }
   }
 }
 
 //Collector, U+1F5BC (rarity 1) //other Common(rarity 1) classes no longer appear in the shop (rollRarity)
 export class Collector extends Admin {
   static name = "Collector";
-  static description = "Other common items can no longer appear in the shop";
+  static description = "Other common items can no longer appear.";
   static unicode = "U+1F5BC";//painting
   static color = "rgba(8, 56, 111, 1)";
   static rarity = 2;
@@ -3555,7 +3584,6 @@ export class Collector extends Admin {
     //do nothing - rarity changes should happen in rollRarity
   }
 }
-  */
 
 export class Djembe extends Admin {
   static name = "War Drum";

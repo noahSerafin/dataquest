@@ -22,13 +22,13 @@ const knife = {
 }
 const testPiece = {
     id: crypto.randomUUID(),
-    name: "Lighthouse",
+    name: "Zombie",
     description: "testing this pieces special move",
     unicode: 'U+1F47E',
     maxSize: 2,
     moves: 10,
     range: 20,
-    attack: 2,
+    attack: 10,
     defence: 20,
     rarity: 5,
     color: "#ee74eeff",

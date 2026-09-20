@@ -2062,15 +2062,18 @@ function cancelConfirm() {
         </div>
       </div>
       <div v-if="!displayEditor && roundHasStarted" class="player-helper">
-        <div v-if="roundHasStarted" class="turn-info">{{ (!hasFinishedTurn || isPlacing) ? "Your turn" : "Enemy turn" }}
+        <div class="player-helper-left">
+          <div v-if="roundHasStarted" class="turn-info">{{ (!hasFinishedTurn || isPlacing) ? "Your turn" : "Enemy turn" }}</div>
+          <div v-if="isPlacing && pieceToPlace">
+            <p style="margin: 0">Placing:</p>
+          </div>
         </div>
-        <div v-if="isPlacing && pieceToPlace">
-          <p>Placing:</p>
-          <button @click="pieceToPlace = null">Cancel</button>
+        <div class="player-helper-right">
+          <div v-if="isPlacing && pieceToPlace" class="info">
+            <BlueprintView :blueprint="pieceToPlace" :tileSize="60" :cssclass="'placing'" />
+          </div>
         </div>
-        <div v-if="isPlacing && pieceToPlace" class="info">
-          <BlueprintView :blueprint="pieceToPlace" :tileSize="60" :cssclass="'placing'" />
-        </div>
+        <button @click="pieceToPlace = null">Cancel</button>
       </div>
     </div>
     <div class="stage">
@@ -2197,9 +2200,7 @@ function cancelConfirm() {
   background: #777;
 }
 .player-helper {
-  position: absolute;
-  top: 10px;
-  right: 10px;
+  display: flex;
 }
 
 .turn-info {

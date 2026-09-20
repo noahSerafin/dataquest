@@ -55,7 +55,7 @@ export const STATUS_INFO: Record<string, string> = {
   Gold: "+1 max size, +1 defence, +1 moves, +1 range, +1 attack",
   Holographic: "+2 max size, +2 defence, +2 moves, +2 range, +2 attack, +0.5 dmg mult",
   Deadly: "+1 dmg mult",
-  Compressed: "Uses 0 Admin slots",
+  Compressed: "Uses 0 Memory/Admin slots",
   "♺": "Won at 0 infamy",
   "♳": "Won at 1 infamy",
   "♴": "Won at 2 infamy",

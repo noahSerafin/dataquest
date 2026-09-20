@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import WelcomeScreen from './components/WelcomeScreen.vue'
 import { ref, onMounted, computed, watch, nextTick } from "vue";
 import BackgroundShader from "./components/BackgroundShader.vue";
 import Board from './components/Board.vue';
@@ -133,6 +134,12 @@ onMounted(() => {
       console.log('audio error: ', err);
     });
   }
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'S' && e.ctrlKey && e.shiftKey) {
+      showSpriteSheet.value = !showSpriteSheet.value;
+    }
+  });
 });
 
 function toggleMusic() {
@@ -165,6 +172,7 @@ import MainMenu from "./components/MainMenu.vue";
 import PieceController from "./components/PieceController.vue";
 import HybridCompiler from "./components/HybridCompiler.vue";
 import Collection from "./components/Collection.vue";
+import SpriteSheet from "./components/SpriteSheet.vue";
 import { applyTutorialTooltips, reapplyTutorialTooltips } from "./tutorial.ts";
 import { allTips } from "./tutorialSteps.ts";
 import { StorageManager } from "./StorageManager";
@@ -261,6 +269,7 @@ function toggleInventory() {
 const showMainMenu = ref(true);
 const currentSeed = ref<string>("");
 const bgProgress = ref(0);
+const showWelcomeScreen = ref(true);
 
 function createNewPlayer(payload: { os: OS, seed: string, stake?: number }) {
   bgProgress.value++;
@@ -326,6 +335,7 @@ function createNewPlayer(payload: { os: OS, seed: string, stake?: number }) {
   player.value.canPlace = false;
 }
 const showCollection = ref(false);
+const showSpriteSheet = ref(false);
 
 function incrementMapProgress() {
   player.value.extraDifficulty = 0;
@@ -1981,12 +1991,17 @@ function cancelConfirm() {
 </script>
 
 <template>
-  <div class="app-root">
-    <BackgroundShader 
-      :progress="bgProgress" 
-      :edgeColor="currentCompany?.edgeColor || 'rgb(156, 201, 84)'" 
-      :tileColor="currentCompany?.tileColor || 'rgb(17, 31, 15)'" 
-    />
+  <WelcomeScreen v-if="showWelcomeScreen">
+    <div class="welcome-ui">
+      <button class="play-btn" @click="showWelcomeScreen = false">PLAY</button>
+    </div>
+  </WelcomeScreen>
+  
+  <div class="app-root" v-else>
+    <BackgroundShader
+    :progress="bgProgress"
+    :edgeColor="currentCompany?.edgeColor || 'rgb(156, 201, 84)'"
+    :tileColor="currentCompany?.tileColor || 'rgb(17, 31, 15)'" />
     <div class="debug-controls" :class="{ 'mobile-open': isMobileMenuOpen }">
       <button @click="showCollection = !showCollection" class="info-btn">Info</button>
       <button v-if="debugMode === true" class="swap-display" @mousedown="swapDisplay()">
@@ -2117,6 +2132,7 @@ function cancelConfirm() {
         @damagePieceAt="damagePieceAt" @specialActionAt="handleSpecialActionAt" @placeAt="placeAt" gameStart="true" />
       <Collection class="stage-panel" :class="{ active: showCollection }" @close="showCollection = false"
         :debugMode="debugMode" :currentSeed="currentSeed" />
+      <SpriteSheet v-if="showSpriteSheet" @close="showSpriteSheet = false" />
     </div>
     <Leveleditor v-if="displayEditor" @export-level="handleExport" />
     <div v-if="gameStarted || debugMode" class="player-area">
@@ -2159,6 +2175,40 @@ function cancelConfirm() {
 </template>
 
 <style scoped>
+.welcome-ui {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.welcome-title {
+  color: white;
+  font-family: monospace;
+  font-size: 4rem;
+  margin: 0;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8), 0 0 20px rgba(47, 197, 235, 0.5);
+  letter-spacing: 0.2rem;
+}
+
+.play-btn {
+  font-size: 2rem;
+  padding: 1rem 3rem;
+  font-family: monospace;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: 2px solid white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+}
+
+.play-btn:hover {
+  background: white;
+  color: black;
+  transform: scale(1.05);
+}
+
 .confirm-modal-overlay {
   position: fixed;
   top: 0;

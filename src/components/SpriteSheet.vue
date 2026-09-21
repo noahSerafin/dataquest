@@ -95,6 +95,16 @@ const allIcons = computed(() => {
       });
     }
   });
+
+  const mapNodes = ['U+1F6D2', 'U+1FAA6', 'U+1F46F', 'U+2699', 'U+1F9EC'];
+  mapNodes.forEach((unicode, index) => {
+    result.push({
+      id: 'mapNode-' + index,
+      primary: getUnicode(unicode),
+      extra: '',
+      hybrid: false
+    });
+  });
   
   return result;
 });

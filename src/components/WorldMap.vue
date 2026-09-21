@@ -17,7 +17,8 @@ import { level4Levels } from "../level4Levels";
 import { level5Levels } from "../level5Levels";
 import { allPieces } from "../Pieces";
 import { allAdmins } from "../AdminPrograms";
-import { makeBlueprint, pickWeightedRandom, pickWeightedRandomItem } from "../helperFunctions";
+import { allOSes } from "../Operators";
+import { makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, getSpriteStyle } from "../helperFunctions";
 import BlueprintView from "./BlueprintView.vue";
 import ItemView from "./ItemView.vue";
 import BlueprintController from "./BlueprintController.vue";
@@ -304,6 +305,46 @@ function displayIcon(node: WorldNode) {
         case "boss": return String.fromCodePoint(parseInt(boss.value.unicode.replace('U+', ''), 16), 0xFE0F);
         case "skip": return "";
     }
+}
+
+function getIconStyle(node: WorldNode, size: number = 24): Record<string, any> {
+    let iconID: number | undefined;
+
+    if (!revealedNodeIds.value.has(node.id)) {
+        return {};
+    }
+
+    if (node.id === currentNodeId.value) {
+        const os = allOSes.find(o => o.unicode === props.player.osunicode);
+        iconID = os?.iconID;
+    } else if (node.type === 'skip' && node.skipReward) {
+        iconID = node.skipReward.value.iconID;
+    } else if (node.type === 'level') {
+        iconID = node.company.iconID;
+    } else if (node.type === 'boss') {
+        iconID = boss.value.iconID;
+    } else if (node.type === 'shop'){
+        iconID = 474;
+    } else if(node.type === "sacrificial altar"){
+        iconID = 475;
+    } else if(node.type === 'duplicator'){
+        iconID = 476;
+    } else if(node.type === 'workbench'){
+        iconID = 477;
+    } else if(node.type === 'hybrid compiler'){
+        iconID = 478;
+    }
+
+    if (iconID !== undefined && iconID >= 0) {
+        return {
+            ...getSpriteStyle(iconID),
+            width: `${size}px`,
+            height: `${size}px`,
+            display: 'inline-block',
+            color: 'transparent'
+        };
+    }
+    return {};
 }
 
 const connections = computed(() => {
@@ -635,8 +676,10 @@ watch(currentNodeId, () => {
                             class='text-gold'>
                             ${{ node.reward }}
                         </div>
-                        <div class="icon">
-                            {{ displayIcon(node) }}
+                        <div class="icon" :style="getIconStyle(node, 24)">
+                            <template v-if="!getIconStyle(node).backgroundImage">
+                                {{ displayIcon(node) }}
+                            </template>
                         </div>
                         <div v-if="!node.visited && (node.type == 'level' && node.id !== currentNodeId)">
                             {{ String.fromCodePoint(parseInt("U+1F512".replace('U+', ''), 16), 0xFE0F) }}{{
@@ -688,8 +731,10 @@ watch(currentNodeId, () => {
             <h6 v-if="selectedPreviewNode.type === 'skip'">(Must have room)</h6>
             <h4 v-if="selectedPreviewNode.type !== 'boss' && selectedPreviewNode.type === 'level'">{{
                 selectedPreviewNode.company.name }}</h4>
-            <div v-if="selectedPreviewNode.type !== 'boss' && selectedPreviewNode.type === 'level'">
-                {{ String.fromCodePoint(parseInt(selectedPreviewNode.company.unicode.replace('U+', ''), 16), 0xFE0F) }}
+            <div v-if="selectedPreviewNode.type !== 'boss' && selectedPreviewNode.type === 'level'" :style="getIconStyle(selectedPreviewNode, 32)">
+                <template v-if="!getIconStyle(selectedPreviewNode).backgroundImage">
+                    {{ String.fromCodePoint(parseInt(selectedPreviewNode.company.unicode.replace('U+', ''), 16), 0xFE0F) }}
+                </template>
             </div>
             <h5 v-if="selectedPreviewNode.type === 'boss' || selectedPreviewNode.type === 'level'">Security Level 🔒: {{
                 player.difficulty + selectedPreviewNode.difficultyMod }}</h5>

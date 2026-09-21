@@ -5,6 +5,7 @@
     import { StorageManager } from '../StorageManager';
     import FormattedDescription from './FormattedDescription.vue';
     import { STATUS_COLORS } from '../statuses';
+    import { getSpriteStyle } from '../helperFunctions';
 
     const props = defineProps<{
         debugMode: boolean;
@@ -175,8 +176,7 @@
                     <div class="usb-connector"></div>
                     <div class="os-content">
                         <h3 class="mb-0">{{ item.os.name }}</h3>
-                        <div class="logo">
-                            {{ returnUnicode(item.os.unicode) }}
+                        <div class="logo" :style="getSpriteStyle(item.os.iconID)">
                         </div>
 
                         <div class="os-wins" v-if="getWinsForOS(item.os.unicode).length > 0">
@@ -196,20 +196,17 @@
                             <h5 class="mb-0">Starts with:</h5>
                             <div class="bps">
                                 <div class="logo" 
-                                    v-for="bp in item.os.blueprints">
-                                    {{ returnUnicode(bp.unicode) }}
+                                    v-for="bp in item.os.blueprints" :style="getSpriteStyle(bp.iconID)">
                                 </div>
                             </div>
                             <div class="bps">
                                 <div class="logo" 
-                                    v-for="bp in item.os.items">
-                                    {{ returnUnicode(bp.unicode) }}
+                                    v-for="bp in item.os.items" :style="getSpriteStyle(bp.iconID)">
                                 </div>
                             </div>
                             <div class="bps">
                                 <div class="logo" 
-                                    v-for="bp in item.os.admins">
-                                    {{ returnUnicode(bp.unicode) }}
+                                    v-for="bp in item.os.admins" :style="getSpriteStyle(bp.iconID)">
                                 </div>
                             </div>
                         </template>
@@ -417,6 +414,9 @@
     }
     .logo{
         font-size: 36px;
+        width: 36px;
+        height: 36px;
+        display: inline-block;
     }
     .stats span{
         font-weight: bold;

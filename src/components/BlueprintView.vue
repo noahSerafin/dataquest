@@ -2,6 +2,8 @@
 import { ref, computed, useTemplateRef } from "vue";
 import { useTilt } from "../composables/useTilt";
 import type { Coordinate, PieceBlueprint } from "../types";
+import { spritesheetState, iconsUrl } from "../helperFunctions";
+import { allPieces } from "../Pieces";
 
 //construction-------------
 
@@ -37,6 +39,45 @@ const ExtraUnicodeSymbol = computed(() =>
     ? String.fromCodePoint(parseInt(props.blueprint.extraUnicode.replace('U+', ''), 16), 0xFE0F)
     : ''
 )
+
+//remove for production (localStorage issue)
+const resolvedIconID = computed(() => {
+  if (props.blueprint.iconID !== undefined && props.blueprint.iconID >= 0) {
+    return props.blueprint.iconID;
+  }
+  const PieceClass = allPieces.find(p => p.name === props.blueprint.name);
+  return PieceClass ? (PieceClass as any).iconID : -1;
+});
+
+// Windows preference bit of code
+//const isWindows = navigator.userAgent.toLowerCase().includes('win');
+
+const useUnicode = computed(() => {
+  //if (isWindows) return true;
+  //if (spritesheetState.value.error) return true;
+  if (resolvedIconID.value < 0) return true;
+  return false;
+});
+
+const spriteStyle = computed(() => {
+  if (useUnicode.value) return {};
+  const iconID = resolvedIconID.value;
+  if (iconID < 0) return {};
+  const col = iconID % 37;
+  const row = Math.floor(iconID / 37);
+  return {
+    backgroundImage: `url('${iconsUrl}')`,
+    backgroundSize: `3700% 1200%`,
+    backgroundPosition: `${col * (100 / 36)}% ${row * (100 / 11)}%`,
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    borderRadius: 'inherit',
+    backgroundRepeat: 'no-repeat'
+  };
+});
 
 // --- reactive properties derived from the piece instance ---
 function showRarity(rarity: number) {
@@ -118,8 +159,12 @@ function handleSelect() {
       :style="[pieceStyle, tiltStyle]"
     >
       <p class='top-left' v-if="cssclass==='shop' || cssclass==='skipReward'" :style="`top: -${((props.tileSize-10)/2 - 24)}px`">P</p>
-      <span class="primary-unicode">{{ unicodeSymbol }}</span>
-      <span v-if="blueprint.extraUnicode" class="extra-unicode">{{ ExtraUnicodeSymbol }}</span>
+      
+      <div v-if="!useUnicode" class="sprite-icon" :style="spriteStyle"></div>
+      <template v-else>
+        <span class="primary-unicode">{{ unicodeSymbol }}</span>
+        <span v-if="blueprint.extraUnicode" class="extra-unicode">{{ ExtraUnicodeSymbol }}</span>
+      </template>
     </div>
   </div>
 </template>

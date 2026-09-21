@@ -20,6 +20,7 @@ export abstract class Item<TTarget = any> {
     targetType: 'blueprint' | 'piece' | 'shopItem' | 'player' | 'gameState' | 'playerAndGame' | 'piecesAndBoard' | 'all'
     isTriggering: boolean = false;
     compressed: boolean = false;
+    iconID: number;
     //variantName: string
     constructor(
         name: string,
@@ -39,6 +40,7 @@ export abstract class Item<TTarget = any> {
         this.cost = cost
         this.rarity = rarity
         this.targetType = targetType
+        this.iconID = (this.constructor as any).iconID ?? -1
         //this.variantName = variantName
     }
 
@@ -57,6 +59,9 @@ export abstract class Item<TTarget = any> {
 }
 
 export class Mushroom extends Item<PieceBlueprint> {
+  static iconID = 167;
+
+
     static name = "Mushroom";
     static description = "Increases a held program's attack by 1";
     static unicode = "U+1F344";
@@ -72,6 +77,9 @@ export class Mushroom extends Item<PieceBlueprint> {
 }
 
 export class Meat extends Item<PieceBlueprint> {
+  static iconID = 204;
+
+
     static name = "Meat";
     static description = "Increases a held program's attack by 2";
     static unicode = "U+1F356";//Meat "U+1F3CB"; //U+1F356 Large meat
@@ -86,6 +94,9 @@ export class Meat extends Item<PieceBlueprint> {
 }
 
 export class Iron extends Item<PieceBlueprint> {
+  static iconID = 164;
+
+
     static name = "Iron";
     static description = "Increases a held held program's defence by 1";
     static unicode = "U+1F96C"
@@ -101,6 +112,9 @@ export class Iron extends Item<PieceBlueprint> {
 }
 
 export class Garlic extends Item<PieceBlueprint> {
+  static iconID = 200;
+
+
     static name = "Garlic";
     static description = "Increases a held program's defence by 2";
     static unicode = "U+1F9C4";
@@ -115,6 +129,9 @@ export class Garlic extends Item<PieceBlueprint> {
 }
 
 export class Ginger extends Item<PieceBlueprint> {
+  static iconID = 217;
+
+
     static name = "Ginger";
     static description = "Increases a held program's defence by 3";
     static unicode = "U+1FADA"
@@ -134,6 +151,9 @@ export class Ginger extends Item<PieceBlueprint> {
 //??"U+26E8";
 
 export class Blueberry extends Item<PieceBlueprint> {
+  static iconID = 162;
+
+
     static name = "Blueberry";
     static description = "Increases a held program's max size by 1";
     static unicode = "U+1FAD0";
@@ -150,6 +170,9 @@ export class Blueberry extends Item<PieceBlueprint> {
 }
 
 class Melon extends Item<PieceBlueprint> {
+  static iconID = 190;
+
+
     static name = "Melon";
     static description = "+2 max size to a held program";
     static unicode = "U+1F349";
@@ -166,6 +189,9 @@ class Melon extends Item<PieceBlueprint> {
 }
 
 class Pie extends Item<PieceBlueprint> {
+  static iconID = 205;
+
+
     static name = "Pie";
     static description = "+3 max size to a held program";
     static unicode = "U+1F967";
@@ -182,6 +208,9 @@ class Pie extends Item<PieceBlueprint> {
 }
 
 class Pepper extends Item<PieceBlueprint> {
+  static iconID = 169;
+
+
     static name = "Pepper";
     static description = "Increases a held program's range by 1";
     static unicode = "U+1FAD1" //Radish U+1FADC
@@ -198,6 +227,9 @@ class Pepper extends Item<PieceBlueprint> {
 }
 
 export class Carrot extends Item<PieceBlueprint> {
+  static iconID = 199;
+
+
     static name = "Carrot";
     static description = "Increases a held program's range by 2";
     static unicode = "U+1F955"//scope "U+1F52D";
@@ -214,6 +246,9 @@ export class Carrot extends Item<PieceBlueprint> {
 }
 
 export class Juice extends Item<PieceBlueprint> {
+  static iconID = 166;
+
+
     static name = "Juiced";
     static description = "Increases a held program's moves by 1";
     static unicode = "U+1F9C3";
@@ -228,6 +263,9 @@ export class Juice extends Item<PieceBlueprint> {
 }
 
 class Teapot extends Item<PieceBlueprint> {
+  static iconID = 181;
+
+
     static name = "Teapot";//defence?
     static description = "Increases a held program's moves by 2";
     static unicode = "U+1FAD6";//BEANS, U+1FAD8
@@ -243,6 +281,9 @@ class Teapot extends Item<PieceBlueprint> {
 }
 
 export class Coffee extends Item<PieceBlueprint> {
+  static iconID = 208;
+
+
     static name = "Coffee";
     static description = "Increases a held program's moves by 3";
     static unicode = "U+2615";
@@ -257,6 +298,9 @@ export class Coffee extends Item<PieceBlueprint> {
 }
 
 export class Roids extends Item<PieceBlueprint> {
+  static iconID = 194;
+
+
     static name = "Roids";
     static description = "Increase a held program's attack by 1, and moves by 1";//make a program?
     static unicode = "U+1F489";
@@ -272,6 +316,9 @@ export class Roids extends Item<PieceBlueprint> {
 }
 
 export class Formula extends Item<PieceBlueprint> {
+  static iconID = 174;
+
+
     static name = "Formula";
     static description = "Increases a held program's max size by 1 and defence by 1";
     static unicode = "U+1F37C";
@@ -289,6 +336,9 @@ export class Formula extends Item<PieceBlueprint> {
 // OLIVE, U+1FAD2
 
 export class Blessing extends Item<PieceBlueprint> {
+  static iconID = 215;
+
+
     static name = "Blessing";
     static description = "Increases all a held program's stats by 1";
     static unicode = "U+1F389";
@@ -308,6 +358,9 @@ export class Blessing extends Item<PieceBlueprint> {
 }
 
 export class Supplement extends Item<Piece> {
+  static iconID = 207;
+
+
     static name = "Supplement";
     static description = "Increases all a placed program's stats by 1 for one round";
     static unicode = "U+1F48A";
@@ -327,6 +380,9 @@ export class Supplement extends Item<Piece> {
 }
 
 export class Bandage extends Item<Piece> {
+  static iconID = 172;
+
+
     static name = "Bandage";
     static description = "Removes 1 harmful status effect from a program";
     static unicode = "U+1FA79";
@@ -356,6 +412,9 @@ export class Bandage extends Item<Piece> {
 }
 
 export class Cake extends Item<Piece> {
+  static iconID = 198;
+
+
     static name = "Cake";
     static description = "Hide a non-exposed program";
     static unicode = "U+1F382";
@@ -372,6 +431,9 @@ export class Cake extends Item<Piece> {
 }
 
 class Soap extends Item<Piece> {
+  static iconID = 180;
+
+
     static name = "Soap";
     static description = "Removes all harmful status effects from a program";
     static unicode = "U+1F9FC";
@@ -389,6 +451,9 @@ class Soap extends Item<Piece> {
 }
 
 export class Voucher extends Item<Item> {
+  static iconID = 171;
+
+
     static name = "Voucher";
     static description = "Makes one item in the shop free";
     static unicode = "U+1F9FE";
@@ -403,6 +468,9 @@ export class Voucher extends Item<Item> {
 }
 
 export class Rations extends Item<Piece> {
+  static iconID = 193;
+
+
     static name = "Rations";
     static description = "Replenish a programs moves";
     static unicode = "U+1F96B";
@@ -417,6 +485,9 @@ export class Rations extends Item<Piece> {
 }
 
 export class Beans extends Item<Piece> {
+  static iconID = 183;
+
+
     static name = "Beans";
     static description = "Replenish a programs actions";//give a placed piece 2 actions every turn for a round?
     static unicode = "U+1FAD8";
@@ -431,6 +502,9 @@ export class Beans extends Item<Piece> {
 }
 
 export class ShootingStar extends Item<PieceBlueprint> {
+  static iconID = 221;
+
+
     static name = "Shooting Star";
     static description = "Make a held program immune to all harmful statuses";
     static unicode = "U+1F320";
@@ -461,6 +535,9 @@ export class ShootingStar extends Item<PieceBlueprint> {
 // BENTO BOX, U+1F371 random upgrade item
 //// AMPHORA, U+1F3FA Pandora
 export class Pandora extends Item<Player> {
+  static iconID = 219;
+
+
     static name = "Pandora";
     static description = "Grants 3 random upgrade items (must have room)";
     static unicode = "U+1F3FA";
@@ -480,6 +557,9 @@ export class Pandora extends Item<Player> {
 
 //move randomgen functions to helper file, import asnd use them them here
 export class Gift extends Item<Player> {
+  static iconID = 176;
+
+
     static name = "Gift Box";
     static description = "Grants a random program (must have room)";
     static unicode = "U+1F381";
@@ -500,6 +580,9 @@ export class Gift extends Item<Player> {
 }
 
 export class Genie extends Item<Player> {
+  static iconID = 211;
+
+
     static name = "Genie";
     static description = "Gifts up to 3 random programs (depending on available memory)";
     static unicode = "U+1F9DE";
@@ -527,6 +610,9 @@ export class Genie extends Item<Player> {
 }
 
 export class Box extends Item<Player> {
+  static iconID = 168;
+
+
     static name = "Mystery Box";
     static description = "Grants a random consumable item";
     static unicode = "U+1F4E6";
@@ -546,7 +632,10 @@ export class Box extends Item<Player> {
     }
 }
 
-export class Pinata extends Item<Player> {//untested
+export class Pinata extends Item<Player> {
+  static iconID = 192;
+
+  static iconID = 187;//untested
     static name = "Pinata";
     static description = "Grants a random admin program (must have room)";
     static unicode = "U+1FA85";
@@ -569,6 +658,9 @@ export class Pinata extends Item<Player> {//untested
 }
 
 export class Spanner extends Item<Piece> {
+  static iconID = 195;
+
+
     static name = "Spanner";
     static description = "Prevent a program from moving, and taking action for one turn";
     static unicode = "U+1F527";
@@ -587,6 +679,9 @@ export class Spanner extends Item<Piece> {
 }
 
 class Makeover extends Item<Piece> {
+  static iconID = 189;
+
+
     static name = "Makeover";
     static description = "Remove exposed from a program";
     static unicode = "U+1F485";
@@ -602,6 +697,9 @@ class Makeover extends Item<Piece> {
 }
 
 class Lips extends Item<Piece> {
+  static iconID = 206;
+
+
     static name = "Seduction";
     static description = "Charm an enemy program";
     static unicode = "U+1F484";
@@ -616,7 +714,9 @@ class Lips extends Item<Piece> {
     }
 }
 
-export class Wand extends Item<Piece[]> {//TODO test
+export class Wand extends Item<Piece[]> {
+  static iconID = 202;
+  static iconID = 202;//TODO test
     static name = "Magic Wand";
     static description = "Undo a turn";
     static unicode = "U+1FA84";
@@ -630,7 +730,9 @@ export class Wand extends Item<Piece[]> {//TODO test
     }
 }
 
-export class Hourglass extends Item<Piece[]> {//TODO test
+export class Hourglass extends Item<Piece[]> {
+  static iconID = 212;
+  static iconID = 212;//TODO test
     static name = "Hourglass";
     static description = "Retry a node without losing a life";
     static unicode = "U+231B";
@@ -645,7 +747,9 @@ export class Hourglass extends Item<Piece[]> {//TODO test
     }
 }
 
-class Keygen extends Item<Piece[]> {//TODO test
+class Keygen extends Item<Piece[]> {
+  static iconID = 188;
+  static iconID = 188;//TODO test
     static name = "Keygen";
     static description = "Lower the defence of all enemy programs in a node by 1";
     static unicode = "U+1F511";
@@ -667,6 +771,8 @@ class Keygen extends Item<Piece[]> {//TODO test
 }
 
 class Bugle extends Item<Piece[]> {
+  static iconID = 185;
+
     static name = "Bugle";
     static description = "All placed player programs gain +1 attack";
     static unicode = "U+1F4EF";
@@ -686,6 +792,8 @@ class Bugle extends Item<Piece[]> {
 }
 
 class Megaphone extends Item<Piece[]> {
+  static iconID = 191;
+
     static name = "Pep Talk";
     static description = "All placed player programs gain +1 moves";
     static unicode = "U+1F4E3";
@@ -705,6 +813,8 @@ class Megaphone extends Item<Piece[]> {
 }
 
 class Battery extends Item<Piece[]> {
+  static iconID = 163;
+
     static name = "Fresh Batteries";
     static description = "All placed player programs replenish their moves remaining";
     static unicode = " U+1F50B";
@@ -725,6 +835,9 @@ class Battery extends Item<Piece[]> {
 
 //SANDWICH, U+1F96A, all rounder? random stat?
 export class Sandwich extends Item<Piece> {
+  static iconID = 213;
+
+
     static name = "Sandwich";
     static description = "Increases all a placed program's stats by 2 for one round";
     static unicode = "U+1F96A";
@@ -744,6 +857,9 @@ export class Sandwich extends Item<Piece> {
 }
 
 class Hotline extends Item {
+  static iconID = 177;
+
+
     static name = "Hotline";
     static description = "load a random friendly program into a node at a random position";
     static unicode = "U+1F4DE";
@@ -768,6 +884,9 @@ class Hotline extends Item {
 
 //target player
 export class Floppy extends Item {
+  static iconID = 170;
+
+
     static name = "Update";
     static description = "+1 memory";
     static unicode = "U+1F4BE";
@@ -783,6 +902,9 @@ export class Floppy extends Item {
 }
 
 export class Update2 extends Item {
+  static iconID = 196;
+
+
     static name = "Update 2.0";
     static description = "+2 memory";
     static unicode = "U+1F4BF";
@@ -798,6 +920,9 @@ export class Update2 extends Item {
 }
 
 export class Update3 extends Item {
+  static iconID = 220;
+
+
     static name = "Hardware Upgrade";
     static description = "+1 admin slot";
     static unicode = " U+1F4BD";//"U+1F4C0"; // MINIDISC, U+1F4BD
@@ -813,6 +938,9 @@ export class Update3 extends Item {
 }
 
 export class Life extends Item {
+  static iconID = 214;
+
+
     static name = "1-Up";
     static description = "+1 extra life";
     static unicode = "U+1F493";
@@ -828,6 +956,9 @@ export class Life extends Item {
 }
 
 export class Dupe extends Item<Player> {
+  static iconID = 210;
+
+
     static name = "Dupe";
     static description = "Duplicate a random Admin, destroy all other admins";
     static unicode = "U+1F942";
@@ -850,7 +981,10 @@ export class Dupe extends Item<Player> {
 }
 
 //JAR, U+1FAD9 - piece? capture an enemy of size 1, turn into blueprint
-export class Jar extends Item {//Pokeball?
+export class Jar extends Item {
+  static iconID = 187;
+
+  static iconID = 184;//Pokeball?
     static name = "Jar";
     static description = "Use on an enemy with a size of 1 and defence of 0 to add it to your inventory";
     static unicode = "U+1FAD9";
@@ -884,7 +1018,9 @@ export class Jar extends Item {//Pokeball?
     }
 }
 
-class Chili extends Item<Piece[]> {//HOT PEPPER, U+1F336 - moves +1 range +1
+class Chili extends Item<Piece[]> {
+  static iconID = 197;
+  static iconID = 197;//HOT PEPPER, U+1F336 - moves +1 range +1
     static name = "Zing";
     static description = "Increases all your placed programs' moves and range by 1 for one round";
     static unicode = "U+1F336";
@@ -905,6 +1041,8 @@ class Chili extends Item<Piece[]> {//HOT PEPPER, U+1F336 - moves +1 range +1
 }
 
 class Feast extends Item<Piece[]> {
+  static iconID = 216;
+
     static name = "Feast";
     static description = "Increases all your placed programs' stats by 3 for one round";
     static unicode = "U+1F372";
@@ -927,7 +1065,9 @@ class Feast extends Item<Piece[]> {
     }
 }
 
-class Lightning extends Item<Piece[]> {//lighting remove 1 tile from all enemy pieces U+26A1
+class Lightning extends Item<Piece[]> {
+  static iconID = 203;
+  static iconID = 203;//lighting remove 1 tile from all enemy pieces U+26A1
     static name = "Lightning";
     static description = "Removes all defences and 1 tile from all enemies";
     static unicode = "U+26A1";
@@ -948,7 +1088,9 @@ class Lightning extends Item<Piece[]> {//lighting remove 1 tile from all enemy p
 }
 
 //toothbrush - single use broom?
-class Toothbrush extends Item<Piece[]> {//lighting remove 1 tile from all enemy pieces U+26A1
+class Toothbrush extends Item<Piece[]> {
+  static iconID = 182;
+  static iconID = 182;//lighting remove 1 tile from all enemy pieces U+26A1
     static name = "Toothbrush";
     static description = "Removes all enemies with a size of 1 and 0 defence remaining";
     static unicode = "U+1FAA5";
@@ -967,6 +1109,9 @@ class Toothbrush extends Item<Piece[]> {//lighting remove 1 tile from all enemy 
 }
 
 class Beer extends Item<Player> {
+  static iconID = 218;
+
+
     static name = "Happy Hour";
     static description = "Duplicate a random item.";
     static unicode = "U+1F37B";
@@ -993,6 +1138,9 @@ class Beer extends Item<Player> {
 }
 
 export class Headphones extends Item<PieceBlueprint> {
+  static iconID = 165;
+
+
     static name = "Locked In";
     static description = "Make a held program in your inventory permanently immune to being confused";
     static unicode = "U+1F3A7";
@@ -1006,6 +1154,9 @@ export class Headphones extends Item<PieceBlueprint> {
     }
 }
 class Disguise extends Item<PieceBlueprint> {
+  static iconID = 209;
+
+
     static name = "Disguise";
     static description = "Make a held program in your inventory permanently immune to being exposed";
     static unicode = "U+1F978";
@@ -1019,6 +1170,9 @@ class Disguise extends Item<PieceBlueprint> {
     }
 }
 class Goggles extends Item<PieceBlueprint> {
+  static iconID = 201;
+
+
     static name = "Goggles";
     static description = "Make a held program in your inventory permanently immune to being Blinded";
     static unicode = "U+1F97D";
@@ -1032,6 +1186,9 @@ class Goggles extends Item<PieceBlueprint> {
     }
 }
 class Gloves extends Item<PieceBlueprint> {
+  static iconID = 186;
+
+
     static name = "Gloves";
     static description = "Make a held program in your inventory permanently immune to being frozen";
     static unicode = "U+1F9E4";
@@ -1045,6 +1202,9 @@ class Gloves extends Item<PieceBlueprint> {
     }
 }
 class Labcoat extends Item<PieceBlueprint> {
+  static iconID = 178;
+
+
     static name = "Lab Coat";
     static description = "Make a held program in your inventory permanently immune to being diseased";
     static unicode = "U+1F97C";
@@ -1058,6 +1218,9 @@ class Labcoat extends Item<PieceBlueprint> {
     }
 }
 class Frogman extends Item<PieceBlueprint> {
+  static iconID = 175;
+
+
     static name = "Frogman";
     static description = "Make a held program in your inventory permanently immune to being posioned";
     static unicode = "U+1F93F";
@@ -1071,6 +1234,9 @@ class Frogman extends Item<PieceBlueprint> {
     }
 }
 class Blackheart extends Item<PieceBlueprint> {
+  static iconID = 184;
+
+
     static name = "Blackheart";
     static description = "Make a held program in your inventory permanently immune to being charmed";
     static unicode = "U+1F5A4";
@@ -1083,7 +1249,10 @@ class Blackheart extends Item<PieceBlueprint> {
         target.immunities.charmed = true;
     }
 }
-class Plunger extends Item<PieceBlueprint> {//item remove??
+class Plunger extends Item<PieceBlueprint> {
+  static iconID = 179;
+
+  static iconID = 178;//item remove??
     static name = "Plunger";
     static description = "Make a held program in your inventory permanently immune to being slowed";
     static unicode = "U+1FAA0";
@@ -1098,6 +1267,9 @@ class Plunger extends Item<PieceBlueprint> {//item remove??
 }
 ////POURING LIQUID, U+1FAD7, spillage
 class Extinguisher extends Item<PieceBlueprint> {
+  static iconID = 173;
+
+
     static name = "Extinguisher";
     static description = "Make a held program in your inventory permanently immune to burning";
     static unicode = "U+1F9EF";

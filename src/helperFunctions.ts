@@ -12,6 +12,17 @@ export const isSoundEnabled = ref(false);
 let audioCtx: AudioContext | null = null;
 const audioBufferCache = new Map<string, AudioBuffer>();
 
+import iconsUrl from "../public/iconsCropped.png";
+
+export const spritesheetState = ref({ loaded: false, error: false });
+export { iconsUrl };
+
+const spriteImg = new Image();
+spriteImg.src = iconsUrl;
+spriteImg.onload = () => spritesheetState.value.loaded = true;
+spriteImg.onerror = () => spritesheetState.value.error = true;
+
+
 function getAudioContext() {
   if (!audioCtx) {
     audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)();
@@ -141,6 +152,7 @@ export function makeBlueprint(PieceClass: any, variant?: PieceVariant, costReduc
     color: PieceClass.color,
     isPlaced: false,
     cost: Math.max(0, (temp.rarity * 2 - 1) - (costReduction ? costReduction : 0)),
+    iconID: (PieceClass as any).iconID,
     variantName: temp.variantName,
     immunities: temp.immunities,
     damageMult: temp.damageMult

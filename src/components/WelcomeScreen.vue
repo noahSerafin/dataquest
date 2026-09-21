@@ -60,7 +60,7 @@ onMounted(() => {
         uv = uv * 0.8 + 0.1; // scale the letters up a bit
         
         // randomize letters
-        float timeStep = floor(iTime * 1.5 + block.y * 0.5 - block.x * 0.3); // animate changes
+        float timeStep = floor(iTime * 1.0 + block.y * 0.5 - block.x * 0.3); // animate changes
         vec2 rand = rand2(block + timeStep);
         
         float col = floor(rand.x * 37.0);
@@ -76,13 +76,21 @@ onMounted(() => {
     {
         float blockSize = 32.0;
         fragCoord.x -= mod(fragCoord.x, blockSize);
+        fragCoord.y -= mod(fragCoord.y, blockSize); // Snap Y to block grid so brightness is uniform across the icon
         
         float offset = sin(fragCoord.x * 15.0);
         // Halved speed from original shader (*.3+.7) to (*.15+.35)
-        float speed = cos(fragCoord.x * 3.0) * 0.15 + 0.35; 
+        float speed = cos(fragCoord.x * 3.0) * 0.15 + 0.25; 
        
         float y = fract(fragCoord.y / iResolution.y + iTime * speed + offset);
-        return 1.0 / (y * 20.0);
+        
+        // Define how long the tail is (0.0 to 1.0). 
+        // Subtracting the baseline intensity at 'tailLength' ensures it hits 0.0 
+        // exactly at that length, making everything below the strand completely black.
+        float tailLength = 0.8;
+        float intensity = (1.0 / (y * 20.0)) - (1.0 / (tailLength * 20.0));
+        
+        return max(0.0, intensity);
     }
 
     void main()
@@ -94,12 +102,6 @@ onMounted(() => {
         // Multiply color by rain intensity
         vec3 finalColor = tex.rgb * clamp(r, 0.0, 1.5);
         
-        // DEBUG: Uncomment the line below to see if the rain pattern itself is working (will appear white)
-        // finalColor = vec3(clamp(r, 0.0, 1.0));
-        
-        // DEBUG: Uncomment the line below to just show the raw texture without rain (to see if texture loaded)
-        // finalColor = tex.rgb;
-
         gl_FragColor = vec4(finalColor, 1.0);
     }
   `;
@@ -214,7 +216,7 @@ function loadTexture(gl: WebGLRenderingContext, url: string) {
   const texture = gl.createTexture();
   gl.bindTexture(gl.TEXTURE_2D, texture);
 
-  // Single pixel placeholder (Magenta so it's obvious if it's falling back to this)
+  // Single pixel placeholder (Black)
   const level = 0;
   const internalFormat = gl.RGBA;
   const width = 1;
@@ -222,7 +224,7 @@ function loadTexture(gl: WebGLRenderingContext, url: string) {
   const border = 0;
   const srcFormat = gl.RGBA;
   const srcType = gl.UNSIGNED_BYTE;
-  const pixel = new Uint8Array([255, 0, 255, 255]); // Opaque Magenta
+  const pixel = new Uint8Array([0, 0, 0, 255]); // Opaque Black
   gl.texImage2D(gl.TEXTURE_2D, level, internalFormat, width, height, border, srcFormat, srcType, pixel);
 
   const image = new Image();

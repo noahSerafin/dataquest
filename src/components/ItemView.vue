@@ -5,6 +5,7 @@ import { Item } from "../Items"; // adjust path
 import { tutorialState, clearTooltips } from "../tutorial";
 import { proTips, proTipSuggestion } from "../tutorialSteps";
 import { Random } from "../Random";
+import { spritesheetState, iconsUrl } from "../helperFunctions";
 import FormattedDescription from "./FormattedDescription.vue";
 //import type { PieceVariant } from "../types";
 
@@ -53,6 +54,41 @@ const unicodeSymbol = computed(() =>
     ? String.fromCodePoint(parseInt(props.item.unicode.replace('U+', ''), 16), 0xFE0F)
     : ''
 )
+
+// Windows preference bit of code
+//const isWindows = navigator.userAgent.toLowerCase().includes('win');
+
+const useUnicode = computed(() => {
+  //if (isWindows) return true;
+  //if (spritesheetState.value.error) return true;
+  //if ((props.item as any).iconID === undefined || (props.item as any).iconID < 0) return true;
+  return false;
+});
+
+const iconDimensions = computed(() => {
+  const widthAdjustment = props.type === 'admin' ? 22 : 16
+  const heightAdjustment = props.type === 'consumable' ? 22 : 16
+  const width = props.tileSize - widthAdjustment
+  const height = props.tileSize - heightAdjustment
+  return Math.min(width, height)
+});
+
+const spriteStyle = computed(() => {
+  if (useUnicode.value) return {};
+  const iconID = (props.item as any).iconID;
+  if (iconID === undefined || iconID < 0) return {};
+  const col = iconID % 37;
+  const row = Math.floor(iconID / 37);
+  return {
+    backgroundImage: `url('${iconsUrl}')`,
+    backgroundSize: `3700% 1200%`,
+    backgroundPosition: `${col * (100 / 36)}% ${row * (100 / 11)}%`,
+    width: `${iconDimensions.value}px`,
+    height: `${iconDimensions.value}px`,
+    color: 'transparent',
+    margin: 'auto'
+  };
+});
 
 const itemStyle = computed(() => {
   const widthAdjustment = props.type === 'admin' ? 22 : 16
@@ -120,7 +156,7 @@ const isDisabled = computed(() => {
       <p class='bottom-left' v-if="type === 'admin' && (item as any).count !== undefined"
         :style="`bottom: -${((props.tileSize - 10) / 2 - 24)}px`">
         {{ (item as any).count }}</p>
-      <div class="icon">{{ unicodeSymbol }}</div>
+      <div class="icon" :style="spriteStyle" :class="{ 'sprite-icon': !useUnicode }">{{ unicodeSymbol }}</div>
     </div>
 
     <!-- Speech bubble for Clippy admin -->
@@ -235,6 +271,13 @@ const isDisabled = computed(() => {
   position: relative;
   z-index: 1;
   transform: translateZ(0);
+}
+
+.sprite-icon {
+  width: 100%;
+  height: 100%;
+  border-radius: 5px; /* optional */
+  background-repeat: no-repeat;
 }
 
 .info {

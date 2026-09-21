@@ -3,6 +3,7 @@ import { ref, computed } from "vue";
 import type { Coordinate } from "../types";
 import { Piece } from "../Pieces";
 import { STATUS_ICONS } from "../statuses";
+import { spritesheetState, iconsUrl } from "../helperFunctions";
 
 //construction-------------
 
@@ -64,6 +65,37 @@ const ExtraUnicodeSymbol = computed(() =>
     ? String.fromCodePoint(parseInt(props.piece.extraUnicode.replace('U+', ''), 16), 0xFE0F)
     : ''
 )
+
+// Windows preference bit of code
+//const isWindows = navigator.userAgent.toLowerCase().includes('win');
+
+const useUnicode = computed(() => {
+  //if (isWindows) return true;
+  //if (spritesheetState.value.error) return true;
+  //if (props.piece.iconID === undefined || props.piece.iconID < 0) return true;
+  return false;
+});
+
+const spriteStyle = computed(() => {
+  if (useUnicode.value) return {};
+  const iconID = props.piece.iconID;
+  if (iconID === undefined || iconID < 0) return {};
+  const col = iconID % 37;
+  const row = Math.floor(iconID / 37);
+  return {
+    backgroundImage: `url('${iconsUrl}')`,
+    backgroundSize: `3700% 1200%`,
+    backgroundPosition: `${col * (100 / 36)}% ${row * (100 / 11)}%`,
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    borderRadius: 'inherit',
+    backgroundRepeat: 'no-repeat',
+    zIndex: 1
+  };
+});
 
 // --- reactive properties derived from the piece instance ---
 
@@ -153,8 +185,12 @@ function pieceTipClass(){
     :style="pieceStyle"
     @click="handleSelect"
   >
-    <span class="primary-unicode">{{ unicodeSymbol }}</span>
-    <span v-if="piece.extraUnicode" class="extra-unicode">{{ ExtraUnicodeSymbol }}</span>
+    <div v-if="!useUnicode" class="sprite-icon" :style="spriteStyle"></div>
+    <template v-else>
+      <span class="primary-unicode">{{ unicodeSymbol }}</span>
+      <span v-if="piece.extraUnicode" class="extra-unicode">{{ ExtraUnicodeSymbol }}</span>
+    </template>
+    
     <button v-if="showFastControls && selectedPiece === piece" class="deselect-btn"
     @click.stop = "$emit('deselect')"
     >x

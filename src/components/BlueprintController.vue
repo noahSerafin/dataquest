@@ -3,6 +3,8 @@ import { computed, ref } from "vue"
 import type { PieceBlueprint } from "../types"
 import { STATUS_ICONS } from "../statuses";
 import FormattedDescription from "./FormattedDescription.vue";
+import { spritesheetState, iconsUrl } from "../helperFunctions";
+import { allPieces } from "../Pieces";
 
 const props = defineProps<{
   piece: PieceBlueprint;
@@ -101,6 +103,40 @@ function toggleTooltip(key: string) {
   openTooltip.value = key;
 }
 
+//remove for production (localStorage issue)
+const resolvedIconID = computed(() => {
+  if (props.piece.iconID !== undefined && props.piece.iconID >= 0) {
+    return props.piece.iconID;
+  }
+  const PieceClass = allPieces.find(p => p.name === props.piece.name);
+  return PieceClass ? (PieceClass as any).iconID : -1;
+});
+
+//const isWindows = navigator.userAgent.toLowerCase().includes('win');
+
+const useUnicode = computed(() => {
+  //if (isWindows) return true; // keep commented for user testing
+  //if (spritesheetState.value.error) return true;
+  if (resolvedIconID.value < 0) return true;
+  return false;
+});
+
+const spriteStyle = computed(() => {
+  if (useUnicode.value) return {};
+  const id = resolvedIconID.value;
+  if (id < 0) return {};
+  const col = id % 37;
+  const row = Math.floor(id / 37);
+  return {
+    backgroundImage: `url('${iconsUrl}')`,
+    backgroundSize: `3700% 1200%`,
+    backgroundPosition: `${col * (100 / 36)}% ${row * (100 / 11)}%`,
+    width: '36px',
+    height: '36px',
+    backgroundRepeat: 'no-repeat'
+  };
+});
+
 defineEmits(["buy", "steal", "sell", "highlightPlacements", "close"])
 </script>
 
@@ -113,12 +149,15 @@ defineEmits(["buy", "steal", "sell", "highlightPlacements", "close"])
     <div class="left">
       <div :class="`header ${piece.variantName ? ('variant-header v_'+piece.variantName) : ''}`" @mousedown="startDrag" @touchstart="startDrag">
         <div class="symbol-container">
-          <span class="symbol">
-            {{ String.fromCodePoint(parseInt(piece.unicode.replace("U+", ""), 16), 0xFE0F) }}
-          </span>
-          <span class="extra-symbol">
-            {{ piece.extraUnicode ? String.fromCodePoint(parseInt(piece.extraUnicode.replace("U+", ""), 16), 0xFE0F) : '' }}
-          </span>
+          <div v-if="!useUnicode" class="sprite-icon" :style="spriteStyle"></div>
+          <template v-else>
+            <span class="symbol">
+              {{ String.fromCodePoint(parseInt(piece.unicode.replace("U+", ""), 16), 0xFE0F) }}
+            </span>
+            <span class="extra-symbol">
+              {{ piece.extraUnicode ? String.fromCodePoint(parseInt(piece.extraUnicode.replace("U+", ""), 16), 0xFE0F) : '' }}
+            </span>
+          </template>
         </div>
         <span v-if="piece.variantName" class="variant"><FormattedDescription :description="piece.variantName" :isHeader="true" /></span>
         <span class="name">{{ piece.hybridName ? piece.hybridName : piece.name }}</span>

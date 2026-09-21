@@ -7,7 +7,9 @@ import { getRandomUnoccupiedTile } from "./helperFunctions";
 import { Random } from "./Random";
 
 //lower difficulty of +1 bosses, more +2 bosses
-class NorthWind extends Admin {//🌬️//dash U+1F4A8
+class NorthWind extends Admin {
+  static iconID = 398;
+  static iconID = 398;//🌬️//dash U+1F4A8
     static rarity = 1;
     static name = "North Wind";
     static description = "All player pieces are moved down 1 space after every turn";
@@ -43,6 +45,8 @@ class NorthWind extends Admin {//🌬️//dash U+1F4A8
 }
 
 class Hook extends Admin {
+  static iconID = 404;
+
     static rarity = 2;
     static name = "Hook";
     static description = "All player pieces are moved up 1 space after every turn";
@@ -76,6 +80,8 @@ class Hook extends Admin {
 }
 
 class Mirror extends Admin {
+  static iconID = 405;
+
     static rarity = 2;
     static name = "Mirror";
     static description = "Enemy program's classes are chosen from blueprints in your inventory";
@@ -110,6 +116,8 @@ class Mirror extends Admin {
 }
 
 class Downturn extends Admin {
+  static iconID = 403;
+
     static rarity = 2;
     static name = "Downturn";
     static description = "Lose $1 after every turn";
@@ -126,6 +134,8 @@ class Downturn extends Admin {
 }
 
 class Factory extends Admin {
+  static iconID = 425;
+
     static rarity = 4;
     static name = "Factory";
     static description = "Places a new enemy piece every 3 turns";
@@ -165,7 +175,9 @@ class Factory extends Admin {
     }
 }
 
-class Wrath extends Admin {//⛈️//🌩️
+class Wrath extends Admin {
+  static iconID = 443;
+  static iconID = 443;//⛈️//🌩️
     static name = "Wrath";
     static description = "A random player piece loses their remaining defence and a tile each turn after the first";
     static unicode = "U+1F329";
@@ -197,6 +209,8 @@ class Wrath extends Admin {//⛈️//🌩️
 }
 
 class Reaper extends Admin {
+  static iconID = 441;
+
     static name = "Reaper";
     static description = "Takes a life every 10 turns";
     static unicode = "U+2620";
@@ -222,6 +236,8 @@ class Reaper extends Admin {
 }
 
 class Volcano extends Admin {
+  static iconID = 434;
+
     static name = "Volcano";
     static description = "After 3 turns, burning is applied to every player program at the end of every enemy turn";//coundown to round loss??
     //static description = "After 5 turns, burning is applied to every player program at the end of every turn";//coundown to round loss??
@@ -250,6 +266,8 @@ class Volcano extends Admin {
 }
 
 class Circus extends Admin {
+  static iconID = 412;
+
     static name = "Circus";
     static description = "Every enemy gains +1 moves at the start of the round";
     static unicode = "U+1F3AA";
@@ -270,6 +288,8 @@ class Circus extends Admin {
 }
 
 class Castle extends Admin {
+  static iconID = 411;
+
     static name = "Castle";
     static description = "Every enemy gains +1 defence at the start of the round";
     static unicode = "U+1F3EF";
@@ -291,6 +311,8 @@ class Castle extends Admin {
 }
 
 class Anchor extends Admin {
+  static iconID = 410;
+
     static name = "Anchor";
     static description = "Every player program loses -2 moves";
     static unicode = "U+2693";
@@ -308,6 +330,8 @@ class Anchor extends Admin {
 }
 
 class Jack extends Admin {
+  static iconID = 426;
+
     static name = "Jack O' Lantern";
     static description = "Every enemy gains +1 range at the start of the round";
     static unicode = "U+1F383";
@@ -328,6 +352,8 @@ class Jack extends Admin {
 }
 
 class Lock extends Admin {
+  static iconID = 424;
+
     static name = "Encryption";
     static description = "Every enemy gains +2 defence at the start of the round";
     static unicode = "U+1F512";
@@ -349,6 +375,8 @@ class Lock extends Admin {
 }
 
 class Eclipse extends Admin {
+  static iconID = 423;
+
     static name = "Eclipse";
     static description = "Every player program loses -1 range";//hides enemies?
     static unicode = "U+1F31A";
@@ -366,6 +394,8 @@ class Eclipse extends Admin {
 }
 
 class LowBattery extends Admin {
+  static iconID = 397;
+
     static name = "Drain";
     static description = "Every player program loses -1 max size";
     static unicode = "U+1FAAB";
@@ -384,7 +414,9 @@ class LowBattery extends Admin {
     }
 }
 
-class Customs extends Admin {//remove
+class Customs extends Admin {
+  static iconID = 402;
+  static iconID = 402;//remove
     static name = "Customs";
     static description = "Every player program is exposed and loses -1 moves";
     static unicode = "U+1F6C3";
@@ -406,6 +438,8 @@ class Customs extends Admin {//remove
 }
 
 class Shrine extends Admin {
+  static iconID = 407;
+
     static name = "Shrine";
     static description = "Every player program loses -1 attack";
     static unicode = "U+26E9";
@@ -423,6 +457,8 @@ class Shrine extends Admin {
 }
 
 class Izakaya extends Admin {
+  static iconID = 415;
+
     static name = "Izakaya";
     static description = "Every player program is confused";
     static unicode = "U+1F3EE";
@@ -441,7 +477,9 @@ class Izakaya extends Admin {
     }
 }
 
-class Snowflake extends Admin {//LEAFLESS TREE, U+1FABE
+class Snowflake extends Admin {
+  static iconID = 429;
+  static iconID = 429;//LEAFLESS TREE, U+1FABE
     static name = "Cold Snap";
     static description = "Every player program is frozen";
     static unicode = "U+2744";
@@ -461,6 +499,8 @@ class Snowflake extends Admin {//LEAFLESS TREE, U+1FABE
 }
 
 class Sun extends Admin {
+  static iconID = 436;
+
     static name = "Don't look at the sun";
     static description = "Every player program is blinded";
     static unicode = "U+1F31E";
@@ -480,6 +520,8 @@ class Sun extends Admin {
 }
 
 class Whale extends Admin {
+  static iconID = 409;
+
     static name = "Whale";
     static description = "Every enemy gains +2 max size at the start of the round";
     static unicode = "U+1F433";
@@ -500,6 +542,8 @@ class Whale extends Admin {
 }
 
 class Hammer extends Admin {
+  static iconID = 413;
+
     static name = "Banhammer";
     static description = "Every enemy gains +1 attack at the start of the round";
     static unicode = "U+1F528";
@@ -520,6 +564,8 @@ class Hammer extends Admin {
 }
 
 class Omega extends Admin {
+  static iconID = 440;
+
     static name = "Omega";
     static description = "Every enemy gains +1 to all stats";
     static unicode = "U+3A9";
@@ -547,6 +593,8 @@ class Omega extends Admin {
 }
 
 class Bones extends Admin {
+  static iconID = 430;
+
     static name = "Mr Bones";
     static description = "Destroyed player progams are revived as enemies";
     static unicode = "U+1FA7B";
@@ -572,6 +620,8 @@ class Bones extends Admin {
 }
 
 class Frog extends Admin {
+  static iconID = 431;
+
     static name = "Poison Swamp";
     static description = "Every player program is poisoned";
     static unicode = "U+1F438";
@@ -591,6 +641,8 @@ class Frog extends Admin {
 }
 
 class Coral extends Admin {
+  static iconID = 422;
+
     static name = "Deep Water";
     static description = "Every player program is slowed";
     static unicode = "U+1FAB8";
@@ -610,6 +662,8 @@ class Coral extends Admin {
 }
 
 class REDACTED extends Admin {
+  static iconID = 442;
+
     static name = "REDACTED";
     static description = "All enemy program information is obscured";//1 damage for security level?
     static unicode = "U+2B1B";
@@ -629,7 +683,9 @@ class REDACTED extends Admin {
     }
 }
 
-class Fog extends Admin {//😶‍🌫️🌫️
+class Fog extends Admin {
+  static iconID = 437;
+  static iconID = 437;//😶‍🌫️🌫️
     static name = "Fog of War";
     static description = "All tiles outside your programs range are obscured";//handle in app
     static unicode = "U+1F301";//fog //"U+1FAEF";//fight //"U+2601"; //cloud
@@ -652,6 +708,8 @@ class Fog extends Admin {//😶‍🌫️🌫️
 }
 
 class Wilt extends Admin {
+  static iconID = 418;
+
     static name = "Wilted";
     static description = "Every player program loses -2 max size";
     static unicode = "U+1F940";
@@ -671,6 +729,8 @@ class Wilt extends Admin {
 }
 
 class Biohazard extends Admin {
+  static iconID = 420;
+
     static name = "Biohazard";
     static description = "Every player program is diseased";
     static unicode = "U+2623";
@@ -690,6 +750,8 @@ class Biohazard extends Admin {
 }
 
 class Nofun extends Admin {
+  static iconID = 439;
+
     static name = "No Fun Allowed";
     static description = "Disables 1 random admin after each turn";
     static unicode = "U+1F6D1"; //NO ENTRY, U+26D4
@@ -711,6 +773,8 @@ class Nofun extends Admin {
 }
 
 class Tornado extends Admin {
+  static iconID = 433;
+
     static name = "Tornado";
     static description = "Player load points are randomised";
     static unicode = "U+1F32A";
@@ -749,6 +813,8 @@ class Tornado extends Admin {
 }
 
 class Tsunami extends Admin {
+  static iconID = 417;
+
     static name = "Tsunami";
     static description = "Every piece is moved left 3 spaces each turn after the first";//the player's current security level no.?
     static unicode = "U+1F30A";
@@ -793,6 +859,8 @@ class Tsunami extends Admin {
 }
 
 class Coaster extends Admin {
+  static iconID = 427;
+
     static name = "Up and Up";//cranking up
     static description = "Every player piece takes a cumulating +1 damage after every 2 turns";//turn count is damage?
     static unicode = "U+1F3A2";//"U+1F3D4";//mountain
@@ -820,6 +888,8 @@ class Coaster extends Admin {
 }
 
 class Singularity extends Admin {
+  static iconID = 432;
+
     static name = "Singularity";
     static description = "After 3 turns, all enemies' actions are doubled";
     static unicode = "U+1F916";
@@ -847,6 +917,8 @@ class Singularity extends Admin {
 }
 
 class Cocktail extends Admin {
+  static iconID = 421;
+
     static name = "Deadly Cocktail";
     static description = "Loads 2 random Bosses of lower security levels";//do not weight the pick
     static unicode = "U+1F378";
@@ -892,6 +964,8 @@ class Cocktail extends Admin {
 }
 //"U+1F3D4";//mountain +4 maxsize (3)
 class Mountain extends Admin {
+  static iconID = 416;
+
     static name = "Mountain";
     static description = "Every enemy gains +4 max size at the start of the round";
     static unicode = "U+1F3D4";
@@ -912,6 +986,8 @@ class Mountain extends Admin {
 }
 //quicksand BEACH WITH UMBRELLA, U+1F3D6 //THONG SANDAL, U+1FA74 //HOURGLASS WITH FLOWING SAND,// U+23F3 DESERT, U+1F3DC
 class Quicksand extends Admin {
+  static iconID = 401;
+
     static name = "Quicksand";
     static description = "Programs that move temporarily lose -1 moves at the end of enemy's turn";
     static unicode = "U+1F3D6";
@@ -934,6 +1010,8 @@ class Quicksand extends Admin {
 }
 //CLOUD WITH SNOW, U+1F328 - white out -1 moves -1 range 5
 class Snow extends Admin {
+  static iconID = 435;
+
     static name = "White Out";
     static description = "Every player program loses -1 range and -1 moves";
     static unicode = "U+1F328";
@@ -951,6 +1029,8 @@ class Snow extends Admin {
     }
 }
 class Nightfall extends Admin {
+  static iconID = 438;
+
     static name = "Nightfall";
     static description = "Hides a random enemy on the end of each turn";
     static unicode = "U+1F303";
@@ -975,6 +1055,8 @@ class Nightfall extends Admin {
 }
 //black book NOTEBOOK, U+1F4D3 after 3 turns switch the side of a friendly 5
 class Blackmail extends Admin {
+  static iconID = 428;
+
     static name = "Blackmail";
     static description = "After 5 turns, a random player piece switches sides.";
     static unicode = "U+1F4D3";
@@ -1007,6 +1089,8 @@ class Blackmail extends Admin {
 
 // CLIPBOARD, U+1F4CB inspection nerfs all your placed programs 3
 class ClipBoard extends Admin {
+  static iconID = 414;
+
     static name = "Inspection";
     static description = "Every player program loses -1 max size and -1 attack";
     static unicode = "U+1F4CB";
@@ -1027,6 +1111,8 @@ class ClipBoard extends Admin {
 
 //TRAFFIC LIGHT, U+1F6A6 pieces that take an action take 1 damage
 class TrafficLight extends Admin {
+  static iconID = 400;
+
     static name = "Traffic Light";
     static description = "Programs that move or action when the light is red take damage equal to your security level at the end of your turn";
     static unicode = "U+1F6A6";
@@ -1063,6 +1149,8 @@ class TrafficLight extends Admin {
 }
 
 class Concussion extends Admin {
+  static iconID = 396;
+
     static name = "Concussion";
     static description = "Your programs that take damage twice are confused";
     static unicode = "U+1F4AB";
@@ -1095,6 +1183,8 @@ class Concussion extends Admin {
 }
 
 class Taxman extends Admin {
+  static iconID = 399;
+
     static rarity = 1;
     static name = "Taxman";
     static description = "Your program's max size is nerfed by -1 for every $5 you have on load";
@@ -1120,6 +1210,8 @@ class Taxman extends Admin {
 }
 
 class Rage extends Admin {
+  static iconID = 406;
+
     static name = "Rage";
     static description = "Enemy programs that take health damage from attacks become enraged";
     static unicode = "U+1F620";//"U+1F4A2";
@@ -1142,6 +1234,8 @@ class Rage extends Admin {
 }
 
 class Autumn extends Admin {
+  static iconID = 419;
+
     static name = "Autumn";
     static description = "Every player program loses -3 max size"; //and -1 defence?
     static unicode = "U+1FABE";
@@ -1162,6 +1256,8 @@ class Autumn extends Admin {
 
 //SLEEPING SYMBOL, U+1F4A4
 class Snoozefest extends Admin {
+  static iconID = 408;
+
     static name = "Snoozefest";
     static description = "Your programs lose 1 action the first turn after they are placed";
     static unicode = "U+1F4A4";

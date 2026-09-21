@@ -12,10 +12,22 @@ export const isSoundEnabled = ref(false);
 let audioCtx: AudioContext | null = null;
 const audioBufferCache = new Map<string, AudioBuffer>();
 
-import iconsUrl from "../public/iconsCropped.png";
+import iconsUrl from "../public/large-spritesheet.png";
 
 export const spritesheetState = ref({ loaded: false, error: false });
 export { iconsUrl };
+
+export function getSpriteStyle(iconID: number | undefined) {
+  if (iconID === undefined || iconID < 0) return {};
+  const col = iconID % 37;
+  const row = Math.floor(iconID / 37);
+  return {
+    backgroundImage: `url('${iconsUrl}')`,
+    backgroundSize: `3700% 1300%`,
+    backgroundPosition: `${col * (100 / 36)}% ${row * (100 / 12)}%`,
+    backgroundRepeat: 'no-repeat'
+  };
+}
 
 const spriteImg = new Image();
 spriteImg.src = iconsUrl;

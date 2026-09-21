@@ -3,7 +3,7 @@ import { computed, ref } from "vue"
 import type { PieceBlueprint } from "../types"
 import { STATUS_ICONS } from "../statuses";
 import FormattedDescription from "./FormattedDescription.vue";
-import { spritesheetState, iconsUrl } from "../helperFunctions";
+import { spritesheetState, iconsUrl, getSpriteStyle } from "../helperFunctions";
 import { allPieces } from "../Pieces";
 
 const props = defineProps<{
@@ -117,23 +117,16 @@ const resolvedIconID = computed(() => {
 const useUnicode = computed(() => {
   //if (isWindows) return true; // keep commented for user testing
   //if (spritesheetState.value.error) return true;
-  if (resolvedIconID.value < 0) return true;
+  //if (resolvedIconID.value < 0) return true;
   return false;
 });
 
 const spriteStyle = computed(() => {
   if (useUnicode.value) return {};
-  const id = resolvedIconID.value;
-  if (id < 0) return {};
-  const col = id % 37;
-  const row = Math.floor(id / 37);
   return {
-    backgroundImage: `url('${iconsUrl}')`,
-    backgroundSize: `3700% 1200%`,
-    backgroundPosition: `${col * (100 / 36)}% ${row * (100 / 12)}%`,
+    ...getSpriteStyle(resolvedIconID.value),
     width: '36px',
-    height: '36px',
-    backgroundRepeat: 'no-repeat'
+    height: '36px'
   };
 });
 

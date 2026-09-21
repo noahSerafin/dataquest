@@ -3,7 +3,7 @@ import { ref, computed } from "vue";
 import type { Coordinate } from "../types";
 import { Piece } from "../Pieces";
 import { STATUS_ICONS } from "../statuses";
-import { spritesheetState, iconsUrl } from "../helperFunctions";
+import { spritesheetState, iconsUrl, getSpriteStyle } from "../helperFunctions";
 
 //construction-------------
 
@@ -78,21 +78,14 @@ const useUnicode = computed(() => {
 
 const spriteStyle = computed(() => {
   if (useUnicode.value) return {};
-  const iconID = props.piece.iconID;
-  if (iconID === undefined || iconID < 0) return {};
-  const col = iconID % 37;
-  const row = Math.floor(iconID / 37);
   return {
-    backgroundImage: `url('${iconsUrl}')`,
-    backgroundSize: `3700% 1200%`,
-    backgroundPosition: `${col * (100 / 36)}% ${row * (100 / 12)}%`,
+    ...getSpriteStyle(props.piece.iconID),
     width: '100%',
     height: '100%',
     position: 'absolute',
     top: 0,
     left: 0,
     borderRadius: 'inherit',
-    backgroundRepeat: 'no-repeat',
     zIndex: 1
   };
 });

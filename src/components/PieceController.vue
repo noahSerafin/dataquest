@@ -3,7 +3,7 @@ import { Piece } from "../Pieces"
 import { ref, computed, onMounted } from "vue";
 import { STATUS_ICONS, STATUS_INFO } from "../statuses";
 import FormattedDescription from "./FormattedDescription.vue";
-import { spritesheetState, iconsUrl } from "../helperFunctions";
+import { spritesheetState, iconsUrl, getSpriteStyle } from "../helperFunctions";
 
 const props = defineProps<{
   piece: InstanceType<typeof Piece>
@@ -119,28 +119,21 @@ const shieldIcon = String.fromCodePoint(
   parseInt("U+1F6E1".replace("U+", ""), 16)
 );
 
-const isWindows = navigator.userAgent.toLowerCase().includes('win');
+//const isWindows = navigator.userAgent.toLowerCase().includes('win');
 
 const useUnicode = computed(() => {
   //if (isWindows) return true; // keep commented for user testing
-  if (spritesheetState.value.error) return true;
-  if (props.piece.iconID === undefined || props.piece.iconID < 0) return true;
+  //if (spritesheetState.value.error) return true;
+  //if (props.piece.iconID === undefined || props.piece.iconID < 0) return true;
   return false;
 });
 
 const spriteStyle = computed(() => {
   if (useUnicode.value) return {};
-  const id = props.piece.iconID;
-  if (id === undefined || id < 0) return {};
-  const col = id % 37;
-  const row = Math.floor(id / 37);
   return {
-    backgroundImage: `url('${iconsUrl}')`,
-    backgroundSize: `3700% 1200%`,
-    backgroundPosition: `${col * (100 / 36)}% ${row * (100 / 12)}%`,
+    ...getSpriteStyle(props.piece.iconID),
     width: '36px',
-    height: '36px',
-    backgroundRepeat: 'no-repeat'
+    height: '36px'
   };
 });
 </script>

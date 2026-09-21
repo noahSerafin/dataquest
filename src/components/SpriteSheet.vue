@@ -1,14 +1,28 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, onMounted, onUnmounted } from "vue";
 import { allPieces, Spawn } from "../Pieces";
 import { allItems } from "../Items";
 import { allAdmins } from "../AdminPrograms";
 import { allBosses } from "../Bosses";
+import { companies } from "../companies";
+import { allOSes } from "../Operators";
 import { makeBlueprint } from "../helperFunctions";
 
 const emit = defineEmits<{
   (e: 'close'): void;
 }>();
+
+onMounted(() => {
+  document.documentElement.style.setProperty('background-color', 'transparent', 'important');
+  document.body.style.setProperty('background-color', 'transparent', 'important');
+  document.getElementById('app')?.style.setProperty('background-color', 'transparent', 'important');
+});
+
+onUnmounted(() => {
+  document.documentElement.style.removeProperty('background-color');
+  document.body.style.removeProperty('background-color');
+  document.getElementById('app')?.style.removeProperty('background-color');
+});
 
 const pieces = computed(() => allPieces.filter(p => p.name !== Spawn.name).map(c => makeBlueprint(c)));
 const items = computed(() => allItems.map(ItemClass => new ItemClass()));
@@ -55,18 +69,85 @@ const allIcons = computed(() => {
     result.push({
       id: 'boss-' + b.name,
       primary: getUnicode(b.unicode),
-      extra: '',
+      extra: b.extraUnicode ? getUnicode(b.extraUnicode) : '',
       hybrid: false
     });
+  });
+
+  companies.forEach(c => {
+    if (c.unicode) {
+      result.push({
+        id: 'company-' + c.name,
+        primary: getUnicode(c.unicode),
+        extra: '',
+        hybrid: false
+      });
+    }
+  });
+
+  allOSes.forEach(os => {
+    if (os.unicode) {
+      result.push({
+        id: 'os-' + os.name,
+        primary: getUnicode(os.unicode),
+        extra: '',
+        hybrid: false
+      });
+    }
   });
   
   return result;
 });
 
+function downloadSpriteSheet() {
+  const canvas = document.createElement('canvas');
+  const cols = 37; // 37 columns wide
+  const rows = Math.ceil(allIcons.value.length / cols);
+  
+  const iconSize = 64; 
+  canvas.width = cols * iconSize;
+  canvas.height = rows * iconSize;
+  
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+  
+  ctx.clearRect(0, 0, canvas.width, canvas.height); // Guarantee transparent alpha channel
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle = 'white'; // Make monochrome emojis render white
+  
+  allIcons.value.forEach((icon, index) => {
+    const col = index % cols;
+    const row = Math.floor(index / cols);
+    const x = col * iconSize + (iconSize / 2);
+    const y = row * iconSize + (iconSize / 2) + 4; // slight vertical optical offset
+    
+    if (icon.hybrid) {
+      ctx.font = '72px system-ui, sans-serif'; // scale(1.5)
+      ctx.fillText(icon.primary, x - 10, y);
+      if (icon.extra) {
+        ctx.font = '48px system-ui, sans-serif';
+        ctx.fillText(icon.extra, x + 8, y - 10);
+      }
+    } else {
+      ctx.font = '48px system-ui, sans-serif';
+      ctx.fillText(icon.primary, x, y);
+      if (icon.extra) {
+        ctx.fillText(icon.extra, x, y);
+      }
+    }
+  });
+  
+  const link = document.createElement('a');
+  link.download = 'dataquest-spritesheet.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
 </script>
 
 <template>
-  <div class="sprite-sheet-overlay" @click="emit('close')">
+  <div class="sprite-sheet-overlay" @click.self="emit('close')">
+    <button class="download-btn" @click="downloadSpriteSheet">📥 Download Transparent PNG</button>
     <div class="sprite-sheet">
       <div v-for="icon in allIcons" :key="icon.id" class="icon-wrapper" :class="{ hybrid: icon.hybrid }">
         <span class="primary">{{ icon.primary }}</span>
@@ -82,22 +163,40 @@ const allIcons = computed(() => {
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
-  background: transparent;
+  min-height: 100vh;
+  background: transparent !important;
   z-index: 999999;
   display: flex;
+  flex-direction: column;
+  align-items: center;
   overflow: auto;
 }
 
+.download-btn {
+  margin: 20px;
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  z-index: 10;
+}
+.download-btn:hover {
+  background: #3b82f6;
+}
+
 .sprite-sheet {
-  position: fixed;
-  left: 0;
-  top: 0;
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
   gap: 0px; /* Minimal distance */
   padding: 10px;
+  background: transparent !important;
 }
 
 .icon-wrapper {

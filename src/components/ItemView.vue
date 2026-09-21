@@ -5,7 +5,7 @@ import { Item } from "../Items"; // adjust path
 import { tutorialState, clearTooltips } from "../tutorial";
 import { proTips, proTipSuggestion } from "../tutorialSteps";
 import { Random } from "../Random";
-import { spritesheetState, iconsUrl } from "../helperFunctions";
+import { spritesheetState, iconsUrl, getSpriteStyle } from "../helperFunctions";
 import FormattedDescription from "./FormattedDescription.vue";
 //import type { PieceVariant } from "../types";
 
@@ -75,18 +75,12 @@ const iconDimensions = computed(() => {
 
 const spriteStyle = computed(() => {
   if (useUnicode.value) return {};
-  const iconID = (props.item as any).iconID;
-  if (iconID === undefined || iconID < 0) return {};
-  const col = iconID % 37;
-  const row = Math.floor(iconID / 37);
   return {
-    backgroundImage: `url('${iconsUrl}')`,
-    backgroundSize: `3700% 1200%`,
-    backgroundPosition: `${col * (100 / 36)}% ${row * (100 / 12)}%`,
+    ...getSpriteStyle((props.item as any).iconID),
     width: `${iconDimensions.value}px`,
     height: `${iconDimensions.value}px`,
     color: 'transparent',
-    margin: 'auto'
+    display: 'inline-block'
   };
 });
 

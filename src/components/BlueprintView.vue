@@ -2,7 +2,7 @@
 import { ref, computed, useTemplateRef } from "vue";
 import { useTilt } from "../composables/useTilt";
 import type { Coordinate, PieceBlueprint } from "../types";
-import { spritesheetState, iconsUrl } from "../helperFunctions";
+import { spritesheetState, iconsUrl, getSpriteStyle } from "../helperFunctions";
 import { allPieces } from "../Pieces";
 
 //construction-------------
@@ -55,27 +55,20 @@ const resolvedIconID = computed(() => {
 const useUnicode = computed(() => {
   //if (isWindows) return true;
   //if (spritesheetState.value.error) return true;
-  if (resolvedIconID.value < 0) return true;
+  //if (resolvedIconID.value < 0) return true;
   return false;
 });
 
 const spriteStyle = computed(() => {
   if (useUnicode.value) return {};
-  const iconID = resolvedIconID.value;
-  if (iconID < 0) return {};
-  const col = iconID % 37;
-  const row = Math.floor(iconID / 37);
   return {
-    backgroundImage: `url('${iconsUrl}')`,
-    backgroundSize: `3700% 1200%`,
-    backgroundPosition: `${col * (100 / 36)}% ${row * (100 / 12)}%`,
+    ...getSpriteStyle(resolvedIconID.value),
     width: '100%',
     height: '100%',
     position: 'absolute',
     top: 0,
     left: 0,
-    borderRadius: 'inherit',
-    backgroundRepeat: 'no-repeat'
+    borderRadius: 'inherit'
   };
 });
 

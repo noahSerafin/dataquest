@@ -53,8 +53,6 @@ export abstract class Admin<
 
 class Meteor extends Admin {
   static iconID = 372;
-
-
   static name = "Meteor";
   static description = "Deals 2 damage to every piece at the start of a round";
   static unicode = "U+2604";//"U+1F71A"
@@ -76,8 +74,6 @@ class Meteor extends Admin {
 
 export class Miner extends Admin {
   static iconID = 238;
-
-
   static name = "Miner";
   static description = "Collect $2 at the end of every round";
   static unicode = "U+26CF";
@@ -98,8 +94,6 @@ export class Miner extends Admin {
 
 export class Bubble extends Admin {
   static iconID = 261;
-
-
   static name = "Bubble";
   static description = "Gain +$1 bonus interest every round, 10% chance to pop and reset, also reducing money to 0";
   static unicode = "U+1FAE7";
@@ -131,8 +125,6 @@ export class Bubble extends Admin {
 
 export class Crystal extends Admin {
   static iconID = 231;
-
-  static iconID = 221;//test
   static name = "Crystal Ball";
   static description = "See the next shop in advance";//and show hidden nodes?
   static unicode = "U+1F52E";
@@ -146,8 +138,6 @@ export class Crystal extends Admin {
 
 class Clover extends Admin {
   static iconID = 271;
-
-
   static name = "Lucky Clover";
   static description = "+25% chance of rarer items appearing";
   static unicode = "U+1F340";
@@ -161,8 +151,6 @@ class Clover extends Admin {
 
 class Onion extends Admin {
   static iconID = 374;
-
-
   static name = "Onion";
   static description = "Saves you from one lost round but is destroyed in the process";
   static unicode = "U+1F9C5";
@@ -179,8 +167,6 @@ class Onion extends Admin {
 //name desc utf || maxsize moves range atk def
 class Blood extends Admin {
   static iconID = 327;
-
-
   static name = "Blood Tax";
   static description = "Each time your attacks deal damage, earn $1";//overkills only?
   static unicode = "U+1FA78";
@@ -201,8 +187,6 @@ class Blood extends Admin {
 
 class Razor extends Admin {
   static iconID = 310;
-
-
   static name = "Razor";
   static description = "+1 attack to all your placed programs";
   static unicode = "U+1FA92";
@@ -223,8 +207,6 @@ class Razor extends Admin {
 
 class BionicArm extends Admin {
   static iconID = 324;
-
-
   static name = "Bionic Arms";
   static description = "Raises all your program's attack by 2";
   static unicode = "U+1F9BE";
@@ -245,8 +227,6 @@ class BionicArm extends Admin {
 
 class BionicLeg extends Admin {
   static iconID = 325;
-
-
   static name = "Bionic Legs";
   static description = "Raises all your program's moves by 2";
   static unicode = "U+1F9BF";
@@ -267,8 +247,6 @@ class BionicLeg extends Admin {
 
 class Convenience extends Admin {
   static iconID = 266;
-
-
   static name = "Convenience Store";
   static description = "Open the shop any time (still only reloads for free at shop nodes)";
   static unicode = "U+1F3EA";
@@ -282,8 +260,6 @@ class Convenience extends Admin {
 
 class Department extends Admin {
   static iconID = 298;
-
-
   static name = "Department Store";
   static description = "+3 shop slots, 1 Program, 1 Item, and 1 Admin";
   static unicode = "U+1F3EC";
@@ -297,8 +273,6 @@ class Department extends Admin {
 
 class Eye extends Admin {
   static iconID = 332;
-
-
   static name = "Evil Eye";
   static description = "Lower's the defences of all enemy progams by 1 at the start of a round";
   static unicode = "U+1F9FF";
@@ -322,8 +296,6 @@ class Eye extends Admin {
 
 class Bouquet extends Admin {
   static iconID = 291;
-
-  static iconID = 281;//duplicates showing up anyway
   static name = "Bouquet";
   static description = "Held admin programs can reappear in the shop";
   static unicode = "U+1F490";
@@ -337,8 +309,6 @@ class Bouquet extends Admin {
 
 class Heartbreaker extends Admin {
   static iconID = 235;
-
-  static iconID = 225;//make a boss
   static name = "Heartbreaker";
   static description = "Makes your programs immune to being charmed on placement";
   static unicode = "U+1F494";//charmed symbol? "U+1F498";
@@ -359,8 +329,6 @@ class Heartbreaker extends Admin {
 
 class Hamsa extends Admin {
   static iconID = 363;
-
-
   static name = "Hamsa";
   static description = "Your program's get +3 defence on placement";
   static unicode = "U+1FAAC";
@@ -416,8 +384,6 @@ class Parachute extends Admin {
 
 export class Notepad extends Admin {
   static iconID = 240;
-
-
   static name = "Notepad";
   static description = "Increases memory by 1";
   static unicode = "U+1F4DD";//"U+1F4C4";//"U+1F5C7";
@@ -437,8 +403,6 @@ export class Notepad extends Admin {
 // GLOBE WITH MERIDIANS, U+1F310
 export class AdminMap extends Admin {
   static iconID = 287;
-
-
   static name = "World Map";
   static description = "See incoming node structures in advance";
   static unicode = "U+1F5FA";//"U+1F30D";
@@ -498,8 +462,6 @@ export class PetriDish extends Admin {
 
 export class Volatile extends Admin {
   static iconID = 350;
-
-  static iconID = 340;//handled in app
   static name = "Volatile";
   static description = "Status effects are doubled (+1 status mult)";
   static unicode = "U+1F9EA";
@@ -512,8 +474,6 @@ export class Volatile extends Admin {
 
 class Inheritance extends Admin {
   static iconID = 367;
-
-
   static name = "Inheritance";
   static description = "Earn double your interest after winning a round, does not stack";
   static unicode = "U+1F911";
@@ -531,8 +491,6 @@ class Inheritance extends Admin {
 
 export class CreditCard extends Admin {
   static iconID = 230;
-
-
   static name = "Credit Card";
   static description = "Go up to $20 in debt";
   static unicode = "U+1F4B3";
@@ -546,8 +504,6 @@ export class CreditCard extends Admin {
 
 class Needle extends Admin {
   static iconID = 387;
-
-  static iconID = 377;//needs some kind of nerf, increase max size only?
   static name = "Needle";
   static description = "Winning a round with one program placed boosts all it's stats by one permanently";
   static unicode = "U+1FAA1";
@@ -581,8 +537,6 @@ class Needle extends Admin {
 
 export class Rune extends Admin {
   static iconID = 277;
-
-
   static name = "Rune";//
   static description = "Your programs with a range of 1 on attacking get +1 damage multiplyer";//all programs?
   static unicode = "U+16B1";
@@ -604,8 +558,6 @@ export class Rune extends Admin {
 
 class Joker extends Admin {
   static iconID = 270;
-
-
   static name = "Joker";
   static description = "+0.5 damage multiplyer on attacking";
   static unicode = "U+1F0CF";
@@ -639,8 +591,6 @@ export class Chemistry extends Admin {
 
 class Aesculapius extends Admin {
   static iconID = 256;
-
-
   static name = "Aesculapius";//CADUCEUS, U+2624
   static description = "All placed programs are immune to poison and disease";
   static unicode = "U+2695";
@@ -662,8 +612,6 @@ class Aesculapius extends Admin {
 
 class Heart extends Admin {
   static iconID = 268;
-
-  static iconID = 258;//change
   static name = "Heart";
   static description = "+1 max size and +1 moves on placement";
   static unicode = "U+1FAC0";
@@ -683,8 +631,6 @@ class Heart extends Admin {
 
 class Bone extends Admin {
   static iconID = 259;
-
-  static iconID = 249;//change
   static name = "Big Boned";
   static description = "Programs all gain +2 max size, -1 moves on placement";
   static unicode = "U+1F9B4";
@@ -704,8 +650,6 @@ class Bone extends Admin {
 
 class RollerBlades extends Admin {
   static iconID = 378;
-
-
   static name = "Rollers";
   static description = "Programs all gain +3 moves on placement";
   static unicode = "U+1F6FC";
@@ -725,8 +669,6 @@ class RollerBlades extends Admin {
 
 class Lungs extends Admin {
   static iconID = 355;
-
-
   static name = "Cardio";
   static description = "Player programs all gain a temporary +3 moves on the start of each turn";//+3 temp moves? would negate slowed
   static unicode = "U+1FAC1";
@@ -752,8 +694,6 @@ class Lungs extends Admin {
 
 class Brain extends Admin {
   static iconID = 370;
-
-  static iconID = 360;//unfinished, actionsHandler in Piececontroller playing up, or canAttack bool being set false somewhere?
   static name = "Machine Learning";
   static description = "Every space of free memory in your inventory gives +1 attack to your programs on load";
   static unicode = "U+1F9E0";
@@ -772,8 +712,6 @@ class Brain extends Admin {
 
 class GoldenTicket extends Admin {
   static iconID = 233;
-
-  static iconID = 223;//make item
   static name = "Golden Ticket";
   static description = "Skip one non boss level for $5 (no reward or interest earned)";
   static unicode = "U+1F3AB";
@@ -801,8 +739,6 @@ export class Dove extends Admin {
 
 class Stonks extends Admin {
   static iconID = 316;
-
-
   static name = "Stonks";
   static description = "+1 bonus interest for every $5 you have";
   static unicode = "U+1F4C8";
@@ -826,8 +762,6 @@ class Stonks extends Admin {
 
 class Schoolbag extends Admin {
   static iconID = 248;
-
-
   static name = "Schoolbag";//"Schoolbag";
   static description = "Items only use 0.5 memory each";
   static unicode = "U+1F392";// "U+1F6D2";
@@ -869,8 +803,6 @@ export class Backdoor extends Admin {
 
 class Communism extends Admin {
   static iconID = 297;
-
-
   static name = "Communism";
   static description = "+1 all stats to all placed programs while money is under 5";
   static unicode = "U+262D";
@@ -914,8 +846,6 @@ export class Palette extends Admin {
 
 class Osiris extends Admin {
   static iconID = 389;
-
-
   static name = "Osiris";
   static description = "+1 attack to all your placed programs each time a program is destroyed";//your own programs?
   static unicode = "U+13080";//horus: "U+1314A";
@@ -953,8 +883,6 @@ class Slots extends Admin {
 
 class Newspaper extends Admin {
   static iconID = 273;
-
-
   static name = "Millwall Brick";
   static description = "+1 damage for programs with a range of 1 on load";
   static unicode = " U+1F5DE";//U+1F4F0";
@@ -975,8 +903,6 @@ class Newspaper extends Admin {
 
 class Crown extends Admin {
   static iconID = 348;
-
-
   static name = "Tithe";
   static description = "Gain $5 every round";// U+1FA8E
   static unicode = " U+1F451";
@@ -995,8 +921,6 @@ class Crown extends Admin {
 
 class Cactus extends Admin {
   static iconID = 262;
-
-
   static name = "Cactus";
   static description = "Programs retaliate with your current security level of damage when they are attacked";//current security
   static unicode = "U+1F335";
@@ -1017,8 +941,6 @@ class Cactus extends Admin {
 
 export class Compass extends Admin {
   static iconID = 229;
-
-
   static name = "Compass";
   static description = "Shows nodes that are normally secret until reaching them";//make the path red/white? keep the hidden nodes hidden
   static unicode = "U+1F9ED";
@@ -1032,8 +954,6 @@ export class Compass extends Admin {
 
 export class OffRoader extends Admin {
   static iconID = 241;
-
-
   static name = "Off Roader";
   static description = "Travel to nodes on different paths to your own";
   static unicode = "U+1F699";
@@ -1047,8 +967,6 @@ export class OffRoader extends Admin {
 
 export class Seed extends Admin {
   static iconID = 249;
-
-
   static name = "Seed";
   static description = "Raises maximum interest by $5";
   static unicode = "U+1F331";
@@ -1067,8 +985,6 @@ export class Seed extends Admin {
 
 class Puzzle extends Admin {
   static iconID = 309;
-
-
   static name = "Puzzle Piece";
   static description = "Programs with an ally adjacent to their head temporarily gain +1 defence until the start of your next turn";//for each piece adjacent?
   static unicode = "U+1F9E9";
@@ -1099,8 +1015,6 @@ class Puzzle extends Admin {
 
 class Chivalry extends Admin {
   static iconID = 357;
-
-
   static name = "Chivalry";
   static description = "Programs with an ally adjacent to their head gain +1 attack at the end of your turn";
   static unicode = "U+1F3F0";
@@ -1132,8 +1046,6 @@ class Chivalry extends Admin {
 
 class Roger extends Admin {
   static iconID = 304;
-
-
   static name = "Jolly Roger";
   static description = "Gain $1 per destroyed program";
   static unicode = "U+1F571";//"U+2620";
@@ -1152,8 +1064,6 @@ class Roger extends Admin {
 
 class Bucket extends Admin {
   static iconID = 223;
-
-
   static name = "Bucket";
   static description = "+2 memory";
   static unicode = "U+1FAA3";
@@ -1173,8 +1083,6 @@ class Bucket extends Admin {
 
 class Diamond extends Admin {
   static iconID = 361;
-
-
   static name = "Diamond";//payroll
   static description = "Every $20 you have increases your program's defence by 1 on load";
   static unicode = "U+1F48E";
@@ -1201,8 +1109,6 @@ class Diamond extends Admin {
 
 export class Sneakers extends Admin {
   static iconID = 253;
-
-  static iconID = 243;//item???
   static name = "Trainers";
   static description = "+1 moves for all placed programs";
   static unicode = "U+1F45F";
@@ -1223,8 +1129,6 @@ export class Sneakers extends Admin {
 //candle U+1F56F
 class Candle extends Admin {
   static iconID = 224;
-
-
   static name = "Candle";
   static description = "+1 range, -1 moves for all your programs on load";
   static unicode = "U+1F56F";
@@ -1244,8 +1148,6 @@ class Candle extends Admin {
 
 class Lightbulb extends Admin {
   static iconID = 339;
-
-
   static name = "Lightbulb";
   static description = "+2 range for all your programs on load";
   static unicode = "U+1F4A1";
@@ -1265,8 +1167,6 @@ class Lightbulb extends Admin {
 
 class Feather extends Admin {
   static iconID = 335;
-
-
   static name = "Feather";
   static description = "+3 moves, -1 maxSize for all placed programs";
   static unicode = "U+1FAB6";
@@ -1289,8 +1189,6 @@ class Feather extends Admin {
 
 export class Copier extends Admin {
   static iconID = 359;
-
-
   static name = "Copier";
   static description = "Places a copy of your first placed program 1 space to the right if it is unnocupied";
   static unicode = "U+1F4E0";//"U+1F5A8";
@@ -1355,8 +1253,6 @@ export class Copier extends Admin {
 
 class Telescope extends Admin {
   static iconID = 318;
-
-
   static name = "Telescope";//tower
   static description = "+3 range, -2 moves for all your placed programs";
   static unicode = "U+1F52D";
@@ -1376,8 +1272,6 @@ class Telescope extends Admin {
 
 class Microscope extends Admin {
   static iconID = 272;
-
-
   static name = "Microbiology";
   static description = "Your programs with a size of 1 temporarily get +1 defence at the end of your turn";//+2 temp defence on end of turn? 
   static unicode = "U+1F52C";
@@ -1399,8 +1293,6 @@ class Microscope extends Admin {
 
 class Lotus extends Admin {
   static iconID = 369;
-
-  static iconID = 359;//boss? remove money?
   static name = "Lotus";
   static description = "Each rare admin gives + 0.5 damage mult on attacking";
   static unicode = "U+1FAB7";
@@ -1424,8 +1316,6 @@ class Lotus extends Admin {
 
 class Broom extends Admin {
   static iconID = 292;
-
-
   static name = "Broom";
   static description = "Clears all enemies with 1 size and 0 defence on the end of your turn";
   static unicode = "U+1F9F9";
@@ -1448,8 +1338,6 @@ class Broom extends Admin {
 
 class Pickup extends Admin {
   static iconID = 274;
-
-
   static name = "Pickup";
   static description = "+3 Memory";
   static unicode = "U+1F6FB";
@@ -1468,8 +1356,6 @@ class Pickup extends Admin {
 
 class Artic extends Admin {
   static iconID = 352;
-
-
   static name = "Artic";
   static description = "Inreases Memory by 5";
   static unicode = "U+1F69B";
@@ -1488,8 +1374,6 @@ class Artic extends Admin {
 
 class Sprinkler extends Admin {
   static iconID = 251;
-
-
   static name = "Sprinkler";
   static description = "Removes burning from all programs at the end of your turn";
   static unicode = "U+1F6BF";
@@ -1509,8 +1393,6 @@ class Sprinkler extends Admin {
 
 class FireEngine extends Admin {
   static iconID = 267;
-
-
   static name = "Fire Engine";
   static description = "Your programs become immune to burning on placement";
   static unicode = "U+1F692";
@@ -1529,8 +1411,6 @@ class FireEngine extends Admin {
 
 class Prayer extends Admin {
   static iconID = 344;
-
-
   static name = "Prayer Beads";
   static description = "Programs get +2 defence on load";
   static unicode = "U+1F4FF";
@@ -1549,8 +1429,6 @@ class Prayer extends Admin {
 }
 class Vitamins extends Admin {
   static iconID = 285;
-
-
   static name = "Vitamin C";
   static description = "Programs get +1 defence on load";
   static unicode = "U+1F34A";
@@ -1569,8 +1447,6 @@ class Vitamins extends Admin {
 
 class Protein extends Admin {
   static iconID = 245;
-
-
   static name = "Protein";
   static description = "Programs get +1 max size on load";
   static unicode = "U+1F357";//steak "U+1F52C";
@@ -1589,8 +1465,6 @@ class Protein extends Admin {
 
 class Fountain extends Admin {
   static iconID = 334;
-
-
   static name = "Fountain of Youth";
   static description = "Programs get +3 max size on load";
   static unicode = "U+26F2";
@@ -1609,8 +1483,6 @@ class Fountain extends Admin {
 
 class Spoon extends Admin {
   static iconID = 313;
-
-
   static name = "Silver Spoon";
   static description = "Gain $4 at the start of every round";
   static unicode = "U+1F944";
@@ -1628,8 +1500,6 @@ class Spoon extends Admin {
 
 export class Hermes extends Admin {
   static iconID = 365;
-
-  static iconID = 355;//moves
   static name = "Hermes";// Wings";
   static description = "All your programs gain +1 moves remaining and are immune to being slowed at the start of each turn";
   static unicode = "U+269A";//"U+1FABD";
@@ -1657,8 +1527,6 @@ export class Hermes extends Admin {
 
 class Scarf extends Admin {
   static iconID = 278;
-
-
   static name = "Scarf";
   static description = "All your programs are immune to being frozen on load";
   static unicode = "U+1F9E3";
@@ -1678,8 +1546,6 @@ class Scarf extends Admin {
 
 export class Ambulance extends Admin {
   static iconID = 321;
-
-  static iconID = 311;//a promoted piece dying should recover the pawn, a 
   static name = "Ambulance";
   static description = "Recovers all your destroyed programs to your inventory, letting you reload them";
   static unicode = "U+1F691";
@@ -1708,8 +1574,6 @@ export class Ambulance extends Admin {
 
 class FakeID extends Admin {
   static iconID = 300;
-
-
   static name = "Fake I.D.";
   static description = "Your programs are immune to being exposed";
   static unicode = "U+1FAAA";// DISGUISED FACE, U+1F978
@@ -1728,8 +1592,6 @@ class FakeID extends Admin {
 
 class Shades extends Admin {
   static iconID = 312;
-
-
   static name = "Shades";//GOGGLES, U+1F97D
   static description = "Your programs are immune to being blinded";
   static unicode = "U+1F60E";// U+1F576, GOGGLES, U+1F97D
@@ -1748,8 +1610,6 @@ class Shades extends Admin {
 
 class Barber extends Admin {
   static iconID = 288;
-
-
   static name = '"A little off the top"';
   static description = "Deals 1 damage to every piece at the start of a round";
   static unicode = "U+1F488";
@@ -1771,8 +1631,6 @@ class Barber extends Admin {
 
 class Umbrella extends Admin {
   static iconID = 394;
-
-
   static name = "Umbrella";
   static description = "Disables boss admin effects";
   static unicode = "U+2614";
@@ -1785,8 +1643,6 @@ class Umbrella extends Admin {
 
 export class Bank extends Admin {
   static iconID = 222;
-
-
   static name = "Bank";
   static description = "Increases sell value of held items and admins by $2 every round";
   static unicode = "U+1F3E6";
@@ -1811,8 +1667,6 @@ export class Bank extends Admin {
 
 class Ballet extends Admin {
   static iconID = 383;
-
-  static iconID = 373;//needs to reset
   static name = "Twinkle Toes";
   static description = "all your programs are hidden for the first 3 turns of a round";
   static unicode = "U+1FA70";
@@ -1843,8 +1697,6 @@ class Ballet extends Admin {
 
 class Pants extends Admin {
   static iconID = 314;
-
-
   static name = "Spare Pair";
   static description = "Your first destroyed program each round is moved back into your inventory";
   static unicode = "U+1FA72";
@@ -1873,8 +1725,6 @@ class Pants extends Admin {
 
 class Ace extends Admin {
   static iconID = 289;
-
-
   static name = "Ace in the hole";
   static description = "Your last placed program gets +1 to all stats";
   static unicode = "U+2660";//"U+1F0A1";
@@ -1906,8 +1756,6 @@ class Ace extends Admin {
 
 class Pi extends Admin {
   static iconID = 388;
-
-  static iconID = 378;//test
   static name = "Pi";//
   static description = "Programs get +3.14 damage multiplyer on attacking";
   static unicode = "U+3C0";
@@ -1927,8 +1775,6 @@ class Pi extends Admin {
 
 class Pazzaz extends Admin {
   static iconID = 342;
-
-
   static name = "Pazzaz";
   static description = "Every $10 increases your program's movement by 1 on load";
   static unicode = "U+1F57A";
@@ -1950,8 +1796,6 @@ class Pazzaz extends Admin {
 
 class Toilet extends Admin {
   static iconID = 358;
-
-
   static name = "Circling The Drain";
   static description = "Common admins each provide +1 to all stats on placement";
   static unicode = "U+1F6BD";
@@ -1984,8 +1828,6 @@ class Toilet extends Admin {
 
 class Harvest extends Admin {
   static iconID = 234;
-
-
   static name = "Harvest";
   static description = "Every 4 turns, +1 max size to all your placed programs";
   static unicode = "U+1F33E";
@@ -2015,8 +1857,6 @@ class Harvest extends Admin {
 
 class Bipolar extends Admin {
   static iconID = 283;
-
-
   static name = "Ups and Downs";
   static description = "Gain $1 on destroying an enemy, lose $5 on destruction of your own programs";
   static unicode = "U+1F3AD";
@@ -2040,8 +1880,6 @@ class Bipolar extends Admin {
 
 export class Taoism extends Admin {
   static iconID = 381;
-
-
   static name = "Taoism";
   static description = "Each round, after the first turn when the number of enemy programs equals the number of your programs, +1 to all your loaded programs' stats.";
   static unicode = "U+262F";
@@ -2084,8 +1922,6 @@ export class Taoism extends Admin {
 
 class Loot extends Admin {
   static iconID = 307;
-
-
   static name = "Loot";
   static description = "Earn an extra $4 at the end of a round";
   static unicode = "U+1F4B0";
@@ -2103,8 +1939,6 @@ class Loot extends Admin {
 
 class HedgeFund extends Admin {
   static iconID = 302;
-
-
   static name = "Hedge Fund";
   static description = "Raises interest cap by $10";
   static unicode = "U+1F4B8";
@@ -2144,8 +1978,6 @@ class PeaPod extends Admin {
 
 class Liberty extends Admin {
   static iconID = 338;
-
-
   static name = "Liberty";
   static description = "Programs gain +1 range and +1 movement on load"
   static unicode = "U+1F5FD";
@@ -2164,8 +1996,6 @@ class Liberty extends Admin {
 
 class Punching extends Admin {
   static iconID = 246;
-
-
   static name = "Punching";
   static description = "+1 security level, +$5 reward from nodes";
   static unicode = "U+1F94A";
@@ -2194,8 +2024,6 @@ class Punching extends Admin {
 
 class Teddy extends Admin {
   static iconID = 376;
-
-  static iconID = 366;//handle in app
   static name = "Playtime";
   static description = "-1 security level";
   static unicode = "U+1F9F8";
@@ -2222,8 +2050,6 @@ class Teddy extends Admin {
 
 export class Abacus extends Admin {
   static iconID = 255;
-
-
   static name = "Abacus";
   static description = "gain 6/your current security level in $ at the end of a round (rounded down)";
   static unicode = "U+1F9EE";
@@ -2254,8 +2080,6 @@ export class Abacus extends Admin {
 
 export class Cheese extends Admin {
   static iconID = 226;
-
-
   static name = "Chedda";
   static description = "+$1 at the end of a round";
   static unicode = "U+1F9C0";
@@ -2273,8 +2097,6 @@ export class Cheese extends Admin {
 
 class AirSupport extends Admin {
   static iconID = 290;
-
-
   static name = "Air Support";
   static description = "1 damage to all enemy programs on the board every time you place a new program";
   static unicode = "U+1F6E6";
@@ -2296,8 +2118,6 @@ class AirSupport extends Admin {
 
 export class DartBoard extends Admin {
   static iconID = 328;
-
-  static iconID = 318;//test
   static name = "Bullseye";//
   static description = "Programs get +1 damage multiplyer on attacking";
   static unicode = "U+1F3AF";
@@ -2317,8 +2137,6 @@ export class DartBoard extends Admin {
 
 class Dice extends Admin {
   static iconID = 269;
-
-
   static name = "High Roller";
   static description = "Reroll skip rewards";
   static unicode = "U+1F3B2";
@@ -2331,8 +2149,6 @@ class Dice extends Admin {
 
 class Ladder extends Admin {
   static iconID = 306;
-
-
   static name = "Leg Up";
   static description = "Skip one non boss node for free each security level";
   static unicode = "U+1FA9C";
@@ -2355,8 +2171,6 @@ class Ribbon extends Admin {//change
 */
 class Ring extends Admin {
   static iconID = 391;
-
-
   static name = "Ring";
   static description = "Stats changed inside a node persist across rounds";
   static unicode = "U+1F48D";
@@ -2413,8 +2227,6 @@ class Minerva extends Admin {
 
 class Hermit extends Admin {
   static iconID = 236;
-
-
   static name = "Hermit Shell";
   static description = "Programs get +2 defence and -1 moves on load";
   static unicode = "U+1F41A";
@@ -2434,8 +2246,6 @@ class Hermit extends Admin {
 
 class Tracker extends Admin {
   static iconID = 320;
-
-  static iconID = 310; // FOOTPRINTS, U+1F463
   static name = "Tracker";
   static description = "Exposes all enemies at the start of a round";
   static unicode = "U+1F43E";
@@ -2459,8 +2269,6 @@ class Tracker extends Admin {
 
 class Pong extends Admin {
   static iconID = 377;
-
-
   static name = "Pong";
   static description = "Damage received from enemies is returned back to them";
   static unicode = "U+1F3D3";
@@ -2480,8 +2288,6 @@ class Pong extends Admin {
 
 class Knot extends Admin {
   static iconID = 237;
-
-  static iconID = 227;//test
   static name = "Knot";
   static description = "Your programs can move through themselves";
   static unicode = "U+1FAA2";
@@ -2494,8 +2300,6 @@ class Knot extends Admin {
 
 class Rainbow extends Admin {
   static iconID = 244;
-
-
   static name = "Pot of Gold";
   static description = "+$10 After beating a boss";//nerf to 5? 7?
   static unicode = "U+1F308";
@@ -2509,8 +2313,6 @@ class Rainbow extends Admin {
 
 class Jammer extends Admin {
   static iconID = 303;
-
-
   static name = "Jammer";
   static description = "-1 range to all enemy programs with a range > 1";
   static unicode = "U+1F5FC";//no phones "U+1F4F5";
@@ -2532,8 +2334,6 @@ class Jammer extends Admin {
 
 class Balloon extends Admin {
   static iconID = 258;
-
-
   static name = "Balloon";
   static description = "+1 max size to all your held programs after each round";
   static unicode = "U+1F388";
@@ -2553,8 +2353,6 @@ class Balloon extends Admin {
 
 class Wheel extends Admin {
   static iconID = 345;
-
-
   static name = "Roulette Wheel";
   static description = "Spend $5 to reroll Bosses, doubles next reroll's cost";
   static unicode = "U+1F6DE";
@@ -2568,8 +2366,6 @@ class Wheel extends Admin {
 
 class Bath extends Admin {
   static iconID = 384;
-
-
   static name = "Decontamination";
   static description = "Removes all statuses from all programs at the end of each turn";
   static unicode = "U+1F6C1";
@@ -2591,8 +2387,6 @@ class Bath extends Admin {
 
 class Purse extends Admin {
   static iconID = 264;
-
-
   static name = "Coinpurse";
   static description = "Save $1 every time you spend money";
   static unicode = "U+1F45B";
@@ -2606,8 +2400,6 @@ class Purse extends Admin {
 
 export class Discount extends Admin {
   static iconID = 333;
-
-
   static name = "Five Finger Discount";
   static description = "Steal once from every shop";
   static unicode = "U+1FAF3";
@@ -2622,8 +2414,6 @@ export class Discount extends Admin {
 
 class Variety extends Admin {
   static iconID = 349;
-
-
   static name = "Variety Box";
   static description = "Variants are +25% more likely to appear in the shop";
   static unicode = "U+1F371"; //variety box chocolates  HEART WITH RIBBON, U+1F49D , CHOCOLATE BAR, U+1F36B
@@ -2654,8 +2444,6 @@ class Appraisal extends Admin {
 
 class Camp extends Admin {
   static iconID = 293;
-
-  static iconID = 283;//needs reviewing
   static name = "Camper";
   static description = "Your non-hidden programs that don't move gain +1 range every 2 turns, ones that do revert their range to their base range";// to all stats on the end of your turn";
   static unicode = "U+26FA";//🏕️
@@ -2708,8 +2496,6 @@ class Piggy extends Admin {
 
 class Bowling extends Admin {
   static iconID = 281;
-
-  static iconID = 271;//test
   static name = "Strike";
   static description = "Destroyed programs deal 1 damage to each enemy tile adjacent to it's head position";
   static unicode = "U+1F3B3"; // damage adjacent tiles
@@ -2742,8 +2528,6 @@ class Bowling extends Admin {
 
 class Stiletto extends Admin {
   static iconID = 279;
-
-
   static name = "Stiletto";
   static description = "Programs all gain +1 attack, -1 moves on placement";
   static unicode = "U+1F460";
@@ -2764,8 +2548,6 @@ class Stiletto extends Admin {
 
 class Disco extends Admin {
   static iconID = 362;
-
-
   static name = "Disco Ball";
   static description = "Damage received from enemies also applies to enemies adjacent to the attacker";
   static unicode = "U+1FAA9";
@@ -2795,8 +2577,6 @@ class Disco extends Admin {
 
 class Nest extends Admin {
   static iconID = 239;
-
-
   static name = "Nest Egg";
   static description = "Gains $3 sell value each round";
   static unicode = "U+1FABA"
@@ -2814,8 +2594,6 @@ class Nest extends Admin {
 
 class Sled extends Admin {
   static iconID = 311;
-
-  static iconID = 301;//test
   static name = "Rosebud";
   static description = "Your last loaded program starts hidden";
   static unicode = "U+1F6F7";
@@ -2845,8 +2623,6 @@ class Sled extends Admin {
 
 class Crash extends Admin {
   static iconID = 326;
-
-  static iconID = 316;//test
   static name = "Blue Screen";
   static description = "Freezes all programs after every turn";
   static unicode = "";
@@ -2869,8 +2645,6 @@ class Crash extends Admin {
 
 export class Skyscraper extends Admin {
   static iconID = 364;
-
-  static iconID = 354;//test not working
   static name = "Highrise";
   static description = "Each placed program gains +1 temporary defence for every 2 tiles currently occupied at the end of your turn";//every 3? can make larger to nerf
   static unicode = "U+1F3E2";
@@ -2894,8 +2668,6 @@ export class Skyscraper extends Admin {
 
 class School extends Admin {
   static iconID = 393;
-
-  static iconID = 383;//test
   static name = "Staying in School";
   static description = "Each unplaced program in your inventory gains +1 to all stats at the end of a round, up to a max of +7"
   static unicode = "U+1F393";//school building "U+1F3EB";
@@ -2927,8 +2699,6 @@ class School extends Admin {
 
 class Dharma extends Admin {
   static iconID = 395;
-
-  static iconID = 385;//test
   static name = "Wheel of Dharma";
   static description = "Every kind of reroll is free"//reroll up to 10? //make piece and bp immune to a status on receiving it?
   static unicode = "U+2638"; //every kind of reroll is free (shop, bosses(roulette) ---- nodes(ferris), skips(dice-already free), )
@@ -2941,8 +2711,6 @@ class Dharma extends Admin {
 
 class Putter extends Admin {
   static iconID = 275;
-
-  static iconID = 265;//test
   static name = "Putter";
   static description = "After a program is destroyed, the last remaining enemy program loses -1 to all stats";//0 defence?
   static unicode = "U+26F3";
@@ -3072,8 +2840,6 @@ class Evergreen extends Admin {
 //face down card, close to chest etc.
 class Cards extends Admin {
   static iconID = 366;
-
-  static iconID = 356;//test
   static name = "Hidden Hand";
   static description = "Held upgrade item's effects apply to all your programs on load";
   static unicode = "U+1FAAD"; //FOLDING HAND FAN, 
@@ -3157,8 +2923,6 @@ class Triangle extends Admin {
 
 class Juggler extends Admin {
   static iconID = 305;
-
-  static iconID = 295;//test
   static name = "Juggler";
   static description = "If your first loaded program is different to the previous round's first, +1 to all its stats";//store multiple ids?
   static unicode = "U+1F939";
@@ -3186,8 +2950,6 @@ class Juggler extends Admin {
 
 class Ice extends Admin {
   static iconID = 382;
-
-  static iconID = 372;//needs to reset
   static name = "Thaw";
   static description = "Freezes all programs on the first turn of a round, then unfreezes them every turn after";
   static unicode = "U+1F9CA";
@@ -3245,8 +3007,6 @@ class Howzat extends Admin {
 
 export class Cherries extends Admin {
   static iconID = 368;
-
-  static iconID = 358;//test
   static name = "Jackpot";
   static description = "Unplaced programs of the same base type in your inventory add their stats to the loaded program";
   static unicode = "U+1F352";
@@ -3272,8 +3032,6 @@ export class Cherries extends Admin {
 
 class Coin extends Admin {
   static iconID = 263;
-
-
   static name = "Coin Toss";
   static description = "50% chance for +1 damage multiplyer on attacking";
   static unicode = "U+1FA99";
@@ -3362,8 +3120,6 @@ class BlackBelt extends Admin {
 
 class Bell extends Admin {
   static iconID = 379;
-
-  static iconID = 369;//test
   static name = "Saved by the Bell";
   static description = "Freezes programs attacking yours when there is only 1 player program in a node";
   static unicode = "U+1F514";
@@ -3391,8 +3147,6 @@ class Bell extends Admin {
 //onPieceDestruction gain money
 class Violin extends Admin {
   static iconID = 284;
-
-  static iconID = 274;//test
   static name = "Violin";
   static description = "Gain $3 on destruction of your programs if they match one in your inventory (summons do not count)";//0 defence?
   static unicode = "U+1F3BB";
@@ -3604,8 +3358,6 @@ class Butler extends Admin {
 //CHAIN reaction onPieceDestruction deal damage around head like bowling but deal +1 damage each time?
 class Chain extends Admin {
   static iconID = 296;
-
-  static iconID = 286;//test
   static name = "Chain Reaction";
   static description = "Destroying a program deals 1 damage to each enemy adjacent to it's head, +1 damage each time this is triggered."// Resets to 1 each round.";//or enemy's attack???
   static unicode = "U+26D3";//U+26D3//U+1F517
@@ -3638,8 +3390,6 @@ class Chain extends Admin {
 }
 class Nose extends Admin {
   static iconID = 282;
-
-
   static name = "Traffic Sniffer";
   static description = "Enemies that move are exposed";
   static unicode = "U+1F443";
@@ -3796,8 +3546,6 @@ class Selfie extends Admin {
 
 class Daisy extends Admin {
   static iconID = 360;
-
-  static iconID = 350;// test
   static name = "Daisy Chain";
   static description = "Attacks also damage enemy programs next to the damage receiver";//effect all programs??
   static unicode = "U+1F33C";
@@ -3883,8 +3631,6 @@ class Drunk extends Admin {
 
 export class StoneAge extends Admin {
   static iconID = 315;
-
-  static iconID = 305;//needs reviewing
   static name = "Stone Age";
   static description = "Fixes all pieces' range to 1 on the start of every turn after the first";
   static unicode = "U+1FAA8";
@@ -3903,8 +3649,6 @@ export class StoneAge extends Admin {
 
 class Huzzah extends Admin {
   static iconID = 294;
-
-
   static name = "Huzzah";
   static description = "Gain a pinata with a random admin inside after beating a boss";
   static unicode = "U+1F37E";
@@ -3925,8 +3669,6 @@ class Huzzah extends Admin {
 
 class Lefty extends Admin {
   static iconID = 385;
-
-
   static name = "Left Hand Path";
   static description = "Your programs gain +1 attack every non boss node your enter that equals your current security level";// too easy, make right hand instead
   static unicode = "U+1FAF2";//"U+1FAF8";
@@ -3948,8 +3690,6 @@ class Lefty extends Admin {
 
 class Righty extends Admin {
   static iconID = 390;
-
-
   static name = "Right Hand Path";
   static description = "Your programs gain +1 defence for every node your enter that has a higher security level than your own";// too easy, make right hand instead
   static unicode = "U+1FAF1";//"U+1FAF7";//"U+1F91A";
@@ -3973,8 +3713,6 @@ class Righty extends Admin {
 
 export class Booty extends Admin {
   static iconID = 354;
-
-
   static name = "Booty";
   static description = "Earn an extra $6 at the end of a round";
   static unicode = "U+1FA8E";

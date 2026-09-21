@@ -82,7 +82,7 @@ const spriteStyle = computed(() => {
   return {
     backgroundImage: `url('${iconsUrl}')`,
     backgroundSize: `3700% 1200%`,
-    backgroundPosition: `${col * (100 / 36)}% ${row * (100 / 11)}%`,
+    backgroundPosition: `${col * (100 / 36)}% ${row * (100 / 12)}%`,
     width: `${iconDimensions.value}px`,
     height: `${iconDimensions.value}px`,
     color: 'transparent',

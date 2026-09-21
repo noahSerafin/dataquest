@@ -1,9 +1,10 @@
 import type { OS } from "./types";
 import { Voucher, Mushroom, Garlic, Meat, Genie, Pandora, Update2, Dupe, Jar, Iron } from "./Items";
-import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Clippy, Notepad, StoneAge, Rune, OffRoader, AdminMap, Compass, Backdoor, Miner, Copier, Cherries, Sneakers, Palette, Hermes, Dove, Discount, Booty, Djembe, Silly, Cane, Collector } from "./AdminPrograms";
+import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Clippy, Notepad, StoneAge, Rune, OffRoader, AdminMap, Compass, Backdoor, Miner, Copier, Cherries, Sneakers, Palette, Hermes, Cane } from "./AdminPrograms";
 import { createDefaultStatuses } from "./types";
 
 const knife = {
+    iconID: 4,
     id: crypto.randomUUID(),
     name: "Knife",
     description: "A basic attack program",
@@ -21,6 +22,7 @@ const knife = {
     immunities: createDefaultStatuses()
 }
 const testPiece = {
+    iconID: 1,
     id: crypto.randomUUID(),
     name: "Zombie",
     description: "testing this pieces special move",
@@ -53,6 +55,7 @@ const testPiece = {
     variantName: 'Holographic'
 }
 const superKnife = {
+    iconID: 1,
     id: crypto.randomUUID(),
     name: "Arms",
     description: "A suped up attack program for testing",
@@ -71,6 +74,7 @@ const superKnife = {
 }
 
 const shield = {
+    iconID: 7,
     id: crypto.randomUUID(),
     name: "Shield",
     description: "A basic defensive program",
@@ -89,6 +93,7 @@ const shield = {
 }
 
 const sling = {
+    iconID: 8,
     id: crypto.randomUUID(),
     name: "Sling",
     description: '"A basic ranged program"',
@@ -107,6 +112,7 @@ const sling = {
 }
 
 const potato = {
+    iconID: 5,
     id: crypto.randomUUID(),
     name: "Potato",
     description: '"A basic all around program"',
@@ -124,6 +130,7 @@ const potato = {
     immunities: createDefaultStatuses()
 }
 const tp = {
+    iconID: 10,
     id: crypto.randomUUID(),
     name: "TP",
     description: "A large program with high movement",
@@ -141,6 +148,7 @@ const tp = {
     immunities: createDefaultStatuses()
 }
 const rat = {
+    iconID: 6,
     id: crypto.randomUUID(),
     name: "Rat",
     description: "A small and fast program",
@@ -158,6 +166,7 @@ const rat = {
     immunities: createDefaultStatuses()
 }
 const ant = {
+    iconID: 0,
     id: crypto.randomUUID(),
     name: "Ant",
     description: "A very fast but small program",
@@ -175,6 +184,7 @@ const ant = {
     immunities: createDefaultStatuses()
 }
 const labrat = {
+    iconID: 58,
     id: crypto.randomUUID(),
     name: "Lab Rat",
     description: "A small and fast program that can spread disease, reducing max size",
@@ -209,6 +219,7 @@ const labrat = {
     immunities: createDefaultStatuses()
 }*/
 const snail = {
+    iconID: 9,
     id: crypto.randomUUID(),
     name: "Snail",
     description: "A slow program that can retract itself to boost its defence",
@@ -226,6 +237,7 @@ const snail = {
     immunities: createDefaultStatuses()
 }
 const bug = {
+    iconID: 44,
     id: crypto.randomUUID(),
     name: "Bug",
     description: "A fast but small program that can apply slowed others",
@@ -243,6 +255,7 @@ const bug = {
     immunities: createDefaultStatuses()
 }
 const bee = {
+    iconID: 2,
     id: crypto.randomUUID(),
     name: "Bee",
     description: "A small program which can sting, sacrificing itself for a high damage attack",
@@ -260,6 +273,7 @@ const bee = {
     immunities: createDefaultStatuses()
 }
 const honey = {
+    iconID: 56,
     id: crypto.randomUUID(),
     name: "Honeypot",
     description: "A program that can summon Bees",
@@ -277,6 +291,7 @@ const honey = {
     immunities: createDefaultStatuses()
 }
 const aegis = {
+    iconID: 12,
     id: crypto.randomUUID(),
     name: "Aegis",
     description: "An advanced defensive program that can retaliate against attacks",
@@ -294,6 +309,7 @@ const aegis = {
     immunities: createDefaultStatuses()
 }
 const screwdriver = {
+    iconID: 140,
     id: crypto.randomUUID(),
     name: "Screwdriver",
     description: "A program that can tinker with another, boosting a random stat by 1 or reducing an enemy's by 1",
@@ -311,6 +327,7 @@ const screwdriver = {
     immunities: createDefaultStatuses()
 }
 const lance = {
+    iconID: 30,
     id: crypto.randomUUID(),
     name: "Lance",
     description: "An attacking program that can charge, damaging targets in a staight line and moving forward until stopped",
@@ -327,6 +344,7 @@ const lance = {
     immunities: createDefaultStatuses()
 }
 const banana = {
+    iconID: 1,
     id: crypto.randomUUID(),
     name: "Banana Peel",
     description: "A program hidden to the enemy that immobilises programs moving over it for 1 turn, and strips them of any actions, removing itself in the process",
@@ -345,6 +363,7 @@ const banana = {
 //1, 1, 0, 0, 0,
 
 const testhybrid = {
+    iconID: 1,
     id: "274ec329-8c17-4265-8c12-e9a28bcf0112",
     name: "Lance",
     description: "A test program",
@@ -369,6 +388,7 @@ labrat.immunities.diseased = true;
 //
 
 const Window95: OS = {
+    iconID: 459,
     name: 'Classic95',
     unicode: 'U+229E',
     prefix: 'C',
@@ -382,6 +402,7 @@ const Window95: OS = {
     description: 'The intro to cyberspace, comes with a helpful assistant.'
 }
 const Steam: OS = {
+    iconID: 460,
     name: 'Steam',
     unicode: 'U+1F682',
     prefix: 'S',
@@ -395,6 +416,7 @@ const Steam: OS = {
     description: 'The Gamers choice. High starting memory, comes with all the essential base programs, and one voucher to redeem a free shop item.'
 }
 const Penguin: OS = {//potato //shield
+    iconID: 463,
     name: 'Penguin',
     unicode: 'U+1F427',
     prefix: 'P',
@@ -409,6 +431,7 @@ const Penguin: OS = {//potato //shield
 }
 
 const Window: OS = {//knife //shield //snail
+    iconID: 461,
     name: 'Window',
     unicode: ' U+1FA9F',
     prefix: 'w',
@@ -424,6 +447,7 @@ const Window: OS = {//knife //shield //snail
 }
 
 const Apple: OS = {
+    iconID: 462,
     name: 'Apple',
     unicode: 'U+1F34F',
     prefix: 'l',
@@ -438,6 +462,7 @@ const Apple: OS = {
 }
 
 const Temple: OS = {
+    iconID: 464,
     name: 'Temple',
     unicode: 'U+2696',
     prefix: 'T',
@@ -452,6 +477,7 @@ const Temple: OS = {
 }
 
 const Fortran: OS = {
+    iconID: 465,
     name: 'Fortran',
     unicode: 'U+2697',
     prefix: 'F',
@@ -466,6 +492,7 @@ const Fortran: OS = {
 }
 
 const Cobol: OS = {
+    iconID: 466,
     name: 'Cobol',
     unicode: 'U+1F3DB',
     prefix: 'C',
@@ -480,6 +507,7 @@ const Cobol: OS = {
 }
 
 const Arch: OS = {
+    iconID: 467,
     name: 'Arch',
     unicode: 'U+394',
     prefix: 'A',
@@ -494,6 +522,7 @@ const Arch: OS = {
 }
 
 const GNU: OS = {
+    iconID: 468,
     name: 'GNU',
     unicode: 'U+1F403',
     prefix: 'G',
@@ -508,6 +537,7 @@ const GNU: OS = {
 }
 
 const Amiga: OS = {
+    iconID: 469,
     name: 'Amiga',
     unicode: 'U+2705',//HEAVY CHECK MARK, U+2714
     prefix: 'a',
@@ -522,6 +552,7 @@ const Amiga: OS = {
 }
 
 const Beos: OS = {
+    iconID: 470,
     name: 'BeOS',
     unicode: 'U+1F41D',
     prefix: 'B',
@@ -537,6 +568,7 @@ const Beos: OS = {
 
 // ROUND PUSHPIN, U+1F4CD
 const Explorer: OS = {
+    iconID: 471,
     name: 'Explorer',
     unicode: 'U+1F30D',
     prefix: 'E',
@@ -551,6 +583,7 @@ const Explorer: OS = {
 }
 
 const Satoshi: OS = {
+    iconID: 472,
     name: 'Satoshi',
     unicode: 'U+20BF',
     prefix: 's',
@@ -609,6 +642,7 @@ give programs that create their own other programs
 */
 
 const Debugger: OS = {
+    iconID: 473,
     name: 'Debugger',
     unicode: 'U+1F41B',
     prefix: 'D',
@@ -617,7 +651,7 @@ const Debugger: OS = {
     adminSlots: 6,
     blueprints: [banana, superKnife, testhybrid, testPiece],
     items: [new Genie, new Pandora, new Update2, new Dupe, new Jar],
-    admins: [new Djembe, new Booty, new Silly, new Cane, new Collector],
+    admins: [new Cane],
     lives: 9,
     description: 'FOR TESTING'
 }

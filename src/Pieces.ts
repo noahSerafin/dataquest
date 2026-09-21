@@ -462,8 +462,6 @@ export class Spawn extends Piece {
 
 class Knife extends Piece {
   static iconID = 4;
-
-
   static name = "Knife";
   static description = "A basic attack piece";
   static unicode = "U+1F52A";// kitchen knife 
@@ -476,8 +474,6 @@ class Knife extends Piece {
 
 class Dagger extends Piece {
   static iconID = 19;
-
-
   static name = "Dagger";
   static description = "A basic attack piece, has a special attack that ignores the defences of enemies";
   static unicode = "U+1F5E1";
@@ -496,8 +492,6 @@ class Dagger extends Piece {
 
 class Paladin extends Piece {
   static iconID = 66;
-
-
   static name = "Paladin";
   static description = "A defensive piece that can share it's defence with another for a turn";
   static unicode = "U+1F540";
@@ -522,8 +516,6 @@ class Paladin extends Piece {
 
 class Arms extends Piece {
   static iconID = 83;
-
-
   static name = "Arms";
   static description = "A stronger attacking piece that can attack all enemies in range";
   static unicode = "U+2694";
@@ -546,8 +538,6 @@ class Arms extends Piece {
 
 class Shield extends Piece {
   static iconID = 7;
-
-
   static name = "Shield";
   static description = "A basic defensive piece";//can share defence?
   static unicode = "U+1F6E1";
@@ -560,8 +550,6 @@ class Shield extends Piece {
 
 class Aegis extends Piece {
   static iconID = 12;
-
-
   static name = "Aegis";
   static description = "An advanced defensive piece that can use it's special to retaliate against attacks";//damaging special? buckler for parry?
   static unicode = "U+26FB";
@@ -581,8 +569,6 @@ class Aegis extends Piece {
 
 class Sling extends Piece {
   static iconID = 8;
-
-
   static name = "Sling";
   static description = "A basic ranged piece";
   static unicode = "U+1F94F";
@@ -609,8 +595,6 @@ class Bow extends Piece {
 
 class Acorn extends Piece {
   static iconID = 11;
-
-
   static name = "Acorn";
   static description = "A program that turns into an Oak tree";
   static unicode = "U+1F330";
@@ -632,8 +616,6 @@ class Acorn extends Piece {
 
 class Tree extends Piece {
   static iconID = 31;
-
-
   static name = "Oak";
   static description = "A program that can spawn Acorns upon reaching it's max size";
   static unicode = "U+1F333";
@@ -658,8 +640,6 @@ class Tree extends Piece {
 //COCONUT, U+1F965
 class Coconut extends Piece {
   static iconID = 47;
-
-
   static name = "Coconut";
   static description = "A program that turns into a Palm tree";
   static unicode = "U+1F965";
@@ -681,8 +661,6 @@ class Coconut extends Piece {
 
 class Palm extends Piece {
   static iconID = 102;
-
-
   static name = "Palm";
   static description = "A program that can spawn Coconuts upon reaching it's max size";
   static unicode = "U+1F334";
@@ -720,8 +698,6 @@ class Rooster extends Piece {
 
 class Chicken extends Piece {
   static iconID = 18;
-
-
   static name = "Chicken";
   static description = "What came first? Spawns eggs";
   static unicode = "U+1F414";
@@ -743,8 +719,6 @@ class Chicken extends Piece {
 
 class Chick extends Piece {
   static iconID = 17;
-
-
   static name = "Chick";
   static description = "Turns into a Chicken or a Rooster on reaching it's max size";
   static unicode = "U+1F423";
@@ -770,8 +744,6 @@ class Chick extends Piece {
 
 class Egg extends Piece {
   static iconID = 3;
-
-
   static name = "Egg";
   static description = "What came first? Spawns a Chick";
   static unicode = "U+1F95A";
@@ -794,8 +766,6 @@ class Egg extends Piece {
 
 class SAM extends Piece {
   static iconID = 71;
-
-
   static name = "SAM";
   static description = "A slow moving but long ranged program with high damage";
   static unicode = "U+1F680";//"U+1F94D";
@@ -809,8 +779,6 @@ class SAM extends Piece {
 
 class Gate extends Piece {
   static iconID = 53;
-
-
   static name = "Gate";
   static description = "A defensive program that can target an empty space and move opposite & adjacent program's heads to that space";
   static unicode = "U+13208";//"U+26E9";
@@ -859,8 +827,6 @@ class Gate extends Piece {
 
 class Fence extends Piece {
   static iconID = 22;
-
-
   static name = "Fence";
   static description = "A large defensive program";
   static unicode = "U+1F6A7";
@@ -887,8 +853,6 @@ class Stonewall extends Piece {
 
 class Firewall extends Piece {
   static iconID = 93;
-
-
   static name = "Firewall";
   static description = "A large program with a short range that can burn";
   static unicode = "U+1F525";
@@ -911,8 +875,6 @@ class Firewall extends Piece {
 
 class Pitfall extends Piece {
   static iconID = 70;
-
-
   static name = "Pitfall";
   static description = "A trap program that loads hidden and freezes programs that pass over it";
   static unicode = "U+1F573";
@@ -988,8 +950,6 @@ class Mole extends Piece {//unfinished - test negative
 
 class Lance extends Piece {
   static iconID = 30;
-
-
   static name = "Lance";
   static description = "An attacking piece that can charge, damaging targets in a staight line and moving forward until stopped";
   static unicode = "U+1F3A0";
@@ -1026,8 +986,6 @@ class Lance extends Piece {
 
 class Trojan extends Piece {
   static iconID = 79;
-
-  static iconID = 79;//test more
   static name = "Trojan";
   static description = "Can create clones of itself";
   static unicode = "U+1F40E";//"U+1F434";
@@ -1064,8 +1022,6 @@ class Trojan extends Piece {
 
 class Cannon extends Piece {
   static iconID = 86;
-
-
   static name = "Cannon";
   static description = "A slow ranged program that can damage multiple targets in a straight line";
   static unicode = "U+1F3B1";//TODO change this
@@ -1090,8 +1046,6 @@ class Cannon extends Piece {
 
 class Nerf extends Piece {
   static iconID = 100;
-
-
   static name = "Nerf Gun";
   static description = "a ranged program that can lower all the stats of other programs by -1";
   static unicode = "U+1F52B";
@@ -1115,8 +1069,6 @@ class Nerf extends Piece {
 
 class Tank extends Piece {
   static iconID = 144;
-
-
   static name = "Tank";
   static description = "A mobile ranged program with high defence that can damage multiple targets in a straight line";
   static unicode = "U+1F94C";
@@ -1141,8 +1093,6 @@ class Tank extends Piece {
 
 class Dynamite extends Piece {
   static iconID = 50;
-
-
   static name = "Dynamite";
   static description = "Can be sacrificed to inflict high damage to a group of enemies";
   static unicode = "U+1F9E8";
@@ -1168,8 +1118,6 @@ class Dynamite extends Piece {
 
 class Bomb extends Piece {
   static iconID = 122;
-
-
   static name = "Bomb";
   static description = "Can be sacrificed to inflict high damage over a wide area";
   static unicode = "U+1F4A3";
@@ -1195,8 +1143,6 @@ class Bomb extends Piece {
 
 class Dataworm extends Piece {
   static iconID = 126;
-
-  static iconID = 126;//test
   static name = "Dataworm";
   static description = "A large program that can tunnel through adjacent programs, removing a piece of memory regardless of defence (head excluded), increasing it's own size, decreasing the target's by 1, and applying disease";
   static unicode = "U+1FAB1";//"U+1F41B";
@@ -1243,8 +1189,6 @@ class Dataworm extends Piece {
 
 class Snake extends Piece {
   static iconID = 35;
-
-  static iconID = 35;//test
   static name = "Snake";
   static description = "A program that can move into others' tiles (head excluded), removing a piece of memory regardless of defence and adding to its own max size and moves";
   static unicode = "U+1F40D";
@@ -1284,8 +1228,6 @@ class Snake extends Piece {
 
 class Copycat extends Piece {
   static iconID = 124;
-
-
   static name = "Copycat";
   static description = "Can take on the stats of any program in range";
   static unicode = "U+1F63C";//"U+1F431";
@@ -1314,8 +1256,6 @@ class Copycat extends Piece {
 
 class Banana extends Piece {
   static iconID = 1;
-
-
   static name = "Banana Peel";
   static description = "A program hidden to the enemy that immobilises programs moving over it for 1 turn, and strips them of any actions, removing itself in the process";
   static unicode = "U+1F34C";
@@ -1336,8 +1276,6 @@ class Banana extends Piece {
 
 class Trap extends Piece {
   static iconID = 78;
-
-
   static name = "Trap";
   static description = "A program hidden to the enemy that freezes programs moving over it and applies poison to them, removing itself";
   static unicode = "U+1FAA4";
@@ -1369,8 +1307,6 @@ class Trap extends Piece {
 
 class Lovebomb extends Piece {
   static iconID = 135;
-
-
   static name = "Love Bomb";
   static description = "A program hidden to the enemy that applies charmed to programs moving over it, removing itself";
   static unicode = "U+1F498";
@@ -1399,8 +1335,6 @@ class Lovebomb extends Piece {
 
 class Tar extends Piece {
   static iconID = 36;
-
-
   static name = "Tar";
   static description = "A program hidden to the enemy that applies slowed to programs moving over it, removing itself";
   static unicode = "U+2668";
@@ -1429,8 +1363,6 @@ class Tar extends Piece {
 
 class Mine extends Piece {
   static iconID = 99;
-
-
   static name = "Mine";
   static description = "A program hidden to the enemy that damages programs moving over it, removing itself";
   static unicode = "U+1F4A5";// MAP SYMBOL FOR LIGHTHOUSE, U+26EF
@@ -1457,8 +1389,6 @@ class Mine extends Piece {
 
 class Oil extends Piece {
   static iconID = 101;
-
-
   static name = "Oil";
   static description = "A program hidden to the enemy that confuses programs moving over it, removing itself";
   static unicode = "U+1F6E2";
@@ -1487,8 +1417,6 @@ class Oil extends Piece {
 
 class Web extends Piece {
   static iconID = 40;
-
-
   static name = "Web";
   static description = "A program that loads hidden and freezes enemies moving over it, removing itself";
   static unicode = "U+1F578";
@@ -1518,8 +1446,6 @@ class Web extends Piece {
 
 class Spider extends Piece {
   static iconID = 74;
-
-
   static name = "Spider";
   static description = "A fast program with that can spawn hidden webs in unnoccupied spaces that freeze other programs in them";
   static unicode = "U+1F577";
@@ -1541,8 +1467,6 @@ class Spider extends Piece {
 //	U+1F9A0 microbe
 class Germ extends Piece {
   static iconID = 38;
-
-  static iconID = 38;//up to here //TODO
   static name = "Virus";//"Virus"
   static description = "A program that infects other programs, draining their max size over time";
   static unicode = "U+1F9A0";
@@ -1573,8 +1497,6 @@ class Germ extends Piece {
 //	U+1F5DC U+FE0F vice hold others in place
 class Vice extends Piece {
   static iconID = 81;
-
-
   static name = "Vice";
   static description = "A program that can freeze others, reducing their moves to 0";
   static unicode = "U+1F5DC";
@@ -1598,8 +1520,6 @@ class Vice extends Piece {
 //	U+1F441 U+FE0F U+200D U+1F5E8 U+FE0F eye
 class Watchman extends Piece {
   static iconID = 39;
-
-
   static name = "Watchman";
   static description = "A program that exposes other programs and reduces their defence by 1. Or damages already exposed programs with no defence";
   static unicode = "U+1F441";
@@ -1632,8 +1552,6 @@ class Watchman extends Piece {
 
 class Magnet extends Piece {
   static iconID = 60;
-
-
   static name = "Magnet";
   static description = "A program that moves other programs toward itself";
   static unicode = "U+1F9F2";
@@ -1670,8 +1588,6 @@ class Magnet extends Piece {
 //	U+1F422 turtle
 class Turtle extends Piece {
   static iconID = 73;
-
-
   static name = "Snapping Turtle";
   static description = "A slow program with high defence";
   static unicode = "U+1F422";
@@ -1686,8 +1602,6 @@ class Turtle extends Piece {
 //	U+1F997 hopper
 class Hopper extends Piece {
   static iconID = 57;
-
-
   static name = "Hopper";
   static description = "A program that can jump to spaces in range";
   static unicode = "U+1F997";
@@ -1749,8 +1663,6 @@ class Hopper extends Piece {
 //	U+1F9FD sponge
 class Sponge extends Piece {
   static iconID = 158;
-
-
   static name = "Sponge";
   static description = "A program that can absorb stats of nearby programs";
   static unicode = "U+1F9FD";
@@ -1782,8 +1694,6 @@ class Sponge extends Piece {
 
 class Puffer extends Piece {
   static iconID = 106;
-
-
   static name = "Puffer";
   static description = "A program that damages programs that attack it, poisoning them";
   static unicode = "U+1F421";
@@ -1805,8 +1715,6 @@ class Puffer extends Piece {
 
 class Nuke extends Piece {
   static iconID = 155;
-
-
   static name = "Nuke";
   static description = "A slow and fragile program that destroys itself and damages all in range";
   static unicode = "U+2622";
@@ -1830,8 +1738,6 @@ class Nuke extends Piece {
 
 class Highwayman extends Piece {
   static iconID = 55;
-
-  static iconID = 55;//not working
   static name = "Highwayman";
   static description = "A program that can generate money once from an enemy piece based on it's rarity, or steal money from the player (starting pieces only, will not work on summons)";
   static unicode = "U+1F9B9";
@@ -1866,8 +1772,6 @@ class Highwayman extends Piece {
 
 class Tengu extends Piece {
   static iconID = 76;
-
-  static iconID = 76;//not working
   static name = "Tengu";
   static description = "A program that can apply slowed to an enemy and steal money once based on it's rarity, or steal money from the player (starting pieces only, will not work on summons)";
   static unicode = "U+1F47A";
@@ -1904,8 +1808,6 @@ class Tengu extends Piece {
 
 class Elephant extends Piece {
   static iconID = 51;
-
-
   static name = "Elephant";
   static description = "A large program with strong stats, that can trample a line of targets, reducing their max size by 1";
   static unicode = "U+1F418";
@@ -1946,8 +1848,6 @@ class Elephant extends Piece {
 
 class Mammoth extends Piece {
   static iconID = 98;
-
-
   static name = "Mammoth";
   static description = "A larger, tougher Elephant. Can trample a line of targets, reducing their max size by 2";
   static unicode = "U+1F9A3"
@@ -1988,8 +1888,6 @@ class Mammoth extends Piece {
 
 class Snowman extends Piece {
   static iconID = 143;
-
-
   static name = "Snowman";
   static description = "A program that can snowball, increasing it's max size, moves, and attack";
   static unicode = "U+26C4";
@@ -2027,8 +1925,6 @@ class Soldier extends Piece {
 
 class Fencer extends Piece {
   static iconID = 52;
-
-
   static name = "Fencer";
   static description = "A close range program that can retaliate incoming attacks";
   static unicode = "U+1F93A";
@@ -2049,8 +1945,6 @@ class Fencer extends Piece {
 
 export class Pawn extends Piece {
   static iconID = 68;
-
-
   static name = "Pawn";
   static description = "A slow program that can be promoted into another piece in range";
   static unicode = "U+265F";//♟️
@@ -2107,8 +2001,6 @@ export class Pawn extends Piece {
 
 class Larva extends Piece {
   static iconID = 29;
-
-
   static name = "Larva";
   static description = "A program that can consume other's body tiles and turn into a wasp on reaching it's max size";
   static unicode = "U+1F41B";
@@ -2150,8 +2042,6 @@ class Larva extends Piece {
 
 class Wasp extends Piece {
   static iconID = 67;
-
-
   static name = "Parasitic Wasp";
   static description = "A program that can replace an enemy body piece with a larva";
   static unicode = "U+131A4";
@@ -2207,8 +2097,6 @@ class Rat extends Piece {
 
 class Flute extends Piece {
   static iconID = 32;
-
-  static iconID = 32;//not working
   static name = "Piper";
   static description = "A program that can summon rats";
   static unicode = "U+1FA88";
@@ -2234,8 +2122,6 @@ class Flute extends Piece {
 //RABBIT, U+1F407 high movement 1 atk 1 maxsize, special make more rabbits
 class Rabbit extends Piece {
   static iconID = 107;
-
-  static iconID = 107;//not working
   static name = "Rabbit";
   static description = "A fast program that can create more rabbits when at it's max size";
   static unicode = "U+1F407";
@@ -2283,8 +2169,6 @@ class Rabbit extends Piece {
 
 class LabRat extends Piece {
   static iconID = 58;
-
-
   static name = "Lab Rat";
   static description = "A small and fast program that can spread disease, reducing max size"
   static unicode = "U+1F401";
@@ -2311,8 +2195,6 @@ class LabRat extends Piece {
 
 class Bat extends Piece {
   static iconID = 116;
-
-
   static name = "Vampire Bat";
   static description = "A program immune to disease and being blinded. Can remove body tiles from other programs spread disease to them, gaining a move and increasing it's max size";//remove tile, +1 temp defence? spread statuess?
   static unicode = "U+1F987";
@@ -2346,8 +2228,6 @@ class Bat extends Piece {
 
 class Dragon extends Piece {
   static iconID = 127;
-
-  static iconID = 127;//line?
   static name = "Dragon";
   static description = "A large program with high stats that can apply burning to all programs in range, or damage already burning targets";//multpie targets?
   static unicode = "U+1F409";
@@ -2440,8 +2320,6 @@ class Squid extends Piece {
 
 class Snail extends Piece {
   static iconID = 9;
-
-
   static name = "Snail";
   static description = "A slow program that can retract itself to double it's defence temporarily until the next turn";
   static unicode = "U+1F40C";
@@ -2464,8 +2342,6 @@ class Snail extends Piece {
 
 class Shark extends Piece {
   static iconID = 109;
-
-
   static name = "Shark";
   static description = "A fast program with high attack";//exposes pieces that take damage?
   static unicode = "U+1F988";
@@ -2478,8 +2354,6 @@ class Shark extends Piece {
 
 class Greatshield extends Piece {
   static iconID = 149;
-
-  static iconID = 149;//testt
   static name = "Greatshield";
   static description = "A slow but highly defensive program, can share its defence temporarily with all friendlies in range";
   static unicode = "U+26C9";
@@ -2504,8 +2378,6 @@ class Greatshield extends Piece {
 
 class Wizard extends Piece {
   static iconID = 117;
-
-
   static name = "Wizard";
   static description = "A program that can summon random rograms equal to or -1 relative to the player's security level.";
   static unicode = "U+1F9D9";
@@ -2538,8 +2410,6 @@ class Wizard extends Piece {
 
 class Ninja extends Piece {
   static iconID = 63;
-
-
   static name = "Ninja";
   static description = "A small program with high attack that can hide itself from enemies until attacking";
   static unicode = "U+1F977";
@@ -2560,8 +2430,6 @@ class Ninja extends Piece {
 
 class Fairy extends Piece {
   static iconID = 128;
-
-  static iconID = 128;//TODO test unfinished
   static name = "Fairy";//ANGEL?? fairy consumable item for used blueprint???
   static description = "Immune to all statuses. Can bless a friendly program to remove harmful statuses, give it +1 max size, and give bonus temporary defence equal to the fairy's attack";
   static unicode = "U+1F9DA";
@@ -2599,8 +2467,6 @@ class Fairy extends Piece {
 
 class Doctor extends Piece {
   static iconID = 24;
-
-
   static name = "Doctor";
   static description = "Can remove harmful statuses (except exposed) from friendlies and increase their max size by 1";
   static unicode = "U+1FA7A";
@@ -2629,8 +2495,6 @@ class Doctor extends Piece {
 
 class Medic extends Piece {
   static iconID = 61;
-
-
   static name = "Field Medic";
   static description = "Can remove harmful statuses (except exposed) from friendlies.";
   static unicode = "U+26D1";
@@ -2659,8 +2523,6 @@ class Medic extends Piece {
 
 class Paragon extends Piece {
   static iconID = 138;
-
-
   static name = "Paragon";
   static description = "A strong defensive piece that can remove any harmful statuses from a group of friendlies and give them a temporary +1 defence"//, and give them a temporary defence equal to its own.";//a group of friendlies"
   static unicode = "U+26E8";
@@ -2688,8 +2550,6 @@ class Paragon extends Piece {
 
 class Cupid extends Piece {
   static iconID = 125;
-
-
   static name = "Cupid";
   static description = "Can reduce it's own attack to charm an enemy, putting it under your control for the round";
   static unicode = "U+1F47C";
@@ -2716,8 +2576,6 @@ class Cupid extends Piece {
 
 class Oni extends Piece {
   static iconID = 156;
-
-
   static name = "Oni";
   static description = "A strong but slow program that can inflict the slowed status on a group of enemies, or damage already slowed ones";
   static unicode = "U+1F479";
@@ -2746,8 +2604,6 @@ class Oni extends Piece {
 
 class Ant extends Piece {
   static iconID = 0;
-
-
   static name = "Ant";
   static description = "A very fast but small program";
   static unicode = "U+1F41C"; //high movement - lvl 2 bug
@@ -2760,8 +2616,6 @@ class Ant extends Piece {
 
 class Bug extends Piece {
   static iconID = 44;
-
-
   static name = "Bug";
   static description = "A fast small program that can apply slowed others";
   static unicode = "U+1F47E";
@@ -2783,8 +2637,6 @@ class Bug extends Piece {
 
 class Cockroach extends Piece {
   static iconID = 88;
-
-
   static name = "Cockroach";
   static description = "A faster, tougher bug, immune to disease";
   static unicode = "U+1FAB3";
@@ -2798,8 +2650,6 @@ class Cockroach extends Piece {
 
 class Mosquito extends Piece {
   static iconID = 62;
-
-
   static name = "Mosquito";
   static description = "Can steal enemy body tiles and spread disease to them";//spread statuses?
   static unicode = "U+1F99F";
@@ -2831,8 +2681,6 @@ class Mosquito extends Piece {
 
 class Scorpion extends Piece {
   static iconID = 72;
-
-
   static name = "Scorpion";
   static description = "Can sting enemies inflicting poison, lowering their defence by 1 each turn";
   static unicode = "U+1F982";
@@ -2858,8 +2706,6 @@ class Scorpion extends Piece {
 
 class Firebrand extends Piece {
   static iconID = 129;
-
-
   static name = "Firebrand";
   static description = "A high level program which can apply burning and damage at the same time";
   static unicode = "U+1F4DB";
@@ -2885,8 +2731,6 @@ class Firebrand extends Piece {
 
 class Golem extends Piece {
   static iconID = 94;
-
-
   static name = "Golem";
   static description = "A large but slow program with high defence";
   static unicode = "U+1F5FF";
@@ -2899,8 +2743,6 @@ class Golem extends Piece {
 
 class Gman extends Piece {
   static iconID = 131;
-
-
   static name = "G-man";
   static description = "A boss level program that can freeze enemies and temporarily apply disarmed, reducing their actions to 0";
   static unicode = "U+1F574";
@@ -2925,8 +2767,6 @@ class Gman extends Piece {
 
 class Guard extends Piece {
   static iconID = 26;
-
-
   static name = "Guard";
   static description = "A basic all round program";
   static unicode = "U+1F482";
@@ -2939,8 +2779,6 @@ class Guard extends Piece {
 
 class Officer extends Piece {
   static iconID = 65;
-
-
   static name = "Officer";
   static description = "A mid level all round program";
   static unicode = "U+1F46E";
@@ -2953,8 +2791,6 @@ class Officer extends Piece {
 
 class Troll extends Piece {
   static iconID = 80;
-
-
   static name = "Troll";
   static description = "A large and strong program";
   static unicode = "U+1F9CC";
@@ -2967,8 +2803,6 @@ class Troll extends Piece {
 
 class Potato extends Piece {
   static iconID = 5;
-
-
   static name = "Potato";
   static description = "A low-level all round program";
   static unicode = "U+1F954";
@@ -2981,8 +2815,6 @@ class Potato extends Piece {
 
 class Ghost extends Piece {
   static iconID = 54;
-
-  static iconID = 54;//unfinished negative
   static name = "Ghost";
   static description = "A program that loads hidden, and can hide itself";
   static unicode = "U+1F47B";
@@ -3007,8 +2839,6 @@ class Ghost extends Piece {
 
 class Beetle extends Piece {
   static iconID = 14;
-
-
   static name = "Beetle";
   static description = "A mid-level all round program";
   static unicode = "U+1FAB2";
@@ -3021,8 +2851,6 @@ class Beetle extends Piece {
 
 class LadyBeetle extends Piece {
   static iconID = 59;
-
-
   static name = "Ladybird";
   static description = "A tougher beetle";
   static unicode = "U+1F41E";
@@ -3036,8 +2864,6 @@ class LadyBeetle extends Piece {
 
 class Yarn extends Piece {
   static iconID = 41;
-
-
   static name = "Yarn";
   static description = "A very fast and large program";
   static unicode = "U+1F9F6";
@@ -3056,8 +2882,6 @@ class Yarn extends Piece {
 
 class Bee extends Piece {
   static iconID = 2;
-
-
   static name = "Bee";
   static description = "A small program which can sting, sacrificing itself for a high damage attack";//can sacrifice itself with sting for higher damage???
   static unicode = "U+1F41D";
@@ -3103,8 +2927,6 @@ class Honeypot extends Piece {
 
 class Decoy extends Piece {
   static iconID = 20;
-
-
   static name = "Decoy";
   static description = "A defensive program that can swap head positions with other programs";
   static unicode = "U+1FAB5";
@@ -3150,8 +2972,6 @@ class Extinguisher extends Piece {//item for all activeitems? admin instead of f
 */
 class Donkey extends Piece {
   static iconID = 48;
-
-
   static name = "Donkey";
   static description = "A slow program with a powerful kick";
   static unicode = "U+1FACF";
@@ -3164,8 +2984,6 @@ class Donkey extends Piece {
 
 class Jellyfish extends Piece {
   static iconID = 28;
-
-
   static name = "Jelly";
   static description = "A slow program that can shock, damaging and applying the slowed status";
   static unicode = "U+1FABC";
@@ -3190,8 +3008,6 @@ class Jellyfish extends Piece {
 
 class Screwdriver extends Piece {
   static iconID = 140;
-
-
   static name = "Screwdriver";
   static description = "A program that can tinker with another, giving +1 to a friendly's stat, or -1 to an enemy's";
   static unicode = "U+1FA9B";
@@ -3227,8 +3043,6 @@ class Screwdriver extends Piece {
 
 class Axe extends Piece {
   static iconID = 84;
-
-
   static name = "Axe";
   static description = "A short ranged program with a high attack that can chop off a non-head piece of memory and it's neighbours";//and adjacent tiles?
   static unicode = "U+1FA93";
@@ -3265,8 +3079,6 @@ class Axe extends Piece {
 
 class Boomerang extends Piece {
   static iconID = 43;
-
-
   static name = "Boomerang";
   static description = "A mobile program that can damage a target and reset it's own moves remaining";
   static unicode = "U+1FA83";
@@ -3301,8 +3113,6 @@ class Angel extends Piece {//not passive, same as fairy, remove?? unfinished
 // WATCH, U+231A
 class Stopwatch extends Piece {
   static iconID = 112;
-
-  static iconID = 112;//not passive
   static name = "Stopwatch";
   static description = "Can replenish another program's moves and give +1 action, or take away an enemy's actions by applying disarmed";
   static unicode = "U+231A";//U+23F1";
@@ -3328,8 +3138,6 @@ class Stopwatch extends Piece {
 
 class Sol extends Piece {
   static iconID = 157;
-
-  static iconID = 157;//not passive
   static name = "Sol";
   static description = "Extreme range and damage, can laser targets in a straight line";
   static unicode = "U+1F6F0";//🛰️
@@ -3355,8 +3163,6 @@ class Sol extends Piece {
 
 class Vampire extends Piece {
   static iconID = 148;
-
-
   static name = "Dracula";
   static description = "Removes tiles of other programs, stealing an action and move off them if possible, and increasing all it's stats (except range) by 1";
   static unicode = "U+1F9DB";
@@ -3394,8 +3200,6 @@ class Vampire extends Piece {
 
 class Centipede extends Piece {
   static iconID = 123;
-
-
   static name = "Centipede";
   static description = "A large piece with a high attack that can bite inflicitng poision and damage";
   static unicode = "U+131A8";
@@ -3419,8 +3223,6 @@ class Centipede extends Piece {
 
 class Helicopter extends Piece {
   static iconID = 151;
-
-  static iconID = 151;//unfinished, handle in app
   static name = "Helicopter";
   static description = "A program that can move 2 empty spaces in one move";
   static unicode = "U+1F681";
@@ -3433,8 +3235,6 @@ class Helicopter extends Piece {
 
 class UFO extends Piece {
   static iconID = 146;
-
-
   static name = "UFO";
   static description = "A strong ranged program that can pull enemy's heads toward itself, confusing and damaging them.";// that can move enemies away from itself";//without increasing size?? And traverse gaps?
   static unicode = "U+1F6F8";
@@ -3482,8 +3282,6 @@ class UFO extends Piece {
 
 class TP extends Piece {
   static iconID = 10;
-
-
   static name = "TP";
   static description = "A large program with high movement";
   static unicode = "U+1F9FB";
@@ -3496,8 +3294,6 @@ class TP extends Piece {
 
 class Saw extends Piece {
   static iconID = 34;
-
-
   static name = "Saw";
   static description = "A program that can remove a body tile from an enemy, regardless of its defence";
   static unicode = "U+1FA9A";
@@ -3545,8 +3341,6 @@ class Croc extends Piece {
 
 class Lighthouse extends Piece {
   static iconID = 97;
-
-
   static name = "Lighthouse";
   static description = "A program that can expose and blind enemies in a wide area, as well as temporarily increase firendlies range by 1";
   static unicode = "U+1F6A8";
@@ -3580,8 +3374,6 @@ class Lighthouse extends Piece {
 
 class Torch extends Piece {
   static iconID = 77;
-
-  static iconID = 77;//remove from enemies for now
   static name = "Torch";
   static description = "A long range program that can expose a group of targets, and temporarily increase friendlies range by 1";
   static unicode = "U+1F526";
@@ -3625,8 +3417,6 @@ class Torch extends Piece {
 
 class Camera extends Piece {
   static iconID = 46;
-
-
   static name = "Camera";
   static description = "A program that can flash and blind others";//store ids of targets for damage?
   static unicode = "U+1F4F8";
@@ -3648,8 +3438,6 @@ class Camera extends Piece {
 
 class Drum extends Piece {
   static iconID = 49;
-
-
   static name = "Drum";//Marching Drum
   static description = "A program that gives +1 moves remaining to all firendlies in range";
   static unicode = "U+1F941";
@@ -3673,8 +3461,6 @@ class Drum extends Piece {
 
 class Shrike extends Piece {
   static iconID = 142;
-
-
   static name = "Shrike";
   static description = "A fast high level program that can freeze and damage enemies";
   static unicode = "U+1F426";
@@ -3697,8 +3483,6 @@ class Shrike extends Piece {
 
 class Eagle extends Piece {
   static iconID = 92;
-
-
   static name = "Eagle";
   static description = "A fast program with a high attack";
   static unicode = "U+1F985";
@@ -3711,8 +3495,6 @@ class Eagle extends Piece {
 
 class Recurve extends Piece {
   static iconID = 121;
-
-
   static name = "Archer";
   static description = "A longer ranged program, can launch a volley of attacks on all non hidden enemies";
   static unicode = "U+1664";
@@ -3736,8 +3518,6 @@ class Recurve extends Piece {
 
 class Daemon extends Piece {
   static iconID = 90;
-
-
   static name = "Daemon";
   static description = "A program immune to being slowed that can apply slowed to other programs";
   static unicode = "U+1F47F";//smiling: U+1F608
@@ -3759,8 +3539,6 @@ class Daemon extends Piece {
 
 class Archdaemon extends Piece {
   static iconID = 120;
-
-
   static name = "Arch Daemon";
   static description = "A stronger Daemon immune to slowed that can apply slowed to other programs";
   static unicode = "U+1F608"
@@ -4059,8 +3837,6 @@ class Bison extends Piece {
 
 class Rhino extends Piece {
   static iconID = 139;
-
-
   static name = "Rhino";
   static description = "High defence. Charges instead of attacking, damaging targets in a staight line and moving forward until stopped";
   static unicode = "U+1F98F";
@@ -4456,8 +4232,6 @@ class Giraffe extends Piece {
 
 class Kite extends Piece {
   static iconID = 95;
-
-
   static name = "Kite";
   static description = "A very fast and large program, can move it's head to any space along it's body";
   static unicode = "U+1FA81";
@@ -4484,8 +4258,6 @@ class Kite extends Piece {
 //SCARAB EGYPTIAN HIEROGLYPH I007, U+1318F - frog
 class Scarab extends Piece {
   static iconID = 108;
-
-
   static name = "Scarab";
   static description = "A program that can roll into empty spaces to increase it's max size.";
   static unicode = "U+131A3";
@@ -4506,8 +4278,6 @@ class Scarab extends Piece {
 
 class Orangutan extends Piece {
   static iconID = 137;
-
-
   static name = "Orangutan";
   static description = "A strong program that can damage and then reduce another program's defence remaining to 0";
   static unicode = "U+1F9A7";
@@ -4527,8 +4297,6 @@ class Orangutan extends Piece {
 
 class Gorilla extends Piece {
   static iconID = 152;
-
-
   static name = "Kong";
   static description = "A fierce program that can damage and then reduce another program's defence remaining to 0";
   static unicode = "U+1F98D";
@@ -4550,8 +4318,6 @@ class Gorilla extends Piece {
 //Octopus U+1F419
 class Octopus extends Piece {
   static iconID = 64;
-
-
   static name = "Octopus";
   static description = "A program that can move it's head position to anywhere along it's body";
   static unicode = "U+1F419";
@@ -4581,8 +4347,6 @@ class Octopus extends Piece {
 //needs enemyai handling
 export class Frond extends Piece {
   static iconID = 23;
-
-
   static name = "Frond";
   static description = "A program that will hide another that passes over it, removing itself.";
   static unicode = "U+1FAB4";
@@ -4605,8 +4369,6 @@ export class Frond extends Piece {
 
 class Coat extends Piece {
   static iconID = 145;
-
-
   static name = "Turncoat";
   static description = "A hidden trap program that will flip the team of whatever passes over it, removing itself.";
   static unicode = "U+1F9E5";
@@ -4634,8 +4396,6 @@ class Coat extends Piece {
 //UNICORN FACE, U+1F984
 class Unicorn extends Piece {
   static iconID = 161;
-
-
   static name = "Unicorn";
   static description = "High attack. Loads hidden, and can charge, hiding itself if it deals no damage.";
   static unicode = "U+1F984";
@@ -4689,8 +4449,6 @@ class Unicorn extends Piece {
 
 class Teargas extends Piece {
   static iconID = 113;
-
-
   static name = "Tear Gas";
   static description = "A hidden trap program that blinds whatever passes over it, removing itself.";
   static unicode = "U+1F4A8";
@@ -4712,8 +4470,6 @@ class Teargas extends Piece {
 }
 class Poop extends Piece {
   static iconID = 105;
-
-
   static name = "Poop";
   static description = "A hidden trap program that spreads disease to whatever passes over it, removing itself.";
   static unicode = "U+1F4A9";
@@ -4735,8 +4491,6 @@ class Poop extends Piece {
 }
 class Firework extends Piece {
   static iconID = 130;
-
-
   static name = "Firework";
   static description = "A hidden trap program applies burning to whatever passes over it, removing itself.";
   static unicode = "U+1F386";
@@ -4759,8 +4513,6 @@ class Firework extends Piece {
 
 class Banner extends Piece {
   static iconID = 13;
-
-
   static name = "Banner";
   static description = "A program that cannot attack, but can boost the attack of all friendlies in range by it's own attack";//multpie targets?
   static unicode = "U+1F6A9";//BLACK PENNANT, U+1F3F2 //WAVING BLACK FLAG, U+1F3F4
@@ -4785,8 +4537,6 @@ class Banner extends Piece {
 }
 class Tradie extends Piece {
   static iconID = 115;
-
-
   static name = "Tradie";
   static description = "A program that can spawn walls";
   static unicode = "U+1F477";
@@ -4808,8 +4558,6 @@ class Tradie extends Piece {
 
 class Super extends Piece {
   static iconID = 159;
-
-
   static name = "Super";
   static description = "High movement, attack, and defence. Can laser targets in a straight line";
   static unicode = "U+1F9B8";
@@ -4834,8 +4582,6 @@ class Super extends Piece {
 
 class Dolls extends Piece {
   static iconID = 154;
-
-  static iconID = 154;//finished? test, will have to be handled in app for sure, and a custom flag for hybrids
   static name = "Matryoshka";
   static description = "A program that can reduce it's defence to 1 place a copy of itself with -1 max size, -1 defence, and +1 moves"
   static unicode = " U+1FA86";
@@ -4875,8 +4621,6 @@ class Dolls extends Piece {
 
 class Parrot extends Piece {
   static iconID = 103;
-
-
   static name = "Parrot";
   static description = "Can take on the attack of any program in range";//redundant unless it gets another move
   static unicode = "U+1F99C";//"U+1F431";
@@ -4900,8 +4644,6 @@ class Parrot extends Piece {
 
 class Zombie extends Piece {
   static iconID = 147;
-
-  static iconID = 147;//finished? test, will have to be handled in app for sure, and a custom flag for hybrids
   static name = "Zombie";
   static description = "Turns other program's into friendly copies of itself if it destroys them"//does health damage??
   static unicode = "U+1F9DF";
@@ -4945,8 +4687,6 @@ class Zombie extends Piece {
 
 class Lich extends Piece {
   static iconID = 153;
-
-  static iconID = 153;//finished? test, will have to be handled in app for sure, and a custom flag for hybrids
   static name = "Lich";
   static description = "Summons Zombies"//does health damage??
   static unicode = "U+1F480";
@@ -4969,8 +4709,6 @@ class Lich extends Piece {
 
 class Harp extends Piece {
   static iconID = 136;
-
-
   static name = "Lyre";//Marching Drum
   static description = "A program that applies zen to all firendlies in range";
   static unicode = "U+1FA89";
@@ -4995,8 +4733,6 @@ class Harp extends Piece {
 //Pentagram - U+269D summons daemons
 class Pentagram extends Piece {
   static iconID = 104;
-
-  static iconID = 104;//finished? test, will have to be handled in app for sure, and a custom flag for hybrids
   static name = "Pentagram";
   static description = "Summons Daemons"//does health damage??
   static unicode = "U+26E4";

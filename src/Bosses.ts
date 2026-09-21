@@ -176,7 +176,6 @@ class Factory extends Admin {
 }
 
 class Wrath extends Admin {
-  static iconID = 443;
   static iconID = 443;//⛈️//🌩️
     static name = "Wrath";
     static description = "A random player piece loses their remaining defence and a tile each turn after the first";
@@ -415,8 +414,7 @@ class LowBattery extends Admin {
 }
 
 class Customs extends Admin {
-  static iconID = 402;
-  static iconID = 402;//remove
+    static iconID = 402;
     static name = "Customs";
     static description = "Every player program is exposed and loses -1 moves";
     static unicode = "U+1F6C3";
@@ -478,8 +476,7 @@ class Izakaya extends Admin {
 }
 
 class Snowflake extends Admin {
-  static iconID = 429;
-  static iconID = 429;//LEAFLESS TREE, U+1FABE
+    static iconID = 429;
     static name = "Cold Snap";
     static description = "Every player program is frozen";
     static unicode = "U+2744";
@@ -499,8 +496,7 @@ class Snowflake extends Admin {
 }
 
 class Sun extends Admin {
-  static iconID = 436;
-
+    static iconID = 436;
     static name = "Don't look at the sun";
     static description = "Every player program is blinded";
     static unicode = "U+1F31E";
@@ -684,8 +680,7 @@ class REDACTED extends Admin {
 }
 
 class Fog extends Admin {
-  static iconID = 437;
-  static iconID = 437;//😶‍🌫️🌫️
+    static iconID = 437;//😶‍🌫️🌫️
     static name = "Fog of War";
     static description = "All tiles outside your programs range are obscured";//handle in app
     static unicode = "U+1F301";//fog //"U+1FAEF";//fight //"U+2601"; //cloud

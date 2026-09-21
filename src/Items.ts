@@ -634,8 +634,6 @@ export class Box extends Item<Player> {
 
 export class Pinata extends Item<Player> {
   static iconID = 192;
-
-  static iconID = 187;//untested
     static name = "Pinata";
     static description = "Grants a random admin program (must have room)";
     static unicode = "U+1FA85";
@@ -716,7 +714,6 @@ class Lips extends Item<Piece> {
 
 export class Wand extends Item<Piece[]> {
   static iconID = 202;
-  static iconID = 202;//TODO test
     static name = "Magic Wand";
     static description = "Undo a turn";
     static unicode = "U+1FA84";
@@ -732,7 +729,6 @@ export class Wand extends Item<Piece[]> {
 
 export class Hourglass extends Item<Piece[]> {
   static iconID = 212;
-  static iconID = 212;//TODO test
     static name = "Hourglass";
     static description = "Retry a node without losing a life";
     static unicode = "U+231B";
@@ -749,7 +745,6 @@ export class Hourglass extends Item<Piece[]> {
 
 class Keygen extends Item<Piece[]> {
   static iconID = 188;
-  static iconID = 188;//TODO test
     static name = "Keygen";
     static description = "Lower the defence of all enemy programs in a node by 1";
     static unicode = "U+1F511";
@@ -982,9 +977,7 @@ export class Dupe extends Item<Player> {
 
 //JAR, U+1FAD9 - piece? capture an enemy of size 1, turn into blueprint
 export class Jar extends Item {
-  static iconID = 187;
-
-  static iconID = 184;//Pokeball?
+    static iconID = 187;
     static name = "Jar";
     static description = "Use on an enemy with a size of 1 and defence of 0 to add it to your inventory";
     static unicode = "U+1FAD9";
@@ -1020,7 +1013,6 @@ export class Jar extends Item {
 
 class Chili extends Item<Piece[]> {
   static iconID = 197;
-  static iconID = 197;//HOT PEPPER, U+1F336 - moves +1 range +1
     static name = "Zing";
     static description = "Increases all your placed programs' moves and range by 1 for one round";
     static unicode = "U+1F336";
@@ -1067,7 +1059,6 @@ class Feast extends Item<Piece[]> {
 
 class Lightning extends Item<Piece[]> {
   static iconID = 203;
-  static iconID = 203;//lighting remove 1 tile from all enemy pieces U+26A1
     static name = "Lightning";
     static description = "Removes all defences and 1 tile from all enemies";
     static unicode = "U+26A1";
@@ -1090,7 +1081,6 @@ class Lightning extends Item<Piece[]> {
 //toothbrush - single use broom?
 class Toothbrush extends Item<Piece[]> {
   static iconID = 182;
-  static iconID = 182;//lighting remove 1 tile from all enemy pieces U+26A1
     static name = "Toothbrush";
     static description = "Removes all enemies with a size of 1 and 0 defence remaining";
     static unicode = "U+1FAA5";
@@ -1250,9 +1240,7 @@ class Blackheart extends Item<PieceBlueprint> {
     }
 }
 class Plunger extends Item<PieceBlueprint> {
-  static iconID = 179;
-
-  static iconID = 178;//item remove??
+    static iconID = 179;
     static name = "Plunger";
     static description = "Make a held program in your inventory permanently immune to being slowed";
     static unicode = "U+1FAA0";

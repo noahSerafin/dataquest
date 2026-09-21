@@ -40,6 +40,7 @@ export interface HybridBlueprint extends PieceBlueprint {
 }
 
 export type OS = {
+  iconID: number,
   name: string
   unicode: string
   prefix: string
@@ -150,6 +151,7 @@ export const statusUnicodes: Record<keyof typeof props.piece.statuses, string> =
 }*/
 
 export type Company = {
+  iconID: number,
   name: string,
   abbr: string,
   unicode: string,

@@ -83,7 +83,7 @@ const allIcons = computed(() => {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: #000;
+  background: transparent;
   z-index: 999999;
   display: flex;
   overflow: auto;

@@ -2045,7 +2045,7 @@ class Wasp extends Piece {
   static name = "Parasitic Wasp";
   static description = "A program that can replace an enemy body piece with a larva";
   static unicode = "U+131A4";
-  static color = "#802f00ff";
+  static color = "#b4b359ff";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
     super(Wasp.name, Wasp.description, Wasp.unicode, 3, 2, 1, 3, 1, Wasp.color, headPosition, [headPosition], team, Wasp.rarity, removeCallback, id)
@@ -3203,7 +3203,7 @@ class Centipede extends Piece {
   static name = "Centipede";
   static description = "A large piece with a high attack that can bite inflicitng poision and damage";
   static unicode = "U+131A8";
-  static color = "#3b2108ff";
+  static color = "rgb(177, 115, 57)";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
     super(Centipede.name, Centipede.description, Centipede.unicode, 7, 2, 1, 4, 2, Centipede.color, headPosition, [headPosition], team, Centipede.rarity, removeCallback, id)

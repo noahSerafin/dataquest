@@ -644,7 +644,7 @@ give programs that create their own other programs
 const Debugger: OS = {
     iconID: 473,
     name: 'Debugger',
-    unicode: 'U+1F41B',
+    unicode: 'U+1F5DD',
     prefix: 'D',
     money: 50,
     memory: 10,

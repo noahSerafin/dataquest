@@ -63,11 +63,12 @@ onMounted(() => {
         float timeStep = floor(iTime * 1.0 + block.y * 0.5 - block.x * 0.3); // animate changes
         vec2 rand = rand2(block + timeStep);
         
-        float col = floor(rand.x * 37.0);
-        float row = floor(rand.y * 12.0);
+        float iconIndex = floor(rand.x * 479.0);
+        float col = mod(iconIndex, 37.0);
+        float row = 12.0 - floor(iconIndex / 37.0);
         
         // Since we unpack with flip_y, 0,0 is at bottom left of the texture.
-        vec2 spriteUV = (vec2(col, row) + uv) / vec2(37.0, 12.0);
+        vec2 spriteUV = (vec2(col, row) + uv) / vec2(37.0, 13.0);
         
         return texture2D(iChannel0, spriteUV);
     }
@@ -136,7 +137,7 @@ onMounted(() => {
   };
 
   // Load texture using Vite's BASE_URL to handle GitHub Pages subpaths correctly
-  textureInfo = loadTexture(gl, import.meta.env.BASE_URL + 'iconsCropped.jpg');
+  textureInfo = loadTexture(gl, import.meta.env.BASE_URL + 'large-spritesheet.png');
 
   // Create a buffer for the square's positions.
   const positionBuffer = gl.createBuffer();

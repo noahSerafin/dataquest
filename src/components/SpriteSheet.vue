@@ -106,6 +106,42 @@ const allIcons = computed(() => {
     });
   });
   
+  const fastControls = ['U+1F44B', 'U+1F9B6'];
+  fastControls.forEach((unicode, index) => {
+    result.push({
+      id: 'fastControl-' + index,
+      primary: getUnicode(unicode),
+      extra: '',
+      hybrid: false
+    });
+  });
+
+  const statuses = [
+    'U+1F92E', // diseased 🤮
+    'U+1F630', // slowed 😰
+    'U+1F635', // blinded 😵
+    'U+1F975', // burning 🥵
+    'U+1F922', // poisoned 🤢
+    'U+1F976', // frozen 🥶
+    'U+1F60D', // charmed 😍
+    'U+1F915', // confused 🤕
+    'U+1FAE3', // exposed 🫣
+    'U+1F92B', // hidden 🤫
+    'U+1FAE5', // negative 🫥
+    'U+1F4A2', // enraged 💢
+    'U+1F60C', // zen 😌
+    'U+1F910', // disarmed 🤐
+    'U+1F624'  // juiced 😤
+  ];
+  statuses.forEach((unicode, index) => {
+    result.push({
+      id: 'status-' + index,
+      primary: getUnicode(unicode),
+      extra: '',
+      hybrid: false
+    });
+  });
+
   return result;
 });
 

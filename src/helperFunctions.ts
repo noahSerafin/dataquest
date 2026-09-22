@@ -23,8 +23,8 @@ export function getSpriteStyle(iconID: number | undefined) {
   const row = Math.floor(iconID / 37);
   return {
     backgroundImage: `url('${iconsUrl}')`,
-    backgroundSize: `3700% 1300%`,
-    backgroundPosition: `${col * (100 / 36)}% ${row * (100 / 12)}%`,
+    backgroundSize: `3700% 1400%`,
+    backgroundPosition: `${col * (100 / 36)}% ${row * (100 / 13)}%`,
     backgroundRepeat: 'no-repeat'
   };
 }

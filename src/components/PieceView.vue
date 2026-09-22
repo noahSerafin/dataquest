@@ -2,7 +2,7 @@
 import { ref, computed } from "vue";
 import type { Coordinate } from "../types";
 import { Piece } from "../Pieces";
-import { STATUS_ICONS } from "../statuses";
+import { STATUS_ICONS, STATUS_ICONIDS } from "../statuses";
 import { spritesheetState, iconsUrl, getSpriteStyle } from "../helperFunctions";
 
 //construction-------------
@@ -199,23 +199,24 @@ function pieceTipClass(){
         class="status-icon"
         title="key"          
       >
-        {{ STATUS_ICONS[key] ?? '?' }}
+        <div v-if="STATUS_ICONIDS[key]" :style="{...getSpriteStyle(STATUS_ICONIDS[key]), width: '12px', height: '12px'}"></div>
+        <template v-else>{{ STATUS_ICONS[key] ?? '?' }}</template>
       </span>
     </div>
     <div v-if="!piece.redacted && showStats && piece.name !== 'Spawn'" class="piece-stats-left">
       <div class="stat-actions" v-if="piece.actions > 0">
-        <span v-for="n in piece.actions" :key="n">👋</span>
+        <div v-for="n in piece.actions" :key="n" class="stat-icon" :style="getSpriteStyle(479)"></div>
       </div>
       <div class="stat-attack">
-        <span class="red-sword">⚔</span>
+        <div class="stat-icon" :style="getSpriteStyle(83)"></div>
         <span class="stat-value">{{ piece.getStat('attack') }}</span>
       </div>
       <div class="stat-moves">
-        <span>🦶</span>
+        <div class="stat-icon" :style="getSpriteStyle(480)"></div>
         <span class="stat-value">{{ piece.movesRemaining }}</span>
       </div>
       <div class="stat-defence" v-if="piece.defenceRemaining > 0">
-        <span>🛡️</span>
+        <div class="stat-icon" :style="getSpriteStyle(7)"></div>
         <span class="stat-value">{{ piece.defenceRemaining }}</span>
       </div>
     </div>
@@ -445,6 +446,12 @@ function pieceTipClass(){
   z-index: 10;
   pointer-events: none;
   line-height: 1;
+}
+
+.stat-icon {
+  width: 15px;
+  height: 15px;
+  display: inline-block;
 }
 
 .stat-actions {

@@ -6,14 +6,32 @@ export const STATUS_ICONS: Record<string, string> = {
   poisoned: "🤢",    // U+1F922
   frozen: "🥶",      // U+1F976
   charmed: "😍",     // U+1F60D
-  confused: "🤕",    // U+1F915 // SHAKING FACE, U+1FAE8 //DIZZY SYMBOL, U+1F4AB
+  confused: "🤕",    // U+1F915
   exposed: "🫣",
   hidden: "🤫",      // U+1F92B
   negative: "🫥",    // U+1FAE5
-  enraged: "💢",     // ANGER SYMBOL, U+1F4A2
-  zen: "😌", //U+1F60C
-  disarmed: "🤐", //U+1F910
-  juiced: "😤"
+  enraged: "💢",     // U+1F4A2
+  zen: "😌", // U+1F60C
+  disarmed: "🤐", // U+1F910
+  juiced: "😤" // U+1F624
+};
+
+export const STATUS_ICONIDS: Record<string, number> = {
+  diseased: 481,
+  slowed: 482,
+  blinded: 483,
+  burning: 484,
+  poisoned: 485,
+  frozen: 486,
+  charmed: 487,
+  confused: 488,
+  exposed: 489,
+  hidden: 490,
+  negative: 491,
+  enraged: 492,
+  zen: 493,
+  disarmed: 494,
+  juiced: 495
 };
 
 export const STATUS_INFO: Record<string, string> = {

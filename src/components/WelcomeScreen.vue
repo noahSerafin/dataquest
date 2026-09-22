@@ -63,12 +63,12 @@ onMounted(() => {
         float timeStep = floor(iTime * 1.0 + block.y * 0.5 - block.x * 0.3); // animate changes
         vec2 rand = rand2(block + timeStep);
         
-        float iconIndex = floor(rand.x * 479.0);
+        float iconIndex = floor(rand.x * 496.0);
         float col = mod(iconIndex, 37.0);
-        float row = 12.0 - floor(iconIndex / 37.0);
+        float row = 13.0 - floor(iconIndex / 37.0);
         
         // Since we unpack with flip_y, 0,0 is at bottom left of the texture.
-        vec2 spriteUV = (vec2(col, row) + uv) / vec2(37.0, 13.0);
+        vec2 spriteUV = (vec2(col, row) + uv) / vec2(37.0, 14.0);
         
         return texture2D(iChannel0, spriteUV);
     }

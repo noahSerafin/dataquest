@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Piece } from "../Pieces"
 import { ref, computed, onMounted } from "vue";
-import { STATUS_ICONS, STATUS_INFO } from "../statuses";
+import { STATUS_ICONS, STATUS_INFO, STATUS_ICONIDS } from "../statuses";
 import FormattedDescription from "./FormattedDescription.vue";
 import { spritesheetState, iconsUrl, getSpriteStyle } from "../helperFunctions";
 
@@ -169,7 +169,8 @@ const spriteStyle = computed(() => {
         title="key"  
         @click="toggleTooltip(key)"        
       >
-        {{ STATUS_ICONS[key] ?? '?' }}
+        <div v-if="STATUS_ICONIDS[key]" :style="{...getSpriteStyle(STATUS_ICONIDS[key]), width: '24px', height: '24px', display: 'inline-block'}" class="status-icon-sprite"></div>
+        <template v-else>{{ STATUS_ICONS[key] ?? '?' }}</template>
          <!-- Tooltip -->
         <div
           v-if="openTooltip === key"
@@ -194,7 +195,9 @@ const spriteStyle = computed(() => {
         class="status-icon"
         title="key"  
         @click="toggleTooltip(key)"        
-        >{{ STATUS_ICONS[key] ?? '?' }}
+        >
+          <div v-if="STATUS_ICONIDS[key]" :style="{...getSpriteStyle(STATUS_ICONIDS[key]), width: '24px', height: '24px', display: 'inline-block', verticalAlign: 'middle'}"></div>
+          <template v-else>{{ STATUS_ICONS[key] ?? '?' }}</template>
         </span>
       </p>
     </div>

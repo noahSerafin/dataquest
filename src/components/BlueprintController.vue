@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue"
 import type { PieceBlueprint } from "../types"
-import { STATUS_ICONS } from "../statuses";
+import { STATUS_ICONS, STATUS_ICONIDS } from "../statuses";
 import FormattedDescription from "./FormattedDescription.vue";
 import { spritesheetState, iconsUrl, getSpriteStyle } from "../helperFunctions";
 import { allPieces } from "../Pieces";
@@ -175,7 +175,9 @@ defineEmits(["buy", "steal", "sell", "highlightPlacements", "close"])
           class="status-icon"
           title="key"  
           @click="toggleTooltip(key)"        
-          >{{ STATUS_ICONS[key] ?? '?' }}
+          >
+            <div v-if="STATUS_ICONIDS[key]" :style="{...getSpriteStyle(STATUS_ICONIDS[key]), width: '24px', height: '24px', display: 'inline-block', verticalAlign: 'middle'}"></div>
+            <template v-else>{{ STATUS_ICONS[key] ?? '?' }}</template>
           </span>
         </p>
       </div>

@@ -4,7 +4,6 @@ import type { PieceBlueprint } from "../types"
 import { STATUS_ICONS, STATUS_ICONIDS } from "../statuses";
 import FormattedDescription from "./FormattedDescription.vue";
 import { spritesheetState, iconsUrl, getSpriteStyle } from "../helperFunctions";
-import { allPieces } from "../Pieces";
 
 const props = defineProps<{
   piece: PieceBlueprint;
@@ -103,28 +102,17 @@ function toggleTooltip(key: string) {
   openTooltip.value = key;
 }
 
-//remove for production (localStorage issue)
-const resolvedIconID = computed(() => {
-  if (props.piece.iconID !== undefined && props.piece.iconID >= 0) {
-    return props.piece.iconID;
-  }
-  const PieceClass = allPieces.find(p => p.name === props.piece.name);
-  return PieceClass ? (PieceClass as any).iconID : -1;
-});
-
-//const isWindows = navigator.userAgent.toLowerCase().includes('win');
-
 const useUnicode = computed(() => {
   //if (isWindows) return true; // keep commented for user testing
   //if (spritesheetState.value.error) return true;
-  //if (resolvedIconID.value < 0) return true;
+  //if (props.piece.iconID === undefined || props.piece.iconID < 0) return true;
   return false;
 });
 
 const spriteStyle = computed(() => {
   if (useUnicode.value) return {};
   return {
-    ...getSpriteStyle(resolvedIconID.value),
+    ...getSpriteStyle(props.piece.iconID),
     width: '36px',
     height: '36px'
   };

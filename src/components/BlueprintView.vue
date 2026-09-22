@@ -3,7 +3,6 @@ import { ref, computed, useTemplateRef } from "vue";
 import { useTilt } from "../composables/useTilt";
 import type { Coordinate, PieceBlueprint } from "../types";
 import { spritesheetState, iconsUrl, getSpriteStyle } from "../helperFunctions";
-import { allPieces } from "../Pieces";
 
 //construction-------------
 
@@ -40,29 +39,17 @@ const ExtraUnicodeSymbol = computed(() =>
     : ''
 )
 
-//remove for production (localStorage issue)
-const resolvedIconID = computed(() => {
-  if (props.blueprint.iconID !== undefined && props.blueprint.iconID >= 0) {
-    return props.blueprint.iconID;
-  }
-  const PieceClass = allPieces.find(p => p.name === props.blueprint.name);
-  return PieceClass ? (PieceClass as any).iconID : -1;
-});
-
-// Windows preference bit of code
-//const isWindows = navigator.userAgent.toLowerCase().includes('win');
-
 const useUnicode = computed(() => {
   //if (isWindows) return true;
   //if (spritesheetState.value.error) return true;
-  //if (resolvedIconID.value < 0) return true;
+  //if (props.blueprint.iconID === undefined || props.blueprint.iconID < 0) return true;
   return false;
 });
 
 const spriteStyle = computed(() => {
   if (useUnicode.value) return {};
   return {
-    ...getSpriteStyle(resolvedIconID.value),
+    ...getSpriteStyle(props.blueprint.iconID),
     width: '100%',
     height: '100%',
     position: 'absolute',

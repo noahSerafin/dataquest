@@ -131,7 +131,8 @@ const allIcons = computed(() => {
     'U+1F4A2', // enraged 💢
     'U+1F60C', // zen 😌
     'U+1F910', // disarmed 🤐
-    'U+1F624'  // juiced 😤
+    'U+1F624', // juiced 😤
+    'U+1F532'
   ];
   statuses.forEach((unicode, index) => {
     result.push({

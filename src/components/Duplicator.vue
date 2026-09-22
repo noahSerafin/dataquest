@@ -53,6 +53,7 @@
         if (isBlueprint && primaryBP.value) {
             primaryBP.value.isPlaced = false;
             resultBP.value = {
+                iconID: primaryBP.value.iconID,
                 id: crypto.randomUUID(),
                 name: primaryBP.value.name,
                 description: primaryBP.value.description,
@@ -75,6 +76,7 @@
             if(primaryBP.value.hybridName){
                 resultBP.value.hybridName = primaryBP.value.hybridName;
                 resultBP.value.extraUnicode = primaryBP.value.extraUnicode;
+                resultBP.value.hybridIconID = primaryBP.value.hybridIconID;
             }
             props.player.addProgram(resultBP.value);
             primaryBP.value = null;

@@ -56,7 +56,8 @@ export abstract class Piece {
   specialName?: string;
   extraUnicode?: string;
   variantName?: string;
-  hybridName?: string
+  hybridName?: string;
+  hybridIconID?: number;
   targetType: 'piece' | 'pieceAndPlayer' | 'space' | 'pieceAndPlace' | 'group' | 'line' | 'self' | 'all' | 'graveyard' | 'trapPiece' | 'spaceAndPieces' | 'placeAndPieces' = 'piece';
 
   id: string
@@ -440,6 +441,7 @@ export abstract class Piece {
       copy.hybridName = this.hybridName;
       copy.description = this.description;
       copy.extraUnicode = this.extraUnicode;
+      copy.hybridIconID = this.hybridIconID;
     }
     if (this.variantName) {
       copy.variantName = this.variantName;
@@ -450,6 +452,7 @@ export abstract class Piece {
 }
 
 export class Spawn extends Piece {
+  static iconID = 495;
   static name = "Spawn";
   static description = "A load point for programs";
   static unicode = "U+1F532";//"U+2BD0";
@@ -1012,6 +1015,7 @@ class Trojan extends Piece {
     newTrojan.actions = 0;
     newTrojan.hybridName = this.hybridName;
     newTrojan.extraUnicode = this.extraUnicode;
+    newTrojan.hybridIconID = this.hybridIconID;
     activePieces.push(newTrojan);
     this.actions--
   }
@@ -1982,10 +1986,14 @@ export class Pawn extends Piece {
     promoted.attack = targetPiece.attack;
     promoted.defence = targetPiece.defence;
     promoted.statModifiers = this.statModifiers
+    promoted.damageMult = this.damageMult;
+    promoted.immunities = this.immunities;
     if (targetPiece.hybridName) {
       promoted.hybridName = targetPiece.hybridName;
       promoted.description = targetPiece.description;
       promoted.extraUnicode = targetPiece.extraUnicode;
+      promoted.hybridIconID = targetPiece.hybridIconID;
+      promoted.color = targetPiece.color;
     }
 
     activePieces.push(promoted);
@@ -4612,6 +4620,7 @@ class Dolls extends Piece {
     newTrojan.actions = 0;
     newTrojan.hybridName = this.hybridName;
     newTrojan.extraUnicode = this.extraUnicode;
+    newTrojan.hybridIconID = this.hybridIconID;
     this.defence = 1;
     this.defenceRemaining = 1;
     activePieces.push(newTrojan);
@@ -4677,6 +4686,7 @@ class Zombie extends Piece {
       newTrojan.actions = 0;
       newTrojan.hybridName = this.hybridName;
       newTrojan.extraUnicode = this.extraUnicode;
+      newTrojan.hybridIconID = this.hybridIconID;
       activePieces.push(newTrojan);
     }
     targetPiece.takeDamage(this.getStat('attack'));
@@ -4873,7 +4883,7 @@ console.log("Pieces of rarity 6: ", adminLogs.rarity6)
 
 //TELEVISION, U+1F4FA charm piece - brainwash
 //fleur de lis U+269C scout, lay traps? expose/Temp increase friendlies range.
-//building castle? creates a wall around it of 8 tiles 
+//building castle? creates a wall around it of 8 tiles
 //🏗 crane  U+1F3D7
 
 //Invisible wall - hi defence hidden piece

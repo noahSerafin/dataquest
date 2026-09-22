@@ -1004,6 +1004,7 @@ export class Jar extends Item {
             bp.defence = activePieces[idx].getStat('defence');
             bp.variantName = activePieces[idx].variantName;
             bp.extraUnicode = activePieces[idx].extraUnicode;
+            bp.hybridIconID = activePieces[idx].hybridIconID;
             //check for space?
             player.addProgram(bp)
             activePieces[idx].takeDamage(1);

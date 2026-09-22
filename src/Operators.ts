@@ -22,9 +22,9 @@ const knife = {
     immunities: createDefaultStatuses()
 }
 const testPiece = {
-    iconID: 1,
+    iconID: 498,
     id: crypto.randomUUID(),
-    name: "Zombie",
+    name: "Pawn",
     description: "testing this pieces special move",
     unicode: 'U+1F47E',
     maxSize: 2,
@@ -52,7 +52,6 @@ const testPiece = {
         negative: false,
     },
     damageMult: 1.5,
-    variantName: 'Holographic'
 }
 const superKnife = {
     iconID: 1,
@@ -70,7 +69,8 @@ const superKnife = {
     // blueprint-only fields:
     isPlaced: false,
     cost: 1,
-    immunities: createDefaultStatuses()
+    immunities: createDefaultStatuses(),
+    variantName: 'Holographic'
 }
 
 const shield = {
@@ -379,7 +379,8 @@ const testhybrid = {
     cost: 1,
     hybridName: 'LanceHog',
     extraUnicode: 'U+1F994',
-    immunities: createDefaultStatuses()
+    immunities: createDefaultStatuses(),
+    hybridIconID: 400
 }
 bug.immunities.slowed = true;
 labrat.immunities.diseased = true;

@@ -184,6 +184,7 @@ import { allOSes } from "./Operators.ts";
 import { serializeGameState, rehydrateGameState } from "./saveSystem";
 
 const testSword = {
+  iconID: 4,
   id: "274ec329-8c17-4265-8c12-e9a28bcf0110",
   name: "Knife",
   description: "A basic attack piece",
@@ -200,6 +201,7 @@ const testSword = {
   immunities: {}
 }
 const testShield = {
+  iconID: 7,
   id: "274ec329-8c17-4265-8c12-e9a28bcf0111",
   name: "Shield",
   description: "A basic defensive piece",
@@ -216,6 +218,7 @@ const testShield = {
   immunities: {}
 }
 const test = {
+  iconID: 30,
   id: "274ec329-8c17-4265-8c12-e9a28bcf0112",
   name: "Lance",
   description: "A test piece",
@@ -231,6 +234,7 @@ const test = {
   cost: 1,
   hybridName: 'LanceHog',
   extraUnicode: 'U+1F994',
+  hybridIconID: 39,
   immunities: {}
 }
 const testVoucher = new Voucher();
@@ -330,7 +334,7 @@ function createNewPlayer(payload: { os: OS, seed: string, stake?: number }) {
   showMainMenu.value = false;
   showMap.value = true;
   gameStarted.value = true;
-  currentCompany.value = { name: 'Player', abbr: '', unicode: player.value.osunicode, pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "rgb(156, 201, 84)" };
+  currentCompany.value = { iconID: 499, name: 'Player', abbr: '', unicode: player.value.osunicode, pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "rgb(156, 201, 84)" };
   refreshShop(true);
   player.value.canPlace = false;
 }
@@ -792,7 +796,7 @@ const lastTurnPieces = ref<InstanceType<typeof Piece>[]>([]);//player
 const originalPieces = ref<InstanceType<typeof Piece>[]>([]);//player
 const originalSpawns = ref<Coordinate[]>([]);//player
 const originalPlayerPieceIds = ref<string[]>([]);
-const currentCompany = ref<Company>({ name: 'Player', abbr: '', unicode: player.value.osunicode || '', pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "rgb(156, 201, 84)" });
+const currentCompany = ref<Company>({ iconID: 499, name: 'Player', abbr: '', unicode: player.value.osunicode || '', pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "rgb(156, 201, 84)" });
 
 async function selectLevel(newLevel: Level, company: Company, difficultyMod: number, lReward: number) {//load level, start 
   bgProgress.value++;
@@ -1252,8 +1256,9 @@ function instantiatePieceFromBlueprint(//this goes in app
   if (bp.hybridName) {
     piece.hybridName = bp.hybridName;
     piece.description = bp.description;
-    //piece.unicode = bp.unicode //should already be the case
     piece.extraUnicode = bp.extraUnicode;
+    piece.hybridIconID = bp.hybridIconID;
+    //piece.unicode = bp.unicode //should already be the case
   }
   if (bp.variantName) {
     piece.variantName = bp.variantName;

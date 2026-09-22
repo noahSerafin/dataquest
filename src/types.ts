@@ -30,6 +30,7 @@ export type PieceBlueprint = {
   damageMult?: number
   hybridName?: string
   extraUnicode?: string
+  hybridIconID?: number
   variantName?: string
 }
 

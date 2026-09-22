@@ -59,6 +59,20 @@ const spriteStyle = computed(() => {
   };
 });
 
+const hybridSpriteStyle = computed(() => {
+  if (useUnicode.value || props.blueprint.hybridIconID === undefined) return {};
+  return {
+    ...getSpriteStyle(props.blueprint.hybridIconID),
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    borderRadius: 'inherit',
+    zIndex: 2
+  };
+});
+
 // --- reactive properties derived from the piece instance ---
 function showRarity(rarity: number) {
   switch (rarity) {
@@ -140,7 +154,10 @@ function handleSelect() {
     >
       <p class='top-left' v-if="cssclass==='shop' || cssclass==='skipReward'" :style="`top: -${((props.tileSize-10)/2 - 24)}px`">P</p>
       
-      <div v-if="!useUnicode" class="sprite-icon" :style="spriteStyle"></div>
+      <template v-if="!useUnicode">
+        <div class="sprite-icon primary-sprite" :class="{ hybrid: !!blueprint.hybridIconID }" :style="spriteStyle"></div>
+        <div v-if="blueprint.hybridIconID !== undefined" class="sprite-icon extra-sprite" :style="hybridSpriteStyle"></div>
+      </template>
       <template v-else>
         <span class="primary-unicode">{{ unicodeSymbol }}</span>
         <span v-if="blueprint.extraUnicode" class="extra-unicode">{{ ExtraUnicodeSymbol }}</span>
@@ -237,18 +254,25 @@ function handleSelect() {
   display: inline-block;
   transform: translateZ(0);
 }
-.hybrid .primary-unicode{
+.hybrid .primary-unicode, .primary-sprite.hybrid{
   position: absolute;
   left: 5%;
   z-index: 1;
   width: 100%;
-  transform: scale(1.5);
 }
-.hybrid .extra-unicode{
+.primary-sprite.hybrid {
+  transform: scale(1.3);
+  left: -10%;
+}
+.hybrid .extra-unicode, .extra-sprite{
     position: absolute;
     left: 20%;
     top: -15%;
-    z-index: 1;
-    
+    z-index: 2 !important;
+}
+.extra-sprite {
+  transform: scale(0.65);
+  left: 25%;
+  top: -20%;
 }
 </style>

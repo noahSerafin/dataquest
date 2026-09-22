@@ -416,8 +416,6 @@ export class AdminMap extends Admin {
 
 export class PetriDish extends Admin {
   static iconID = 343;
-
-  static iconID = 333;// status test unfinished: make enemies spread to fellow enemies
   static name = "Petri Dish";
   static description = "Harmful status effects spread to adjacent enemy programs at the end of your turn";//effect all programs??
   static unicode = "U+1F9EB";
@@ -576,8 +574,6 @@ class Joker extends Admin {
 
 export class Chemistry extends Admin {
   static iconID = 356;
-
-  static iconID = 346;//test
   static name = "Chemistry"; //bon appetite U+1F37D
   static description = "Items that affect stats effects are doubled (+1 item effect mult)";
   static unicode = "U+232C";//"U+2697";//BENZENE RING, U+232C  
@@ -724,8 +720,6 @@ class GoldenTicket extends Admin {
 
 export class Dove extends Admin {
   static iconID = 330;
-
-  static iconID = 320;// PEACE SYMBOL, U+262E // HERB, Olive branch U+1F33F
   static name = "Dove";
   static description = "You may move and action after placing at the start of every round";
   static unicode = "U+1F54A";//🕊️ ////CHURCH, sanctuary U+26EA
@@ -1230,6 +1224,7 @@ export class Copier extends Admin {
           copy.hybridName = playerPieces[0].hybridName;
           copy.description = playerPieces[0].description;
           copy.extraUnicode = playerPieces[0].extraUnicode;
+          copy.hybridIconID = playerPieces[0].hybridIconID;
         }
         if (playerPieces[0].variantName) {
           copy.variantName = playerPieces[0].variantName;
@@ -3414,8 +3409,6 @@ class Nose extends Admin {
 //"U+269A" wings immune to traps
 class Wings extends Admin {
   static iconID = 286;
-
-
   static name = "Wings";
   static description = "Your programs are immune to traps";//and move over gaps?
   static unicode = "U+1FABD";
@@ -3430,8 +3423,6 @@ class Wings extends Admin {
 
 class Glasses extends Admin {
   static iconID = 232;
-
-
   static name = "Glasses";
   static description = "Your programs get +1 range, and -1 attack on load";
   static unicode = "U+1F453";
@@ -3469,8 +3460,6 @@ class Salt extends Admin {
 
 class Baseball extends Admin {
   static iconID = 380;
-
-
   static name = "Strike Out";
   static description = "Enemies that fail to damage your programs 3 times are removed";
   static unicode = "U+26BE";
@@ -3521,8 +3510,6 @@ class Baseball extends Admin {
 //SELFIE, U+1F933 use action on self for a temp defence?
 class Selfie extends Admin {
   static iconID = 347;
-
-
   static name = "Selfie";
   static description = "Programs that attack themselves gain +1 attack";
   static unicode = "U+1F933";
@@ -3577,8 +3564,6 @@ class Daisy extends Admin {
 
 class Meditation extends Admin {
   static iconID = 371;
-
-  static iconID = 361;//needs reviewing
   static name = "Meditation";
   static description = "Your non-hidden programs that don't move temoprarily gain +1 to all stats";// to all stats on the end of your turn";
   static unicode = "U+1F9D8";
@@ -3605,8 +3590,6 @@ class Meditation extends Admin {
 
 class Drunk extends Admin {
   static iconID = 308;
-
-
   static name = "Mean Drunk";
   static description = "Your pieces gain +1 attack, and +0.5 damage mult on load. But are also confused.";
   static unicode = "U+1F943";
@@ -3729,8 +3712,6 @@ export class Booty extends Admin {
 //PROBING CANE, U+1F9AF (rarity 2) //onTurnEnd Trigger traps within 1 range of all your pieces early on the end of your turn.
 export class Cane extends Admin {
   static iconID = 225;
-
-
   static name = "Cane";
   static description = "Triggers all enemy traps within 1 range of your programs on the end of your turn";
   static unicode = "U+1F9AF";
@@ -3771,8 +3752,6 @@ export class Cane extends Admin {
 //Bassline, U+1F4FE (rarity 4) //other Your stats cannot go below 1. changes addmodifier fnc in pieces
 export class Bassline extends Admin {
   static iconID = 323;
-
-
   static name = "Bassline";
   static description = "Sets all your programs stats that are 0 to 1 after the enemy's turn."
   static unicode = "U+1F4FE";
@@ -3799,8 +3778,6 @@ export class Bassline extends Admin {
 //Silly, U+1F921 (rarity 6) //onRoundEnd Makes a copy of items but compressed on the end of a round. Allow compressed on items, but when not admins they effect memory instead of adminslots
 export class Silly extends Admin {
   static iconID = 392;
-
-
   static name = "Silly";
   static description = "Creates a compressed copy of a random item in your inventory at the end of a round";
   static unicode = "U+1F921";
@@ -3825,8 +3802,6 @@ export class Silly extends Admin {
 //Collector, U+1F5BC (rarity 1) //other Common(rarity 1) classes no longer appear in the shop (rollRarity)
 export class Collector extends Admin {
   static iconID = 265;
-
-
   static name = "Collector";
   static description = "Common programs and items can no longer appear in the shop or from items.";
   static unicode = "U+1F5BC";//painting
@@ -3842,8 +3817,6 @@ export class Collector extends Admin {
 
 export class Djembe extends Admin {
   static iconID = 351;
-
-
   static name = "War Drum";
   static description = "All player programs gain +1 attack and +1 moves on load";
   static unicode = "U+1FA98";//djembe LONG DRUM,
@@ -3949,7 +3922,7 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //RECYCLING SYMBOL, U+2672 selling programs gives 1 of lower rarirty
 
 //U+1F4FA TELEVISION
-//U+1F4FB RADIO 
+//U+1F4FB RADIO
 //SLEUTH OR SPY, U+1F575
 //TEACUP WITHOUT HANDLE, U+1F375 calm down, removes enraged from enemies
 //Swish, U+1F3C0 - range of 3+ gets +3 attack

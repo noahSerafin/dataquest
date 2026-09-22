@@ -10,9 +10,9 @@ import { sunrisePieces } from "./Pieces";
 
 import { whiteflowerPieces } from "./Pieces";
 
-export const shopCompany: Company = Object.freeze({iconID: 480, name: 'SPEC', abbr: 'SHOP', unicode: "", pieceList: allPieces, tileColor: "rgb(34, 53, 12)", edgeColor: "rgb(156, 201, 84)"});
-export const playerCompany: Company = Object.freeze({iconID: 480, name: 'SPEC', abbr: '???', unicode: "", pieceList: allPieces, tileColor: "rgb(34, 53, 12)", edgeColor: "rgb(156, 201, 84)"});
-export const bossCompany: Company = Object.freeze({iconID: 480, name: 'Umbrella', abbr: 'BOSS', unicode: "", pieceList: allPieces, tileColor: "rgb(34, 53, 12)", edgeColor: "rgb(156, 201, 84)"});
+export const shopCompany: Company = Object.freeze({iconID: 499, name: 'SPEC', abbr: 'SHOP', unicode: "", pieceList: allPieces, tileColor: "rgb(34, 53, 12)", edgeColor: "rgb(156, 201, 84)"});
+export const playerCompany: Company = Object.freeze({iconID: 499, name: 'SPEC', abbr: '???', unicode: "", pieceList: allPieces, tileColor: "rgb(34, 53, 12)", edgeColor: "rgb(156, 201, 84)"});
+export const bossCompany: Company = Object.freeze({iconID: 499, name: 'Umbrella', abbr: 'BOSS', unicode: "", pieceList: allPieces, tileColor: "rgb(34, 53, 12)", edgeColor: "rgb(156, 201, 84)"});
 export const companies: Company[] = [
     {iconID: 444, name: 'Saturn Solutions', abbr: 'SSL', unicode: "U+1FA90", pieceList: allPieces, tileColor: "rgb(74, 74, 74)", edgeColor: "rgb(233, 233, 233)"},
     {iconID: 445, name: 'Nightbridge Corp', abbr: 'NBC',  unicode: "U+1F309", pieceList: NightbridgePieces, tileColor: "rgb(47, 11, 86)", edgeColor: "rgb(247, 172, 238)"},

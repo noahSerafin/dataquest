@@ -87,6 +87,7 @@
     function applyStatMods() {
         if (!workingBP.value) return
         resultBP.value = {
+            iconID: workingBP.value.iconID,
             id: crypto.randomUUID(),
             name: workingBP.value.name,
             description: workingBP.value.description,
@@ -107,6 +108,7 @@
         if(workingBP.value.hybridName){
             resultBP.value.hybridName = workingBP.value.hybridName;
             resultBP.value.extraUnicode = workingBP.value.extraUnicode;
+            resultBP.value.hybridIconID = workingBP.value.hybridIconID;
         }
     }
 

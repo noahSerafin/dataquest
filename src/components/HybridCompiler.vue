@@ -72,6 +72,7 @@
 
         if (props.player.hasAdmin('ribbon')) {
             return {
+                iconID: primary.iconID,
                 id: crypto.randomUUID(),
                 name: primary.name, // for finding the base class with special move
                 description: 'A boosted hybrid, primary feature: ' + primary.description, // need to remove string 'A boosted hybrid, primary feature: ' for double hybrid
@@ -88,11 +89,13 @@
                 cost: primary.cost + secondary.cost,
                 hybridName: makeHybridName(primary.name, secondary.name),
                 extraUnicode: secondary.unicode,
+                hybridIconID: secondary.iconID,
                 immunities: combinedImmunities,
                 variantName: primary.variantName
             }
         }
         return {
+            iconID: primary.iconID,
             id: crypto.randomUUID(),
             name: primary.name, // for finding the base class with special move
             description: 'A hybrid, primary feature: ' + primary.description,
@@ -109,6 +112,7 @@
             cost: primary.cost + secondary.cost,
             hybridName: makeHybridName(primary.name, secondary.name),
             extraUnicode: secondary.unicode,
+            hybridIconID: secondary.iconID,
             immunities: combinedImmunities,
             variantName: primary.variantName
         }

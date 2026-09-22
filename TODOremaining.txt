@@ -3,7 +3,7 @@ hide admin counts in collection
 clear localStorage
 remove resolvedIconID and other on the fly grabbing of iconIDs
 proper tutorial - seperate from roguelike mode 
-
+(wire)shark - teleport to nearest enemy in range?
 
 //SOUND FX
 roundWon - x1

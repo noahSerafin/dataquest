@@ -1,144 +1,28 @@
-priority - serach numbers descending
+Fix editor -
+delete node function
+visual grid
+custom map nodes
+path drawing
 
-EDITOR
--export tiles - done
+Messaging system
+panel - porfile picture, name, parargraph box, response choices (optional)
+dialogue trees
 
--dropper drops pieces (or their name + unicode) - done
--export pieces - done
+ITEMS/ADMINS
+review roguelikes
 
--set up spawner pieces - done
-
-- add extender function to dropper, using previous piece - done
-
-- clicking on an already dropped piece changes the pieceToExtend - done
-
-
-BOARD
--import tiles - done
--import pieces into piecemap - done
--render pieces from piecemap - done
-
--allow placing on spawners, then next to owned tiles - done
-
-
-ITEMS 3
-- implement item functions - done except statuses
-cleanup targets: allow player as accepted target? 9
-
-
-PIECES 4
-
-statuses 3
-
--test highlights - done
-
--moving piece should update board - done
-
--move should add to size up to max size - done
-
--atk function -done-
-
-special functions 4
-keep track of upgrades and display on piece
-
-ADMIN PIECES
-
-- make class - done 
-
-- work out how abilities will effect every piece - done
-
-status admins (immunities) 4
-round admins 6
-
-PLAYER
-disable moving if placing/disable placing if moving 3
-
--placement 
--allow placing on spawners - done
--and next to owned tiles - done
--placing on a spawner should remove the highlight for that spwaner - done
-
-- grey out from inventory until round end - retain ID for stats? return will have to reset tiles to [] - done with blueprints
-
-- sell - done
-rarity = value ?+=no. of upgrades used on a piece? 3
-
-
-AI 2/3 nearly-done
-functions:
-    - findNearestPlayerPiece - done
-    pathfinding a -> b in a grid - needsreviewing
-    moveTowards player - incomplete
-    - isPlayerPieceInRange - done
-
-enemyPieces = get a list of piece.team = 'enemy' from activePieces
-
-for each piece found:
-(use js timeouts to slow down execution for visibility)
-
-while movesRemaining:
-if maxSize && playerInRange {
-    //pieces should try to use special move if possible
-    if(atk > player's def){
-        attack
-    } else if movesRemaining{
-        find another piece, repeat
-    }
-} (if not max size and can move){
-    move toward nearest player 
-    every move:
-    if(isPlayerInRange){
-        //pieces should try to use special move if possible
-    } else if(atk > player's def){
-        attack
-    } else {
-        find another piece, repeat
-    }
-}
-
-
-
-SHOP
-- rarity - done
-- two piece/item slots
-piece packs/item packs?
-- reroll button - done
-
-vouchers?
-
-
-MAP 5
-
-- loads from levels.ts - done
-isometric view?
-branching paths
-see two maps ahead?
-path examples before boss(paths meeting point):
-    one level +1 difficulty, shop
-    one level +0 difficulty, one level +0 difficulty
-    one level +0 difficulty, one level +1 difficulty
-    one level +2 difficulty, shop
-
-- hover/click to show map preview of tiles + spawns in popout - done
-- increments difficutly - done
-multiple levels files?
-boss levels
-
+SHOPs - per level
 
 APP 6
-game logic
-- disable moving if placing/disable placing if moving - done
-end rounds, reset board -> open map
-map -> click on shop, open shop, click on level, open board
-swap between shop -> map -> board
+review roguelike elements:
+admin rolls/limits
+shop rolls
+rerolls in general
 increment difficulty
-
-HYBRIDS 7
-Hybrid class accepts two pieces
-takes average of both stats, rounded up
-takes speacial move of first piece
-
 
 EDITOR 8
 Add a Spawn for a 'wall' type piece
 Have logic for spawning any piece on single spawn, then only pieces with max size >= to the spawn's size
+
+Special functions 4
+keep track of upgrades and display on piece

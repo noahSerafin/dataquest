@@ -3,7 +3,7 @@ import { Piece } from "../Pieces"
 import { ref, computed, onMounted } from "vue";
 import { STATUS_ICONS, STATUS_INFO, STATUS_ICONIDS } from "../statuses";
 import FormattedDescription from "./FormattedDescription.vue";
-import { spritesheetState, iconsUrl, getSpriteStyle } from "../helperFunctions";
+import { getSpriteStyle } from "../helperFunctions";
 
 const props = defineProps<{
   piece: InstanceType<typeof Piece>

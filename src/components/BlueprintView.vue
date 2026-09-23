@@ -2,7 +2,7 @@
 import { ref, computed, useTemplateRef } from "vue";
 import { useTilt } from "../composables/useTilt";
 import type { Coordinate, PieceBlueprint } from "../types";
-import { spritesheetState, iconsUrl, getSpriteStyle } from "../helperFunctions";
+import { getSpriteStyle } from "../helperFunctions";
 
 //construction-------------
 

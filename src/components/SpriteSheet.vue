@@ -36,7 +36,7 @@ function getUnicode(unicodeStr: string) {
 
 // Group all together
 const allIcons = computed(() => {
-  const result = [];
+  const result: { id: string, primary: string, extra: string, hybrid: boolean }[] = [];
   
   pieces.value.forEach(p => {
     result.push({
@@ -69,7 +69,7 @@ const allIcons = computed(() => {
     result.push({
       id: 'boss-' + b.name,
       primary: getUnicode(b.unicode),
-      extra: b.extraUnicode ? getUnicode(b.extraUnicode) : '',
+      extra: (b as any).extraUnicode ? getUnicode((b as any).extraUnicode) : '',
       hybrid: false
     });
   });

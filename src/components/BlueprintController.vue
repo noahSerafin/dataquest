@@ -3,7 +3,7 @@ import { computed, ref } from "vue"
 import type { PieceBlueprint } from "../types"
 import { STATUS_ICONS, STATUS_ICONIDS } from "../statuses";
 import FormattedDescription from "./FormattedDescription.vue";
-import { spritesheetState, iconsUrl, getSpriteStyle } from "../helperFunctions";
+import { getSpriteStyle } from "../helperFunctions";
 
 const props = defineProps<{
   piece: PieceBlueprint;

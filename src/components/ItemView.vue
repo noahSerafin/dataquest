@@ -5,7 +5,7 @@ import { Item } from "../Items"; // adjust path
 import { tutorialState, clearTooltips } from "../tutorial";
 import { proTips, proTipSuggestion } from "../tutorialSteps";
 import { Random } from "../Random";
-import { spritesheetState, iconsUrl, getSpriteStyle } from "../helperFunctions";
+import { getSpriteStyle } from "../helperFunctions";
 import FormattedDescription from "./FormattedDescription.vue";
 //import type { PieceVariant } from "../types";
 

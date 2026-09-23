@@ -3,7 +3,7 @@ import { ref, computed } from "vue";
 import type { Coordinate } from "../types";
 import { Piece } from "../Pieces";
 import { STATUS_ICONS, STATUS_ICONIDS } from "../statuses";
-import { spritesheetState, iconsUrl, getSpriteStyle } from "../helperFunctions";
+import { getSpriteStyle } from "../helperFunctions";
 
 //construction-------------
 

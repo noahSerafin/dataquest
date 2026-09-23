@@ -169,6 +169,9 @@ import BossView from "./components/BossView.vue";
 import RoundSummary from "./components/RoundSummary.vue";
 import BlueprintView from "./components/BlueprintView.vue";
 import MainMenu from "./components/MainMenu.vue";
+import RogueMenu from "./components/RogueMenu.vue";
+import CampaignMenu from "./components/CampaignMenu.vue";
+import WorldEditor from "./components/WorldEditor.vue";
 import PieceController from "./components/PieceController.vue";
 import HybridCompiler from "./components/HybridCompiler.vue";
 import Collection from "./components/Collection.vue";
@@ -270,10 +273,33 @@ const showInventory = ref(true);
 function toggleInventory() {
   showInventory.value = !showInventory.value;
 }
-const showMainMenu = ref(true);
+const currentAppMode = ref<'welcome' | 'mainMenu' | 'rogueMenu' | 'campaignMenu' | 'campaign' | 'worldEditor' | 'levelEditor' | 'rogue'>('welcome');
 const currentSeed = ref<string>("");
 const bgProgress = ref(0);
-const showWelcomeScreen = ref(true);
+const campaignWorldMap = ref<any>(null);
+
+function startCampaign(_slotIndex: number) {
+  // Try loading a campaign file, for now we will use an empty shell or prompt if missing
+  // Eventually this will fetch from `/campaign_worlds/world1.json` or similar
+  campaignWorldMap.value = {
+    nodes: {
+      "start": { id: "start", type: "start", position: {x: 100, y: 100}, next: [], difficultyMod: 0, reward: 0 }
+    },
+    startNode: "start"
+  };
+  currentAppMode.value = 'campaign';
+  showMap.value = true;
+  gameStarted.value = true;
+  
+  // Need to initialize a basic player for campaign
+  const defaultOS = allOSes[0];
+  player.value = new Player(
+    defaultOS.unicode, defaultOS.money, defaultOS.memory, defaultOS.adminSlots,
+    defaultOS.items, defaultOS.blueprints, defaultOS.admins, defaultOS.lives,
+    5, 0, 0, 0, 0, 0
+  );
+  currentCompany.value = { iconID: 499, name: 'Player', abbr: '', unicode: player.value.osunicode, pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "rgb(156, 201, 84)" };
+}
 
 function createNewPlayer(payload: { os: OS, seed: string, stake?: number }) {
   bgProgress.value++;
@@ -331,7 +357,7 @@ function createNewPlayer(payload: { os: OS, seed: string, stake?: number }) {
   os.admins.forEach(admin => StorageManager.unlockAdmin(admin.name));
   os.items.forEach(item => StorageManager.unlockItem(item.name));
 
-  showMainMenu.value = false;
+  currentAppMode.value = 'rogue';
   showMap.value = true;
   gameStarted.value = true;
   currentCompany.value = { iconID: 499, name: 'Player', abbr: '', unicode: player.value.osunicode, pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "rgb(156, 201, 84)" };
@@ -353,7 +379,7 @@ function incrementMapProgress() {
 function openMainMenu() {
   showBoard.value = false;
   showSummary.value = false;
-  showMainMenu.value = true;
+  currentAppMode.value = 'mainMenu';
   //sessionStorage.clear();
   //localStorage.clear(); // only if you aren't using it yet
   window.location.reload();
@@ -555,6 +581,28 @@ function refreshShop(isFree: boolean) {
   rerollCost.value = player.value.hasAdmin('Wheel of Dharma') ? 0 : rerollCost.value;
 
   const appraisalDiscount = 2 * player.value.admins.filter(a => a.name === 'Appraisal').length;
+  
+  //rogue elements
+  const ownedAdmins = new Set(player.value.admins.map(a => a.name));
+  const availableAdmins = (player.value.hasAdmin('Bouquet')) ? allAdmins : allAdmins.filter(AdminClass => !ownedAdmins.has(AdminClass.name));
+  
+  const allItemsAndAdmins: ItemConstructor[] = [...allItems, ...availableAdmins];
+
+  if (currentAppMode.value === 'campaign' && activeShopContents.value && activeShopContents.value.length > 0) {
+    shopBlueprints.value = [];
+    shopItems.value = [];
+    for (const name of activeShopContents.value) {
+      const pName = name.trim();
+      const p = allPieces.find(x => x.name === pName);
+      if (p) {
+        shopBlueprints.value.push(makeBlueprint(p, undefined, appraisalDiscount));
+      } else {
+        const iClass = allItemsAndAdmins.find(x => x.name === pName);
+        if (iClass) shopItems.value.push(new iClass());
+      }
+    }
+    return;
+  }
 
   const classes = [
     pickWeightedRandom(allPieces, player.value),
@@ -563,11 +611,6 @@ function refreshShop(isFree: boolean) {
   ];
   shopBlueprints.value = classes.map(c => makeBlueprint(c.class, c.variant ?? undefined, appraisalDiscount));
 
-  //no reappearing admins
-  const ownedAdmins = new Set(player.value.admins.map(a => a.name));
-  const availableAdmins = (player.value.hasAdmin('Bouquet')) ? allAdmins : allAdmins.filter(AdminClass => !ownedAdmins.has(AdminClass.name));
-
-  const allItemsAndAdmins: ItemConstructor[] = [...allItems, ...availableAdmins];
   shopItems.value = [
     pickWeightedRandomItem(allItemsAndAdmins, player.value, appraisalDiscount),
     pickWeightedRandomItem(allItemsAndAdmins, player.value, appraisalDiscount),
@@ -995,7 +1038,6 @@ function loadSavedGame() {
   currentSeed.value = state.seed;
 
   gameStarted.value = true;
-  showMainMenu.value = false;
 
   const ui = state.uiState || {};
   showBoard.value = ui.showBoard ?? false;
@@ -1055,7 +1097,16 @@ const toggleShop = () => {
   canProceedFromShop.value = false;
   saveGameState();
 }
-const openShop = () => {
+const activeShopContents = ref<string[] | null>(null);
+
+const openShop = (node?: any) => {
+  if (node && typeof node.shopContents === 'string') {
+    activeShopContents.value = node.shopContents.split(',').map((s: string) => s.trim());
+  } else if (node && Array.isArray(node.shopContents)) {
+    activeShopContents.value = node.shopContents;
+  } else {
+    activeShopContents.value = null;
+  }
   showShop.value = true;
   canProceedFromShop.value = true;
   shopDisabled.value = false;
@@ -1996,10 +2047,19 @@ function cancelConfirm() {
 </script>
 
 <template>
-  <WelcomeScreen v-if="showWelcomeScreen">
-    <div class="welcome-ui">
-      <button class="play-btn" @click="showWelcomeScreen = false">PLAY</button>
+  <WelcomeScreen v-if="['welcome', 'mainMenu', 'rogueMenu', 'campaignMenu'].includes(currentAppMode)">
+    <div v-if="currentAppMode === 'welcome'" class="welcome-ui">
+      <button class="play-btn" @click="currentAppMode = 'mainMenu'">PLAY</button>
     </div>
+
+    <!-- Menus as Overlay -->
+    <MainMenu v-if="currentAppMode === 'mainMenu'" @selectMode="currentAppMode = $event" class="stage-panel active" />
+    
+    <RogueMenu v-if="currentAppMode === 'rogueMenu'" @createNewPlayer="createNewPlayer" @resumeGame="loadSavedGame"
+      class="stage-panel active" :debugMode="debugMode" :stake="stake"
+      @increaseStake="increaseStake" @decreaseStake="decreaseStake" />
+      
+    <CampaignMenu v-if="currentAppMode === 'campaignMenu'" @back="currentAppMode = 'mainMenu'" @startCampaign="startCampaign" class="stage-panel active" />
   </WelcomeScreen>
   
   <div class="app-root" v-else>
@@ -2098,14 +2158,15 @@ function cancelConfirm() {
     </div>
     <div class="stage">
       <h1 class="yourTurnWarning" v-if="yourTurnWarning">YOUR TURN</h1>
-      <MainMenu v-if="showMainMenu && !displayEditor" @createNewPlayer="createNewPlayer" @resumeGame="loadSavedGame"
-        class="stage-panel" :class="{ active: showMainMenu }" :debugMode="debugMode" :stake="stake"
-        @increaseStake="increaseStake" @decreaseStake="decreaseStake" />
+      
+      <WorldEditor v-if="currentAppMode === 'worldEditor'" class="stage-panel active" />
+
       <RoundSummary v-if="showSummary" class="stage-panel" :class="{ active: showSummary }" :hasWonRound="hasWonRound"
         :player="player" :bosses="bossAdmins" :roundHasStarted="roundHasStarted" @proceedFromEndOfRound="handleProceed"
         @reloadLevel="reloadLevel" @mainMenu="openMainMenu" @returnToMap="handleReturnToMap" />
       <WorldMap ref="worldMapRef" v-if="!displayEditor" class="stage-panel" :class="{ active: showMap }"
         :allLevels="level1Levels" :player="player" :seed="combinedMapSeed" :cssclass="mapClass" :bosses="bossAdmins"
+        :staticWorld="campaignWorldMap"
         @selectLevel="selectLevel" @openShop="openShop" @openDisabledShop="openDisabledShop"
         @openCompiler="openCompiler" @openAltar="openAltar" @openDuplicator="openDuplicator"
         @openWorkbench="openWorkbench" @incrementProgress="incrementMapProgress(); saveGameState()"
@@ -2139,7 +2200,7 @@ function cancelConfirm() {
         :debugMode="debugMode" :currentSeed="currentSeed" />
       <SpriteSheet v-if="showSpriteSheet" @close="showSpriteSheet = false" />
     </div>
-    <Leveleditor v-if="displayEditor" @export-level="handleExport" />
+    <Leveleditor v-if="currentAppMode === 'levelEditor'" @export-level="handleExport" />
     <div v-if="gameStarted || debugMode" class="player-area">
       <!-- PlayerView + End Turn / Retry -->
       <PlayerView v-if="!displayEditor" ref="playerViewRef" :player="player" :showInventory="showInventory"

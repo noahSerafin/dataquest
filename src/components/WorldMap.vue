@@ -33,12 +33,13 @@ const props = defineProps<{
     allLevels: Level[];
     seed: string | number;
     cssclass: 'visible' | 'collapsed';
-    bosses: Admin[]
+    bosses: Admin[];
+    staticWorld?: WorldMap;
 }>();
 
 const emit = defineEmits<{
     (e: "selectLevel", level: Level, company: Company, difficultyMod: number, reward: number, playerSpawns?: Coordinate[]): void;
-    (e: "openShop"): void;
+    (e: "openShop", node: WorldNode): void;
     (e: "openDisabledShop"): void;
     (e: "openAltar"): void;
     (e: "openDuplicator"): void;
@@ -73,7 +74,11 @@ const skipsThisLevel = ref<number>(0);
 // Explicitly seed the PRNG before any map generation starts to ensure reproducibility
 Random.setSeed(props.seed);
 
-const world = ref<WorldMap>(generateWorld(levelPool.value, props.player.difficulty, props.player.stake));//should be called again with after boss after increase difficulty
+const world = ref<WorldMap>(
+    props.staticWorld 
+    ? props.staticWorld 
+    : generateWorld(levelPool.value, props.player.difficulty, props.player.stake)
+);
 assignSkipRewards(world.value);
 
 const currentNodeId = ref(world.value.startNode);
@@ -225,7 +230,7 @@ function enterNode(node: WorldNode) {
         node.visible = true;
     }
     if (node.type === 'shop' && isReachable) {
-        emit('openShop')
+        emit('openShop', node)
     }
     if (node.type === 'sacrificial altar') {
         emit('openAltar')

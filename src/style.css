@@ -259,6 +259,11 @@ body,
   right: 2%;
   width: 18%;
   height: 80%;
+  pointer-events: none;
+}
+
+#overlay-root > * {
+  pointer-events: auto;
 }
 
 #overlay-root.piece-controller {

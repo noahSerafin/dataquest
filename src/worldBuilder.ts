@@ -13,7 +13,7 @@ interface Level {
   pieces: Piece[];
 }
 
- //world graph structure
+//world graph structure
 export interface WorldNode {
   id: string;                // "node_1"
   type: "start" | "level" | "skip" | "shop" | "boss" | "hybrid compiler" | "sacrificial altar" | "duplicator" | "workbench";
@@ -35,12 +35,12 @@ export interface WorldMap {
   startNode: string;
 }
 
-function chooseRandomCompany(){
+function chooseRandomCompany() {
   return Random.pick(companies);
 }
 
 type PathSpec = {
-  type: 'level'| 'skip' | 'hiddenShop' | 'hiddenCompiler' | 'hiddenAltar' | 'hiddenDuplicator' | 'hiddenWorkbench';// add typed strings here
+  type: 'level' | 'skip' | 'hiddenShop' | 'hiddenCompiler' | 'hiddenAltar' | 'hiddenDuplicator' | 'hiddenWorkbench';// add typed strings here
   mods: [number, number];    // difficultyMod for node 1 and node 2
   rewards: [number, number]; //add non monetary rewards? like programs/admins?
 };
@@ -54,31 +54,31 @@ function shuffle(array: PathSpec[]) {
 
 function getEasyPath(difficulty: number): PathSpec {
   const options: PathSpec[] = [
-    
+
     { type: 'level', mods: [0, 0], rewards: [3, 3] },
     { type: 'hiddenAltar', mods: [0, 0], rewards: [3, 3] }
   ];
-  if (difficulty > 1 ){
+  if (difficulty > 1) {
     options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
-    options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
-    options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
-    options.push({ type: 'skip',  mods: [0, 0], rewards: [0, 3] });
+      options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
+      options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
+      options.push({ type: 'skip', mods: [0, 0], rewards: [0, 3] });
     options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] });
-    options.push({ type: 'hiddenShop',  mods: [0, 0], rewards: [3, 3] });
-    options.push({ type: 'hiddenAltar',  mods: [0, 0], rewards: [3, 3] });
+    options.push({ type: 'hiddenShop', mods: [0, 0], rewards: [3, 3] });
+    options.push({ type: 'hiddenAltar', mods: [0, 0], rewards: [3, 3] });
   }
-  if (difficulty > 2 ){
-    options.push({ type: 'skip',  mods: [0, 0], rewards: [0, 3] }),//skip path
-    options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
-    options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
-    options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
-    options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
-    options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
-    options.push({ type: 'hiddenShop',  mods: [0, 0], rewards: [3, 3] });
-    options.push({ type: 'hiddenAltar',  mods: [0, 0], rewards: [3, 3] });
-    options.push({ type: 'hiddenDuplicator',  mods: [0, 0], rewards: [3, 3] });
-    options.push({ type: 'hiddenWorkbench',  mods: [0, 0], rewards: [3, 3] });
-    options.push({ type: 'hiddenCompiler',  mods: [0, 0], rewards: [3, 3] });
+  if (difficulty > 2) {
+    options.push({ type: 'skip', mods: [0, 0], rewards: [0, 3] }),//skip path
+      options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
+      options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
+      options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
+      options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
+      options.push({ type: 'level', mods: [0, 0], rewards: [3, 3] }),
+      options.push({ type: 'hiddenShop', mods: [0, 0], rewards: [3, 3] });
+    options.push({ type: 'hiddenAltar', mods: [0, 0], rewards: [3, 3] });
+    options.push({ type: 'hiddenDuplicator', mods: [0, 0], rewards: [3, 3] });
+    options.push({ type: 'hiddenWorkbench', mods: [0, 0], rewards: [3, 3] });
+    options.push({ type: 'hiddenCompiler', mods: [0, 0], rewards: [3, 3] });
   }
   shuffle(options);
   return options[0];
@@ -86,24 +86,24 @@ function getEasyPath(difficulty: number): PathSpec {
 
 function getIndividualPath(difficulty: number): PathSpec {
   const options: PathSpec[] = [
-    { type: 'skip',  mods: [0, 1], rewards: [0, 5] },//skip path
+    { type: 'skip', mods: [0, 1], rewards: [0, 5] },//skip path
     { type: 'level', mods: [0, 1], rewards: [3, 5] },// risky path
-    { type: 'hiddenShop',  mods: [0, 1], rewards: [3, 5] }
+    { type: 'hiddenShop', mods: [0, 1], rewards: [3, 5] }
   ];
-  if (difficulty > 1 ){
-    options.push({ type: 'level',  mods: [1, 2], rewards: [4, 7] })
-    options.push({ type: 'hiddenShop',  mods: [1, 2], rewards: [4, 7] });
+  if (difficulty > 1) {
+    options.push({ type: 'level', mods: [1, 2], rewards: [4, 7] })
+    options.push({ type: 'hiddenShop', mods: [1, 2], rewards: [4, 7] });
   }
-  if (difficulty > 2 ){
-    options.push({ type: 'skip',  mods: [0, 2], rewards: [0, 7] });
-    options.push({ type: 'hiddenAltar',  mods: [0, 1], rewards: [3, 5] });
-    options.push({ type: 'hiddenAltar',  mods: [1, 2], rewards: [4, 7] });
-    options.push({ type: 'hiddenDuplicator',  mods: [0, 1], rewards: [3, 5] });
-    options.push({ type: 'hiddenDuplicator',  mods: [1, 2], rewards: [4, 7] });
-    options.push({ type: 'hiddenWorkbench',  mods: [0, 1], rewards: [3, 5] });
-    options.push({ type: 'hiddenWorkbench',  mods: [1, 2], rewards: [4, 7] });
-    options.push({ type: 'hiddenCompiler',  mods: [0, 1], rewards: [3, 5] });
-    options.push({ type: 'hiddenCompiler',  mods: [1, 2], rewards: [4, 7] });
+  if (difficulty > 2) {
+    options.push({ type: 'skip', mods: [0, 2], rewards: [0, 7] });
+    options.push({ type: 'hiddenAltar', mods: [0, 1], rewards: [3, 5] });
+    options.push({ type: 'hiddenAltar', mods: [1, 2], rewards: [4, 7] });
+    options.push({ type: 'hiddenDuplicator', mods: [0, 1], rewards: [3, 5] });
+    options.push({ type: 'hiddenDuplicator', mods: [1, 2], rewards: [4, 7] });
+    options.push({ type: 'hiddenWorkbench', mods: [0, 1], rewards: [3, 5] });
+    options.push({ type: 'hiddenWorkbench', mods: [1, 2], rewards: [4, 7] });
+    options.push({ type: 'hiddenCompiler', mods: [0, 1], rewards: [3, 5] });
+    options.push({ type: 'hiddenCompiler', mods: [1, 2], rewards: [4, 7] });
     //secret nodes (the type string) in middle of path between two nodes
     //options.push({ type: 'altar',  mods: [1, 2], rewards: [4, 7] });
     //options.push({ type: 'skipAndAltar',  mods: [1, 2], rewards: [4, 7] });
@@ -125,19 +125,19 @@ function getPathSpecsForDifficulty(difficulty: number): PathSpec[] {
       //Random.bool(0.5) ? { type: 'level', mods: [0, 0], rewards: [3, 3] } : { type: 'hiddenAltar', mods: [0, 0], rewards: [3, 3] }, // safe path
       getEasyPath(difficulty),
       //getIndividualPath(difficulty)
-      { type: 'skip',  mods: [0, 1], rewards: [0, 5] },
+      { type: 'skip', mods: [0, 1], rewards: [0, 5] },
       //{ type: 'hiddenShop',  mods: [1, 2], rewards: [4, 7] }
     ];
   }
 
   // difficulty 3+
   //if (difficulty > 2) {
-    return [
-      //{ type: 'level', mods: [0, 0], rewards: [3, 3] },
-      getEasyPath(difficulty),
-      getIndividualPath(difficulty),
-      getIndividualPath(difficulty),
-    ];
+  return [
+    //{ type: 'level', mods: [0, 0], rewards: [3, 3] },
+    getEasyPath(difficulty),
+    getIndividualPath(difficulty),
+    getIndividualPath(difficulty),
+  ];
   //}
 }
 
@@ -274,7 +274,7 @@ export function generateWorld(
         next: [p2],
         position: {
           x: pos.node1.x,
-          y: ((pos.node1.y + pos.node2.y) / 2) +16
+          y: ((pos.node1.y + pos.node2.y) / 2) + 16
         },
         company: shopCompany,
         difficultyMod: 0,
@@ -316,7 +316,7 @@ export function generateWorld(
         next: [p2],
         position: {
           x: pos.node1.x,
-          y: ((pos.node1.y + pos.node2.y) / 2) +16
+          y: ((pos.node1.y + pos.node2.y) / 2) + 16
         },
         company: playerCompany,
         difficultyMod: 0,
@@ -358,7 +358,7 @@ export function generateWorld(
         next: [p2],
         position: {
           x: pos.node1.x,
-          y: ((pos.node1.y + pos.node2.y) / 2) +16
+          y: ((pos.node1.y + pos.node2.y) / 2) + 16
         },
         company: playerCompany,
         difficultyMod: 0,
@@ -400,7 +400,7 @@ export function generateWorld(
         next: [p2],
         position: {
           x: pos.node1.x,
-          y: ((pos.node1.y + pos.node2.y) / 2) +10
+          y: ((pos.node1.y + pos.node2.y) / 2) + 10
         },
         company: playerCompany,
         difficultyMod: 0,
@@ -442,7 +442,7 @@ export function generateWorld(
         next: [p2],
         position: {
           x: pos.node1.x,
-          y: ((pos.node1.y + pos.node2.y) / 2) +16
+          y: ((pos.node1.y + pos.node2.y) / 2) + 16
         },
         company: playerCompany,
         difficultyMod: 0,
@@ -462,7 +462,7 @@ export function generateWorld(
         reward: spec.rewards[1]
       };
     }
-    
+
     if (spec.type === 'level') {
       nodes[p1] = {
         id: p1,
@@ -486,7 +486,7 @@ export function generateWorld(
         reward: spec.rewards[1]
       };
     }
-    
+
     nodes[startId].next.push(p1);
   });
 
@@ -522,7 +522,7 @@ export function generateWorld(
     selectedEdges.forEach(edge => {
       let sourceId = `path_${edge.from}_1`;
       let targetId = `path_${edge.to}_2`;
-      
+
       const roll = Random.next();
       // 30% chance to originate from middle node OR 30% chance to lead to middle node
       // This ensures we never have middle-to-middle connections
@@ -558,7 +558,7 @@ export function generateWorld(
     type: "boss",
     level: pick(),
     next: [],
-    position: { x: 200, y: 50 },
+    position: { x: 200, y: 30 },
     company: bossCompany,
     difficultyMod: 0,
     reward: Math.min(10, difficulty * 2)// +5;
@@ -571,12 +571,12 @@ export function generateWorld(
     } else {
       node.visible = false;
     }
-    
+
     // Process level spawns if node has a level
     if (node.level && (node.type === 'level' || node.type === 'boss')) {
       const { processedPieces } = processSpawnPoints(
-        node.level.pieces, 
-        (node.company && node.company.pieceList && node.company.pieceList.length > 0) ? node.company.pieceList : allPieces, 
+        node.level.pieces,
+        (node.company && node.company.pieceList && node.company.pieceList.length > 0) ? node.company.pieceList : allPieces,
         difficulty,
         node.difficultyMod
       );
@@ -591,8 +591,8 @@ export function generateWorld(
 }
 
 function processSpawnPoints(
-  pieces: Piece[], 
-  companyPieces: any[], 
+  pieces: Piece[],
+  companyPieces: any[],
   difficulty: number,
   mod: number
   //stake: number
@@ -638,7 +638,7 @@ function processSpawnPoints(
         if (variant) {
           applyVariant(enemyInstance, variant);
         }
-        
+
         enemyInstance.defenceRemaining = enemyInstance.getStat('defence');
 
         /*OLD STAKE MODIFIERS

@@ -4766,7 +4766,6 @@ class Pentagram extends Piece {
 
 //
 //taxi U+1F695 /
-//RICKSHAW, U+1F6FA
 //bus U+1F68C move other pieces (friendly) to it's tail?
 //this.tiles.splice(this.tiles.length-1, 1);
 

@@ -3917,30 +3917,21 @@ console.log("Admins of rarity 4: ", adminLogs.rarity4)
 console.log("Admins of rarity 5: ", adminLogs.rarity5)
 console.log("Admins of rarity 6: ", adminLogs.rarity6)
 
-//JEANS, U+1F456 all hidden nodes are compilers - cost gets more expensive each time
-// LIPSTICK, U+1F484 retaliations charm enemies - piece.willRetaliate: hedgehog, fencer, puffer. Admins: Blackbelt(willRetaliate) Cactus Pong
-//RECYCLING SYMBOL, U+2672 selling programs gives 1 of lower rarirty
+//JEANS, U+1F456 all hidden nodes are compilers - cost gets more expensive each time //gene hybrids appear in shop
+//LIPSTICK, U+1F484 retaliations charm enemies - piece.willRetaliate: hedgehog, fencer, puffer. Admins: Blackbelt(willRetaliate) Cactus Pong
+//EGYPTIAN HIEROGLYPH L004, U+131A7 Plague of locusts, remove all body tiles from enemies at start of round
+//U+1F4FA TELEVISION enemies first turn is disabled
+//Boots, U+1F462 +1 moves, +1 max size, -1 attack/def
+// U+1F3C4 surfing
 
-//U+1F4FA TELEVISION
+//FINGERPRINT, U+1FAC6 forensics
 //U+1F4FB RADIO
 //SLEUTH OR SPY, U+1F575
 //TEACUP WITHOUT HANDLE, U+1F375 calm down, removes enraged from enemies
 //Swish, U+1F3C0 - range of 3+ gets +3 attack
 //SNOWBOARDER, U+1F3C2
-//Boots, U+1F462 +1 moves +1 max size
-
-// challenge nodes?
-//DESERT ISLAND, U+1F3DD
-//DESERT, U+1F3DC
-//DERELICT HOUSE BUILDING, U+1F3DA
-//STADIUM, U+1F3DF colloseum -  1 on 1
-
-
-// ROUNDED SYMBOL FOR CAI, U+1F265 wealth + rand money admin?
-// ROUNDED SYMBOL FOR FU, U+1F260 luck + clovers?
-//ROUNDED SYMBOL FOR LU, U+1F261 prosperity +  mystery boxes/pandoras
-//ROUNDED SYMBOL FOR SHOU, U+1F262 logevity + max size
-//ROUNDED SYMBOL FOR XI, U+1F263 happiness + gifts
+//CRUTCH, U+1FA7C
+// MOUNT FUJI, U+1F5FB
 
 //SEE-NO-EVIL MONKEY, U+1F648 -1 range
 /*class MonkeySee extends Admin {
@@ -3964,26 +3955,26 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //HEAR-NO-EVIL MONKEY, U+1F649 -1 moves
 //SPEAK-NO-EVIL MONKEY, U+1F64A -1 attack/actions?
 
-
-
-//GOAT, U+1F410 charge line piece, or GOAT admin
-
-//splash damage- mult to group targets??
-//bomb bonuses -
-//gene hybrids appear in shop
-
 //TULIP, U+1F337 pair with bubble, some kind of effect based off money???
-
 //CLAPPER BOARD, U+1F3AC Action
+
+// challenge nodes?
+//DESERT ISLAND, U+1F3DD
+//DESERT, U+1F3DC
+//DERELICT HOUSE BUILDING, U+1F3DA
+//STADIUM, U+1F3DF colloseum -  1 on 1
+
+// ROUNDED SYMBOL FOR CAI, U+1F265 wealth + rand money admin?
+// ROUNDED SYMBOL FOR FU, U+1F260 luck + clovers?
+//ROUNDED SYMBOL FOR LU, U+1F261 prosperity +  mystery boxes/pandoras
+//ROUNDED SYMBOL FOR SHOU, U+1F262 logevity + max size
+//ROUNDED SYMBOL FOR XI, U+1F263 happiness + gifts
+
 // CRESCENT MOON, U+1F319
-//CRUTCH, U+1FA7C
-// MOUNT FUJI, U+1F5FB
-//FINGERPRINT, U+1FAC6 forensics
 //MEDIUM WHITE CIRCLE, U+26AA Pearl
 //TOOTH, U+1F9B7
 //HINDU TEMPLE, U+1F6D5 polytheism
 //KAABA, U+1F54B move in a circle
-//HIBISCUS, U+1F33A + health
 //LOLLIPOP, U+1F36D sweet tooth
 //CANDY, U+1F36C
 //PINCHED FINGERS, U+1F90C
@@ -3993,13 +3984,11 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 // ♱ U+2671
 // benzene ring ⏣
 //۩ U+06E9 Arabic Place of Sajdah. Prayer
-// U+1F3C4 surfing
 // U+16B9 rune P
 //rune bloodborne  U+16C9
 
 //SOCKS, U+1F9E6
 // BILLED CAP, U+1F9E2
-//DUMPLING, U+1F95F Pierog
 //PEANUTS, U+1F95C
 //⛱️
 //🀄
@@ -4009,54 +3998,32 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //Arevakhach LEFT-FACING ARMENIAN ETERNITY SIGN, U+58E
 //RIGHT-FACING ARMENIAN ETERNITY SIGN, U+58D
 // SAXOPHONE, U+1F3B7 + moves
-// ACCORDION, U+1FA97 Busker -
 //PINE DECORATION, U+1F38D
 //SEAT, U+1F4BA Recliner
 //CHAIR, U+1FA91
 //HAIR PICK, U+1FAAE
-//SPOOL OF THREAD, U+1F9F5
 // COFFIN, U+26B0
-//CLOSED MAILBOX WITH RAISED FLAG, U+1F4EB
-//OLD KEY, U+1F5DD
 //GOAL NET, U+1F945
 // CELTIC CROSS, U+1F548
 
 //complicated edits...
 //ROUND PUSHPIN, U+1F4CD trap's heads are marked with pin, doesn't reveal them though
 
-//TAKEOUT BOX, U+1F961
-
-//AMPERSAND, U+26
 //AEGEAN NUMBER ONE THOUSAND, U+10122 hit markers
 //MUSICAL SYMBOL GLISSANDO UP, U+1D1B1, stairs
 
 //blood tax nerf to only attacking own pieces? overkills? or jolly roger?
 // HOSPITAL, U+1F3E5
-// BLACK ROSETTE, U+1F3F6
 //MOUNTAIN BICYCLIST, U+1F6B5
 
-//PINE DECORATION, U+1F38D
 //SYMBOL FOR SALT OF ANTIMONY, U+1F72D sceptre
 //LINK SYMBOL, U+1F517
-//ALCHEMICAL SYMBOL FOR GOLD, U+1F71A gold comet
 // PUSHPIN, U+1F4CC
 //WAVING BLACK FLAG, U+1F3F4
 
 //ANKH, U+2625
 
-//EGYPTIAN HIEROGLYPH S034, U+132F9
-//EGYPTIAN HIEROGLYPH O010A, U+13262
-// LEFT LUGGAGE, U+1F6C5 Key and suitcase
-
-// PLACARD, U+1FAA7
-
-//hex SOFTWARE-FUNCTION SYMBOL, U+2394
-
 // AUTOMATED TELLER MACHINE, U+1F3E7
-
-//TURNED BLACK SHOGI PIECE, U+26CA //black shield
-
-//8ball BILLIARDS, U+1F3B1
 
 //stag
 // LINEAR B IDEOGRAM B104 DEER, U+10082
@@ -4074,39 +4041,10 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 
 // SPARKLES, U+2728
 
-//alien
-//EGYPTIAN HIEROGLYPH R028, U+132CF
-
 //crosshair
 //POSITION INDICATOR, U+2316
 
-//LOCK, U+
-//OLD KEY, U+1F5DD
-
-//EGYPTIAN HIEROGLYPH AA024, U+13426 //gate??
-//gate
-// EGYPTIAN HIEROGLYPH N024, U+13208
-
-//EGYPTIAN HIEROGLYPH D004, U+13079 //eye
-
 //EGYPTIAN HIEROGLYPH D009, U+1307F //eye on stilts
-
-// //bull
-//EGYPTIAN HIEROGLYPH E001, U+130D2
-//EGYPTIAN HIEROGLYPH F002, U+13100
-// EGYPTIAN HIEROGLYPH F001, U+130FE
-
-//turtle
-// EGYPTIAN HIEROGLYPH I002, U+13189
-
-//frog
-//EGYPTIAN HIEROGLYPH I007, U+1318F
-
-//beetle
-//EGYPTIAN HIEROGLYPH L001, U+131A3
 
 //fly
 // EGYPTIAN HIEROGLYPH L003, U+131A6
-
-//cricket
-//EGYPTIAN HIEROGLYPH L004, U+131A7 Plague of locusts, remove all body tiles from enemies at start of round

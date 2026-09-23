@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { getSpriteStyle } from "../helperFunctions";
+import { companies, shopCompany, bossCompany, playerCompany } from '../companies';
+import { allBosses } from '../Bosses';
+import type { Company } from '../types';
 
 type NodeType = "start" | "level" | "skip" | "shop" | "boss" | "hybrid compiler" | "sacrificial altar" | "duplicator" | "workbench";
 
@@ -11,8 +15,11 @@ interface EditorNode {
   difficultyMod: number;
   reward: number;
   levelName?: string;
-  shopContents?: string[]; // IDs or names of blueprints/items
+  shopContents?: string; // IDs or names of blueprints/items
+  skipContents?: string; // IDs or names for skip rewards
+  bossName?: string; // name of the selected boss
   drops?: string[]; // predefined drops for levels
+  company?: Company;
 }
 
 const nodes = ref<Record<string, EditorNode>>({});
@@ -40,13 +47,15 @@ function generateId() {
 
 function addNode() {
   const id = generateId();
+  const type = Object.keys(nodes.value).length === 0 ? 'start' : 'level';
   nodes.value[id] = {
     id,
-    type: Object.keys(nodes.value).length === 0 ? 'start' : 'level',
+    type,
     position: { x: 100, y: 100 },
     next: [],
     difficultyMod: 0,
-    reward: 3,
+    reward: 0,
+    company: type === 'level' ? companies[0] : undefined
   };
   if (!startNodeId.value) startNodeId.value = id;
 }
@@ -117,7 +126,7 @@ function onMouseUp(event: MouseEvent) {
       const node = nodes.value[id];
       const dx = mouseX - node.position.x;
       const dy = mouseY - node.position.y;
-      return dx >= 0 && dx <= 120 && dy >= 0 && dy <= 40; // Approx node size
+      return dx >= -10 && dx <= 50 && dy >= -10 && dy <= 80; // Approx node size
     });
 
     if (targetNodeId && targetNodeId !== linkStartNode.value) {
@@ -149,7 +158,7 @@ onUnmounted(() => {
 // Import/Export
 function exportData() {
   const exportPayload = {
-    nodes: nodes.value,
+    nodes: Object.fromEntries(Object.entries(nodes.value).map(([k, v]) => [k, { ...v, company: v.company?.name }])),
     startNode: startNodeId.value,
   };
   const data = JSON.stringify(exportPayload, null, 2);
@@ -166,7 +175,13 @@ function importData() {
     try {
       const parsed = JSON.parse(jsonStr);
       if (parsed.nodes && parsed.startNode !== undefined) {
-        nodes.value = parsed.nodes;
+        const importedNodes = parsed.nodes;
+        for (const key in importedNodes) {
+           if (importedNodes[key].company && typeof importedNodes[key].company === 'string') {
+               importedNodes[key].company = allCompanyOptions.find(c => c.name === importedNodes[key].company);
+           }
+        }
+        nodes.value = importedNodes;
         startNodeId.value = parsed.startNode;
       } else {
         alert('Invalid JSON structure');
@@ -177,6 +192,64 @@ function importData() {
   }
 }
 
+const allCompanyOptions = [shopCompany, bossCompany, playerCompany, ...companies];
+
+function updateNext(event: Event, node: EditorNode) {
+  const value = (event.target as HTMLInputElement).value;
+  node.next = value.split(',').map(s => s.trim()).filter(s => s.length > 0);
+}
+
+function displayIcon(node: EditorNode) {
+    if (node.type === 'skip') return "";
+    switch (node.type) {
+        case "start": return "⬤";
+        case "shop": return "🛒";
+        case "sacrificial altar": return String.fromCodePoint(parseInt("U+1FAA6".replace('U+', ''), 16), 0xFE0F);
+        case "duplicator": return String.fromCodePoint(parseInt("U+1F46F".replace('U+', ''), 16), 0xFE0F);
+        case "workbench": return String.fromCodePoint(parseInt("U+2699".replace('U+', ''), 16), 0xFE0F);
+        case "hybrid compiler": return String.fromCodePoint(parseInt("U+1F9EC".replace('U+', ''), 16), 0xFE0F);
+        case "level": return node.company ? String.fromCodePoint(parseInt(node.company.unicode.replace('U+', ''), 16), 0xFE0F) : "";
+        case "boss": return node.bossName ? "" : "?";
+        default: return "";
+    }
+}
+
+function getIconStyle(node: EditorNode, size: number = 24): Record<string, any> {
+    let iconID: number | undefined;
+    if (node.type === 'level' && node.company) {
+        iconID = node.company.iconID;
+    } else if (node.type === 'shop'){
+        iconID = 474;
+    } else if(node.type === "sacrificial altar"){
+        iconID = 475;
+    } else if(node.type === 'duplicator'){
+        iconID = 476;
+    } else if(node.type === 'workbench'){
+        iconID = 477;
+    } else if(node.type === 'hybrid compiler'){
+        iconID = 478;
+    } else if (node.type === 'boss' && node.bossName) {
+        const boss = allBosses.find(b => b.name === node.bossName);
+        if (boss) iconID = boss.iconID;
+    }
+
+    if (iconID !== undefined && iconID >= 0) {
+        return {
+            ...getSpriteStyle(iconID),
+            width: `${size}px`,
+            height: `${size}px`,
+            display: 'inline-block',
+            color: 'transparent'
+        };
+    }
+    return {};
+}
+
+function getCenter(node: EditorNode) {
+    if (node.type === 'level') return { x: node.position.x + 20, y: node.position.y + 35 };
+    return { x: node.position.x + 18, y: node.position.y + 18 };
+}
+
 // Lines drawing
 const linksList = computed(() => {
   const links: { x1: number, y1: number, x2: number, y2: number }[] = [];
@@ -184,11 +257,13 @@ const linksList = computed(() => {
     node.next.forEach(nextId => {
       const target = nodes.value[nextId];
       if (target) {
+        const c1 = getCenter(node);
+        const c2 = getCenter(target);
         links.push({
-          x1: node.position.x + 60, // center x
-          y1: node.position.y + 40, // bottom center y
-          x2: target.position.x + 60,
-          y2: target.position.y, // top center y
+          x1: c1.x,
+          y1: c1.y,
+          x2: c2.x,
+          y2: c2.y,
         });
       }
     });
@@ -234,20 +309,55 @@ function canvasOffsetY(y: number) {
                 
           <!-- Render active dragging link -->
           <line v-if="isLinking && linkStartNode" 
-                :x1="nodes[linkStartNode].position.x + 60" 
-                :y1="nodes[linkStartNode].position.y + 40" 
+                :x1="getCenter(nodes[linkStartNode]).x" 
+                :y1="getCenter(nodes[linkStartNode]).y" 
                 :x2="canvasOffsetX(linkEndPos.x)" 
                 :y2="canvasOffsetY(linkEndPos.y)" 
                 stroke="#2fc5eb" stroke-width="3" />
         </svg>
 
         <div v-for="node in nodes" :key="node.id"
-             class="editor-node"
-             :class="{ selected: selectedNodeId === node.id, isStart: startNodeId === node.id }"
-             :style="{ left: node.position.x + 'px', top: node.position.y + 'px' }"
+             class="editor-node node"
+             :class="{ 
+               selected: selectedNodeId === node.id, 
+               isStart: startNodeId === node.id,
+               bossNode: node.type === 'boss',
+               startNode: node.type === 'start',
+               shopNode: node.type === 'shop',
+               skipNode: node.type === 'skip',
+               levelNode: node.type === 'level'
+             }"
+             :style="{ 
+               left: node.position.x + 'px', 
+               top: node.position.y + 'px',
+               backgroundColor: node.type === 'level' && node.company ? node.company.tileColor : undefined,
+               borderColor: node.type === 'level' && node.company ? node.company.edgeColor : undefined
+             }"
              @mousedown.stop="onMouseDownNode($event, node.id)">
-          <div class="node-title">{{ node.type }}</div>
-          <div class="node-id">{{ node.id }}</div>
+             
+          <div class="pins">
+              <div class="pins-top"></div>
+              <div class="pins-bottom"></div>
+              <div class="pins-left"></div>
+              <div class="pins-right"></div>
+          </div>
+          
+          <div class="node-inner">
+              <div class="node-inner-content" v-if="node.type !== 'start'">
+                  <div v-if="node.type == 'level'" class='text-gold'>
+                      ${{ node.reward }}
+                  </div>
+                  <div class="icon" :style="getIconStyle(node, 24)">
+                      <template v-if="!getIconStyle(node).backgroundImage">
+                          {{ displayIcon(node) }}
+                      </template>
+                  </div>
+                  <div v-if="node.type == 'level'">
+                      {{ String.fromCodePoint(parseInt("U+1F512".replace('U+', ''), 16), 0xFE0F) }}{{
+                          node.difficultyMod }}
+                  </div>
+              </div>
+          </div>
         </div>
       </div>
 
@@ -260,9 +370,22 @@ function canvasOffsetY(y: number) {
         </div>
 
         <div class="prop-group">
+          <label>Next Nodes (comma-separated IDs)</label>
+          <input type="text" :value="selectedNode.next.join(', ')" @input="updateNext($event, selectedNode)" />
+        </div>
+
+        <div class="prop-group">
           <label>Type</label>
           <select v-model="selectedNode.type">
             <option v-for="type in nodeTypes" :key="type" :value="type">{{ type }}</option>
+          </select>
+        </div>
+
+        <div class="prop-group">
+          <label>Company</label>
+          <select v-model="selectedNode.company">
+            <option :value="undefined">None</option>
+            <option v-for="c in allCompanyOptions" :key="c.name" :value="c">{{ c.name }}</option>
           </select>
         </div>
 
@@ -276,9 +399,17 @@ function canvasOffsetY(y: number) {
           <input type="number" v-model.number="selectedNode.difficultyMod" />
         </div>
 
-        <div class="prop-group">
+        <div class="prop-group" v-if="selectedNode.type === 'level' || selectedNode.type === 'boss'">
           <label>Reward / Money</label>
           <input type="number" v-model.number="selectedNode.reward" />
+        </div>
+
+        <div class="prop-group" v-if="selectedNode.type === 'boss'">
+          <label>Boss</label>
+          <select v-model="selectedNode.bossName">
+            <option :value="undefined">Random Boss</option>
+            <option v-for="boss in allBosses" :key="boss.name" :value="boss.name">{{ boss.name }}</option>
+          </select>
         </div>
 
         <div class="prop-group" v-if="selectedNode.type === 'level'">
@@ -290,6 +421,11 @@ function canvasOffsetY(y: number) {
         <div class="prop-group" v-if="selectedNode.type === 'shop'">
           <label>Shop Contents (comma-separated Blueprint/Item names)</label>
           <textarea v-model="selectedNode.shopContents" placeholder="Knife, Shield, Voucher..."></textarea>
+        </div>
+
+        <div class="prop-group" v-if="selectedNode.type === 'skip'">
+          <label>Skip Contents (comma-separated Blueprint/Item/Admin names)</label>
+          <textarea v-model="selectedNode.skipContents" placeholder="Knife, Shield, Voucher..."></textarea>
         </div>
 
         <button class="danger-btn" @click="removeNode(selectedNode.id)">Delete Node</button>
@@ -357,39 +493,184 @@ function canvasOffsetY(y: number) {
 
 .editor-node {
   position: absolute;
-  width: 120px;
-  background: #222;
-  border: 2px solid #555;
   border-radius: 6px;
   cursor: grab;
   user-select: none;
   box-shadow: 0 4px 6px rgba(0,0,0,0.3);
   text-align: center;
-  padding-bottom: 5px;
 }
 .editor-node:active {
   cursor: grabbing;
 }
-.editor-node.selected {
-  border-color: #2fc5eb;
+.editor-node.levelNode.selected {
+  border: 2px solid #2fc5eb !important;
   box-shadow: 0 0 10px #2fc5eb;
 }
-.editor-node.isStart {
-  border-color: #4CAF50;
+.editor-node.levelNode.isStart {
+  border: 2px solid #4CAF50 !important;
   box-shadow: 0 0 10px #4CAF50;
 }
 .node-title {
-  background: #333;
-  padding: 5px;
-  font-weight: bold;
-  font-size: 0.9rem;
-  border-bottom: 1px solid #555;
-  border-radius: 4px 4px 0 0;
+  display: none;
 }
 .node-id {
-  font-size: 0.7rem;
-  color: #888;
-  padding: 5px;
+  display: none;
+}
+
+.levelNode {
+    width: 40px;
+    height: 70px;
+    font-size: 14px;
+}
+
+.bossNode {
+  width: 72px;
+  height: 72px;
+}
+
+.startNode,
+.shopNode,
+.skipNode {
+    width: 36px;
+    height: 36px;
+}
+
+.node-inner {
+    text-align: center;
+    height: 100%;
+    background: #141414;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    user-select: none;
+    border-radius: 4px;
+}
+
+.bossNode .node-inner,
+.shopNode .node-inner {
+    border-left: none;
+    border-right: none;
+}
+
+.bossNode .node-inner {
+    width: 100%;
+    height: 100%;
+}
+
+.pins {
+    position: absolute;
+    z-index: -1;
+    width: 80%;
+    height: 80%;
+    left: 10%;
+    top: 10%;
+}
+
+.pins-left,
+.pins-right,
+.pins-bottom,
+.pins-top {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.pins-top {
+    left: 10%;
+    top: -10%;
+    border-top: 3px dashed white;
+}
+
+.pins-left {
+    top: 10%;
+    left: -10%;
+}
+
+.pins-bottom {
+    left: 10%;
+    top: 22%;
+    border-bottom: 3px dashed white;
+}
+
+.pins-right {
+    left: 26%;
+    top: 10%;
+}
+
+.levelNode .pins-top {
+    display: none;
+}
+
+.levelNode .pins-bottom {
+    display: none;
+}
+
+.levelNode .pins-left {
+    border-left: 3px dashed white;
+}
+
+.levelNode .pins-right {
+    border-right: 3px dashed white;
+}
+
+.bossNode .pins-left,
+.bossNode .pins-right,
+.bossNode .pins-top,
+.bossNode .pins-bottom,
+.startNode .pins-left,
+.startNode .pins-right,
+.startNode .pins-top,
+.startNode .pins-bottom {
+    top: 4%;
+    border-top: 2px dotted white;
+    border-bottom: 2px dotted white;
+    border-right: 2px dotted white;
+    border-left: 2px dotted white;
+}
+
+.bossNode .pins-top{
+    left: 10%;
+    top: -4%;
+}
+.startNode .pins-top {
+    left: 4%;
+    top: -9%;
+}
+
+.bossNode .pins-bottom{
+    top: 21%;
+}
+.startNode .pins-bottom {
+    top: 19%;
+}
+
+.bossNode .pins-right{
+    left: 22%;
+}
+.startNode .pins-right {
+    left: 19%;
+}
+.bossNode .pins-left{
+    top: 10%;
+    left: -4%;
+}
+
+.text-gold {
+    color: gold;
+}
+
+.boss-info {
+    position: absolute;
+    background-color: #111;
+    font-size: 14px;
+    opacity: 1;
+    width: 100px;
+    left: 120%;
+    border: 1px solid white;
+    border-radius: 5px;
+    padding: 0.2rem;
 }
 
 .properties-panel {

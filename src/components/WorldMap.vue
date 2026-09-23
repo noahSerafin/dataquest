@@ -854,7 +854,11 @@ watch(currentNodeId, () => {
     font-size: 14px;
 }
 
-.bossNode,
+.bossNode {
+    width: 72px;
+    height: 72px;
+}
+
 .startNode {
     width: 36px;
     height: 36px;
@@ -952,20 +956,31 @@ watch(currentNodeId, () => {
     border-left: 2px dotted white;
 }
 
-.bossNode .pins-top,
+.bossNode .pins-top{
+    left: 10%;
+    top: -4%;
+}
 .startNode .pins-top {
     left: 4%;
     top: -9%;
 }
 
-.bossNode .pins-bottom,
+.bossNode .pins-bottom{
+    top: 21%;
+}
 .startNode .pins-bottom {
     top: 19%;
 }
 
-.bossNode .pins-right,
+.bossNode .pins-right{
+    left: 22%;
+}
 .startNode .pins-right {
     left: 19%;
+}
+.bossNode .pins-left{
+    top: 10%;
+    left: -4%;
 }
 
 /*

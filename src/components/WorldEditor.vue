@@ -371,7 +371,7 @@ function canvasOffsetY(y: number) {
 
         <div class="prop-group">
           <label>Next Nodes (comma-separated IDs)</label>
-          <input type="text" :value="selectedNode.next.join(', ')" @input="updateNext($event, selectedNode)" />
+          <input type="text" :value="selectedNode.next.join(', ')" @change="updateNext($event, selectedNode)" />
         </div>
 
         <div class="prop-group">

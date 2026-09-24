@@ -1539,7 +1539,7 @@ class Scarf extends Admin {
   }
 }
 
-export class Ambulance extends Admin {
+export class Ambulance extends Admin {////U+1F6DF RING BUOY
   static iconID = 321;
   static name = "Ambulance";
   static description = "Recovers all your destroyed programs to your inventory, letting you reload them";
@@ -3970,7 +3970,6 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //ROUNDED SYMBOL FOR SHOU, U+1F262 logevity + max size
 //ROUNDED SYMBOL FOR XI, U+1F263 happiness + gifts
 
-// CRESCENT MOON, U+1F319
 //MEDIUM WHITE CIRCLE, U+26AA Pearl
 //TOOTH, U+1F9B7
 //HINDU TEMPLE, U+1F6D5 polytheism

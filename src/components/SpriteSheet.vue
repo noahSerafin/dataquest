@@ -132,7 +132,29 @@ const allIcons = computed(() => {
     'U+1F60C', // zen 😌
     'U+1F910', // disarmed 🤐
     'U+1F624', // juiced 😤
-    'U+1F532'
+    'U+1F532', //spawn,
+    'U+1F6FA',// RICKSHAW
+    'U+1F9F5',// SPOOL OF THREAD
+    'U+1FA97',// ACCORDION
+    'U+1F417',// BOAR
+    'U+1F3B1',// 8ball BILLIARDS
+    'U+1F439',// HAMSTER FACE
+    'U+1F458',// KIMONO
+    'U+132CF',// EGYPTIAN HIEROGLYPH R028 //alieny
+    'U+1F410',// GOAT
+    'U+1F95F',// DUMPLING
+    'U+1F99D',// RACCOON 
+    'U+1F973',// FACE WITH PARTY HORN AND PARTY HAT
+    'U+1F9A4',// DODO 
+    'U+1F428',// KOALA
+    'U+1F319',// CRESCENT MOON
+    'U+1F3B7',// SAXOPHONE 
+    'U+262E',// PEACE SYMBOL
+    'U+1F9E7',// RED GIFT ENVELOPE
+    'U+1F369',// DOUGHNUT
+    'U+1F36C',// CANDY
+    'U+26BD',// SOCCER BALL 
+
   ];
   statuses.forEach((unicode, index) => {
     result.push({

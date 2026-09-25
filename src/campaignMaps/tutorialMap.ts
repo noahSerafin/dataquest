@@ -40,7 +40,8 @@ export const sector0 = {
           "ds1": 8,
           "ds2": 12
         }
-      }
+      },
+      "levelName": "TheArena"
     },
     "node_ltmmq2vo6": {
       "id": "node_ltmmq2vo6",
@@ -83,7 +84,8 @@ export const sector0 = {
           "ds1": 17,
           "ds2": 16
         }
-      }
+      },
+      "levelName": "Castled"
     },
     "node_hb7dz8ll7": {
       "id": "node_hb7dz8ll7",
@@ -120,7 +122,8 @@ export const sector0 = {
           "ds1": 23,
           "ds2": 23
         }
-      }
+      },
+      "levelName": "The Alley"
     },
     "node_dl1mtdtzw": {
       "id": "node_dl1mtdtzw",
@@ -149,7 +152,8 @@ export const sector0 = {
           "y1": -21,
           "y2": 0
         }
-      }
+      },
+      "levelName": "The Gauntlet"
     },
     "node_ysd75k5m7": {
       "id": "node_ysd75k5m7",
@@ -171,7 +175,8 @@ export const sector0 = {
           "y2": 0,
           "ds1": 25
         }
-      }
+      },
+      "levelName": "The Cave"
     },
     "node_fsmb6r7an": {
       "id": "node_fsmb6r7an",
@@ -185,7 +190,8 @@ export const sector0 = {
       ],
       "difficultyMod": 1,
       "reward": 1,
-      "company": "Saturn Solutions"
+      "company": "Saturn Solutions",
+      "levelName": "The Penopticon"
     },
     "node_5i9h9b6ti": {
       "id": "node_5i9h9b6ti",
@@ -198,7 +204,8 @@ export const sector0 = {
       "difficultyMod": 0,
       "reward": 0,
       "company": "Saturn Solutions",
-      "bossName": "North Wind"
+      "bossName": "North Wind",
+      "levelName": "The Arena"
     },
     "node_svw51xvjh": {
       "id": "node_svw51xvjh",

@@ -657,7 +657,7 @@ function canvasOffsetY(y: number) {
           </select>
         </div>
 
-        <div class="prop-group" v-if="selectedNode.type === 'level'">
+        <div class="prop-group" v-if="selectedNode.type === 'level' || selectedNode.type === 'boss'">
           <label>Level Name</label>
           <input type="text" v-model="selectedNode.levelName" placeholder="e.g. castled" />
           <small>Matches a level exported from the Level Editor</small>

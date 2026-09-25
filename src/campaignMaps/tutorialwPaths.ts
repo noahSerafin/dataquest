@@ -1,68 +1,178 @@
-export const sector0 = {
+{
   "nodes": {
-    "node_sjtiq3y93": {
-      "id": "node_sjtiq3y93",
+    "node_g41ksufcp": {
+      "id": "node_g41ksufcp",
       "type": "start",
       "position": {
-        "x": 620,
-        "y": 680
+        "x": 440,
+        "y": 660
       },
       "next": [
-        "node_l6a42tosz"
-      ],
-      "difficultyMod": 0,
-      "reward": 0
-    },
-    "node_l6a42tosz": {
-      "id": "node_l6a42tosz",
-      "type": "level",
-      "position": {
-        "x": 620,
-        "y": 540
-      },
-      "next": [
-        "node_3oza2obd1",
-        "node_bb0re4wdn"
-      ],
-      "difficultyMod": 1,
-      "reward": 1,
-      "company": "Saturn Solutions",
-      "levelName": "Arena"
-    },
-    "node_bb0re4wdn": {
-      "id": "node_bb0re4wdn",
-      "type": "shop",
-      "position": {
-        "x": 620,
-        "y": 440
-      },
-      "next": [
-        "node_479ijsvss",
-        "node_9kf9q9389",
-        "node_mx0wh6x87"
+        "node_km8bwjcq7"
       ],
       "difficultyMod": 0,
       "reward": 0,
-      "company": "Saturn Solutions",
-      "shopContents": "Bee, Rat, Sling, Snail, TP, Blueberry, Iron, Juiced, Mushroom, Update, Candle, Chedda, Harvest, Notepad, Parachute"
+      "pathOffsets": {}
     },
-    "node_479ijsvss": {
-      "id": "node_479ijsvss",
+    "node_km8bwjcq7": {
+      "id": "node_km8bwjcq7",
       "type": "level",
       "position": {
-        "x": 620,
-        "y": 280
+        "x": 560,
+        "y": 540
       },
       "next": [
-        "node_vfnnmes9d",
-        "node_k8csaf04f"
+        "node_svw51xvjh",
+        "node_9wnsfvrt4"
       ],
       "difficultyMod": 1,
       "reward": 1,
       "company": "Saturn Solutions"
     },
-    "node_3oza2obd1": {
-      "id": "node_3oza2obd1",
+    "node_ltmmq2vo6": {
+      "id": "node_ltmmq2vo6",
+      "type": "level",
+      "position": {
+        "x": 340,
+        "y": 120
+      },
+      "next": [
+        "node_hb7dz8ll7"
+      ],
+      "difficultyMod": 1,
+      "reward": 1,
+      "company": "Saturn Solutions"
+    },
+    "node_c8d8kquy9": {
+      "id": "node_c8d8kquy9",
+      "type": "level",
+      "position": {
+        "x": 340,
+        "y": 380
+      },
+      "next": [
+        "node_ltmmq2vo6",
+        "node_vx34hfayc"
+      ],
+      "difficultyMod": 2,
+      "reward": 3,
+      "company": "Saturn Solutions",
+      "pathOffsets": {
+        "node_vx34hfayc": {
+          "x": 0,
+          "y1": -22,
+          "y2": 0
+        }
+      }
+    },
+    "node_hb7dz8ll7": {
+      "id": "node_hb7dz8ll7",
+      "type": "level",
+      "position": {
+        "x": 580,
+        "y": 120
+      },
+      "next": [
+        "node_ysd75k5m7"
+      ],
+      "difficultyMod": 1,
+      "reward": 1,
+      "company": "Saturn Solutions"
+    },
+    "node_rxj93azy4": {
+      "id": "node_rxj93azy4",
+      "type": "level",
+      "position": {
+        "x": 900,
+        "y": 380
+      },
+      "next": [
+        "node_fsmb6r7an"
+      ],
+      "difficultyMod": 1,
+      "reward": 1,
+      "company": "Saturn Solutions"
+    },
+    "node_dl1mtdtzw": {
+      "id": "node_dl1mtdtzw",
+      "type": "level",
+      "position": {
+        "x": 580,
+        "y": 240
+      },
+      "next": [
+        "node_hb7dz8ll7",
+        "node_5i9h9b6ti",
+        "node_ysd75k5m7"
+      ],
+      "difficultyMod": 2,
+      "reward": 1,
+      "company": "Saturn Solutions",
+      "pathOffsets": {
+        "node_5i9h9b6ti": {
+          "x": 0,
+          "type": "VDHDV",
+          "y": -24,
+          "ds2": 11
+        },
+        "node_ysd75k5m7": {
+          "x": 47,
+          "y1": -21,
+          "y2": 0
+        }
+      }
+    },
+    "node_ysd75k5m7": {
+      "id": "node_ysd75k5m7",
+      "type": "level",
+      "position": {
+        "x": 680,
+        "y": 120
+      },
+      "next": [
+        "node_5i9h9b6ti"
+      ],
+      "difficultyMod": 1,
+      "reward": 1,
+      "company": "Saturn Solutions",
+      "pathOffsets": {
+        "node_5i9h9b6ti": {
+          "x": 86,
+          "y1": 20,
+          "y2": 0,
+          "ds1": 25
+        }
+      }
+    },
+    "node_fsmb6r7an": {
+      "id": "node_fsmb6r7an",
+      "type": "level",
+      "position": {
+        "x": 900,
+        "y": 120
+      },
+      "next": [
+        "node_ysd75k5m7"
+      ],
+      "difficultyMod": 1,
+      "reward": 1,
+      "company": "Saturn Solutions"
+    },
+    "node_5i9h9b6ti": {
+      "id": "node_5i9h9b6ti",
+      "type": "boss",
+      "position": {
+        "x": 780,
+        "y": 300
+      },
+      "next": [],
+      "difficultyMod": 0,
+      "reward": 0,
+      "company": "Saturn Solutions",
+      "bossName": "North Wind"
+    },
+    "node_svw51xvjh": {
+      "id": "node_svw51xvjh",
       "type": "skip",
       "position": {
         "x": 720,
@@ -74,111 +184,12 @@ export const sector0 = {
       "company": "Saturn Solutions",
       "skipContents": "Banana"
     },
-    "node_9kf9q9389": {
-      "id": "node_9kf9q9389",
-      "type": "level",
-      "position": {
-        "x": 400,
-        "y": 420
-      },
-      "next": [
-        "node_ke497jyk5",
-        "node_hn1byob3n"
-      ],
-      "difficultyMod": 1,
-      "reward": 1,
-      "company": "Longhouse Web Services"
-    },
-    "node_mx0wh6x87": {
-      "id": "node_mx0wh6x87",
-      "type": "level",
-      "position": {
-        "x": 920,
-        "y": 420
-      },
-      "next": [
-        "node_eiu6ted16"
-      ],
-      "difficultyMod": 1,
-      "reward": 1,
-      "company": "Tsukimi Group"
-    },
-    "node_qm7so3844": {
-      "id": "node_qm7so3844",
-      "type": "boss",
-      "position": {
-        "x": 760,
-        "y": 140
-      },
-      "next": [],
-      "difficultyMod": 0,
-      "reward": 5,
-      "company": "Saturn Solutions",
-      "bossName": "North Wind"
-    },
-    "node_ke497jyk5": {
-      "id": "node_ke497jyk5",
-      "type": "level",
-      "position": {
-        "x": 400,
-        "y": 120
-      },
-      "next": [
-        "node_af4vvbttj"
-      ],
-      "difficultyMod": 1,
-      "reward": 1,
-      "company": "Saturn Solutions",
-      "levelName": "castled"
-    },
-    "node_vfnnmes9d": {
-      "id": "node_vfnnmes9d",
-      "type": "level",
-      "position": {
-        "x": 620,
-        "y": 120
-      },
-      "next": [
-        "node_qm7so3844"
-      ],
-      "difficultyMod": 2,
-      "reward": 3,
-      "company": "Nightbridge Corp"
-    },
-    "node_eiu6ted16": {
-      "id": "node_eiu6ted16",
-      "type": "level",
-      "position": {
-        "x": 920,
-        "y": 120
-      },
-      "next": [
-        "node_qm7so3844"
-      ],
-      "difficultyMod": 1,
-      "reward": 1,
-      "company": "Zenith Ltd."
-    },
-    "node_af4vvbttj": {
-      "id": "node_af4vvbttj",
-      "type": "sacrificial altar",
-      "position": {
-        "x": 520,
-        "y": 140
-      },
-      "next": [
-        "node_vfnnmes9d"
-      ],
-      "difficultyMod": 0,
-      "reward": 0,
-      "company": "Saturn Solutions"
-    },
-    "node_hn1byob3n": {
-      "id": "node_hn1byob3n",
+    "node_vx34hfayc": {
+      "id": "node_vx34hfayc",
       "type": "skip",
       "position": {
-        "x": 500,
-        "y": 280
+        "x": 460,
+        "y": 260
       },
       "next": [],
       "difficultyMod": 0,
@@ -186,20 +197,47 @@ export const sector0 = {
       "company": "Saturn Solutions",
       "skipContents": "Bucket"
     },
-    "node_k8csaf04f": {
-      "id": "node_k8csaf04f",
-      "type": "level",
+    "node_9wnsfvrt4": {
+      "id": "node_9wnsfvrt4",
+      "type": "shop",
       "position": {
-        "x": 760,
-        "y": 280
+        "x": 540,
+        "y": 440
       },
       "next": [
-        "node_qm7so3844"
+        "node_dl1mtdtzw",
+        "node_rxj93azy4",
+        "node_c8d8kquy9"
       ],
-      "difficultyMod": 1,
-      "reward": 1,
-      "company": "Meridian Security Inc."
+      "difficultyMod": 0,
+      "reward": 0,
+      "company": "Saturn Solutions",
+      "pathOffsets": {
+        "node_rxj93azy4": {
+          "x": 0,
+          "type": "HDVDH",
+          "y": -45,
+          "x1": 15,
+          "ds2": 14,
+          "ds1": 11
+        },
+        "node_dl1mtdtzw": {
+          "x": -19,
+          "y1": 0,
+          "y2": 0,
+          "ds2": 9,
+          "type": "VDHDV"
+        },
+        "node_c8d8kquy9": {
+          "x": 0,
+          "ds1": 10,
+          "ds2": 7,
+          "y2": 4,
+          "y1": -3
+        }
+      },
+      "shopContents": "Bee, Rat, Sling, Snail, TP, Blueberry, Iron, Juiced, Mushroom, Update, Candle, Chedda, Harvest, Notepad, Parachute"
     }
   },
-  "startNode": "node_sjtiq3y93"
+  "startNode": "node_g41ksufcp"
 }

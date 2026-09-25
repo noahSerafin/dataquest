@@ -37,7 +37,7 @@ const linkEndPos = ref({ x: 0, y: 0 });
 const isDraggingPath = ref(false);
 const dragPathSource = ref<string | null>(null);
 const dragPathTarget = ref<string | null>(null);
-const dragPathType = ref<'x' | 'y1' | 'y2' | null>(null);
+const dragPathType = ref<'x' | 'y1' | 'y2' | 'y' | 'x1' | 'x2' | null>(null);
 const dragPathStartPos = ref(0);
 const dragPathStartOffset = ref(0);
 
@@ -145,6 +145,19 @@ function onMouseMove(event: MouseEvent) {
         let newOffset = dragPathStartOffset.value + delta;
         const limit = targetNode.type === 'level' || targetNode.type === 'boss' ? 30 : 15;
         offsets.y2 = Math.max(-limit, Math.min(limit, newOffset));
+      } else if (dragPathType.value === 'y') {
+        const delta = event.clientY - dragPathStartPos.value;
+        offsets.y = dragPathStartOffset.value + delta;
+      } else if (dragPathType.value === 'x1') {
+        const delta = event.clientX - dragPathStartPos.value;
+        let newOffset = dragPathStartOffset.value + delta;
+        const limit = sourceNode.type === 'level' || sourceNode.type === 'boss' ? 30 : 15;
+        offsets.x1 = Math.max(-limit, Math.min(limit, newOffset));
+      } else if (dragPathType.value === 'x2') {
+        const delta = event.clientX - dragPathStartPos.value;
+        let newOffset = dragPathStartOffset.value + delta;
+        const limit = targetNode.type === 'level' || targetNode.type === 'boss' ? 30 : 15;
+        offsets.x2 = Math.max(-limit, Math.min(limit, newOffset));
       }
       sourceNode.pathOffsets[dragPathTarget.value] = offsets;
     }
@@ -185,7 +198,7 @@ function onMouseUp(event: MouseEvent) {
   dragPathType.value = null;
 }
 
-function onMouseDownPathHandle(event: MouseEvent, sourceId: string, targetId: string, type: 'x'|'y1'|'y2', currentOffset: number) {
+function onMouseDownPathHandle(event: MouseEvent, sourceId: string, targetId: string, type: 'x'|'y1'|'y2'|'y'|'x1'|'x2', currentOffset: number) {
   event.stopPropagation();
   isDraggingPath.value = true;
   dragPathSource.value = sourceId;
@@ -246,9 +259,45 @@ function importData() {
 
 const allCompanyOptions = [shopCompany, bossCompany, playerCompany, ...companies];
 
-function updateNext(event: Event, node: EditorNode) {
-  const value = (event.target as HTMLInputElement).value;
-  node.next = value.split(',').map(s => s.trim()).filter(s => s.length > 0);
+function getPathSettings(node: EditorNode, nextId: string) {
+  if (!node.pathOffsets) return {};
+  const val = node.pathOffsets[nextId];
+  if (typeof val === 'number') return { x: val };
+  return val || {};
+}
+
+function updatePathSetting(node: EditorNode, nextId: string, key: string, value: any) {
+  if (!node.pathOffsets) node.pathOffsets = {};
+  if (!node.pathOffsets[nextId] || typeof node.pathOffsets[nextId] === 'number') {
+    node.pathOffsets[nextId] = { x: typeof node.pathOffsets[nextId] === 'number' ? node.pathOffsets[nextId] : 0 };
+  }
+  if (value === 0 && (key === 'ds1' || key === 'ds2')) {
+     delete node.pathOffsets[nextId][key];
+  } else {
+     node.pathOffsets[nextId][key] = value;
+  }
+}
+
+function updateNextNodeId(node: EditorNode, index: number, newId: string) {
+  const oldId = node.next[index];
+  if (oldId === newId) return;
+  node.next[index] = newId;
+  if (node.pathOffsets && node.pathOffsets[oldId]) {
+    node.pathOffsets[newId] = node.pathOffsets[oldId];
+    delete node.pathOffsets[oldId];
+  }
+}
+
+function addNextNode(node: EditorNode) {
+  node.next.push('');
+}
+
+function removeNextNode(node: EditorNode, index: number) {
+  const oldId = node.next[index];
+  node.next.splice(index, 1);
+  if (node.pathOffsets && node.pathOffsets[oldId]) {
+    delete node.pathOffsets[oldId];
+  }
 }
 
 function displayIcon(node: EditorNode) {
@@ -304,7 +353,7 @@ function getCenter(node: EditorNode) {
 
 // Lines drawing
 const linksList = computed(() => {
-  const links: { sourceId: string, targetId: string, d: string, midHandle?: any, h1Handle?: any, h2Handle?: any }[] = [];
+  const links: { sourceId: string, targetId: string, d: string, type: string, midHandle?: any, h1Handle?: any, h2Handle?: any, v1Handle?: any, v2Handle?: any }[] = [];
   Object.values(nodes.value).forEach(node => {
     node.next.forEach(nextId => {
       const target = nodes.value[nextId];
@@ -316,55 +365,80 @@ const linksList = computed(() => {
         const x2 = c2.x;
         const y2 = c2.y;
         
-        let offsetX = 0;
-        let offsetY1 = 0;
-        let offsetY2 = 0;
-        if (node.pathOffsets && node.pathOffsets[nextId] !== undefined) {
-          const val = node.pathOffsets[nextId];
-          if (typeof val === 'number') {
-            offsetX = val;
-          } else {
-            offsetX = val.x || 0;
-            offsetY1 = val.y1 || 0;
-            offsetY2 = val.y2 || 0;
-          }
+        const settings = node.pathOffsets && node.pathOffsets[nextId] !== undefined ? node.pathOffsets[nextId] : {};
+        const isObj = typeof settings === 'object';
+        const type = isObj ? (settings.type || 'HDVDH') : 'HDVDH';
+        
+        const dxRaw = x2 - x1;
+        const dyRaw = y2 - y1;
+        const dsDefault = Math.min(Math.abs(dxRaw), Math.abs(dyRaw)) * 0.1;
+        
+        let ds1 = isObj && settings.ds1 !== undefined ? settings.ds1 : dsDefault;
+        let ds2 = isObj && settings.ds2 !== undefined ? settings.ds2 : dsDefault;
+        
+        if (type === 'HDVDH') {
+          const offsetX = isObj ? (settings.x || 0) : (typeof settings === 'number' ? settings : 0);
+          const offsetY1 = isObj ? (settings.y1 || 0) : 0;
+          const offsetY2 = isObj ? (settings.y2 || 0) : 0;
+          
+          const y1Adj = y1 + offsetY1;
+          const y2Adj = y2 + offsetY2;
+          
+          const dxTotal = x2 - x1;
+          const dyTotal = y2Adj - y1Adj;
+          const sx = Math.sign(dxTotal) || 1;
+          const sy = Math.sign(dyTotal) || 1;
+          
+          const xb = x1 + dxTotal / 2 + offsetX;
+          const xa = xb - sx * ds1;
+          const xc = xb + sx * ds2;
+          const yc = y1Adj + sy * ds1;
+          const yd = y2Adj - sy * ds2;
+          
+          const points = `${x1},${y1Adj} ${xa},${y1Adj} ${xb},${yc} ${xb},${yd} ${xc},${y2Adj} ${x2},${y2Adj}`;
+          const d = "M " + points.replace(/ /g, " L ");
+          
+          links.push({
+            sourceId: node.id,
+            targetId: nextId,
+            d,
+            type: 'HDVDH',
+            midHandle: { x: xb, yTop: Math.min(yc, yd), yBottom: Math.max(yc, yd), offset: offsetX },
+            h1Handle: { y: y1Adj, xLeft: Math.min(x1, xa), xRight: Math.max(x1, xa), offset: offsetY1 },
+            h2Handle: { y: y2Adj, xLeft: Math.min(xc, x2), xRight: Math.max(xc, x2), offset: offsetY2 }
+          });
+        } else {
+          const offsetY = isObj ? (settings.y || 0) : 0;
+          const offsetX1 = isObj ? (settings.x1 || 0) : 0;
+          const offsetX2 = isObj ? (settings.x2 || 0) : 0;
+          
+          const x1Adj = x1 + offsetX1;
+          const x2Adj = x2 + offsetX2;
+          
+          const dxTotal = x2Adj - x1Adj;
+          const dyTotal = y2 - y1;
+          const sx = Math.sign(dxTotal) || 1;
+          const sy = Math.sign(dyTotal) || 1;
+          
+          const yb = y1 + dyTotal / 2 + offsetY;
+          const ya = yb - sy * ds1;
+          const yd = yb + sy * ds2;
+          const xb = x1Adj + sx * ds1;
+          const xc = x2Adj - sx * ds2;
+          
+          const points = `${x1Adj},${y1} ${x1Adj},${ya} ${xb},${yb} ${xc},${yb} ${x2Adj},${yd} ${x2Adj},${y2}`;
+          const d = "M " + points.replace(/ /g, " L ");
+          
+          links.push({
+            sourceId: node.id,
+            targetId: nextId,
+            d,
+            type: 'VDHDV',
+            midHandle: { y: yb, xLeft: Math.min(xb, xc), xRight: Math.max(xb, xc), offset: offsetY },
+            v1Handle: { x: x1Adj, yTop: Math.min(y1, ya), yBottom: Math.max(y1, ya), offset: offsetX1 },
+            v2Handle: { x: x2Adj, yTop: Math.min(y2, yd), yBottom: Math.max(y2, yd), offset: offsetX2 }
+          });
         }
-        
-        const y1Adj = y1 + offsetY1;
-        const y2Adj = y2 + offsetY2;
-        
-        const dxTotal = x2 - x1;
-        const dyTotal = y2Adj - y1Adj;
-        const sx = Math.sign(dxTotal) || 1;
-        const sy = Math.sign(dyTotal) || 1;
-        const ds = Math.min(Math.abs(dxTotal), Math.abs(dyTotal)) * 0.1;
-        
-        const xb = x1 + dxTotal / 2 + offsetX;
-        
-        const xa = xb - sx * ds;
-        const xc = xb + sx * ds;
-        const yc = y1Adj + sy * ds;
-        const yd = y2Adj - sy * ds;
-        
-        const points = `${x1},${y1Adj} ${xa},${y1Adj} ${xb},${yc} ${xb},${yd} ${xc},${y2Adj} ${x2},${y2Adj}`;
-        const d = "M " + points.replace(/ /g, " L ");
-        
-        const yTop = Math.min(yc, yd);
-        const yBottom = Math.max(yc, yd);
-        
-        const h1Left = Math.min(x1, xa);
-        const h1Right = Math.max(x1, xa);
-        const h2Left = Math.min(xc, x2);
-        const h2Right = Math.max(xc, x2);
-
-        links.push({
-          sourceId: node.id,
-          targetId: nextId,
-          d,
-          midHandle: { x: xb, yTop, yBottom, offset: offsetX },
-          h1Handle: { y: y1Adj, xLeft: h1Left, xRight: h1Right, offset: offsetY1 },
-          h2Handle: { y: y2Adj, xLeft: h2Left, xRight: h2Right, offset: offsetY2 }
-        });
       }
     });
   });
@@ -407,41 +481,47 @@ function canvasOffsetY(y: number) {
             <path :d="link.d" 
                   stroke="#2fc5eb" fill="none" stroke-width="3" stroke-dasharray="5,5" />
                   
-            <!-- Vertical Handle -->
-            <line v-if="selectedNodeId === link.sourceId && link.midHandle"
-                  :x1="link.midHandle.x" :y1="link.midHandle.yTop"
-                  :x2="link.midHandle.x" :y2="link.midHandle.yBottom"
-                  stroke="rgba(255, 255, 255, 0.5)" stroke-width="12"
-                  class="path-drag-handle-v"
-                  @mousedown.stop="onMouseDownPathHandle($event, link.sourceId, link.targetId, 'x', link.midHandle.offset)" />
-            <line v-if="selectedNodeId === link.sourceId && link.midHandle"
-                  :x1="link.midHandle.x" :y1="link.midHandle.yTop"
-                  :x2="link.midHandle.x" :y2="link.midHandle.yBottom"
-                  stroke="#fff" stroke-width="3" pointer-events="none" />
-                  
-            <!-- H1 Handle -->
-            <line v-if="selectedNodeId === link.sourceId && link.h1Handle"
-                  :x1="link.h1Handle.xLeft" :y1="link.h1Handle.y"
-                  :x2="link.h1Handle.xRight" :y2="link.h1Handle.y"
-                  stroke="rgba(255, 255, 255, 0.5)" stroke-width="12"
-                  class="path-drag-handle-h"
-                  @mousedown.stop="onMouseDownPathHandle($event, link.sourceId, link.targetId, 'y1', link.h1Handle.offset)" />
-            <line v-if="selectedNodeId === link.sourceId && link.h1Handle"
-                  :x1="link.h1Handle.xLeft" :y1="link.h1Handle.y"
-                  :x2="link.h1Handle.xRight" :y2="link.h1Handle.y"
-                  stroke="#fff" stroke-width="3" pointer-events="none" />
-                  
-            <!-- H2 Handle -->
-            <line v-if="selectedNodeId === link.sourceId && link.h2Handle"
-                  :x1="link.h2Handle.xLeft" :y1="link.h2Handle.y"
-                  :x2="link.h2Handle.xRight" :y2="link.h2Handle.y"
-                  stroke="rgba(255, 255, 255, 0.5)" stroke-width="12"
-                  class="path-drag-handle-h"
-                  @mousedown.stop="onMouseDownPathHandle($event, link.sourceId, link.targetId, 'y2', link.h2Handle.offset)" />
-            <line v-if="selectedNodeId === link.sourceId && link.h2Handle"
-                  :x1="link.h2Handle.xLeft" :y1="link.h2Handle.y"
-                  :x2="link.h2Handle.xRight" :y2="link.h2Handle.y"
-                  stroke="#fff" stroke-width="3" pointer-events="none" />
+            <!-- HDVDH Handles -->
+            <template v-if="link.type === 'HDVDH' && selectedNodeId === link.sourceId">
+              <line v-if="link.midHandle" :x1="link.midHandle.x" :y1="link.midHandle.yTop" :x2="link.midHandle.x" :y2="link.midHandle.yBottom"
+                    stroke="rgba(255, 255, 255, 0.5)" stroke-width="12" class="path-drag-handle-v"
+                    @mousedown.stop="onMouseDownPathHandle($event, link.sourceId, link.targetId, 'x', link.midHandle.offset)" />
+              <line v-if="link.midHandle" :x1="link.midHandle.x" :y1="link.midHandle.yTop" :x2="link.midHandle.x" :y2="link.midHandle.yBottom"
+                    stroke="#fff" stroke-width="3" pointer-events="none" />
+                    
+              <line v-if="link.h1Handle" :x1="link.h1Handle.xLeft" :y1="link.h1Handle.y" :x2="link.h1Handle.xRight" :y2="link.h1Handle.y"
+                    stroke="rgba(255, 255, 255, 0.5)" stroke-width="12" class="path-drag-handle-h"
+                    @mousedown.stop="onMouseDownPathHandle($event, link.sourceId, link.targetId, 'y1', link.h1Handle.offset)" />
+              <line v-if="link.h1Handle" :x1="link.h1Handle.xLeft" :y1="link.h1Handle.y" :x2="link.h1Handle.xRight" :y2="link.h1Handle.y"
+                    stroke="#fff" stroke-width="3" pointer-events="none" />
+                    
+              <line v-if="link.h2Handle" :x1="link.h2Handle.xLeft" :y1="link.h2Handle.y" :x2="link.h2Handle.xRight" :y2="link.h2Handle.y"
+                    stroke="rgba(255, 255, 255, 0.5)" stroke-width="12" class="path-drag-handle-h"
+                    @mousedown.stop="onMouseDownPathHandle($event, link.sourceId, link.targetId, 'y2', link.h2Handle.offset)" />
+              <line v-if="link.h2Handle" :x1="link.h2Handle.xLeft" :y1="link.h2Handle.y" :x2="link.h2Handle.xRight" :y2="link.h2Handle.y"
+                    stroke="#fff" stroke-width="3" pointer-events="none" />
+            </template>
+            
+            <!-- VDHDV Handles -->
+            <template v-if="link.type === 'VDHDV' && selectedNodeId === link.sourceId">
+              <line v-if="link.midHandle" :x1="link.midHandle.xLeft" :y1="link.midHandle.y" :x2="link.midHandle.xRight" :y2="link.midHandle.y"
+                    stroke="rgba(255, 255, 255, 0.5)" stroke-width="12" class="path-drag-handle-h"
+                    @mousedown.stop="onMouseDownPathHandle($event, link.sourceId, link.targetId, 'y', link.midHandle.offset)" />
+              <line v-if="link.midHandle" :x1="link.midHandle.xLeft" :y1="link.midHandle.y" :x2="link.midHandle.xRight" :y2="link.midHandle.y"
+                    stroke="#fff" stroke-width="3" pointer-events="none" />
+                    
+              <line v-if="link.v1Handle" :x1="link.v1Handle.x" :y1="link.v1Handle.yTop" :x2="link.v1Handle.x" :y2="link.v1Handle.yBottom"
+                    stroke="rgba(255, 255, 255, 0.5)" stroke-width="12" class="path-drag-handle-v"
+                    @mousedown.stop="onMouseDownPathHandle($event, link.sourceId, link.targetId, 'x1', link.v1Handle.offset)" />
+              <line v-if="link.v1Handle" :x1="link.v1Handle.x" :y1="link.v1Handle.yTop" :x2="link.v1Handle.x" :y2="link.v1Handle.yBottom"
+                    stroke="#fff" stroke-width="3" pointer-events="none" />
+                    
+              <line v-if="link.v2Handle" :x1="link.v2Handle.x" :y1="link.v2Handle.yTop" :x2="link.v2Handle.x" :y2="link.v2Handle.yBottom"
+                    stroke="rgba(255, 255, 255, 0.5)" stroke-width="12" class="path-drag-handle-v"
+                    @mousedown.stop="onMouseDownPathHandle($event, link.sourceId, link.targetId, 'x2', link.v2Handle.offset)" />
+              <line v-if="link.v2Handle" :x1="link.v2Handle.x" :y1="link.v2Handle.yTop" :x2="link.v2Handle.x" :y2="link.v2Handle.yBottom"
+                    stroke="#fff" stroke-width="3" pointer-events="none" />
+            </template>
           </g>
                 
           <!-- Render active dragging link -->
@@ -507,8 +587,33 @@ function canvasOffsetY(y: number) {
         </div>
 
         <div class="prop-group">
-          <label>Next Nodes (comma-separated IDs)</label>
-          <input type="text" :value="selectedNode.next.join(', ')" @change="updateNext($event, selectedNode)" />
+          <label>Next Nodes</label>
+          <div class="next-nodes-list">
+            <div v-for="(nextId, index) in selectedNode.next" :key="index" class="next-node-card">
+              <div class="next-node-header">
+                <input type="text" :value="nextId" @change="updateNextNodeId(selectedNode, index, $event.target.value)" placeholder="Target Node ID" />
+                <button class="remove-btn" @click="removeNextNode(selectedNode, index)">X</button>
+              </div>
+              <div class="path-settings">
+                <label>Path Type:</label>
+                <select :value="getPathSettings(selectedNode, nextId).type || 'HDVDH'" @change="updatePathSetting(selectedNode, nextId, 'type', $event.target.value)">
+                  <option value="HDVDH">HDVDH</option>
+                  <option value="VDHDV">VDHDV</option>
+                </select>
+                
+                <label>Diag 1 Length ({{ getPathSettings(selectedNode, nextId).ds1 ?? 'auto' }})</label>
+                <input type="range" min="0" max="200" 
+                       :value="getPathSettings(selectedNode, nextId).ds1 || 0" 
+                       @input="updatePathSetting(selectedNode, nextId, 'ds1', parseInt($event.target.value))" />
+                       
+                <label>Diag 2 Length ({{ getPathSettings(selectedNode, nextId).ds2 ?? 'auto' }})</label>
+                <input type="range" min="0" max="200" 
+                       :value="getPathSettings(selectedNode, nextId).ds2 || 0" 
+                       @input="updatePathSetting(selectedNode, nextId, 'ds2', parseInt($event.target.value))" />
+              </div>
+            </div>
+          </div>
+          <button style="margin-top:0.5rem;" @click="addNextNode(selectedNode)">+ Add Next Node</button>
         </div>
 
         <div class="prop-group">
@@ -865,6 +970,42 @@ function canvasOffsetY(y: number) {
 .prop-group small {
   color: #888;
   font-size: 0.75rem;
+}
+
+.next-node-card {
+  background: #2a2a2a;
+  border: 1px solid #444;
+  padding: 0.5rem;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.next-node-header {
+  display: flex;
+  gap: 0.5rem;
+}
+.next-node-header input {
+  flex-grow: 1;
+}
+.remove-btn {
+  background: #ff4444 !important;
+  padding: 0 0.5rem !important;
+}
+.path-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  color: #aaa;
+}
+.path-settings input[type="range"] {
+  width: 100%;
+}
+.next-nodes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .danger-btn {

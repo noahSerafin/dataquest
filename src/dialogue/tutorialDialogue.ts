@@ -185,7 +185,7 @@ export const tutorialDialogue ={
       "text": "That's a shop. It's run by Hamuel, good guy. They'll let you know more when you visit.",
       "choices": [
         {
-          "text": "What about 🪦 smaller one in the top corner?",
+          "text": "What about the 🪦 in the top corner?",
           "nextNode": "node_7"
         },
       ]

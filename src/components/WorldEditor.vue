@@ -12,6 +12,7 @@ interface EditorNode {
   type: NodeType;
   position: { x: number; y: number };
   next: string[];
+  pathOffsets?: Record<string, any>;
   difficultyMod: number;
   reward: number;
   levelName?: string;
@@ -32,6 +33,13 @@ const dragOffset = ref({ x: 0, y: 0 });
 const isLinking = ref(false);
 const linkStartNode = ref<string | null>(null);
 const linkEndPos = ref({ x: 0, y: 0 });
+
+const isDraggingPath = ref(false);
+const dragPathSource = ref<string | null>(null);
+const dragPathTarget = ref<string | null>(null);
+const dragPathType = ref<'x' | 'y1' | 'y2' | null>(null);
+const dragPathStartPos = ref(0);
+const dragPathStartOffset = ref(0);
 
 const selectedNodeId = ref<string | null>(null);
 const selectedNode = computed(() => selectedNodeId.value ? nodes.value[selectedNodeId.value] : null);
@@ -111,6 +119,35 @@ function onMouseMove(event: MouseEvent) {
     node.position.y = Math.round(node.position.y / 20) * 20;
   } else if (isLinking.value && linkStartNode.value) {
     linkEndPos.value = { x: event.clientX, y: event.clientY };
+  } else if (isDraggingPath.value && dragPathSource.value && dragPathTarget.value && dragPathType.value) {
+    const sourceNode = nodes.value[dragPathSource.value];
+    const targetNode = nodes.value[dragPathTarget.value];
+    if (sourceNode && targetNode) {
+      if (!sourceNode.pathOffsets) sourceNode.pathOffsets = {};
+      const current = sourceNode.pathOffsets[dragPathTarget.value];
+      let offsets = { x: 0, y1: 0, y2: 0 };
+      if (typeof current === 'number') {
+        offsets.x = current;
+      } else if (current) {
+        offsets = { ...current };
+      }
+      
+      if (dragPathType.value === 'x') {
+        const delta = event.clientX - dragPathStartPos.value;
+        offsets.x = dragPathStartOffset.value + delta;
+      } else if (dragPathType.value === 'y1') {
+        const delta = event.clientY - dragPathStartPos.value;
+        let newOffset = dragPathStartOffset.value + delta;
+        const limit = sourceNode.type === 'level' || sourceNode.type === 'boss' ? 30 : 15;
+        offsets.y1 = Math.max(-limit, Math.min(limit, newOffset));
+      } else if (dragPathType.value === 'y2') {
+        const delta = event.clientY - dragPathStartPos.value;
+        let newOffset = dragPathStartOffset.value + delta;
+        const limit = targetNode.type === 'level' || targetNode.type === 'boss' ? 30 : 15;
+        offsets.y2 = Math.max(-limit, Math.min(limit, newOffset));
+      }
+      sourceNode.pathOffsets[dragPathTarget.value] = offsets;
+    }
   }
 }
 
@@ -141,6 +178,21 @@ function onMouseUp(event: MouseEvent) {
   dragNodeId.value = null;
   isLinking.value = false;
   linkStartNode.value = null;
+  
+  isDraggingPath.value = false;
+  dragPathSource.value = null;
+  dragPathTarget.value = null;
+  dragPathType.value = null;
+}
+
+function onMouseDownPathHandle(event: MouseEvent, sourceId: string, targetId: string, type: 'x'|'y1'|'y2', currentOffset: number) {
+  event.stopPropagation();
+  isDraggingPath.value = true;
+  dragPathSource.value = sourceId;
+  dragPathTarget.value = targetId;
+  dragPathType.value = type;
+  dragPathStartPos.value = type === 'x' ? event.clientX : event.clientY;
+  dragPathStartOffset.value = currentOffset;
 }
 
 onMounted(() => {
@@ -252,18 +304,66 @@ function getCenter(node: EditorNode) {
 
 // Lines drawing
 const linksList = computed(() => {
-  const links: { x1: number, y1: number, x2: number, y2: number }[] = [];
+  const links: { sourceId: string, targetId: string, d: string, midHandle?: any, h1Handle?: any, h2Handle?: any }[] = [];
   Object.values(nodes.value).forEach(node => {
     node.next.forEach(nextId => {
       const target = nodes.value[nextId];
       if (target) {
         const c1 = getCenter(node);
         const c2 = getCenter(target);
+        const x1 = c1.x;
+        const y1 = c1.y;
+        const x2 = c2.x;
+        const y2 = c2.y;
+        
+        let offsetX = 0;
+        let offsetY1 = 0;
+        let offsetY2 = 0;
+        if (node.pathOffsets && node.pathOffsets[nextId] !== undefined) {
+          const val = node.pathOffsets[nextId];
+          if (typeof val === 'number') {
+            offsetX = val;
+          } else {
+            offsetX = val.x || 0;
+            offsetY1 = val.y1 || 0;
+            offsetY2 = val.y2 || 0;
+          }
+        }
+        
+        const y1Adj = y1 + offsetY1;
+        const y2Adj = y2 + offsetY2;
+        
+        const dxTotal = x2 - x1;
+        const dyTotal = y2Adj - y1Adj;
+        const sx = Math.sign(dxTotal) || 1;
+        const sy = Math.sign(dyTotal) || 1;
+        const ds = Math.min(Math.abs(dxTotal), Math.abs(dyTotal)) * 0.1;
+        
+        const xb = x1 + dxTotal / 2 + offsetX;
+        
+        const xa = xb - sx * ds;
+        const xc = xb + sx * ds;
+        const yc = y1Adj + sy * ds;
+        const yd = y2Adj - sy * ds;
+        
+        const points = `${x1},${y1Adj} ${xa},${y1Adj} ${xb},${yc} ${xb},${yd} ${xc},${y2Adj} ${x2},${y2Adj}`;
+        const d = "M " + points.replace(/ /g, " L ");
+        
+        const yTop = Math.min(yc, yd);
+        const yBottom = Math.max(yc, yd);
+        
+        const h1Left = Math.min(x1, xa);
+        const h1Right = Math.max(x1, xa);
+        const h2Left = Math.min(xc, x2);
+        const h2Right = Math.max(xc, x2);
+
         links.push({
-          x1: c1.x,
-          y1: c1.y,
-          x2: c2.x,
-          y2: c2.y,
+          sourceId: node.id,
+          targetId: nextId,
+          d,
+          midHandle: { x: xb, yTop, yBottom, offset: offsetX },
+          h1Handle: { y: y1Adj, xLeft: h1Left, xRight: h1Right, offset: offsetY1 },
+          h2Handle: { y: y2Adj, xLeft: h2Left, xRight: h2Right, offset: offsetY2 }
         });
       }
     });
@@ -303,9 +403,46 @@ function canvasOffsetY(y: number) {
       <div class="editor-canvas">
         <svg class="links-layer">
           <!-- Render saved links -->
-          <line v-for="(link, idx) in linksList" :key="idx" 
-                :x1="link.x1" :y1="link.y1" :x2="link.x2" :y2="link.y2" 
-                stroke="#2fc5eb" stroke-width="3" stroke-dasharray="5,5" />
+          <g v-for="(link, idx) in linksList" :key="idx">
+            <path :d="link.d" 
+                  stroke="#2fc5eb" fill="none" stroke-width="3" stroke-dasharray="5,5" />
+                  
+            <!-- Vertical Handle -->
+            <line v-if="selectedNodeId === link.sourceId && link.midHandle"
+                  :x1="link.midHandle.x" :y1="link.midHandle.yTop"
+                  :x2="link.midHandle.x" :y2="link.midHandle.yBottom"
+                  stroke="rgba(255, 255, 255, 0.5)" stroke-width="12"
+                  class="path-drag-handle-v"
+                  @mousedown.stop="onMouseDownPathHandle($event, link.sourceId, link.targetId, 'x', link.midHandle.offset)" />
+            <line v-if="selectedNodeId === link.sourceId && link.midHandle"
+                  :x1="link.midHandle.x" :y1="link.midHandle.yTop"
+                  :x2="link.midHandle.x" :y2="link.midHandle.yBottom"
+                  stroke="#fff" stroke-width="3" pointer-events="none" />
+                  
+            <!-- H1 Handle -->
+            <line v-if="selectedNodeId === link.sourceId && link.h1Handle"
+                  :x1="link.h1Handle.xLeft" :y1="link.h1Handle.y"
+                  :x2="link.h1Handle.xRight" :y2="link.h1Handle.y"
+                  stroke="rgba(255, 255, 255, 0.5)" stroke-width="12"
+                  class="path-drag-handle-h"
+                  @mousedown.stop="onMouseDownPathHandle($event, link.sourceId, link.targetId, 'y1', link.h1Handle.offset)" />
+            <line v-if="selectedNodeId === link.sourceId && link.h1Handle"
+                  :x1="link.h1Handle.xLeft" :y1="link.h1Handle.y"
+                  :x2="link.h1Handle.xRight" :y2="link.h1Handle.y"
+                  stroke="#fff" stroke-width="3" pointer-events="none" />
+                  
+            <!-- H2 Handle -->
+            <line v-if="selectedNodeId === link.sourceId && link.h2Handle"
+                  :x1="link.h2Handle.xLeft" :y1="link.h2Handle.y"
+                  :x2="link.h2Handle.xRight" :y2="link.h2Handle.y"
+                  stroke="rgba(255, 255, 255, 0.5)" stroke-width="12"
+                  class="path-drag-handle-h"
+                  @mousedown.stop="onMouseDownPathHandle($event, link.sourceId, link.targetId, 'y2', link.h2Handle.offset)" />
+            <line v-if="selectedNodeId === link.sourceId && link.h2Handle"
+                  :x1="link.h2Handle.xLeft" :y1="link.h2Handle.y"
+                  :x2="link.h2Handle.xRight" :y2="link.h2Handle.y"
+                  stroke="#fff" stroke-width="3" pointer-events="none" />
+          </g>
                 
           <!-- Render active dragging link -->
           <line v-if="isLinking && linkStartNode" 
@@ -489,6 +626,22 @@ function canvasOffsetY(y: number) {
   width: 100%;
   height: 100%;
   pointer-events: none;
+}
+
+.path-drag-handle-v {
+  cursor: ew-resize;
+  pointer-events: auto;
+}
+.path-drag-handle-v:hover {
+  stroke: rgba(255, 255, 255, 0.8);
+}
+
+.path-drag-handle-h {
+  cursor: ns-resize;
+  pointer-events: auto;
+}
+.path-drag-handle-h:hover {
+  stroke: rgba(255, 255, 255, 0.8);
 }
 
 .editor-node {

@@ -63,7 +63,7 @@ onMounted(() => {
         float timeStep = floor(iTime * 1.0 + block.y * 0.5 - block.x * 0.3); // animate changes
         vec2 rand = rand2(block + timeStep);
         
-        float iconIndex = floor(rand.x * 496.0);
+        float iconIndex = floor(rand.x * 517.0);
         float col = mod(iconIndex, 37.0);
         float row = 13.0 - floor(iconIndex / 37.0);
         

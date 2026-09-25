@@ -320,9 +320,66 @@ function getIconStyle(node: WorldNode, size: number = 24): Record<string, any> {
     return {};
 }
 
+const mapOffsetX = computed(() => {
+  let minX = Infinity;
+  const nodes = props.staticWorld.nodes;
+  
+  Object.values(nodes).forEach(node => {
+      minX = Math.min(minX, node.position.x);
+  });
+  
+  Object.values(nodes).forEach(node => {
+    node.next.forEach(nextId => {
+      const target = nodes[nextId];
+      if (target) {
+        const c1x = node.position.x + (node.type === 'level' ? 20 : 18);
+        const c1y = node.position.y + (node.type === 'level' ? 35 : 18);
+        const c2x = target.position.x + (target.type === 'level' ? 20 : 18);
+        const c2y = target.position.y + (target.type === 'level' ? 35 : 18);
+        
+        const x1 = c1x;
+        const x2 = c2x;
+        
+        const settings = (node as any).pathOffsets && (node as any).pathOffsets[nextId] !== undefined ? (node as any).pathOffsets[nextId] : {};
+        const isObj = typeof settings === 'object';
+        const type = isObj ? (settings.type || 'HDVDH') : 'HDVDH';
+        
+        const dxRaw = x2 - x1;
+        const dyRaw = c2y - c1y;
+        const dsDefault = Math.min(Math.abs(dxRaw), Math.abs(dyRaw)) * 0.1;
+        
+        let ds1 = isObj && settings.ds1 !== undefined ? settings.ds1 : dsDefault;
+        let ds2 = isObj && settings.ds2 !== undefined ? settings.ds2 : dsDefault;
+        
+        if (type === 'HDVDH') {
+          const offsetX = isObj ? (settings.x || 0) : (typeof settings === 'number' ? settings : 0);
+          const xb = x1 + dxRaw / 2 + offsetX;
+          const sx1 = Math.sign(xb - x1) || 1;
+          const sx2 = Math.sign(x2 - xb) || 1;
+          const xa = xb - sx1 * ds1;
+          const xc = xb + sx2 * ds2;
+          minX = Math.min(minX, x1, xa, xb, xc, x2);
+        } else {
+          const offsetX1 = isObj ? (settings.x1 || 0) : 0;
+          const offsetX2 = isObj ? (settings.x2 || 0) : 0;
+          const x1Adj = x1 + offsetX1;
+          const x2Adj = x2 + offsetX2;
+          const dxTotal = x2Adj - x1Adj;
+          const sx = Math.sign(dxTotal) || 1;
+          const xb = x1Adj + sx * ds1;
+          const xc = x2Adj - sx * ds2;
+          minX = Math.min(minX, x1Adj, xb, xc, x2Adj);
+        }
+      }
+    });
+  });
+  
+  return minX === Infinity ? 0 : 50 - minX;
+});
+
 function getCenter(node: WorldNode) {
-    if (node.type === 'level') return { x: node.position.x + 20, y: node.position.y + 35 };
-    return { x: node.position.x + 18, y: node.position.y + 18 };
+    if (node.type === 'level') return { x: node.position.x + 20 + mapOffsetX.value, y: node.position.y + 35 };
+    return { x: node.position.x + 18 + mapOffsetX.value, y: node.position.y + 18 };
 }
 
 // Drawing paths exactly as in WorldEditor
@@ -474,7 +531,7 @@ function handleMapMouseUpOrLeave() {
                 levelNode: node.type === 'level',
                 visited: isNodeCleared(node.id)
             }" :style="{
-                left: node.position.x + 'px',
+                left: (node.position.x + mapOffsetX) + 'px',
                 top: node.position.y + 'px',
                 backgroundColor: node.type === 'level' && node.company ? node.company.tileColor : undefined,
                 borderColor: node.type === 'level' && node.company ? node.company.edgeColor : undefined
@@ -506,7 +563,7 @@ function handleMapMouseUpOrLeave() {
                 </div>
             </div>
             
-            <svg class="map-lines" style="position: absolute; inset: 0; width: 100vw; height: 100vh; pointer-events: none;">
+            <svg class="map-lines" style="position: absolute; inset: 0; width: max(100vw, 3000px); height: 100vh; pointer-events: none;">
                 <g v-for="(path, i) in connections" :key="i">
                     <path :d="path.d" fill="none" :stroke="path.isActive ? '#34ffff' : '#9CC954'"
                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -592,3 +649,301 @@ function handleMapMouseUpOrLeave() {
         </div>
     </div>
 </template>
+
+<style scoped>
+.visible {
+    transform: translateY(0);
+}
+
+.collapsed {
+    transform: translateY(500%);
+    top: 100%;
+}
+
+.world-map {
+    background-color: rgb(8, 47, 0);
+    z-index: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.node-map {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+@keyframes moveBand {
+    from {
+        stroke-dashoffset: 0;
+    }
+    to {
+        stroke-dashoffset: var(--dash-offset-to);
+    }
+}
+
+.active-band {
+    animation: moveBand linear infinite;
+}
+
+.map-lines {
+    z-index: -1;
+}
+
+.node {
+    position: absolute;
+    width: 42px;
+    height: 32px;
+    opacity: 0.4;
+}
+
+.levelNode {
+    width: 40px;
+    height: 70px;
+    font-size: 14px;
+}
+
+.bossNode {
+    width: 72px;
+    height: 72px;
+}
+
+.startNode {
+    width: 36px;
+    height: 36px;
+}
+
+.node-inner {
+    text-align: center;
+    height: 100%;
+    background: #141414;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    user-select: none;
+}
+
+.bossNode,
+.shopNode {
+    border-left: none;
+    border-right: none;
+}
+
+.bossNode.node-inner {
+    width: 100%;
+    height: 100%;
+}
+
+.pins {
+    position: absolute;
+    z-index: -1;
+    width: 80%;
+    height: 80%;
+}
+
+.pins-left,
+.pins-right,
+.pins-bottom,
+.pins-top {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.pins-top {
+    left: 10%;
+    top: -10%;
+    border-top: 3px dashed white;
+}
+
+.pins-left {
+    top: 10%;
+    left: -10%;
+}
+
+.pins-bottom {
+    left: 10%;
+    top: 22%;
+    border-bottom: 3px dashed white;
+}
+
+.pins-right {
+    left: 26%;
+    top: 10%;
+}
+
+.levelNode .pins-top {
+    display: none;
+}
+
+.levelNode .pins-bottom {
+    display: none;
+}
+
+.levelNode .pins-left {
+    border-left: 3px dashed white;
+}
+
+.levelNode .pins-right {
+    border-right: 3px dashed white;
+}
+
+.bossNode .pins-left,
+.bossNode .pins-right,
+.bossNode .pins-top,
+.bossNode .pins-bottom,
+.startNode .pins-left,
+.startNode .pins-right,
+.startNode .pins-top,
+.startNode .pins-bottom {
+    top: 4%;
+    border-top: 2px dotted white;
+    border-bottom: 2px dotted white;
+    border-right: 2px dotted white;
+    border-left: 2px dotted white;
+}
+
+.bossNode .pins-top{
+    left: 10%;
+    top: -4%;
+}
+.startNode .pins-top {
+    left: 4%;
+    top: -9%;
+}
+
+.bossNode .pins-bottom{
+    top: 21%;
+}
+.startNode .pins-bottom {
+    top: 19%;
+}
+
+.bossNode .pins-right{
+    left: 22%;
+}
+.startNode .pins-right {
+    left: 19%;
+}
+.bossNode .pins-left{
+    top: 10%;
+    left: -4%;
+}
+
+.node.clickable {
+    opacity: 1;
+    cursor: pointer;
+    border-color: yellow;
+}
+
+.preview-modal.ZEN .text-gold {
+    color: #864800;
+}
+
+.preview-modal {
+    position: absolute;
+    left: 10%;
+    top: 16%;
+    width: 80%;
+    height: auto;
+    background: #111;
+    padding: 16px;
+    border: 2px solid #444;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+h5 {
+    margin: 0.2rem;
+}
+
+.preview-modal.WFG {
+    color: rgb(52, 12, 51);
+}
+
+.preview-modal.ZEN {
+    color: rgb(16, 16, 16);
+}
+
+.btns {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.boss-info,
+.company-info {
+    position: absolute;
+    background-color: #111;
+    font-size: 14px;
+    opacity: 1;
+    width: 100px;
+    left: 120%;
+    border: 1px solid white;
+    border-radius: 5px;
+    padding: 0.2rem;
+}
+
+.company-info {
+    right: 100%;
+    left: -65px;
+    width: 50px;
+    text-align: center;
+    top: 0;
+}
+
+.boss-info,
+.bossNode .company-info {
+    top: -30px;
+}
+
+.boss-info {
+    top: -40px;
+    width: 150px;
+}
+
+.node.unrevealed {
+    opacity: 0.6;
+}
+
+.node.visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+h6 {
+    margin: 0.5rem;
+}
+
+.node.visited::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+    z-index: 5;
+}
+
+@media (max-width: 500px) {
+  .world-map {
+    display: block;
+    overflow: auto !important;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+  }
+
+  .node-map {
+    min-width: 300px;
+    left: 0;
+    margin: 0 auto;
+  }
+}
+</style>

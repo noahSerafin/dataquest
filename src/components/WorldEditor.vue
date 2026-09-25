@@ -386,12 +386,14 @@ const linksList = computed(() => {
           
           const dxTotal = x2 - x1;
           const dyTotal = y2Adj - y1Adj;
-          const sx = Math.sign(dxTotal) || 1;
           const sy = Math.sign(dyTotal) || 1;
           
           const xb = x1 + dxTotal / 2 + offsetX;
-          const xa = xb - sx * ds1;
-          const xc = xb + sx * ds2;
+          const sx1 = Math.sign(xb - x1) || 1;
+          const sx2 = Math.sign(x2 - xb) || 1;
+          
+          const xa = xb - sx1 * ds1;
+          const xc = xb + sx2 * ds2;
           const yc = y1Adj + sy * ds1;
           const yd = y2Adj - sy * ds2;
           
@@ -416,13 +418,14 @@ const linksList = computed(() => {
           const x2Adj = x2 + offsetX2;
           
           const dxTotal = x2Adj - x1Adj;
-          const dyTotal = y2 - y1;
           const sx = Math.sign(dxTotal) || 1;
-          const sy = Math.sign(dyTotal) || 1;
           
-          const yb = y1 + dyTotal / 2 + offsetY;
-          const ya = yb - sy * ds1;
-          const yd = yb + sy * ds2;
+          const yb = y1 + (y2 - y1) / 2 + offsetY;
+          const sy1 = Math.sign(yb - y1) || 1;
+          const sy2 = Math.sign(y2 - yb) || 1;
+          
+          const ya = yb - sy1 * ds1;
+          const yd = yb + sy2 * ds2;
           const xb = x1Adj + sx * ds1;
           const xc = x2Adj - sx * ds2;
           

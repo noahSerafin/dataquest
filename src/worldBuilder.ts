@@ -28,6 +28,7 @@ export interface WorldNode {
   skipReward?: SkipReward; //get shop function into helpers to create these
   resolved?: boolean;          // skip nodes only
   visible?: boolean;
+  bossName?: string;
 }
 
 export interface WorldMap {

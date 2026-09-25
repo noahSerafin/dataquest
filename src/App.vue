@@ -185,6 +185,10 @@ import Workbench from "./components/Workbench.vue";
 import { Random } from "./Random";
 import { allOSes } from "./Operators.ts";
 import { serializeGameState, rehydrateGameState } from "./saveSystem";
+import CampaignShop from "./components/CampaignShop.vue";
+import CampaignWorldMap from "./components/CampaignWorldMap.vue";
+import { sector0 } from "./campaignMaps/tutorialMap.ts";
+
 
 const testSword = {
   iconID: 4,
@@ -277,27 +281,21 @@ const currentAppMode = ref<'welcome' | 'mainMenu' | 'rogueMenu' | 'campaignMenu'
 const currentSeed = ref<string>("");
 const bgProgress = ref(0);
 const campaignWorldMap = ref<any>(null);
+const campaignClearedNodes = ref<string[]>([]);
+const campaignShopPurchases = ref<Record<string, string[]>>({});
 
 function startCampaign(_slotIndex: number) {
-  // Try loading a campaign file, for now we will use an empty shell or prompt if missing
-  // Eventually this will fetch from `/campaign_worlds/world1.json` or similar
   campaignWorldMap.value = {
-    nodes: {
-      "start": { id: "start", type: "start", position: {x: 100, y: 100}, next: [], difficultyMod: 0, reward: 0 }
-    },
-    startNode: "start"
+    nodes: JSON.parse(JSON.stringify(sector0.nodes)),
+    startNode: sector0.startNode
   };
+  campaignClearedNodes.value = [];
+  campaignShopPurchases.value = {};
+  
   currentAppMode.value = 'campaign';
   showMap.value = true;
   gameStarted.value = true;
   
-  // Need to initialize a basic player for campaign
-  const defaultOS = allOSes[0];
-  player.value = new Player(
-    defaultOS.unicode, defaultOS.money, defaultOS.memory, defaultOS.adminSlots,
-    defaultOS.items, defaultOS.blueprints, defaultOS.admins, defaultOS.lives,
-    5, 0, 0, 0, 0, 0
-  );
   currentCompany.value = { iconID: 499, name: 'Player', abbr: '', unicode: player.value.osunicode, pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "rgb(156, 201, 84)" };
 }
 
@@ -366,6 +364,12 @@ function createNewPlayer(payload: { os: OS, seed: string, stake?: number }) {
 }
 const showCollection = ref(false);
 const showSpriteSheet = ref(false);
+
+function handleCampaignNodeCleared(nodeId: string) {
+  if (!campaignClearedNodes.value.includes(nodeId)) {
+    campaignClearedNodes.value.push(nodeId);
+  }
+}
 
 function incrementMapProgress() {
   player.value.extraDifficulty = 0;
@@ -588,22 +592,6 @@ function refreshShop(isFree: boolean) {
   
   const allItemsAndAdmins: ItemConstructor[] = [...allItems, ...availableAdmins];
 
-  if (currentAppMode.value === 'campaign' && activeShopContents.value && activeShopContents.value.length > 0) {
-    shopBlueprints.value = [];
-    shopItems.value = [];
-    for (const name of activeShopContents.value) {
-      const pName = name.trim();
-      const p = allPieces.find(x => x.name === pName);
-      if (p) {
-        shopBlueprints.value.push(makeBlueprint(p, undefined, appraisalDiscount));
-      } else {
-        const iClass = allItemsAndAdmins.find(x => x.name === pName);
-        if (iClass) shopItems.value.push(new iClass());
-      }
-    }
-    return;
-  }
-
   const classes = [
     pickWeightedRandom(allPieces, player.value),
     pickWeightedRandom(allPieces, player.value),
@@ -672,8 +660,20 @@ async function addItemToinventory(item: Item) {
     reapplyTutorialTooltips(200);
   }
 }
+function trackCampaignShopPurchase(itemName: string) {
+  if (currentAppMode.value === 'campaign' && currentShopNodeId.value) {
+    if (!campaignShopPurchases.value[currentShopNodeId.value]) {
+      campaignShopPurchases.value[currentShopNodeId.value] = [];
+    }
+    campaignShopPurchases.value[currentShopNodeId.value].push(itemName);
+  }
+}
+
 async function buyItem(item: Item) {
   shopItems.value = shopItems.value.filter(i => i.id !== item.id);
+  campaignItems.value = campaignItems.value.filter(i => i.id !== item.id);
+  campaignAdmins.value = campaignAdmins.value.filter(i => i.id !== item.id);
+  trackCampaignShopPurchase(item.name);
   player.value.spend(item.cost);
   if (player.value.hasAdmin('Piggy')) {
     player.value.money += 2;
@@ -682,6 +682,9 @@ async function buyItem(item: Item) {
 }
 async function stealItem(item: Item) {
   shopItems.value = shopItems.value.filter(i => i.id !== item.id);
+  campaignItems.value = campaignItems.value.filter(i => i.id !== item.id);
+  campaignAdmins.value = campaignAdmins.value.filter(i => i.id !== item.id);
+  trackCampaignShopPurchase(item.name);
   if (player.value.hasAdmin('Five Finger Discount') && !hasStolenFromThisShop.value) {
     hasStolenFromThisShop.value = true;
   }
@@ -1098,14 +1101,57 @@ const toggleShop = () => {
   saveGameState();
 }
 const activeShopContents = ref<string[] | null>(null);
+const currentShopNodeId = ref<string | null>(null);
+
+const campaignBlueprints = ref<PieceBlueprint[]>([]);
+const campaignItems = ref<InstanceType<typeof Item>[]>([]);
+const campaignAdmins = ref<InstanceType<typeof Admin>[]>([]);
+
+function loadCampaignShop() {
+  shopTarget.value = null;
+  campaignBlueprints.value = [];
+  campaignItems.value = [];
+  campaignAdmins.value = [];
+  
+  const appraisalDiscount = 2 * player.value.admins.filter(a => a.name === 'Appraisal').length;
+  const ownedAdmins = new Set(player.value.admins.map(a => a.name));
+  const availableAdmins = (player.value.hasAdmin('Bouquet')) ? allAdmins : allAdmins.filter(AdminClass => !ownedAdmins.has(AdminClass.name));
+  const allItemsAndAdmins: ItemConstructor[] = [...allItems, ...availableAdmins];
+
+  if (activeShopContents.value && activeShopContents.value.length > 0) {
+    const purchasedItems = (currentShopNodeId.value && campaignShopPurchases.value[currentShopNodeId.value]) || [];
+    for (const name of activeShopContents.value) {
+      const pName = name.trim();
+      const p = allPieces.find(x => x.name === pName);
+      if (p) {
+        campaignBlueprints.value.push(makeBlueprint(p, undefined, appraisalDiscount));
+      } else {
+        if (purchasedItems.includes(pName)) continue;
+        const iClass = allItemsAndAdmins.find(x => x.name === pName);
+        if (iClass) {
+          const itemInst = new iClass();
+          if (itemInst instanceof Admin) {
+            campaignAdmins.value.push(itemInst);
+          } else {
+            campaignItems.value.push(itemInst);
+          }
+        }
+      }
+    }
+  }
+}
 
 const openShop = (node?: any) => {
+  currentShopNodeId.value = node?.id || null;
   if (node && typeof node.shopContents === 'string') {
     activeShopContents.value = node.shopContents.split(',').map((s: string) => s.trim());
   } else if (node && Array.isArray(node.shopContents)) {
     activeShopContents.value = node.shopContents;
   } else {
     activeShopContents.value = null;
+  }
+  if (currentAppMode.value === 'campaign') {
+    loadCampaignShop();
   }
   showShop.value = true;
   canProceedFromShop.value = true;
@@ -2164,18 +2210,30 @@ function cancelConfirm() {
       <RoundSummary v-if="showSummary" class="stage-panel" :class="{ active: showSummary }" :hasWonRound="hasWonRound"
         :player="player" :bosses="bossAdmins" :roundHasStarted="roundHasStarted" @proceedFromEndOfRound="handleProceed"
         @reloadLevel="reloadLevel" @mainMenu="openMainMenu" @returnToMap="handleReturnToMap" />
-      <WorldMap ref="worldMapRef" v-if="!displayEditor" class="stage-panel" :class="{ active: showMap }"
+      <WorldMap ref="worldMapRef" v-if="!displayEditor && currentAppMode !== 'campaign'" class="stage-panel" :class="{ active: showMap }"
         :allLevels="level1Levels" :player="player" :seed="combinedMapSeed" :cssclass="mapClass" :bosses="bossAdmins"
         :staticWorld="campaignWorldMap"
         @selectLevel="selectLevel" @openShop="openShop" @openDisabledShop="openDisabledShop"
         @openCompiler="openCompiler" @openAltar="openAltar" @openDuplicator="openDuplicator"
         @openWorkbench="openWorkbench" @incrementProgress="incrementMapProgress(); saveGameState()"
         @addBoss="addBossAdmin" @replaceBosses="replaceBosses" @increaseDifficulty="increaseDifficulty" />
-      <Shop v-if="!displayEditor" class="stage-panel" :class="{ active: showShop }" :cssclass="shopClass"
+      <CampaignWorldMap v-if="!displayEditor && currentAppMode === 'campaign'" class="stage-panel" :class="{ active: showMap }"
+        :player="player" :cssclass="mapClass" :staticWorld="campaignWorldMap" :clearedNodes="campaignClearedNodes"
+        @selectLevel="selectLevel" @openShop="openShop" @openDisabledShop="openDisabledShop"
+        @openCompiler="openCompiler" @openAltar="openAltar" @openDuplicator="openDuplicator"
+        @openWorkbench="openWorkbench" @incrementProgress="incrementMapProgress(); saveGameState()"
+        @addBoss="addBossAdmin" @clearNode="handleCampaignNodeCleared" />
+      <Shop v-if="!displayEditor && currentAppMode !== 'campaign'" class="stage-panel" :class="{ active: showShop }" :cssclass="shopClass"
         :shopBlueprints="shopBlueprints" :shopItems="shopItems" :rerollCost="rerollCost" :target="shopTarget"
         :hasStolen="hasStolenFromThisShop" @refresh-shop="refreshShop(false)" @buy-blueprint="buyBlueprint" @steal-blueprint="stealBlueprint"
         @buy-item="buyItem" @steal-item="stealItem" @selectTarget="selectShopTarget" @clearTarget="clearShopTarget" @closeShop="closeShop"
         :player="player" :shop-disabled="shopDisabled" :canProceed="canProceedFromShop" />
+      <CampaignShop v-if="!displayEditor && currentAppMode === 'campaign'" class="stage-panel" :class="{ active: showShop }" :cssclass="shopClass"
+        :campaignBlueprints="campaignBlueprints" :campaignItems="campaignItems" :campaignAdmins="campaignAdmins" :target="shopTarget"
+        :hasStolen="hasStolenFromThisShop" :player="player" :shopDisabled="false" :canProceed="canProceedFromShop"
+        @buy-blueprint="buyBlueprint" @steal-blueprint="stealBlueprint"
+        @buy-item="buyItem" @steal-item="stealItem" @selectTarget="selectShopTarget" @clearTarget="clearShopTarget" @closeShop="closeShop"
+      />
       <HybridCompiler v-if="!displayEditor" class="stage-panel" :class="{ active: showCompiler }" :player="player"
         :pieceToPlace="pieceToPlace" :isDraggingPlacement="isDraggingPlacement" @openCompiler="openCompiler"
         @toggleCompiler="toggleCompiler" @clear-drag="clearDrag" @close="toggleCompiler" />

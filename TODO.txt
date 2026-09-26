@@ -1,7 +1,10 @@
 New CampaignMap.vue
 Try loading a map - passes
 Any node can be clicked if is in visited.next - passes
-Try entering a level to open the board
+Try entering a level to open the board - passes but does not generate enemies
+-
+Add an import json to Leveleditor
+Make some maps with enemies on for campaign
 highlight all lines blue if in .next - passing so far
 visited levels (complete ones) cannot be entered.
 empty skips cannot be entered.

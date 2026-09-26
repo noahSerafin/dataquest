@@ -452,7 +452,7 @@ export abstract class Piece {
 }
 
 export class Spawn extends Piece {
-  static iconID = 495;
+  static iconID = 496;
   static name = "Spawn";
   static description = "A load point for programs";
   static unicode = "U+1F532";//"U+2BD0";

@@ -45,7 +45,7 @@ export const sector0 = {
           "ds2": 12
         }
       },
-      "levelName": "TheArena"
+      "levelName": "The Arena"
     },
     "node_ltmmq2vo6": {
       "id": "node_ltmmq2vo6",

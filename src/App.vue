@@ -2199,7 +2199,7 @@ function cancelConfirm() {
             <BlueprintView :blueprint="pieceToPlace" :tileSize="60" :cssclass="'placing'" />
           </div>
         </div>
-        <button @click="pieceToPlace = null">Cancel</button>
+        <button v-if="isPlacing && pieceToPlace" @click="pieceToPlace = null">Cancel</button>
       </div>
     </div>
     <div class="stage">

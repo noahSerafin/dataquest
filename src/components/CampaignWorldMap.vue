@@ -12,12 +12,13 @@ import { allPieces } from "../Pieces";
 import { allAdmins } from "../AdminPrograms";
 import { allOSes } from "../Operators";
 import { companies, shopCompany, bossCompany, playerCompany } from "../companies";
-import { level1Levels } from "../level1Levels";
+import { level1Levels } from "../campaignLevels/sector0.ts";
 import { level2Levels } from "../level2Levels";
 import { level3Levels } from "../level3Levels";
 import { level4Levels } from "../level4Levels";
 import { level5Levels } from "../level5Levels";
 import { level6Levels } from "../level6Levels";
+import { testLevels } from "../levels";
 import { makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, getSpriteStyle } from "../helperFunctions";
 import BlueprintView from "./BlueprintView.vue";
 import ItemView from "./ItemView.vue";
@@ -169,7 +170,7 @@ function enterNode(node: WorldNode) {
 
 // Hydrate the static map and generate skip rewards synchronously before initial render
 const allCompanyOptions = [shopCompany, bossCompany, playerCompany, ...companies];
-const allGameLevels = [...level1Levels, ...level2Levels, ...level3Levels, ...level4Levels, ...level5Levels, ...level6Levels];
+const allGameLevels = [...level1Levels, ...level2Levels, ...level3Levels, ...level4Levels, ...level5Levels, ...level6Levels, ...testLevels];
 
 for (const node of Object.values(props.staticWorld.nodes)) {
     if (node.company && typeof node.company === 'string') {
@@ -180,8 +181,8 @@ for (const node of Object.values(props.staticWorld.nodes)) {
     }
 
     if (node.type === 'skip' && !node.skipReward) {
-        if (node.skipReward) {
-            node.skipReward = parseSkipReward(node.skipReward) || generateSkipReward();
+        if (node.skipContents) {
+            node.skipReward = parseSkipReward(node.skipContents) || generateSkipReward();
         } else {
             node.skipReward = generateSkipReward();
         }

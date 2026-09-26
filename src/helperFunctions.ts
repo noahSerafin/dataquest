@@ -330,7 +330,8 @@ export function addProgramsUntilFull(//not working, "PieceClass is not a constru
   let freeMemory = player.memory - player.usedMemory
 
   while ((freeMemory >= 1 || player.hasAdmin('Toolbox') && freeMemory >= 0.5) && attempts < maxAttempts) {
-    const bp = makeBlueprint(pickWeightedRandom(allPieces, player))
+    const random = pickWeightedRandom(allPieces, player);
+    const bp = makeBlueprint(random.class, random.variant ?? undefined);
 
     // If addProgram returns false when full, even better
     const added = player.addProgram(bp);

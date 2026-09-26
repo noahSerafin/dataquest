@@ -48,7 +48,13 @@ const emit = defineEmits<{
 }>();
 
 const worldNodes = computed(() => Object.values(props.staticWorld.nodes));
-const clearedSet = computed(() => new Set(props.clearedNodes));
+const clearedSet = computed(() => {
+    const set = new Set(props.clearedNodes);
+    if (props.staticWorld.startNode) {
+        set.add(props.staticWorld.startNode);
+    }
+    return set;
+});
 
 const selectedPreviewNode = ref<WorldNode | null>(null);
 
@@ -58,16 +64,12 @@ function isNodeCleared(nodeId: string): boolean {
 
 const reachableNodes = computed(() => {
     const reachable = new Set<string>();
-    if (clearedSet.value.size === 0) {
-        reachable.add(props.staticWorld.startNode);
-    } else {
-        for (const clearedId of clearedSet.value) {
-            reachable.add(clearedId);
-            const node = props.staticWorld.nodes[clearedId];
-            if (node) {
-                for (const nextId of node.next) {
-                    reachable.add(nextId);
-                }
+    for (const clearedId of clearedSet.value) {
+        reachable.add(clearedId);
+        const node = props.staticWorld.nodes[clearedId];
+        if (node) {
+            for (const nextId of node.next) {
+                reachable.add(nextId);
             }
         }
     }
@@ -178,8 +180,29 @@ for (const node of Object.values(props.staticWorld.nodes)) {
     }
 
     if (node.type === 'skip' && !node.skipReward) {
-        node.skipReward = generateSkipReward();
+        if (node.skipReward) {
+            node.skipReward = parseSkipReward(node.skipReward) || generateSkipReward();
+        } else {
+            node.skipReward = generateSkipReward();
+        }
     }
+}
+
+function parseSkipReward(contents: string): SkipReward | undefined {
+    const piece = allPieces.find(p => p.name === contents);
+    if (piece) {
+        return { kind: 'blueprint', value: makeBlueprint(piece) };
+    }
+    const adminClass = allAdmins.find(a => a.name === contents);
+    if (adminClass) {
+        return { kind: 'admin', value: new adminClass() };
+    }
+    const allItems = [Voucher, Box, Gift, Jar, Pinata, Cake, Wand, Dupe, Genie, Pandora, Floppy, Update2, Update3, Hourglass, Life];
+    const ItemClass = allItems.find(i => new i().name === contents);
+    if (ItemClass) {
+        return { kind: 'item', value: new ItemClass() };
+    }
+    return undefined;
 }
 
 function generateSkipReward(): SkipReward {
@@ -261,7 +284,7 @@ function displayIcon(node: WorldNode) {
         );
     }
     switch (node.type) {
-        case "start": return "⬤";
+        case "start": return String.fromCodePoint(parseInt(props.player.osunicode.replace('U+', ''), 16), 0xFE0F);
         case "shop": return "🛒";
         case "sacrificial altar": return String.fromCodePoint(parseInt("U+1FAA6".replace('U+', ''), 16), 0xFE0F);
         case "duplicator": return String.fromCodePoint(parseInt("U+1F46F".replace('U+', ''), 16), 0xFE0F);
@@ -529,7 +552,7 @@ function handleMapMouseUpOrLeave() {
                 shopNode: node.type === 'shop',
                 skipNode: node.type === 'skip',
                 levelNode: node.type === 'level',
-                visited: isNodeCleared(node.id)
+                visited: isNodeCleared(node.id) && node.type !== 'start'
             }" :style="{
                 left: (node.position.x + mapOffsetX) + 'px',
                 top: node.position.y + 'px',
@@ -543,7 +566,7 @@ function handleMapMouseUpOrLeave() {
                     <div class="pins-right"></div>
                 </div>
                 <div class="node-inner">
-                    <div class="node-inner-content" v-if="!(node.type === 'start')">
+                    <div class="node-inner-content">
                         <div v-if="!isNodeCleared(node.id) && node.type == 'level'" class='text-gold'>
                             ${{ node.reward }}
                         </div>
@@ -633,7 +656,7 @@ function handleMapMouseUpOrLeave() {
                     :disabled="!player.hasAdminSpace" @click="takeSkipReward(selectedPreviewNode)">
                     Accept Reward
                 </button>
-                <button v-if="selectedPreviewNode?.type === 'skip' && player.hasAdmin('High Roller')"
+                <button v-if="selectedPreviewNode?.type === 'skip' && player.hasAdmin('High Roller') && !selectedPreviewNode.skipReward"
                     :disabled="!canReroll" @click="rerollSkipReward(selectedPreviewNode)">
                     Reroll
                 </button>

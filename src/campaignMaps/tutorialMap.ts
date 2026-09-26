@@ -1,4 +1,8 @@
 export const sector0 = {
+  //base security
+  //levels array
+  //dialogue tree
+  //background colours
   "nodes": {
     "node_g41ksufcp": {
       "id": "node_g41ksufcp",
@@ -218,7 +222,7 @@ export const sector0 = {
       "difficultyMod": 0,
       "reward": 0,
       "company": "Saturn Solutions",
-      "skipContents": "Banana"
+      "skipContents": "Banana Peel"
     },
     "node_vx34hfayc": {
       "id": "node_vx34hfayc",

@@ -676,28 +676,54 @@ watch(currentNodeId, () => {
                     <div class="pins-right"></div>
                 </div>
                 <div class="node-inner">
-                    <div class="node-inner-content" v-if="!(node.type === 'start' && node.visited)">
-                        <div v-if="!node.visited && (node.type == 'level' && node.id !== currentNodeId)"
-                            class='text-gold'>
-                            ${{ node.reward }}
-                        </div>
-                        <div class="icon" :style="getIconStyle(node, 24)">
-                            <template v-if="!getIconStyle(node).backgroundImage">
-                                {{ displayIcon(node) }}
-                            </template>
-                        </div>
-                        <div v-if="!node.visited && (node.type == 'level' && node.id !== currentNodeId)">
-                            {{ String.fromCodePoint(parseInt("U+1F512".replace('U+', ''), 16), 0xFE0F) }}{{
-                                node.difficultyMod + player.difficulty }}
-                        </div>
-                        <div v-if="node.type === 'boss'" class="boss-info">
-                            <strong>
-                                {{ boss.name }}:
-                            </strong>
-                            <span>
-                                <FormattedDescription :description="boss.description" />
-                            </span>
-                        </div>
+                    <div class="node-inner-content" v-if="!(node.type === 'start' && node.visited)"
+                        :style="node.type === 'boss' ? { display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', width: '100%', height: '100%' } : {}">
+                        <template v-if="node.type !== 'boss'">
+                            <div v-if="!node.visited && (node.type == 'level' && node.id !== currentNodeId)"
+                                class='text-gold'>
+                                ${{ node.reward }}
+                            </div>
+                            <div class="icon" :style="getIconStyle(node, 24)">
+                                <template v-if="!getIconStyle(node).backgroundImage">
+                                    {{ displayIcon(node) }}
+                                </template>
+                            </div>
+                            <div v-if="!node.visited && (node.type == 'level' && node.id !== currentNodeId)">
+                                {{ String.fromCodePoint(parseInt("U+1F512".replace('U+', ''), 16), 0xFE0F) }}{{
+                                    node.difficultyMod + player.difficulty }}
+                            </div>
+                        </template>
+                        <template v-else>
+                            <div class="boss-left" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 50%;">
+                                <div class='text-gold' style="font-size: 14px;">
+                                    ${{ node.reward }}
+                                </div>
+                                <div class="icon" :style="{...getSpriteStyle(node.company?.iconID ?? 0), width: '24px', height: '24px', display: 'inline-block', color: 'transparent'}">
+                                    <template v-if="!(getSpriteStyle(node.company?.iconID ?? 0).backgroundImage)">
+                                        {{ (node.company && node.company.unicode) ? String.fromCodePoint(parseInt(node.company.unicode.replace('U+', ''), 16), 0xFE0F) : '' }}
+                                    </template>
+                                </div>
+                                <div style="font-size: 14px;">
+                                    {{ String.fromCodePoint(parseInt("U+1F512".replace('U+', ''), 16), 0xFE0F) }}{{
+                                        node.difficultyMod + player.difficulty }}
+                                </div>
+                            </div>
+                            <div class="boss-right" style="display: flex; align-items: center; justify-content: center; width: 50%; position: relative;">
+                                <div class="icon" :style="getIconStyle(node, 24)">
+                                    <template v-if="!getIconStyle(node).backgroundImage">
+                                        {{ displayIcon(node) }}
+                                    </template>
+                                </div>
+                                <div class="boss-info">
+                                    <strong>
+                                        {{ boss.name }}:
+                                    </strong>
+                                    <span>
+                                        <FormattedDescription :description="boss.description" />
+                                    </span>
+                                </div>
+                            </div>
+                        </template>
                     </div>
                 </div>
             </div>

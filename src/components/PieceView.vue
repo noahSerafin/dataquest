@@ -216,7 +216,7 @@ function pieceTipClass(){
         class="status-icon"
         title="key"          
       >
-        <div v-if="STATUS_ICONIDS[key]" :style="{...getSpriteStyle(STATUS_ICONIDS[key]), width: '12px', height: '12px'}"></div>
+        <div v-if="STATUS_ICONIDS[key]" :style="{...getSpriteStyle(STATUS_ICONIDS[key]), width: '20px', height: '20px'}"></div>
         <template v-else>{{ STATUS_ICONS[key] ?? '?' }}</template>
       </span>
     </div>
@@ -330,7 +330,7 @@ function pieceTipClass(){
   font-size: 0.3em;
   height: 0.3em;
   margin-left: 0.2rem;
-  top: -40%;
+  top: -15%;
 }
 .action-btn, .deselect-btn{
   position: absolute;

@@ -3921,6 +3921,7 @@ class Hippo extends Piece {
 }
 
 class Tail extends Piece {
+  static iconID = 25;
   static name = "Gecko Tail";
   static description = "An decoy program spawned by a Gecko";
   static unicode = "U+1F98E";
@@ -3932,8 +3933,6 @@ class Tail extends Piece {
 }
 class Gecko extends Piece {
   static iconID = 25;
-
-
   static name = "Gecko";
   static description = "A program that replaces it's last piece with a decoy tail program";
   static unicode = "U+1F98E";

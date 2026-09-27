@@ -560,7 +560,7 @@ export function generateWorld(
     level: pick(),
     next: [],
     position: { x: 200, y: 30 },
-    company: bossCompany,
+    company: chooseRandomCompany(),
     difficultyMod: 0,
     reward: Math.min(10, difficulty * 2)// +5;
   };

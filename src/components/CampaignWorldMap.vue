@@ -507,6 +507,17 @@ const connections = computed(() => {
   return paths;
 });
 
+const expandedBossInfo = ref<Record<string, boolean>>({});
+function toggleBossInfo(e: Event, nodeId: string) {
+    e.stopPropagation();
+    expandedBossInfo.value[nodeId] = !expandedBossInfo.value[nodeId];
+}
+function getBossInstance(bossName?: string) {
+    if (!bossName) return null;
+    const BossClass = allBosses.find(b => b.name === bossName);
+    return BossClass ? new BossClass() : null;
+}
+
 const mapContainer = ref<HTMLDivElement | null>(null);
 let isDraggingMap = false;
 let startXMap = 0;
@@ -568,22 +579,56 @@ function handleMapMouseUpOrLeave() {
                     <div class="pins-right"></div>
                 </div>
                 <div class="node-inner">
-                    <div class="node-inner-content">
-                        <div v-if="!isNodeCleared(node.id) && node.type == 'level'" class='text-gold'>
-                            ${{ node.reward }}
-                        </div>
-                        <div class="icon" :style="getIconStyle(node, 24)">
-                            <template v-if="!getIconStyle(node).backgroundImage">
-                                {{ displayIcon(node) }}
-                            </template>
-                        </div>
-                        <div v-if="!isNodeCleared(node.id) && node.type == 'level'">
-                            {{ String.fromCodePoint(parseInt("U+1F512".replace('U+', ''), 16), 0xFE0F) }}{{
-                                node.difficultyMod + player.difficulty }}
-                        </div>
-                        <div v-if="node.type === 'boss'" class="boss-info">
-                            <strong>{{ node.bossName }}:</strong>
-                        </div>
+                    <div class="node-inner-content" :style="node.type === 'boss' ? { display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', width: '100%', height: '100%' } : {}">
+                        <template v-if="node.type !== 'boss'">
+                            <div v-if="!isNodeCleared(node.id) && node.type == 'level'" class='text-gold'>
+                                ${{ node.reward }}
+                            </div>
+                            <div class="icon" :style="getIconStyle(node, 24)">
+                                <template v-if="!getIconStyle(node).backgroundImage">
+                                    {{ displayIcon(node) }}
+                                </template>
+                            </div>
+                            <div v-if="!isNodeCleared(node.id) && node.type == 'level'">
+                                {{ String.fromCodePoint(parseInt("U+1F512".replace('U+', ''), 16), 0xFE0F) }}{{
+                                    node.difficultyMod + player.difficulty }}
+                            </div>
+                        </template>
+                        <template v-else>
+                            <div class="boss-left" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 50%;">
+                                <div class='text-gold' style="font-size: 14px;">
+                                    ${{ node.reward }}
+                                </div>
+                                <div class="icon" :style="{...getSpriteStyle(node.company?.iconID ?? 0), width: '24px', height: '24px', display: 'inline-block', color: 'transparent'}">
+                                    <template v-if="!(getSpriteStyle(node.company?.iconID ?? 0).backgroundImage)">
+                                        {{ (node.company && node.company.unicode) ? String.fromCodePoint(parseInt(node.company.unicode.replace('U+', ''), 16), 0xFE0F) : '' }}
+                                    </template>
+                                </div>
+                                <div style="font-size: 14px;">
+                                    {{ String.fromCodePoint(parseInt("U+1F512".replace('U+', ''), 16), 0xFE0F) }}{{
+                                        node.difficultyMod + player.difficulty }}
+                                </div>
+                            </div>
+                            <div class="boss-right" style="display: flex; align-items: center; justify-content: center; width: 50%; position: relative; height: 90%;">
+                                <div class="icon" :style="getIconStyle(node, 24)">
+                                    <template v-if="!getIconStyle(node).backgroundImage">
+                                        {{ displayIcon(node) }}
+                                    </template>
+                                </div>
+
+                                <div class="boss-info-toggle" @click="toggleBossInfo($event, node.id)"
+                                     style="position: absolute; bottom: 0; width: 16px; height: 16px; border-radius: 50%; background: #444; border: 1px solid white; color: white; display: flex; align-items: center; justify-content: center; font-size: 12px; cursor: pointer; z-index: 10;">
+                                     ?
+                                </div>
+
+                                <div v-if="expandedBossInfo[node.id]" class="boss-info">
+                                    <strong>{{ node.bossName }}:</strong>
+                                    <span>
+                                        <FormattedDescription :description="getBossInstance(node.bossName)?.description || ''" />
+                                    </span>
+                                </div>
+                            </div>
+                        </template>
                     </div>
                 </div>
             </div>

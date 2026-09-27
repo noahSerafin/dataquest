@@ -82,7 +82,6 @@ function canClick(node: WorldNode): boolean {
     
     if (isNodeCleared(node.id)) {
         if (node.type === 'shop') return true;
-        if (node.type === 'skip' && node.skipReward) return true; // keep skip reward if not claimed
         return false;
     }
     
@@ -155,6 +154,7 @@ function enterNode(node: WorldNode) {
         emit('openCompiler');
         emit('clearNode', node.id);
     } else if (node.type === 'boss') {
+        emit('clearNode', node.id);
         const BossClass = allBosses.find(b => b.name === node.bossName);
         if (BossClass) {
             emit("addBoss", new BossClass());
@@ -163,6 +163,7 @@ function enterNode(node: WorldNode) {
             emit("selectLevel", node.level, node.company, node.difficultyMod, (node.reward + props.player.bonusReward));
         }
     } else if (node.level) {
+        emit('clearNode', node.id);
         showTutorialTip('board');
         emit("selectLevel", node.level, node.company, node.difficultyMod, (node.reward + props.player.bonusReward));
     }
@@ -279,7 +280,7 @@ function deselect() {
 }
 
 function displayIcon(node: WorldNode) {
-    if (node.type === 'skip' && node.skipReward) {
+    if (node.type === 'skip' && node.skipReward && !isNodeCleared(node.id)) {
         return String.fromCodePoint(
             parseInt(node.skipReward.value.unicode.replace('U+', ''), 16), 0xFE0F
         );
@@ -307,7 +308,7 @@ function displayIcon(node: WorldNode) {
 function getIconStyle(node: WorldNode, size: number = 24): Record<string, any> {
     let iconID: number | undefined;
 
-    if (node.type === 'skip' && node.skipReward) {
+    if (node.type === 'skip' && node.skipReward && !isNodeCleared(node.id)) {
         iconID = node.skipReward.value.iconID;
     } else if (node.type === 'level' && node.company) {
         iconID = node.company.iconID;
@@ -553,7 +554,7 @@ function handleMapMouseUpOrLeave() {
                 shopNode: node.type === 'shop',
                 skipNode: node.type === 'skip',
                 levelNode: node.type === 'level',
-                visited: isNodeCleared(node.id) && node.type !== 'start'
+                visited: isNodeCleared(node.id) && node.type !== 'start' && node.type !== 'shop'
             }" :style="{
                 left: (node.position.x + mapOffsetX) + 'px',
                 top: node.position.y + 'px',

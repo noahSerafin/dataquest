@@ -2257,8 +2257,8 @@ function cancelConfirm() {
       <Collection class="stage-panel" :class="{ active: showCollection }" @close="showCollection = false"
         :debugMode="debugMode" :currentSeed="currentSeed" />
       <SpriteSheet v-if="showSpriteSheet" @close="showSpriteSheet = false" />
+      <Leveleditor v-if="currentAppMode === 'levelEditor'" @export-level="handleExport" />
     </div>
-    <Leveleditor v-if="currentAppMode === 'levelEditor'" @export-level="handleExport" />
     <div v-if="gameStarted || debugMode" class="player-area">
       <!-- PlayerView + End Turn / Retry -->
       <PlayerView v-if="!displayEditor" ref="playerViewRef" :player="player" :showInventory="showInventory"

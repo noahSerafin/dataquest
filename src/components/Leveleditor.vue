@@ -5,6 +5,7 @@ import PieceView from "./PieceView.vue";
 import type { Piece } from "../Pieces";
 import { Spawn } from '../Pieces';
 import {allPieces} from "../Pieces";
+import { generateNode } from "../nodeBuilder";
 
 //const pieceClasses: Array<typeof Piece>
 //switch to object for fast lookup when there are "dozens" of pieces
@@ -205,6 +206,7 @@ const updateSize = () => {
 }
 
 type LevelData = {
+  name?: string;
   tiles: Coordinate[];
   pieces: any[];
 };
@@ -213,8 +215,16 @@ const emit = defineEmits<{
   (e: 'export-level', payload: LevelData): void;
 }>();
 
-// export active tiles and pieces to clipboard
-const exportLevel = async () => {
+const showExportModal = ref(false);
+const exportLevelName = ref("New Level");
+
+const openExportModal = () => {
+  exportLevelName.value = "New Level";
+  showExportModal.value = true;
+}
+
+const confirmExport = async () => {
+  if (!exportLevelName.value) return;
 
   const coords: Coordinate[] = Array.from(activeTiles.value).map(key => {
     const [x, y] = key.split(",").map(Number)
@@ -238,17 +248,108 @@ const exportLevel = async () => {
 
   // Step 3: Build the final level object
   const exportingLevel = {
+    name: exportLevelName.value,
     tiles: coords,
     pieces: exportedPieces,
   }
 
   // Step 4: Copy JSON to clipboard
-  const json = JSON.stringify(exportingLevel, null, 2)
-  await navigator.clipboard.writeText(json)
-  alert('Copied level to clipboard.')
+  try {
+    const json = JSON.stringify(exportingLevel, null, 2)
+    await navigator.clipboard.writeText(json)
+    alert('Copied level to clipboard.')
+  } catch (err) {
+    console.error('Failed to copy to clipboard', err)
+    alert('Failed to copy level to clipboard.')
+  }
 
   // Step 5: Emit for higher-level handling if needed
   emit('export-level', exportingLevel);
+  
+  showExportModal.value = false;
+}
+
+const loadLevelData = (parsed: any) => {
+  if (!parsed || !parsed.tiles || !parsed.pieces) {
+    alert("Invalid level data");
+    return;
+  }
+  
+  if (parsed.name) {
+    console.log(`Importing level: ${parsed.name}`);
+  }
+  
+  activeTiles.value.clear();
+  piecesToExport.value = [];
+  
+  let maxX = 4;
+  let maxY = 4;
+
+  parsed.tiles.forEach((t: Coordinate) => {
+    activeTiles.value.add(`${t.x},${t.y}`);
+    if (t.x > maxX) maxX = t.x;
+    if (t.y > maxY) maxY = t.y;
+  });
+  
+  parsed.pieces.forEach((p: any) => {
+    const pieceClass = pieceClasses.find(cls => cls.name === p.name);
+    if (pieceClass) {
+      const newPiece = new pieceClass(p.headPosition, p.team, undefined, p.id);
+      newPiece.tiles = p.tiles;
+      piecesToExport.value.push(newPiece);
+      
+      p.tiles.forEach((t: Coordinate) => {
+        if (t.x > maxX) maxX = t.x;
+        if (t.y > maxY) maxY = t.y;
+      });
+    } else {
+      console.warn("Unknown piece name:", p.name);
+    }
+  });
+
+  width.value = maxX + 1;
+  height.value = maxY + 1;
+  size.value = Math.max(width.value, height.value);
+};
+
+const importLevel = () => {
+  const json = prompt("Paste level JSON here:");
+  if (!json) return;
+    
+    let parsed;
+    try {
+      // First try strict JSON parsing
+      parsed = JSON.parse(json);
+    } catch (e) {
+      // If it fails (e.g., unquoted keys from a .ts file), fallback to evaluating it as a JS object
+      try {
+        parsed = new Function("return " + json)();
+      } catch (fallbackError) {
+        alert("Failed to parse level data. Please ensure it is a valid object.");
+        console.error(fallbackError);
+        return;
+      }
+    }
+    
+    loadLevelData(parsed);
+}
+
+const generateDifficulty = ref(1);
+
+const generateLevel = () => {
+  const generatedLevel = generateNode(generateDifficulty.value, 0);
+  
+  generatedLevel.pieces.forEach((p: any) => {
+    if (p.name === 'Spawn' && p.team === 'enemy') {
+      const candidates = pieceClasses.filter((c: any) => c.rarity === p.rarity && c.name !== 'Spawn');
+      if (candidates.length > 0) {
+        const chosen = candidates[Math.floor(Math.random() * candidates.length)];
+        p.name = chosen.name;
+      }
+    }
+  });
+
+  loadLevelData(generatedLevel);
 }
 
 
@@ -296,9 +397,31 @@ const boardHeight = computed(() => tileSize.value * height.value)
         Height: {{ height }}
         <input type="range" min="5" max="48" v-model.number="height" @input="fillGrid"/>
       </label>
-       <!-- Export button -->
-    <button @click="exportLevel" class="export-btn">Export Tiles</button>
-  </div>
+    </div>
+    
+    <div class="action-buttons">
+      <div class="generate-controls">
+        <label>
+          Diff: {{ generateDifficulty }}
+          <input type="number" min="1" max="50" v-model.number="generateDifficulty" class="diff-input"/>
+        </label>
+        <button @click="generateLevel">Generate</button>
+      </div>
+      <button @click="importLevel" class="import-btn">Import Level</button>
+      <button @click="openExportModal" class="export-btn">Export Tiles</button>
+    </div>
+
+    <!-- Export Modal -->
+    <div v-if="showExportModal" class="export-modal">
+      <div class="modal-content">
+        <h3>Enter a name for the level:</h3>
+        <input v-model="exportLevelName" type="text" @keyup.enter="confirmExport" class="export-input" />
+        <div class="modal-actions">
+          <button @click="confirmExport">OK</button>
+          <button @click="showExportModal = false">Cancel</button>
+        </div>
+      </div>
+    </div>
   <!-- Place Pieces -->
    <div class="droppers">
      <label>
@@ -365,6 +488,8 @@ const boardHeight = computed(() => tileSize.value * height.value)
 
 <style scoped>
   .editor{
+    position: absolute;
+    top: 100px;
     z-index: 99999;
   }
   .controls{
@@ -374,9 +499,22 @@ const boardHeight = computed(() => tileSize.value * height.value)
     left: 20%;
     width: 100%;
 }
-.export-btn{
-  position: absolute;
-  bottom: 5vh;
+.action-buttons {
+  position: fixed;
+  top: 5vh;
+  right: 5%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 99999;
+}
+.generate-controls {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.diff-input {
+  width: 40px;
 }
 .grid-container{
   position: relative;
@@ -411,5 +549,39 @@ const boardHeight = computed(() => tileSize.value * height.value)
     height: 100%;
     overflow-y: scroll;
   }
+}
+
+.export-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+}
+
+.modal-content {
+  background: #333;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  color: white;
+}
+
+.export-input {
+  margin: 10px 0;
+  padding: 5px;
+  width: 80%;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
 }
 </style>

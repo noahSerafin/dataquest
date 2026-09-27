@@ -1,8 +1,8 @@
+//base security
+//levels array
+//dialogue tree
+//background colours
 export const sector0 = {
-  //base security
-  //levels array
-  //dialogue tree
-  //background colours
   "nodes": {
     "node_g41ksufcp": {
       "id": "node_g41ksufcp",
@@ -55,11 +55,26 @@ export const sector0 = {
         "y": 120
       },
       "next": [
+        "node_mez50lbxk",
         "node_hb7dz8ll7"
       ],
       "difficultyMod": 1,
       "reward": 1,
-      "company": "Saturn Solutions"
+      "company": "Saturn Solutions",
+      "pathOffsets": {
+        "node_hb7dz8ll7": {
+          "x": 0,
+          "y1": 0,
+          "y2": 0
+        },
+        "node_mez50lbxk": {
+          "x": 0,
+          "y1": 19,
+          "y2": 0,
+          "ds1": 2,
+          "ds2": 3
+        }
+      }
     },
     "node_c8d8kquy9": {
       "id": "node_c8d8kquy9",
@@ -277,6 +292,33 @@ export const sector0 = {
         }
       },
       "shopContents": "Bee, Rat, Sling, Snail, TP, Blueberry, Iron, Juiced, Mushroom, Update, Candle, Chedda, Harvest, Notepad, Parachute"
+    },
+    "node_mez50lbxk": {
+      "id": "node_mez50lbxk",
+      "type": "sacrificial altar",
+      "position": {
+        "x": 500,
+        "y": 200
+      },
+      "next": [
+        "node_hb7dz8ll7",
+        ""
+      ],
+      "difficultyMod": 0,
+      "reward": 0,
+      "company": "Saturn Solutions",
+      "pathOffsets": {
+        "node_hb7dz8ll7": {
+          "x": 0,
+          "y1": 0,
+          "y2": 19,
+          "ds1": 2,
+          "ds2": 3
+        },
+        "": {
+          "x": 0
+        }
+      }
     }
   },
   "startNode": "node_g41ksufcp"

@@ -4,7 +4,7 @@ export const tutorialDialogue = {
   "nodes": {
     "node_1": {
       "id": "node_1",
-      "nodeID": "node_g41ksufcp",
+      "nodeID": "load:node_g41ksufcp",
       "speaker": "Al",
       "text": "Hi there! Always exciting to have a new recruit. What you're seeing infront of you is our training enviroment. Use this space to learn the ropes of hacking before we send you out into cyberspace to collect some real bounties.",
       "choices": [
@@ -44,7 +44,7 @@ export const tutorialDialogue = {
     },
     "node_11": {
       "id": "node_11",
-      "nodeID": "node_g41ksufcp",
+      "nodeID": "preview:node_km8bwjcq7",
       "speaker": "Al",
       "text": "Here you can see some more details about the node, including a minimap of it's layout. Red squares indicate tiles occupied by the defending (enemy) programs. And green represent your entry points into the node.",
       "choices": [
@@ -64,6 +64,7 @@ export const tutorialDialogue = {
     "node_13": {
       "id": "node_13",
       "speaker": "Al",
+      "nodeID": "enter:node_km8bwjcq7",
       "text": "Now we can see what we're up against. Click on that enemy piece to view it's stats.",
       "choices": [
       ]

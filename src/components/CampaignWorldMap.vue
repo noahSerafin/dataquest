@@ -59,10 +59,10 @@ const clearedSet = computed(() => {
 });
 
 const selectedPreviewNode = ref<WorldNode | null>(null);
-const lastInteractedNodeId = ref<string | null>(null);
+const lastInteractedMapEvent = ref<string | null>(null);
 
 onMounted(() => {
-    lastInteractedNodeId.value = props.staticWorld.startNode;
+    lastInteractedMapEvent.value = `load:${props.staticWorld.startNode}`;
 });
 
 function isNodeCleared(nodeId: string): boolean {
@@ -109,7 +109,7 @@ function trySelect(node: WorldNode) {
     }
 
     selectedPreviewNode.value = node;
-    lastInteractedNodeId.value = node.id;
+    lastInteractedMapEvent.value = `preview:${node.id}`;
     if (props.player.hasAdmin('Clippy')) {
         reapplyTutorialTooltips(200);
     }
@@ -129,7 +129,7 @@ function canSkip(node: WorldNode) {
 
 function skipNode(node: WorldNode) {
     selectedPreviewNode.value = null;
-    lastInteractedNodeId.value = node.id;
+    lastInteractedMapEvent.value = `skip:${node.id}`;
     emit('clearNode', node.id);
     if (!props.player.hasAdmin('Leg Up')) {
         props.player.spend(5)
@@ -140,7 +140,7 @@ function skipNode(node: WorldNode) {
 function enterNode(node: WorldNode) {
     const isReachable = canClick(node);
     selectedPreviewNode.value = null;
-    lastInteractedNodeId.value = node.id;
+    lastInteractedMapEvent.value = `enter:${node.id}`;
     
     if (node.type === 'shop' && !isReachable) {
         emit('openDisabledShop');
@@ -659,7 +659,7 @@ function handleMapMouseUpOrLeave() {
         </div>
 
         <!-- Preview modal -->
-        <div v-if="selectedPreviewNode" :class="`preview-modal ${selectedPreviewNode.company?.abbr}`"
+        <div v-if="selectedPreviewNode" :id="'preview-modal-' + selectedPreviewNode.id" :class="`preview-modal ${selectedPreviewNode.company?.abbr}`"
             :style="selectedPreviewNode.type !== 'boss' && selectedPreviewNode.type === 'level' && selectedPreviewNode.company ? { backgroundColor: `${selectedPreviewNode.company.tileColor}`, border: `2px solid ${selectedPreviewNode.company.edgeColor}` } : {}">
             <h3>{{ selectedPreviewNode.type.toUpperCase() }}</h3>
             
@@ -730,7 +730,7 @@ function handleMapMouseUpOrLeave() {
         <MessagingSystem 
             v-if="props.staticWorld.dialogueTree"
             :dialogueTree="props.staticWorld.dialogueTree"
-            :activeMapNodeId="lastInteractedNodeId"
+            :activeMapEvent="lastInteractedMapEvent"
         />
     </div>
 </template>

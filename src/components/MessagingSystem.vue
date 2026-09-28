@@ -5,7 +5,7 @@ import { characters } from '../Characters';
 
 const props = defineProps<{
     dialogueTree?: DialogueTree | null;
-    activeMapNodeId?: string | null; // Current node user clicked or cleared
+    activeMapEvent?: string | null; // e.g. "preview:node_123"
 }>();
 
 const emit = defineEmits<{
@@ -32,7 +32,7 @@ watch(() => props.dialogueTree, (newTree) => {
     if (newTree && newTree.startNode) {
         currentNodeId.value = newTree.startNode;
         isMinimized.value = false;
-        checkNodeTriggers();
+        checkNodeTriggers(props.activeMapEvent);
     } else {
         currentNodeId.value = null;
     }
@@ -40,17 +40,29 @@ watch(() => props.dialogueTree, (newTree) => {
 
 // Check if we are waiting for a map node
 const waitingForMapNode = computed(() => {
-    return currentNode.value?.nodeID ? currentNode.value.nodeID !== props.activeMapNodeId : false;
+    return currentNode.value?.nodeID ? currentNode.value.nodeID !== props.activeMapEvent : false;
 });
 
-watch(() => props.activeMapNodeId, () => {
-    checkNodeTriggers();
+watch(() => props.activeMapEvent, (newEvent) => {
+    checkNodeTriggers(newEvent);
 });
 
-function checkNodeTriggers() {
-    if (currentNode.value?.nodeID && currentNode.value.nodeID === props.activeMapNodeId) {
+function checkNodeTriggers(eventStr?: string | null) {
+    if (!props.dialogueTree || !eventStr) return;
+
+    if (currentNode.value?.nodeID === eventStr) {
         // We were waiting for this node, now un-minimize / show
         isMinimized.value = false;
+        return;
+    }
+
+    // Search the whole tree to see if a node triggers on this event
+    for (const [id, node] of Object.entries(props.dialogueTree.nodes)) {
+        if (node.nodeID === eventStr) {
+            currentNodeId.value = id;
+            isMinimized.value = false;
+            return;
+        }
     }
 }
 
@@ -99,8 +111,6 @@ function selectChoice(choice: DialogueChoice) {
 
 function closeDialogue() {
     isMinimized.value = true;
-    currentNodeId.value = null;
-    emit('complete');
 }
 
 </script>
@@ -132,22 +142,15 @@ function closeDialogue() {
                 <p>{{ currentNode?.text }}</p>
             </div>
 
-            <div class="choices">
-                <template v-if="currentNode?.choices && currentNode.choices.length > 0">
-                    <button 
-                        v-for="(choice, index) in currentNode.choices" 
-                        :key="index"
-                        class="choice-btn"
-                        @click="selectChoice(choice)"
-                    >
-                        {{ choice.text }}
-                    </button>
-                </template>
-                <template v-else>
-                    <button class="choice-btn continue-btn" @click="selectChoice({ text: 'Continue', nextNode: undefined })">
-                        Continue
-                    </button>
-                </template>
+            <div class="choices" v-if="currentNode?.choices && currentNode.choices.length > 0">
+                <button 
+                    v-for="(choice, index) in currentNode.choices" 
+                    :key="index"
+                    class="choice-btn"
+                    @click="selectChoice(choice)"
+                >
+                    {{ choice.text }}
+                </button>
             </div>
         </div>
     </div>

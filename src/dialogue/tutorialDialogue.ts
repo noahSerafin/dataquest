@@ -1,9 +1,10 @@
-export const tutorialDialogue ={
-  "dialogueId": "MerchantEncounter",
+export const tutorialDialogue = {
+  "dialogueId": "Tutorial",
   "startNode": "node_1",
   "nodes": {
     "node_1": {
       "id": "node_1",
+      "nodeID": "node_g41ksufcp",
       "speaker": "Al",
       "text": "Hi there! Always exciting to have a new recruit. What you're seeing infront of you is our training enviroment. Use this space to learn the ropes of hacking before we send you out into cyberspace to collect some real bounties.",
       "choices": [
@@ -23,8 +24,9 @@ export const tutorialDialogue ={
     },
     "node_2": {
       "id": "node_2",
+      "elementID": "node_g41ksufcp",
       "speaker": "Al",
-      "text": "Here's your current position in this circuit. The blue wires indicate other nodes that can travel to",
+      "text": "This ciruit represent a map of available nodes. Here's your current position in this circuit. The blue wires indicate other nodes that can travel to",
       "choices": [
         {
           "text": "Got it.",
@@ -34,15 +36,17 @@ export const tutorialDialogue ={
     },
     "node_3": {
       "id": "node_3",
+      "elementID": "node_km8bwjcq7",
       "speaker": "Al",
-      "text": "This is a node with a bounty on it. Companies will issue bounties on nodes that they want their security tested on. You can see here the reward (in $), the company logo, and the node's security level 🔒. Tougher nodes will typically have a higher reward for cracking them.",
+      "text": "Right now you are connected to a node with a bounty on it. Companies will issue bounties on nodes that they want their security tested on. You can see here the reward (in $), the company logo, and the node's security level 🔒. Tougher nodes will typically have a higher reward for cracking them.",
       "choices": [
       ]
     },
     "node_11": {
       "id": "node_11",
+      "nodeID": "node_g41ksufcp",
       "speaker": "Al",
-      "text":  "Here you can see some more details about the node, including a minimap of it's layout. Red squares indicate tiles occupied by the defending (enemy) programs. And green represent your entry points into the node.",
+      "text": "Here you can see some more details about the node, including a minimap of it's layout. Red squares indicate tiles occupied by the defending (enemy) programs. And green represent your entry points into the node.",
       "choices": [
         {
           "text": "Alright, what now?",

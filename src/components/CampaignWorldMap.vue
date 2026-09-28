@@ -26,6 +26,7 @@ import BlueprintController from "./BlueprintController.vue";
 import { StorageManager } from "../StorageManager";
 import { Random } from "../Random";
 import FormattedDescription from "./FormattedDescription.vue";
+import MessagingSystem from "./MessagingSystem.vue";
 import type { Coordinate } from "../types";
 
 const props = defineProps<{
@@ -58,6 +59,11 @@ const clearedSet = computed(() => {
 });
 
 const selectedPreviewNode = ref<WorldNode | null>(null);
+const lastInteractedNodeId = ref<string | null>(null);
+
+onMounted(() => {
+    lastInteractedNodeId.value = props.staticWorld.startNode;
+});
 
 function isNodeCleared(nodeId: string): boolean {
     return clearedSet.value.has(nodeId);
@@ -103,6 +109,7 @@ function trySelect(node: WorldNode) {
     }
 
     selectedPreviewNode.value = node;
+    lastInteractedNodeId.value = node.id;
     if (props.player.hasAdmin('Clippy')) {
         reapplyTutorialTooltips(200);
     }
@@ -122,6 +129,7 @@ function canSkip(node: WorldNode) {
 
 function skipNode(node: WorldNode) {
     selectedPreviewNode.value = null;
+    lastInteractedNodeId.value = node.id;
     emit('clearNode', node.id);
     if (!props.player.hasAdmin('Leg Up')) {
         props.player.spend(5)
@@ -132,6 +140,7 @@ function skipNode(node: WorldNode) {
 function enterNode(node: WorldNode) {
     const isReachable = canClick(node);
     selectedPreviewNode.value = null;
+    lastInteractedNodeId.value = node.id;
     
     if (node.type === 'shop' && !isReachable) {
         emit('openDisabledShop');
@@ -556,7 +565,7 @@ function handleMapMouseUpOrLeave() {
         @mouseleave="handleMapMouseUpOrLeave">
         <div class="node-map">
             <!-- Nodes -->
-            <div v-for="node in worldNodes" :key="node.id" class="node " :class="{
+            <div v-for="node in worldNodes" :key="node.id" :id="node.id" class="node " :class="{
                 clickable: canClick(node),
                 current: isNodeCleared(node.id) && node.type !== 'start',
                 visible: true,
@@ -717,6 +726,12 @@ function handleMapMouseUpOrLeave() {
                         v-if="!props.player.hasAdmin('Leg Up')">$5</span></button>
             </div>
         </div>
+
+        <MessagingSystem 
+            v-if="props.staticWorld.dialogueTree"
+            :dialogueTree="props.staticWorld.dialogueTree"
+            :activeMapNodeId="lastInteractedNodeId"
+        />
     </div>
 </template>
 

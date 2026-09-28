@@ -12,22 +12,25 @@ export abstract class Character {
         this.role = role;
     }
 }
-//EGYPTIAN HIEROGLYPH R028, U+132CF //alieny
-//U+1F439 HAMSTER FACE
-////RICKSHAW, U+1F6FA
-//TAKEOUT BOX, U+1F961
-//SPOOL OF THREAD, U+1F9F5
-// ACCORDION, U+1FA97 Busker -
-//U+1F417 BOAR
-////8ball BILLIARDS, U+1F3B1
-//frog //EGYPTIAN HIEROGLYPH I007, U+1318F
-//U+1F99D RACCOON 
-// U+1F973 FACE WITH PARTY HORN AND PARTY HAT
-//U+1F913 NERD FACE 
-// U+1F9A4 DODO 
-//U+1F428 KOALA 
-//U+1F458 KIMONO
-//GOAT, U+1F410 charge line piece, or GOAT admin
-//DUMPLING, U+1F95F Pierog
+export class GameCharacter extends Character {
+    constructor(name: string, iconId: number, unicode: string, role: string) {
+        super(name, iconId, unicode, role);
+    }
+}
 
-//U+1FAA7 PLACARD 
+export const characters: Record<string, Character> = {
+    "Rick": new GameCharacter("Rick", 497, "U+1F6FA", ""),
+    "Sue": new GameCharacter("Sue", 498, "U+1F9F5", ""),
+    "Buster": new GameCharacter("Buster", 499, "U+1FA97", ""),
+    "Pumba": new GameCharacter("Pumba", 500, "U+1F417", ""),
+    "Bill": new GameCharacter("Bill", 501, "U+1F3B1", ""),
+    "Hamuel": new GameCharacter("Hamuel", 502, "U+1F439", "Shopkeeper"),
+    "Kim": new GameCharacter("Kim", 503, "U+1F458", ""),
+    "Al": new GameCharacter("Al", 504, "U+132CF", "Guide"),
+    "The Goat": new GameCharacter("goated", 505, "U+1F410", ""),
+    "Piero": new GameCharacter("Piero", 506, "U+1F95F", ""),
+    "Jim": new GameCharacter("Jim", 507, "U+1F99D", ""),
+    "Party Pete": new GameCharacter("Party Pete", 508, "U+1F973", ""),
+    "Dodo": new GameCharacter("Dodo", 509, "U+1F9A4", ""),
+    "Shiela": new GameCharacter("Shiela", 510, "U+1F428", ""),
+};

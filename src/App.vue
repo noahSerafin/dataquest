@@ -287,7 +287,8 @@ const campaignShopPurchases = ref<Record<string, string[]>>({});
 function startCampaign(_slotIndex: number) {
   campaignWorldMap.value = {
     nodes: JSON.parse(JSON.stringify(sector0.nodes)),
-    startNode: sector0.startNode
+    startNode: sector0.startNode,
+    dialogueTree: (sector0 as any).dialogueTree
   };
   campaignClearedNodes.value = [];
   campaignShopPurchases.value = {};

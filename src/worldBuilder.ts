@@ -1,4 +1,4 @@
-import type { Company, Coordinate, SkipReward } from "./types";
+import type { Company, Coordinate, SkipReward, DialogueTree } from "./types";
 import { Spawn, allPieces } from "./Pieces";
 import { DIFFICULTY_RARITY } from "./constants";
 import { applyVariant, rollVariant } from "./helperFunctions";
@@ -34,6 +34,7 @@ export interface WorldNode {
 export interface WorldMap {
   nodes: Record<string, WorldNode>;
   startNode: string;
+  dialogueTree?: DialogueTree;
 }
 
 function chooseRandomCompany() {

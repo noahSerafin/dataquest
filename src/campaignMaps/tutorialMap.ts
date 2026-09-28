@@ -1,8 +1,11 @@
+import { tutorialDialogue } from "../dialogue/tutorialDialogue";
+
 //base security
 //levels array
 //dialogue tree
 //background colours
 export const sector0 = {
+  "dialogueTree": tutorialDialogue,
   "nodes": {
     "node_g41ksufcp": {
       "id": "node_g41ksufcp",

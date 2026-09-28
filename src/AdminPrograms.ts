@@ -4047,3 +4047,8 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 
 //fly
 // EGYPTIAN HIEROGLYPH L003, U+131A6
+
+//TAKEOUT BOX, U+1F961
+//U+1F913 NERD FACE
+//frog //EGYPTIAN HIEROGLYPH I007, U+1318F
+//U+1FAA7 PLACARD

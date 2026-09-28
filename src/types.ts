@@ -165,3 +165,23 @@ export type SkipReward =
   | { kind: "blueprint"; value: PieceBlueprint }
   | { kind: "admin"; value: Admin }
   | { kind: "item"; value: Item };
+
+export interface DialogueChoice {
+  text: string;
+  nextNode?: string;
+}
+
+export interface DialogueNode {
+  id: string;
+  speaker: string;
+  text: string;
+  choices: DialogueChoice[];
+  nodeID?: string;
+  elementID?: string;
+}
+
+export interface DialogueTree {
+  dialogueId: string;
+  startNode: string;
+  nodes: Record<string, DialogueNode>;
+}

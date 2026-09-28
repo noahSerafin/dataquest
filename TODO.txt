@@ -1,3 +1,6 @@
+Load a message from the dialogue tree
+
+Have logic for spawning any piece on single spawn, then only pieces with max size >= to the spawn's size
 Make some maps with enemies on for campaign
 altar/compiler/duplicator cannot be re-entered (or cost money to enter?)
 

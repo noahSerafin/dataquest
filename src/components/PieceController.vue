@@ -141,7 +141,9 @@ const spriteStyle = computed(() => {
 <template>
   <div :class="`piece-controller instance v_${piece.variantName} redacted-${piece.redacted}`" :style="{
     transform: `translate(${position.x}px, ${position.y}px)`
-  }">
+  }"
+  :id="piece.id + '-controller'"
+  >
     <div :class="`header ${piece.variantName ? ('variant-header v_'+piece.variantName) : ''}`" @mousedown="startDrag" @touchstart="startDrag">
       <div class="symbol-container">
         <div v-if="!useUnicode" class="sprite-icon" :style="spriteStyle"></div>

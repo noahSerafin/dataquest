@@ -67,23 +67,26 @@ function checkNodeTriggers(eventStr?: string | null) {
 }
 
 // Overlay logic
-const originalStyles = new Map<HTMLElement, { zIndex: string, position: string }>();
+const overlayRect = ref({ top: 0, bottom: 0, left: 0, right: 0 });
+let overlayInterval: number;
 
 function updateOverlay() {
-    // Restore previous
-    originalStyles.forEach((styles, el) => {
-        el.style.zIndex = styles.zIndex;
-        el.style.position = styles.position;
-    });
-    originalStyles.clear();
-
     if (isOpen.value && !isMinimized.value && !waitingForMapNode.value && currentNode.value?.elementID) {
         const el = document.getElementById(currentNode.value.elementID);
         if (el) {
-            originalStyles.set(el, { zIndex: el.style.zIndex, position: el.style.position });
-            el.style.position = 'relative';
-            el.style.zIndex = '10001';
+            const rect = el.getBoundingClientRect();
+            const p = 4; // padding
+            overlayRect.value = {
+                left: Math.max(0, rect.left - p),
+                top: Math.max(0, rect.top - p),
+                right: Math.min(window.innerWidth, rect.right + p),
+                bottom: Math.min(window.innerHeight, rect.bottom + p)
+            };
+        } else {
+            overlayRect.value = { top: 0, bottom: 0, left: 0, right: 0 };
         }
+    } else {
+        overlayRect.value = { top: 0, bottom: 0, left: 0, right: 0 };
     }
 }
 
@@ -91,13 +94,12 @@ watch([isOpen, isMinimized, waitingForMapNode, currentNode], () => {
     setTimeout(updateOverlay, 50); // small delay to let DOM update
 });
 
+onMounted(() => {
+    overlayInterval = window.setInterval(updateOverlay, 50); // Continuously track element in case of scrolling/dragging
+});
+
 onUnmounted(() => {
-    // Cleanup overlay
-    originalStyles.forEach((styles, el) => {
-        el.style.zIndex = styles.zIndex;
-        el.style.position = styles.position;
-    });
-    originalStyles.clear();
+    clearInterval(overlayInterval);
 });
 
 function selectChoice(choice: DialogueChoice) {
@@ -117,7 +119,16 @@ function closeDialogue() {
 
 <template>
     <!-- Tutorial Overlay Blocker -->
-    <div v-if="isOpen && !isMinimized && !waitingForMapNode && currentNode?.elementID" class="tutorial-overlay"></div>
+    <template v-if="isOpen && !isMinimized && !waitingForMapNode && currentNode?.elementID && overlayRect.right > 0">
+        <!-- Top -->
+        <div class="tutorial-overlay" :style="{ top: 0, left: 0, right: 0, height: overlayRect.top + 'px' }"></div>
+        <!-- Bottom -->
+        <div class="tutorial-overlay" :style="{ top: overlayRect.bottom + 'px', left: 0, right: 0, bottom: 0 }"></div>
+        <!-- Left -->
+        <div class="tutorial-overlay" :style="{ top: overlayRect.top + 'px', height: (overlayRect.bottom - overlayRect.top) + 'px', left: 0, width: overlayRect.left + 'px' }"></div>
+        <!-- Right -->
+        <div class="tutorial-overlay" :style="{ top: overlayRect.top + 'px', height: (overlayRect.bottom - overlayRect.top) + 'px', left: overlayRect.right + 'px', right: 0 }"></div>
+    </template>
 
     <div v-if="isOpen" class="messaging-system" :class="{ minimized: isMinimized, hidden: waitingForMapNode }">
         <!-- Minimized View -->
@@ -159,19 +170,16 @@ function closeDialogue() {
 <style scoped>
 .tutorial-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
     background-color: rgba(0, 0, 0, 0.6);
-    z-index: 10000;
+    z-index: 9999998;
+    pointer-events: auto;
 }
 
 .messaging-system {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    z-index: 10002;
+    z-index: 9999999;
     font-family: 'Courier New', Courier, monospace;
 }
 

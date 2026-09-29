@@ -12,6 +12,7 @@ import { allAdmins } from "./AdminPrograms";
 import { Admin } from "./AdminPrograms";
 import type { AdminTrigger } from "./AdminPrograms";
 import PlayerView from "./components/PlayerView.vue";
+import MessagingSystem from "./components/MessagingSystem.vue";
 import type { Piece } from "./Pieces"
 import { Spawn, allPieces } from "./Pieces"
 import type { Coordinate, PieceBlueprint, Level, OS, Company } from "./types";
@@ -283,6 +284,20 @@ const bgProgress = ref(0);
 const campaignWorldMap = ref<any>(null);
 const campaignClearedNodes = ref<string[]>([]);
 const campaignShopPurchases = ref<Record<string, string[]>>({});
+const appDialogueEvent = ref<string | null>(null);
+
+onMounted(() => {
+    document.addEventListener('click', (e) => {
+        const targetWithId = (e.target as HTMLElement).closest('[id]');
+        if (targetWithId && targetWithId.id) {
+            appDialogueEvent.value = `click:${targetWithId.id}`;
+        }
+    }, { capture: true });
+});
+
+function handleMapEvent(e: string) {
+    appDialogueEvent.value = e;
+}
 
 function startCampaign(_slotIndex: number) {
   campaignWorldMap.value = {
@@ -296,6 +311,7 @@ function startCampaign(_slotIndex: number) {
   currentAppMode.value = 'campaign';
   showMap.value = true;
   gameStarted.value = true;
+  showInventory.value = false;
   
   currentCompany.value = { iconID: 499, name: 'Player', abbr: '', unicode: player.value.osunicode, pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "rgb(156, 201, 84)" };
 }
@@ -2223,7 +2239,7 @@ function cancelConfirm() {
         @selectLevel="selectLevel" @openShop="openShop" @openDisabledShop="openDisabledShop"
         @openCompiler="openCompiler" @openAltar="openAltar" @openDuplicator="openDuplicator"
         @openWorkbench="openWorkbench" @incrementProgress="incrementMapProgress(); saveGameState()"
-        @addBoss="addBossAdmin" @clearNode="handleCampaignNodeCleared" />
+        @addBoss="addBossAdmin" @clearNode="handleCampaignNodeCleared" @mapEvent="handleMapEvent" />
       <Shop v-if="!displayEditor && currentAppMode !== 'campaign'" class="stage-panel" :class="{ active: showShop }" :cssclass="shopClass"
         :shopBlueprints="shopBlueprints" :shopItems="shopItems" :rerollCost="rerollCost" :target="shopTarget"
         :hasStolen="hasStolenFromThisShop" @refresh-shop="refreshShop(false)" @buy-blueprint="buyBlueprint" @steal-blueprint="stealBlueprint"
@@ -2258,6 +2274,14 @@ function cancelConfirm() {
       <Collection class="stage-panel" :class="{ active: showCollection }" @close="showCollection = false"
         :debugMode="debugMode" :currentSeed="currentSeed" />
       <SpriteSheet v-if="showSpriteSheet" @close="showSpriteSheet = false" />
+
+      <Teleport to="body">
+        <MessagingSystem 
+          v-if="campaignWorldMap?.dialogueTree"
+          :dialogueTree="campaignWorldMap.dialogueTree"
+          :activeMapEvent="appDialogueEvent"
+        />
+      </Teleport>
       <Leveleditor v-if="currentAppMode === 'levelEditor'" @export-level="handleExport" />
     </div>
     <div v-if="gameStarted || debugMode" class="player-area">

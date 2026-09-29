@@ -1,4 +1,5 @@
-Load a message from the dialogue tree
+review dom scanner:
+"rogue mode does not have any dialogue trees for the time being, though i may add some in future. However it does have its own tutorial of sorts with the 'Clippy' admin. Can you make sure that if we are scanning the dom every click, there is no double work being performed here as the clippy associated functions also scans the dom i believe"
 
 Have logic for spawning any piece on single spawn, then only pieces with max size >= to the spawn's size
 Make some maps with enemies on for campaign

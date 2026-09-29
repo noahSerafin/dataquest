@@ -26,7 +26,6 @@ import BlueprintController from "./BlueprintController.vue";
 import { StorageManager } from "../StorageManager";
 import { Random } from "../Random";
 import FormattedDescription from "./FormattedDescription.vue";
-import MessagingSystem from "./MessagingSystem.vue";
 import type { Coordinate } from "../types";
 
 const props = defineProps<{
@@ -47,6 +46,7 @@ const emit = defineEmits<{
     (e: "addBoss", admin: Admin): void;
     (e: "incrementProgress"): void;
     (e: "clearNode", nodeId: string): void;
+    (e: "mapEvent", eventStr: string): void;
 }>();
 
 const worldNodes = computed(() => Object.values(props.staticWorld.nodes));
@@ -60,6 +60,10 @@ const clearedSet = computed(() => {
 
 const selectedPreviewNode = ref<WorldNode | null>(null);
 const lastInteractedMapEvent = ref<string | null>(null);
+
+watch(lastInteractedMapEvent, (val) => {
+    if (val) emit('mapEvent', val);
+});
 
 onMounted(() => {
     lastInteractedMapEvent.value = `load:${props.staticWorld.startNode}`;
@@ -563,7 +567,7 @@ function handleMapMouseUpOrLeave() {
         @mousemove="handleMapMouseMove"
         @mouseup="handleMapMouseUpOrLeave"
         @mouseleave="handleMapMouseUpOrLeave">
-        <div class="node-map">
+        <div id='campaign-node-map' class="node-map">
             <!-- Nodes -->
             <div v-for="node in worldNodes" :key="node.id" :id="node.id" class="node " :class="{
                 clickable: canClick(node),
@@ -717,7 +721,8 @@ function handleMapMouseUpOrLeave() {
                     Reroll
                 </button>
                 
-                <button v-if="selectedPreviewNode && selectedPreviewNode?.type !== 'skip'"
+                <button id="enterNodeButton"
+                    v-if="selectedPreviewNode && selectedPreviewNode?.type !== 'skip'"
                     :disabled="!canClick(selectedPreviewNode) && selectedPreviewNode.type !== 'shop'"
                     @click="enterNode(selectedPreviewNode)">Enter</button>
                 
@@ -726,12 +731,6 @@ function handleMapMouseUpOrLeave() {
                         v-if="!props.player.hasAdmin('Leg Up')">$5</span></button>
             </div>
         </div>
-
-        <MessagingSystem 
-            v-if="props.staticWorld.dialogueTree"
-            :dialogueTree="props.staticWorld.dialogueTree"
-            :activeMapEvent="lastInteractedMapEvent"
-        />
     </div>
 </template>
 

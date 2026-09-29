@@ -26,7 +26,7 @@ export const tutorialDialogue = {
       "id": "node_2",
       "elementID": "node_g41ksufcp",
       "speaker": "Al",
-      "text": "This ciruit represent a map of available nodes. Here's your current position in this circuit. The blue wires indicate other nodes that can travel to",
+      "text": "The ciruit represent a map of available nodes. Here's your current position in this circuit. The blue wires indicate other nodes that can travel to",
       "choices": [
         {
           "text": "Got it.",
@@ -45,6 +45,7 @@ export const tutorialDialogue = {
     "node_11": {
       "id": "node_11",
       "nodeID": "preview:node_km8bwjcq7",
+      "elementID": "preview-modal-node_km8bwjcq7",
       "speaker": "Al",
       "text": "Here you can see some more details about the node, including a minimap of it's layout. Red squares indicate tiles occupied by the defending (enemy) programs. And green represent your entry points into the node.",
       "choices": [
@@ -57,6 +58,7 @@ export const tutorialDialogue = {
     "node_12": {
       "id": "node_12",
       "speaker": "Al",
+      "elementID": "enterNodeButton",
       "text": "Let's enter it and claim that bounty!",
       "choices": [
       ]
@@ -65,6 +67,7 @@ export const tutorialDialogue = {
       "id": "node_13",
       "speaker": "Al",
       "nodeID": "enter:node_km8bwjcq7",
+      "elementID": "141ea35c-5b06-4f6c-9cbe-a93fd691db8f",
       "text": "Now we can see what we're up against. Click on that enemy piece to view it's stats.",
       "choices": [
       ]
@@ -72,7 +75,9 @@ export const tutorialDialogue = {
     "node_14": {
       "id": "node_14",
       "speaker": "Al",
-      "text": "This guard program has a pretty even spread of stats. Max size determines how many tiles a program can take up, think of it like it's max health. Moves is how many spaces it can move each turn, moving will add tiles to the program until it reaches it's max size. Range is how far a program can target others for attacks or special moves. Attack is how many tiles a program can remove from another, and Defence is how much attack a program can absorb before losing tiles.",
+      "nodeID": "click:141ea35c-5b06-4f6c-9cbe-a93fd691db8f",
+      "elementID": "141ea35c-5b06-4f6c-9cbe-a93fd691db8f-controller",
+      "text": "This guard program has a pretty even spread of stats. Max size determines how many tiles a program will take up when it moves, think of it like it's max health. Moves is how many spaces it can move each turn. Range is how far a program can target others for attacks or special moves. Attack is how many tiles a program can remove from another, and Defence is how much attack a program can absorb before losing tiles.",
       "choices": [
         {
           "text": "Now what?",
@@ -83,6 +88,7 @@ export const tutorialDialogue = {
     "node_15": {
       "id": "node_15",
       "speaker": "Al",
+      "elementID": "inventory-btn",
       "text": "We load one of our own progams into the green spawn point. Let's open your inventory.",
       "choices": [
       ]
@@ -90,6 +96,8 @@ export const tutorialDialogue = {
     "node_16": {
       "id": "node_16",
       "speaker": "Al",
+      "nodeID": "click:inventory-btn",
+      "elementID": "inventory",
       "text": "This is where you keep your programs and items, each one will consume memory (displayed at the top). We've provided you with some basic starting software. You can view their details by clicking on them.",
       "choices": [
         {
@@ -101,14 +109,27 @@ export const tutorialDialogue = {
     "node_17": {
       "id": "node_17",
       "speaker": "Al",
-      "text": "Your shield has 0 attack, so won't be very effective against that guard. I'd reccomend using the knife, select it and then load it into the spawn point, or drag it over.",
+      "elementID": "274ec329-8c17-4265-8c12-e9a28bcf0110",
+      "text": "Your shield has 0 attack, so won't be very effective against that guard. I'd reccomend using the knife. Select it, and then load it here by clicking the green spawn point, or drag it over",
       "choices": [
+        {
+          "text": "OK",
+          "nextNode": "node_1705"
+        },
       ]
+    },
+    "node_1705": {
+      "id": "node_17",
+      "speaker": "Al",
+      "nodeID": "click:274ec329-8c17-4265-8c12-e9a28bcf0110",
+      "elementID": "place-4-6",
+      "text": "Now load it here by clicking the green spawn point. You can also drag programs over later.",
     },
     "node_18": {
       "id": "node_18",
       "speaker": "Al",
-      "text": "The moment you use all the spawn points in a node, the enemy will start moving toward your programs. Fortunately, this guard is pretty slow, and has limited range. So your knife was not attacked. Always check if any enemy can attack you before you choose to load in a program.",
+      "nodeID": "click:place-4-6",
+      "text": "The moment you use all the spawn points in a node, the enemy will start moving toward your programs. Fortunately, this guard is pretty slow, and has limited range. So your knife cannot be attacked. But always check if any enemy can attack you before you choose to load in a program.",
       "choices": [
         {
           "text": "Anything else?",
@@ -130,7 +151,7 @@ export const tutorialDialogue = {
     "node_20": {
       "id": "node_20",
       "speaker": "Al",
-      "text": "If your programs get deleted from the node, don't worry, they won't leave your inventory. You can return to the map anytime using the forefeit button and try again. I'll leave this one to you now, be in touch once you've cleared this node.",
+      "text": "If your programs get deleted from the node, don't worry, they won't leave your inventory. You can return to the map anytime using the forefeit button and try again. I'll leave this one to you now, be in touch once you've cleared this node. Don't forget to end your turn once your programs are out of moves and actions.",
       "choices": [
         {
           "text": "Thanks",
@@ -141,6 +162,7 @@ export const tutorialDialogue = {
     "node_21": {
       "id": "node_21",
       "speaker": "Al",
+      "nodeID": "clear:node_km8bwjcq7",
       "text": "Congrats on your first bounty! I've placed a bonus node here for you.",
       "choices": [
         {

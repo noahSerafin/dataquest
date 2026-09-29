@@ -279,13 +279,13 @@
                     </li>
                 </ul>
             </div>
-            <button class="inv-btn mt-2 px-2 py-1 bg-blue-500 text-white rounded" @click="$emit('openInventory')">{{showInventory ? 'Hide' : 'Inventory' }}<span class="phone-hide"></span></button>
+            <button id="inventory-btn" class="inv-btn mt-2 px-2 py-1 bg-blue-500 text-white rounded" @click="$emit('openInventory')">{{showInventory ? 'Hide' : 'Inventory' }}<span class="phone-hide"></span></button>
         </div>
 
     </div>
     <!-- Inventory Popup -->
     <Teleport to="#overlay-root">
-    <div v-if="showInventory" class="inventory mt-3 border-t pt-2" :style="{ transform: `translate(${dragState.x}px, ${dragState.y}px)` }">
+    <div id="inventory" v-if="showInventory" class="inventory mt-3 border-t pt-2" :style="{ transform: `translate(${dragState.x}px, ${dragState.y}px)` }">
         <!-- Memory -->
         <div class="inventory-head" @mousedown="startDrag" @touchstart="startDrag" :style="{ cursor: isDragging ? 'grabbing' : 'grab' }">
             <p><strong>Memory:</strong> {{ memoryUsage }}</p>

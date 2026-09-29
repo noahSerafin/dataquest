@@ -543,7 +543,7 @@ function resolveMove(
         height: (tileSize - 5) + 'px',
       }" />
     <div v-if="player.canPlace && (placementMode || isFirstTurn)" v-for="(tile, index) in placementHighlights"
-      :key="index" :class="`highlight-tile green placement-tile ${!props.isFirstTurn ? 'placement-tile-tip' : ''}`"
+      :id="`place-${tile.x}-${tile.y}`" :key="index" :class="`highlight-tile green placement-tile ${!props.isFirstTurn ? 'placement-tile-tip' : ''}`"
       @mouseup="onMouseUp" v-on:click="handlePlaceClick(tile)" :data-x="tile.x" :data-y="tile.y" :style="{
         left: (tile.x * tileSize) + 1 + 'px',
         top: (tile.y * tileSize) + 1 + 'px',

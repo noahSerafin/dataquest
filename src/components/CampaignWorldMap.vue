@@ -895,26 +895,26 @@ function handleMapMouseUpOrLeave() {
     top: -4%;
 }
 .startNode .pins-top {
-    left: 4%;
+    left: 3%;
     top: -9%;
 }
 
 .bossNode .pins-bottom{
-    top: 21%;
+    top: 24%;
 }
 .startNode .pins-bottom {
     top: 19%;
 }
 
 .bossNode .pins-right{
-    left: 22%;
+    left: 24%;
 }
 .startNode .pins-right {
     left: 19%;
 }
 .bossNode .pins-left{
     top: 10%;
-    left: -4%;
+    left: -3%;
 }
 
 .node.clickable {

@@ -67,7 +67,7 @@ export const tutorialDialogue = {
       "id": "node_13",
       "speaker": "Al",
       "nodeID": "enter:node_km8bwjcq7",
-      "elementID": "141ea35c-5b06-4f6c-9cbe-a93fd691db8f",
+      "elementID": "piece-141ea35c-5b06-4f6c-9cbe-a93fd691db8f",
       "text": "Now we can see what we're up against. Click on that enemy piece to view it's stats.",
       "choices": [
       ]
@@ -75,7 +75,7 @@ export const tutorialDialogue = {
     "node_14": {
       "id": "node_14",
       "speaker": "Al",
-      "nodeID": "click:141ea35c-5b06-4f6c-9cbe-a93fd691db8f",
+      "nodeID": "click:piece-141ea35c-5b06-4f6c-9cbe-a93fd691db8f",
       "elementID": "141ea35c-5b06-4f6c-9cbe-a93fd691db8f-controller",
       "text": "This guard program has a pretty even spread of stats. Max size determines how many tiles a program will take up when it moves, think of it like it's max health. Moves is how many spaces it can move each turn. Range is how far a program can target others for attacks or special moves. Attack is how many tiles a program can remove from another, and Defence is how much attack a program can absorb before losing tiles.",
       "choices": [
@@ -110,13 +110,7 @@ export const tutorialDialogue = {
       "id": "node_17",
       "speaker": "Al",
       "elementID": "274ec329-8c17-4265-8c12-e9a28bcf0110",
-      "text": "Your shield has 0 attack, so won't be very effective against that guard. I'd reccomend using the knife. Select it, and then load it here by clicking the green spawn point, or drag it over",
-      "choices": [
-        {
-          "text": "OK",
-          "nextNode": "node_1705"
-        },
-      ]
+      "text": "Your shield has 0 attack, so won't be very effective against that guard. I'd reccomend using the knife.",
     },
     "node_1705": {
       "id": "node_17",
@@ -151,11 +145,11 @@ export const tutorialDialogue = {
     "node_20": {
       "id": "node_20",
       "speaker": "Al",
+      "elementID": "player-actions",
       "text": "If your programs get deleted from the node, don't worry, they won't leave your inventory. You can return to the map anytime using the forefeit button and try again. I'll leave this one to you now, be in touch once you've cleared this node. Don't forget to end your turn once your programs are out of moves and actions.",
       "choices": [
         {
           "text": "Thanks",
-          "nextNode": "node_4"
         }
       ]
     },
@@ -163,7 +157,7 @@ export const tutorialDialogue = {
       "id": "node_21",
       "speaker": "Al",
       "nodeID": "clear:node_km8bwjcq7",
-      "text": "Congrats on your first bounty! I've placed a bonus node here for you.",
+      "text": "Congrats on your first bounty! There's a bonus node here for you.",
       "choices": [
         {
           "text": "What is it?",
@@ -179,7 +173,7 @@ export const tutorialDialogue = {
     },
     "node_10": {
       "id": "node_10",
-      "speaker": "",
+      "speaker": "Al",
       "text": "The banana is a 'trap' program. This means it will load hidden into a node and is undetectable by enemy progams. But it will also be able to be moved over by other by other progams, which will instantly trigger it's special action, and remove it from the node. Click 'Accept' to claim it.",
       "choices": [
         {

@@ -1384,6 +1384,8 @@ function instantiatePieceFromBlueprint(//this goes in app
 async function placePieceOnBoardAt(coord: Coordinate) {
   if (!pieceToPlace.value) return;
 
+  appDialogueEvent.value = "place-" + coord.x + "-" + coord.y;
+
   const bp = pieceToPlace.value;
   pieceToPlace.value = null;
 

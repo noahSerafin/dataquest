@@ -128,8 +128,8 @@ export const tutorialDialogue = {
     "node_18": {
       "id": "node_18",
       "speaker": "Al",
-      "nodeID": "click:place-4-6",
-      "text": "The moment you use all the spawn points in a node, the enemy will start moving toward your programs. Fortunately, this guard is pretty slow, and has limited range. So your knife cannot be attacked. But always check if any enemy can attack you before you choose to load in a program.",
+      "nodeID": "place-4-6",
+      "text": "The moment you use all the spawn points in a node, the enemy will start moving toward your programs. Fortunately, this guard is pretty slow, and has limited range. So your knife was not attacked. But always check if any enemy can attack you before you choose to load in a program.",
       "choices": [
         {
           "text": "Anything else?",

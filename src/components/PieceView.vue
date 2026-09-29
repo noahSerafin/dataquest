@@ -188,7 +188,7 @@ function pieceTipClass(){
   <div
   :class="`piece ${piece.headPosition.x}-${piece.headPosition.y} ${cssclass}-piece ${props.piece.variantName ? ('variant-program v_'+piece.variantName) : ''} ${props.piece.extraUnicode ? 'hybrid' : ''} team-${piece.team} taking-damage-${piece.isTakingDamage} triggering-${piece.isTriggering} hidden-${piece.statuses.hidden} tiles:(${piece.tiles.toString()}) redacted-${piece.redacted} ${pieceTipClass()}`"
     :name="piece?.hybridName? piece.hybridName : piece?.name"
-    :id="piece?.id"
+    :id="'piece-'+piece?.id"
     :style="pieceStyle"
     @click="handleSelect"
   >

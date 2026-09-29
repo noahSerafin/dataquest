@@ -550,7 +550,7 @@ function resolveMove(
         width: (tileSize - 5) + 'px',
         height: (tileSize - 5) + 'px',
       }" />
-    <div v-if="pieceToPlace" class="ghost-piece" :style="ghostStyle">
+    <div :id="selectedPiece?.id + '-ghost'" v-if="pieceToPlace" class="ghost-piece" :style="ghostStyle">
       {{ String.fromCodePoint(parseInt(pieceToPlace.unicode.replace("U+", ""), 16), 0xFE0F) }}
     </div>
   </div>

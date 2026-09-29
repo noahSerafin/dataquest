@@ -665,7 +665,7 @@ function handleMapMouseUpOrLeave() {
         <!-- Preview modal -->
         <div v-if="selectedPreviewNode" :id="'preview-modal-' + selectedPreviewNode.id" :class="`preview-modal ${selectedPreviewNode.company?.abbr}`"
             :style="selectedPreviewNode.type !== 'boss' && selectedPreviewNode.type === 'level' && selectedPreviewNode.company ? { backgroundColor: `${selectedPreviewNode.company.tileColor}`, border: `2px solid ${selectedPreviewNode.company.edgeColor}` } : {}">
-            <h3>{{ selectedPreviewNode.type.toUpperCase() }}</h3>
+            <h3>{{ selectedPreviewNode.type === 'skip' ? 'REWARD' : selectedPreviewNode.type.toUpperCase() }}</h3>
             
             <h6 v-if="selectedPreviewNode.type === 'workbench'">Tinker with up to 5 of a program's stats</h6>
             <h6 v-if="selectedPreviewNode.type === 'sacrificial altar'">Sacrifice a program for x3 it's sell value</h6>

@@ -285,6 +285,7 @@ const campaignWorldMap = ref<any>(null);
 const campaignClearedNodes = ref<string[]>([]);
 const campaignShopPurchases = ref<Record<string, string[]>>({});
 const appDialogueEvent = ref<string | null>(null);
+const messagingSystemRef = ref<InstanceType<typeof MessagingSystem> | null>(null);
 
 onMounted(() => {
     document.addEventListener('click', (e) => {
@@ -947,6 +948,11 @@ async function handleProceed() {
   currentCompany.value.edgeColor = 'rgb(156, 201, 84)';
   hasWonRound.value = false;
   saveGameState();
+
+  if (currentAppMode.value === 'campaign' && campaignClearedNodes.value.length > 0) {
+    const lastNode = campaignClearedNodes.value[campaignClearedNodes.value.length - 1];
+    appDialogueEvent.value = `clear:${lastNode}`;
+  }
 }
 
 async function reloadLevel() {
@@ -2279,6 +2285,7 @@ function cancelConfirm() {
 
       <Teleport to="body">
         <MessagingSystem 
+          ref="messagingSystemRef"
           v-if="campaignWorldMap?.dialogueTree"
           :dialogueTree="campaignWorldMap.dialogueTree"
           :activeMapEvent="appDialogueEvent"

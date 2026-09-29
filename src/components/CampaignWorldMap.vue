@@ -892,10 +892,10 @@ function handleMapMouseUpOrLeave() {
 
 .bossNode .pins-top{
     left: 10%;
-    top: -4%;
+    top: -3%;
 }
 .startNode .pins-top {
-    left: 3%;
+    left: 4%;
     top: -9%;
 }
 
@@ -903,14 +903,15 @@ function handleMapMouseUpOrLeave() {
     top: 24%;
 }
 .startNode .pins-bottom {
-    top: 19%;
+    top: 20%;
 }
 
 .bossNode .pins-right{
+    top: 10%;
     left: 24%;
 }
 .startNode .pins-right {
-    left: 19%;
+    left: 20%;
 }
 .bossNode .pins-left{
     top: 10%;

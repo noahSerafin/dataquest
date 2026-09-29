@@ -157,24 +157,14 @@ export const tutorialDialogue = {
       "id": "node_21",
       "speaker": "Al",
       "nodeID": "clear:node_km8bwjcq7",
-      "text": "Congrats on your first bounty! There's a bonus node here for you.",
-      "choices": [
-        {
-          "text": "What is it?",
-        }
-      ]
-    },
-    "node_4": {
-      "id": "node_4",
-      "speaker": "Al",
-      "text": "This is a reward node. They will normally be located toward the edges of a circuit as an extra incentive, but we've put this one here as a demonstration, try entering it.",
-      "choices": [
-      ]
+      "elementID": "node_svw51xvjh",
+      "text": "Congrats on your first bounty! There's a reward node here for you. Try entering it.",
     },
     "node_10": {
       "id": "node_10",
       "speaker": "Al",
-      "text": "The banana is a 'trap' program. This means it will load hidden into a node and is undetectable by enemy progams. But it will also be able to be moved over by other by other progams, which will instantly trigger it's special action, and remove it from the node. Click 'Accept' to claim it.",
+      "nodeID": "click:node_svw51xvjh",
+      "text": "The Banana Peel is a 'trap' program. This means it will load hidden into a node and is undetectable by enemy progams. But it will also be able to be moved over by other by other progams, which will instantly trigger it's special action, and remove it from the node. Hidden programs are useful for loading into nodes where you can be imediately attacked. Click 'Accept Reward' to claim it.",
       "choices": [
         {
           "text": "Thanks, any more nodes I should know about?",
@@ -185,6 +175,7 @@ export const tutorialDialogue = {
     "node_5": {
       "id": "node_5",
       "speaker": "Al",
+      "elementID": "node_5i9h9b6ti",
       "text": "Most importantly, the big one. This is the boss node. Boss nodes will have special effect inside that will add an extra challenge to clearing them. Once you clear this node, you've passed your training and can move out into the wild.",
       "choices": [
         {
@@ -203,6 +194,7 @@ export const tutorialDialogue = {
     "node_6": {
       "id": "node_6",
       "speaker": "Al",
+      "elementID": "node_9wnsfvrt4",
       "text": "That's a shop. It's run by Hamuel, good guy. They'll let you know more when you visit.",
       "choices": [
         {
@@ -214,11 +206,15 @@ export const tutorialDialogue = {
     "node_7": {
       "id": "node_7",
       "speaker": "Al",
+      "elementID": "node_mez50lbxk",
       "text": "That is an an altar node. It will let you sacrifice programs (remove them from your inventory) to gain money. You can always sell a program on the spot, but altars will give you a bit extra. Look out for more nodes of this shape in the future, they always have something interesting inside. But beware once you enter them, unlike shops you will not be able to again.",
       "choices": [
         {
           "text": "What about the 🛒 ahead?",
           "nextNode": "node_6"
+        },
+        {
+          "text": "Thanks, That's all for now",
         },
       ]
     },

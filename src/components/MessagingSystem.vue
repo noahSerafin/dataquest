@@ -121,6 +121,14 @@ function checkNodeTriggers(eventStr?: string | null) {
     }
 }
 
+function triggerNodeCleared(nodeId: string) {
+    checkNodeTriggers(`clear:${nodeId}`);
+}
+
+defineExpose({
+    triggerNodeCleared
+});
+
 // Overlay logic
 const overlayRect = ref({ top: 0, bottom: 0, left: 0, right: 0 });
 let overlayInterval: number;

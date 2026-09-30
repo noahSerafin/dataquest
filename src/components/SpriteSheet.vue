@@ -150,7 +150,7 @@ const allIcons = computed(() => {
     'U+1F319',// CRESCENT MOON
     'U+1F3B7',// SAXOPHONE 
     'U+262E',// PEACE SYMBOL
-    'U+1F9E7',// RED GIFT ENVELOPE
+    'U+1F9E2',// cap
     'U+1F369',// DOUGHNUT
     'U+1F36C',// CANDY
     'U+26BD',// SOCCER BALL 

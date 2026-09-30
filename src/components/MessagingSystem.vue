@@ -195,7 +195,7 @@ function selectChoice(choice: DialogueChoice) {
         <div class="tutorial-overlay" :style="{ top: overlayRect.top + 'px', height: (overlayRect.bottom - overlayRect.top) + 'px', left: overlayRect.right + 'px', right: 0 }"></div>
     </template>
 
-    <div v-if="isVisible" class="messaging-system" :class="{ minimized: isMinimized }">
+    <div id="messaging-system" v-if="isVisible" class="messaging-system" :class="{ minimized: isMinimized }">
         <!-- Minimized View -->
         <div v-if="isMinimized" class="minimized-icon" @click="isMinimized = false; scrollToBottom()">
             ✉️
@@ -242,15 +242,15 @@ function selectChoice(choice: DialogueChoice) {
                 </div>
 
                 <div class="message-body" ref="messageBodyRef">
-                    <div v-for="msg in chatHistories[selectedContact]" :key="msg.id" class="message-pair">
+                    <div v-for="(msg, index) in chatHistories[selectedContact]" :key="msg.id" class="message-pair">
                         <div class="speaker-msg-container">
-                            <div class="speaker-msg">
-                                <p>{{ msg.text }}</p>
+                            <div class="speaker-msg" :class="{ 'latest-msg': index === chatHistories[selectedContact].length - 1 && !msg.playerResponse }">
+                                <p v-html="msg.text"></p>
                             </div>
                         </div>
                         <div v-if="msg.playerResponse" class="player-msg-container">
-                            <div class="player-msg">
-                                <p>{{ msg.playerResponse }}</p>
+                            <div class="player-msg" :class="{ 'latest-msg': index === chatHistories[selectedContact].length - 1 }">
+                                <p v-html="msg.playerResponse"></p>
                             </div>
                         </div>
                     </div>
@@ -486,8 +486,17 @@ function selectChoice(choice: DialogueChoice) {
     line-height: 1.4;
 }
 
+.latest-msg {
+    border-color: #34ffff !important;
+    box-shadow: 0 0 5px rgba(52, 255, 255, 0.4);
+}
+
 .player-msg p, .speaker-msg p {
     margin: 0;
+}
+
+:deep(.player-msg p *), :deep(.speaker-msg p *) {
+    /* Ensure any nested elements from v-html inherit correctly or have sensible defaults */
 }
 
 .choices {

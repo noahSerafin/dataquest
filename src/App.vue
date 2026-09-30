@@ -225,7 +225,7 @@ const testShield = {
   cost: 1,
   immunities: {}
 }
-const test = {
+/*const test = {
   iconID: 30,
   id: "274ec329-8c17-4265-8c12-e9a28bcf0112",
   name: "Lance",
@@ -245,7 +245,8 @@ const test = {
   hybridIconID: 39,
   immunities: {}
 }
-const testVoucher = new Voucher();
+//const testVoucher = new Voucher();
+*/
 
 const swapDisplay = () => {
   displayEditor.value = !displayEditor.value;//add map later, make shop an overlay?
@@ -257,11 +258,11 @@ const yourTurnWarning = ref(false);
 
 const player = ref(new Player(
   'U+1F60A',
-  50, // starting money
+  0, // starting money
   5,  // memory limit
-  5, //admin slots
-  [testVoucher], // no items yet
-  [testSword, testShield, test],//, testShield] // starting pieces
+  4, //admin slots
+  [], // no items yet
+  [testSword, testShield], // starting pieces
   [],//no admins yet
   2,
   5,
@@ -2216,7 +2217,7 @@ function cancelConfirm() {
         <div class="player-helper-left">
           <div v-if="roundHasStarted" class="turn-info">{{ (!hasFinishedTurn || isPlacing) ? "Your turn" : "Enemy turn" }}</div>
           <div v-if="isPlacing && pieceToPlace">
-            <p style="margin: 0">Placing:</p>
+            <p style="margin: 0">Loading:</p>
           </div>
         </div>
         <div class="player-helper-right">

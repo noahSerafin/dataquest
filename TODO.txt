@@ -4,10 +4,13 @@ Have logic for spawning any piece on single spawn, then only pieces with max siz
 Make some maps with enemies on for campaign
 altar/compiler/duplicator cannot be re-entered (or cost money to enter?)
 
-Boss nodes: Display reward, company, security in boss node - do this in CampaignMap and WorldMap
+return to map button in campaign mode
+disable interest in campaign mode
 
+chose player icon from list on new campagin
 overworld map
-//background colours for node maps (use company owner)//levels array
+background colours for node maps (use company owner)//levels array
+save campaign progress
 
 Preserve all roguelike App functions (move to own file?)
 For campaign:

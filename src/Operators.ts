@@ -523,9 +523,9 @@ const Arch: OS = {
 }
 
 const GNU: OS = {
-    iconID: 468,
+    iconID: 5,//468,//free sprite space
     name: 'GNU',
-    unicode: 'U+1F403',
+    unicode: 'U+1F5A7',//U+1F403',
     prefix: 'G',
     money: 5,
     memory: 5,
@@ -553,9 +553,9 @@ const Amiga: OS = {
 }
 
 const Beos: OS = {
-    iconID: 470,
+    iconID: 2,//470,//free sprite space
     name: 'BeOS',
-    unicode: 'U+1F41D',
+    unicode: 'U+1F5B2',//U+1F41D',
     prefix: 'B',
     money: 4,
     memory: 7,

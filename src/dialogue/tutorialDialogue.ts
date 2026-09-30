@@ -5,13 +5,10 @@ export const tutorialDialogue = {
     "node_1": {
       "id": "node_1",
       "nodeID": "load:node_g41ksufcp",
+      "elementID": "messaging-system",
       "speaker": "Al",
       "text": "Hi there! Always exciting to have a new recruit. What you're seeing infront of you is our training enviroment. Use this space to learn the ropes of hacking before we send you out into cyberspace to collect some real bounties.",
       "choices": [
-        {
-          "text": "Sure",
-          "nextNode": "node_2"
-        },
         {
           "text": "Where do I start?",
           "nextNode": "node_2"
@@ -26,7 +23,7 @@ export const tutorialDialogue = {
       "id": "node_2",
       "elementID": "node_g41ksufcp",
       "speaker": "Al",
-      "text": "The ciruit represent a map of available nodes. Here's your current position in this circuit. The blue wires indicate other nodes that can travel to",
+      "text": "The ciruit represents a map of available nodes. Here's your current position in this circuit. The blue wires indicate other nodes that can travel to",
       "choices": [
         {
           "text": "Got it.",
@@ -38,7 +35,7 @@ export const tutorialDialogue = {
       "id": "node_3",
       "elementID": "node_km8bwjcq7",
       "speaker": "Al",
-      "text": "Right now you are connected to a node with a bounty on it. Companies will issue bounties on nodes that they want their security tested on. You can see here the reward (in $), the company logo, and the node's security level 🔒. Tougher nodes will typically have a higher reward for cracking them.",
+      "text": "Right now you are connected to a node with a bounty on it. Companies will issue bounties on nodes that they want their security tested on. You can see here the <span class='text-yellow'>reward (in $)</span>, the company logo, and the node's security level 🔒. Tougher nodes will typically have a higher reward for cracking them. Click here to bring up the node's preview",
       "choices": [
       ]
     },
@@ -77,7 +74,7 @@ export const tutorialDialogue = {
       "speaker": "Al",
       "nodeID": "click:piece-141ea35c-5b06-4f6c-9cbe-a93fd691db8f",
       "elementID": "141ea35c-5b06-4f6c-9cbe-a93fd691db8f-controller",
-      "text": "This guard program has a pretty even spread of stats. Max size determines how many tiles a program will take up when it moves, think of it like it's max health. Moves is how many spaces it can move each turn. Range is how far a program can target others for attacks or special moves. Attack is how many tiles a program can remove from another, and Defence is how much attack a program can absorb before losing tiles.",
+      "text": "This guard program has a pretty even spread of stats. <span class='text-green'>Max size</span> determines how many tiles a program will take up when it moves, think of it like it's max health. <span class='text-blue'>Moves</span> is how many spaces it can move each turn. <span class='text-orange'>Range</span> is how far a program can target others for attacks or special moves. <span class='text-red'>Attack</span> is how many tiles a program can remove from another, and <span class='text-cyan'>Defence</span> is how much damage a program can absorb before losing tiles.",
       "choices": [
         {
           "text": "Now what?",
@@ -110,14 +107,14 @@ export const tutorialDialogue = {
       "id": "node_17",
       "speaker": "Al",
       "elementID": "274ec329-8c17-4265-8c12-e9a28bcf0110",
-      "text": "Your shield has 0 attack, so won't be very effective against that guard. I'd reccomend using the knife.",
+      "text": "Your Shield has 0 attack, so won't be very effective against that guard. I'd reccomend using the Knife.",
     },
     "node_1705": {
       "id": "node_17",
       "speaker": "Al",
       "nodeID": "click:274ec329-8c17-4265-8c12-e9a28bcf0110",
       "elementID": "place-4-6",
-      "text": "Now load it here by clicking the green spawn point. You can also drag programs over later.",
+      "text": "You'll notic at the top we are now loading our your Knife program. Load it into the node here by clicking the green spawn point. You can also drag programs over later.",
     },
     "node_18": {
       "id": "node_18",
@@ -202,7 +199,7 @@ export const tutorialDialogue = {
       "id": "node_7",
       "speaker": "Al",
       "elementID": "node_mez50lbxk",
-      "text": "That is an an altar node. It will let you sacrifice programs (remove them from your inventory) to gain money. You can always sell a program on the spot, but altars will give you a bit extra. Look out for more nodes of this shape in the future, they always have something interesting inside. But beware once you enter them, unlike shops you will not be able to again.",
+      "text": "That is an an altar node. It will let you sacrifice programs (remove them from your inventory) to gain <span class='text-yellow'>money</span>. You can always sell a program on the spot, but altars will give you a bit extra. Look out for more nodes of this shape in the future, they always have something interesting inside. But beware once you enter them, unlike shops you will not be able to again.",
       "choices": [
         {
           "text": "Thanks, That's all for now",

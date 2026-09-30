@@ -72,8 +72,8 @@
 
     const props = defineProps<{
         player: Player,
-        //activePieces: InstanceType<typeof Piece>[]
-        showInventory: boolean
+        showInventory: boolean,
+        isCampaign?: boolean
     }>();
     
     const emit = defineEmits<{
@@ -245,7 +245,7 @@
                     {{ String.fromCodePoint(parseInt(player.osunicode.replace('U+', ''), 16), 0xFE0F) }}
                 </span>
                 <span style="text-align: left;"><strong class="text-yellow">$:</strong> {{ props.player.money }}</span>
-                <p>
+                <p v-if="!isCampaign">
                     <span v-for="_ in (Math.max(0, Math.floor(player.lives || 0)))">
                        {{ String.fromCodePoint(0x1FA77) }}
                     </span>

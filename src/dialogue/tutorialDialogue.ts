@@ -114,7 +114,7 @@ export const tutorialDialogue = {
       "speaker": "Al",
       "nodeID": "click:274ec329-8c17-4265-8c12-e9a28bcf0110",
       "elementID": "place-4-6",
-      "text": "You'll notic at the top we are now loading our your Knife program. Load it into the node here by clicking the green spawn point. You can also drag programs over later.",
+      "text": "You'll notice at the top we are now loading our your Knife program. Load it into the node here by clicking the green spawn point. You can also drag programs over later.",
     },
     "node_18": {
       "id": "node_18",

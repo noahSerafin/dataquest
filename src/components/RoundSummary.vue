@@ -12,7 +12,8 @@
         hasWonRound: boolean,
         player: Player,
         bosses: Admin[],
-        roundHasStarted: boolean
+        roundHasStarted: boolean,
+        isCampaign?: boolean
     }
     const props = defineProps<Props>()
 
@@ -23,7 +24,9 @@
         (e: 'returnToMap'): void;
     }>();
    
-    props.player.calcInterest(); //await?? for html
+    if(!props.isCampaign){
+        props.player.calcInterest(); //await?? for html
+    }
 
     onMounted(() => {
         if(props.player.hasAdmin('Clippy')){
@@ -54,7 +57,7 @@
             <h3>
                 Node complete
             </h3>
-            <div class="interest-summary">Interest earned: 
+            <div v-if="!isCampaign" class="interest-summary">Interest earned: 
                 <span class="text-yellow">
                     ${{ player.nextInterest }}
                 </span>
@@ -124,7 +127,7 @@
                 Round Over
             </h3>
             <button @click="emit('reloadLevel')" :disabled="roundHasStarted">Retry</button>
-            <button v-if="props.player.mapProgress < 2" @click="emit('returnToMap')" :disabled="roundHasStarted">Return to Map</button>
+            <button v-if="props.player.mapProgress < 2 || isCampaign" @click="emit('returnToMap')" :disabled="roundHasStarted">Return to Map</button>
         </div>
         <div class="if-lost" v-if="!hasWonRound && player.lives <= 0">
             <h3>

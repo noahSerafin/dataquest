@@ -994,6 +994,15 @@ async function reloadLevel() {
 }
 
 async function handleReturnToMap() {
+  if (currentAppMode.value === 'campaign') {
+    showBoard.value = false;
+    showSummary.value = false;
+    showMap.value = true;
+    roundHasStarted.value = false;
+    saveGameState();
+    return;
+  }
+  
   if (!worldMapRef.value) return;
   worldMapRef.value.rollbackNode();
   showBoard.value = false;
@@ -1838,10 +1847,12 @@ const endRound = async (roundWon: boolean) => {
       const index = player.value.admins.findIndex(a => a.name === 'Onion');
       if (index !== -1) player.value.admins.splice(index, 1);
     }
-    else if (player.value.lives > 0) {
-      player.value.lives -= 1;
+    else if (player.value.lives > 0 || currentAppMode.value === 'campaign') {
+      if (currentAppMode.value !== 'campaign') {
+        player.value.lives -= 1;
+      }
       await handleApplyAdmins('onRoundLoss', '');
-      if (player.value.lives <= 0) {
+      if (player.value.lives <= 0 && currentAppMode.value !== 'campaign') {
         StorageManager.clearSaveGame();
       }
     } else {
@@ -2104,7 +2115,9 @@ async function handleConfirm() {
   if (confirmModalAction.value === "forfeit") {
     endRound(false);
   } else if (confirmModalAction.value === "retry") {
-    player.value.lives--;
+    if (currentAppMode.value !== 'campaign') {
+      player.value.lives--;
+    }
     await handleApplyAdmins('onRoundLoss', '');
     reloadLevel();
   }
@@ -2234,7 +2247,7 @@ function cancelConfirm() {
       <WorldEditor v-if="currentAppMode === 'worldEditor'" class="stage-panel active" />
 
       <RoundSummary v-if="showSummary" class="stage-panel" :class="{ active: showSummary }" :hasWonRound="hasWonRound"
-        :player="player" :bosses="bossAdmins" :roundHasStarted="roundHasStarted" @proceedFromEndOfRound="handleProceed"
+        :player="player" :bosses="bossAdmins" :roundHasStarted="roundHasStarted" :isCampaign="currentAppMode === 'campaign'" @proceedFromEndOfRound="handleProceed"
         @reloadLevel="reloadLevel" @mainMenu="openMainMenu" @returnToMap="handleReturnToMap" />
       <WorldMap ref="worldMapRef" v-if="!displayEditor && currentAppMode !== 'campaign'" class="stage-panel" :class="{ active: showMap }"
         :allLevels="level1Levels" :player="player" :seed="combinedMapSeed" :cssclass="mapClass" :bosses="bossAdmins"
@@ -2296,7 +2309,7 @@ function cancelConfirm() {
     </div>
     <div v-if="gameStarted || debugMode" class="player-area">
       <!-- PlayerView + End Turn / Retry -->
-      <PlayerView v-if="!displayEditor" ref="playerViewRef" :player="player" :showInventory="showInventory"
+      <PlayerView v-if="!displayEditor" ref="playerViewRef" :player="player" :showInventory="showInventory" :isCampaign="currentAppMode === 'campaign'"
         @highlightPlacements="highlightPlacements" @sellBlueprint="sellBlueprint" @sellItem="sellItem"
         @applyItem="handleApplyItem" @sellAdmin="sellAdmin" @reorderAdmins="player.admins = $event"
         @startPlacementDrag="startPlacementDrag" @closeInventory="toggleInventory" @openInventory="toggleInventory" />
@@ -2322,7 +2335,7 @@ function cancelConfirm() {
     <div v-if="showConfirmModal" class="confirm-modal-overlay">
       <div class="confirm-modal">
         <h2>{{ confirmModalAction === 'forfeit' ? 'Forfeit Round?' : 'Retry Round?' }}</h2>
-        <p v-if="confirmModalAction === 'forfeit'">Are you sure you want to forfeit this round? You will lose a life!</p>
+        <p v-if="confirmModalAction === 'forfeit'">Are you sure you want to forfeit this round? <span v-if="currentAppMode !== 'campaign'">You will lose a life!</span></p>
         <p v-if="confirmModalAction === 'retry'">Are you sure you want to retry this round? <strong style="color: red;">Warning: This will cost you 1 life.</strong></p>
         <div class="modal-actions">
           <button @click="handleConfirm">Yes</button>

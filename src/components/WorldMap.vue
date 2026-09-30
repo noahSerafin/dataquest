@@ -984,7 +984,7 @@ watch(currentNodeId, () => {
 
 .bossNode .pins-top{
     left: 10%;
-    top: -4%;
+    top: -3%;
 }
 .startNode .pins-top {
     left: 4%;
@@ -992,21 +992,22 @@ watch(currentNodeId, () => {
 }
 
 .bossNode .pins-bottom{
-    top: 21%;
+    top: 24%;
 }
 .startNode .pins-bottom {
-    top: 19%;
+    top: 20%;
 }
 
 .bossNode .pins-right{
-    left: 22%;
+    top: 10%;
+    left: 24%;
 }
 .startNode .pins-right {
-    left: 19%;
+    left: 20%;
 }
 .bossNode .pins-left{
     top: 10%;
-    left: -4%;
+    left: -3%;
 }
 
 /*

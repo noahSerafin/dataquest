@@ -20,13 +20,9 @@ Beating boss loads next map
 
 make a test campaign, populate with existing levels
 
-Messaging system
-panel - porfile picture, name, parargraph box, response choices (optional)
-dialogue trees
-
 ITEMS/ADMINS
 review roguelikes
-items add +0.2 to pieces version number for each +1 stat, only display version number if above 1
+keep track of upgrades and display on piece - items add +0.2 to pieces version number for each +1 stat, only display version number if above 1
 
 SPECIAL nodes
 variant maker?
@@ -45,5 +41,5 @@ EDITOR 8
 Add a Spawn for a 'wall' type piece
 Have logic for spawning any piece on single spawn, then only pieces with max size >= to the spawn's size
 
-Special functions 4
-keep track of upgrades and display on piece
+Quick match mode
+choose starting money and difficulty, open a shop then gen a level

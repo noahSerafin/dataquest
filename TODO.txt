@@ -6,10 +6,8 @@ altar/compiler/duplicator cannot be re-entered (or cost money to enter?)
 
 Boss nodes: Display reward, company, security in boss node - do this in CampaignMap and WorldMap
 
-world
-//dialogue tree
-//background colours
-//levels array
+overworld map
+//background colours for node maps (use company owner)//levels array
 
 Preserve all roguelike App functions (move to own file?)
 For campaign:

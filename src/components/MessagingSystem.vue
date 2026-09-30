@@ -277,6 +277,7 @@ function selectChoice(choice: DialogueChoice) {
     background-color: rgba(0, 0, 0, 0.6);
     z-index: 9999998;
     pointer-events: auto;
+    transition: all 0.3s ease;
 }
 
 .messaging-system {

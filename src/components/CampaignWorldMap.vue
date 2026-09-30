@@ -706,7 +706,7 @@ function handleMapMouseUpOrLeave() {
             </template>
             
             <div class="btns">
-                <button
+                <button id="accept-blueprint-button"
                     v-if="selectedPreviewNode?.type === 'skip' && (selectedPreviewNode.skipReward?.kind === 'blueprint' || selectedPreviewNode.skipReward?.kind === 'item')"
                     :disabled="!player.hasMemorySpace" @click="takeSkipReward(selectedPreviewNode)">
                     Accept Reward

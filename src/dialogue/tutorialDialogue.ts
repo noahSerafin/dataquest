@@ -164,50 +164,15 @@ export const tutorialDialogue = {
       "id": "node_10",
       "speaker": "Al",
       "nodeID": "click:node_svw51xvjh",
+      "elementID": "accept-blueprint-button",
       "text": "The Banana Peel is a 'trap' program. This means it will load hidden into a node and is undetectable by enemy progams. But it will also be able to be moved over by other by other progams, which will instantly trigger it's special action, and remove it from the node. Hidden programs are useful for loading into nodes where you can be imediately attacked. Click 'Accept Reward' to claim it.",
-      "choices": [
-        {
-          "text": "Thanks, any more nodes I should know about?",
-          "nextNode": "node_5"
-        }
-      ]
     },
     "node_5": {
       "id": "node_5",
       "speaker": "Al",
+      "nodeID": "click:accept-blueprint-button",
       "elementID": "node_5i9h9b6ti",
-      "text": "Most importantly, the big one. This is the boss node. Boss nodes will have special effect inside that will add an extra challenge to clearing them. Once you clear this node, you've passed your training and can move out into the wild.",
-      "choices": [
-        {
-          "text": "What about the 🛒 right ahead?",
-          "nextNode": "node_6"
-        },
-        {
-          "text": "What about 🪦 smaller one in the top corner?",
-          "nextNode": "node_7"
-        },
-        {
-          "text": "Thanks, That's all for now",
-        },
-      ]
-    },
-    "node_6": {
-      "id": "node_6",
-      "speaker": "Al",
-      "elementID": "node_9wnsfvrt4",
-      "text": "That's a shop. It's run by Hamuel, good guy. They'll let you know more when you visit.",
-      "choices": [
-        {
-          "text": "What about the 🪦 in the top corner?",
-          "nextNode": "node_7"
-        },
-      ]
-    },
-    "node_7": {
-      "id": "node_7",
-      "speaker": "Al",
-      "elementID": "node_mez50lbxk",
-      "text": "That is an an altar node. It will let you sacrifice programs (remove them from your inventory) to gain money. You can always sell a program on the spot, but altars will give you a bit extra. Look out for more nodes of this shape in the future, they always have something interesting inside. But beware once you enter them, unlike shops you will not be able to again.",
+      "text": "One more node type you should know about, this is a boss node. Boss nodes will have special effect inside that will add an extra challenge to clearing them. Once you clear this node, you've passed your training and can move out into the rest of cyberspace.",
       "choices": [
         {
           "text": "What about the 🛒 ahead?",
@@ -218,5 +183,84 @@ export const tutorialDialogue = {
         },
       ]
     },
+    "node_6": {
+      "id": "node_6",
+      "speaker": "Al",
+      "elementID": "node_9wnsfvrt4",
+      "text": "That's a shop. It's run by another recruit, Hamuel. They'll let you know more when you visit.",
+      "choices": [
+        {
+          "text": "What about the 🪦 in the top corner?",
+          "nextNode": "node_7"
+        },
+        {
+          "text": "Thanks, That's all for now",
+        },
+      ]
+    },
+    "node_7": {
+      "id": "node_7",
+      "speaker": "Al",
+      "elementID": "node_mez50lbxk",
+      "text": "That is an an altar node. It will let you sacrifice programs (remove them from your inventory) to gain money. You can always sell a program on the spot, but altars will give you a bit extra. Look out for more nodes of this shape in the future, they always have something interesting inside. But beware once you enter them, unlike shops you will not be able to again.",
+      "choices": [
+        {
+          "text": "Thanks, That's all for now",
+          "nextNode": "node_99"
+        },
+      ]
+    },
+    "node_99": {
+      "id": "node_99",
+      "speaker": "Al",
+      "text": "Great! I'll let you roam freely for now. Good luck out there!",
+    },
+    "s0node_1": {
+      "id": "s0node_1",
+      "nodeID": "click:node_9wnsfvrt4",
+      "speaker": "Hamuel",
+      "text": "Welcome to the trainee shop! You can buy as many programs as you like. But consumables and admins are a one time purchase I'm afraid.",
+      "choices": [
+        {
+          "text": "What's an admin?",
+          "nextNode": "s0node_2"
+        },
+        {
+          "text": "What are consumables?",
+          "nextNode": "s0node_3"
+        },
+        {
+          "text": "Maybe later",
+        }
+      ]
+    },
+    "s0node_2": {
+      "id": "s0node_2",
+      "speaker": "Hamuel",
+      "text": "Al's clearly been slacking on the training! Admins are programs that run passively in the background, they take up admin slots instead of inventory memory. You can currently hold up to 4. Depending on what triggers them, you will get different bonuses. Some might modify you programs when you load them, some might generate extra money from completed nodes, and some might drastically change the way programs behave.",
+      "choices": [
+        {
+          "text": "What about consumables?",
+          "nextNode": "s0node_3"
+        },
+        {
+          "text": "Thanks",
+        }
+      ]
+    },
+    "s0node_3": {
+      "id": "s0node_3",
+      "speaker": "Hamuel",
+      "text": "Consumables are single use pieces of software. They can either modify programs in your inventory, programs inside a node, or your own operating system, like increasing your current memory.",
+      "choices": [
+        {
+          "text": "What about admins?",
+          "nextNode": "s0node_2"
+        },
+        {
+          "text": "Thanks",
+        }
+      ]
+    }
   }
 }

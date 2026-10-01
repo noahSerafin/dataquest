@@ -77,7 +77,8 @@ export const sector0 = {
           "ds1": 2,
           "ds2": 3
         }
-      }
+      },
+      "levelName": "The Pen"
     },
     "node_c8d8kquy9": {
       "id": "node_c8d8kquy9",
@@ -121,7 +122,8 @@ export const sector0 = {
       ],
       "difficultyMod": 1,
       "reward": 1,
-      "company": "Saturn Solutions"
+      "company": "Saturn Solutions",
+      "levelName": "The Sector"
     },
     "node_rxj93azy4": {
       "id": "node_rxj93azy4",
@@ -224,10 +226,10 @@ export const sector0 = {
       },
       "next": [],
       "difficultyMod": 0,
-      "reward": 0,
+      "reward": 5,
       "company": "Saturn Solutions",
       "bossName": "North Wind",
-      "levelName": "The Arena"
+      "levelName": "Pachinko"
     },
     "node_svw51xvjh": {
       "id": "node_svw51xvjh",
@@ -304,8 +306,7 @@ export const sector0 = {
         "y": 200
       },
       "next": [
-        "node_hb7dz8ll7",
-        ""
+        "node_hb7dz8ll7"
       ],
       "difficultyMod": 0,
       "reward": 0,
@@ -317,9 +318,6 @@ export const sector0 = {
           "y2": 19,
           "ds1": 2,
           "ds2": 3
-        },
-        "": {
-          "x": 0
         }
       }
     }

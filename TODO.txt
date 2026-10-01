@@ -1,16 +1,16 @@
-Review appearance of special nodes vs reward nodes
 
-Have logic for spawning any piece on single spawn, then only pieces with max size >= to the spawn's size
 Make some maps with enemies on for campaign
-altar/compiler/duplicator cannot be re-entered (or cost money to enter?)
+Have logic for spawning any piece on single spawn, then only pieces with max size >= to the spawn's size
 
-return to map button in campaign mode
-disable interest in campaign mode
 
 chose player icon from list on new campagin
+campaign is raising security level every level, not just after bosses
 overworld map
 background colours for node maps (use company owner)//levels array
 save campaign progress
+
+cosmetic cicuitboard pieces
+Review appearance of special nodes vs reward nodes
 
 Preserve all roguelike App functions (move to own file?)
 For campaign:

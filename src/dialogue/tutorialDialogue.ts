@@ -114,7 +114,7 @@ export const tutorialDialogue = {
       "speaker": "Al",
       "nodeID": "click:274ec329-8c17-4265-8c12-e9a28bcf0110",
       "elementID": "place-4-6",
-      "text": "You'll notice at the top we are now loading our your Knife program. Load it into the node here by clicking the green spawn point. You can also drag programs over later.",
+      "text": "You'll notice at the top we are now loading your Knife program. Load it into the node here by clicking the green spawn point. You can also drag programs over later.",
     },
     "node_18": {
       "id": "node_18",
@@ -143,7 +143,7 @@ export const tutorialDialogue = {
       "id": "node_20",
       "speaker": "Al",
       "elementID": "player-actions",
-      "text": "If your programs get deleted from the node, don't worry, they won't leave your inventory. You can return to the map anytime using the forefeit button and try again. I'll leave this one to you now, be in touch once you've cleared this node. Don't forget to end your turn once your programs are out of moves and actions.",
+      "text": "If your programs get deleted from the node, don't worry, they won't leave your inventory. You can return to the map anytime using the forefeit button and try again. <br></br> I'll leave this one to you now, be in touch once you've cleared this node. Don't forget to end your turn once your programs are out of moves and actions.",
       "choices": [
         {
           "text": "Thanks",
@@ -214,7 +214,7 @@ export const tutorialDialogue = {
     },
     "s0node_1": {
       "id": "s0node_1",
-      "nodeID": "click:node_9wnsfvrt4",
+      "nodeID": "enter:node_9wnsfvrt4",
       "speaker": "Hamuel",
       "text": "Welcome to the trainee shop! You can buy as many programs as you like. But consumables and admins are a one time purchase I'm afraid.",
       "choices": [

@@ -264,7 +264,7 @@ const player = ref(new Player(
   [], // no items yet
   [testSword, testShield], // starting pieces
   [],//no admins yet
-  2,
+  0,//security level
   5,
   0,
   0,
@@ -2336,7 +2336,7 @@ function cancelConfirm() {
       <div class="confirm-modal">
         <h2>{{ confirmModalAction === 'forfeit' ? 'Forfeit Round?' : 'Retry Round?' }}</h2>
         <p v-if="confirmModalAction === 'forfeit'">Are you sure you want to forfeit this round? <span v-if="currentAppMode !== 'campaign'">You will lose a life!</span></p>
-        <p v-if="confirmModalAction === 'retry'">Are you sure you want to retry this round? <strong style="color: red;">Warning: This will cost you 1 life.</strong></p>
+        <p v-if="confirmModalAction === 'retry'">Are you sure you want to retry this round? <strong v-if="currentAppMode !== 'campaign'" style="color: red;">Warning: This will cost you 1 life.</strong></p>
         <div class="modal-actions">
           <button @click="handleConfirm">Yes</button>
           <button @click="cancelConfirm">Cancel</button>

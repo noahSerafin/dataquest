@@ -61,7 +61,8 @@ export const sector1 = {
           "ds2": 10,
           "ds1": 12
         }
-      }
+      },
+      "levelName": "The Split"
     },
     "node_c9gbjumx0": {
       "id": "node_c9gbjumx0",
@@ -92,7 +93,8 @@ export const sector1 = {
           "ds1": 12,
           "ds2": 12
         }
-      }
+      },
+      "levelName": "The Fort"
     },
     "node_qs0fbko7z": {
       "id": "node_qs0fbko7z",
@@ -142,7 +144,8 @@ export const sector1 = {
       ],
       "difficultyMod": 1,
       "reward": 2,
-      "company": "Flyby Surveilance"
+      "company": "Flyby Surveilance",
+      "levelName": "Take Cover"
     },
     "node_n3120xi39": {
       "id": "node_n3120xi39",
@@ -163,7 +166,8 @@ export const sector1 = {
           "y1": 0,
           "y2": 25
         }
-      }
+      },
+      "levelName": "The Feast"
     },
     "node_ey2q5qyqu": {
       "id": "node_ey2q5qyqu",
@@ -178,14 +182,15 @@ export const sector1 = {
       ],
       "difficultyMod": 2,
       "reward": 3,
-      "company": "Starlane Tech",
+      "company": "Flyby Surveilance",
       "pathOffsets": {
         "node_2mg40n4at": {
           "x": 0,
           "ds1": 5,
           "ds2": 5
         }
-      }
+      },
+      "levelName": "The Hive"
     },
     "node_399ayz3qf": {
       "id": "node_399ayz3qf",
@@ -212,7 +217,8 @@ export const sector1 = {
           "y1": -21,
           "y2": -10
         }
-      }
+      },
+      "levelName": "The Kitchen"
     },
     "node_vzmlxo9e6": {
       "id": "node_vzmlxo9e6",
@@ -243,7 +249,8 @@ export const sector1 = {
           "ds1": 10,
           "ds2": 12
         }
-      }
+      },
+      "levelName": "Trick or Treat"
     },
     "node_p2awqy8u9": {
       "id": "node_p2awqy8u9",
@@ -255,8 +262,9 @@ export const sector1 = {
       "next": [],
       "difficultyMod": 0,
       "reward": 0,
-      "company": "Saturn Solutions",
-      "bossName": "Traffic Light"
+      "company": "Whiteflower Global",
+      "bossName": "Traffic Light",
+      "levelName": "The Danger Zone"
     },
     "node_m3cv37rwi": {
       "id": "node_m3cv37rwi",
@@ -268,8 +276,9 @@ export const sector1 = {
       "next": [],
       "difficultyMod": 0,
       "reward": 0,
-      "company": "Saturn Solutions",
-      "bossName": "Quicksand"
+      "company": "Meridian Security Inc.",
+      "bossName": "Quicksand",
+      "levelName": "Chokepoints"
     },
     "node_1o9y3xy33": {
       "id": "node_1o9y3xy33",
@@ -290,7 +299,8 @@ export const sector1 = {
           "y1": 14,
           "y2": 30
         }
-      }
+      },
+      "levelName": "The Stairs"
     },
     "node_ywvwhu1ce": {
       "id": "node_ywvwhu1ce",
@@ -304,7 +314,8 @@ export const sector1 = {
       ],
       "difficultyMod": 2,
       "reward": 3,
-      "company": "Saturn Solutions"
+      "company": "Nightbridge Corp",
+      "levelName": "The Sewer"
     },
     "node_wo7yv59o3": {
       "id": "node_wo7yv59o3",
@@ -325,7 +336,8 @@ export const sector1 = {
           "y1": 0,
           "y2": -2
         }
-      }
+      },
+      "levelName": "Ratatouille"
     },
     "node_5h13gn9y4": {
       "id": "node_5h13gn9y4",
@@ -348,7 +360,8 @@ export const sector1 = {
           "ds2": 8,
           "ds1": 8
         }
-      }
+      },
+      "levelName": "The Divide"
     },
     "node_ie40v3v37": {
       "id": "node_ie40v3v37",

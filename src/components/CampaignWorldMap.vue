@@ -12,7 +12,7 @@ import { allPieces } from "../Pieces";
 import { allAdmins } from "../AdminPrograms";
 import { allOSes } from "../Operators";
 import { companies, shopCompany, bossCompany, playerCompany } from "../companies";
-import { level1Levels } from "../campaignLevels/sector0.ts";
+import { level0Levels } from "../campaignLevels/sector0.ts";
 import { level2Levels } from "../level2Levels";
 import { level3Levels } from "../level3Levels";
 import { level4Levels } from "../level4Levels";
@@ -184,7 +184,7 @@ function enterNode(node: WorldNode) {
 
 // Hydrate the static map and generate skip rewards synchronously before initial render
 const allCompanyOptions = [shopCompany, bossCompany, playerCompany, ...companies];
-const allGameLevels = [...level1Levels, ...level2Levels, ...level3Levels, ...level4Levels, ...level5Levels, ...level6Levels, ...testLevels];
+const allGameLevels = [...level0Levels, ...level2Levels, ...level3Levels, ...level4Levels, ...level5Levels, ...level6Levels, ...testLevels];
 
 for (const node of Object.values(props.staticWorld.nodes)) {
     if (node.company && typeof node.company === 'string') {

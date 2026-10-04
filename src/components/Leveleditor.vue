@@ -341,7 +341,16 @@ const generateLevel = () => {
   
   generatedLevel.pieces.forEach((p: any) => {
     if (p.name === 'Spawn' && p.team === 'enemy') {
-      const candidates = pieceClasses.filter((c: any) => c.rarity === p.rarity && c.name !== 'Spawn');
+      const candidates = pieceClasses.filter((c: any) => {
+        if (c.rarity !== p.rarity || c.name === 'Spawn') return false;
+        try {
+          const dummy = new c({x: -1, y: -1}, 'enemy');
+          return dummy.maxSize >= (p.tiles?.length || 1);
+        } catch (e) {
+          return false;
+        }
+      });
+      
       if (candidates.length > 0) {
         const chosen = candidates[Math.floor(Math.random() * candidates.length)];
         p.name = chosen.name;

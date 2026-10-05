@@ -188,7 +188,7 @@ import { allOSes } from "./Operators.ts";
 import { serializeGameState, rehydrateGameState } from "./saveSystem";
 import CampaignShop from "./components/CampaignShop.vue";
 import CampaignWorldMap from "./components/CampaignWorldMap.vue";
-import { sector0 } from "./campaignMaps/tutorialMap.ts";
+import { sector0 } from "./campaignMaps/sector0.ts";
 
 
 const testSword = {

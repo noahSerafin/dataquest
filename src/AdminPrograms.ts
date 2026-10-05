@@ -2093,7 +2093,7 @@ export class Cheese extends Admin {
 class AirSupport extends Admin {
   static iconID = 290;
   static name = "Air Support";
-  static description = "1 damage to all enemy programs on the board every time you place a new program";
+  static description = "1 damage to all enemy programs on the board every time you place a new program";//non-hidden?
   static unicode = "U+1F6E6";
   static color = "#190247ff";
   static rarity = 3;

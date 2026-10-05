@@ -12,7 +12,7 @@ import { allPieces } from "../Pieces";
 import { allAdmins } from "../AdminPrograms";
 import { allOSes } from "../Operators";
 import { companies, shopCompany, bossCompany, playerCompany } from "../companies";
-import { level0Levels } from "../campaignLevels/sector0.ts";
+import { level0Levels } from "../campaignLevels/sector0Lvls.ts";
 import { level2Levels } from "../level2Levels";
 import { level3Levels } from "../level3Levels";
 import { level4Levels } from "../level4Levels";

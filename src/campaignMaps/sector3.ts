@@ -53,7 +53,8 @@ export const sector3 = {
           "y2": 0,
           "ds2": 26
         }
-      }
+      },
+      "levelName": "The Red Carpet"
     },
     "node_8509fvb3x": {
       "id": "node_8509fvb3x",
@@ -75,7 +76,8 @@ export const sector3 = {
           "y2": 0,
           "ds1": 34
         }
-      }
+      },
+      "levelName": "The Lawn"
     },
     "node_2255e6yzd": {
       "id": "node_2255e6yzd",
@@ -100,7 +102,8 @@ export const sector3 = {
           "ds1": 7,
           "ds2": 10
         }
-      }
+      },
+      "levelName": "Carrion"
     },
     "node_zowkqtb1z": {
       "id": "node_zowkqtb1z",
@@ -136,7 +139,8 @@ export const sector3 = {
           "y2": 0,
           "ds2": 34
         }
-      }
+      },
+      "levelName": "The Pass"
     },
     "node_uio5v44a1": {
       "id": "node_uio5v44a1",
@@ -158,7 +162,8 @@ export const sector3 = {
           "y2": 0,
           "ds1": 28
         }
-      }
+      },
+      "levelName": "The Booby Trap"
     },
     "node_x6s2c7b8o": {
       "id": "node_x6s2c7b8o",
@@ -181,7 +186,8 @@ export const sector3 = {
           "ds1": 8,
           "ds2": 9
         }
-      }
+      },
+      "levelName": "The Watering Hole"
     },
     "node_tsrge2kzq": {
       "id": "node_tsrge2kzq",
@@ -197,7 +203,8 @@ export const sector3 = {
       ],
       "difficultyMod": 3,
       "reward": 5,
-      "company": "Longhouse Web Services"
+      "company": "Longhouse Web Services",
+      "levelName": "The Crossroads"
     },
     "node_l0y2h5msh": {
       "id": "node_l0y2h5msh",
@@ -220,7 +227,8 @@ export const sector3 = {
           "ds1": 5,
           "ds2": 7
         }
-      }
+      },
+      "levelName": "The Farm"
     },
     "node_9qvk94we3": {
       "id": "node_9qvk94we3",
@@ -242,7 +250,8 @@ export const sector3 = {
           "y1": 30,
           "y2": 0
         }
-      }
+      },
+      "levelName": "The Shallows"
     },
     "node_klrlji06y": {
       "id": "node_klrlji06y",
@@ -264,7 +273,8 @@ export const sector3 = {
           "y1": 0,
           "y2": 0
         }
-      }
+      },
+      "levelName": "Ninja School"
     },
     "node_2yn3k75s0": {
       "id": "node_2yn3k75s0",
@@ -277,7 +287,7 @@ export const sector3 = {
       "difficultyMod": 0,
       "reward": 0,
       "company": "Saturn Solutions",
-      "shopContents": "Axe, Coconut, Elephant, Ghost, SAM, Air, Support, Camper, Edge Case, Telescope, Toolbox"
+      "shopContents": "Coconut, Elephant, Ghost, Honeypot, SAM, Camper, Edge Case, Telescope, Toolbox, Tracker"
     },
     "node_wpzs572tz": {
       "id": "node_wpzs572tz",
@@ -290,7 +300,7 @@ export const sector3 = {
       "difficultyMod": 0,
       "reward": 0,
       "company": "Saturn Solutions",
-      "shopContents": "Bug, Drum, Field Medic, Pitfall, Ninja, Jammer, Mean Drunk, Razor, Shades, Stone Age"
+      "shopContents": "Bug, Camera, Field Medic, Pitfall, Ninja, Jammer, Mean Drunk, Razor, Shades, Stone Age"
     },
     "node_5svll8h4l": {
       "id": "node_5svll8h4l",
@@ -340,7 +350,8 @@ export const sector3 = {
           "y1": -4,
           "y2": 0
         }
-      }
+      },
+      "levelName": "The Castle"
     },
     "node_oljhbd0kz": {
       "id": "node_oljhbd0kz",
@@ -355,7 +366,8 @@ export const sector3 = {
       "difficultyMod": 0,
       "reward": 0,
       "company": "Meridian Security Inc.",
-      "bossName": "Banhammer"
+      "bossName": "Banhammer",
+      "levelName": "The Floodgates"
     },
     "node_qgsx9gmcp": {
       "id": "node_qgsx9gmcp",
@@ -377,7 +389,8 @@ export const sector3 = {
           "y1": 26,
           "y2": 8
         }
-      }
+      },
+      "levelName": "The Big Top"
     },
     "node_agwmqvxja": {
       "id": "node_agwmqvxja",
@@ -390,8 +403,8 @@ export const sector3 = {
         "node_fveh4qswo",
         "node_dfnmvg2kb"
       ],
-      "difficultyMod": 0,
-      "reward": 0,
+      "difficultyMod": 3,
+      "reward": 5,
       "company": "Tsukimi Group",
       "pathOffsets": {
         "node_fveh4qswo": {
@@ -406,7 +419,8 @@ export const sector3 = {
           "ds1": 12,
           "ds2": 12
         }
-      }
+      },
+      "levelName": "The Mine"
     },
     "node_1dygbkd57": {
       "id": "node_1dygbkd57",
@@ -419,8 +433,8 @@ export const sector3 = {
         "node_fveh4qswo",
         "node_sq8vko80h"
       ],
-      "difficultyMod": 0,
-      "reward": 0,
+      "difficultyMod": 3,
+      "reward": 5,
       "company": "Sakura Robotics",
       "pathOffsets": {
         "node_fveh4qswo": {
@@ -435,7 +449,8 @@ export const sector3 = {
           "ds1": 10,
           "ds2": 7
         }
-      }
+      },
+      "levelName": "The Illiad"
     },
     "node_sq8vko80h": {
       "id": "node_sq8vko80h",
@@ -447,7 +462,8 @@ export const sector3 = {
       "next": [],
       "difficultyMod": 0,
       "reward": 0,
-      "company": "Saturn Solutions"
+      "company": "Saturn Solutions",
+      "skipContents": "Puzzle Piece"
     },
     "node_dfnmvg2kb": {
       "id": "node_dfnmvg2kb",
@@ -459,7 +475,8 @@ export const sector3 = {
       "next": [],
       "difficultyMod": 0,
       "reward": 0,
-      "company": "Saturn Solutions"
+      "company": "Saturn Solutions",
+      "skipContents": "Air Support"
     },
     "node_i4bakdvwj": {
       "id": "node_i4bakdvwj",
@@ -472,7 +489,7 @@ export const sector3 = {
       "difficultyMod": 0,
       "reward": 0,
       "company": "Saturn Solutions",
-      "shopContents": "Donkey, Lab Rat, Pawn, Paladin, Stonewall, Trap"
+      "shopContents": "Donkey, Drum, Lab Rat, Pawn, Paladin, Stonewall, Trap, Soap, Spanner"
     },
     "node_n4i6vtt1u": {
       "id": "node_n4i6vtt1u",
@@ -511,7 +528,7 @@ export const sector3 = {
       "difficultyMod": 0,
       "reward": 0,
       "company": "Saturn Solutions",
-      "skipContents": "Camera"
+      "skipContents": "Rosebud"
     },
     "node_ba16p1r32": {
       "id": "node_ba16p1r32",

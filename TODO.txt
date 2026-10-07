@@ -1,5 +1,5 @@
 
-Make some maps with enemies on for campaign 4,5,6
+Make some maps with enemies on for campaign 5,6
 campaign is raising security level every level, not just after bosses
 overworld map / progress security level after boss/all bosses defeated
 chose player icon from list on new campagin

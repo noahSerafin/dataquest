@@ -170,11 +170,28 @@ function handleMouseUp() {
   dragMode.value = null
 }
 
+function handleKeyDown(e: KeyboardEvent) {
+  const target = e.target as HTMLElement;
+  if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA')) {
+    return;
+  }
+  
+  if (e.key === 'e' || e.key === 'E') {
+    setDropper({ mode: 'extend' });
+  } else if (e.key === 'x' || e.key === 'X') {
+    setDropper({ mode: 'tile' });
+  } else if (e.key === 's' || e.key === 'S') {
+    setDropper({ mode: 'piece', pieceName: 'Spawn' });
+  }
+}
+
 onMounted(() => {
   window.addEventListener("mouseup", handleMouseUp)
+  window.addEventListener("keydown", handleKeyDown)
 })
 onBeforeUnmount(() => {
   window.removeEventListener("mouseup", handleMouseUp)
+  window.removeEventListener("keydown", handleKeyDown)
 })
 
 // Track clicked tiles

@@ -68,6 +68,26 @@ function addNode() {
   if (!startNodeId.value) startNodeId.value = id;
 }
 
+function copySelectedNode() {
+  if (!selectedNode.value) return;
+  const original = selectedNode.value;
+  const id = generateId();
+  
+  nodes.value[id] = {
+    ...original,
+    id,
+    position: {
+      x: original.position.x + 20,
+      y: original.position.y + 20
+    },
+    next: [...original.next],
+    pathOffsets: original.pathOffsets ? JSON.parse(JSON.stringify(original.pathOffsets)) : undefined,
+    drops: original.drops ? [...original.drops] : undefined,
+  };
+  
+  selectNode(id);
+}
+
 function removeNode(id: string) {
   delete nodes.value[id];
   // Remove links to this node
@@ -470,6 +490,7 @@ function canvasOffsetY(y: number) {
     <div class="editor-header">
       <h2>Campaign World Editor</h2>
       <button @click="addNode">Add Node</button>
+      <button @click="copySelectedNode" :disabled="!selectedNodeId">Copy Node</button>
       <button @click="exportData">Export to Clipboard</button>
       <button @click="importData">Import</button>
       <div style="flex-grow: 1"></div>
@@ -708,9 +729,13 @@ function canvasOffsetY(y: number) {
   cursor: pointer;
   border-radius: 4px;
 }
-.editor-header button:hover {
+.editor-header button:hover:not(:disabled) {
   background: #444;
   border-color: #2fc5eb;
+}
+.editor-header button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .editor-main {

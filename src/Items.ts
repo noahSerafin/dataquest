@@ -1277,7 +1277,7 @@ class Extinguisher extends Item<PieceBlueprint> {
 //PUSHPIN, U+1F4CC save node(+game?) state, return to it later.
 //SLEEPING ACCOMMODATION, U+1F6CC reroll next node?
 
-export const allItems = [Blueberry, Battery, Iron, Headphones, Juice, Mushroom, Box, Pepper, Floppy, Voucher, Bandage, Extinguisher, Formula, Frogman, Gift, Hotline, Labcoat, Plunger, Soap, Teapot, Toothbrush, Beans, Blackheart, Bugle, Gloves, Jar, Keygen, Makeover, Melon, Megaphone, Pinata, Rations, Roids, Spanner, Update2, Chili, Cake, Carrot, Garlic, Goggles, Wand, Lightning, Meat, Pie, Lips, Supplement, Coffee, Disguise, Dupe, Genie, Hourglass, Sandwich, Life, Blessing, Feast, Ginger, Beer, Pandora, Update3, ShootingStar];
+export const allItems = [Blueberry, Battery, Iron, Headphones, Juice, Mushroom, Box, Pepper, Floppy, Voucher, Bandage, Extinguisher, Formula, Frogman, Gift, Hotline, Labcoat, Plunger, Soap, Teapot, Toothbrush, Beans, Blackheart, Bugle, Gloves, Jar, Keygen, Makeover, Melon, Megaphone, Pinata, Rations, Roids, Lips, Spanner, Update2, Chili, Cake, Carrot, Garlic, Goggles, Wand, Lightning, Meat, Pie, Supplement, Coffee, Disguise, Dupe, Genie, Hourglass, Sandwich, Life, Blessing, Feast, Ginger, Beer, Pandora, Update3, ShootingStar];
 export const upgradeItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Roids, Formula]
 
 /*Items.forEach(i => {

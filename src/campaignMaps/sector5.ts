@@ -55,7 +55,8 @@ export const sector5 = {
       ],
       "difficultyMod": 5,
       "reward": 10,
-      "company": "Starlane Tech"
+      "company": "Nightbridge Corp",
+      "levelName": "Stop Start"
     },
     "node_4u51dlzib": {
       "id": "node_4u51dlzib",
@@ -82,7 +83,8 @@ export const sector5 = {
           "type": "VDHDV",
           "y": -12
         }
-      }
+      },
+      "levelName": "The Track"
     },
     "node_j192xt3eg": {
       "id": "node_j192xt3eg",
@@ -105,7 +107,8 @@ export const sector5 = {
           "ds1": 8,
           "ds2": 8
         }
-      }
+      },
+      "levelName": "The Pin"
     },
     "node_a79ecbr08": {
       "id": "node_a79ecbr08",
@@ -133,7 +136,8 @@ export const sector5 = {
           "y1": -7,
           "y2": 30
         }
-      }
+      },
+      "levelName": "The Ritual"
     },
     "node_b51rxzfvu": {
       "id": "node_b51rxzfvu",
@@ -147,7 +151,7 @@ export const sector5 = {
       ],
       "difficultyMod": 5,
       "reward": 10,
-      "company": "Cook.io",
+      "company": "Monkey Media",
       "pathOffsets": {
         "node_9rr9tawqy": {
           "x": 44,
@@ -155,7 +159,8 @@ export const sector5 = {
           "y2": 0,
           "ds1": 9
         }
-      }
+      },
+      "levelName": "The Canopy"
     },
     "node_dhk6bbpio": {
       "id": "node_dhk6bbpio",
@@ -182,7 +187,8 @@ export const sector5 = {
           "y1": 0,
           "y2": -9
         }
-      }
+      },
+      "levelName": "The Slope"
     },
     "node_pr6ndamhd": {
       "id": "node_pr6ndamhd",
@@ -203,7 +209,8 @@ export const sector5 = {
           "y1": 21,
           "y2": 0
         }
-      }
+      },
+      "levelName": "The Bait"
     },
     "node_4fyilfmp4": {
       "id": "node_4fyilfmp4",
@@ -217,8 +224,8 @@ export const sector5 = {
         "node_a79ecbr08",
         "node_sestiht90"
       ],
-      "difficultyMod": 5,
-      "reward": 10,
+      "difficultyMod": 6,
+      "reward": 12,
       "company": "Panda Holdings LLC",
       "pathOffsets": {
         "node_mauodurpb": {
@@ -237,7 +244,8 @@ export const sector5 = {
           "y1": 0,
           "y2": -15
         }
-      }
+      },
+      "levelName": "The Fount"
     },
     "node_sestiht90": {
       "id": "node_sestiht90",
@@ -258,7 +266,8 @@ export const sector5 = {
           "y1": 2,
           "y2": 4
         }
-      }
+      },
+      "levelName": "Artillery"
     },
     "node_uaaktj6hk": {
       "id": "node_uaaktj6hk",
@@ -279,7 +288,8 @@ export const sector5 = {
           "y1": 0,
           "y2": 0
         }
-      }
+      },
+      "levelName": "The Safehouse"
     },
     "node_9rr9tawqy": {
       "id": "node_9rr9tawqy",
@@ -318,7 +328,8 @@ export const sector5 = {
           "ds1": 4,
           "ds2": 3
         }
-      }
+      },
+      "levelName": "Area 51"
     },
     "node_wgpsgril0": {
       "id": "node_wgpsgril0",
@@ -342,7 +353,8 @@ export const sector5 = {
           "ds1": 7,
           "ds2": 8
         }
-      }
+      },
+      "levelName": "Charm Offensive"
     },
     "node_mauodurpb": {
       "id": "node_mauodurpb",
@@ -365,7 +377,8 @@ export const sector5 = {
           "ds1": 8,
           "ds2": 9
         }
-      }
+      },
+      "levelName": "The Bunker"
     },
     "node_4cf93j924": {
       "id": "node_4cf93j924",
@@ -389,7 +402,8 @@ export const sector5 = {
           "ds1": 2,
           "ds2": 7
         }
-      }
+      },
+      "levelName": "The Graveyard"
     },
     "node_lbmztk4zj": {
       "id": "node_lbmztk4zj",
@@ -413,7 +427,8 @@ export const sector5 = {
           "ds1": 3,
           "ds2": 4
         }
-      }
+      },
+      "levelName": "The Bridge"
     },
     "node_81pdx4mgi": {
       "id": "node_81pdx4mgi",
@@ -439,7 +454,8 @@ export const sector5 = {
           "ds1": 3,
           "ds2": 3
         }
-      }
+      },
+      "levelName": "Scorched Earth"
     },
     "node_cj9wvun5m": {
       "id": "node_cj9wvun5m",
@@ -463,7 +479,8 @@ export const sector5 = {
           "ds1": 1,
           "ds2": 8
         }
-      }
+      },
+      "levelName": "The Heat"
     },
     "node_va0hffhea": {
       "id": "node_va0hffhea",
@@ -494,7 +511,8 @@ export const sector5 = {
           "ds1": 4,
           "ds2": 8
         }
-      }
+      },
+      "levelName": "G-Labs"
     },
     "node_2ooc5wrvy": {
       "id": "node_2ooc5wrvy",

@@ -59,7 +59,8 @@ export const sector6 = {
           "y1": -23,
           "y2": -7
         }
-      }
+      },
+      "levelName": "The Chokepoint"
     },
     "node_wenvp3rl6": {
       "id": "node_wenvp3rl6",
@@ -86,7 +87,8 @@ export const sector6 = {
           "y1": 12,
           "y2": 0
         }
-      }
+      },
+      "levelName": "The Zoo"
     },
     "node_12xatlflv": {
       "id": "node_12xatlflv",
@@ -109,7 +111,8 @@ export const sector6 = {
           "ds1": 5,
           "ds2": 10
         }
-      }
+      },
+      "levelName": "The Gates"
     },
     "node_f6rjgz0es": {
       "id": "node_f6rjgz0es",
@@ -132,7 +135,8 @@ export const sector6 = {
           "ds1": 8,
           "ds2": 6
         }
-      }
+      },
+      "levelName": "The Stratosphere"
     },
     "node_0dp3124cm": {
       "id": "node_0dp3124cm",
@@ -164,7 +168,8 @@ export const sector6 = {
           "ds1": 6,
           "ds2": 5
         }
-      }
+      },
+      "levelName": "Prehistory"
     },
     "node_bxu61nry7": {
       "id": "node_bxu61nry7",
@@ -188,7 +193,8 @@ export const sector6 = {
           "ds1": 7,
           "ds2": 8
         }
-      }
+      },
+      "levelName": "The Lockup"
     },
     "node_iu7zrh5d8": {
       "id": "node_iu7zrh5d8",
@@ -209,7 +215,8 @@ export const sector6 = {
           "y1": 0,
           "y2": 0
         }
-      }
+      },
+      "levelName": "The Parlour"
     },
     "node_fdt8fby9k": {
       "id": "node_fdt8fby9k",
@@ -238,7 +245,8 @@ export const sector6 = {
           "ds1": 9,
           "ds2": 12
         }
-      }
+      },
+      "levelName": "The Shock"
     },
     "node_f2vbqvy2h": {
       "id": "node_f2vbqvy2h",
@@ -264,7 +272,8 @@ export const sector6 = {
           "y1": 5,
           "y2": 17
         }
-      }
+      },
+      "levelName": "The Maze"
     },
     "node_4a1kwjqac": {
       "id": "node_4a1kwjqac",
@@ -285,7 +294,8 @@ export const sector6 = {
           "y1": 0,
           "y2": 0
         }
-      }
+      },
+      "levelName": "Fallout"
     },
     "node_uz1kgj2wg": {
       "id": "node_uz1kgj2wg",
@@ -307,7 +317,8 @@ export const sector6 = {
           "y1": 17,
           "y2": 19
         }
-      }
+      },
+      "levelName": "The Trigger"
     },
     "node_cabuhkhcm": {
       "id": "node_cabuhkhcm",
@@ -342,7 +353,8 @@ export const sector6 = {
           "ds1": 5,
           "ds2": 6
         }
-      }
+      },
+      "levelName": "The Reef"
     },
     "node_bu507hh9s": {
       "id": "node_bu507hh9s",
@@ -366,7 +378,8 @@ export const sector6 = {
           "ds1": 9,
           "ds2": 11
         }
-      }
+      },
+      "levelName": "Lost Woods"
     },
     "node_l928zoo3m": {
       "id": "node_l928zoo3m",
@@ -388,7 +401,8 @@ export const sector6 = {
           "type": "VDHDV",
           "y": 16
         }
-      }
+      },
+      "levelName": "The Onslaught"
     },
     "node_pf4657caq": {
       "id": "node_pf4657caq",
@@ -411,7 +425,8 @@ export const sector6 = {
           "y2": 0,
           "ds2": 9
         }
-      }
+      },
+      "levelName": "The Finale"
     },
     "node_o5l1ab8qd": {
       "id": "node_o5l1ab8qd",
@@ -433,7 +448,8 @@ export const sector6 = {
           "ds1": 10,
           "ds2": 10
         }
-      }
+      },
+      "levelName": "NYC"
     },
     "node_f98u869wa": {
       "id": "node_f98u869wa",
@@ -457,7 +473,8 @@ export const sector6 = {
           "ds2": 5,
           "ds1": 7
         }
-      }
+      },
+      "levelName": "The Blitz"
     },
     "node_p979uq6y5": {
       "id": "node_p979uq6y5",
@@ -480,7 +497,8 @@ export const sector6 = {
           "y2": 0,
           "ds1": 9
         }
-      }
+      },
+      "levelName": "Transilvania"
     },
     "node_fgjxua15g": {
       "id": "node_fgjxua15g",

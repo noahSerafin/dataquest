@@ -1,6 +1,6 @@
 import type { Level } from "../types";
 
-const fount = {
+const fount:Level = {
   "name": "The Fount",
   "tiles": [
     {
@@ -455,7 +455,7 @@ const fount = {
     }
   ]
 }
-const heat = {
+const heat:Level = {
   "name": "The Heat",
   "tiles": [
     {
@@ -8551,4 +8551,703 @@ const charm:Level = {
     }
   ]
 }
-export const sector5levels:Level[] = [fount, heat, bridge, charm, artillery, ritual, graveyard, glabs, pin, bait, stopStart, track, safehouse, slope, canopy, bunker, area51];//17
+const scorch:Level = {
+  "name": "Scorched Earth",
+  "tiles": [
+    {
+      "x": 1,
+      "y": 0
+    },
+    {
+      "x": 2,
+      "y": 0
+    },
+    {
+      "x": 3,
+      "y": 0
+    },
+    {
+      "x": 4,
+      "y": 0
+    },
+    {
+      "x": 5,
+      "y": 0
+    },
+    {
+      "x": 6,
+      "y": 0
+    },
+    {
+      "x": 10,
+      "y": 0
+    },
+    {
+      "x": 0,
+      "y": 1
+    },
+    {
+      "x": 1,
+      "y": 1
+    },
+    {
+      "x": 4,
+      "y": 1
+    },
+    {
+      "x": 6,
+      "y": 1
+    },
+    {
+      "x": 7,
+      "y": 1
+    },
+    {
+      "x": 0,
+      "y": 2
+    },
+    {
+      "x": 1,
+      "y": 2
+    },
+    {
+      "x": 9,
+      "y": 2
+    },
+    {
+      "x": 10,
+      "y": 2
+    },
+    {
+      "x": 0,
+      "y": 3
+    },
+    {
+      "x": 3,
+      "y": 3
+    },
+    {
+      "x": 4,
+      "y": 3
+    },
+    {
+      "x": 5,
+      "y": 3
+    },
+    {
+      "x": 6,
+      "y": 3
+    },
+    {
+      "x": 9,
+      "y": 3
+    },
+    {
+      "x": 0,
+      "y": 4
+    },
+    {
+      "x": 3,
+      "y": 4
+    },
+    {
+      "x": 7,
+      "y": 4
+    },
+    {
+      "x": 9,
+      "y": 4
+    },
+    {
+      "x": 10,
+      "y": 4
+    },
+    {
+      "x": 0,
+      "y": 5
+    },
+    {
+      "x": 1,
+      "y": 5
+    },
+    {
+      "x": 2,
+      "y": 5
+    },
+    {
+      "x": 7,
+      "y": 5
+    },
+    {
+      "x": 9,
+      "y": 5
+    },
+    {
+      "x": 0,
+      "y": 6
+    },
+    {
+      "x": 1,
+      "y": 6
+    },
+    {
+      "x": 2,
+      "y": 6
+    },
+    {
+      "x": 7,
+      "y": 6
+    },
+    {
+      "x": 9,
+      "y": 6
+    },
+    {
+      "x": 10,
+      "y": 6
+    },
+    {
+      "x": 2,
+      "y": 7
+    },
+    {
+      "x": 7,
+      "y": 7
+    },
+    {
+      "x": 0,
+      "y": 8
+    },
+    {
+      "x": 1,
+      "y": 8
+    },
+    {
+      "x": 3,
+      "y": 8
+    },
+    {
+      "x": 4,
+      "y": 8
+    },
+    {
+      "x": 6,
+      "y": 8
+    },
+    {
+      "x": 8,
+      "y": 8
+    },
+    {
+      "x": 9,
+      "y": 8
+    },
+    {
+      "x": 0,
+      "y": 9
+    },
+    {
+      "x": 2,
+      "y": 9
+    },
+    {
+      "x": 7,
+      "y": 9
+    },
+    {
+      "x": 9,
+      "y": 9
+    },
+    {
+      "x": 10,
+      "y": 9
+    },
+    {
+      "x": 7,
+      "y": 10
+    },
+    {
+      "x": 8,
+      "y": 10
+    },
+    {
+      "x": 9,
+      "y": 10
+    },
+    {
+      "x": 10,
+      "y": 10
+    },
+    {
+      "x": 2,
+      "y": 11
+    },
+    {
+      "x": 4,
+      "y": 11
+    },
+    {
+      "x": 5,
+      "y": 11
+    },
+    {
+      "x": 7,
+      "y": 11
+    },
+    {
+      "x": 8,
+      "y": 11
+    },
+    {
+      "x": 9,
+      "y": 11
+    },
+    {
+      "x": 10,
+      "y": 11
+    },
+    {
+      "x": 6,
+      "y": 4
+    },
+    {
+      "x": 3,
+      "y": 7
+    },
+    {
+      "x": 6,
+      "y": 7
+    },
+    {
+      "x": 5,
+      "y": 8
+    },
+    {
+      "x": 0,
+      "y": 10
+    },
+    {
+      "x": 1,
+      "y": 11
+    },
+    {
+      "x": 0,
+      "y": 11
+    },
+    {
+      "x": 3,
+      "y": 11
+    },
+    {
+      "x": 5,
+      "y": 10
+    },
+    {
+      "x": 6,
+      "y": 10
+    },
+    {
+      "x": 6,
+      "y": 11
+    },
+    {
+      "x": 3,
+      "y": 9
+    },
+    {
+      "x": 4,
+      "y": 9
+    },
+    {
+      "x": 9,
+      "y": 7
+    },
+    {
+      "x": 3,
+      "y": 1
+    },
+    {
+      "x": 2,
+      "y": 1
+    },
+    {
+      "x": 2,
+      "y": 4
+    },
+    {
+      "x": 8,
+      "y": 9
+    },
+    {
+      "x": 5,
+      "y": 1
+    },
+    {
+      "x": 9,
+      "y": 1
+    },
+    {
+      "x": 8,
+      "y": 2
+    },
+    {
+      "x": 8,
+      "y": 3
+    },
+    {
+      "x": 7,
+      "y": 2
+    },
+    {
+      "x": 2,
+      "y": 2
+    },
+    {
+      "x": 1,
+      "y": 3
+    },
+    {
+      "x": 9,
+      "y": 0
+    },
+    {
+      "x": 7,
+      "y": 0
+    },
+    {
+      "x": 5,
+      "y": 6
+    },
+    {
+      "x": 4,
+      "y": 6
+    },
+    {
+      "x": 4,
+      "y": 5
+    },
+    {
+      "x": 5,
+      "y": 5
+    },
+    {
+      "x": 5,
+      "y": 4
+    }
+  ],
+  "pieces": [
+    {
+      "id": "bf08b70d-9498-46d4-a982-b439fb5c2a56",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 0,
+        "y": 8
+      },
+      "tiles": [
+        {
+          "x": 0,
+          "y": 8
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "f82fa0cc-9f27-40fb-86a6-3f0ba2b625e7",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 0,
+        "y": 9
+      },
+      "tiles": [
+        {
+          "x": 0,
+          "y": 9
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "f16a482a-5457-4c76-a4e3-5490ab99fe4d",
+      "name": "Spawn",
+      "team": "player",
+      "headPosition": {
+        "x": 1,
+        "y": 8
+      },
+      "tiles": [
+        {
+          "x": 1,
+          "y": 8
+        }
+      ],
+      "rarity": 1
+    },
+    {
+      "id": "0bedde74-29e3-4f45-8c09-cf7a889cd949",
+      "name": "Love Bomb",
+      "team": "enemy",
+      "headPosition": {
+        "x": 9,
+        "y": 5
+      },
+      "tiles": [
+        {
+          "x": 9,
+          "y": 5
+        }
+      ],
+      "rarity": 5
+    },
+    {
+      "id": "96610bce-72c7-40f7-9f46-22a374ec1572",
+      "name": "Lion",
+      "team": "enemy",
+      "headPosition": {
+        "x": 10,
+        "y": 9
+      },
+      "tiles": [
+        {
+          "x": 10,
+          "y": 9
+        },
+        {
+          "x": 10,
+          "y": 10
+        }
+      ],
+      "rarity": 5
+    },
+    {
+      "id": "df634439-1144-486f-9f52-8f68ba01fb2b",
+      "name": "Dragon",
+      "team": "enemy",
+      "headPosition": {
+        "x": 10,
+        "y": 4
+      },
+      "tiles": [
+        {
+          "x": 10,
+          "y": 4
+        }
+      ],
+      "rarity": 5
+    },
+    {
+      "id": "b9909bbe-089b-4139-bfc2-7a0981819388",
+      "name": "Dragon",
+      "team": "enemy",
+      "headPosition": {
+        "x": 6,
+        "y": 7
+      },
+      "tiles": [
+        {
+          "x": 6,
+          "y": 7
+        },
+        {
+          "x": 7,
+          "y": 7
+        },
+        {
+          "x": 7,
+          "y": 6
+        }
+      ],
+      "rarity": 5
+    },
+    {
+      "id": "2ba44941-b8af-43fd-b45f-107a2c04d8be",
+      "name": "Dragon",
+      "team": "enemy",
+      "headPosition": {
+        "x": 2,
+        "y": 5
+      },
+      "tiles": [
+        {
+          "x": 2,
+          "y": 5
+        },
+        {
+          "x": 2,
+          "y": 4
+        },
+        {
+          "x": 3,
+          "y": 4
+        }
+      ],
+      "rarity": 5
+    },
+    {
+      "id": "e5a41d72-33de-4d10-8c98-4b93108106c6",
+      "name": "Firebrand",
+      "team": "enemy",
+      "headPosition": {
+        "x": 4,
+        "y": 11
+      },
+      "tiles": [
+        {
+          "x": 4,
+          "y": 11
+        },
+        {
+          "x": 5,
+          "y": 11
+        },
+        {
+          "x": 6,
+          "y": 11
+        }
+      ],
+      "rarity": 5
+    },
+    {
+      "id": "e49f96c1-cfae-4ead-8e13-a78a1b6f2447",
+      "name": "Copycat",
+      "team": "enemy",
+      "headPosition": {
+        "x": 9,
+        "y": 11
+      },
+      "tiles": [
+        {
+          "x": 9,
+          "y": 11
+        },
+        {
+          "x": 10,
+          "y": 11
+        }
+      ],
+      "rarity": 5
+    },
+    {
+      "id": "e75fd89a-c7cd-4aca-83ea-63569b3231d6",
+      "name": "Arch Daemon",
+      "team": "enemy",
+      "headPosition": {
+        "x": 10,
+        "y": 0
+      },
+      "tiles": [
+        {
+          "x": 10,
+          "y": 0
+        }
+      ],
+      "rarity": 5
+    },
+    {
+      "id": "086e9bd0-7e71-4044-afa1-d62724d485a8",
+      "name": "Firewall",
+      "team": "enemy",
+      "headPosition": {
+        "x": 5,
+        "y": 4
+      },
+      "tiles": [
+        {
+          "x": 5,
+          "y": 4
+        },
+        {
+          "x": 5,
+          "y": 5
+        },
+        {
+          "x": 5,
+          "y": 6
+        },
+        {
+          "x": 4,
+          "y": 6
+        },
+        {
+          "x": 4,
+          "y": 5
+        }
+      ],
+      "rarity": 4
+    },
+    {
+      "id": "8723e84f-0c4b-44e9-817e-88f69a1db317",
+      "name": "Firewall",
+      "team": "enemy",
+      "headPosition": {
+        "x": 5,
+        "y": 1
+      },
+      "tiles": [
+        {
+          "x": 5,
+          "y": 1
+        },
+        {
+          "x": 4,
+          "y": 1
+        },
+        {
+          "x": 3,
+          "y": 1
+        }
+      ],
+      "rarity": 4
+    },
+    {
+      "id": "8dd9bf2a-9e85-498b-8db3-79a2b79c750c",
+      "name": "Firewall",
+      "team": "enemy",
+      "headPosition": {
+        "x": 5,
+        "y": 10
+      },
+      "tiles": [
+        {
+          "x": 5,
+          "y": 10
+        },
+        {
+          "x": 6,
+          "y": 10
+        },
+        {
+          "x": 7,
+          "y": 10
+        },
+        {
+          "x": 7,
+          "y": 9
+        }
+      ],
+      "rarity": 4
+    },
+    {
+      "id": "3ece2d00-bb49-4e69-8dfb-b65867da66a4",
+      "name": "Firewall",
+      "team": "enemy",
+      "headPosition": {
+        "x": 3,
+        "y": 9
+      },
+      "tiles": [
+        {
+          "x": 3,
+          "y": 9
+        },
+        {
+          "x": 2,
+          "y": 9
+        }
+      ],
+      "rarity": 4
+    }
+  ]
+}
+export const sector5levels:Level[] = [scorch, fount, heat, bridge, charm, artillery, ritual, graveyard, glabs, pin, bait, stopStart, track, safehouse, slope, canopy, bunker, area51];//18

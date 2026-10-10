@@ -8287,4 +8287,4 @@ const vault:Level = {
     }
   ]
 }
-export const sector4levels: Level[] = [vault, trench, shock, newWorld, heavy, jungle, lockdown, safari, deep, pyramid, whack, conveyer, suprise, minesweeper, stampede, shore, excape];//17
+export const sector4Levels: Level[] = [vault, trench, shock, newWorld, heavy, jungle, lockdown, safari, deep, pyramid, whack, conveyer, suprise, minesweeper, stampede, shore, excape];//17

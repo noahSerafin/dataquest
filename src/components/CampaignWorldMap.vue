@@ -12,13 +12,14 @@ import { allPieces } from "../Pieces";
 import { allAdmins } from "../AdminPrograms";
 import { allOSes } from "../Operators";
 import { companies, shopCompany, bossCompany, playerCompany } from "../companies";
-import { level0Levels } from "../campaignLevels/sector0Lvls.ts";
-import { level2Levels } from "../level2Levels";
-import { level3Levels } from "../level3Levels";
-import { level4Levels } from "../level4Levels";
-import { level5Levels } from "../level5Levels";
-import { level6Levels } from "../level6Levels";
-import { testLevels } from "../levels";
+import { sector0Levels } from "../campaignLevels/sector0Lvls.ts";
+import { sector1Levels } from "../campaignLevels/sector1Lvls.ts";
+import { sector2Levels } from "../campaignLevels/sector2Lvls.ts";
+import { sector3Levels } from "../campaignLevels/sector3Lvls.ts";
+import { sector4Levels } from "../campaignLevels/sector4Lvls.ts";
+import { sector5Levels } from "../campaignLevels/sector5Lvls.ts";
+import { sector6Levels } from "../campaignLevels/sector6Lvls.ts";
+
 import { makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, getSpriteStyle } from "../helperFunctions";
 import BlueprintView from "./BlueprintView.vue";
 import ItemView from "./ItemView.vue";
@@ -184,7 +185,7 @@ function enterNode(node: WorldNode) {
 
 // Hydrate the static map and generate skip rewards synchronously before initial render
 const allCompanyOptions = [shopCompany, bossCompany, playerCompany, ...companies];
-const allGameLevels = [...level0Levels, ...level2Levels, ...level3Levels, ...level4Levels, ...level5Levels, ...level6Levels, ...testLevels];
+const allGameLevels = [...sector0Levels, ...sector1Levels, ...sector2Levels, ...sector3Levels, ...sector4Levels, ...sector5Levels, ...sector6Levels];
 
 for (const node of Object.values(props.staticWorld.nodes)) {
     if (node.company && typeof node.company === 'string') {

@@ -3655,4 +3655,4 @@ const split:Level = {
     }
   ]
 }
-export const level1Levels: Level[] = [split, divide, cover, kitchen, fort, feast, trick, ratatouille, hive, sewer, stairs, danger, chokepoints]//10/13
+export const sector1Levels: Level[] = [split, divide, cover, kitchen, fort, feast, trick, ratatouille, hive, sewer, stairs, danger, chokepoints]//10/13

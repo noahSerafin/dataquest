@@ -3186,4 +3186,4 @@ export const br = {
     }
   ]
 }
-export const level0Levels: Level[] = [arena, castled, pen, br, river, cave, alley, gauntlet, penopticon, stream, halfcourt, tumbler, pachinko];
+export const sector0Levels: Level[] = [arena, castled, pen, br, river, cave, alley, gauntlet, penopticon, stream, halfcourt, tumbler, pachinko];

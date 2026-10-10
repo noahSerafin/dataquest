@@ -9250,4 +9250,4 @@ const scorch:Level = {
     }
   ]
 }
-export const sector5levels:Level[] = [scorch, fount, heat, bridge, charm, artillery, ritual, graveyard, glabs, pin, bait, stopStart, track, safehouse, slope, canopy, bunker, area51];//18
+export const sector5Levels:Level[] = [scorch, fount, heat, bridge, charm, artillery, ritual, graveyard, glabs, pin, bait, stopStart, track, safehouse, slope, canopy, bunker, area51];//18

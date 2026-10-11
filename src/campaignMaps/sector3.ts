@@ -33,7 +33,7 @@ export const sector3 = {
         "node_wpzs572tz",
         "node_x6s2c7b8o"
       ],
-      "difficultyMod": 3,
+      "difficultyMod": 0,
       "reward": 5,
       "company": "Starlane Tech",
       "pathOffsets": {
@@ -66,7 +66,7 @@ export const sector3 = {
       "next": [
         "node_zowkqtb1z"
       ],
-      "difficultyMod": 3,
+      "difficultyMod": 0,
       "reward": 4,
       "company": "Flyby Surveilance",
       "pathOffsets": {
@@ -91,7 +91,7 @@ export const sector3 = {
         "node_8509fvb3x",
         "node_i4bakdvwj"
       ],
-      "difficultyMod": 3,
+      "difficultyMod": 0,
       "reward": 5,
       "company": "Nightbridge Corp",
       "pathOffsets": {
@@ -117,7 +117,7 @@ export const sector3 = {
         "node_2yn3k75s0",
         "node_l0y2h5msh"
       ],
-      "difficultyMod": 4,
+      "difficultyMod": 1,
       "reward": 7,
       "company": "Red Sky Dynamics",
       "pathOffsets": {
@@ -152,7 +152,7 @@ export const sector3 = {
       "next": [
         "node_cg5ykb73i"
       ],
-      "difficultyMod": 3,
+      "difficultyMod": 0,
       "reward": 5,
       "company": "Meridian Security Inc.",
       "pathOffsets": {
@@ -175,7 +175,7 @@ export const sector3 = {
       "next": [
         "node_oljhbd0kz"
       ],
-      "difficultyMod": 3,
+      "difficultyMod": 0,
       "reward": 5,
       "company": "Flyby Surveilance",
       "pathOffsets": {
@@ -201,7 +201,7 @@ export const sector3 = {
         "node_l0y2h5msh",
         "node_5svll8h4l"
       ],
-      "difficultyMod": 3,
+      "difficultyMod": 0,
       "reward": 5,
       "company": "Longhouse Web Services",
       "levelName": "The Crossroads"
@@ -216,7 +216,7 @@ export const sector3 = {
       "next": [
         "node_qgsx9gmcp"
       ],
-      "difficultyMod": 3,
+      "difficultyMod": 0,
       "reward": 5,
       "company": "Monkey Media",
       "pathOffsets": {
@@ -403,7 +403,7 @@ export const sector3 = {
         "node_fveh4qswo",
         "node_dfnmvg2kb"
       ],
-      "difficultyMod": 3,
+      "difficultyMod": 0,
       "reward": 5,
       "company": "Tsukimi Group",
       "pathOffsets": {
@@ -433,7 +433,7 @@ export const sector3 = {
         "node_fveh4qswo",
         "node_sq8vko80h"
       ],
-      "difficultyMod": 3,
+      "difficultyMod": 0,
       "reward": 5,
       "company": "Sakura Robotics",
       "pathOffsets": {

@@ -33,7 +33,7 @@ export const sector4 = {
         "node_xisv7e5qk",
         "node_wdotzdbhm"
       ],
-      "difficultyMod": 4,
+      "difficultyMod": 0,
       "reward": 7,
       "company": "Panda Holdings LLC",
       "pathOffsets": {
@@ -58,7 +58,7 @@ export const sector4 = {
         "node_fcecfhwlq",
         "node_wdotzdbhm"
       ],
-      "difficultyMod": 4,
+      "difficultyMod": 0,
       "reward": 7,
       "company": "Whiteflower Global",
       "pathOffsets": {
@@ -87,7 +87,7 @@ export const sector4 = {
         "node_b4mndi5op",
         "node_qaiduwrcl"
       ],
-      "difficultyMod": 5,
+      "difficultyMod": 1,
       "reward": 10,
       "company": "Whiteflower Global",
       "pathOffsets": {
@@ -111,7 +111,7 @@ export const sector4 = {
         "node_n2l5opypj",
         "node_j78b4u1es"
       ],
-      "difficultyMod": 4,
+      "difficultyMod": 0,
       "reward": 7,
       "company": "Whiteflower Global",
       "pathOffsets": {
@@ -149,7 +149,7 @@ export const sector4 = {
       "next": [
         "node_df6ic6o0o"
       ],
-      "difficultyMod": 4,
+      "difficultyMod": 0,
       "reward": 7,
       "company": "Whiteflower Global",
       "bossName": "Biohazard",
@@ -176,7 +176,7 @@ export const sector4 = {
         "node_o9qn1a141",
         "node_s1ffnxv0q"
       ],
-      "difficultyMod": 4,
+      "difficultyMod": 0,
       "reward": 7,
       "company": "Red Sky Dynamics",
       "pathOffsets": {
@@ -209,7 +209,7 @@ export const sector4 = {
         "node_z4pjamdgy",
         "node_fcecfhwlq"
       ],
-      "difficultyMod": 4,
+      "difficultyMod": 0,
       "reward": 7,
       "company": "Monkey Media",
       "pathOffsets": {
@@ -242,7 +242,7 @@ export const sector4 = {
       "next": [
         "node_j9moyzl66"
       ],
-      "difficultyMod": 5,
+      "difficultyMod": 1,
       "reward": 10,
       "company": "Nightbridge Corp",
       "levelName": "The New World"
@@ -258,7 +258,7 @@ export const sector4 = {
         "node_lojsciht2",
         "node_o9qn1a141"
       ],
-      "difficultyMod": 4,
+      "difficultyMod": 0,
       "reward": 7,
       "company": "Meridian Security Inc.",
       "levelName": "Whack-a-mole"
@@ -274,7 +274,7 @@ export const sector4 = {
         "node_nh1iovxyk",
         "node_t7vhu42fa"
       ],
-      "difficultyMod": 4,
+      "difficultyMod": 0,
       "reward": 7,
       "company": "Red Sky Dynamics",
       "pathOffsets": {
@@ -304,7 +304,7 @@ export const sector4 = {
         "node_n2l5opypj",
         "node_wlt5pgnds"
       ],
-      "difficultyMod": 4,
+      "difficultyMod": 0,
       "reward": 7,
       "company": "Red Sky Dynamics",
       "pathOffsets": {
@@ -336,7 +336,7 @@ export const sector4 = {
       "next": [
         "node_byftql5ob"
       ],
-      "difficultyMod": 4,
+      "difficultyMod": 0,
       "reward": 7,
       "company": "Red Sky Dynamics",
       "bossName": "Factory",
@@ -359,7 +359,7 @@ export const sector4 = {
       "next": [
         "node_wjy6wpra5"
       ],
-      "difficultyMod": 4,
+      "difficultyMod": 0,
       "reward": 7,
       "company": "Flyby Surveilance",
       "bossName": "Blackmail",
@@ -375,7 +375,7 @@ export const sector4 = {
       "next": [
         "node_z6pbzj1pz"
       ],
-      "difficultyMod": 4,
+      "difficultyMod": 0,
       "reward": 7,
       "company": "Red Sky Dynamics",
       "bossName": "Encryption",
@@ -398,7 +398,7 @@ export const sector4 = {
         "y": 740
       },
       "next": [],
-      "difficultyMod": 4,
+      "difficultyMod": 0,
       "reward": 7,
       "company": "Red Sky Dynamics",
       "bossName": "Eclipse",
@@ -415,7 +415,7 @@ export const sector4 = {
         "node_8icgxipc6",
         "node_52tkn1bjd"
       ],
-      "difficultyMod": 5,
+      "difficultyMod": 1,
       "reward": 10,
       "company": "Sakura Robotics",
       "pathOffsets": {
@@ -448,7 +448,7 @@ export const sector4 = {
         "node_52tkn1bjd",
         "node_wlt5pgnds"
       ],
-      "difficultyMod": 5,
+      "difficultyMod": 1,
       "reward": 10,
       "company": "Tsukimi Group",
       "pathOffsets": {

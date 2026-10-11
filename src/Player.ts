@@ -4,7 +4,7 @@ import { Admin } from "./AdminPrograms";
 import { StorageManager } from "./StorageManager";
 
 export class Player {
-    difficulty: number = 1;
+    difficulty: number = 0;
     extraDifficulty: number = 0;
     stake: number;
     bossesCleared: number = 0;

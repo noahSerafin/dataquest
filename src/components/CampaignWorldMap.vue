@@ -434,9 +434,66 @@ const mapOffsetX = computed(() => {
   return minX === Infinity ? 0 : 50 - minX;
 });
 
+const mapOffsetY = computed(() => {
+  let minY = Infinity;
+  const nodes = props.staticWorld.nodes;
+  
+  Object.values(nodes).forEach(node => {
+      minY = Math.min(minY, node.position.y);
+  });
+  
+  Object.values(nodes).forEach(node => {
+    node.next.forEach(nextId => {
+      const target = nodes[nextId];
+      if (target) {
+        const c1x = node.position.x + (node.type === 'level' ? 20 : 18);
+        const c1y = node.position.y + (node.type === 'level' ? 35 : 18);
+        const c2x = target.position.x + (target.type === 'level' ? 20 : 18);
+        const c2y = target.position.y + (target.type === 'level' ? 35 : 18);
+        
+        const y1 = c1y;
+        const y2 = c2y;
+        
+        const settings = (node as any).pathOffsets && (node as any).pathOffsets[nextId] !== undefined ? (node as any).pathOffsets[nextId] : {};
+        const isObj = typeof settings === 'object';
+        const type = isObj ? (settings.type || 'HDVDH') : 'HDVDH';
+        
+        const dxRaw = c2x - c1x;
+        const dyRaw = y2 - y1;
+        const dsDefault = Math.min(Math.abs(dxRaw), Math.abs(dyRaw)) * 0.1;
+        
+        let ds1 = isObj && settings.ds1 !== undefined ? settings.ds1 : dsDefault;
+        let ds2 = isObj && settings.ds2 !== undefined ? settings.ds2 : dsDefault;
+        
+        if (type === 'HDVDH') {
+          const offsetY1 = isObj ? (settings.y1 || 0) : 0;
+          const offsetY2 = isObj ? (settings.y2 || 0) : 0;
+          const y1Adj = y1 + offsetY1;
+          const y2Adj = y2 + offsetY2;
+          const dyTotal = y2Adj - y1Adj;
+          const sy = Math.sign(dyTotal) || 1;
+          const yc = y1Adj + sy * ds1;
+          const yd = y2Adj - sy * ds2;
+          minY = Math.min(minY, y1, y1Adj, yc, yd, y2Adj, y2);
+        } else {
+          const offsetY = isObj ? (settings.y || 0) : (typeof settings === 'number' ? settings : 0);
+          const yb = y1 + dyRaw / 2 + offsetY;
+          const sy1 = Math.sign(yb - y1) || 1;
+          const sy2 = Math.sign(y2 - yb) || 1;
+          const ya = yb - sy1 * ds1;
+          const yd = yb + sy2 * ds2;
+          minY = Math.min(minY, y1, ya, yb, yd, y2);
+        }
+      }
+    });
+  });
+  
+  return minY === Infinity ? 0 : 20 - minY;
+});
+
 function getCenter(node: WorldNode) {
-    if (node.type === 'level') return { x: node.position.x + 20 + mapOffsetX.value, y: node.position.y + 35 };
-    return { x: node.position.x + 18 + mapOffsetX.value, y: node.position.y + 18 };
+    if (node.type === 'level') return { x: node.position.x + 20 + mapOffsetX.value, y: node.position.y + 35 + mapOffsetY.value };
+    return { x: node.position.x + 18 + mapOffsetX.value, y: node.position.y + 18 + mapOffsetY.value };
 }
 
 // Drawing paths exactly as in WorldEditor
@@ -600,7 +657,7 @@ function handleMapMouseUpOrLeave() {
                 visited: isNodeCleared(node.id) && node.type !== 'start' && node.type !== 'shop'
             }" :style="{
                 left: (node.position.x + mapOffsetX) + 'px',
-                top: node.position.y + 'px',
+                top: (node.position.y + mapOffsetY) + 'px',
                 backgroundColor: node.type === 'level' && getNodeCompany(node) ? getNodeCompany(node)!.tileColor : undefined,
                 borderColor: node.type === 'level' && getNodeCompany(node) ? getNodeCompany(node)!.edgeColor : undefined
             }" @click="trySelect(node)">
@@ -665,7 +722,7 @@ function handleMapMouseUpOrLeave() {
                 </div>
             </div>
             
-            <svg class="map-lines" style="position: absolute; inset: 0; width: max(100vw, 3000px); height: 100vh; pointer-events: none;">
+            <svg class="map-lines" style="position: absolute; inset: 0; width: max(100vw, 3000px); height: max(100vh, 3000px); pointer-events: none;">
                 <g v-for="(path, i) in connections" :key="i">
                     <path :d="path.d" fill="none" :stroke="path.isActive ? '#34ffff' : '#9CC954'"
                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />

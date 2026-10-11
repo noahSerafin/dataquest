@@ -4535,7 +4535,7 @@ class Banner extends Piece {
 
   async special(targets: Piece[]): Promise<void> {
     for (const t of targets) {
-      if (t.team === this.team) {
+      if (t.team === this.team && t.id !== this.id) {
         t.addTempModifier({ attack: this.getStat('attack') })
       }
     }

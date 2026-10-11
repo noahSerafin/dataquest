@@ -40,7 +40,7 @@ export const sector1 = {
         "node_399ayz3qf",
         "node_kwenvvhsu"
       ],
-      "difficultyMod": 1,
+      "difficultyMod": 0,
       "reward": 2,
       "company": "Meridian Security Inc.",
       "pathOffsets": {
@@ -75,7 +75,7 @@ export const sector1 = {
         "node_qs0fbko7z",
         "node_ywvwhu1ce"
       ],
-      "difficultyMod": 2,
+      "difficultyMod": 1,
       "reward": 3,
       "company": "Longhouse Web Services",
       "pathOffsets": {
@@ -142,7 +142,7 @@ export const sector1 = {
       "next": [
         "node_n3120xi39"
       ],
-      "difficultyMod": 1,
+      "difficultyMod": 0,
       "reward": 2,
       "company": "Flyby Surveilance",
       "levelName": "Take Cover"
@@ -157,7 +157,7 @@ export const sector1 = {
       "next": [
         "node_vzmlxo9e6"
       ],
-      "difficultyMod": 1,
+      "difficultyMod": 0,
       "reward": 2,
       "company": "Whiteflower Global",
       "pathOffsets": {
@@ -180,7 +180,7 @@ export const sector1 = {
         "node_2mg40n4at",
         ""
       ],
-      "difficultyMod": 2,
+      "difficultyMod": 1,
       "reward": 3,
       "company": "Flyby Surveilance",
       "pathOffsets": {
@@ -203,7 +203,7 @@ export const sector1 = {
         "node_vzmlxo9e6",
         "node_1o9y3xy33"
       ],
-      "difficultyMod": 1,
+      "difficultyMod": 0,
       "reward": 2,
       "company": "Cook.io",
       "pathOffsets": {
@@ -231,7 +231,7 @@ export const sector1 = {
         "node_1o9y3xy33",
         "node_m3cv37rwi"
       ],
-      "difficultyMod": 1,
+      "difficultyMod": 0,
       "reward": 1,
       "company": "Monkey Media",
       "pathOffsets": {
@@ -290,7 +290,7 @@ export const sector1 = {
       "next": [
         "node_p2awqy8u9"
       ],
-      "difficultyMod": 1,
+      "difficultyMod": 0,
       "reward": 2,
       "company": "Meridian Security Inc.",
       "pathOffsets": {
@@ -312,7 +312,7 @@ export const sector1 = {
       "next": [
         "node_wo7yv59o3"
       ],
-      "difficultyMod": 2,
+      "difficultyMod": 1,
       "reward": 3,
       "company": "Nightbridge Corp",
       "levelName": "The Sewer"
@@ -327,7 +327,7 @@ export const sector1 = {
       "next": [
         "node_ie40v3v37"
       ],
-      "difficultyMod": 1,
+      "difficultyMod": 0,
       "reward": 2,
       "company": "Nightbridge Corp",
       "pathOffsets": {
@@ -349,7 +349,7 @@ export const sector1 = {
       "next": [
         "node_m3cv37rwi"
       ],
-      "difficultyMod": 1,
+      "difficultyMod": 0,
       "reward": 2,
       "company": "Saturn Solutions",
       "pathOffsets": {

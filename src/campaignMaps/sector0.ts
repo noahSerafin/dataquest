@@ -162,7 +162,7 @@ export const sector0 = {
         "node_ysd75k5m7"
       ],
       "difficultyMod": 2,
-      "reward": 1,
+      "reward": 3,
       "company": "Saturn Solutions",
       "pathOffsets": {
         "node_5i9h9b6ti": {
@@ -225,7 +225,7 @@ export const sector0 = {
         "y": 280
       },
       "next": [],
-      "difficultyMod": 0,
+      "difficultyMod": 1,
       "reward": 5,
       "company": "Saturn Solutions",
       "bossName": "North Wind",

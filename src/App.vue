@@ -1029,12 +1029,14 @@ async function handleProceed() {
     if (admin.onRoundEnd) admin.onRoundEnd(bossAdmins.value);
   };
   openSummary(false);
-  incrementMapProgress();
-  if (player.value.mapProgress >= 3) {
-    await increaseDifficulty();// make sure new world is generated before we save
-    player.value.mapProgress = 0
-    if (player.value.bossesCleared > 6) {
-      player.value.hasWonGame = false;
+  if (currentAppMode.value !== 'campaign') {
+    incrementMapProgress();
+    if (player.value.mapProgress >= 3) {
+      await increaseDifficulty();// make sure new world is generated before we save
+      player.value.mapProgress = 0;
+      if (player.value.bossesCleared > 6) {
+        player.value.hasWonGame = false;
+      }
     }
   }
   showBoard.value = false;
@@ -1062,6 +1064,7 @@ async function handleProceed() {
 function loadNextSector() {
   if (campaignSectorIndex.value < allCampaignSectors.length - 1) {
     campaignSectorIndex.value++;
+    player.value.difficulty ++
     const nextSector = allCampaignSectors[campaignSectorIndex.value];
     campaignWorldMap.value = {
       nodes: JSON.parse(JSON.stringify(nextSector.nodes)),

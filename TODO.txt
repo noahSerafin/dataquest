@@ -1,3 +1,7 @@
+add retry button to campaign, warning that it will reset the node
++ 1 from past nodes
+Banner buffs itself
+you win appearing on last node
 Test rogue mode is not broken
 campaign is raising security level every level, not just after bosses - (make all nodes security 0 or 1 if hard?)
 add a previous sector btn, track shop purchases in save
@@ -5,6 +9,7 @@ add a previous sector btn, track shop purchases in save
 overworld map?
 background colours for node maps (use company owner)//levels array (make map have a starting copmany)
 
+sector 0, 2 too wide
 cosmetic cicuitboard pieces
 circuitboard map edge non square (contour path edges)
 Review appearance of special nodes vs reward nodes

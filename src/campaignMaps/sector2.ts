@@ -36,7 +36,7 @@ export const sector2 = {
       "next": [
         "node_t43cf0g1r"
       ],
-      "difficultyMod": 2,
+      "difficultyMod": 0,
       "reward": 3,
       "company": "Tsukimi Group",
       "levelName": "The Guardhouse"
@@ -52,7 +52,7 @@ export const sector2 = {
         "node_et3jrxgh5",
         "node_fq41u6f6a"
       ],
-      "difficultyMod": 2,
+      "difficultyMod": 0,
       "reward": 3,
       "company": "Meridian Security Inc.",
       "pathOffsets": {
@@ -75,7 +75,7 @@ export const sector2 = {
         "node_95emidsfs",
         "node_cb62tuat2"
       ],
-      "difficultyMod": 2,
+      "difficultyMod": 0,
       "reward": 3,
       "company": "Zenith Ltd.",
       "pathOffsets": {
@@ -99,7 +99,7 @@ export const sector2 = {
       "next": [
         "node_tew43kmpq"
       ],
-      "difficultyMod": 3,
+      "difficultyMod": 1,
       "reward": 5,
       "company": "Tsukimi Group",
       "pathOffsets": {
@@ -124,7 +124,7 @@ export const sector2 = {
         "node_t43cf0g1r",
         "node_q0erjp0ve"
       ],
-      "difficultyMod": 2,
+      "difficultyMod": 0,
       "reward": 3,
       "company": "Tsukimi Group",
       "pathOffsets": {
@@ -186,8 +186,8 @@ export const sector2 = {
         "node_mem8ck1wh",
         "node_qwmk7rad0"
       ],
-      "difficultyMod": 3,
-      "reward": 3,
+      "difficultyMod": 1,
+      "reward": 5,
       "company": "Starlane Tech",
       "pathOffsets": {
         "node_qwmk7rad0": {
@@ -233,7 +233,7 @@ export const sector2 = {
         "node_317fdw6bf",
         "node_e86rpdxb0"
       ],
-      "difficultyMod": 2,
+      "difficultyMod": 0,
       "reward": 3,
       "company": "Zenith Ltd.",
       "pathOffsets": {
@@ -289,7 +289,7 @@ export const sector2 = {
         "node_i59m44090",
         "node_2kbqcjn3r"
       ],
-      "difficultyMod": 2,
+      "difficultyMod": 0,
       "reward": 3,
       "company": "Starlane Tech",
       "pathOffsets": {
@@ -352,7 +352,7 @@ export const sector2 = {
       "next": [
         "node_317fdw6bf"
       ],
-      "difficultyMod": 2,
+      "difficultyMod": 0,
       "reward": 3,
       "company": "Monkey Media",
       "pathOffsets": {
@@ -375,7 +375,7 @@ export const sector2 = {
         "node_jko4xxcwi",
         "node_4tzizzviv"
       ],
-      "difficultyMod": 3,
+      "difficultyMod": 1,
       "reward": 5,
       "company": "Meridian Security Inc.",
       "pathOffsets": {

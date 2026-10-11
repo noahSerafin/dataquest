@@ -40,3 +40,5 @@ export const characters: Record<string, Character> = {
 };
 
 //icon ids for player: 511, 512, 513, 517, 473, 459, 460, 461, 462, 463, 464, 505, 468
+
+////JEANS, U+1F456 

@@ -45,7 +45,7 @@ export const sector6 = {
         "node_bu507hh9s",
         "node_wenvp3rl6"
       ],
-      "difficultyMod": 6,
+      "difficultyMod": 0,
       "reward": 12,
       "company": "Saturn Solutions",
       "pathOffsets": {
@@ -73,7 +73,7 @@ export const sector6 = {
         "node_l928zoo3m",
         "node_z5lyk0k50"
       ],
-      "difficultyMod": 7,
+      "difficultyMod": 1,
       "reward": 15,
       "company": "Red Sky Dynamics",
       "pathOffsets": {
@@ -100,7 +100,7 @@ export const sector6 = {
       "next": [
         "node_pf4657caq"
       ],
-      "difficultyMod": 6,
+      "difficultyMod": 0,
       "reward": 12,
       "company": "Whiteflower Global",
       "pathOffsets": {
@@ -124,7 +124,7 @@ export const sector6 = {
       "next": [
         "node_yikxd4j2v"
       ],
-      "difficultyMod": 7,
+      "difficultyMod": 1,
       "reward": 15,
       "company": "Starlane Tech",
       "pathOffsets": {
@@ -149,7 +149,7 @@ export const sector6 = {
         "node_bxu61nry7",
         "node_4xajc39m2"
       ],
-      "difficultyMod": 6,
+      "difficultyMod": 0,
       "reward": 12,
       "company": "Cook.io",
       "pathOffsets": {
@@ -182,7 +182,7 @@ export const sector6 = {
         "node_f98u869wa",
         "node_f6rjgz0es"
       ],
-      "difficultyMod": 6,
+      "difficultyMod": 0,
       "reward": 12,
       "company": "Tsukimi Group",
       "pathOffsets": {
@@ -206,7 +206,7 @@ export const sector6 = {
       "next": [
         "node_p979uq6y5"
       ],
-      "difficultyMod": 6,
+      "difficultyMod": 0,
       "reward": 12,
       "company": "Nightbridge Corp",
       "pathOffsets": {
@@ -229,7 +229,7 @@ export const sector6 = {
         "node_0dp3124cm",
         "node_12xatlflv"
       ],
-      "difficultyMod": 6,
+      "difficultyMod": 0,
       "reward": 12,
       "company": "Sakura Robotics",
       "pathOffsets": {
@@ -259,7 +259,7 @@ export const sector6 = {
         "node_4a1kwjqac",
         "node_iu7zrh5d8"
       ],
-      "difficultyMod": 6,
+      "difficultyMod": 0,
       "reward": 12,
       "company": "Panda Holdings LLC",
       "pathOffsets": {
@@ -285,7 +285,7 @@ export const sector6 = {
       "next": [
         "node_l928zoo3m"
       ],
-      "difficultyMod": 6,
+      "difficultyMod": 0,
       "reward": 12,
       "company": "Red Sky Dynamics",
       "pathOffsets": {
@@ -308,7 +308,7 @@ export const sector6 = {
         "node_iu7zrh5d8",
         "node_o5l1ab8qd"
       ],
-      "difficultyMod": 6,
+      "difficultyMod": 0,
       "reward": 12,
       "company": "Flyby Surveilance",
       "pathOffsets": {
@@ -332,7 +332,7 @@ export const sector6 = {
         "node_wz9uluid0",
         "node_fdt8fby9k"
       ],
-      "difficultyMod": 6,
+      "difficultyMod": 0,
       "reward": 12,
       "company": "Meridian Security Inc.",
       "pathOffsets": {
@@ -366,7 +366,7 @@ export const sector6 = {
       "next": [
         "node_drlxdjmql"
       ],
-      "difficultyMod": 6,
+      "difficultyMod": 0,
       "reward": 12,
       "company": "Saturn Solutions",
       "bossName": "Fog of War",
@@ -391,7 +391,7 @@ export const sector6 = {
       "next": [
         "node_9cg8hh4qm"
       ],
-      "difficultyMod": 6,
+      "difficultyMod": 0,
       "reward": 12,
       "company": "Red Sky Dynamics",
       "bossName": "Wrath",
@@ -414,7 +414,7 @@ export const sector6 = {
       "next": [
         "node_zys2jpfj2"
       ],
-      "difficultyMod": 6,
+      "difficultyMod": 0,
       "reward": 12,
       "company": "Whiteflower Global",
       "bossName": "Omega",
@@ -438,7 +438,7 @@ export const sector6 = {
       "next": [
         "node_8147480tz"
       ],
-      "difficultyMod": 6,
+      "difficultyMod": 0,
       "reward": 12,
       "company": "Flyby Surveilance",
       "bossName": "REDACTED",
@@ -461,7 +461,7 @@ export const sector6 = {
       "next": [
         "node_4oedahaep"
       ],
-      "difficultyMod": 6,
+      "difficultyMod": 0,
       "reward": 12,
       "company": "Zenith Ltd.",
       "bossName": "Don't look at the sun",
@@ -486,7 +486,7 @@ export const sector6 = {
       "next": [
         "node_12lj34xa0"
       ],
-      "difficultyMod": 6,
+      "difficultyMod": 0,
       "reward": 12,
       "company": "Whiteflower Global",
       "bossName": "Nightfall",

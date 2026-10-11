@@ -53,7 +53,7 @@ export const sector5 = {
       "next": [
         "node_b51rxzfvu"
       ],
-      "difficultyMod": 5,
+      "difficultyMod": 0,
       "reward": 10,
       "company": "Nightbridge Corp",
       "levelName": "Stop Start"
@@ -69,7 +69,7 @@ export const sector5 = {
         "node_p9kc1mub8",
         "node_sestiht90"
       ],
-      "difficultyMod": 5,
+      "difficultyMod": 0,
       "reward": 10,
       "company": "Panda Holdings LLC",
       "pathOffsets": {
@@ -96,7 +96,7 @@ export const sector5 = {
       "next": [
         "node_wgpsgril0"
       ],
-      "difficultyMod": 5,
+      "difficultyMod": 0,
       "reward": 10,
       "company": "Panda Holdings LLC",
       "pathOffsets": {
@@ -122,7 +122,7 @@ export const sector5 = {
         "node_cj9wvun5m",
         "node_3o1iqjb0w"
       ],
-      "difficultyMod": 5,
+      "difficultyMod": 0,
       "reward": 10,
       "company": "Tsukimi Group",
       "pathOffsets": {
@@ -149,7 +149,7 @@ export const sector5 = {
       "next": [
         "node_9rr9tawqy"
       ],
-      "difficultyMod": 5,
+      "difficultyMod": 0,
       "reward": 10,
       "company": "Monkey Media",
       "pathOffsets": {
@@ -173,7 +173,7 @@ export const sector5 = {
         "node_2ndgxgli8",
         "node_uaaktj6hk"
       ],
-      "difficultyMod": 5,
+      "difficultyMod": 0,
       "reward": 10,
       "company": "Panda Holdings LLC",
       "pathOffsets": {
@@ -200,7 +200,7 @@ export const sector5 = {
       "next": [
         "node_cj9wvun5m"
       ],
-      "difficultyMod": 5,
+      "difficultyMod": 0,
       "reward": 10,
       "company": "Zenith Ltd.",
       "pathOffsets": {
@@ -224,7 +224,7 @@ export const sector5 = {
         "node_a79ecbr08",
         "node_sestiht90"
       ],
-      "difficultyMod": 6,
+      "difficultyMod": 1,
       "reward": 12,
       "company": "Panda Holdings LLC",
       "pathOffsets": {
@@ -257,7 +257,7 @@ export const sector5 = {
       "next": [
         "node_lbmztk4zj"
       ],
-      "difficultyMod": 5,
+      "difficultyMod": 0,
       "reward": 10,
       "company": "Red Sky Dynamics",
       "pathOffsets": {
@@ -279,7 +279,7 @@ export const sector5 = {
       "next": [
         "node_yc1bhskx4"
       ],
-      "difficultyMod": 5,
+      "difficultyMod": 0,
       "reward": 10,
       "company": "Flyby Surveilance",
       "pathOffsets": {
@@ -303,7 +303,7 @@ export const sector5 = {
         "node_81pdx4mgi",
         "node_qdf05d3ul"
       ],
-      "difficultyMod": 5,
+      "difficultyMod": 0,
       "reward": 10,
       "company": "Whiteflower Global",
       "pathOffsets": {
@@ -342,7 +342,7 @@ export const sector5 = {
         "node_pr6ndamhd",
         "node_mauodurpb"
       ],
-      "difficultyMod": 5,
+      "difficultyMod": 0,
       "reward": 10,
       "company": "Sakura Robotics",
       "pathOffsets": {
@@ -367,7 +367,7 @@ export const sector5 = {
         "node_v8cln2a0v",
         "node_29drxy3dd"
       ],
-      "difficultyMod": 5,
+      "difficultyMod": 0,
       "reward": 10,
       "company": "Whiteflower Global",
       "bossName": "Cold Snap",
@@ -390,7 +390,7 @@ export const sector5 = {
       "next": [
         "node_2ooc5wrvy"
       ],
-      "difficultyMod": 5,
+      "difficultyMod": 0,
       "reward": 10,
       "company": "Saturn Solutions",
       "bossName": "Mr Bones",
@@ -415,7 +415,7 @@ export const sector5 = {
       "next": [
         "node_amukcfcot"
       ],
-      "difficultyMod": 5,
+      "difficultyMod": 0,
       "reward": 10,
       "company": "Starlane Tech",
       "bossName": "Singularity",
@@ -440,7 +440,7 @@ export const sector5 = {
       "next": [
         "node_0rxv5jl6r"
       ],
-      "difficultyMod": 5,
+      "difficultyMod": 0,
       "reward": 10,
       "company": "Cook.io",
       "bossName": "Volcano",
@@ -467,7 +467,7 @@ export const sector5 = {
       "next": [
         "node_mnroik0hi"
       ],
-      "difficultyMod": 5,
+      "difficultyMod": 0,
       "reward": 10,
       "company": "Longhouse Web Services",
       "bossName": "Poison Swamp",
@@ -493,7 +493,7 @@ export const sector5 = {
         "node_uaaktj6hk",
         "node_0ojt3bjew"
       ],
-      "difficultyMod": 5,
+      "difficultyMod": 0,
       "reward": 10,
       "company": "Nightbridge Corp",
       "bossName": "Blackmail",

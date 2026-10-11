@@ -1,4 +1,4 @@
-{
+export const tutorialwPaths = {
   "nodes": {
     "node_g41ksufcp": {
       "id": "node_g41ksufcp",

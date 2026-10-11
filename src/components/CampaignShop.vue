@@ -125,7 +125,7 @@ const type = ((item: Item) => {
     </div>
     <div class="item-row">
       <div class="items-header">
-        <div>Items:</div>
+        <div>Consumables:</div>
       </div>
       <li 
       v-for="item in props.campaignItems"

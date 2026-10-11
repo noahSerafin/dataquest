@@ -10,6 +10,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: 'complete'): void;
+    (e: 'change'): void;
 }>();
 
 interface MessageEntry {
@@ -89,17 +90,18 @@ function tryTriggerNode(id: string) {
     viewState.value = 'chat';
     isMinimized.value = false;
     scrollToBottom();
+    emit('change');
 }
 
-// Start dialogue when tree is provided
-watch(() => props.dialogueTree, (newTree) => {
-    if (newTree && newTree.startNode) {
+// Only trigger dialogue when tree changes dynamically (e.g. Next Sector)
+watch(() => props.dialogueTree, (newTree, oldTree) => {
+    if (newTree && oldTree && newTree !== oldTree && newTree.startNode) {
         tryTriggerNode(newTree.startNode);
         checkNodeTriggers(props.activeMapEvent);
-    } else {
+    } else if (!newTree) {
         currentNodeId.value = null;
     }
-}, { immediate: true });
+});
 
 watch(() => props.activeMapEvent, (newEvent) => {
     checkNodeTriggers(newEvent);
@@ -125,8 +127,55 @@ function triggerNodeCleared(nodeId: string) {
     checkNodeTriggers(`clear:${nodeId}`);
 }
 
+function startNewCampaign(tree?: DialogueTree) {
+    seenNodes.value = new Set();
+    chatHistories.value = {};
+    currentNodeId.value = null;
+    selectedContact.value = null;
+    viewState.value = 'overview';
+    isMinimized.value = true;
+
+    const dialogueTree = tree || props.dialogueTree;
+    if (dialogueTree && dialogueTree.startNode) {
+        tryTriggerNode(dialogueTree.startNode);
+        isMinimized.value = false;
+    }
+}
+
+function getState() {
+    return {
+        seenNodes: Array.from(seenNodes.value),
+        chatHistories: chatHistories.value,
+        currentNodeId: currentNodeId.value,
+        selectedContact: selectedContact.value,
+        viewState: viewState.value
+    };
+}
+
+function loadState(state: any) {
+    if (state && state.seenNodes) {
+        seenNodes.value = new Set(state.seenNodes);
+    } else {
+        seenNodes.value = new Set();
+    }
+    
+    if (state && state.chatHistories) {
+        chatHistories.value = state.chatHistories;
+    } else {
+        chatHistories.value = {};
+    }
+
+    currentNodeId.value = state?.currentNodeId || null;
+    selectedContact.value = state?.selectedContact || null;
+    viewState.value = state?.viewState || (state?.selectedContact ? 'chat' : 'overview');
+    isMinimized.value = true;
+}
+
 defineExpose({
-    triggerNodeCleared
+    triggerNodeCleared,
+    getState,
+    loadState,
+    startNewCampaign
 });
 
 // Overlay logic
@@ -178,6 +227,7 @@ function selectChoice(choice: DialogueChoice) {
     if (choice.nextNode && props.dialogueTree?.nodes[choice.nextNode]) {
         tryTriggerNode(choice.nextNode);
     }
+    emit('change');
 }
 
 </script>

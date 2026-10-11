@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch, onMounted } from "vue";
+import { computed, ref, watch } from "vue";
 import MiniMap from "./MiniMap.vue";
 import { Admin } from "../AdminPrograms";
 import { Item, Box, Genie, Gift, Pinata, Pandora, Voucher, Jar, Update2, Update3, Floppy, Life, Cake, Wand, Hourglass, Dupe } from "../Items";
@@ -37,7 +37,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-    (e: "selectLevel", level: Level, company: Company, difficultyMod: number, reward: number, playerSpawns?: Coordinate[]): void;
+    (e: "selectLevel", level: Level, company: Company, difficultyMod: number, reward: number, playerSpawns?: Coordinate[], nodeId?: string): void;
     (e: "openShop", node: WorldNode): void;
     (e: "openDisabledShop"): void;
     (e: "openAltar"): void;
@@ -64,10 +64,6 @@ const lastInteractedMapEvent = ref<string | null>(null);
 
 watch(lastInteractedMapEvent, (val) => {
     if (val) emit('mapEvent', val);
-});
-
-onMounted(() => {
-    lastInteractedMapEvent.value = `load:${props.staticWorld.startNode}`;
 });
 
 function isNodeCleared(nodeId: string): boolean {
@@ -168,41 +164,24 @@ function enterNode(node: WorldNode) {
         emit('openCompiler');
         emit('clearNode', node.id);
     } else if (node.type === 'boss') {
-        emit('clearNode', node.id);
         const BossClass = allBosses.find(b => b.name === node.bossName);
         if (BossClass) {
             emit("addBoss", new BossClass());
         }
         if (node.level) {
-            emit("selectLevel", node.level, node.company, node.difficultyMod, (node.reward + props.player.bonusReward));
+            const comp = getNodeCompany(node) || bossCompany;
+            emit("selectLevel", node.level, comp, node.difficultyMod, (node.reward + props.player.bonusReward), undefined, node.id);
         }
     } else if (node.level) {
-        emit('clearNode', node.id);
         showTutorialTip('board');
-        emit("selectLevel", node.level, node.company, node.difficultyMod, (node.reward + props.player.bonusReward));
+        const comp = getNodeCompany(node) || playerCompany;
+        emit("selectLevel", node.level, comp, node.difficultyMod, (node.reward + props.player.bonusReward), undefined, node.id);
     }
 }
 
 // Hydrate the static map and generate skip rewards synchronously before initial render
 const allCompanyOptions = [shopCompany, bossCompany, playerCompany, ...companies];
 const allGameLevels = [...sector0Levels, ...sector1Levels, ...sector2Levels, ...sector3Levels, ...sector4Levels, ...sector5Levels, ...sector6Levels];
-
-for (const node of Object.values(props.staticWorld.nodes)) {
-    if (node.company && typeof node.company === 'string') {
-        node.company = allCompanyOptions.find(c => c.name === node.company) || node.company;
-    }
-    if (node.levelName) {
-        node.level = allGameLevels.find(l => l.name === node.levelName);
-    }
-
-    if (node.type === 'skip' && !node.skipReward) {
-        if (node.skipContents) {
-            node.skipReward = parseSkipReward(node.skipContents) || generateSkipReward();
-        } else {
-            node.skipReward = generateSkipReward();
-        }
-    }
-}
 
 function parseSkipReward(contents: string): SkipReward | undefined {
     const piece = allPieces.find(p => p.name === contents);
@@ -240,6 +219,39 @@ function generateSkipReward(): SkipReward {
         kind: "item",
         value: pickWeightedRandomItem([Voucher, Box, Gift, Jar, Pinata, Cake, Wand, Dupe, Genie, Pandora, Floppy, Update2, Update3, Hourglass, Life], props.player),
     };
+}
+
+function hydrateWorld(worldMap?: WorldMap) {
+    if (!worldMap || !worldMap.nodes) return;
+    for (const node of Object.values(worldMap.nodes)) {
+        const rawNode = node as any;
+        if (rawNode.company && typeof rawNode.company === 'string') {
+            node.company = allCompanyOptions.find(c => c.name === rawNode.company) || node.company;
+        }
+        if (rawNode.levelName && !node.level) {
+            node.level = allGameLevels.find(l => l.name === rawNode.levelName);
+        }
+
+        if (node.type === 'skip' && !node.skipReward) {
+            if (rawNode.skipContents) {
+                node.skipReward = parseSkipReward(rawNode.skipContents) || generateSkipReward();
+            } else {
+                node.skipReward = generateSkipReward();
+            }
+        }
+    }
+}
+
+watch(() => props.staticWorld, (newWorld) => {
+    if (newWorld) {
+        hydrateWorld(newWorld);
+    }
+}, { immediate: true, flush: 'sync' });
+
+function getNodeCompany(node?: WorldNode | null): Company | undefined {
+    if (!node || !node.company) return undefined;
+    if (typeof node.company === 'object') return node.company;
+    return allCompanyOptions.find(c => c.name === (node.company as unknown as string));
 }
 
 const canReroll = ref<boolean>(true);
@@ -306,7 +318,10 @@ function displayIcon(node: WorldNode) {
         case "duplicator": return String.fromCodePoint(parseInt("U+1F46F".replace('U+', ''), 16), 0xFE0F);
         case "workbench": return String.fromCodePoint(parseInt("U+2699".replace('U+', ''), 16), 0xFE0F);
         case "hybrid compiler": return String.fromCodePoint(parseInt("U+1F9EC".replace('U+', ''), 16), 0xFE0F);
-        case "level": return node.company ? String.fromCodePoint(parseInt(node.company.unicode.replace('U+', ''), 16), 0xFE0F) : "";
+        case "level": {
+            const comp = getNodeCompany(node);
+            return comp?.unicode ? String.fromCodePoint(parseInt(comp.unicode.replace('U+', ''), 16), 0xFE0F) : "";
+        }
         case "boss": {
              const BossClass = allBosses.find(b => b.name === node.bossName);
              if (BossClass) {
@@ -324,8 +339,11 @@ function getIconStyle(node: WorldNode, size: number = 24): Record<string, any> {
 
     if (node.type === 'skip' && node.skipReward && !isNodeCleared(node.id)) {
         iconID = node.skipReward.value.iconID;
-    } else if (node.type === 'level' && node.company) {
-        iconID = node.company.iconID;
+    } else if (node.type === 'level') {
+        const comp = getNodeCompany(node);
+        if (comp) {
+            iconID = comp.iconID;
+        }
     } else if (node.type === 'boss') {
         const BossClass = allBosses.find(b => b.name === node.bossName);
         if (BossClass) {
@@ -583,8 +601,8 @@ function handleMapMouseUpOrLeave() {
             }" :style="{
                 left: (node.position.x + mapOffsetX) + 'px',
                 top: node.position.y + 'px',
-                backgroundColor: node.type === 'level' && node.company ? node.company.tileColor : undefined,
-                borderColor: node.type === 'level' && node.company ? node.company.edgeColor : undefined
+                backgroundColor: node.type === 'level' && getNodeCompany(node) ? getNodeCompany(node)!.tileColor : undefined,
+                borderColor: node.type === 'level' && getNodeCompany(node) ? getNodeCompany(node)!.edgeColor : undefined
             }" @click="trySelect(node)">
                 <div class="pins">
                     <div class="pins-top"></div>
@@ -613,9 +631,9 @@ function handleMapMouseUpOrLeave() {
                                 <div class='text-gold' style="font-size: 14px;">
                                     ${{ node.reward }}
                                 </div>
-                                <div class="icon" :style="{...getSpriteStyle(node.company?.iconID ?? 0), width: '24px', height: '24px', display: 'inline-block', color: 'transparent'}">
-                                    <template v-if="!(getSpriteStyle(node.company?.iconID ?? 0).backgroundImage)">
-                                        {{ (node.company && node.company.unicode) ? String.fromCodePoint(parseInt(node.company.unicode.replace('U+', ''), 16), 0xFE0F) : '' }}
+                                <div class="icon" :style="{...getSpriteStyle(getNodeCompany(node)?.iconID ?? 0), width: '24px', height: '24px', display: 'inline-block', color: 'transparent'}">
+                                    <template v-if="!(getSpriteStyle(getNodeCompany(node)?.iconID ?? 0).backgroundImage)">
+                                        {{ getNodeCompany(node)?.unicode ? String.fromCodePoint(parseInt(getNodeCompany(node)!.unicode.replace('U+', ''), 16), 0xFE0F) : '' }}
                                     </template>
                                 </div>
                                 <div style="font-size: 14px;">
@@ -664,8 +682,8 @@ function handleMapMouseUpOrLeave() {
         </div>
 
         <!-- Preview modal -->
-        <div v-if="selectedPreviewNode" :id="'preview-modal-' + selectedPreviewNode.id" :class="`preview-modal ${selectedPreviewNode.company?.abbr}`"
-            :style="selectedPreviewNode.type !== 'boss' && selectedPreviewNode.type === 'level' && selectedPreviewNode.company ? { backgroundColor: `${selectedPreviewNode.company.tileColor}`, border: `2px solid ${selectedPreviewNode.company.edgeColor}` } : {}">
+        <div v-if="selectedPreviewNode" :id="'preview-modal-' + selectedPreviewNode.id" :class="`preview-modal ${getNodeCompany(selectedPreviewNode)?.abbr || ''}`"
+            :style="selectedPreviewNode.type !== 'boss' && selectedPreviewNode.type === 'level' && getNodeCompany(selectedPreviewNode) ? { backgroundColor: `${getNodeCompany(selectedPreviewNode)!.tileColor}`, border: `2px solid ${getNodeCompany(selectedPreviewNode)!.edgeColor}` } : {}">
             <h3>{{ selectedPreviewNode.type === 'skip' ? 'REWARD' : selectedPreviewNode.type.toUpperCase() }}</h3>
             
             <h6 v-if="selectedPreviewNode.type === 'workbench'">Tinker with up to 5 of a program's stats</h6>
@@ -674,17 +692,17 @@ function handleMapMouseUpOrLeave() {
             <h6 v-if="selectedPreviewNode.type === 'hybrid compiler'">Combine two programs stats into one. Keep the primary's special move.</h6>
             <h6 v-if="selectedPreviewNode.type === 'skip'">(Must have room)</h6>
             
-            <h4 v-if="selectedPreviewNode.type !== 'boss' && selectedPreviewNode.type === 'level' && selectedPreviewNode.company">{{ selectedPreviewNode.company.name }}</h4>
+            <h4 v-if="selectedPreviewNode.type !== 'boss' && selectedPreviewNode.type === 'level' && getNodeCompany(selectedPreviewNode)">{{ getNodeCompany(selectedPreviewNode)!.name }}</h4>
             <div v-if="selectedPreviewNode.type !== 'boss' && selectedPreviewNode.type === 'level'" :style="getIconStyle(selectedPreviewNode, 32)">
-                <template v-if="!getIconStyle(selectedPreviewNode).backgroundImage && selectedPreviewNode.company">
-                    {{ String.fromCodePoint(parseInt(selectedPreviewNode.company.unicode.replace('U+', ''), 16), 0xFE0F) }}
+                <template v-if="!getIconStyle(selectedPreviewNode).backgroundImage && getNodeCompany(selectedPreviewNode)?.unicode">
+                    {{ String.fromCodePoint(parseInt(getNodeCompany(selectedPreviewNode)!.unicode.replace('U+', ''), 16), 0xFE0F) }}
                 </template>
             </div>
             
             <h5 v-if="selectedPreviewNode.type === 'boss' || selectedPreviewNode.type === 'level'">Security Level 🔒: {{ player.difficulty + selectedPreviewNode.difficultyMod }}</h5>
             <h5 v-if="selectedPreviewNode.type === 'boss' || selectedPreviewNode.type === 'level'" class="text-gold">Reward: ${{ selectedPreviewNode.reward }}</h5>
             
-            <MiniMap v-if="selectedPreviewNode && selectedPreviewNode.level && selectedPreviewNode.company" :level="selectedPreviewNode.level" :company="selectedPreviewNode.company" />
+            <MiniMap v-if="selectedPreviewNode && selectedPreviewNode.level && getNodeCompany(selectedPreviewNode)" :level="selectedPreviewNode.level" :company="getNodeCompany(selectedPreviewNode)!" />
             
             <template v-if="selectedPreviewNode?.type === 'skip'">
                 <BlueprintView v-if="selectedPreviewNode.skipReward?.kind === 'blueprint'"

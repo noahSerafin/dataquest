@@ -8,7 +8,7 @@
     import BlueprintView from "./BlueprintView.vue";
     import BlueprintController from "./BlueprintController.vue";
     import { reapplyTutorialTooltips } from "../tutorial";
-    import { playSoundFx, preloadSound } from "../helperFunctions";
+    import { playSoundFx, preloadSound, getSpriteStyle } from "../helperFunctions";
     import selectSoundUrl from "../../sfx/select.ogg";
 
     // Drag state
@@ -73,7 +73,8 @@
     const props = defineProps<{
         player: Player,
         showInventory: boolean,
-        isCampaign?: boolean
+        isCampaign?: boolean,
+        companyIconId?: number
     }>();
     
     const emit = defineEmits<{
@@ -242,9 +243,13 @@
             <!-- Money -->
             <div class="player-info">
                 <span class="os">
-                    {{ String.fromCodePoint(parseInt(player.osunicode.replace('U+', ''), 16), 0xFE0F) }}
+                    <div v-if="isCampaign && companyIconId" class="sprite-icon" :style="getSpriteStyle(companyIconId)"></div>
+                    <template v-else>
+                        {{ String.fromCodePoint(parseInt(player.osunicode.replace('U+', ''), 16), 0xFE0F) }}
+                    </template>
                 </span>
                 <span style="text-align: left;"><strong class="text-yellow">$:</strong> {{ props.player.money }}</span>
+
                 <p v-if="!isCampaign">
                     <span v-for="_ in (Math.max(0, Math.floor(player.lives || 0)))">
                        {{ String.fromCodePoint(0x1FA77) }}
@@ -379,6 +384,12 @@
         font-size: 24px;
         margin: 0;
         text-align: left;
+    }
+    .sprite-icon {
+        width: 32px;
+        height: 32px;
+        display: inline-block;
+        background-size: cover;
     }
     .inventory{
         text-align: left;

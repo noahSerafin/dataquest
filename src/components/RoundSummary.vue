@@ -122,19 +122,24 @@
             </div>
             <button class="btn-grey" @click="collectAndProceed">Collect <span class="text-yellow">$</span> and proceed</button>
         </div>
-        <div class="if-lost" v-if="!hasWonRound && player.lives > 0">
+        <div class="if-lost" v-if="!hasWonRound && isCampaign">
+            <h3>
+                Round Over
+            </h3>
+            <button @click="emit('returnToMap')" :disabled="roundHasStarted">Return to Map</button>
+        </div>
+        <div class="if-lost" v-else-if="!hasWonRound && player.lives > 0">
             <h3>
                 Round Over
             </h3>
             <button @click="emit('reloadLevel')" :disabled="roundHasStarted">Retry</button>
-            <button v-if="props.player.mapProgress < 2 || isCampaign" @click="emit('returnToMap')" :disabled="roundHasStarted">Return to Map</button>
+            <button v-if="props.player.mapProgress < 2" @click="emit('returnToMap')" :disabled="roundHasStarted">Return to Map</button>
         </div>
-        <div class="if-lost" v-if="!hasWonRound && player.lives <= 0">
+        <div class="if-lost" v-else-if="!hasWonRound && player.lives <= 0">
             <h3>
                 Game Over
             </h3>
             <button @click="emit('mainMenu')">Main Menu</button>
-
         </div>
     </div>
 </template>

@@ -6,7 +6,7 @@ import Board from './components/Board.vue';
 import Leveleditor from './components/Leveleditor.vue';
 import { castled, level1Levels } from './level1Levels';
 import { Player } from "./Player";
-import { Item, Voucher, allItems } from "./Items";
+import { Item, allItems } from "./Items";
 import type { ItemConstructor } from "./Items";
 import { allAdmins } from "./AdminPrograms";
 import { Admin } from "./AdminPrograms";
@@ -184,11 +184,18 @@ import Altar from "./components/Altar.vue";
 import Duplicator from "./components/Duplicator.vue";
 import Workbench from "./components/Workbench.vue";
 import { Random } from "./Random";
+import { getSpriteStyle } from "./helperFunctions";
 import { allOSes } from "./Operators.ts";
 import { serializeGameState, rehydrateGameState } from "./saveSystem";
 import CampaignShop from "./components/CampaignShop.vue";
 import CampaignWorldMap from "./components/CampaignWorldMap.vue";
 import { sector0 } from "./campaignMaps/sector0.ts";
+import { sector1 } from "./campaignMaps/sector1.ts";
+import { sector2 } from "./campaignMaps/sector2.ts";
+import { sector3 } from "./campaignMaps/sector3.ts";
+import { sector4 } from "./campaignMaps/sector4.ts";
+import { sector5 } from "./campaignMaps/sector5.ts";
+import { sector6 } from "./campaignMaps/sector6.ts";
 
 
 const testSword = {
@@ -285,6 +292,11 @@ const bgProgress = ref(0);
 const campaignWorldMap = ref<any>(null);
 const campaignClearedNodes = ref<string[]>([]);
 const campaignShopPurchases = ref<Record<string, string[]>>({});
+const campaignPlayerIconID = ref<number>(499);
+const campaignSlotIndex = ref<number>(-1);
+const campaignSectorIndex = ref<number>(0);
+const allCampaignSectors = [sector0, sector1, sector2, sector3, sector4, sector5, sector6];
+const currentCampaignNodeId = ref<string | null>(null);
 const appDialogueEvent = ref<string | null>(null);
 const messagingSystemRef = ref<InstanceType<typeof MessagingSystem> | null>(null);
 
@@ -301,21 +313,100 @@ function handleMapEvent(e: string) {
     appDialogueEvent.value = e;
 }
 
-function startCampaign(_slotIndex: number) {
+function startCampaign(slotIndex: number, iconID: number) {
+  const existingSave = StorageManager.loadCampaignSlot(slotIndex);
+  if (existingSave) {
+    loadCampaignGame(slotIndex, existingSave);
+    return;
+  }
+  
+  campaignSlotIndex.value = slotIndex;
+  campaignSectorIndex.value = 0;
+  campaignPlayerIconID.value = iconID;
   campaignWorldMap.value = {
-    nodes: JSON.parse(JSON.stringify(sector0.nodes)),
-    startNode: sector0.startNode,
-    dialogueTree: (sector0 as any).dialogueTree
+    nodes: JSON.parse(JSON.stringify(allCampaignSectors[0].nodes)),
+    startNode: allCampaignSectors[0].startNode,
+    dialogueTree: (allCampaignSectors[0] as any).dialogueTree
   };
   campaignClearedNodes.value = [];
   campaignShopPurchases.value = {};
+  currentCampaignNodeId.value = null;
   
   currentAppMode.value = 'campaign';
   showMap.value = true;
   gameStarted.value = true;
   showInventory.value = false;
   
-  currentCompany.value = { iconID: 499, name: 'Player', abbr: '', unicode: player.value.osunicode, pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "rgb(156, 201, 84)" };
+  player.value = new Player(
+    'U+1F60A',
+    0, 5, 4, [], [testSword, testShield], [], 0, 5, 0, 0, 0, 0, stake.value
+  );
+  
+  currentCompany.value = { iconID: iconID, name: 'Player', abbr: '', unicode: player.value.osunicode, pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "rgb(156, 201, 84)" };
+  
+  appDialogueEvent.value = `load:${allCampaignSectors[0].startNode}`;
+
+  nextTick(() => {
+    messagingSystemRef.value?.startNewCampaign(campaignWorldMap.value?.dialogueTree);
+    saveGameState();
+  });
+}
+
+function loadCampaignGame(slotIndex: number, data: any) {
+  campaignSlotIndex.value = slotIndex;
+  const state = rehydrateGameState(data);
+
+  player.value = state.player;
+  currentSeed.value = state.seed || "";
+  campaignSectorIndex.value = data.campaignSectorIndex || 0;
+  campaignClearedNodes.value = data.campaignClearedNodes || [];
+  campaignShopPurchases.value = data.campaignShopPurchases || {};
+  campaignPlayerIconID.value = data.campaignPlayerIconID || data.metadata?.iconID || 499;
+  currentCampaignNodeId.value = data.currentCampaignNodeId || null;
+  
+  campaignWorldMap.value = state.world;
+  
+  currentAppMode.value = 'campaign';
+  gameStarted.value = true;
+  showInventory.value = false;
+  appDialogueEvent.value = null;
+
+  const ui = state.uiState || {};
+  showBoard.value = ui.showBoard ?? false;
+  showMap.value = ui.showMap ?? true;
+  showShop.value = ui.showShop ?? false;
+  showCompiler.value = ui.showCompiler ?? false;
+  showAltar.value = ui.showAltar ?? false;
+  showDuplicator.value = ui.showDuplicator ?? false;
+  showWorkbench.value = ui.showWorkbench ?? false;
+  showSummary.value = ui.showSummary ?? false;
+  hasWonRound.value = ui.hasWonRound ?? true;
+  roundHasStarted.value = ui.roundHasStarted ?? false;
+  isFirstTurn.value = ui.isFirstTurn ?? true;
+  if (ui.foggedTiles) foggedTiles.value = ui.foggedTiles;
+  if (ui.currentCompany) currentCompany.value = ui.currentCompany;
+
+  if (state.boardState) {
+    activePieces.value = state.boardState.activePieces || [];
+    originalPieces.value = state.boardState.originalPieces || [];
+    lastTurnPieces.value = state.boardState.lastTurnPieces || [];
+    graveyard.value = state.boardState.graveyard || [];
+    bossAdmins.value = state.boardState.bossAdmins || [];
+    playerSpawns.value = state.boardState.playerSpawns || [];
+    originalSpawns.value = state.boardState.originalSpawns || [];
+    level.value = state.boardState.level || castled;
+
+    activePieces.value.forEach(p => p.removeCallback = removePiece);
+    originalPieces.value.forEach(p => p.removeCallback = removePiece);
+    lastTurnPieces.value.forEach(p => p.removeCallback = removePiece);
+    graveyard.value.forEach(p => p.removeCallback = removePiece);
+  } else {
+    bossAdmins.value = [];
+  }
+
+  nextTick(() => {
+    messagingSystemRef.value?.loadState(data.messagingState || {});
+  });
 }
 
 function createNewPlayer(payload: { os: OS, seed: string, stake?: number }) {
@@ -388,6 +479,8 @@ function handleCampaignNodeCleared(nodeId: string) {
   if (!campaignClearedNodes.value.includes(nodeId)) {
     campaignClearedNodes.value.push(nodeId);
   }
+  appDialogueEvent.value = `clear:${nodeId}`;
+  messagingSystemRef.value?.triggerNodeCleared(nodeId);
 }
 
 function incrementMapProgress() {
@@ -863,8 +956,11 @@ const originalSpawns = ref<Coordinate[]>([]);//player
 const originalPlayerPieceIds = ref<string[]>([]);
 const currentCompany = ref<Company>({ iconID: 499, name: 'Player', abbr: '', unicode: player.value.osunicode || '', pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "rgb(156, 201, 84)" });
 
-async function selectLevel(newLevel: Level, company: Company, difficultyMod: number, lReward: number) {//load level, start 
+async function selectLevel(newLevel: Level, company: Company, difficultyMod: number, lReward: number, _pSpawns?: Coordinate[], nodeId?: string) {//load level, start 
   bgProgress.value++;
+  if (currentAppMode.value === 'campaign') {
+    currentCampaignNodeId.value = nodeId || null;
+  }
   pieceToPlace.value = null;
   currentCompany.value = { ...company };
   showBoard.value = true;
@@ -947,12 +1043,33 @@ async function handleProceed() {
   currentCompany.value.unicode = player.value.osunicode;
   currentCompany.value.tileColor = 'rgb(17, 31, 15)';
   currentCompany.value.edgeColor = 'rgb(156, 201, 84)';
+  if (currentAppMode.value === 'campaign') {
+    currentCompany.value.iconID = campaignPlayerIconID.value;
+    if (currentCampaignNodeId.value) {
+      handleCampaignNodeCleared(currentCampaignNodeId.value);
+      currentCampaignNodeId.value = null;
+    }
+  }
   hasWonRound.value = false;
   saveGameState();
 
   if (currentAppMode.value === 'campaign' && campaignClearedNodes.value.length > 0) {
     const lastNode = campaignClearedNodes.value[campaignClearedNodes.value.length - 1];
     appDialogueEvent.value = `clear:${lastNode}`;
+  }
+}
+
+function loadNextSector() {
+  if (campaignSectorIndex.value < allCampaignSectors.length - 1) {
+    campaignSectorIndex.value++;
+    const nextSector = allCampaignSectors[campaignSectorIndex.value];
+    campaignWorldMap.value = {
+      nodes: JSON.parse(JSON.stringify(nextSector.nodes)),
+      startNode: nextSector.startNode,
+      dialogueTree: (nextSector as any).dialogueTree
+    };
+    appDialogueEvent.value = `load:${nextSector.startNode}`;
+    saveGameState();
   }
 }
 
@@ -995,10 +1112,16 @@ async function reloadLevel() {
 
 async function handleReturnToMap() {
   if (currentAppMode.value === 'campaign') {
+    currentCampaignNodeId.value = null;
     showBoard.value = false;
     showSummary.value = false;
     showMap.value = true;
     roundHasStarted.value = false;
+    currentCompany.value.abbr = '';
+    currentCompany.value.unicode = player.value.osunicode;
+    currentCompany.value.tileColor = 'rgb(17, 31, 15)';
+    currentCompany.value.edgeColor = 'rgb(156, 201, 84)';
+    currentCompany.value.iconID = campaignPlayerIconID.value;
     saveGameState();
     return;
   }
@@ -1021,10 +1144,12 @@ const worldMapRef = ref();
 
 function saveGameState() {
   console.log('saving game');
-  if (!worldMapRef.value) return;
+  if (!worldMapRef.value && currentAppMode.value !== 'campaign') return;
+  
   const uiState = {
     showBoard: showBoard.value,
     showMap: showMap.value,
+
     showShop: showShop.value,
     showCompiler: showCompiler.value,
     showAltar: showAltar.value,
@@ -1051,16 +1176,47 @@ function saveGameState() {
 
   const serialized = serializeGameState(
     player.value,
-    worldMapRef.value.world,
-    worldMapRef.value.currentNodeId,
-    worldMapRef.value.previousNodeId,
-    worldMapRef.value.skipsThisLevel,
-    worldMapRef.value.boss,
+    worldMapRef.value?.world || campaignWorldMap.value,
+    worldMapRef.value?.currentNodeId || null,
+    worldMapRef.value?.previousNodeId || null,
+    worldMapRef.value?.skipsThisLevel || 0,
+    worldMapRef.value?.boss || null,
     currentSeed.value,
     boardState,
     uiState
   );
-  StorageManager.saveGame(serialized);
+  
+  if (currentAppMode.value === 'campaign') {
+    const campaignData = {
+      ...serialized,
+      campaignSectorIndex: campaignSectorIndex.value,
+      campaignClearedNodes: campaignClearedNodes.value,
+      campaignShopPurchases: campaignShopPurchases.value,
+      campaignPlayerIconID: campaignPlayerIconID.value,
+      currentCampaignNodeId: currentCampaignNodeId.value,
+      messagingState: messagingSystemRef.value?.getState() || {},
+      world: campaignWorldMap.value // Use the campaign map explicitly
+    };
+    
+    // Calculate total nodes vs cleared nodes for completion percentage
+    let totalNodes = 0;
+    allCampaignSectors.forEach(sector => {
+       totalNodes += Object.keys(sector.nodes).length;
+    });
+    
+    // Only unique clears count towards completion
+    const uniqueClears = new Set(campaignClearedNodes.value);
+    const completion = totalNodes > 0 ? Math.floor((uniqueClears.size / totalNodes) * 100) : 0;
+    
+    const metadata = {
+      iconID: campaignPlayerIconID.value,
+      sector: campaignSectorIndex.value,
+      completion: completion
+    };
+    StorageManager.saveCampaignSlot(campaignSlotIndex.value, campaignData, metadata);
+  } else {
+    StorageManager.saveGame(serialized);
+  }
 }
 
 function loadSavedGame() {
@@ -1868,7 +2024,11 @@ const endRound = async (roundWon: boolean) => {
   }*/
   player.value.canPlace = false;
   player.value.fogged = false;
-  saveGameState();
+  if (currentAppMode.value !== 'campaign') {
+    saveGameState();
+  } else {
+    bossAdmins.value = [];
+  }
 }
 
 async function onReceiveDamage(id: string, receiver: Piece) {
@@ -1970,7 +2130,9 @@ const endTurn = async () => {
   handleApplyAdmins('onTurnStart', '');
   checkForRoundEnd();
   if (!roundHasStarted.value) return;
-  saveGameState();
+  if (currentAppMode.value !== 'campaign') {
+    saveGameState();
+  }
   hasFinishedTurn.value = false;
   if (roundHasStarted.value) {
     yourTurnWarning.value = true;
@@ -2215,8 +2377,9 @@ function cancelConfirm() {
       <div class="enemy-info">
         <div v-if="gameStarted || debugMode" class="enemy-left">
           <span v-if="currentCompany" class="flex">
-            <div>{{ currentCompany.abbr }}</div>
-            <div>{{ currentCompany.unicode ? String.fromCodePoint(parseInt(currentCompany.unicode.replace('U+', ''), 16), 0xFE0F) : '' }}</div>
+            <div style="margin-right: 4px;">{{ currentCompany.abbr }}</div>
+            <div v-if="currentCompany.iconID" class="sprite-icon" :style="getSpriteStyle(currentCompany.iconID)"></div>
+            <div v-else>{{ currentCompany.unicode ? String.fromCodePoint(parseInt(currentCompany.unicode.replace('U+', ''), 16), 0xFE0F) : '' }}</div>
           </span>
           <p class="security"><strong>Security: </strong>{{ player.difficulty }}<span
           v-if="player.extraDifficulty > 0"> + {{ player.extraDifficulty }}</span></p>
@@ -2309,7 +2472,7 @@ function cancelConfirm() {
     </div>
     <div v-if="gameStarted || debugMode" class="player-area">
       <!-- PlayerView + End Turn / Retry -->
-      <PlayerView v-if="!displayEditor" ref="playerViewRef" :player="player" :showInventory="showInventory" :isCampaign="currentAppMode === 'campaign'"
+      <PlayerView v-if="!displayEditor" ref="playerViewRef" :player="player" :showInventory="showInventory" :isCampaign="currentAppMode === 'campaign'" :companyIconId="campaignPlayerIconID"
         @highlightPlacements="highlightPlacements" @sellBlueprint="sellBlueprint" @sellItem="sellItem"
         @applyItem="handleApplyItem" @sellAdmin="sellAdmin" @reorderAdmins="player.admins = $event"
         @startPlacementDrag="startPlacementDrag" @closeInventory="toggleInventory" @openInventory="toggleInventory" />
@@ -2321,14 +2484,13 @@ function cancelConfirm() {
       <div id="player-actions" v-if="!displayEditor" class="player-actions">
         <button v-if="(!displayEditor && roundHasStarted && !hasFinishedTurn && hasPlacedPiece) || debugMode" class="end-turn"
           v-on:click="endTurn()">End Turn</button>
-        <!--<button class="mt-2 px-2 py-1 bg-blue-500 text-white rounded" @click="showInventory = !showInventory">{{showInventory ? 'Hide Inventory' : 'Inventory' }}</button>-->
-        <!--<div v-if="!displayEditor && roundHasStarted" class="graveyard">
-        <button>🪦</button>
-      </div>-->
         <button :disabled="hasFinishedTurn" v-if="!displayEditor && roundHasStarted && player.lives > 1"
           class="retry-btn" v-on:click="requestRetry()">Retry</button>
         <button :disabled="hasFinishedTurn" v-if="!displayEditor && roundHasStarted" class="forfeit-btn"
           v-on:click="requestForfeit()">Forfeit</button>
+        
+        <button v-if="currentAppMode === 'campaign' && showMap && campaignWorldMap && Object.values(campaignWorldMap.nodes).filter((n: any) => n.type === 'boss').every((n: any) => campaignClearedNodes.includes(n.id)) && campaignSectorIndex < allCampaignSectors.length - 1" class="end-turn"
+          @click="loadNextSector()">Next Sector</button>
       </div>
     </div>
     
@@ -2603,6 +2765,13 @@ function cancelConfirm() {
 }
 .security, .infamy{
   margin: 0;
+}
+
+.sprite-icon {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  background-size: cover;
 }
 
 </style>

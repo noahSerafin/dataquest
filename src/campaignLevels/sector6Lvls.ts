@@ -1,6 +1,6 @@
 import type { Level } from "../types";
 
-const blitz:Level = {
+const blitz: Level = {
   "name": "The Blitz",
   "tiles": [
     {
@@ -491,7 +491,7 @@ const blitz:Level = {
     }
   ]
 }
-const zoo:Level = {
+const zoo: Level = {
   "name": "The Zoo",
   "tiles": [
     {
@@ -1258,7 +1258,7 @@ const zoo:Level = {
     }
   ]
 }
-const transilvania:Level = {
+const transilvania: Level = {
   "name": "Transilvania",
   "tiles": [
     {
@@ -1801,7 +1801,7 @@ const transilvania:Level = {
     }
   ]
 }
-const reef:Level = {
+const reef: Level = {
   "name": "The Reef",
   "tiles": [
     {
@@ -2920,7 +2920,7 @@ const reef:Level = {
     }
   ]
 }
-const stratosphere:Level = {
+const stratosphere: Level = {
   "name": "The Stratosphere",
   "tiles": [
     {
@@ -3371,7 +3371,7 @@ const stratosphere:Level = {
     }
   ]
 }
-const nyc:Level = {
+const nyc: Level = {
   "name": "NYC",
   "tiles": [
     {
@@ -3846,7 +3846,7 @@ const nyc:Level = {
     }
   ]
 }
-const fallout:Level = {
+const fallout: Level = {
   "name": "Fallout",
   "tiles": [
     {
@@ -4505,7 +4505,7 @@ const fallout:Level = {
     }
   ]
 }
-const finale:Level = {
+const finale: Level = {
   "name": "The Finale",
   "tiles": [
     {
@@ -5144,7 +5144,7 @@ const finale:Level = {
     }
   ]
 }
-const enchanted:Level = {
+const enchanted: Level = {
   "name": "Lost Woods",
   "tiles": [
     {
@@ -5711,7 +5711,7 @@ const enchanted:Level = {
     }
   ]
 }
-const lockup:Level = {
+const lockup: Level = {
   "name": "The Lockup",
   "tiles": [
     {
@@ -6270,7 +6270,7 @@ const lockup:Level = {
     }
   ]
 }
-const gates:Level = {
+const gates: Level = {
   "name": "The Gates",
   "tiles": [
     {
@@ -7604,7 +7604,7 @@ const prehistory = {
     }
   ]
 }
-const shock:Level = {
+const shock: Level = {
   "name": "The Shock",
   "tiles": [
     {
@@ -8191,7 +8191,7 @@ const shock:Level = {
     }
   ]
 }
-const parlour:Level = {
+const parlour: Level = {
   "name": "The Parlour",
   "tiles": [
     {
@@ -8702,7 +8702,7 @@ const parlour:Level = {
     },
     {
       "id": "54343dcd-5c49-4dcc-8504-c9c04f28668d",
-      "name": "Lyre",
+      "name": "Drum",
       "team": "enemy",
       "headPosition": {
         "x": 5,
@@ -8926,7 +8926,7 @@ const parlour:Level = {
     }
   ]
 }
-const chokepoint:Level = {
+const chokepoint: Level = {
   "name": "The Chokepoint",
   "tiles": [
     {
@@ -9437,7 +9437,7 @@ const chokepoint:Level = {
     }
   ]
 }
-const maze:Level = {
+const maze: Level = {
   "name": "The Maze",
   "tiles": [
     {
@@ -9824,7 +9824,7 @@ const maze:Level = {
     }
   ]
 }
-const trigger:Level = {
+const trigger: Level = {
   "name": "The Trigger",
   "tiles": [
     {
@@ -10263,7 +10263,7 @@ const trigger:Level = {
     }
   ]
 }
-const onslaught:Level = {
+const onslaught: Level = {
   "name": "The Onslaught",
   "tiles": [
     {
@@ -11030,4 +11030,4 @@ const onslaught:Level = {
     }
   ]
 }
-export const sector6Levels:Level[] = [finale, onslaught, blitz, zoo, transilvania, stratosphere, reef, nyc, fallout, enchanted, lockup, gates, prehistory, shock, parlour, chokepoint, maze, trigger];//18
+export const sector6Levels: Level[] = [finale, onslaught, blitz, zoo, transilvania, stratosphere, reef, nyc, fallout, enchanted, lockup, gates, prehistory, shock, parlour, chokepoint, maze, trigger];//18

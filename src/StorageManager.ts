@@ -192,5 +192,48 @@ export const StorageManager = {
 
   clearSaveGame() {
     localStorage.removeItem('dataquest_save_game');
+  },
+
+  getCampaignSlots(): any[] {
+    const data = localStorage.getItem('dataquest_campaign_slots');
+    if (data) {
+      try {
+        const parsed = JSON.parse(data);
+        if (Array.isArray(parsed) && parsed.length === 3) {
+          return parsed;
+        }
+      } catch (e) {
+        console.error("Error parsing campaign slots data", e);
+      }
+    }
+    return [
+      { isEmpty: true },
+      { isEmpty: true },
+      { isEmpty: true }
+    ];
+  },
+
+  saveCampaignSlot(index: number, state: any, metadata: any) {
+    const slots = this.getCampaignSlots();
+    slots[index] = {
+      isEmpty: false,
+      metadata: metadata,
+      state: state
+    };
+    localStorage.setItem('dataquest_campaign_slots', JSON.stringify(slots));
+  },
+
+  loadCampaignSlot(index: number): any | null {
+    const slots = this.getCampaignSlots();
+    if (slots[index] && !slots[index].isEmpty) {
+      return slots[index].state;
+    }
+    return null;
+  },
+  
+  clearCampaignSlot(index: number) {
+    const slots = this.getCampaignSlots();
+    slots[index] = { isEmpty: true };
+    localStorage.setItem('dataquest_campaign_slots', JSON.stringify(slots));
   }
 };

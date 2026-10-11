@@ -1213,7 +1213,7 @@ class Frogman extends Item<PieceBlueprint> {
 
 
     static name = "Frogman";
-    static description = "Make a held program in your inventory permanently immune to being posioned";
+    static description = "Make a held program in your inventory permanently immune to being poisoned";
     static unicode = "U+1F93F";
     static color = "#5b22dfff";
     static rarity = 2;

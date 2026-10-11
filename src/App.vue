@@ -372,37 +372,27 @@ function loadCampaignGame(slotIndex: number, data: any) {
   appDialogueEvent.value = null;
 
   const ui = state.uiState || {};
-  showBoard.value = ui.showBoard ?? false;
-  showMap.value = ui.showMap ?? true;
+  showBoard.value = false;
+  showMap.value = true;
   showShop.value = ui.showShop ?? false;
   showCompiler.value = ui.showCompiler ?? false;
   showAltar.value = ui.showAltar ?? false;
   showDuplicator.value = ui.showDuplicator ?? false;
   showWorkbench.value = ui.showWorkbench ?? false;
-  showSummary.value = ui.showSummary ?? false;
+  showSummary.value = false;
   hasWonRound.value = ui.hasWonRound ?? true;
-  roundHasStarted.value = ui.roundHasStarted ?? false;
-  isFirstTurn.value = ui.isFirstTurn ?? true;
+  roundHasStarted.value = false;
+  isFirstTurn.value = true;
   if (ui.foggedTiles) foggedTiles.value = ui.foggedTiles;
   if (ui.currentCompany) currentCompany.value = ui.currentCompany;
 
-  if (state.boardState) {
-    activePieces.value = state.boardState.activePieces || [];
-    originalPieces.value = state.boardState.originalPieces || [];
-    lastTurnPieces.value = state.boardState.lastTurnPieces || [];
-    graveyard.value = state.boardState.graveyard || [];
-    bossAdmins.value = state.boardState.bossAdmins || [];
-    playerSpawns.value = state.boardState.playerSpawns || [];
-    originalSpawns.value = state.boardState.originalSpawns || [];
-    level.value = state.boardState.level || castled;
-
-    activePieces.value.forEach(p => p.removeCallback = removePiece);
-    originalPieces.value.forEach(p => p.removeCallback = removePiece);
-    lastTurnPieces.value.forEach(p => p.removeCallback = removePiece);
-    graveyard.value.forEach(p => p.removeCallback = removePiece);
-  } else {
-    bossAdmins.value = [];
-  }
+  activePieces.value = [];
+  originalPieces.value = [];
+  lastTurnPieces.value = [];
+  graveyard.value = [];
+  bossAdmins.value = [];
+  playerSpawns.value = [];
+  originalSpawns.value = [];
 
   nextTick(() => {
     messagingSystemRef.value?.loadState(data.messagingState || {});
@@ -976,9 +966,10 @@ async function selectLevel(newLevel: Level, company: Company, difficultyMod: num
   activePieces.value = [];
   originalPlayerPieceIds.value = [];
   graveyard.value = [];
-  level.value = newLevel;
+  const clonedLevel = JSON.parse(JSON.stringify(newLevel));
+  level.value = clonedLevel;
   player.value.nextReward = lReward;
-  const newPieces = rehydratePieces(newLevel.pieces);
+  const newPieces = rehydratePieces(clonedLevel.pieces);
   player.value.extraDifficulty = difficultyMod;
   activePieces.value = newPieces;
 
@@ -1149,24 +1140,26 @@ function saveGameState() {
   console.log('saving game');
   if (!worldMapRef.value && currentAppMode.value !== 'campaign') return;
   
+  const isCampaign = currentAppMode.value === 'campaign';
+
   const uiState = {
-    showBoard: showBoard.value,
-    showMap: showMap.value,
+    showBoard: isCampaign ? false : showBoard.value,
+    showMap: isCampaign ? true : showMap.value,
 
     showShop: showShop.value,
     showCompiler: showCompiler.value,
     showAltar: showAltar.value,
     showDuplicator: showDuplicator.value,
     showWorkbench: showWorkbench.value,
-    roundHasStarted: roundHasStarted.value,
-    showSummary: showSummary.value,
+    roundHasStarted: isCampaign ? false : roundHasStarted.value,
+    showSummary: isCampaign ? false : showSummary.value,
     hasWonRound: hasWonRound.value,
     isFirstTurn: isFirstTurn.value,
     foggedTiles: foggedTiles.value,
     currentCompany: currentCompany.value
   };
 
-  const boardState = {
+  const boardState = isCampaign ? null : {
     activePieces: activePieces.value,
     originalPieces: originalPieces.value,
     lastTurnPieces: lastTurnPieces.value,
@@ -1177,9 +1170,19 @@ function saveGameState() {
     level: level.value
   };
 
+  let cleanWorld = worldMapRef.value?.world || campaignWorldMap.value;
+  if (isCampaign && cleanWorld) {
+    cleanWorld = JSON.parse(JSON.stringify(cleanWorld));
+    if (cleanWorld.nodes) {
+      Object.values(cleanWorld.nodes).forEach((n: any) => {
+        delete n.level;
+      });
+    }
+  }
+
   const serialized = serializeGameState(
     player.value,
-    worldMapRef.value?.world || campaignWorldMap.value,
+    cleanWorld,
     worldMapRef.value?.currentNodeId || null,
     worldMapRef.value?.previousNodeId || null,
     worldMapRef.value?.skipsThisLevel || 0,
@@ -1189,16 +1192,17 @@ function saveGameState() {
     uiState
   );
   
-  if (currentAppMode.value === 'campaign') {
+  if (isCampaign) {
     const campaignData = {
       ...serialized,
+      boardState: null,
       campaignSectorIndex: campaignSectorIndex.value,
       campaignClearedNodes: campaignClearedNodes.value,
       campaignShopPurchases: campaignShopPurchases.value,
       campaignPlayerIconID: campaignPlayerIconID.value,
       currentCampaignNodeId: currentCampaignNodeId.value,
       messagingState: messagingSystemRef.value?.getState() || {},
-      world: campaignWorldMap.value // Use the campaign map explicitly
+      world: cleanWorld
     };
     
     // Calculate total nodes vs cleared nodes for completion percentage
@@ -1443,13 +1447,16 @@ function rehydratePieces(rawPieces: any[]): InstanceType<typeof Piece>[] {
   const pieceClasses = [...allPieces];
   pieceClasses.unshift(Spawn);
   return rawPieces.map(p => {
-    const PieceClass = pieceClasses.find(cls => cls.name === p.name)
+    const PieceClass = pieceClasses.find(cls => cls.name === p.name);
     if (!PieceClass) return p;
     const instance = new PieceClass(p.headPosition, p.team, removePiece);
     Object.assign(instance, p);
+    instance.tiles = (p.tiles && p.tiles.length > 0)
+      ? p.tiles.map((t: Coordinate) => ({ ...t }))
+      : (p.headPosition ? [{ ...p.headPosition }] : []);
     instance.removeCallback = removePiece;
     return instance;
-  })
+  });
 }
 
 onMounted(() => {

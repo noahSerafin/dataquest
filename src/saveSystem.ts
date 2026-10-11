@@ -148,6 +148,9 @@ export function rehydratePieceArray(rawPieces: any[]): Piece[] {
     if (PieceClass) {
         const inst = new PieceClass(p.headPosition, p.team, undefined, p.id);
         Object.assign(inst, p); // restores modifiers, remaining moves, etc.
+        inst.tiles = (p.tiles && p.tiles.length > 0)
+            ? p.tiles.map((t: any) => ({ ...t }))
+            : (p.headPosition ? [{ ...p.headPosition }] : []);
         // Ensure critical stats are valid numbers
         if (isNaN(inst.defenceRemaining)) {
             inst.defenceRemaining = inst.getStat('defence') || 0;

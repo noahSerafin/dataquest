@@ -1,7 +1,22 @@
+Sector0
+remove altar altogether
+
+Sector2
+yoyo level in sector3 too hard
+yoyo reward connection going the wrong way
+convenience store in shop - get rid
+remove coin also? eliminate randomness
+banner appears in shop but appears in sector1 shop already
+-already quite overpowered, postpone items until later - include some variants after the yoyo level?
+
+
+make selcting "I've done this before" disable future message popups completely
 add retry button to campaign, warning that it will reset the node
-+ 1 from past nodes
-Banner buffs itself
+remove + 1 from past nodes in header
+boss description need the highest z-index
+reduce rewards massively
 you win appearing on last node
+hide rarity text on items/bps/controllers in campaign mode
 Test rogue mode is not broken
 campaign is raising security level every level, not just after bosses - (make all nodes security 0 or 1 if hard?)
 add a previous sector btn, track shop purchases in save
@@ -14,6 +29,8 @@ cosmetic cicuitboard pieces
 circuitboard map edge non square (contour path edges)
 Review appearance of special nodes vs reward nodes
 Dialogue after tutorial
+put variants in campaign levels
+secret bonus nodes
 
 Preserve all roguelike App functions (move to own file?)
 For campaign:

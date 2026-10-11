@@ -228,8 +228,9 @@ function hydrateWorld(worldMap?: WorldMap) {
         if (rawNode.company && typeof rawNode.company === 'string') {
             node.company = allCompanyOptions.find(c => c.name === rawNode.company) || node.company;
         }
-        if (rawNode.levelName && !node.level) {
-            node.level = allGameLevels.find(l => l.name === rawNode.levelName);
+        if (rawNode.levelName) {
+            const found = allGameLevels.find(l => l.name === rawNode.levelName);
+            node.level = found ? JSON.parse(JSON.stringify(found)) : undefined;
         }
 
         if (node.type === 'skip' && !node.skipReward) {

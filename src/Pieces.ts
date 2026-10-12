@@ -4765,10 +4765,19 @@ class Pentagram extends Piece {
 
 //
 //taxi U+1F695 /
-//bus U+1F68C move other pieces (friendly) to it's tail?
-//this.tiles.splice(this.tiles.length-1, 1);
-
+//bus U+1F68C move other pieces (friendly) to it's tail?//this.tiles.splice(this.tiles.length-1, 1);
 //FISHING POLE AND FISH, U+1F3A3 long range - move a piece toward it - magnet with long range
+//FISH U+1F41F slips into empty space when attacked //U+1F420 TROPICAL FISH 
+////fleur de lis U+269C scout, lay traps? expose/Temp increase friendlies range.
+//U+2702 BLACK SCISSORS remove middle tile of piece (two if even). Swap with saw?
+
+//🏗 crane  U+1F3D7 creates a wall around it of 8 tiles
+//TELEVISION, U+1F4FA charm piece - brainwash
+//acorn -> sapling -> oak then acorn can be rarity 1
+//PLAYGROUND SLIDE, U+1F6DD like gate but with more range? line target??
+//SWAN, U+1F9A2 - break a man's arm /reduce range?
+//BACTRIAN CAMEL, U+1F42B spit to blind
+
 
 export const allPieces = [Ant, Banana, Bee, Egg, Knife, Potato, Rat, Shield, Sling, Snail, TP, Acorn, Aegis, Banner, Beetle, Bow, Bull, Chick, Chicken, Dagger, Decoy, Dog, Fence, Frond, Doctor, Gecko, Guard, Hedgehog, Jellyfish, Larva, Lance, Tree, Flute, Rooster, Saw, Snake, Tar, Germ, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Buffalo, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, Hopper, LabRat, LadyBeetle, Magnet, Medic, Mosquito, Ninja, Octopus, Officer, Paladin, Wasp, Pawn, Peacock, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Vulture, Alien, Arms, Axe, Bison, Cannon, Lightning, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Kite, Leopard, Lighthouse, Mammoth, Mine, Nerf, Oil, Palm, Parrot, Poop, Puffer, Rabbit, Scarab, Shark, Soldier, Squid, Teargas, Tiger, Tradie, Bat, Wizard, Wolf, Zebra, Archdaemon, Recurve, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Firework, Gman, Giraffe, Hippo, Lion, Lovebomb, Harp, Orangutan, Paragon, Pentagram, Rhino, Screwdriver, Shovel, Shrike, Snowman, Stopwatch, Tank, Coat, UFO, Zombie, Vampire, Greatshield, Bear, Helicopter, Gorilla, Lich, Dolls, Nuke, Oni, Sol, Sponge, Super, Rex, Unicorn]; //100 +2 (web, ink)
 
@@ -4879,24 +4888,12 @@ console.log("Pieces of rarity 4: ", adminLogs.rarity4)
 console.log("Pieces of rarity 5: ", adminLogs.rarity5)
 console.log("Pieces of rarity 6: ", adminLogs.rarity6)
 
-//TELEVISION, U+1F4FA charm piece - brainwash
-//fleur de lis U+269C scout, lay traps? expose/Temp increase friendlies range.
-//building castle? creates a wall around it of 8 tiles
-//🏗 crane  U+1F3D7
-
 //Invisible wall - hi defence hidden piece
-//acorn -> sapling -> oak then acorn can be rarity 1
-
-//chequered flag U+1F3C1
-
-//PLAYGROUND SLIDE, U+1F6DD like gate but with more range? line target??
-//SWAN, U+1F9A2 - break a man's arm /reduce range?
-
 //FROG FACE, U+1F438 //range 3 low atk //poison/hop ability? FROG EGYPTIAN HIEROGLYPH I007, U+1318F
 // KANGAROO, U+1F998 hop
-//BACTRIAN CAMEL, U+1F42B
+
 //Dromidary
-
+//chequered flag U+1F3C1
 //chess knight special move L shape
-
 //DANCER, U+1F483 //high movement no damage
+

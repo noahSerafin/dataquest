@@ -30,8 +30,7 @@ export const sector3 = {
       },
       "next": [
         "node_klrlji06y",
-        "node_wpzs572tz",
-        "node_x6s2c7b8o"
+        "node_wpzs572tz"
       ],
       "difficultyMod": 0,
       "reward": 5,
@@ -46,12 +45,6 @@ export const sector3 = {
           "x": 0,
           "y1": 21,
           "y2": 0
-        },
-        "node_x6s2c7b8o": {
-          "x": 50,
-          "y1": 0,
-          "y2": 0,
-          "ds2": 26
         }
       },
       "levelName": "The Red Carpet"
@@ -173,7 +166,8 @@ export const sector3 = {
         "y": 440
       },
       "next": [
-        "node_oljhbd0kz"
+        "node_oljhbd0kz",
+        "node_cg5ykb73i"
       ],
       "difficultyMod": 0,
       "reward": 5,
@@ -185,6 +179,12 @@ export const sector3 = {
           "y2": 25,
           "ds1": 8,
           "ds2": 9
+        },
+        "node_cg5ykb73i": {
+          "x": 53,
+          "y1": 0,
+          "y2": 0,
+          "ds1": 21
         }
       },
       "levelName": "The Watering Hole"
@@ -328,7 +328,7 @@ export const sector3 = {
           "y2": -16
         }
       },
-      "shopContents": "Boomerang, Buffalo, Gate, Mosquito, Ladybird, Gloves, Jar, Melon, Roids, Update 2.0, Ace in the hole, Broom, Chain Reaction, Full Bodied, Spare Pair"
+      "shopContents": "Boomerang, Buffalo, Gate, Mosquito, Ladybird, Gloves, Jar, Melon, Roids, Update 2.0, Ace in the hole, Broom, Full Bodied, Scarf, Spare Pair"
     },
     "node_fveh4qswo": {
       "id": "node_fveh4qswo",
@@ -341,7 +341,7 @@ export const sector3 = {
         "node_b6kh8upu0"
       ],
       "difficultyMod": 0,
-      "reward": 0,
+      "reward": 5,
       "company": "Sakura Robotics",
       "bossName": "Castle",
       "pathOffsets": {
@@ -364,7 +364,7 @@ export const sector3 = {
         "node_n4i6vtt1u"
       ],
       "difficultyMod": 0,
-      "reward": 0,
+      "reward": 5,
       "company": "Meridian Security Inc.",
       "bossName": "Banhammer",
       "levelName": "The Floodgates"
@@ -380,7 +380,7 @@ export const sector3 = {
         "node_grqa40fhn"
       ],
       "difficultyMod": 0,
-      "reward": 0,
+      "reward": 5,
       "company": "Monkey Media",
       "bossName": "Circus",
       "pathOffsets": {

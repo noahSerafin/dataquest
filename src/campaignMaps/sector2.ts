@@ -5,7 +5,7 @@ export const sector2 = {
       "type": "start",
       "position": {
         "x": 720,
-        "y": 580
+        "y": 560
       },
       "next": [
         "node_qjlq1k631",
@@ -34,12 +34,22 @@ export const sector2 = {
         "y": 380
       },
       "next": [
-        "node_t43cf0g1r"
+        "node_t43cf0g1r",
+        "node_i5gj9vkxa"
       ],
       "difficultyMod": 0,
       "reward": 3,
       "company": "Tsukimi Group",
-      "levelName": "The Guardhouse"
+      "levelName": "The Guardhouse",
+      "pathOffsets": {
+        "node_i5gj9vkxa": {
+          "x": 0,
+          "y1": 19,
+          "y2": 8,
+          "ds1": 6,
+          "ds2": 8
+        }
+      }
     },
     "node_qjlq1k631": {
       "id": "node_qjlq1k631",
@@ -50,7 +60,8 @@ export const sector2 = {
       },
       "next": [
         "node_et3jrxgh5",
-        "node_fq41u6f6a"
+        "node_fq41u6f6a",
+        "node_b3dk15m73"
       ],
       "difficultyMod": 0,
       "reward": 3,
@@ -58,8 +69,13 @@ export const sector2 = {
       "pathOffsets": {
         "node_fq41u6f6a": {
           "x": 20,
-          "y1": -4,
+          "y1": -10,
           "y2": 8
+        },
+        "node_b3dk15m73": {
+          "x": 0,
+          "type": "VDHDV",
+          "y": 41
         }
       },
       "levelName": "Bouncing Back"
@@ -104,7 +120,7 @@ export const sector2 = {
       "company": "Tsukimi Group",
       "pathOffsets": {
         "node_tew43kmpq": {
-          "x": 27,
+          "x": 77,
           "y1": -23,
           "y2": 0,
           "ds1": 4,
@@ -121,19 +137,12 @@ export const sector2 = {
         "y": 360
       },
       "next": [
-        "node_t43cf0g1r",
         "node_q0erjp0ve"
       ],
       "difficultyMod": 0,
       "reward": 3,
       "company": "Tsukimi Group",
-      "pathOffsets": {
-        "node_t43cf0g1r": {
-          "x": 0,
-          "y1": -16,
-          "y2": 20
-        }
-      },
+      "pathOffsets": {},
       "levelName": "The Grove"
     },
     "node_qwmk7rad0": {
@@ -173,7 +182,15 @@ export const sector2 = {
       "reward": 0,
       "company": "Tsukimi Group",
       "bossName": "Shrine",
-      "levelName": "Assasins"
+      "levelName": "Assasins",
+      "pathOffsets": {
+        "node_6444j8vi7": {
+          "x": -30,
+          "y1": 0,
+          "y2": 0,
+          "ds1": 5
+        }
+      }
     },
     "node_95emidsfs": {
       "id": "node_95emidsfs",
@@ -305,8 +322,8 @@ export const sector2 = {
       "id": "node_tew43kmpq",
       "type": "skip",
       "position": {
-        "x": 740,
-        "y": 300
+        "x": 660,
+        "y": 320
       },
       "next": [],
       "difficultyMod": 0,
@@ -340,7 +357,7 @@ export const sector2 = {
       "difficultyMod": 0,
       "reward": 0,
       "company": "Saturn Solutions",
-      "shopContents": "Bow, Frond, Decoy, Doctor, Hedgehog, Extinguisher, Formula, Frogman, Lab Coat, Plunger, Aesculapius, Coin Toss, Convenience Store, Fire Engine, Scarf"
+      "shopContents": "Bow, Frond, Decoy, Doctor, Hedgehog, Formula"
     },
     "node_4tzizzviv": {
       "id": "node_4tzizzviv",
@@ -407,22 +424,12 @@ export const sector2 = {
         "x": 740,
         "y": 460
       },
-      "next": [
-        "node_i5gj9vkxa"
-      ],
+      "next": [],
       "difficultyMod": 0,
       "reward": 0,
       "company": "Saturn Solutions",
       "shopContents": "Banner, Dog, Fence, Gecko, Snake, Millwall Brick, Pickup, Putter, Stiletto, Vitamin C",
-      "pathOffsets": {
-        "node_i5gj9vkxa": {
-          "x": -53,
-          "y1": -8,
-          "y2": 18,
-          "ds2": 4,
-          "ds1": 4
-        }
-      }
+      "pathOffsets": {}
     },
     "node_s5gsrut28": {
       "id": "node_s5gsrut28",
@@ -442,7 +449,7 @@ export const sector2 = {
       "type": "shop",
       "position": {
         "x": 740,
-        "y": 240
+        "y": 280
       },
       "next": [],
       "difficultyMod": 0,
@@ -455,23 +462,14 @@ export const sector2 = {
       "type": "skip",
       "position": {
         "x": 720,
-        "y": 640
+        "y": 620
       },
-      "next": [
-        "node_qjlq1k631"
-      ],
+      "next": [],
       "difficultyMod": 0,
       "reward": 0,
       "company": "Saturn Solutions",
       "skipContents": "Yo-yo",
-      "pathOffsets": {
-        "node_qjlq1k631": {
-          "x": -50,
-          "y1": 7,
-          "y2": 30,
-          "ds1": 12
-        }
-      }
+      "pathOffsets": {}
     },
     "node_2kbqcjn3r": {
       "id": "node_2kbqcjn3r",

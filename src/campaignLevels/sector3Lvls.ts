@@ -1,6 +1,6 @@
 import type { Level } from "../types"
 
-const carrion:Level = {
+const carrion: Level = {
   "name": "Carrion",
   "tiles": [
     {
@@ -371,7 +371,7 @@ const carrion:Level = {
     }
   ]
 }
-const hole:Level = {
+const hole: Level = {
   "name": "The Watering Hole",
   "tiles": [
     {
@@ -742,7 +742,7 @@ const hole:Level = {
     }
   ]
 }
-const mine:Level = {
+const mine: Level = {
   "name": "The Mine",
   "tiles": [
     {
@@ -1169,7 +1169,7 @@ const mine:Level = {
     }
   ]
 }
-const carpet:Level = {
+const carpet: Level = {
   "name": "The Red Carpet",
   "tiles": [
     {
@@ -1496,7 +1496,7 @@ const carpet:Level = {
     }
   ]
 }
-const Illiad:Level = {
+const Illiad: Level = {
   "name": "The Illiad",
   "tiles": [
     {
@@ -1875,7 +1875,7 @@ const Illiad:Level = {
     }
   ]
 }
-const lawn:Level = {
+const lawn: Level = {
   "name": "The Lawn",
   "tiles": [
     {
@@ -2250,7 +2250,7 @@ const lawn:Level = {
     }
   ]
 }
-const booby:Level = {
+const booby: Level = {
   "name": "The Booby Trap",
   "tiles": [
     {
@@ -2654,7 +2654,7 @@ const booby:Level = {
     {
       "id": "2c205c72-df35-4c81-a250-3879f22b8669",
       "name": "Officer",
-      "team": "player",
+      "team": "enemy",
       "headPosition": {
         "x": 3,
         "y": 2
@@ -2669,7 +2669,7 @@ const booby:Level = {
     }
   ]
 }
-const dojo:Level = {
+const dojo: Level = {
   "name": "Ninja School",
   "tiles": [
     {
@@ -3036,7 +3036,7 @@ const dojo:Level = {
     }
   ]
 }
-const crossroads:Level = {
+const crossroads: Level = {
   "name": "The Crossroads",
   "tiles": [
     {
@@ -3419,7 +3419,7 @@ const crossroads:Level = {
     }
   ]
 }
-const pass:Level = {
+const pass: Level = {
   "name": "The Pass",
   "tiles": [
     {
@@ -3770,7 +3770,7 @@ const pass:Level = {
     }
   ]
 }
-const farm:Level = {
+const farm: Level = {
   "name": "The Farm",
   "tiles": [
     {
@@ -4205,7 +4205,7 @@ const farm:Level = {
     }
   ]
 }
-const shallows:Level = {
+const shallows: Level = {
   "name": "The Shallows",
   "tiles": [
     {
@@ -4540,7 +4540,7 @@ const shallows:Level = {
     }
   ]
 }
-const castle:Level = {
+const castle: Level = {
   "name": "The Castle",
   "tiles": [
     {
@@ -4919,7 +4919,7 @@ const castle:Level = {
     }
   ]
 }
-const circus:Level = {
+const circus: Level = {
   "name": "The Big Top",
   "tiles": [
     {
@@ -5390,7 +5390,7 @@ const circus:Level = {
     }
   ]
 }
-const floodgate:Level = {
+const floodgate: Level = {
   "name": "The Floodgates",
   "tiles": [
     {

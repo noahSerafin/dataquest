@@ -4572,7 +4572,7 @@ const pit:Level = {
     {
       "id": "5cc01aab-f9eb-4307-9519-a21d24232c06",
       "name": "Bull",
-      "team": "player",
+      "team": "enemy",
       "headPosition": {
         "x": 2,
         "y": 2

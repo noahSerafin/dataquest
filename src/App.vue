@@ -2278,7 +2278,7 @@ function requestForfeit() {
 }
 
 function requestRetry() {
-  if (player.value.lives <= 1) return;
+  if (currentAppMode.value !== 'campaign' && player.value.lives <= 1) return;
   confirmModalAction.value = "retry";
   showConfirmModal.value = true;
 }
@@ -2494,7 +2494,7 @@ function cancelConfirm() {
       <div id="player-actions" v-if="!displayEditor" class="player-actions">
         <button v-if="(!displayEditor && roundHasStarted && !hasFinishedTurn && hasPlacedPiece) || debugMode" class="end-turn"
           v-on:click="endTurn()">End Turn</button>
-        <button :disabled="hasFinishedTurn" v-if="!displayEditor && roundHasStarted && player.lives > 1"
+        <button :disabled="hasFinishedTurn" v-if="!displayEditor && roundHasStarted && (currentAppMode !== 'campaign' && player.lives > 1)"
           class="retry-btn" v-on:click="requestRetry()">Retry</button>
         <button :disabled="hasFinishedTurn" v-if="!displayEditor && roundHasStarted" class="forfeit-btn"
           v-on:click="requestForfeit()">Forfeit</button>

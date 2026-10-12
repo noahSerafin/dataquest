@@ -11,8 +11,8 @@ export const sector0 = {
       "id": "node_g41ksufcp",
       "type": "start",
       "position": {
-        "x": 440,
-        "y": 660
+        "x": 460,
+        "y": 560
       },
       "next": [
         "node_km8bwjcq7"
@@ -32,7 +32,7 @@ export const sector0 = {
       "type": "level",
       "position": {
         "x": 540,
-        "y": 560
+        "y": 500
       },
       "next": [
         "node_svw51xvjh",
@@ -45,7 +45,13 @@ export const sector0 = {
         "node_svw51xvjh": {
           "x": 0,
           "ds1": 8,
-          "ds2": 12
+          "ds2": 12,
+          "y1": 14
+        },
+        "node_9wnsfvrt4": {
+          "x": 0,
+          "y1": -19,
+          "y2": 13
         }
       },
       "levelName": "The Arena"
@@ -54,11 +60,10 @@ export const sector0 = {
       "id": "node_ltmmq2vo6",
       "type": "level",
       "position": {
-        "x": 400,
+        "x": 480,
         "y": 120
       },
       "next": [
-        "node_mez50lbxk",
         "node_hb7dz8ll7"
       ],
       "difficultyMod": 1,
@@ -84,7 +89,7 @@ export const sector0 = {
       "id": "node_c8d8kquy9",
       "type": "level",
       "position": {
-        "x": 400,
+        "x": 480,
         "y": 380
       },
       "next": [
@@ -96,8 +101,8 @@ export const sector0 = {
       "company": "Nightbridge Corp",
       "pathOffsets": {
         "node_vx34hfayc": {
-          "x": 0,
-          "y1": -22,
+          "x": 59,
+          "y1": -18,
           "y2": 0
         },
         "node_ltmmq2vo6": {
@@ -236,7 +241,7 @@ export const sector0 = {
       "type": "skip",
       "position": {
         "x": 720,
-        "y": 500
+        "y": 480
       },
       "next": [],
       "difficultyMod": 0,
@@ -248,8 +253,8 @@ export const sector0 = {
       "id": "node_vx34hfayc",
       "type": "skip",
       "position": {
-        "x": 520,
-        "y": 260
+        "x": 480,
+        "y": 280
       },
       "next": [],
       "difficultyMod": 0,
@@ -261,8 +266,8 @@ export const sector0 = {
       "id": "node_9wnsfvrt4",
       "type": "shop",
       "position": {
-        "x": 540,
-        "y": 460
+        "x": 640,
+        "y": 440
       },
       "next": [
         "node_dl1mtdtzw",
@@ -297,29 +302,6 @@ export const sector0 = {
         }
       },
       "shopContents": "Bee, Rat, Sling, Snail, TP, Blueberry, Iron, Juiced, Mushroom, Update, Candle, Chedda, Harvest, Notepad, Parachute"
-    },
-    "node_mez50lbxk": {
-      "id": "node_mez50lbxk",
-      "type": "sacrificial altar",
-      "position": {
-        "x": 500,
-        "y": 200
-      },
-      "next": [
-        "node_hb7dz8ll7"
-      ],
-      "difficultyMod": 0,
-      "reward": 0,
-      "company": "Saturn Solutions",
-      "pathOffsets": {
-        "node_hb7dz8ll7": {
-          "x": 0,
-          "y1": 0,
-          "y2": 19,
-          "ds1": 2,
-          "ds2": 3
-        }
-      }
     }
   },
   "startNode": "node_g41ksufcp"

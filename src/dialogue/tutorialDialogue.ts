@@ -177,6 +177,7 @@ export const tutorialDialogue = {
         },
         {
           "text": "Thanks, That's all for now",
+          "nextNode": "node_99"
         },
       ]
     },
@@ -185,21 +186,6 @@ export const tutorialDialogue = {
       "speaker": "Al",
       "elementID": "node_9wnsfvrt4",
       "text": "That's a shop. It's run by another recruit, Hamuel. They'll let you know more when you visit.",
-      "choices": [
-        {
-          "text": "What about the 🪦 in the top corner?",
-          "nextNode": "node_7"
-        },
-        {
-          "text": "Thanks, That's all for now",
-        },
-      ]
-    },
-    "node_7": {
-      "id": "node_7",
-      "speaker": "Al",
-      "elementID": "node_mez50lbxk",
-      "text": "That is an an altar node. It will let you sacrifice programs (remove them from your inventory) to gain <span class='text-yellow'>money</span>. You can always sell a program on the spot, but altars will give you a bit extra. Look out for more nodes of this shape in the future, they always have something interesting inside. But beware once you enter them, unlike shops you will not be able to again.",
       "choices": [
         {
           "text": "Thanks, That's all for now",

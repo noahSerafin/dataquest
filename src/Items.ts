@@ -4,6 +4,7 @@ import type { Player } from "./Player"
 import { getRandomUnoccupiedTile, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, addItemsUntilFull } from "./helperFunctions"
 import { StorageManager } from "./StorageManager"
 import { Random } from "./Random"
+import { PIECE_VARIANTS } from "./constants"
 
 export abstract class Item<TTarget = any> {
     id: string
@@ -59,7 +60,7 @@ export abstract class Item<TTarget = any> {
 }
 
 export class Mushroom extends Item<PieceBlueprint> {
-  static iconID = 167;
+    static iconID = 167;
 
 
     static name = "Mushroom";
@@ -77,7 +78,7 @@ export class Mushroom extends Item<PieceBlueprint> {
 }
 
 export class Meat extends Item<PieceBlueprint> {
-  static iconID = 204;
+    static iconID = 204;
 
 
     static name = "Meat";
@@ -94,7 +95,7 @@ export class Meat extends Item<PieceBlueprint> {
 }
 
 export class Iron extends Item<PieceBlueprint> {
-  static iconID = 164;
+    static iconID = 164;
 
 
     static name = "Iron";
@@ -112,7 +113,7 @@ export class Iron extends Item<PieceBlueprint> {
 }
 
 export class Garlic extends Item<PieceBlueprint> {
-  static iconID = 200;
+    static iconID = 200;
 
 
     static name = "Garlic";
@@ -129,7 +130,7 @@ export class Garlic extends Item<PieceBlueprint> {
 }
 
 export class Ginger extends Item<PieceBlueprint> {
-  static iconID = 217;
+    static iconID = 217;
 
 
     static name = "Ginger";
@@ -151,7 +152,7 @@ export class Ginger extends Item<PieceBlueprint> {
 //??"U+26E8";
 
 export class Blueberry extends Item<PieceBlueprint> {
-  static iconID = 162;
+    static iconID = 162;
 
 
     static name = "Blueberry";
@@ -170,7 +171,7 @@ export class Blueberry extends Item<PieceBlueprint> {
 }
 
 class Melon extends Item<PieceBlueprint> {
-  static iconID = 190;
+    static iconID = 190;
 
 
     static name = "Melon";
@@ -189,7 +190,7 @@ class Melon extends Item<PieceBlueprint> {
 }
 
 class Pie extends Item<PieceBlueprint> {
-  static iconID = 205;
+    static iconID = 205;
 
 
     static name = "Pie";
@@ -208,7 +209,7 @@ class Pie extends Item<PieceBlueprint> {
 }
 
 class Pepper extends Item<PieceBlueprint> {
-  static iconID = 169;
+    static iconID = 169;
 
 
     static name = "Pepper";
@@ -227,7 +228,7 @@ class Pepper extends Item<PieceBlueprint> {
 }
 
 export class Carrot extends Item<PieceBlueprint> {
-  static iconID = 199;
+    static iconID = 199;
 
 
     static name = "Carrot";
@@ -246,7 +247,7 @@ export class Carrot extends Item<PieceBlueprint> {
 }
 
 export class Juice extends Item<PieceBlueprint> {
-  static iconID = 166;
+    static iconID = 166;
 
 
     static name = "Juiced";
@@ -263,7 +264,7 @@ export class Juice extends Item<PieceBlueprint> {
 }
 
 class Teapot extends Item<PieceBlueprint> {
-  static iconID = 181;
+    static iconID = 181;
 
 
     static name = "Teapot";//defence?
@@ -281,7 +282,7 @@ class Teapot extends Item<PieceBlueprint> {
 }
 
 export class Coffee extends Item<PieceBlueprint> {
-  static iconID = 208;
+    static iconID = 208;
 
 
     static name = "Coffee";
@@ -298,7 +299,7 @@ export class Coffee extends Item<PieceBlueprint> {
 }
 
 export class Roids extends Item<PieceBlueprint> {
-  static iconID = 194;
+    static iconID = 194;
 
 
     static name = "Roids";
@@ -316,7 +317,7 @@ export class Roids extends Item<PieceBlueprint> {
 }
 
 export class Formula extends Item<PieceBlueprint> {
-  static iconID = 174;
+    static iconID = 174;
 
 
     static name = "Formula";
@@ -336,7 +337,7 @@ export class Formula extends Item<PieceBlueprint> {
 // OLIVE, U+1FAD2
 
 export class Blessing extends Item<PieceBlueprint> {
-  static iconID = 215;
+    static iconID = 215;
 
 
     static name = "Blessing";
@@ -358,7 +359,7 @@ export class Blessing extends Item<PieceBlueprint> {
 }
 
 export class Supplement extends Item<Piece> {
-  static iconID = 207;
+    static iconID = 207;
 
 
     static name = "Supplement";
@@ -380,7 +381,7 @@ export class Supplement extends Item<Piece> {
 }
 
 export class Bandage extends Item<Piece> {
-  static iconID = 172;
+    static iconID = 172;
 
 
     static name = "Bandage";
@@ -412,7 +413,7 @@ export class Bandage extends Item<Piece> {
 }
 
 export class Cake extends Item<Piece> {
-  static iconID = 198;
+    static iconID = 198;
 
 
     static name = "Cake";
@@ -431,7 +432,7 @@ export class Cake extends Item<Piece> {
 }
 
 class Soap extends Item<Piece> {
-  static iconID = 180;
+    static iconID = 180;
 
 
     static name = "Soap";
@@ -451,7 +452,7 @@ class Soap extends Item<Piece> {
 }
 
 export class Voucher extends Item<Item> {
-  static iconID = 171;
+    static iconID = 171;
 
 
     static name = "Voucher";
@@ -468,7 +469,7 @@ export class Voucher extends Item<Item> {
 }
 
 export class Rations extends Item<Piece> {
-  static iconID = 193;
+    static iconID = 193;
 
 
     static name = "Rations";
@@ -485,7 +486,7 @@ export class Rations extends Item<Piece> {
 }
 
 export class Beans extends Item<Piece> {
-  static iconID = 183;
+    static iconID = 183;
 
 
     static name = "Beans";
@@ -502,7 +503,7 @@ export class Beans extends Item<Piece> {
 }
 
 export class ShootingStar extends Item<PieceBlueprint> {
-  static iconID = 221;
+    static iconID = 221;
 
 
     static name = "Shooting Star";
@@ -535,7 +536,7 @@ export class ShootingStar extends Item<PieceBlueprint> {
 // BENTO BOX, U+1F371 random upgrade item
 //// AMPHORA, U+1F3FA Pandora
 export class Pandora extends Item<Player> {
-  static iconID = 219;
+    static iconID = 219;
 
 
     static name = "Pandora";
@@ -557,7 +558,7 @@ export class Pandora extends Item<Player> {
 
 //move randomgen functions to helper file, import asnd use them them here
 export class Gift extends Item<Player> {
-  static iconID = 176;
+    static iconID = 176;
 
 
     static name = "Gift Box";
@@ -580,7 +581,7 @@ export class Gift extends Item<Player> {
 }
 
 export class Genie extends Item<Player> {
-  static iconID = 211;
+    static iconID = 211;
 
 
     static name = "Genie";
@@ -610,7 +611,7 @@ export class Genie extends Item<Player> {
 }
 
 export class Box extends Item<Player> {
-  static iconID = 168;
+    static iconID = 168;
 
 
     static name = "Mystery Box";
@@ -633,7 +634,7 @@ export class Box extends Item<Player> {
 }
 
 export class Pinata extends Item<Player> {
-  static iconID = 192;
+    static iconID = 192;
     static name = "Pinata";
     static description = "Grants a random admin program (must have room)";
     static unicode = "U+1FA85";
@@ -656,7 +657,7 @@ export class Pinata extends Item<Player> {
 }
 
 export class Spanner extends Item<Piece> {
-  static iconID = 195;
+    static iconID = 195;
 
 
     static name = "Spanner";
@@ -669,7 +670,7 @@ export class Spanner extends Item<Piece> {
         //name desc utf || maxsize moves range atk def
     }
     apply(target: Piece, _itemMult: number) {
-        if(!target.immunities.frozen){
+        if (!target.immunities.frozen) {
             target.statuses.frozen = true;
         }
         target.statuses.disarmed = true;
@@ -677,11 +678,11 @@ export class Spanner extends Item<Piece> {
 }
 
 class Makeover extends Item<Piece> {
-  static iconID = 189;
+    static iconID = 189;
 
 
     static name = "Makeover";
-    static description = "Remove exposed from a program";
+    static description = "Roll a random variant on a held program";//"Remove exposed from a program";//roll a random variant on a program
     static unicode = "U+1F485";
     static color = "#f18fedff";
     static rarity = 3;
@@ -691,11 +692,15 @@ class Makeover extends Item<Piece> {
     }
     apply(target: Piece, _itemMult: number) {
         target.statuses.exposed = false;
+        //roll a random variant on a program
+        const variant = Random.pick(PIECE_VARIANTS);
+        target.variantName = variant.name;
+        target.addModifier(variant.mods);
     }
 }
 
 class Lips extends Item<Piece> {
-  static iconID = 206;
+    static iconID = 206;
 
 
     static name = "Seduction";
@@ -713,7 +718,7 @@ class Lips extends Item<Piece> {
 }
 
 export class Wand extends Item<Piece[]> {
-  static iconID = 202;
+    static iconID = 202;
     static name = "Magic Wand";
     static description = "Undo a turn";
     static unicode = "U+1FA84";
@@ -728,7 +733,7 @@ export class Wand extends Item<Piece[]> {
 }
 
 export class Hourglass extends Item<Piece[]> {
-  static iconID = 212;
+    static iconID = 212;
     static name = "Hourglass";
     static description = "Retry a node without losing a life";
     static unicode = "U+231B";
@@ -744,7 +749,7 @@ export class Hourglass extends Item<Piece[]> {
 }
 
 class Keygen extends Item<Piece[]> {
-  static iconID = 188;
+    static iconID = 188;
     static name = "Keygen";
     static description = "Lower the defence of all enemy programs in a node by 1";
     static unicode = "U+1F511";
@@ -766,7 +771,7 @@ class Keygen extends Item<Piece[]> {
 }
 
 class Bugle extends Item<Piece[]> {
-  static iconID = 185;
+    static iconID = 185;
 
     static name = "Bugle";
     static description = "All placed player programs gain +1 attack";
@@ -787,7 +792,7 @@ class Bugle extends Item<Piece[]> {
 }
 
 class Megaphone extends Item<Piece[]> {
-  static iconID = 191;
+    static iconID = 191;
 
     static name = "Pep Talk";
     static description = "All placed player programs gain +1 moves";
@@ -808,7 +813,7 @@ class Megaphone extends Item<Piece[]> {
 }
 
 class Battery extends Item<Piece[]> {
-  static iconID = 163;
+    static iconID = 163;
 
     static name = "Fresh Batteries";
     static description = "All placed player programs replenish their moves remaining";
@@ -830,7 +835,7 @@ class Battery extends Item<Piece[]> {
 
 //SANDWICH, U+1F96A, all rounder? random stat?
 export class Sandwich extends Item<Piece> {
-  static iconID = 213;
+    static iconID = 213;
 
 
     static name = "Sandwich";
@@ -852,7 +857,7 @@ export class Sandwich extends Item<Piece> {
 }
 
 class Hotline extends Item {
-  static iconID = 177;
+    static iconID = 177;
 
 
     static name = "Hotline";
@@ -879,7 +884,7 @@ class Hotline extends Item {
 
 //target player
 export class Floppy extends Item {
-  static iconID = 170;
+    static iconID = 170;
 
 
     static name = "Update";
@@ -897,7 +902,7 @@ export class Floppy extends Item {
 }
 
 export class Update2 extends Item {
-  static iconID = 196;
+    static iconID = 196;
 
 
     static name = "Update 2.0";
@@ -915,7 +920,7 @@ export class Update2 extends Item {
 }
 
 export class Update3 extends Item {
-  static iconID = 220;
+    static iconID = 220;
 
 
     static name = "Hardware Upgrade";
@@ -933,7 +938,7 @@ export class Update3 extends Item {
 }
 
 export class Life extends Item {
-  static iconID = 214;
+    static iconID = 214;
 
 
     static name = "1-Up";
@@ -951,7 +956,7 @@ export class Life extends Item {
 }
 
 export class Dupe extends Item<Player> {
-  static iconID = 210;
+    static iconID = 210;
 
 
     static name = "Dupe";
@@ -1013,7 +1018,7 @@ export class Jar extends Item {
 }
 
 class Chili extends Item<Piece[]> {
-  static iconID = 197;
+    static iconID = 197;
     static name = "Zing";
     static description = "Increases all your placed programs' moves and range by 1 for one round";
     static unicode = "U+1F336";
@@ -1034,7 +1039,7 @@ class Chili extends Item<Piece[]> {
 }
 
 class Feast extends Item<Piece[]> {
-  static iconID = 216;
+    static iconID = 216;
 
     static name = "Feast";
     static description = "Increases all your placed programs' stats by 3 for one round";
@@ -1059,7 +1064,7 @@ class Feast extends Item<Piece[]> {
 }
 
 class Lightning extends Item<Piece[]> {
-  static iconID = 203;
+    static iconID = 203;
     static name = "Lightning";
     static description = "Removes all defences and 1 tile from all enemies";
     static unicode = "U+26A1";
@@ -1072,7 +1077,7 @@ class Lightning extends Item<Piece[]> {
         activePieces.forEach(piece => {
             if (piece.team === 'enemy') {
                 piece.defenceRemaining = 0;
-                piece.addModifier({defence: -piece.getStat('defence')});
+                piece.addModifier({ defence: -piece.getStat('defence') });
                 piece.takeDamage(piece.defenceRemaining + 1);
             }
         });
@@ -1081,7 +1086,7 @@ class Lightning extends Item<Piece[]> {
 
 //toothbrush - single use broom?
 class Toothbrush extends Item<Piece[]> {
-  static iconID = 182;
+    static iconID = 182;
     static name = "Toothbrush";
     static description = "Removes all enemies with a size of 1 and 0 defence remaining";
     static unicode = "U+1FAA5";
@@ -1100,7 +1105,7 @@ class Toothbrush extends Item<Piece[]> {
 }
 
 class Beer extends Item<Player> {
-  static iconID = 218;
+    static iconID = 218;
 
 
     static name = "Happy Hour";
@@ -1129,7 +1134,7 @@ class Beer extends Item<Player> {
 }
 
 export class Headphones extends Item<PieceBlueprint> {
-  static iconID = 165;
+    static iconID = 165;
 
 
     static name = "Locked In";
@@ -1145,7 +1150,7 @@ export class Headphones extends Item<PieceBlueprint> {
     }
 }
 class Disguise extends Item<PieceBlueprint> {
-  static iconID = 209;
+    static iconID = 209;
 
 
     static name = "Disguise";
@@ -1161,7 +1166,7 @@ class Disguise extends Item<PieceBlueprint> {
     }
 }
 class Goggles extends Item<PieceBlueprint> {
-  static iconID = 201;
+    static iconID = 201;
 
 
     static name = "Goggles";
@@ -1177,7 +1182,7 @@ class Goggles extends Item<PieceBlueprint> {
     }
 }
 class Gloves extends Item<PieceBlueprint> {
-  static iconID = 186;
+    static iconID = 186;
 
 
     static name = "Gloves";
@@ -1193,7 +1198,7 @@ class Gloves extends Item<PieceBlueprint> {
     }
 }
 class Labcoat extends Item<PieceBlueprint> {
-  static iconID = 178;
+    static iconID = 178;
 
 
     static name = "Lab Coat";
@@ -1209,7 +1214,7 @@ class Labcoat extends Item<PieceBlueprint> {
     }
 }
 class Frogman extends Item<PieceBlueprint> {
-  static iconID = 175;
+    static iconID = 175;
 
 
     static name = "Frogman";
@@ -1225,7 +1230,7 @@ class Frogman extends Item<PieceBlueprint> {
     }
 }
 class Blackheart extends Item<PieceBlueprint> {
-  static iconID = 184;
+    static iconID = 184;
 
 
     static name = "Blackheart";
@@ -1256,7 +1261,7 @@ class Plunger extends Item<PieceBlueprint> {
 }
 ////POURING LIQUID, U+1FAD7, spillage
 class Extinguisher extends Item<PieceBlueprint> {
-  static iconID = 173;
+    static iconID = 173;
 
 
     static name = "Extinguisher";

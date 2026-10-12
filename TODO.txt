@@ -1,19 +1,18 @@
-Sector0
-remove altar altogether
-
 Sector2
 yoyo level in sector3 too hard
-yoyo reward connection going the wrong way
-convenience store in shop - get rid
+review shop with all the immunity items in, spread these out over future sectors (Extinguisher, Frogman, Lab Coat, Plunger, )-
+add immunity admins to future sectors (aesculapius, fire engine)
 remove coin also? eliminate randomness
 banner appears in shop but appears in sector1 shop already
 -already quite overpowered, postpone items until later - include some variants after the yoyo level?
 
+Sector3 - 4 shops
 
-make selcting "I've done this before" disable future message popups completely
+
 add retry button to campaign, warning that it will reset the node
 remove + 1 from past nodes in header
-boss description need the highest z-index
+make selcting "I've done this before" disable future message popups completely
+boss description needs the highest z-index
 reduce rewards massively
 you win appearing on last node
 hide rarity text on items/bps/controllers in campaign mode
@@ -21,8 +20,6 @@ Test rogue mode is not broken
 campaign is raising security level every level, not just after bosses - (make all nodes security 0 or 1 if hard?)
 add a previous sector btn, track shop purchases in save
 
-overworld map?
-background colours for node maps (use company owner)//levels array (make map have a starting copmany)
 
 sector 0, 2 too wide
 cosmetic cicuitboard pieces
@@ -32,7 +29,14 @@ Dialogue after tutorial
 put variants in campaign levels
 secret bonus nodes
 
+
+overworld map?
+background colours for node maps (use company owner)//levels array (make map have a starting copmany)
+
 Preserve all roguelike App functions (move to own file?)
+!makeover apply random variant - test
+!attacking hidden pieces should reveal them while they are taking damage
+Normalise all food, can be used on progam in or out of node? Sandwich +1 blessing +2
 For campaign:
 Beating boss loads next map
 (allow returning to previous map?)
@@ -42,7 +46,10 @@ make a test campaign, populate with existing levels
 
 ITEMS/ADMINS
 review roguelikes
-keep track of upgrades and display on piece - items add +0.2 to pieces version number for each +1 stat, only display version number if above 1
+keep track of upgrades and display on piece - items add +0.1 to pieces version number for each +1 stat, only display version number if above 1
+MaxSize, Moves + 0.1 
+atk, def, range + 0.2
+Immunties + 0.3 
 
 SPECIAL nodes
 variant maker?

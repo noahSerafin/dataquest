@@ -350,7 +350,7 @@ class Relay extends Admin {
 
 
   static name = "Relay";
-  static description = "All placed programs with a range bigger than 1 on placement gain +2 attack";
+  static description = "All placed programs with a range bigger than 1 on placement gain +1 attack";
   static unicode = "U+1F4E1";
   static color = "rgb(226, 94, 42)";
   static rarity = 2;
@@ -363,7 +363,7 @@ class Relay extends Admin {
     if (activePieces[idx].team === 'player' && activePieces[idx].getStat('range') > 1) {
       this.isTriggering = true;
       setTimeout(() => this.isTriggering = false, 500);
-      activePieces[idx].addModifier({ attack: 2 })
+      activePieces[idx].addModifier({ attack: 1 })
     }
   }
 }
@@ -991,15 +991,16 @@ class Puzzle extends Admin {
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces) {
       if (p.team !== 'player') continue;
-      const hasAdjacentAlly = activePieces.some(other =>
+      //check this is any other piece's tile, not just its head
+      const noOfAdjacentAllies = activePieces.filter(other =>
         other !== p &&
         other.team === 'player' && other.name !== 'Spawn' &&
         Math.abs(other.headPosition.x - p.headPosition.x) +
         Math.abs(other.headPosition.y - p.headPosition.y) === 1
       )
-
-      if (hasAdjacentAlly) {
-        p.addTempModifier({ defence: 1 })
+      //add def to all tiles except head
+      if (noOfAdjacentAllies.length > 0) {
+        p.addTempModifier({ defence: noOfAdjacentAllies.length })
         this.isTriggering = true;
         setTimeout(() => this.isTriggering = false, 500);
       }
@@ -3355,7 +3356,7 @@ class Chain extends Admin {
   static iconID = 296;
   static name = "Chain Reaction";
   static description = "Destroying a program deals 1 damage to each enemy adjacent to it's head, +1 damage each time this is triggered."// Resets to 1 each round.";//or enemy's attack???
-  static unicode = "U+26D3";//U+26D3//U+1F517
+  static unicode = "U+26D3";//U+1F517
   static color = "rgb(247, 222, 162)";
   static rarity = 3;
   constructor() {
@@ -3922,6 +3923,7 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //EGYPTIAN HIEROGLYPH L004, U+131A7 Plague of locusts, remove all body tiles from enemies at start of round
 //U+1F4FA TELEVISION enemies first turn is disabled
 //Boots, U+1F462 +1 moves, +1 max size, -1 attack/def
+// U+1F5D1 WASTEBASKET - Recycle bin 
 // U+1F3C4 surfing
 
 //FINGERPRINT, U+1FAC6 forensics

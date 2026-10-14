@@ -341,6 +341,7 @@ function startCampaign(slotIndex: number, iconID: number) {
     'U+1F60A',
     0, 5, 4, [], [testSword, testShield], [], 0, 5, 0, 0, 0, 0, stake.value
   );
+  player.value.difficulty = 0; // campaign starts at difficulty 0
   
   currentCompany.value = { iconID: iconID, name: 'Player', abbr: '', unicode: player.value.osunicode, pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "rgb(156, 201, 84)" };
   
@@ -429,7 +430,6 @@ function createNewPlayer(payload: { os: OS, seed: string, stake?: number }) {
 
   Random.setSeed(rawSeed);
 
-  player.value.difficulty = 1
   player.value = new Player(
     os.unicode,
     os.money,
@@ -446,6 +446,7 @@ function createNewPlayer(payload: { os: OS, seed: string, stake?: number }) {
     0,
     stake.value
   )
+  player.value.difficulty = 1; // rogue mode starts at difficulty 1
 
   // Track this OS as played
   StorageManager.recordOS(os.unicode);

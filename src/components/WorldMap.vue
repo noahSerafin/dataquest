@@ -64,9 +64,10 @@ const levelPool = computed(() => {
     if (props.player.difficulty > 6) {
         return [...level1Levels, ...level2Levels, ...level3Levels, ...level4Levels, ...level5Levels, ...level6Levels]
     }
-    const tierIndex = Math.min(
-        props.player.difficulty - 1
-    );
+    const tierIndex = Math.max(0, Math.min(
+        props.player.difficulty - 1,
+        levelTiers.length - 1
+    ));
     return levelTiers[tierIndex];
 });
 const skipsThisLevel = ref<number>(0);

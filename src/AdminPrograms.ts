@@ -980,7 +980,7 @@ export class Seed extends Admin {
 class Puzzle extends Admin {
   static iconID = 309;
   static name = "Puzzle Piece";
-  static description = "Programs with an ally adjacent to their head temporarily gain +1 defence until the start of your next turn";//for each piece adjacent?
+  static description = "Programs temporarily gain +1 defence for each ally adjacent to their head until the start of your next turn";//for each piece adjacent?
   static unicode = "U+1F9E9";
   static color = "#55b0ff";
   static rarity = 3;
@@ -989,18 +989,16 @@ class Puzzle extends Admin {
   }
   //on turn end
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-    for (const p of activePieces) {
-      if (p.team !== 'player') continue;
-      //check this is any other piece's tile, not just its head
-      const noOfAdjacentAllies = activePieces.filter(other =>
+    const allies = activePieces.filter(p => p.team === 'player' && p.name !== 'Spawn');
+    for (const p of allies) {
+      const head = p.headPosition;
+      //count each ally piece once if ANY of its tiles is adjacent to this head
+      const noOfAdjacentAllies = allies.filter(other =>
         other !== p &&
-        other.team === 'player' && other.name !== 'Spawn' &&
-        Math.abs(other.headPosition.x - p.headPosition.x) +
-        Math.abs(other.headPosition.y - p.headPosition.y) === 1
-      )
-      //add def to all tiles except head
-      if (noOfAdjacentAllies.length > 0) {
-        p.addTempModifier({ defence: noOfAdjacentAllies.length })
+        other.tiles.some(t => Math.abs(t.x - head.x) + Math.abs(t.y - head.y) === 1)
+      ).length;
+      if (noOfAdjacentAllies > 0) {
+        p.addTempModifier({ defence: noOfAdjacentAllies })
         this.isTriggering = true;
         setTimeout(() => this.isTriggering = false, 500);
       }
@@ -1011,27 +1009,25 @@ class Puzzle extends Admin {
 class Chivalry extends Admin {
   static iconID = 357;
   static name = "Chivalry";
-  static description = "Programs with an ally adjacent to their head gain +1 attack at the end of your turn";
+  static description = "Programs gain a temporary +1 attack for each ally adjacent to their head at the start of your turn";
   static unicode = "U+1F3F0";
   static color = "#33bcfcff";
-  static rarity = 5;
+  static rarity = 5;//4?
   constructor() {
-    super(Chivalry.name, Chivalry.description, Chivalry.unicode, Chivalry.color, 7, Chivalry.rarity, 'gameState', 'onTurnEnd')
+    super(Chivalry.name, Chivalry.description, Chivalry.unicode, Chivalry.color, 7, Chivalry.rarity, 'gameState', 'onTurnStart')
   }
   //on turn end
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-    for (const p of activePieces) {
-      if (p.team !== 'player') continue;
-
-      const hasAdjacentAlly = activePieces.some(other =>
+    const allies = activePieces.filter(p => p.team === 'player' && p.name !== 'Spawn');
+    for (const p of allies) {
+      const head = p.headPosition;
+      //count each ally piece once if ANY of its tiles is adjacent to this head
+      const noOfAdjacentAllies = allies.filter(other =>
         other !== p &&
-        other.team === 'player' && other.name !== 'Spawn' &&
-        Math.abs(other.headPosition.x - p.headPosition.x) +
-        Math.abs(other.headPosition.y - p.headPosition.y) === 1
-      )
-
-      if (hasAdjacentAlly) {
-        p.addModifier({ attack: 1 })
+        other.tiles.some(t => Math.abs(t.x - head.x) + Math.abs(t.y - head.y) === 1)
+      ).length;
+      if (noOfAdjacentAllies > 0) {
+        p.addTempModifier({ attack: noOfAdjacentAllies })
         this.isTriggering = true;
         setTimeout(() => this.isTriggering = false, 500);
       }

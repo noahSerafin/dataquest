@@ -10,6 +10,7 @@ Sector3 - 4 shops
 
 
 add retry button to campaign, warning that it will reset the node
+add previous sector button
 remove + 1 from past nodes in header
 make selcting "I've done this before" disable future message popups completely
 boss description needs the highest z-index

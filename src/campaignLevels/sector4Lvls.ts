@@ -5944,7 +5944,7 @@ const minesweeper:Level = {
     {
       "id": "c7972be7-354a-45f3-bb91-0d1465396b9c",
       "name": "Mine",
-      "team": "player",
+      "team": "enemy",
       "headPosition": {
         "x": 5,
         "y": 3
@@ -5960,7 +5960,7 @@ const minesweeper:Level = {
     {
       "id": "997a748d-2e1c-4c1a-b530-157c0e5f89c2",
       "name": "Mine",
-      "team": "player",
+      "team": "enemy",
       "headPosition": {
         "x": 0,
         "y": 8
@@ -5976,7 +5976,7 @@ const minesweeper:Level = {
     {
       "id": "0b7b32ce-b18d-40ad-a7a0-28f15b629682",
       "name": "Mine",
-      "team": "player",
+      "team": "enemy",
       "headPosition": {
         "x": 3,
         "y": 1

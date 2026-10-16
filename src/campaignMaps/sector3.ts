@@ -476,7 +476,7 @@ export const sector3 = {
       "difficultyMod": 0,
       "reward": 0,
       "company": "Saturn Solutions",
-      "skipContents": "Air Support"
+      "skipContents": "Juggler"
     },
     "node_i4bakdvwj": {
       "id": "node_i4bakdvwj",

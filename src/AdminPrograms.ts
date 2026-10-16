@@ -2359,7 +2359,7 @@ class Wheel extends Admin {
 class Bath extends Admin {
   static iconID = 384;
   static name = "Decontamination";
-  static description = "Removes all statuses from all programs at the end of each turn";
+  static description = "Removes all statuses (except hidden) from all programs at the end of each turn";
   static unicode = "U+1F6C1";
   static color = "rgb(168, 255, 245)";
   static rarity = 6;//5,4?
@@ -2369,6 +2369,7 @@ class Bath extends Admin {
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces) {
       for (const status in p.statuses) {
+        if (status === 'hidden' || status === 'negative') continue;//decontamination doesn't reveal hidden programs
         p.statuses[status] = false;
       }
     };

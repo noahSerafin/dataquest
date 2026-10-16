@@ -603,7 +603,7 @@ export const sector5 = {
       "difficultyMod": 0,
       "reward": 0,
       "company": "Saturn Solutions",
-      "skipContents": "G-man"
+      "skipContents": "Stopwatch"
     },
     "node_29drxy3dd": {
       "id": "node_29drxy3dd",
@@ -616,7 +616,7 @@ export const sector5 = {
       "difficultyMod": 0,
       "reward": 0,
       "company": "Saturn Solutions",
-      "skipContents": "Love Bomb"
+      "skipContents": "G-man"
     },
     "node_3o1iqjb0w": {
       "id": "node_3o1iqjb0w",
@@ -629,7 +629,7 @@ export const sector5 = {
       "difficultyMod": 0,
       "reward": 0,
       "company": "Saturn Solutions",
-      "shopContents": "Archer, Centipede, Dragon, Stopwatch, Tank, BlackHeart, Pep Talk, Pie, Supplement, Soap, Chivalry, Daisy Chain, Hamsa, Monarch, Pong, Strike Out"
+      "shopContents": "Archer, Centipede, Dragon, Love Bomb, Tank, BlackHeart, Pep Talk, Pie, Supplement, Soap, Chivalry, Daisy Chain, Hamsa, Monarch, Pong, Strike Out"
     },
     "node_yc1bhskx4": {
       "id": "node_yc1bhskx4",

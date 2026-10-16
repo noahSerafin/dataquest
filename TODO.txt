@@ -1,3 +1,5 @@
+review each sector, then play again without upgrade items.
+
 Sector2
 yoyo level in sector3 too hard
 review shop with all the immunity items in, spread these out over future sectors (Extinguisher, Frogman, Lab Coat, Plunger, )-
@@ -7,6 +9,12 @@ banner appears in shop but appears in sector1 shop already
 -already quite overpowered, postpone items until later - include some variants after the yoyo level?
 
 Sector3 - 4 shops
+move air support to sector 5
+
+Sector - 4 
+bottom shop after eclipse instead of in middle
+sceond bottom shop reverse route to
+remove blackmail
 
 
 add retry button to campaign, warning that it will reset the node
@@ -34,6 +42,16 @@ secret bonus nodes
 overworld map?
 background colours for node maps (use company owner)//levels array (make map have a starting copmany)
 
+BUGS - 
+dove allowing moving after placing even not on first turn
+next sector needs to close shop
+workbench + compiler + duplicator do not preserve damagemult
+immunity items still applying to duplicates
+
+NICE TO HAVE
+upgrades add version numbers (see below)
+You win screen more obvious, change button to endless mode here
+Make rabbits always jump diagonally
 Preserve all roguelike App functions (move to own file?)
 !makeover apply random variant - test
 !attacking hidden pieces should reveal them while they are taking damage

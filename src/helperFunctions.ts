@@ -201,6 +201,22 @@ export function applyVariant(piece: Piece, variant: PieceVariant) {
   }
 }
 
+// Blueprint equivalent of applyVariant, mutates a held program directly so existing upgrades are preserved
+export function applyVariantToBlueprint(bp: PieceBlueprint, variant: PieceVariant) {
+  for (const [stat, delta] of Object.entries(variant.mods) as [StatKey, number][]) {
+    const min = STAT_MIN[stat];
+    const next = bp[stat] + delta;
+    bp[stat] = Math.max(min, next);
+  }
+  bp.variantName = variant.name;
+  if (variant.name === 'Deadly') {
+    bp.damageMult = (bp.damageMult ?? 1) + 1;
+  }
+  if (variant.name === 'Holographic') {
+    bp.damageMult = (bp.damageMult ?? 1) + 0.5;
+  }
+}
+
 function rollRarity(clovers: number, hasCollector: boolean = false) {
 
   const base = [40, 30, 14, 9, 5, 2];

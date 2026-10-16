@@ -320,8 +320,8 @@ export const sector4 = {
           "x": 78,
           "y1": 0,
           "y2": 0,
-          "ds1": 6,
-          "ds2": 6
+          "ds1": 10,
+          "ds2": 8
         }
       },
       "levelName": "Suprise"
@@ -344,7 +344,9 @@ export const sector4 = {
         "node_byftql5ob": {
           "x": -89,
           "y1": 0,
-          "y2": 6
+          "y2": 6,
+          "type": "VDHDV",
+          "y": 14
         }
       },
       "levelName": "The Conveyer"
@@ -362,7 +364,7 @@ export const sector4 = {
       "difficultyMod": 0,
       "reward": 7,
       "company": "Flyby Surveilance",
-      "bossName": "Blackmail",
+      "bossName": "Deep Water",
       "levelName": "Lockdown"
     },
     "node_wlt5pgnds": {
@@ -381,10 +383,10 @@ export const sector4 = {
       "bossName": "Encryption",
       "pathOffsets": {
         "node_z6pbzj1pz": {
-          "x": 76,
+          "x": 69,
           "y1": 28,
           "y2": 0,
-          "ds1": 3,
+          "ds1": 4,
           "ds2": 7
         }
       },
@@ -397,23 +399,34 @@ export const sector4 = {
         "x": 920,
         "y": 740
       },
-      "next": [],
+      "next": [
+        "node_52tkn1bjd"
+      ],
       "difficultyMod": 0,
       "reward": 7,
       "company": "Red Sky Dynamics",
       "bossName": "Eclipse",
-      "levelName": "The Shore"
+      "levelName": "The Shore",
+      "pathOffsets": {
+        "node_52tkn1bjd": {
+          "x": -19,
+          "y1": 0,
+          "y2": 0,
+          "ds1": 3,
+          "ds2": 8
+        }
+      }
     },
     "node_s1ffnxv0q": {
       "id": "node_s1ffnxv0q",
       "type": "level",
       "position": {
-        "x": 800,
-        "y": 840
+        "x": 820,
+        "y": 820
       },
       "next": [
         "node_8icgxipc6",
-        "node_52tkn1bjd"
+        "node_6z7nqhuab"
       ],
       "difficultyMod": 1,
       "reward": 10,
@@ -426,12 +439,12 @@ export const sector4 = {
           "ds2": 10,
           "ds1": 19
         },
-        "node_52tkn1bjd": {
-          "x": 0,
-          "y1": 21,
-          "y2": -3,
-          "ds1": 12,
-          "ds2": 10
+        "node_6z7nqhuab": {
+          "x": -34,
+          "y1": 0,
+          "y2": 23,
+          "ds1": 11,
+          "ds2": 9
         }
       },
       "levelName": "The Trench"
@@ -445,7 +458,6 @@ export const sector4 = {
       },
       "next": [
         "node_8icgxipc6",
-        "node_52tkn1bjd",
         "node_wlt5pgnds"
       ],
       "difficultyMod": 1,
@@ -457,20 +469,12 @@ export const sector4 = {
           "y1": -20,
           "y2": 5
         },
-        "node_52tkn1bjd": {
-          "x": 0,
-          "y1": 22,
-          "y2": 0,
-          "type": "VDHDV",
-          "y": 65,
-          "ds1": 8,
-          "ds2": 12
-        },
         "node_wlt5pgnds": {
-          "x": 42,
-          "y1": -4,
-          "y2": 0,
-          "ds1": 14
+          "x": 0,
+          "type": "VDHDV",
+          "y": 45,
+          "x2": 30,
+          "ds2": 13
         }
       },
       "levelName": "The Escape"
@@ -479,7 +483,7 @@ export const sector4 = {
       "id": "node_52tkn1bjd",
       "type": "shop",
       "position": {
-        "x": 940,
+        "x": 980,
         "y": 840
       },
       "next": [],
@@ -492,8 +496,8 @@ export const sector4 = {
       "id": "node_z6pbzj1pz",
       "type": "skip",
       "position": {
-        "x": 1160,
-        "y": 880
+        "x": 1180,
+        "y": 860
       },
       "next": [],
       "difficultyMod": 0,
@@ -557,14 +561,14 @@ export const sector4 = {
       "id": "node_byftql5ob",
       "type": "skip",
       "position": {
-        "x": 900,
-        "y": 900
+        "x": 760,
+        "y": 860
       },
       "next": [],
       "difficultyMod": 0,
       "reward": 0,
       "company": "Saturn Solutions",
-      "skipContents": "Copier"
+      "skipContents": "Gassed"
     },
     "node_j9moyzl66": {
       "id": "node_j9moyzl66",

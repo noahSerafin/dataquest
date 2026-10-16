@@ -1237,6 +1237,7 @@ function loadSavedGame() {
   player.value = state.player;
   currentSeed.value = state.seed;
 
+  currentAppMode.value = 'rogue';
   gameStarted.value = true;
 
   const ui = state.uiState || {};

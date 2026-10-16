@@ -2151,30 +2151,6 @@ class Rabbit extends Piece {
   }
 }
 
-// TOP HAT, U+1F3A9 spawns a rabbit
-/*class Hat extends Piece {//not working
-  static name = "Hat Trick";
-  static description = "A program that can turn into a rabbit";
-  static unicode = "U+1F3A9";
-  static color = "#6ea1caff";
-  static rarity = 4;
-  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Hat.name, Hat.description, Hat.unicode, 1, 1, 1, 1, 0, Hat.color, headPosition, [headPosition], team, Hat.rarity, removeCallback, id)
-   this.specialName='Breed'
-   this.targetType='space'
-   this.canAttack=false;
-  }
-  async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
-    const newRabbit = new Rabbit(target, this.team, this.removeCallback, crypto.randomUUID());
-    newRabbit.actions = 0;
-    newRabbit.movesRemaining = 0;
-    activePieces.push(newRabbit);
-    this.actions--
-  }
-}*/
-
-
-
 class LabRat extends Piece {
   static iconID = 58;
   static name = "Lab Rat";
@@ -4762,17 +4738,38 @@ class Pentagram extends Piece {
   }
 }
 
+// TOP HAT, U+1F3A9 spawns a rabbit
+/*class Hat extends Piece {//not working
+  static name = "Hat Trick";
+  static description = "A program that can summon rabbits";
+  static unicode = "U+1F3A9";
+  static color = "#6ea1caff";
+  static rarity = 4;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
+   super(Hat.name, Hat.description, Hat.unicode, 1, 1, 1, 1, 0, Hat.color, headPosition, [headPosition], team, Hat.rarity, removeCallback, id)
+   this.specialName='Breed'
+   this.targetType='space'
+   this.canAttack=false;
+  }
+  async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
+    const newRabbit = new Rabbit(target, this.team, this.removeCallback, crypto.randomUUID());
+    newRabbit.actions = 0;
+    newRabbit.movesRemaining = 0;
+    activePieces.push(newRabbit);
+    this.actions--
+  }
+}*/
 
 //
-//taxi U+1F695 /
-//bus U+1F68C move other pieces (friendly) to it's tail?//this.tiles.splice(this.tiles.length-1, 1);
-//FISHING POLE AND FISH, U+1F3A3 long range - move a piece toward it - magnet with long range
-//FISH U+1F41F slips into empty space when attacked //U+1F420 TROPICAL FISH 
-////fleur de lis U+269C scout, lay traps? expose/Temp increase friendlies range.
-//U+2702 BLACK SCISSORS remove middle tile of piece (two if even). Swap with saw?
-
+//U+2702 BLACK SCISSORS //remove end tiles //or remove middle tile of piece (two if even). Swap with saw?
 //🏗 crane  U+1F3D7 creates a wall around it of 8 tiles
-//TELEVISION, U+1F4FA charm piece - brainwash
+//bus U+1F68C move other pieces (friendly) to it's tail?//this.tiles.splice(this.tiles.length-1, 1);
+//FISH U+1F41F slips into empty space when attacked //U+1F420 TROPICAL FISH 
+//TELEVISION, U+1F4FA charm piece - brainwash all in range
+
+//taxi U+1F695 /
+//FISHING POLE AND FISH, U+1F3A3 long range - move a piece toward it - magnet with long range
+////fleur de lis U+269C scout, lay traps? expose/Temp increase friendlies range.
 //acorn -> sapling -> oak then acorn can be rarity 1
 //PLAYGROUND SLIDE, U+1F6DD like gate but with more range? line target??
 //SWAN, U+1F9A2 - break a man's arm /reduce range?

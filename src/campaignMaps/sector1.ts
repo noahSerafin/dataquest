@@ -4,8 +4,8 @@ export const sector1 = {
       "id": "node_00yl6a1xj",
       "type": "start",
       "position": {
-        "x": 760,
-        "y": 280
+        "x": 840,
+        "y": 380
       },
       "next": [
         "node_2gq07go28",
@@ -15,14 +15,14 @@ export const sector1 = {
       "reward": 0,
       "pathOffsets": {
         "node_c9gbjumx0": {
-          "x": 55,
+          "x": -24,
           "y1": 10,
           "y2": 0,
           "ds1": 12,
           "ds2": 14
         },
         "node_2gq07go28": {
-          "x": 0,
+          "x": -22,
           "y1": -4,
           "y2": 18
         }
@@ -32,13 +32,14 @@ export const sector1 = {
       "id": "node_2gq07go28",
       "type": "level",
       "position": {
-        "x": 940,
+        "x": 980,
         "y": 540
       },
       "next": [
         "node_tbudoo9ss",
         "node_399ayz3qf",
-        "node_kwenvvhsu"
+        "node_kwenvvhsu",
+        "node_ey2q5qyqu"
       ],
       "difficultyMod": 0,
       "reward": 2,
@@ -52,14 +53,21 @@ export const sector1 = {
         "node_399ayz3qf": {
           "x": 0,
           "y1": -10,
-          "y2": 0
+          "y2": 0,
+          "ds2": 10,
+          "ds1": 10
         },
         "node_kwenvvhsu": {
-          "x": -47,
+          "x": 3,
           "y1": 0,
           "y2": 0,
           "ds2": 10,
           "ds1": 12
+        },
+        "node_ey2q5qyqu": {
+          "x": 0,
+          "ds1": 15,
+          "ds2": 6
         }
       },
       "levelName": "The Split"
@@ -68,7 +76,7 @@ export const sector1 = {
       "id": "node_c9gbjumx0",
       "type": "level",
       "position": {
-        "x": 760,
+        "x": 800,
         "y": 540
       },
       "next": [
@@ -80,14 +88,14 @@ export const sector1 = {
       "company": "Longhouse Web Services",
       "pathOffsets": {
         "node_qs0fbko7z": {
-          "x": -56,
+          "x": 1,
           "y1": -15,
           "y2": 0,
           "ds1": 15,
           "ds2": 12
         },
         "node_ywvwhu1ce": {
-          "x": -76,
+          "x": -85,
           "y1": 0,
           "y2": 0,
           "ds1": 12,
@@ -100,8 +108,8 @@ export const sector1 = {
       "id": "node_qs0fbko7z",
       "type": "skip",
       "position": {
-        "x": 720,
-        "y": 440
+        "x": 920,
+        "y": 620
       },
       "next": [],
       "difficultyMod": 0,
@@ -113,23 +121,14 @@ export const sector1 = {
       "id": "node_kwenvvhsu",
       "type": "shop",
       "position": {
-        "x": 940,
-        "y": 420
+        "x": 840,
+        "y": 300
       },
-      "next": [
-        "node_ey2q5qyqu"
-      ],
+      "next": [],
       "difficultyMod": 0,
       "reward": 0,
       "company": "Saturn Solutions",
-      "pathOffsets": {
-        "node_ey2q5qyqu": {
-          "x": -19,
-          "y1": 0,
-          "y2": 0,
-          "ds2": 16
-        }
-      },
+      "pathOffsets": {},
       "shopContents": "Ant, Egg, Knife, Shield, Banner, Pepper, Fresh Batteries, Bandage, Locked In, Glasses, Reinforcement, Trainers, Miner"
     },
     "node_tbudoo9ss": {
@@ -174,11 +173,10 @@ export const sector1 = {
       "type": "level",
       "position": {
         "x": 980,
-        "y": 280
+        "y": 380
       },
       "next": [
-        "node_2mg40n4at",
-        ""
+        "node_2mg40n4at"
       ],
       "difficultyMod": 1,
       "reward": 3,
@@ -186,8 +184,8 @@ export const sector1 = {
       "pathOffsets": {
         "node_2mg40n4at": {
           "x": 0,
-          "ds1": 5,
-          "ds2": 5
+          "ds1": 13,
+          "ds2": 12
         }
       },
       "levelName": "The Hive"
@@ -257,7 +255,7 @@ export const sector1 = {
       "type": "boss",
       "position": {
         "x": 1180,
-        "y": 340
+        "y": 360
       },
       "next": [],
       "difficultyMod": 0,
@@ -285,7 +283,7 @@ export const sector1 = {
       "type": "level",
       "position": {
         "x": 1340,
-        "y": 280
+        "y": 300
       },
       "next": [
         "node_p2awqy8u9"
@@ -306,7 +304,7 @@ export const sector1 = {
       "id": "node_ywvwhu1ce",
       "type": "level",
       "position": {
-        "x": 760,
+        "x": 980,
         "y": 660
       },
       "next": [
@@ -321,11 +319,12 @@ export const sector1 = {
       "id": "node_wo7yv59o3",
       "type": "level",
       "position": {
-        "x": 940,
+        "x": 1060,
         "y": 660
       },
       "next": [
-        "node_ie40v3v37"
+        "node_ie40v3v37",
+        "node_5h13gn9y4"
       ],
       "difficultyMod": 0,
       "reward": 2,
@@ -333,8 +332,17 @@ export const sector1 = {
       "pathOffsets": {
         "node_ie40v3v37": {
           "x": 0,
-          "y1": 0,
-          "y2": -2
+          "y1": -13,
+          "y2": -2,
+          "ds2": 6,
+          "ds1": 5
+        },
+        "node_5h13gn9y4": {
+          "x": 0,
+          "y1": 18,
+          "y2": -16,
+          "ds1": 9,
+          "ds2": 5
         }
       },
       "levelName": "Ratatouille"
@@ -367,30 +375,22 @@ export const sector1 = {
       "id": "node_ie40v3v37",
       "type": "shop",
       "position": {
-        "x": 1080,
-        "y": 680
+        "x": 1180,
+        "y": 600
       },
-      "next": [
-        "node_5h13gn9y4"
-      ],
+      "next": [],
       "difficultyMod": 0,
       "reward": 0,
       "company": "Saturn Solutions",
       "shopContents": "Cane, Knot, Hermit Shell, Tempura, Wind Chime",
-      "pathOffsets": {
-        "node_5h13gn9y4": {
-          "x": 0,
-          "y1": -2,
-          "y2": 0
-        }
-      }
+      "pathOffsets": {}
     },
     "node_2mg40n4at": {
       "id": "node_2mg40n4at",
       "type": "skip",
       "position": {
         "x": 1100,
-        "y": 280
+        "y": 320
       },
       "next": [],
       "difficultyMod": 0,

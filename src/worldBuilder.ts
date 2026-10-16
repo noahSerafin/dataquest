@@ -617,7 +617,7 @@ function processSpawnPoints(
         const { min, max } = DIFFICULTY_RARITY[trueDifficulty];
 
         const difficultyMatched = companyPieces.filter(EnemyClass => {
-          if (!EnemyClass || EnemyClass.name === "Nuke") return false;
+          if (!EnemyClass || (difficulty < 7 && EnemyClass.name === "Nuke")) return false;//allow nukes in endless mode
           const temp = new EnemyClass(piece.headPosition, 'enemy');
           return temp.rarity >= min && temp.rarity <= max;
         });

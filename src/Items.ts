@@ -1,7 +1,7 @@
 import type { Coordinate, PieceBlueprint } from "./types"
-import { allPieces, type Piece } from "./Pieces"
+import { allPieces, Piece } from "./Pieces"
 import type { Player } from "./Player"
-import { getRandomUnoccupiedTile, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, addItemsUntilFull } from "./helperFunctions"
+import { getRandomUnoccupiedTile, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, addItemsUntilFull, applyVariantToBlueprint } from "./helperFunctions"
 import { StorageManager } from "./StorageManager"
 import { Random } from "./Random"
 import { PIECE_VARIANTS } from "./constants"
@@ -677,7 +677,7 @@ export class Spanner extends Item<Piece> {
     }
 }
 
-class Makeover extends Item<Piece> {
+class Makeover extends Item<PieceBlueprint> {
     static iconID = 189;
 
 
@@ -687,15 +687,14 @@ class Makeover extends Item<Piece> {
     static color = "#f18fedff";
     static rarity = 3;
     constructor() {
-        super(Makeover.name, Makeover.description, Makeover.unicode, Makeover.color, 2, Makeover.rarity, 'piece')
+        super(Makeover.name, Makeover.description, Makeover.unicode, Makeover.color, 2, Makeover.rarity, 'blueprint')
         //name desc utf || maxsize moves range atk def
     }
-    apply(target: Piece, _itemMult: number) {
-        target.statuses.exposed = false;
+    apply(target: PieceBlueprint, _itemMult: number) {
         //roll a random variant on a program
         const variant = Random.pick(PIECE_VARIANTS);
-        target.variantName = variant.name;
-        target.addModifier(variant.mods);
+        applyVariantToBlueprint(target, variant)
+        //apply each mod to blueprints (variant.mods);
     }
 }
 

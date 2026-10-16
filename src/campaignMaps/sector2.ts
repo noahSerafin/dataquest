@@ -61,7 +61,7 @@ export const sector2 = {
       "next": [
         "node_et3jrxgh5",
         "node_fq41u6f6a",
-        "node_b3dk15m73"
+        "node_2bc1ak4xx"
       ],
       "difficultyMod": 0,
       "reward": 3,
@@ -72,13 +72,13 @@ export const sector2 = {
           "y1": -10,
           "y2": 8
         },
-        "node_b3dk15m73": {
-          "x": 0,
-          "type": "VDHDV",
-          "y": 41
+        "node_2bc1ak4xx": {
+          "x": -48,
+          "y1": 0,
+          "y2": 0
         }
       },
-      "levelName": "Bouncing Back"
+      "levelName": "The Terrarium"
     },
     "node_q0erjp0ve": {
       "id": "node_q0erjp0ve",
@@ -210,7 +210,15 @@ export const sector2 = {
         "node_qwmk7rad0": {
           "x": 25,
           "y1": 29,
-          "y2": 0
+          "y2": 0,
+          "ds1": 8
+        },
+        "node_mem8ck1wh": {
+          "x": 0,
+          "y1": -5,
+          "y2": -8,
+          "ds2": 5,
+          "ds1": 3
         }
       },
       "levelName": "The Lab"
@@ -244,14 +252,15 @@ export const sector2 = {
       "type": "level",
       "position": {
         "x": 1120,
-        "y": 380
+        "y": 400
       },
       "next": [
         "node_317fdw6bf",
-        "node_e86rpdxb0"
+        "node_e86rpdxb0",
+        "node_b3dk15m73"
       ],
-      "difficultyMod": 0,
-      "reward": 3,
+      "difficultyMod": 1,
+      "reward": 5,
       "company": "Zenith Ltd.",
       "pathOffsets": {
         "node_317fdw6bf": {
@@ -267,9 +276,16 @@ export const sector2 = {
           "y2": -17,
           "ds1": 10,
           "ds2": 16
+        },
+        "node_b3dk15m73": {
+          "x": -22,
+          "y1": 18,
+          "y2": -5,
+          "ds1": 10,
+          "ds2": 10
         }
       },
-      "levelName": "The Terrarium"
+      "levelName": "Bouncing Back"
     },
     "node_i59m44090": {
       "id": "node_i59m44090",
@@ -349,7 +365,7 @@ export const sector2 = {
       "type": "shop",
       "position": {
         "x": 940,
-        "y": 520
+        "y": 560
       },
       "next": [
         ""
@@ -455,14 +471,14 @@ export const sector2 = {
       "difficultyMod": 0,
       "reward": 0,
       "company": "Saturn Solutions",
-      "shopContents": "Jelly, Larva, Piper, Tar, Virus, Watchman, Yarn"
+      "shopContents": "Jelly, Larva, Tar, Virus, Watchman, Yarn"
     },
     "node_b3dk15m73": {
       "id": "node_b3dk15m73",
       "type": "skip",
       "position": {
-        "x": 720,
-        "y": 620
+        "x": 960,
+        "y": 480
       },
       "next": [],
       "difficultyMod": 0,
@@ -483,6 +499,19 @@ export const sector2 = {
       "reward": 0,
       "company": "Saturn Solutions",
       "skipContents": "Dagger"
+    },
+    "node_2bc1ak4xx": {
+      "id": "node_2bc1ak4xx",
+      "type": "skip",
+      "position": {
+        "x": 700,
+        "y": 620
+      },
+      "next": [],
+      "difficultyMod": 0,
+      "reward": 0,
+      "company": "Saturn Solutions",
+      "skipContents": "Piper"
     }
   },
   "startNode": "node_1pvj0omxs"

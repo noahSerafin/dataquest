@@ -1068,6 +1068,21 @@ function loadNextSector() {
   }
 }
 
+function loadPreviousSector() {
+  if (campaignSectorIndex.value > 0) {
+    campaignSectorIndex.value--;
+    player.value.difficulty--;
+    const previousSector = allCampaignSectors[campaignSectorIndex.value];
+    campaignWorldMap.value = {
+      nodes: JSON.parse(JSON.stringify(previousSector.nodes)),
+      startNode: previousSector.startNode,
+      dialogueTree: (previousSector as any).dialogueTree
+    };
+    appDialogueEvent.value = `load:${previousSector.startNode}`;
+    saveGameState();
+  }
+}
+
 async function reloadLevel() {
   bgProgress.value++;
   for (const admin of player.value.admins) {
@@ -2496,11 +2511,13 @@ function cancelConfirm() {
       <div id="player-actions" v-if="!displayEditor" class="player-actions">
         <button v-if="(!displayEditor && roundHasStarted && !hasFinishedTurn && hasPlacedPiece) || debugMode" class="end-turn"
           v-on:click="endTurn()">End Turn</button>
-        <button :disabled="hasFinishedTurn" v-if="!displayEditor && roundHasStarted && (currentAppMode !== 'campaign' && player.lives > 1)"
+        <button :disabled="hasFinishedTurn" v-if="!displayEditor && roundHasStarted && (currentAppMode === 'campaign' || player.lives > 1)"
           class="retry-btn" v-on:click="requestRetry()">Retry</button>
         <button :disabled="hasFinishedTurn" v-if="!displayEditor && roundHasStarted" class="forfeit-btn"
           v-on:click="requestForfeit()">Forfeit</button>
         
+        <button v-if="currentAppMode === 'campaign' && showMap && campaignWorldMap && campaignSectorIndex > 0" class="end-turn"
+          @click="loadPreviousSector()">Last Sector</button>
         <button v-if="currentAppMode === 'campaign' && showMap && campaignWorldMap && Object.values(campaignWorldMap.nodes).filter((n: any) => n.type === 'boss').every((n: any) => campaignClearedNodes.includes(n.id)) && campaignSectorIndex < allCampaignSectors.length - 1" class="end-turn"
           @click="loadNextSector()">Next Sector</button>
       </div>

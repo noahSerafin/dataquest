@@ -375,7 +375,7 @@ export const sector1 = {
       "id": "node_ie40v3v37",
       "type": "shop",
       "position": {
-        "x": 1180,
+        "x": 1160,
         "y": 600
       },
       "next": [],

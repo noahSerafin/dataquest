@@ -40,6 +40,7 @@ BUGS -
 -variant pieces still have original moves/defence on first turn
 -statuses affecting copys even when copy does not have that status
 -Mr Bones switches traps that have activated
+-placement ghost still using unicode
 immunity items still applying to duplicates
 dove allowing moving after placing even not on first turn
 charmed watchman still exposes enemies (in general the check is only if team matches)
@@ -49,6 +50,7 @@ workbench + compiler + duplicator do not preserve damagemult
 NICE TO HAVE
 upgrades add version numbers (see below)
 You win screen more obvious, change button to endless mode here
+make cane only effect traps by head positions
 Make rabbits always jump diagonally
 Preserve all roguelike App functions (move to own file?)
 !makeover apply random variant - test

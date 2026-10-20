@@ -1660,7 +1660,7 @@ export class Bank extends Admin {
 class Ballet extends Admin {
   static iconID = 383;
   static name = "Twinkle Toes";
-  static description = "all your programs are hidden for the first 3 turns of a round";
+  static description = "All your programs are hidden for the first 3 turns of a round. And then unhidden, unless they are traps.";
   static unicode = "U+1FA70";
   static color = "#ebc0ffff";
   static rarity = 5;
@@ -1672,7 +1672,7 @@ class Ballet extends Admin {
     this.count += 1;
     for (const piece of activePieces) {
       if (piece.team === 'player') {
-        if (this.count <= 2 && !piece.statuses.exposed) {
+        if (this.count === 2 && !piece.statuses.exposed) {
           piece.statuses.hidden = true
           this.isTriggering = true;
           setTimeout(() => this.isTriggering = false, 500);
@@ -3716,7 +3716,7 @@ export class Booty extends Admin {
 export class Cane extends Admin {
   static iconID = 225;
   static name = "Cane";
-  static description = "Triggers all enemy traps within 1 range of your programs on the end of your turn";
+  static description = "Triggers all enemy traps within 1 range of your programs' heads on the end of your turn";
   static unicode = "U+1F9AF";
   static color = "rgba(235, 235, 235, 1)";
   static rarity = 1;
@@ -3729,11 +3729,11 @@ export class Cane extends Admin {
       if (p.team === 'player') {
         for (const enemy of activePieces) {
           if (enemy.team === 'enemy' && enemy.targetType === 'trapPiece') {
-            const isAdjacent = p.tiles.some(st =>
-              enemy.tiles.some(tt =>
-                Math.abs(st.x - tt.x) + Math.abs(st.y - tt.y) <= 1
-              )
-            );
+            const isAdjacent = enemy.tiles.some(tt =>
+              Math.abs(p.headPosition.x - tt.x) + Math.abs(p.headPosition.y - tt.y) <= 1
+            )
+            //p.tiles.some(st =>//change to headposition
+            //);
             if (isAdjacent) {
               trapsToTrigger.add(enemy);
             }

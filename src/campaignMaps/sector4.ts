@@ -152,7 +152,7 @@ export const sector4 = {
       "difficultyMod": 0,
       "reward": 7,
       "company": "Whiteflower Global",
-      "bossName": "Biohazard",
+      "bossName": "Deep Water",
       "pathOffsets": {
         "node_df6ic6o0o": {
           "x": 0,
@@ -364,7 +364,7 @@ export const sector4 = {
       "difficultyMod": 0,
       "reward": 7,
       "company": "Flyby Surveilance",
-      "bossName": "Deep Water",
+      "bossName": "Biohazard",
       "levelName": "Lockdown"
     },
     "node_wlt5pgnds": {

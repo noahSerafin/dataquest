@@ -9,44 +9,42 @@ banner appears in shop but appears in sector1 shop already
 -already quite overpowered, postpone items until later - include some variants after the yoyo level?
 
 Sector3 - 4 shops
-move air support to sector 5
+remove stone age
 
 Sector - 4 
 bottom shop after eclipse instead of in middle
 sceond bottom shop reverse route to
-remove blackmail
 
+Sector 5
+move air support to sector 5
 
-add retry button to campaign, warning that it will reset the node
-add previous sector button
-remove + 1 from past nodes in header
+FINALISE
 make selcting "I've done this before" disable future message popups completely
 boss description needs the highest z-index
-reduce rewards massively
-you win appearing on last node
 hide rarity text on items/bps/controllers in campaign mode
-Test rogue mode is not broken
-campaign is raising security level every level, not just after bosses - (make all nodes security 0 or 1 if hard?)
-add a previous sector btn, track shop purchases in save
-
-
-sector 0, 2 too wide
+reduce rewards massively
+you win appearing on every node 'node complete' instead
+check tracking of shop purchases in save
+-
 cosmetic cicuitboard pieces
 circuitboard map edge non square (contour path edges)
 Review appearance of special nodes vs reward nodes
 Dialogue after tutorial
 put variants in campaign levels
 secret bonus nodes
-
-
+-
 overworld map?
 background colours for node maps (use company owner)//levels array (make map have a starting copmany)
 
 BUGS - 
+-variant pieces still have original moves/defence on first turn
+-statuses affecting copys even when copy does not have that status
+-Mr Bones switches traps that have activated
+immunity items still applying to duplicates
 dove allowing moving after placing even not on first turn
+charmed watchman still exposes enemies (in general the check is only if team matches)
 next sector needs to close shop
 workbench + compiler + duplicator do not preserve damagemult
-immunity items still applying to duplicates
 
 NICE TO HAVE
 upgrades add version numbers (see below)

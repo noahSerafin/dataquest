@@ -2046,9 +2046,9 @@ const endRound = async (roundWon: boolean) => {
   for (const admin of bossAdmins.value) {//only necessary if we keep boss admins
     admin.onRoundEnd?.();
   }
-  /*for (const admin of player.value.admins) {
+  for (const admin of player.value.admins) {
     admin.onRoundEnd?.();
-  }*/
+  }
   player.value.canPlace = false;
   player.value.fogged = false;
   if (currentAppMode.value !== 'campaign') {

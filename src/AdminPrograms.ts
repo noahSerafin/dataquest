@@ -2688,6 +2688,11 @@ class School extends Admin {
       this.disabled = true;
     }
   }
+  onRoundEnd() {
+    if(this.count >= 7){
+      this.disabled = true;
+    }
+  } 
 }
 
 class Dharma extends Admin {
@@ -3384,7 +3389,7 @@ class Chain extends Admin {
 class Nose extends Admin {
   static iconID = 282;
   static name = "Traffic Sniffer";
-  static description = "Enemies that move are exposed";
+  static description = "Hidden enemies that move are unhidden";
   static unicode = "U+1F443";
   static color = "rgb(94, 117, 100)";
   static rarity = 2;
@@ -3394,12 +3399,12 @@ class Nose extends Admin {
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces) {
       if (p.team === 'enemy' && p.movesRemaining < p.getStat('moves')) {
-        if (!p.immunities.exposed) {
+        //if (!p.immunities.exposed) {
           p.statuses.hidden = false;
-          p.statuses.exposed = true;
+          //p.statuses.exposed = true;
           this.isTriggering = true;
           setTimeout(() => this.isTriggering = false, 500);
-        }
+        //}
       }
     };
   }
@@ -3613,7 +3618,7 @@ class Drunk extends Admin {
 export class StoneAge extends Admin {
   static iconID = 315;
   static name = "Stone Age";
-  static description = "Fixes all pieces' range to 1 on the start of every turn after the first";
+  static description = "Fixes all programs' range to 1 on the start of every turn after the first";
   static unicode = "U+1FAA8";
   static color = "rgb(103, 124, 131)";
   static rarity = 3;

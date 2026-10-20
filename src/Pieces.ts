@@ -496,7 +496,7 @@ class Dagger extends Piece {
 class Paladin extends Piece {
   static iconID = 66;
   static name = "Paladin";
-  static description = "A defensive piece that can share it's defence with another for a turn";
+  static description = "A defensive piece that can share it's defence with another for one turn";
   static unicode = "U+1F540";
   static color = "rgb(84, 160, 190)";
   static rarity = 3;
@@ -554,7 +554,7 @@ class Shield extends Piece {
 class Aegis extends Piece {
   static iconID = 12;
   static name = "Aegis";
-  static description = "An advanced defensive piece that can use it's special to retaliate against attacks";//damaging special? buckler for parry?
+  static description = "An advanced defensive piece that can use it's special move to retaliate against attacks";//damaging special? buckler for parry?
   static unicode = "U+26FB";
   static color = "#06789bff";
   static rarity = 2;
@@ -649,13 +649,15 @@ class Coconut extends Piece {
   static color = "rgb(224, 207, 108)";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
-    super(Coconut.name, Coconut.description, Coconut.unicode, 1, 2, 1, 1, 1, Coconut.color, headPosition, [headPosition], team, Coconut.rarity, removeCallback, id)
+    super(Coconut.name, Coconut.description, Coconut.unicode, 3, 2, 1, 1, 1, Coconut.color, headPosition, [headPosition], team, Coconut.rarity, removeCallback, id)
     this.specialName = 'Grow';
     this.targetType = 'space';
   }
   async special({ target, activePieces }: { target: Coordinate, activePieces: Piece[] }): Promise<void> {
     const newTree = new Palm(target, this.team, this.removeCallback, crypto.randomUUID())
     newTree.tiles.push(this.headPosition);
+    newTree.actions = 0
+    newTree.movesRemaining = 0
     activePieces.push(newTree);
     this.removeCallback?.(this);
     this.actions--
@@ -1240,7 +1242,7 @@ class Copycat extends Piece {
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
     super(Copycat.name, Copycat.description, Copycat.unicode, 1, 2, 2, 0, 0, Copycat.color, headPosition, [headPosition], team, Copycat.rarity, removeCallback, id)
     this.targetType = 'piece';
-    this.specialName = 'Imitate';
+    this.specialName = 'Mog';
     this.hasNeutralSpecial = true;
     //neutral special
     //private count for enemy usage?
@@ -2496,7 +2498,6 @@ class Medic extends Piece {
       for (const key of Doctor.harmfulStatuses) {
         targetPiece.statuses[key] = false;
       }
-      targetPiece.addModifier({ maxSize: 1 })
     } else {
       targetPiece.takeDamage(this.getStat('attack'))
       if (targetPiece.willRetaliate) await this.takeDamage(targetPiece.getStat('attack'))
@@ -2622,13 +2623,21 @@ class Bug extends Piece {
 class Cockroach extends Piece {
   static iconID = 88;
   static name = "Cockroach";
-  static description = "A faster, tougher bug, immune to disease";
+  static description = "A faster, tougher bug. Can bite to damage and spread disease";
   static unicode = "U+1FAB3";
   static color = "#e09f79ff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
-    super(Cockroach.name, Cockroach.description, Cockroach.unicode, 2, 6, 1, 3, 2, Cockroach.color, headPosition, [headPosition], team, Cockroach.rarity, removeCallback, id)
+    super(Cockroach.name, Cockroach.description, Cockroach.unicode, 2, 6, 1, 2, 2, Cockroach.color, headPosition, [headPosition], team, Cockroach.rarity, removeCallback, id)
     this.immunities.diseased = true;
+  }
+  async special(targetPiece: Piece): Promise<void> {
+    if (!targetPiece.immunities.diseased) {
+      targetPiece.statuses.diseased = true;
+    }
+    await targetPiece.takeDamage(this.getStat('attack'))
+
+    this.actions--
   }
 }
 
@@ -4577,28 +4586,28 @@ class Dolls extends Piece {
   }
   async special({ target, activePieces }: { target: Coordinate, activePieces: Piece[] }): Promise<void> {
     if (this.getStat('defence') <= 0 || this.defenceRemaining <= 1) return;//|| this.tiles.length <= 1 has to be bigger???
-    const newTrojan = new Dolls(target, this.team, this.removeCallback, crypto.randomUUID())
+    const newDoll = new Dolls(target, this.team, this.removeCallback, crypto.randomUUID())
     //should we allow copying of stats also?
-    newTrojan.maxSize = this.maxSize - 1;
-    newTrojan.moves = this.moves + 1;
-    newTrojan.range = this.range;
-    newTrojan.attack = this.attack;
-    newTrojan.defence = this.defence - 1;
-    newTrojan.defenceRemaining = this.getStat('defence') - 1;
-    newTrojan.statModifiers = this.statModifiers;//this copies modifiers
+    newDoll.maxSize = this.maxSize - 1;
+    newDoll.moves = this.moves + 1;
+    newDoll.range = this.range;
+    newDoll.attack = this.attack;
+    newDoll.defence = this.defence - 1;
+    newDoll.defenceRemaining = this.getStat('defence') - 1;
+    newDoll.statModifiers = this.statModifiers;//this copies modifiers
     //newTrojan.addModifier({moves: 2})
     //newTrojan.addModifier({defence: -1})
     //newTrojan.addModifier({maxSize: -1})
-    newTrojan.immunities = this.immunities;
-    newTrojan.damageMult = this.damageMult;
-    newTrojan.movesRemaining = 0;
-    newTrojan.actions = 0;
-    newTrojan.hybridName = this.hybridName;
-    newTrojan.extraUnicode = this.extraUnicode;
-    newTrojan.hybridIconID = this.hybridIconID;
+    newDoll.immunities = this.immunities;
+    newDoll.damageMult = this.damageMult;
+    newDoll.movesRemaining = 0;
+    newDoll.actions = 0;
+    newDoll.hybridName = this.hybridName;
+    newDoll.extraUnicode = this.extraUnicode;
+    newDoll.hybridIconID = this.hybridIconID;
     this.defence = 1;
     this.defenceRemaining = 1;
-    activePieces.push(newTrojan);
+    activePieces.push(newDoll);
     this.actions--
   }
 }
@@ -4646,23 +4655,23 @@ class Zombie extends Piece {
     );
     if (!targetPiece) return;
     if ((targetPiece.defence + targetPiece.tiles.length) < this.getStat('attack')) {
-      const newTrojan = new Zombie(target, this.team, this.removeCallback, crypto.randomUUID())
+      const newZombie = new Zombie(target, this.team, this.removeCallback, crypto.randomUUID())
       //should we allow copying of stats also?
-      newTrojan.maxSize = this.maxSize;
-      newTrojan.moves = this.moves;
-      newTrojan.range = this.range;
-      newTrojan.attack = this.attack;
-      newTrojan.defence = this.defence;
-      newTrojan.defenceRemaining = this.getStat('defence');
-      newTrojan.statModifiers = this.statModifiers;//this copies modifiers
-      newTrojan.immunities = this.immunities;
-      newTrojan.damageMult = this.damageMult;
-      newTrojan.movesRemaining = 0;
-      newTrojan.actions = 0;
-      newTrojan.hybridName = this.hybridName;
-      newTrojan.extraUnicode = this.extraUnicode;
-      newTrojan.hybridIconID = this.hybridIconID;
-      activePieces.push(newTrojan);
+      newZombie.maxSize = this.maxSize;
+      newZombie.moves = this.moves;
+      newZombie.range = this.range;
+      newZombie.attack = this.attack;
+      newZombie.defence = this.defence;
+      newZombie.defenceRemaining = this.getStat('defence');
+      newZombie.statModifiers = this.statModifiers;//this copies modifiers
+      newZombie.immunities = this.immunities;
+      newZombie.damageMult = this.damageMult;
+      newZombie.movesRemaining = 0;
+      newZombie.actions = 0;
+      newZombie.hybridName = this.hybridName;
+      newZombie.extraUnicode = this.extraUnicode;
+      newZombie.hybridIconID = this.hybridIconID;
+      activePieces.push(newZombie);
     }
     targetPiece.takeDamage(this.getStat('attack'));
     if (targetPiece.immunities.diseased)

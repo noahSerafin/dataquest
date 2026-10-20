@@ -3326,38 +3326,6 @@ const grove:Level = {
       "rarity": 2
     },
     {
-      "id": "21dca682-67f9-433f-8461-a41d40fb0277",
-      "name": "TP",
-      "team": "player",
-      "headPosition": {
-        "x": 5,
-        "y": 0
-      },
-      "tiles": [
-        {
-          "x": 5,
-          "y": 0
-        },
-        {
-          "x": 5,
-          "y": 1
-        },
-        {
-          "x": 5,
-          "y": 2
-        },
-        {
-          "x": 4,
-          "y": 2
-        },
-        {
-          "x": 4,
-          "y": 3
-        }
-      ],
-      "rarity": 1
-    },
-    {
       "id": "28503b9f-f9cd-43b2-a506-1ee4d1911de2",
       "name": "Piper",
       "team": "enemy",

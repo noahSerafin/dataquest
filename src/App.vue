@@ -10,6 +10,7 @@ import { Item, allItems } from "./Items";
 import type { ItemConstructor } from "./Items";
 import { allAdmins } from "./AdminPrograms";
 import { Admin } from "./AdminPrograms";
+import { rollBoss } from "./helperFunctions.ts";
 import type { AdminTrigger } from "./AdminPrograms";
 import PlayerView from "./components/PlayerView.vue";
 import MessagingSystem from "./components/MessagingSystem.vue";
@@ -2196,10 +2197,21 @@ const combinedMapSeed = computed(() => {
   return raw + (worldSeed.value || '');
 });
 async function increaseDifficulty() {
-  player.value.difficulty += 1;
-  if (player.value.difficulty < 7 && player.value.stake < 2) {//cumulate bosses in endless mode or stake 1+
+  
+  if (player.value.difficulty < 6 && player.value.stake < 2) {//cumulate bosses in endless mode or stake 1+
     bossAdmins.value = [];
+  } else {
+    // Mirror gets repetitive when carried over, so replace it with a boss rolled for the new difficulty
+    const bosses = bossAdmins.value;
+    for (let i = 0; i < bosses.length; i++) {
+      if (bosses[i].name !== 'Mirror') continue;
+      const others = bosses.filter((_, j) => j !== i);
+      const replacement = rollBoss(player.value.difficulty, others, ['Mirror']);
+      bosses[i] = replacement;
+      StorageManager.unlockBoss(replacement.name);
+    }
   }
+  player.value.difficulty += 1;
   refreshShop(true);
   worldSeed.value++
 }

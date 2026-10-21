@@ -49,19 +49,13 @@ workbench + compiler + duplicator do not preserve damagemult
 
 NICE TO HAVE
 upgrades add version numbers (see below)
+add new bosses
 You win screen more obvious, change button to endless mode here
-make cane only effect traps by head positions
+make cane only effect traps by head positions - done? test
 Make rabbits always jump diagonally
 Preserve all roguelike App functions (move to own file?)
-!makeover apply random variant - test
 !attacking hidden pieces should reveal them while they are taking damage
-Normalise all food, can be used on progam in or out of node? Sandwich +1 blessing +2
-For campaign:
-Beating boss loads next map
-(allow returning to previous map?)
-(overworld? for non linear map?)
-
-make a test campaign, populate with existing levels
+Normalise all food, can be used on program in or out of node? Sandwich +1 blessing +2
 
 ITEMS/ADMINS
 review roguelikes
@@ -73,19 +67,6 @@ Immunties + 0.3
 SPECIAL nodes
 variant maker?
 compressor?
-
-SHOPs - per level
-
-APP 6
-review roguelike elements:
-admin rolls/limits
-shop rolls
-rerolls in general
-increment difficulty
-
-EDITOR 8
-Add a Spawn for a 'wall' type piece
-Have logic for spawning any piece on single spawn, then only pieces with max size >= to the spawn's size
 
 rogue tutorial
 

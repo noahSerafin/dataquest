@@ -6,6 +6,8 @@ import { STAT_MIN, PIECE_VARIANTS } from "./constants";
 import { upgradeItems } from "./Items";
 import { StorageManager } from "./StorageManager";
 import { Random } from "./Random";
+import { allBosses, nonStackableBosses } from "./Bosses";
+import type { Admin } from "./AdminPrograms";
 
 export const isSoundEnabled = ref(false);
 
@@ -246,6 +248,49 @@ function rollRarity(clovers: number, hasCollector: boolean = false) {
       return rarity;
     }
   }
+}
+
+
+/**
+ * Rolls a new boss appropriate for the given difficulty.
+ * Avoids bosses the player already has, falls back to allowing stackable duplicates,
+ * and never returns a non-stackable boss the player already has.
+ * @param excludeNames boss names to avoid (ignored if it would leave no options)
+ */
+export function rollBoss(difficulty: number, currentBosses: Admin[], excludeNames: string[] = []): Admin {
+  const bossPool = difficulty > 6 ? allBosses : allBosses.filter(
+    boss => boss.rarity <= difficulty && boss.rarity >= difficulty - 1
+  );
+  const pool = bossPool.length > 0 ? bossPool : allBosses;
+
+  //don't add bosses whose effects don't stack
+  const duplicateNames = new Set(nonStackableBosses
+    .filter(boss => currentBosses.some(playerBoss => playerBoss.name === boss.name))
+    .map(b => b.name));
+
+  const playerBossNames = new Set(currentBosses.map(b => b.name));
+
+  // First try: filter out ALL bosses the player already has
+  let filteredPool = pool.filter(boss => !playerBossNames.has(boss.name));
+
+  // If pool is empty (player has all bosses of this rarity), fallback to allowing duplicates
+  // BUT still excluding non-stackable ones that they already have
+  if (filteredPool.length === 0) {
+    filteredPool = pool.filter(boss => !duplicateNames.has(boss.name));
+
+    // If still empty, grab from allBosses (excluding non-stackable duplicates)
+    if (filteredPool.length === 0) {
+      filteredPool = allBosses.filter(boss => !duplicateNames.has(boss.name));
+    }
+  }
+
+  if (excludeNames.length > 0) {
+    const excludedPool = filteredPool.filter(boss => !excludeNames.includes(boss.name));
+    if (excludedPool.length > 0) filteredPool = excludedPool;
+  }
+
+  const SelectedBoss = Random.pick(filteredPool);
+  return new SelectedBoss();
 }
 
 /*export function pickWeightedRandom(PieceClasses: any[], player: Player) {//clover edit

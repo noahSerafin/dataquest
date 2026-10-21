@@ -35,7 +35,7 @@
     });
 
     const bonus = computed(() => 
-        props.player.hasAdmin('Pot of Gold') && props.bosses.length > 0 ? 10 * props.player.adminCount('Pot of Gold') : 0
+        props.player.hasAdmin('Pot of Gold') && props.player.mapProgress >= 3 ? 10 * props.player.adminCount('Pot of Gold') : 0
     )
 
     function collectAndProceed(){
@@ -113,7 +113,7 @@
                         ${{ 6 * player.adminCount('Booty') }}
                     </span>
                 </span>
-                <span v-if="player.hasAdmin('Pot of Gold') && bosses.length > 0">+ Pot of Gold 
+                <span v-if="player.hasAdmin('Pot of Gold') && player.mapProgress >= 3">+ Pot of Gold 
                     <span class="text-yellow">
                         ${{ 10 * player.adminCount('Pot of Gold') }}
                     </span>

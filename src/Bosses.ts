@@ -205,7 +205,7 @@ class Wrath extends Admin {
 class Reaper extends Admin {
     static iconID = 441;
     static name = "Reaper";
-    static description = "Takes a life every 10 turns";
+    static description = "Takes a life every 10 turns (resets at end of each round)";
     static unicode = "U+2620";
     static color = "#790a0aff";
     static rarity = 6;
@@ -1267,11 +1267,11 @@ console.log("Bosses of rarity 4: ", adminLogs.rarity4)
 console.log("Bosses of rarity 5: ", adminLogs.rarity5)
 console.log("Bosses of rarity 6: ", adminLogs.rarity6)
 
-//FACE WITH LOOK OF TRIUMPH, U+1F624
-//angry pieces, deadly pieces - apply variants?
-
-
+//U+1F9C8 Butter - Moves enemy programs randomly after they take damage - 2
+//U+1F483 Salsa - Enemies gain +1 moves when they deal damage - 2
+//U+1F44F Clapback - All enemies retaliate - 3
+//U+1F6D8 Avalanche - Damaging an enemy increases their attack by 1 - 4
+//U+1F624 Seething - All enemies get +0.5 damage mult at the start of the round - 5
+//U+1F49E Love Triangle - After 3 turns, charms one of your programs. Then charms a different one each following turn, removing charmed from the previous program - 5
+ 
 //EXPRESSIONLESS FACE, U+1F611 sleepy
-
-//BUTTER, U+1F9C8 moves enemy pieces randomly after damage?
-//landslide U+1F6D8 

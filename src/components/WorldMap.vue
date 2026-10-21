@@ -3,7 +3,7 @@ import { computed, ref, onMounted } from "vue";
 import MiniMap from "./MiniMap.vue";
 import { Admin } from "../AdminPrograms";
 import { Item, Box, Genie, Gift, Pinata, Pandora, Voucher, Jar, Update2, Update3, Floppy, Life, Cake, Wand, Hourglass, Dupe } from "../Items";
-import { allBosses, nonStackableBosses } from "../Bosses";
+import { rollBoss } from "../helperFunctions";
 import { watch } from "vue";
 import { reapplyTutorialTooltips, showTutorialTip } from "../tutorial";
 import { Player } from "../Player";
@@ -89,37 +89,7 @@ const boss = ref<Admin>(returnNewBoss());
 
 function returnNewBoss() {
     skipsThisLevel.value = 0;
-    const bossPool = props.player.difficulty > 6 ? allBosses : allBosses.filter(
-        boss => boss.rarity <= props.player.difficulty && boss.rarity >= props.player.difficulty - 1
-    );
-    const pool = bossPool.length > 0 ? bossPool : allBosses;
-
-    //don't add bosses whose effects don't stack
-    const duplicatesToRemove = nonStackableBosses.filter(boss =>
-        props.bosses.some(playerBoss => playerBoss.name === boss.name)
-    );
-    const duplicateNames = new Set(duplicatesToRemove.map(b => b.name));
-    
-    const playerBossNames = new Set(props.bosses.map(b => b.name));
-
-    // First try: filter out ALL bosses the player already has
-    let filteredPool = pool.filter(boss => !playerBossNames.has(boss.name));
-
-    // If pool is empty (player has all bosses of this rarity), fallback to allowing duplicates 
-    // BUT still excluding non-stackable ones that they already have
-    if (filteredPool.length === 0) {
-        filteredPool = pool.filter(boss => !duplicateNames.has(boss.name));
-        
-        // If still empty, grab from allBosses (excluding non-stackable duplicates)
-        if (filteredPool.length === 0) {
-            filteredPool = allBosses.filter(boss => !duplicateNames.has(boss.name));
-        }
-    }
-
-    console.log('allbosses', allBosses.length)
-    //console.log('pool', pool.length)
-    const SelectedBoss = Random.pick(filteredPool);
-    return new SelectedBoss();
+    return rollBoss(props.player.difficulty, props.bosses);
 }
 function newBoss() {
     boss.value = returnNewBoss();

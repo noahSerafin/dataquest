@@ -1897,7 +1897,7 @@ class Mammoth extends Piece {
 class Snowman extends Piece {
   static iconID = 143;
   static name = "Snowman";
-  static description = "A program that can snowball, increasing it's max size, moves, and attack";
+  static description = "A program that can snowball into an empty space, increasing it's max size, moves, and attack";
   static unicode = "U+26C4";
   static color = "#4e4e4eff";
   static rarity = 5;

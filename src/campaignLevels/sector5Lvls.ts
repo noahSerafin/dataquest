@@ -895,7 +895,7 @@ const heat:Level = {
     {
       "id": "1bd6252c-9fe0-4a44-8fe2-60f7f97c4d5b",
       "name": "Centipede",
-      "team": "player",
+      "team": "enemy",
       "headPosition": {
         "x": 6,
         "y": 11
@@ -2787,7 +2787,7 @@ const bridge:Level = {
   ]
 }
 const glabs:Level = {
-  "name": "G-labs",
+  "name": "G-Labs",
   "tiles": [
     {
       "x": 0,
@@ -3569,10 +3569,6 @@ const graveyard:Level = {
       "y": 1
     },
     {
-      "x": 5,
-      "y": 1
-    },
-    {
       "x": 0,
       "y": 2
     },
@@ -3723,6 +3719,10 @@ const graveyard:Level = {
     {
       "x": 1,
       "y": 7
+    },
+    {
+      "x": 5,
+      "y": 1
     }
   ],
   "pieces": [
@@ -3974,6 +3974,66 @@ const graveyard:Level = {
         {
           "x": 4,
           "y": 1
+        }
+      ],
+      "rarity": 5
+    },
+    {
+      "id": "fc473369-2f0e-416b-9559-2ae66ceaee72",
+      "name": "Lyre",
+      "team": "enemy",
+      "headPosition": {
+        "x": 5,
+        "y": 5
+      },
+      "tiles": [
+        {
+          "x": 5,
+          "y": 5
+        },
+        {
+          "x": 5,
+          "y": 4
+        }
+      ],
+      "rarity": 5
+    },
+    {
+      "id": "406fa134-d8ee-4cdd-a620-261ece9eca50",
+      "name": "Lyre",
+      "team": "enemy",
+      "headPosition": {
+        "x": 8,
+        "y": 1
+      },
+      "tiles": [
+        {
+          "x": 8,
+          "y": 1
+        },
+        {
+          "x": 8,
+          "y": 0
+        }
+      ],
+      "rarity": 5
+    },
+    {
+      "id": "fb233c90-2d38-45fa-93ff-893864156b39",
+      "name": "Lyre",
+      "team": "enemy",
+      "headPosition": {
+        "x": 2,
+        "y": 1
+      },
+      "tiles": [
+        {
+          "x": 2,
+          "y": 1
+        },
+        {
+          "x": 2,
+          "y": 0
         }
       ],
       "rarity": 5
@@ -4471,10 +4531,6 @@ const track:Level = {
       "y": 2
     },
     {
-      "x": 11,
-      "y": 3
-    },
-    {
       "x": 0,
       "y": 5
     },
@@ -4517,10 +4573,6 @@ const track:Level = {
     {
       "x": 10,
       "y": 0
-    },
-    {
-      "x": 11,
-      "y": 4
     },
     {
       "x": 9,
@@ -4653,65 +4705,17 @@ const track:Level = {
     {
       "x": 0,
       "y": 4
+    },
+    {
+      "x": 11,
+      "y": 3
+    },
+    {
+      "x": 11,
+      "y": 4
     }
   ],
   "pieces": [
-    {
-      "id": "c5720b57-f016-45c6-8ac0-fcef0fcb8416",
-      "name": "Stopwatch",
-      "team": "enemy",
-      "headPosition": {
-        "x": 11,
-        "y": 4
-      },
-      "tiles": [
-        {
-          "x": 11,
-          "y": 4
-        },
-        {
-          "x": 11,
-          "y": 5
-        },
-        {
-          "x": 11,
-          "y": 6
-        },
-        {
-          "x": 11,
-          "y": 7
-        }
-      ],
-      "rarity": 5
-    },
-    {
-      "id": "a97b1e45-17c0-4394-99d7-e3219023435a",
-      "name": "Stopwatch",
-      "team": "enemy",
-      "headPosition": {
-        "x": 11,
-        "y": 3
-      },
-      "tiles": [
-        {
-          "x": 11,
-          "y": 3
-        },
-        {
-          "x": 11,
-          "y": 2
-        },
-        {
-          "x": 11,
-          "y": 1
-        },
-        {
-          "x": 11,
-          "y": 0
-        }
-      ],
-      "rarity": 5
-    },
     {
       "id": "89ac5549-5850-4cf0-acf1-ebe47da903dc",
       "name": "G-man",
@@ -4795,6 +4799,62 @@ const track:Level = {
         }
       ],
       "rarity": 1
+    },
+    {
+      "id": "f3e8d9bc-a667-4d05-9f49-e24b5cc81460",
+      "name": "Stopwatch",
+      "team": "enemy",
+      "headPosition": {
+        "x": 11,
+        "y": 7
+      },
+      "tiles": [
+        {
+          "x": 11,
+          "y": 7
+        },
+        {
+          "x": 11,
+          "y": 6
+        },
+        {
+          "x": 11,
+          "y": 5
+        },
+        {
+          "x": 11,
+          "y": 4
+        }
+      ],
+      "rarity": 5
+    },
+    {
+      "id": "c87a23a8-6f17-4407-b98e-8d680600e8c5",
+      "name": "Stopwatch",
+      "team": "enemy",
+      "headPosition": {
+        "x": 11,
+        "y": 0
+      },
+      "tiles": [
+        {
+          "x": 11,
+          "y": 0
+        },
+        {
+          "x": 11,
+          "y": 1
+        },
+        {
+          "x": 11,
+          "y": 2
+        },
+        {
+          "x": 11,
+          "y": 3
+        }
+      ],
+      "rarity": 5
     }
   ]
 }
@@ -5062,7 +5122,7 @@ const safehouse:Level = {
     {
       "id": "177f566a-471b-452c-b407-424350ec1288",
       "name": "Centipede",
-      "team": "player",
+      "team": "enemy",
       "headPosition": {
         "x": 11,
         "y": 1
@@ -5090,7 +5150,7 @@ const safehouse:Level = {
     {
       "id": "1f674f4c-6cb9-4d55-b04c-7a8dd09bc001",
       "name": "Dataworm",
-      "team": "player",
+      "team": "enemy",
       "headPosition": {
         "x": 6,
         "y": 5

@@ -5708,6 +5708,86 @@ const enchanted: Level = {
         }
       ],
       "rarity": 5
+    },
+    {
+      "id": "03a8d87e-745d-4160-adf7-41fef6c31c60",
+      "name": "Oak",
+      "team": "enemy",
+      "headPosition": {
+        "x": 3,
+        "y": 6
+      },
+      "tiles": [
+        {
+          "x": 3,
+          "y": 6
+        }
+      ],
+      "rarity": 2
+    },
+    {
+      "id": "5924c1a9-8cf4-4791-8acd-91a2a998c379",
+      "name": "Oak",
+      "team": "enemy",
+      "headPosition": {
+        "x": 2,
+        "y": 2
+      },
+      "tiles": [
+        {
+          "x": 2,
+          "y": 2
+        }
+      ],
+      "rarity": 2
+    },
+    {
+      "id": "22a6f470-b4a3-4608-853e-0fa4cf499822",
+      "name": "Oak",
+      "team": "enemy",
+      "headPosition": {
+        "x": 6,
+        "y": 7
+      },
+      "tiles": [
+        {
+          "x": 6,
+          "y": 7
+        }
+      ],
+      "rarity": 2
+    },
+    {
+      "id": "dbf458dc-a2cc-4e75-a414-ada4e47a6d11",
+      "name": "Oak",
+      "team": "enemy",
+      "headPosition": {
+        "x": 7,
+        "y": 0
+      },
+      "tiles": [
+        {
+          "x": 7,
+          "y": 0
+        }
+      ],
+      "rarity": 2
+    },
+    {
+      "id": "12728c0b-e190-4893-ab6e-15187a353a7d",
+      "name": "Oak",
+      "team": "enemy",
+      "headPosition": {
+        "x": 9,
+        "y": 3
+      },
+      "tiles": [
+        {
+          "x": 9,
+          "y": 3
+        }
+      ],
+      "rarity": 2
     }
   ]
 }

@@ -46,7 +46,7 @@ export const sector6 = {
         "node_wenvp3rl6"
       ],
       "difficultyMod": 0,
-      "reward": 12,
+      "reward": 6,
       "company": "Saturn Solutions",
       "pathOffsets": {
         "node_bu507hh9s": {
@@ -74,7 +74,7 @@ export const sector6 = {
         "node_z5lyk0k50"
       ],
       "difficultyMod": 1,
-      "reward": 15,
+      "reward": 7,
       "company": "Red Sky Dynamics",
       "pathOffsets": {
         "node_l928zoo3m": {
@@ -101,7 +101,7 @@ export const sector6 = {
         "node_pf4657caq"
       ],
       "difficultyMod": 0,
-      "reward": 12,
+      "reward": 6,
       "company": "Whiteflower Global",
       "pathOffsets": {
         "node_pf4657caq": {
@@ -125,7 +125,7 @@ export const sector6 = {
         "node_yikxd4j2v"
       ],
       "difficultyMod": 1,
-      "reward": 15,
+      "reward": 7,
       "company": "Starlane Tech",
       "pathOffsets": {
         "node_yikxd4j2v": {
@@ -150,7 +150,7 @@ export const sector6 = {
         "node_4xajc39m2"
       ],
       "difficultyMod": 0,
-      "reward": 12,
+      "reward": 6,
       "company": "Cook.io",
       "pathOffsets": {
         "node_bxu61nry7": {
@@ -183,7 +183,7 @@ export const sector6 = {
         "node_f6rjgz0es"
       ],
       "difficultyMod": 0,
-      "reward": 12,
+      "reward": 6,
       "company": "Tsukimi Group",
       "pathOffsets": {
         "node_f98u869wa": {
@@ -207,7 +207,7 @@ export const sector6 = {
         "node_p979uq6y5"
       ],
       "difficultyMod": 0,
-      "reward": 12,
+      "reward": 6,
       "company": "Nightbridge Corp",
       "pathOffsets": {
         "node_p979uq6y5": {
@@ -230,7 +230,7 @@ export const sector6 = {
         "node_12xatlflv"
       ],
       "difficultyMod": 0,
-      "reward": 12,
+      "reward": 6,
       "company": "Sakura Robotics",
       "pathOffsets": {
         "node_0dp3124cm": {
@@ -260,7 +260,7 @@ export const sector6 = {
         "node_iu7zrh5d8"
       ],
       "difficultyMod": 0,
-      "reward": 12,
+      "reward": 6,
       "company": "Panda Holdings LLC",
       "pathOffsets": {
         "node_iu7zrh5d8": {
@@ -286,7 +286,7 @@ export const sector6 = {
         "node_l928zoo3m"
       ],
       "difficultyMod": 0,
-      "reward": 12,
+      "reward": 6,
       "company": "Red Sky Dynamics",
       "pathOffsets": {
         "node_l928zoo3m": {
@@ -309,7 +309,7 @@ export const sector6 = {
         "node_o5l1ab8qd"
       ],
       "difficultyMod": 0,
-      "reward": 12,
+      "reward": 6,
       "company": "Flyby Surveilance",
       "pathOffsets": {
         "node_o5l1ab8qd": {
@@ -333,7 +333,7 @@ export const sector6 = {
         "node_fdt8fby9k"
       ],
       "difficultyMod": 0,
-      "reward": 12,
+      "reward": 6,
       "company": "Meridian Security Inc.",
       "pathOffsets": {
         "node_fgjxua15g": {
@@ -367,7 +367,7 @@ export const sector6 = {
         "node_drlxdjmql"
       ],
       "difficultyMod": 0,
-      "reward": 12,
+      "reward": 6,
       "company": "Saturn Solutions",
       "bossName": "Fog of War",
       "pathOffsets": {
@@ -392,7 +392,7 @@ export const sector6 = {
         "node_9cg8hh4qm"
       ],
       "difficultyMod": 0,
-      "reward": 12,
+      "reward": 6,
       "company": "Red Sky Dynamics",
       "bossName": "Wrath",
       "pathOffsets": {
@@ -415,7 +415,7 @@ export const sector6 = {
         "node_zys2jpfj2"
       ],
       "difficultyMod": 0,
-      "reward": 12,
+      "reward": 6,
       "company": "Whiteflower Global",
       "bossName": "Omega",
       "pathOffsets": {
@@ -439,7 +439,7 @@ export const sector6 = {
         "node_8147480tz"
       ],
       "difficultyMod": 0,
-      "reward": 12,
+      "reward": 6,
       "company": "Flyby Surveilance",
       "bossName": "REDACTED",
       "pathOffsets": {
@@ -462,7 +462,7 @@ export const sector6 = {
         "node_4oedahaep"
       ],
       "difficultyMod": 0,
-      "reward": 12,
+      "reward": 6,
       "company": "Zenith Ltd.",
       "bossName": "Don't look at the sun",
       "pathOffsets": {
@@ -487,7 +487,7 @@ export const sector6 = {
         "node_12lj34xa0"
       ],
       "difficultyMod": 0,
-      "reward": 12,
+      "reward": 6,
       "company": "Whiteflower Global",
       "bossName": "Nightfall",
       "pathOffsets": {
@@ -511,7 +511,7 @@ export const sector6 = {
       "difficultyMod": 0,
       "reward": 0,
       "company": "Saturn Solutions",
-      "shopContents": "Dracula, Greatshield, Helicopter, Kong, Sponge, Blessing, Feast, Ginger, Soap, Update 2.0, Needle, Osiris"
+      "shopContents": "Dracula, Greatshield, Helicopter, Kong, Sponge, Blessing, Feast, Ginger, Soap, Update 2.0, Needle, Daisy Chain"
     },
     "node_yikxd4j2v": {
       "id": "node_yikxd4j2v",
@@ -537,7 +537,7 @@ export const sector6 = {
       "difficultyMod": 0,
       "reward": 0,
       "company": "Saturn Solutions",
-      "shopContents": "Grizzly, Oni, Sponge, Super, T-Rex, Happy Hour, Shooting Star, Minerva, Ring, Staying in School,"
+      "shopContents": "Grizzly, Oni, Sponge, Super, T-Rex, Shooting Star, Minerva"
     },
     "node_z5lyk0k50": {
       "id": "node_z5lyk0k50",
@@ -563,7 +563,7 @@ export const sector6 = {
       "difficultyMod": 0,
       "reward": 0,
       "company": "Saturn Solutions",
-      "skipContents": "Matroyoshka"
+      "skipContents": "Matryoshka"
     },
     "node_4oedahaep": {
       "id": "node_4oedahaep",

@@ -54,7 +54,7 @@ export const sector5 = {
         "node_b51rxzfvu"
       ],
       "difficultyMod": 0,
-      "reward": 10,
+      "reward": 5,
       "company": "Nightbridge Corp",
       "levelName": "Stop Start"
     },
@@ -70,7 +70,7 @@ export const sector5 = {
         "node_sestiht90"
       ],
       "difficultyMod": 0,
-      "reward": 10,
+      "reward": 5,
       "company": "Panda Holdings LLC",
       "pathOffsets": {
         "node_p9kc1mub8": {
@@ -97,7 +97,7 @@ export const sector5 = {
         "node_wgpsgril0"
       ],
       "difficultyMod": 0,
-      "reward": 10,
+      "reward": 5,
       "company": "Panda Holdings LLC",
       "pathOffsets": {
         "node_wgpsgril0": {
@@ -123,7 +123,7 @@ export const sector5 = {
         "node_3o1iqjb0w"
       ],
       "difficultyMod": 0,
-      "reward": 10,
+      "reward": 5,
       "company": "Tsukimi Group",
       "pathOffsets": {
         "node_lbmztk4zj": {
@@ -150,7 +150,7 @@ export const sector5 = {
         "node_9rr9tawqy"
       ],
       "difficultyMod": 0,
-      "reward": 10,
+      "reward": 5,
       "company": "Monkey Media",
       "pathOffsets": {
         "node_9rr9tawqy": {
@@ -166,7 +166,7 @@ export const sector5 = {
       "id": "node_dhk6bbpio",
       "type": "level",
       "position": {
-        "x": 860,
+        "x": 880,
         "y": 340
       },
       "next": [
@@ -174,7 +174,7 @@ export const sector5 = {
         "node_uaaktj6hk"
       ],
       "difficultyMod": 0,
-      "reward": 10,
+      "reward": 5,
       "company": "Panda Holdings LLC",
       "pathOffsets": {
         "node_2ndgxgli8": {
@@ -188,7 +188,7 @@ export const sector5 = {
           "y2": -9
         }
       },
-      "levelName": "The Slope"
+      "levelName": "Slippery Slope"
     },
     "node_pr6ndamhd": {
       "id": "node_pr6ndamhd",
@@ -201,7 +201,7 @@ export const sector5 = {
         "node_cj9wvun5m"
       ],
       "difficultyMod": 0,
-      "reward": 10,
+      "reward": 5,
       "company": "Zenith Ltd.",
       "pathOffsets": {
         "node_cj9wvun5m": {
@@ -225,7 +225,7 @@ export const sector5 = {
         "node_sestiht90"
       ],
       "difficultyMod": 1,
-      "reward": 12,
+      "reward": 6,
       "company": "Panda Holdings LLC",
       "pathOffsets": {
         "node_mauodurpb": {
@@ -258,7 +258,7 @@ export const sector5 = {
         "node_lbmztk4zj"
       ],
       "difficultyMod": 0,
-      "reward": 10,
+      "reward": 5,
       "company": "Red Sky Dynamics",
       "pathOffsets": {
         "node_lbmztk4zj": {
@@ -277,16 +277,24 @@ export const sector5 = {
         "y": 420
       },
       "next": [
-        "node_yc1bhskx4"
+        "node_yc1bhskx4",
+        "node_va0hffhea"
       ],
       "difficultyMod": 0,
-      "reward": 10,
+      "reward": 5,
       "company": "Flyby Surveilance",
       "pathOffsets": {
         "node_yc1bhskx4": {
-          "x": -16,
+          "x": -13,
           "y1": 0,
-          "y2": 0
+          "y2": 0,
+          "ds2": 8
+        },
+        "node_va0hffhea": {
+          "x": -20,
+          "y1": 0,
+          "y2": 15,
+          "ds2": 11
         }
       },
       "levelName": "The Safehouse"
@@ -304,7 +312,7 @@ export const sector5 = {
         "node_qdf05d3ul"
       ],
       "difficultyMod": 0,
-      "reward": 10,
+      "reward": 5,
       "company": "Whiteflower Global",
       "pathOffsets": {
         "node_4cf93j924": {
@@ -343,7 +351,7 @@ export const sector5 = {
         "node_mauodurpb"
       ],
       "difficultyMod": 0,
-      "reward": 10,
+      "reward": 5,
       "company": "Sakura Robotics",
       "pathOffsets": {
         "node_mauodurpb": {
@@ -368,7 +376,7 @@ export const sector5 = {
         "node_29drxy3dd"
       ],
       "difficultyMod": 0,
-      "reward": 10,
+      "reward": 5,
       "company": "Whiteflower Global",
       "bossName": "Cold Snap",
       "pathOffsets": {
@@ -391,7 +399,7 @@ export const sector5 = {
         "node_2ooc5wrvy"
       ],
       "difficultyMod": 0,
-      "reward": 10,
+      "reward": 5,
       "company": "Saturn Solutions",
       "bossName": "Mr Bones",
       "pathOffsets": {
@@ -416,7 +424,7 @@ export const sector5 = {
         "node_amukcfcot"
       ],
       "difficultyMod": 0,
-      "reward": 10,
+      "reward": 5,
       "company": "Starlane Tech",
       "bossName": "Singularity",
       "pathOffsets": {
@@ -441,7 +449,7 @@ export const sector5 = {
         "node_0rxv5jl6r"
       ],
       "difficultyMod": 0,
-      "reward": 10,
+      "reward": 5,
       "company": "Cook.io",
       "bossName": "Volcano",
       "pathOffsets": {
@@ -468,7 +476,7 @@ export const sector5 = {
         "node_mnroik0hi"
       ],
       "difficultyMod": 0,
-      "reward": 10,
+      "reward": 5,
       "company": "Longhouse Web Services",
       "bossName": "Poison Swamp",
       "pathOffsets": {
@@ -490,26 +498,20 @@ export const sector5 = {
         "y": 220
       },
       "next": [
-        "node_uaaktj6hk",
         "node_0ojt3bjew"
       ],
       "difficultyMod": 0,
-      "reward": 10,
+      "reward": 5,
       "company": "Nightbridge Corp",
       "bossName": "Blackmail",
       "pathOffsets": {
-        "node_uaaktj6hk": {
-          "x": -19,
-          "y1": 20,
-          "y2": 0,
-          "ds1": 10
-        },
         "node_0ojt3bjew": {
           "x": 0,
+          "y1": 0,
+          "y2": -15,
           "type": "VDHDV",
-          "y": -18,
-          "ds1": 4,
-          "ds2": 8
+          "y": -13,
+          "ds2": 10
         }
       },
       "levelName": "G-Labs"
@@ -629,7 +631,7 @@ export const sector5 = {
       "difficultyMod": 0,
       "reward": 0,
       "company": "Saturn Solutions",
-      "shopContents": "Archer, Centipede, Dragon, Love Bomb, Tank, BlackHeart, Pep Talk, Pie, Supplement, Soap, Chivalry, Daisy Chain, Hamsa, Monarch, Pong, Strike Out"
+      "shopContents": "Archer, Centipede, Dragon, Love Bomb, Tank, BlackHeart, Pep Talk, Pie, Supplement, Soap, Chivalry, Hamsa, Pong, Strike Out"
     },
     "node_yc1bhskx4": {
       "id": "node_yc1bhskx4",
@@ -642,7 +644,7 @@ export const sector5 = {
       "difficultyMod": 0,
       "reward": 0,
       "company": "Saturn Solutions",
-      "shopContents": "Giraffe, Hippo, Lion, Orangutan, Rhino, Soap, Beans, Coffee, Cake, Update, Chemistry, Circling The Drain, Jackpot, Rollers, Saved by the Bell"
+      "shopContents": "Giraffe, Hippo, Lion, Orangutan, Rhino, Soap, Beans, Coffee, Cake, Update, Chemistry, Circling The Drain, Rollers, Saved by the Bell"
     },
     "node_qdf05d3ul": {
       "id": "node_qdf05d3ul",

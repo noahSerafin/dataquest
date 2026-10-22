@@ -12,19 +12,27 @@ Sector3 - 4 shops
 remove stone age
 
 Sector - 4 
-bottom shop after eclipse instead of in middle
 sceond bottom shop reverse route to
 
 Sector 5
+more variants in levels
 move air support to sector 5
+player gets a 'virus' on this sector? HAL starts adding bosses to levels
+
+sector 6
+player is definitely overpowered at this point - make every node a boss node of some kind.
 
 FINALISE
-make selcting "I've done this before" disable future message popups completely
+make selcting "I've done this before" disable future message popups in sector 0 completely
 boss description needs the highest z-index
 hide rarity text on items/bps/controllers in campaign mode
-reduce rewards massively
-you win appearing on every node 'node complete' instead
+reduce rewards massively, but allow replays of levels
+reduce memory giveaways
+allow repurchasing of admins in campaign, but only if they are not already owned
 check tracking of shop purchases in save
+you win appearing on every node 'node complete' instead
+wrong icon showing on loading a new sector
+try beating without bullseye
 -
 cosmetic cicuitboard pieces
 circuitboard map edge non square (contour path edges)
@@ -41,6 +49,8 @@ BUGS -
 -statuses affecting copys even when copy does not have that status
 -Mr Bones switches traps that have activated
 -placement ghost still using unicode
+-monarch does not work in campaign
+archer not using special
 immunity items still applying to duplicates
 dove allowing moving after placing even not on first turn
 charmed watchman still exposes enemies (in general the check is only if team matches)
@@ -51,14 +61,14 @@ NICE TO HAVE
 upgrades add version numbers (see below)
 add new bosses
 You win screen more obvious, change button to endless mode here
-make cane only effect traps by head positions - done? test
-Make rabbits always jump diagonally
-Preserve all roguelike App functions (move to own file?)
-!attacking hidden pieces should reveal them while they are taking damage
+
+remove x(close)button on skip preview
+
+!attacking hidden pieces should reveal them while they are taking damage - or just display dmg numbers?
 Normalise all food, can be used on program in or out of node? Sandwich +1 blessing +2
+make cane only effect traps by head positions - done? test
 
 ITEMS/ADMINS
-review roguelikes
 keep track of upgrades and display on piece - items add +0.1 to pieces version number for each +1 stat, only display version number if above 1
 MaxSize, Moves + 0.1 
 atk, def, range + 0.2

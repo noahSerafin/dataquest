@@ -34,7 +34,7 @@ export const sector4 = {
         "node_wdotzdbhm"
       ],
       "difficultyMod": 0,
-      "reward": 7,
+      "reward": 4,
       "company": "Panda Holdings LLC",
       "pathOffsets": {
         "node_wdotzdbhm": {
@@ -59,7 +59,7 @@ export const sector4 = {
         "node_wdotzdbhm"
       ],
       "difficultyMod": 0,
-      "reward": 7,
+      "reward": 4,
       "company": "Whiteflower Global",
       "pathOffsets": {
         "node_fcecfhwlq": {
@@ -88,7 +88,7 @@ export const sector4 = {
         "node_qaiduwrcl"
       ],
       "difficultyMod": 1,
-      "reward": 10,
+      "reward": 5,
       "company": "Whiteflower Global",
       "pathOffsets": {
         "node_qaiduwrcl": {
@@ -112,7 +112,7 @@ export const sector4 = {
         "node_j78b4u1es"
       ],
       "difficultyMod": 0,
-      "reward": 7,
+      "reward": 4,
       "company": "Whiteflower Global",
       "pathOffsets": {
         "node_xisv7e5qk": {
@@ -150,7 +150,7 @@ export const sector4 = {
         "node_df6ic6o0o"
       ],
       "difficultyMod": 0,
-      "reward": 7,
+      "reward": 4,
       "company": "Whiteflower Global",
       "bossName": "Deep Water",
       "pathOffsets": {
@@ -177,7 +177,7 @@ export const sector4 = {
         "node_s1ffnxv0q"
       ],
       "difficultyMod": 0,
-      "reward": 7,
+      "reward": 4,
       "company": "Red Sky Dynamics",
       "pathOffsets": {
         "node_o9qn1a141": {
@@ -210,7 +210,7 @@ export const sector4 = {
         "node_fcecfhwlq"
       ],
       "difficultyMod": 0,
-      "reward": 7,
+      "reward": 4,
       "company": "Monkey Media",
       "pathOffsets": {
         "node_2mcww0348": {
@@ -243,7 +243,7 @@ export const sector4 = {
         "node_j9moyzl66"
       ],
       "difficultyMod": 1,
-      "reward": 10,
+      "reward": 5,
       "company": "Nightbridge Corp",
       "levelName": "The New World"
     },
@@ -259,7 +259,7 @@ export const sector4 = {
         "node_o9qn1a141"
       ],
       "difficultyMod": 0,
-      "reward": 7,
+      "reward": 4,
       "company": "Meridian Security Inc.",
       "levelName": "Whack-a-mole"
     },
@@ -275,7 +275,7 @@ export const sector4 = {
         "node_t7vhu42fa"
       ],
       "difficultyMod": 0,
-      "reward": 7,
+      "reward": 4,
       "company": "Red Sky Dynamics",
       "pathOffsets": {
         "node_nh1iovxyk": {
@@ -305,7 +305,7 @@ export const sector4 = {
         "node_wlt5pgnds"
       ],
       "difficultyMod": 0,
-      "reward": 7,
+      "reward": 4,
       "company": "Red Sky Dynamics",
       "pathOffsets": {
         "node_n2l5opypj": {
@@ -337,7 +337,7 @@ export const sector4 = {
         "node_byftql5ob"
       ],
       "difficultyMod": 0,
-      "reward": 7,
+      "reward": 4,
       "company": "Red Sky Dynamics",
       "bossName": "Factory",
       "pathOffsets": {
@@ -362,7 +362,7 @@ export const sector4 = {
         "node_wjy6wpra5"
       ],
       "difficultyMod": 0,
-      "reward": 7,
+      "reward": 4,
       "company": "Flyby Surveilance",
       "bossName": "Biohazard",
       "levelName": "Lockdown"
@@ -378,7 +378,7 @@ export const sector4 = {
         "node_z6pbzj1pz"
       ],
       "difficultyMod": 0,
-      "reward": 7,
+      "reward": 4,
       "company": "Red Sky Dynamics",
       "bossName": "Encryption",
       "pathOffsets": {
@@ -403,7 +403,7 @@ export const sector4 = {
         "node_52tkn1bjd"
       ],
       "difficultyMod": 0,
-      "reward": 7,
+      "reward": 4,
       "company": "Red Sky Dynamics",
       "bossName": "Eclipse",
       "levelName": "The Shore",
@@ -429,7 +429,7 @@ export const sector4 = {
         "node_6z7nqhuab"
       ],
       "difficultyMod": 1,
-      "reward": 10,
+      "reward": 5,
       "company": "Sakura Robotics",
       "pathOffsets": {
         "node_8icgxipc6": {
@@ -461,7 +461,7 @@ export const sector4 = {
         "node_wlt5pgnds"
       ],
       "difficultyMod": 1,
-      "reward": 10,
+      "reward": 5,
       "company": "Tsukimi Group",
       "pathOffsets": {
         "node_8icgxipc6": {
@@ -490,7 +490,7 @@ export const sector4 = {
       "difficultyMod": 0,
       "reward": 0,
       "company": "Saturn Solutions",
-      "shopContents": "Arms, Cannon, Firewall, Mammoth, Squid, Gloves, Teapot, Jar, Blackheart, Bugle, Blue Screen, Bullseye, Lightbulb, Ollie, Volatile"
+      "shopContents": "Arms, Cannon, Firewall, Mammoth, Squid, Gloves, Teapot, Jar, Blackheart, Bugle, Blue Screen, Lightbulb, Ollie, Volatile"
     },
     "node_z6pbzj1pz": {
       "id": "node_z6pbzj1pz",

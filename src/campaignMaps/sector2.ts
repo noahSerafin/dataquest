@@ -38,7 +38,7 @@ export const sector2 = {
         "node_i5gj9vkxa"
       ],
       "difficultyMod": 0,
-      "reward": 3,
+      "reward": 2,
       "company": "Tsukimi Group",
       "levelName": "The Guardhouse",
       "pathOffsets": {
@@ -64,7 +64,7 @@ export const sector2 = {
         "node_2bc1ak4xx"
       ],
       "difficultyMod": 0,
-      "reward": 3,
+      "reward": 2,
       "company": "Meridian Security Inc.",
       "pathOffsets": {
         "node_fq41u6f6a": {
@@ -92,7 +92,7 @@ export const sector2 = {
         "node_cb62tuat2"
       ],
       "difficultyMod": 0,
-      "reward": 3,
+      "reward": 2,
       "company": "Zenith Ltd.",
       "pathOffsets": {
         "node_cb62tuat2": {
@@ -140,7 +140,7 @@ export const sector2 = {
         "node_q0erjp0ve"
       ],
       "difficultyMod": 0,
-      "reward": 3,
+      "reward": 2,
       "company": "Tsukimi Group",
       "pathOffsets": {},
       "levelName": "The Grove"
@@ -298,7 +298,7 @@ export const sector2 = {
         "node_afgxpq7x7"
       ],
       "difficultyMod": 5,
-      "reward": 3,
+      "reward": 2,
       "company": "Tsukimi Group",
       "pathOffsets": {
         "node_afgxpq7x7": {
@@ -323,7 +323,7 @@ export const sector2 = {
         "node_2kbqcjn3r"
       ],
       "difficultyMod": 0,
-      "reward": 3,
+      "reward": 2,
       "company": "Starlane Tech",
       "pathOffsets": {
         "node_2kbqcjn3r": {
@@ -386,7 +386,7 @@ export const sector2 = {
         "node_317fdw6bf"
       ],
       "difficultyMod": 0,
-      "reward": 3,
+      "reward": 2,
       "company": "Monkey Media",
       "pathOffsets": {
         "node_317fdw6bf": {

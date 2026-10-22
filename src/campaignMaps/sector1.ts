@@ -42,7 +42,7 @@ export const sector1 = {
         "node_ey2q5qyqu"
       ],
       "difficultyMod": 0,
-      "reward": 2,
+      "reward": 1,
       "company": "Meridian Security Inc.",
       "pathOffsets": {
         "node_tbudoo9ss": {
@@ -84,7 +84,7 @@ export const sector1 = {
         "node_ywvwhu1ce"
       ],
       "difficultyMod": 1,
-      "reward": 3,
+      "reward": 1,
       "company": "Longhouse Web Services",
       "pathOffsets": {
         "node_qs0fbko7z": {
@@ -142,7 +142,7 @@ export const sector1 = {
         "node_n3120xi39"
       ],
       "difficultyMod": 0,
-      "reward": 2,
+      "reward": 1,
       "company": "Flyby Surveilance",
       "levelName": "Take Cover"
     },
@@ -157,7 +157,7 @@ export const sector1 = {
         "node_vzmlxo9e6"
       ],
       "difficultyMod": 0,
-      "reward": 2,
+      "reward": 1,
       "company": "Whiteflower Global",
       "pathOffsets": {
         "node_vzmlxo9e6": {
@@ -179,7 +179,7 @@ export const sector1 = {
         "node_2mg40n4at"
       ],
       "difficultyMod": 1,
-      "reward": 3,
+      "reward": 1,
       "company": "Flyby Surveilance",
       "pathOffsets": {
         "node_2mg40n4at": {
@@ -202,7 +202,7 @@ export const sector1 = {
         "node_1o9y3xy33"
       ],
       "difficultyMod": 0,
-      "reward": 2,
+      "reward": 1,
       "company": "Cook.io",
       "pathOffsets": {
         "node_vzmlxo9e6": {
@@ -289,7 +289,7 @@ export const sector1 = {
         "node_p2awqy8u9"
       ],
       "difficultyMod": 0,
-      "reward": 2,
+      "reward": 1,
       "company": "Meridian Security Inc.",
       "pathOffsets": {
         "node_p2awqy8u9": {
@@ -311,7 +311,7 @@ export const sector1 = {
         "node_wo7yv59o3"
       ],
       "difficultyMod": 1,
-      "reward": 3,
+      "reward": 1,
       "company": "Nightbridge Corp",
       "levelName": "The Sewer"
     },
@@ -327,7 +327,7 @@ export const sector1 = {
         "node_5h13gn9y4"
       ],
       "difficultyMod": 0,
-      "reward": 2,
+      "reward": 1,
       "company": "Nightbridge Corp",
       "pathOffsets": {
         "node_ie40v3v37": {
@@ -358,7 +358,7 @@ export const sector1 = {
         "node_m3cv37rwi"
       ],
       "difficultyMod": 0,
-      "reward": 2,
+      "reward": 1,
       "company": "Saturn Solutions",
       "pathOffsets": {
         "node_m3cv37rwi": {

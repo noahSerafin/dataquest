@@ -97,7 +97,7 @@ export const sector0 = {
         "node_vx34hfayc"
       ],
       "difficultyMod": 2,
-      "reward": 3,
+      "reward": 2,
       "company": "Nightbridge Corp",
       "pathOffsets": {
         "node_vx34hfayc": {
@@ -167,7 +167,7 @@ export const sector0 = {
         "node_ysd75k5m7"
       ],
       "difficultyMod": 2,
-      "reward": 3,
+      "reward": 2,
       "company": "Saturn Solutions",
       "pathOffsets": {
         "node_5i9h9b6ti": {

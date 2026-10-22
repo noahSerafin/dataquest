@@ -33,7 +33,7 @@ export const sector3 = {
         "node_wpzs572tz"
       ],
       "difficultyMod": 0,
-      "reward": 5,
+      "reward": 3,
       "company": "Starlane Tech",
       "pathOffsets": {
         "node_klrlji06y": {
@@ -85,7 +85,7 @@ export const sector3 = {
         "node_i4bakdvwj"
       ],
       "difficultyMod": 0,
-      "reward": 5,
+      "reward": 3,
       "company": "Nightbridge Corp",
       "pathOffsets": {
         "node_i4bakdvwj": {
@@ -111,7 +111,7 @@ export const sector3 = {
         "node_l0y2h5msh"
       ],
       "difficultyMod": 1,
-      "reward": 7,
+      "reward": 5,
       "company": "Red Sky Dynamics",
       "pathOffsets": {
         "node_2yn3k75s0": {
@@ -146,7 +146,7 @@ export const sector3 = {
         "node_cg5ykb73i"
       ],
       "difficultyMod": 0,
-      "reward": 5,
+      "reward": 3,
       "company": "Meridian Security Inc.",
       "pathOffsets": {
         "node_cg5ykb73i": {
@@ -170,7 +170,7 @@ export const sector3 = {
         "node_cg5ykb73i"
       ],
       "difficultyMod": 0,
-      "reward": 5,
+      "reward": 3,
       "company": "Flyby Surveilance",
       "pathOffsets": {
         "node_oljhbd0kz": {
@@ -202,7 +202,7 @@ export const sector3 = {
         "node_5svll8h4l"
       ],
       "difficultyMod": 0,
-      "reward": 5,
+      "reward": 3,
       "company": "Longhouse Web Services",
       "levelName": "The Crossroads"
     },
@@ -217,7 +217,7 @@ export const sector3 = {
         "node_qgsx9gmcp"
       ],
       "difficultyMod": 0,
-      "reward": 5,
+      "reward": 3,
       "company": "Monkey Media",
       "pathOffsets": {
         "node_qgsx9gmcp": {
@@ -341,7 +341,7 @@ export const sector3 = {
         "node_b6kh8upu0"
       ],
       "difficultyMod": 0,
-      "reward": 5,
+      "reward": 3,
       "company": "Sakura Robotics",
       "bossName": "Castle",
       "pathOffsets": {
@@ -364,7 +364,7 @@ export const sector3 = {
         "node_n4i6vtt1u"
       ],
       "difficultyMod": 0,
-      "reward": 5,
+      "reward": 3,
       "company": "Meridian Security Inc.",
       "bossName": "Banhammer",
       "levelName": "The Floodgates"
@@ -380,7 +380,7 @@ export const sector3 = {
         "node_grqa40fhn"
       ],
       "difficultyMod": 0,
-      "reward": 5,
+      "reward": 3,
       "company": "Monkey Media",
       "bossName": "Circus",
       "pathOffsets": {
@@ -404,7 +404,7 @@ export const sector3 = {
         "node_dfnmvg2kb"
       ],
       "difficultyMod": 0,
-      "reward": 5,
+      "reward": 3,
       "company": "Tsukimi Group",
       "pathOffsets": {
         "node_fveh4qswo": {
@@ -434,7 +434,7 @@ export const sector3 = {
         "node_sq8vko80h"
       ],
       "difficultyMod": 0,
-      "reward": 5,
+      "reward": 3,
       "company": "Sakura Robotics",
       "pathOffsets": {
         "node_fveh4qswo": {

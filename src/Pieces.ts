@@ -1902,7 +1902,7 @@ class Snowman extends Piece {
   static color = "#4e4e4eff";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
-    super(Snowman.name, Snowman.description, Snowman.unicode, 2, 1, 1, 0, 0, Snowman.color, headPosition, [headPosition], team, Snowman.rarity, removeCallback, id)
+    super(Snowman.name, Snowman.description, Snowman.unicode, 2, 1, 1, 3, 0, Snowman.color, headPosition, [headPosition], team, Snowman.rarity, removeCallback, id)
     this.specialName = 'Snowball';
     this.targetType = 'space'
     //this.canMove = false;
@@ -3109,7 +3109,7 @@ class Angel extends Piece {//not passive, same as fairy, remove?? unfinished
 class Stopwatch extends Piece {
   static iconID = 112;
   static name = "Stopwatch";
-  static description = "Can replenish another program's moves and give +1 action, or take away an enemy's actions by applying disarmed";
+  static description = "Can replenish another program's moves and give +1 action, or take away an enemy's moves and actions by applying frozen and disarmed";
   static unicode = "U+231A";//U+23F1";
   static color = "#ff5555";
   static rarity = 5;
@@ -3126,6 +3126,9 @@ class Stopwatch extends Piece {
     } else {
       targetPiece.movesRemaining = 0;//get's reset anyway
       targetPiece.statuses.disarmed = true;
+      if(!targetPiece.immunities.frozen){
+        targetPiece.statuses.frozen = true;
+      }
     }
     this.actions--
   }
@@ -3159,7 +3162,7 @@ class Sol extends Piece {
 class Vampire extends Piece {
   static iconID = 148;
   static name = "Dracula";
-  static description = "Removes tiles of other programs, stealing an action and move off them if possible, and increasing all it's stats (except range) by 1";
+  static description = "Removes tiles of other programs, stealing an action and move off them if possible, and increasing all it's stats by 1";
   static unicode = "U+1F9DB";
   static color = "#000000ff";
   static rarity = 6;
@@ -3181,11 +3184,13 @@ class Vampire extends Piece {
     this.addModifier({ attack: 1 });
     this.addModifier({ moves: 1 });
     this.addModifier({ defence: 1 });
+    this.addModifier({ range: 1 });
     this.defenceRemaining += 1;
     if (piece.movesRemaining > 0) {
       this.movesRemaining += 1;
     }
     if (piece.actions > 0) {
+      piece.actions--
       this.actions += 1
     }
     //this.tiles.push(target);
@@ -4292,7 +4297,7 @@ class Orangutan extends Piece {
 class Gorilla extends Piece {
   static iconID = 152;
   static name = "Kong";
-  static description = "A fierce program that can damage and then reduce another program's defence remaining to 0";
+  static description = "A fierce program that can damage and reduce another program's defence remaining to 0";
   static unicode = "U+1F98D";
   static color = "rgb(68, 97, 10)";
   static rarity = 6;

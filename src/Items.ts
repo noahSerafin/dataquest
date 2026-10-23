@@ -5,6 +5,7 @@ import { getRandomUnoccupiedTile, makeBlueprint, pickWeightedRandom, pickWeighte
 import { StorageManager } from "./StorageManager"
 import { Random } from "./Random"
 import { PIECE_VARIANTS } from "./constants"
+import { addVersion, countImmunityChange, getStatVersionDelta, IMMUNITY_VERSION_WEIGHT } from "./version"
 
 export abstract class Item<TTarget = any> {
     id: string
@@ -57,6 +58,32 @@ export abstract class Item<TTarget = any> {
     target: Piece | Player | Item | PieceBlueprint | GameState
     ): void;
     */
+
+    // Whether applying this item to a blueprint should change its version number
+    affectsVersion: boolean = true;
+
+    // Applies the item to a held program and updates its version based on the upgrades received
+    applyToBlueprint(target: PieceBlueprint, itemMult: number): void {
+        const before = {
+            maxSize: target.maxSize,
+            moves: target.moves,
+            attack: target.attack,
+            defence: target.defence,
+        };
+        const immunitiesBefore = { ...target.immunities };
+
+        this.apply(target as unknown as TTarget, itemMult);
+
+        if (!this.affectsVersion) return;
+        const statDelta = getStatVersionDelta({
+            maxSize: target.maxSize - before.maxSize,
+            moves: target.moves - before.moves,
+            attack: target.attack - before.attack,
+            defence: target.defence - before.defence,
+        });
+        const immunityDelta = countImmunityChange(immunitiesBefore, target.immunities) * IMMUNITY_VERSION_WEIGHT;
+        target.version = addVersion(target.version, statDelta + immunityDelta);
+    }
 }
 
 export class Mushroom extends Item<PieceBlueprint> {
@@ -661,7 +688,7 @@ export class Spanner extends Item<Piece> {
 
 
     static name = "Spanner";
-    static description = "Prevent a program from moving, and taking action for one turn";
+    static description = "Freezes and disarms a program. Preventing it from moving, and taking action for one turn";
     static unicode = "U+1F527";
     static color = "#5a0505ff";
     static rarity = 3;
@@ -689,6 +716,7 @@ class Makeover extends Item<PieceBlueprint> {
     constructor() {
         super(Makeover.name, Makeover.description, Makeover.unicode, Makeover.color, 2, Makeover.rarity, 'blueprint')
         //name desc utf || maxsize moves range atk def
+        this.affectsVersion = false; // variants don't count as upgrades
     }
     apply(target: PieceBlueprint, _itemMult: number) {
         //roll a random variant on a program

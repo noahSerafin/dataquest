@@ -47,9 +47,7 @@ background colours for node maps (use company owner)//levels array (make map hav
 BUGS - 
 -variant pieces still have original moves/defence on first turn
 -statuses affecting copys even when copy does not have that status
--Mr Bones switches traps that have activated
 -placement ghost still using unicode
--monarch does not work in campaign
 archer not using special
 immunity items still applying to duplicates
 dove allowing moving after placing even not on first turn
@@ -58,21 +56,17 @@ next sector needs to close shop
 workbench + compiler + duplicator do not preserve damagemult
 
 NICE TO HAVE
-upgrades add version numbers (see below)
+upgrades add version numbers (see below)-
 add new bosses
 You win screen more obvious, change button to endless mode here
+improve UI and button styles
+differentiate P/I/A top left better, shapes? move to bottom right?
 
 remove x(close)button on skip preview
 
 !attacking hidden pieces should reveal them while they are taking damage - or just display dmg numbers?
 Normalise all food, can be used on program in or out of node? Sandwich +1 blessing +2
 make cane only effect traps by head positions - done? test
-
-ITEMS/ADMINS
-keep track of upgrades and display on piece - items add +0.1 to pieces version number for each +1 stat, only display version number if above 1
-MaxSize, Moves + 0.1 
-atk, def, range + 0.2
-Immunties + 0.3 
 
 SPECIAL nodes
 variant maker?
@@ -82,3 +76,5 @@ rogue tutorial
 
 Quick match mode
 choose starting money and difficulty, open a shop then gen a level
+
+Don't limit infamy to completed with that operator

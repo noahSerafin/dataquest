@@ -4,6 +4,7 @@ import type { PieceBlueprint } from "../types"
 import { STATUS_ICONS, STATUS_ICONIDS } from "../statuses";
 import FormattedDescription from "./FormattedDescription.vue";
 import { getSpriteStyle } from "../helperFunctions";
+import { formatVersion, hasVersionSuffix } from "../version";
 
 const props = defineProps<{
   piece: PieceBlueprint;
@@ -141,7 +142,7 @@ defineEmits(["buy", "steal", "sell", "highlightPlacements", "close"])
           </template>
         </div>
         <span v-if="piece.variantName" class="variant"><FormattedDescription :description="piece.variantName" :isHeader="true" /></span>
-        <span class="name">{{ piece.hybridName ? piece.hybridName : piece.name }}</span>
+        <span class="name">{{ piece.hybridName ? piece.hybridName : piece.name }}{{ hasVersionSuffix(piece.version) ? ' ' + formatVersion(piece.version) : '' }}</span>
         <button class="close" @click="$emit('close', piece)">X</button>
       </div>
       <div class='bp-rarity' :style="{ color: rarityInfo.color }">

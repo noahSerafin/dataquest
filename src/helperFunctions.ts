@@ -169,7 +169,8 @@ export function makeBlueprint(PieceClass: any, variant?: PieceVariant, costReduc
     iconID: (PieceClass as any).iconID,
     variantName: temp.variantName,
     immunities: temp.immunities,
-    damageMult: temp.damageMult
+    damageMult: temp.damageMult,
+    version: 1
   };
 }
 

@@ -1577,6 +1577,7 @@ function instantiatePieceFromBlueprint(//this goes in app
   if (bp.variantName) {
     piece.variantName = bp.variantName;
   }
+  piece.version = bp.version ?? 1;
 
   return piece;//modified piece with new stats
 }

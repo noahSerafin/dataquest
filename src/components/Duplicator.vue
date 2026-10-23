@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { ref, version } from 'vue';
     import type { PieceBlueprint } from '../types';
     import { Player } from '../Player';
     import { Item } from '../Items';
@@ -68,7 +68,8 @@
                 // blueprint-only fields:
                 isPlaced: false,
                 cost: primaryBP.value.cost,
-                immunities: primaryBP.value.immunities
+                immunities: primaryBP.value.immunities,
+                version: primaryBP.value.version
             }
             if(primaryBP.value.variantName){
                 resultBP.value.variantName = primaryBP.value.variantName;

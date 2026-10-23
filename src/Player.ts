@@ -153,7 +153,7 @@ export class Player {
     if (!pieceBP) return false;
 
     // Each item implements an apply(piece) method
-    item.apply(pieceBP, itemMult);
+    item.applyToBlueprint(pieceBP, itemMult);
 
     // Remove item from inventory
     this.removeItem(item);

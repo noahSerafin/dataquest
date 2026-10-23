@@ -4,6 +4,7 @@ import { ref, computed, onMounted } from "vue";
 import { STATUS_ICONS, STATUS_INFO, STATUS_ICONIDS } from "../statuses";
 import FormattedDescription from "./FormattedDescription.vue";
 import { getSpriteStyle } from "../helperFunctions";
+import { formatVersion, hasVersionSuffix } from "../version";
 
 const props = defineProps<{
   piece: InstanceType<typeof Piece>
@@ -157,7 +158,7 @@ const spriteStyle = computed(() => {
         </template>
       </div>
       <span v-if="piece.variantName" class="variant"><FormattedDescription :description="piece.variantName" :isHeader="true" /></span>
-      <span class="name">{{ piece.hybridName ? piece.hybridName : piece.name }}</span>
+      <span class="name">{{ piece.hybridName ? piece.hybridName : piece.name }}{{ hasVersionSuffix(piece.version) ? ' ' + formatVersion(piece.version) : '' }}</span>
       <button class="close" @click="$emit('close', piece)">X</button>
     </div>
 

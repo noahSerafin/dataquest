@@ -3,6 +3,7 @@ import { ref, computed, useTemplateRef } from "vue";
 import { useTilt } from "../composables/useTilt";
 import type { Coordinate, PieceBlueprint } from "../types";
 import { getSpriteStyle } from "../helperFunctions";
+import { formatVersion, hasVersionSuffix } from "../version";
 
 //construction-------------
 
@@ -153,6 +154,7 @@ function handleSelect() {
       :style="[pieceStyle, tiltStyle]"
     >
       <p class='top-left' v-if="cssclass==='shop' || cssclass==='skipReward'" :style="`top: -${((props.tileSize-10)/2 - 24)}px`">P</p>
+      <span class="version-badge" v-if="hasVersionSuffix(blueprint.version)">{{ formatVersion(blueprint.version) }}</span>
       
       <template v-if="!useUnicode">
         <div class="sprite-icon primary-sprite" :class="{ hybrid: !!blueprint.hybridIconID }" :style="spriteStyle"></div>
@@ -247,6 +249,18 @@ function handleSelect() {
 }
 .skipReward-piece{
   margin-bottom: 2rem;
+}
+.version-badge{
+  position: absolute;
+  top: 1px;
+  right: 2px;
+  z-index: 3;
+  font-size: 9px;
+  line-height: 1;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 2px black, 0 0 2px black;
+  pointer-events: none;
 }
 .primary-unicode {
   position: relative;

@@ -9,6 +9,7 @@ import move3SoundUrl from '../sfx/move3.ogg';
 import move4SoundUrl from '../sfx/move4.ogg';
 import { playSoundFx, preloadSound } from "./helperFunctions";
 import { Random } from "./Random";
+import { DEFAULT_VERSION, addVersion, getStatVersionDelta } from "./version";
 
 const moveSoundUrls = [move1SoundUrl, move2SoundUrl, move3SoundUrl, move4SoundUrl];
 
@@ -56,6 +57,7 @@ export abstract class Piece {
   specialName?: string;
   extraUnicode?: string;
   variantName?: string;
+  version: number = DEFAULT_VERSION;
   hybridName?: string;
   hybridIconID?: number;
   targetType: 'piece' | 'pieceAndPlayer' | 'space' | 'pieceAndPlace' | 'group' | 'line' | 'self' | 'all' | 'graveyard' | 'trapPiece' | 'spaceAndPieces' | 'placeAndPieces' = 'piece';
@@ -162,10 +164,12 @@ export abstract class Piece {
 
   // --- Methods to handle modifiers ---
   addModifier(mod: StatModifier) {
+    const applied: Partial<Record<string, number>> = {};
     Object.entries(mod).forEach(([key, val]) => {
       if (val === undefined) return;
       const k = key as keyof StatModifier;
-      let newMod = (this.statModifiers[k] ?? 0) + val;
+      const oldMod = this.statModifiers[k] ?? 0;
+      let newMod = oldMod + val;
       const minVal = k === 'maxSize' ? 1 : 0;
       const base = this.getBaseStat(k);
 
@@ -173,7 +177,9 @@ export abstract class Piece {
         newMod = minVal - base;
       }
       this.statModifiers[k] = newMod;
+      applied[k] = newMod - oldMod;
     });
+    this.version = addVersion(this.version, getStatVersionDelta(applied));
   }
 
   removeModifier(mod: StatModifier) {
@@ -446,6 +452,7 @@ export abstract class Piece {
     if (this.variantName) {
       copy.variantName = this.variantName;
     }
+    copy.version = this.version;
 
     return copy;
   }
@@ -646,12 +653,12 @@ class Tree extends Piece {
 class Coconut extends Piece {
   static iconID = 47;
   static name = "Coconut";
-  static description = "A program that turns into a Palm tree";
+  static description = "A program that can grow into a Palm tree by ";
   static unicode = "U+1F965";
   static color = "rgb(224, 207, 108)";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
-    super(Coconut.name, Coconut.description, Coconut.unicode, 3, 2, 1, 1, 1, Coconut.color, headPosition, [headPosition], team, Coconut.rarity, removeCallback, id)
+    super(Coconut.name, Coconut.description, Coconut.unicode, 2, 2, 1, 2, 1, Coconut.color, headPosition, [headPosition], team, Coconut.rarity, removeCallback, id)
     this.specialName = 'Grow';
     this.targetType = 'space';
   }
@@ -1020,6 +1027,7 @@ class Trojan extends Piece {
     newTrojan.hybridName = this.hybridName;
     newTrojan.extraUnicode = this.extraUnicode;
     newTrojan.hybridIconID = this.hybridIconID;
+    newTrojan.version = this.version;
     activePieces.push(newTrojan);
     this.actions--
   }
@@ -3126,7 +3134,7 @@ class Stopwatch extends Piece {
     } else {
       targetPiece.movesRemaining = 0;//get's reset anyway
       targetPiece.statuses.disarmed = true;
-      if(!targetPiece.immunities.frozen){
+      if (!targetPiece.immunities.frozen) {
         targetPiece.statuses.frozen = true;
       }
     }
@@ -4678,6 +4686,7 @@ class Zombie extends Piece {
       newZombie.hybridName = this.hybridName;
       newZombie.extraUnicode = this.extraUnicode;
       newZombie.hybridIconID = this.hybridIconID;
+      newZombie.version = this.version;
       activePieces.push(newZombie);
     }
     targetPiece.takeDamage(this.getStat('attack'));

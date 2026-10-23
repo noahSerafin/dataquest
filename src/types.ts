@@ -32,6 +32,7 @@ export type PieceBlueprint = {
   extraUnicode?: string
   hybridIconID?: number
   variantName?: string
+  version?: number
 }
 
 export interface HybridBlueprint extends PieceBlueprint {

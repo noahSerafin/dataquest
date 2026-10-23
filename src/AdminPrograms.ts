@@ -2184,6 +2184,7 @@ class Ring extends Admin {
             blueprint.range = (piece.getStat('range'));
             blueprint.attack = (piece.getStat('attack'));
             blueprint.defence = (piece.getStat('defence'));
+            blueprint.version = piece.version;
           };
         };
       };
@@ -3447,7 +3448,7 @@ class Salt extends Admin {
 
 
   static name = "Salty";
-  static description = "All your programs get +1 attack when you lose a round";
+  static description = "All your programs get +1 to all stats when you lose a round";
   static unicode = "U+1F9C2";
   static color = "rgb(143, 36, 4)";
   static rarity = 4;
@@ -3456,7 +3457,11 @@ class Salt extends Admin {
   }
   async apply({ player }: { player: Player }) {
     for (const bp of player.programs) {
+      bp.maxSize += 1;
+      bp.moves += 1;
+      bp.range += 1;
       bp.attack += 1;
+      bp.defence += 1;
     }
   }
 }

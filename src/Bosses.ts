@@ -572,7 +572,7 @@ class Omega extends Admin {
 class Bones extends Admin {
     static iconID = 430;
     static name = "Mr Bones";
-    static description = "Destroyed player progams are revived as enemies";
+    static description = "Destroyed non-trap player progams are revived as enemies";
     static unicode = "U+1FA7B";
     static color = "#000000ff";
     static rarity = 5;
@@ -584,13 +584,15 @@ class Bones extends Admin {
         if (piece.team === 'player') {
             const EnemyClass = allPieces.find(p => p.name === piece.name);
             if (EnemyClass) {
-                this.isTriggering = true;
-                setTimeout(() => this.isTriggering = false, 500);
                 const enemyInstance = new EnemyClass(piece.headPosition, 'enemy', piece.removeCallback, crypto.randomUUID());//check later
-                //STATS?
-                activePieces.push(enemyInstance);
-                //original pieces destruction happens in app, but we do it here to stop the piece entering the graveyard
-                activePieces.filter(p => p.id !== piece.id);
+                if(enemyInstance.targetType !== 'trapPiece'){
+                    this.isTriggering = true;
+                    setTimeout(() => this.isTriggering = false, 500);
+                    //STATS?
+                    activePieces.push(enemyInstance);
+                    //original pieces destruction happens in app, but we do it here to stop the piece entering the graveyard
+                    activePieces.filter(p => p.id !== piece.id);
+                }
             }
         }
     }
@@ -1143,7 +1145,7 @@ class Taxman extends Admin {
     static iconID = 399;
     static rarity = 1;
     static name = "Taxman";
-    static description = "Your program's max size is nerfed by -1 for every $5 you have on load";
+    static description = "All your program's max size are nerfed by -1 for every $5 you have on load";
     static unicode = "U+1F4D2";
     static color = "rgb(70, 70, 70)";
     constructor() {

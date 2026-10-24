@@ -65,10 +65,10 @@ onMounted(() => {
         
         float iconIndex = floor(rand.x * 517.0);
         float col = mod(iconIndex, 37.0);
-        float row = 13.0 - floor(iconIndex / 37.0);
+        float row = 14.0 - floor(iconIndex / 37.0);
         
         // Since we unpack with flip_y, 0,0 is at bottom left of the texture.
-        vec2 spriteUV = (vec2(col, row) + uv) / vec2(37.0, 14.0);
+        vec2 spriteUV = (vec2(col, row) + uv) / vec2(37.0, 15.0);
         
         return texture2D(iChannel0, spriteUV);
     }

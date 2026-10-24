@@ -3925,22 +3925,33 @@ console.log("Admins of rarity 4: ", adminLogs.rarity4)
 console.log("Admins of rarity 5: ", adminLogs.rarity5)
 console.log("Admins of rarity 6: ", adminLogs.rarity6)
 
+// U+1F3C4 surfing
 //JEANS, U+1F456 all hidden nodes are compilers - cost gets more expensive each time //gene hybrids appear in shop
 //LIPSTICK, U+1F484 retaliations charm enemies - piece.willRetaliate: hedgehog, fencer, puffer. Admins: Blackbelt(willRetaliate) Cactus Pong
-//EGYPTIAN HIEROGLYPH L004, U+131A7 Plague of locusts, remove all body tiles from enemies at start of round
 //U+1F4FA TELEVISION enemies first turn is disabled
 //Boots, U+1F462 +1 moves, +1 max size, -1 attack/def
 // U+1F5D1 WASTEBASKET - Recycle bin 
-// U+1F3C4 surfing
 
+//Swish, U+1F3C0 - range of 3+ gets +3 attack
+//CRUTCH, U+1FA7C
 //FINGERPRINT, U+1FAC6 forensics
+// MOUNT FUJI, U+1F5FB
 //U+1F4FB RADIO
 //SLEUTH OR SPY, U+1F575
-//TEACUP WITHOUT HANDLE, U+1F375 calm down, removes enraged from enemies
-//Swish, U+1F3C0 - range of 3+ gets +3 attack
+//TULIP, U+1F337 pair with bubble, some kind of effect based off money???
+//CLAPPER BOARD, U+1F3AC Enemies take no actions on the first turn
+
+// challenge nodes?
+//DESERT ISLAND, U+1F3DD
+//DESERT, U+1F3DC
+//DERELICT HOUSE BUILDING, U+1F3DA
+//STADIUM, U+1F3DF colloseum -  1 on 1
+
+//LOLLIPOP, U+1F36D sweet tooth
+
+//EGYPTIAN HIEROGLYPH L004, U+131A7 Plague of locusts, remove all body tiles from enemies at start of round
 //SNOWBOARDER, U+1F3C2
-//CRUTCH, U+1FA7C
-// MOUNT FUJI, U+1F5FB
+//TEACUP WITHOUT HANDLE, U+1F375 calm down, removes enraged from enemies
 
 //SEE-NO-EVIL MONKEY, U+1F648 -1 range
 /*class MonkeySee extends Admin {
@@ -3964,15 +3975,6 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //HEAR-NO-EVIL MONKEY, U+1F649 -1 moves
 //SPEAK-NO-EVIL MONKEY, U+1F64A -1 attack/actions?
 
-//TULIP, U+1F337 pair with bubble, some kind of effect based off money???
-//CLAPPER BOARD, U+1F3AC Action
-
-// challenge nodes?
-//DESERT ISLAND, U+1F3DD
-//DESERT, U+1F3DC
-//DERELICT HOUSE BUILDING, U+1F3DA
-//STADIUM, U+1F3DF colloseum -  1 on 1
-
 // ROUNDED SYMBOL FOR CAI, U+1F265 wealth + rand money admin?
 // ROUNDED SYMBOL FOR FU, U+1F260 luck + clovers?
 //ROUNDED SYMBOL FOR LU, U+1F261 prosperity +  mystery boxes/pandoras
@@ -3983,7 +3985,6 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 //TOOTH, U+1F9B7
 //HINDU TEMPLE, U+1F6D5 polytheism
 //KAABA, U+1F54B move in a circle
-//LOLLIPOP, U+1F36D sweet tooth
 //CANDY, U+1F36C
 //PINCHED FINGERS, U+1F90C
 // FISH CAKE WITH SWIRL DESIGN, U+1F365

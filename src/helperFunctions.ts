@@ -25,8 +25,8 @@ export function getSpriteStyle(iconID: number | undefined) {
   const row = Math.floor(iconID / 37);
   return {
     backgroundImage: `url('${iconsUrl}')`,
-    backgroundSize: `3700% 1400%`,
-    backgroundPosition: `${col * (100 / 36)}% ${row * (100 / 13)}%`,
+    backgroundSize: `3700% 1500%`,
+    backgroundPosition: `${col * (100 / 36)}% ${row * (100 / 14)}%`,
     backgroundRepeat: 'no-repeat'
   };
 }

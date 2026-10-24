@@ -849,7 +849,7 @@ async function handleApplyAdmins(trigger: AdminTrigger, id: string, piece?: Piec
         await admin.apply({ id: id, activePieces: activePieces.value, player: player.value, piece })
       }
       if (admin.targetType === 'piecesAndBoard') {
-        await admin.apply({ activePieces: activePieces.value, board: level.value.tiles })
+        await admin.apply({ activePieces: activePieces.value, board: level.value.tiles, piece })
       }
       if (admin.targetType === 'player') {
         await admin.apply({ player: player.value, piece })

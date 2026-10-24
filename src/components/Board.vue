@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onBeforeUnmount, watch, nextTick } from "vue"
 import type { Coordinate, PieceBlueprint } from "../types"
-import { getTilesInRange, playSoundFx, preloadSound } from "../helperFunctions";
+import { getTilesInRange, playSoundFx, preloadSound, getSpriteStyle, spritesheetState } from "../helperFunctions";
 import targetSoundUrl from '../../sfx/target.ogg';
 import specialSoundUrl from '../../sfx/special.ogg';
 
@@ -121,9 +121,51 @@ const ghostStyle = computed(() => {
     left: mousePos.value.x + 'px',
     top: mousePos.value.y + 'px',
     transform: 'translate(-50%, -50%)',
-    height: tileSize + 'px',//theses styles aren't making it to render
-    width: tileSize + 'px',
+    height: (tileSize.value - 16) + 'px',
+    width: (tileSize.value - 16) + 'px',
     border: '1px solid outset',
+    fontSize: (tileSize.value * 0.6) + 'px',
+    lineHeight: (tileSize.value - 24) + 'px',
+  }
+})
+
+// Ghost sprite: fall back to unicode if the sheet failed or there's no icon
+const ghostUseUnicode = computed(() =>
+  spritesheetState.value.error ||
+  props.pieceToPlace?.iconID === undefined ||
+  props.pieceToPlace.iconID < 0
+)
+
+const ghostUnicode = computed(() => {
+  const u = props.pieceToPlace?.unicode
+  return u ? String.fromCodePoint(parseInt(u.replace('U+', ''), 16), 0xFE0F) : ''
+})
+
+const ghostSpriteStyle = computed(() => {
+  if (ghostUseUnicode.value) return {}
+  return {
+    ...getSpriteStyle(props.pieceToPlace!.iconID),
+    width: '100%',
+    height: '100%',
+    position: 'absolute' as const,
+    top: 0,
+    left: 0,
+    zIndex: 1
+  }
+})
+
+const ghostHybridSpriteStyle = computed(() => {
+  const id = props.pieceToPlace?.hybridIconID
+  if (ghostUseUnicode.value || id === undefined) return {}
+  return {
+    ...getSpriteStyle(id),
+    width: '100%',
+    height: '100%',
+    position: 'absolute' as const,
+    top: '-20%',
+    left: '25%',
+    transform: 'scale(0.65)',
+    zIndex: 2
   }
 })
 
@@ -551,7 +593,11 @@ function resolveMove(
         height: (tileSize - 5) + 'px',
       }" />
     <div :id="selectedPiece?.id + '-ghost'" v-if="pieceToPlace" class="ghost-piece" :style="ghostStyle">
-      {{ String.fromCodePoint(parseInt(pieceToPlace.unicode.replace("U+", ""), 16), 0xFE0F) }}
+      <template v-if="!ghostUseUnicode">
+        <div class="ghost-sprite" :style="ghostSpriteStyle"></div>
+        <div v-if="pieceToPlace.hybridIconID !== undefined" class="ghost-sprite" :style="ghostHybridSpriteStyle"></div>
+      </template>
+      <template v-else>{{ ghostUnicode }}</template>
     </div>
   </div>
 </template>

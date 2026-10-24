@@ -1,7 +1,6 @@
 review each sector, then play again without upgrade items.
 
 Sector2
-yoyo level in sector3 too hard
 review shop with all the immunity items in, spread these out over future sectors (Extinguisher, Frogman, Lab Coat, Plunger, )-
 add immunity admins to future sectors (aesculapius, fire engine)
 remove coin also? eliminate randomness
@@ -56,8 +55,7 @@ next sector needs to close shop
 workbench + compiler + duplicator do not preserve damagemult
 
 NICE TO HAVE
-upgrades add version numbers (see below)-
-add new bosses
+add new bosses - spritesheet hotkeys not working?
 You win screen more obvious, change button to endless mode here
 improve UI and button styles
 differentiate P/I/A top left better, shapes? move to bottom right?

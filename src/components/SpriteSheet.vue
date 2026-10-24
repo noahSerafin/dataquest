@@ -153,8 +153,33 @@ const allIcons = computed(() => {
     'U+1F9E2',// cap
     'U+1F369',// DOUGHNUT
     'U+1F36C',// CANDY
-    'U+26BD',// SOCCER BALL 
-
+    'U+26BD',// SOCCER BALL 505
+    'U+1F9C8',// Butter - Moves enemy programs randomly after they take damage - 2 - onDealDamage
+    'U+1F483',// Salsa - Enemies gain +1 moves when they deal damage - 2 - onReceiveDamage
+    'U+1F44F',// Clapback - All enemies retaliate after their first turn - 3 - onEnemyTurnEnd
+    'U+1F6D8',// Avalanche - Damaging an enemy increases their attack by 1 - 4 onDealDamage
+    'U+1F624',// Seething - All enemies get +0.5 damage mult at the start of the round - 5 - onRoundStart
+    'U+1F49E',// Love Triangle - After 3 turns, charms one of your programs. Then charms a different one each following turn, removing charmed from the previous program - 5 onTurnEnd
+    'U+1F3C4',
+    'U+1FADF',
+    'U+1F456',
+    'U+1F484',
+    'U+1F4FA',
+    'U+1F462',
+    'U+1F5D1',
+    'U+1F3C0',
+    'U+1FA7C',
+    'U+1FAC6',
+    'U+1F5FB',
+    'U+1F4FB',
+    'U+1F575',
+    'U+1F337',
+    'U+1F3AC',
+    'U+1F3DD',
+    'U+1F3DC',
+    'U+1F3DA',
+    'U+1F3DF',
+    'U+1F36D'
   ];
   statuses.forEach((unicode, index) => {
     result.push({

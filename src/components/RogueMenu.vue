@@ -79,7 +79,7 @@
             if (!props.debugMode && !hasPlayedOnce.value) return "Play at least one game to unlock";
         }
         if (osName === 'Debugger') {
-            if (!props.debugMode) return "For debugging";
+            if (props.debugMode) return "For debugging";
         }
         if (osName === 'Penguin') {
             if (!props.debugMode && !StorageManager.hasAnyWin()) return "Win with any operator";

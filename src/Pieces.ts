@@ -1168,7 +1168,7 @@ class Dataworm extends Piece {
     super(Dataworm.name, Dataworm.description, Dataworm.unicode, 6, 3, 1, 4, 2, Dataworm.color, headPosition, [headPosition], team, Dataworm.rarity, removeCallback, id)
     this.specialName = 'Tunnel';
     this.targetType = 'pieceAndPlace'
-    this.appliesStatuses = ['diseased'];
+    //this.appliesStatuses = ['diseased']; //comment out to get enemy to keep using special
   }
 
   async special({ piece, target }: { piece: Piece, target: Coordinate }): Promise<void> {
@@ -1905,14 +1905,15 @@ class Mammoth extends Piece {
 class Snowman extends Piece {
   static iconID = 143;
   static name = "Snowman";
-  static description = "A program that can snowball into an empty space, increasing it's max size, moves, and attack";
+  static description = "A program immune to freezing that can snowball into an empty space, increasing it's max size, moves, and attack";
   static unicode = "U+26C4";
   static color = "#4e4e4eff";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
     super(Snowman.name, Snowman.description, Snowman.unicode, 2, 1, 1, 3, 0, Snowman.color, headPosition, [headPosition], team, Snowman.rarity, removeCallback, id)
     this.specialName = 'Snowball';
-    this.targetType = 'space'
+    this.targetType = 'space';
+    this.immunities.frozen = true;
     //this.canMove = false;
   }
   async special({ target, activePieces: _activePieces }: { target: Coordinate, activePieces: Piece[] }): Promise<void> {
@@ -3372,7 +3373,7 @@ class Lighthouse extends Piece {
           t.statuses.hidden = false;
           t.statuses.exposed = true;
         }
-      } else {
+      } else if(t.id !== this.id){
         t.addTempModifier({ range: 1 });
       }
     }
@@ -4732,7 +4733,7 @@ class Harp extends Piece {
   }
   async special(targets: Piece[]): Promise<void> {
     for (const t of targets) {
-      if (t.team === this.team) {
+      if (t.team === this.team && t.id !== this.id) {
         t.statuses.zen = true;
       }
     }

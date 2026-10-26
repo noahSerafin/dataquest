@@ -860,6 +860,7 @@ async function handleApplyAdmins(trigger: AdminTrigger, id: string, piece?: Piec
   //we do bosses second for onPlacement immunities to take effect
   if (!player.value.hasAdmin('Umbrella')) {
     for (const admin of bossAdmins.value) {
+      admin.disabled = false;
       if (trigger === admin.triggerType) {//'onTurnStart' 'onRoundEnd' 'onReceiveDamage' 'onRoundLoss'  | 'other';
         if (admin.triggerType === 'onTurnStart' || admin.triggerType === 'onRoundLoss') {
           admin.isTriggering = true;
@@ -876,7 +877,7 @@ async function handleApplyAdmins(trigger: AdminTrigger, id: string, piece?: Piec
           await admin.apply({ id: id, activePieces: activePieces.value, player: player.value })
         }
         if (admin.targetType === 'piecesAndBoard') {
-          await admin.apply({ activePieces: activePieces.value, board: level.value.tiles })
+          await admin.apply({ activePieces: activePieces.value, board: level.value.tiles, piece })
         }
         if (admin.targetType === 'all') {
           await admin.apply({ id, activePieces: activePieces.value, removeCallback: removePiece, board: level.value.tiles, player: player.value, playerSpawns: playerSpawns.value, bosses: bossAdmins.value });//, graveyard: graveyard.value})
@@ -884,7 +885,11 @@ async function handleApplyAdmins(trigger: AdminTrigger, id: string, piece?: Piec
         if (onAdminTriggered) await onAdminTriggered();
       }
     }
-  };
+  } else {
+    for (const admin of bossAdmins.value) {
+      admin.disabled = true;
+    }
+  }
 }
 
 const selectedPiece = ref<Piece | null>(null)

@@ -46,7 +46,7 @@ background colours for node maps (use company owner)//levels array (make map hav
 BUGS - 
 -variant pieces still have original moves/defence on first turn
 -statuses affecting copys even when copy does not have that status
--placement ghost still using unicode
+-hybrid preview still using unicode
 archer not using special
 immunity items still applying to duplicates
 dove allowing moving after placing even not on first turn
@@ -55,10 +55,12 @@ next sector needs to close shop
 workbench + compiler + duplicator do not preserve damagemult
 
 NICE TO HAVE
-add new bosses - spritesheet hotkeys not working?
 You win screen more obvious, change button to endless mode here
 improve UI and button styles
 differentiate P/I/A top left better, shapes? move to bottom right?
+nerf hybrids - average rounded up? +1?
+get dracula to attack friendlies
+get dataworm to keep using special when defence is too high?
 
 remove x(close)button on skip preview
 

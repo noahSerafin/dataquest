@@ -1631,6 +1631,7 @@ class Umbrella extends Admin {
   constructor() {
     super(Umbrella.name, Umbrella.description, Umbrella.unicode, Umbrella.color, 10, Umbrella.rarity, 'gameState', 'other')
   }
+  //disables all bosses in app
 }
 
 export class Bank extends Admin {

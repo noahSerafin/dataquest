@@ -585,7 +585,7 @@ class Bones extends Admin {
             const EnemyClass = allPieces.find(p => p.name === piece.name);
             if (EnemyClass) {
                 const enemyInstance = new EnemyClass(piece.headPosition, 'enemy', piece.removeCallback, crypto.randomUUID());//check later
-                if(enemyInstance.targetType !== 'trapPiece'){
+                if (enemyInstance.targetType !== 'trapPiece') {
                     this.isTriggering = true;
                     setTimeout(() => this.isTriggering = false, 500);
                     //STATS?
@@ -1241,65 +1241,69 @@ class Snoozefest extends Admin {
     }
 }
 
-/*
 //U+1F9C8 Butter - Moves enemy programs randomly after they are attacked
 class Butter extends Admin {
-    static iconID = 506;
+    static iconID = 518;
     static name = "Butter";
     static description = "Non max size enemies slip into empty spaces when attacked";//would be nice to only effect the attacked piece, but we would need a new target type set up
     static unicode = "U+1F9C8";
-    static color = "rgb(214, 199, 59)";
+    static color = "rgb(255, 250, 200)";
     static rarity = 2;
     constructor() {
         super(Butter.name, Butter.description, Butter.unicode, Butter.color, 3, Butter.rarity, 'piecesAndBoard', 'onDealDamage')
     }
-    async apply({ activePieces, board, piece: piece}: { activePieces: Piece[], board: Coordinate[], piece?: Piece}) {
-        if(!piece) return;
+    async apply({ activePieces, board, piece: piece }: { activePieces: Piece[], board: Coordinate[], piece?: Piece }) {//test something isnt missing here
+        if (!piece || piece.tiles.length >= piece.maxSize) {
+            return;
+        }
         const spacesToCheck = [
             { x: piece.headPosition.x, y: piece.headPosition.y + 1 },
             { x: piece.headPosition.x + 1, y: piece.headPosition.y },
-            { x: piece.headPosition.x, y: piece.headPosition.y - 1},
-            { x: piece.headPosition.x - 1, y: piece.headPosition.y},
+            { x: piece.headPosition.x, y: piece.headPosition.y - 1 },
+            { x: piece.headPosition.x - 1, y: piece.headPosition.y },
         ]
         const freeSpaces = [];
-            for (const spaceToCheck of spacesToCheck) {
-                const isOccupied = activePieces.some(p =>
-                    p.tiles.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)
-                );
-                const isOnBoard = board.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)
-                //if(!isOccupied && isOnBoard){
-                if (!isOccupied && isOnBoard) {
-                    freeSpaces.push(spaceToCheck);
-                }
+        for (const spaceToCheck of spacesToCheck) {
+            const isOccupied = activePieces.some(p =>
+                p.tiles.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)
+            );
+            const isOnBoard = board.some(t => t.x === spaceToCheck.x && t.y === spaceToCheck.y)
+            //if(!isOccupied && isOnBoard){
+            if (!isOccupied && isOnBoard) {
+                freeSpaces.push(spaceToCheck);
             }
-        piece.moveTo(Random.pick(freeSpaces));
-    }    
+        }
+         if(spacesToCheck.length > 0 ){
+            piece.moveTo(Random.pick(freeSpaces));
+        }
+    }
 }
 
 //U+1F483 Salsa - 
 class Salsa extends Admin {
-    static iconID = 507;
+    static iconID = 519;
     static name = "Salsa";
     static description = "Enemies gain +1 moves when they deal damage";
     static unicode = "U+1F483";
-    static color = "rgb(207, 42, 36)";
+    static color = "rgb(36, 56, 207)";
     static rarity = 2;
     constructor() {
         super(Salsa.name, Salsa.description, Salsa.unicode, Salsa.color, 3, Salsa.rarity, 'gameState', 'onReceiveDamage')
     }
     async apply({ id: id, activePieces: activePieces, piece: _piece }: { id: string, activePieces: Piece[], piece?: Piece }) {
         const idx = activePieces.findIndex(p => p.id === id);
-        activePieces[idx].addModifier({moves: 1});
+        activePieces[idx].addModifier({ moves: 1 });
+        activePieces[idx].movesRemaining += 1;
     }
 }
 
 //U+1F44F Clapback - All enemies retaliate after their first turn - 3 - onEnemyTurnEnd
 class Clapback extends Admin {
-    static iconID = 508;
+    static iconID = 520;
     static name = "Clapback";
     static description = "All enemies always retaliate when attacked";
     static unicode = "U+1F44F";
-    static color = "rgb(255, 231, 151)";
+    static color = "rgb(250, 45, 45)";
     static rarity = 3;
     constructor() {
         super(Clapback.name, Clapback.description, Clapback.unicode, Clapback.color, 3, Clapback.rarity, 'gameState', 'onEnemyTurnEnd')
@@ -1315,7 +1319,7 @@ class Clapback extends Admin {
 
 //U+1F6D8 Avalanche - Damaging an enemy increases their attack by 1 
 class Avalanche extends Admin {
-    static iconID = 509;
+    static iconID = 521;
     static name = "Avalanche";
     static description = "Damaging an enemy increases other enemies attack by 1, and moves by 1";
     static unicode = "U+1F6D8";
@@ -1327,9 +1331,9 @@ class Avalanche extends Admin {
     async apply({ id: _id, activePieces, piece }: { id: string, activePieces: Piece[], piece: Piece }) {
         if (!piece) return;//if the piece was destroyed, do nothing?
         for (const p of activePieces) {
-            if (p.team === 'enemy' && p.id !== piece.id ) {//if it is not the receiver
-                p.addModifier({attack: 1})
-                p.addModifier({moves: 1})
+            if (p.team === 'enemy' && p.id !== piece.id) {//if it is not the receiver
+                p.addModifier({ attack: 1 })
+                p.addModifier({ moves: 1 })
             }
         };
     }
@@ -1337,7 +1341,7 @@ class Avalanche extends Admin {
 
 //U+1F624 Seething - All enemies get +0.5 damage mult at the start of the round - 5 - onRoundStart
 class Seething extends Admin {
-    static iconID = 510;
+    static iconID = 522;
     static name = "Seething";
     static description = "All enemies get +0.5 damage mult at the start of the round";//does damage mult get reset on turns? change to on turn end if so
     static unicode = "U+1F624";
@@ -1357,7 +1361,7 @@ class Seething extends Admin {
 
 //U+1F49E Love Triangle -  - 5 onTurnEnd
 class Love extends Admin {
-    static iconID = 511;
+    static iconID = 523;
     static name = "Love Triangle";
     static description = "After 3 turns, charms one of your programs. Then charms a different one each following turn, removing charmed from the previous program";
     static unicode = "U+1F49E";
@@ -1366,27 +1370,33 @@ class Love extends Admin {
     constructor() {
         super(Love.name, Love.description, Love.unicode, Love.color, 3, Love.rarity, 'gameState', 'onTurnEnd')
     }
-    private count:number = 0;
-    private candidate:string = '';
+    private count: number = 0;
+    private candidate: string = '';
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-        this.count ++
-        if(this.count >= 3){
-            for (const piece of activePieces) {
-                if (piece.team === 'player') {
-                    //if candidate, find and uncharm it
-                    //charm a random player, make the new candidate
-                }
-            };
-        };
+        this.count++
+        if (this.count <= 3) return;
+        //remove charmed from the previous candidate
+
+        //pick a different eligible player program
+        const eligible = activePieces.filter(p =>
+            p.team === 'player' && !p.immunities.charmed && p.id !== this.candidate);
+
+        if (eligible.length > 0) {
+            const previous = activePieces.find(p => p.id === this.candidate);
+            if (previous) previous.statuses.charmed = false;
+            const next = Random.pick(eligible);
+            next.statuses.charmed = true;
+            this.candidate = next.id;
+        }
     }
+
     onRoundEnd() {
         this.count = 0;
         this.candidate = '';
     }
 }
-*/
 
-export const allBosses = [Concussion, LowBattery, NorthWind, Taxman, TrafficLight, Quicksand, Customs, Downturn, Hook, Mirror, Rage, Shrine, Snoozefest, Whale, Anchor, Castle, Circus, Hammer, ClipBoard, Izakaya, Mountain, Tsunami, Wilt, Autumn, Biohazard, Cocktail, Coral, Eclipse, Lock, Factory, Jack, Coaster, Blackmail, Snowflake, Bones, Frog, Singularity, Tornado, Volcano, Snow, Sun, Fog, Nightfall, Nofun, Omega, Reaper, REDACTED, Wrath]
+export const allBosses = [Concussion, LowBattery, NorthWind, Taxman, TrafficLight, Quicksand, Butter, Customs, Downturn, Hook, Mirror, Rage, Salsa, Shrine, Snoozefest, Whale, Anchor, Hammer, Castle, Circus, Clapback, ClipBoard, Izakaya, Mountain, Tsunami, Wilt, Autumn, Avalanche, Biohazard, Cocktail, Coral, Eclipse, Lock, Factory, Jack, Coaster, Blackmail, Snowflake, Love, Bones, Frog, Singularity, Seething, Tornado, Volcano, Snow, Sun, Fog, Nightfall, Nofun, Omega, Reaper, REDACTED, Wrath]
 export const nonStackableBosses = [Mirror, Customs, Snowflake, Sun, Frog, Biohazard, Coral, Izakaya, REDACTED, Fog, Singularity, Tornado, Cocktail]
 
 console.log('bosses length: ', allBosses.length)

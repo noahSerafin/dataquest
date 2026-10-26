@@ -1589,7 +1589,6 @@ function instantiatePieceFromBlueprint(//this goes in app
 
 async function placePieceOnBoardAt(coord: Coordinate) {
   if (!pieceToPlace.value) return;
-
   appDialogueEvent.value = "place-" + coord.x + "-" + coord.y;
 
   const bp = pieceToPlace.value;
@@ -1681,7 +1680,7 @@ function placeAt(coord: Coordinate) {
     isPlacing.value = false;
     isDraggingPlacement.value = false;
     boardRef.value.clearHighlights();
-    return
+    return;
   }
 
   placePieceOnBoardAt(coord);

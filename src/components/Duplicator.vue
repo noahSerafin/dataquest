@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref, version } from 'vue';
+    import { ref } from 'vue';
     import type { PieceBlueprint } from '../types';
     import { Player } from '../Player';
     import { Item } from '../Items';
@@ -70,6 +70,9 @@
                 cost: primaryBP.value.cost,
                 immunities: primaryBP.value.immunities,
                 version: primaryBP.value.version
+            }
+            if(primaryBP.value.damageMult){
+                resultBP.value.damageMult = primaryBP.value.damageMult;
             }
             if(primaryBP.value.variantName){
                 resultBP.value.variantName = primaryBP.value.variantName;

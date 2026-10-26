@@ -339,7 +339,7 @@
         :piece="selectedPiece"
         mode="inventory"
         :canBuy="false"
-        :canPlace="player.canPlace"
+        :canPlace="player.canPlace && !selectedPiece.isPlaced"
         :defaultPosition="{ x: 0, y: 0 }"
         @highlightPlacements="handlePlace"
         @sell="handleSellBlueprint"

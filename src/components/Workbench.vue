@@ -110,6 +110,12 @@
             resultBP.value.extraUnicode = workingBP.value.extraUnicode;
             resultBP.value.hybridIconID = workingBP.value.hybridIconID;
         }
+        if(workingBP.value.version){
+            resultBP.value.version = workingBP.value.version;
+        }
+        if(workingBP.value.damageMult){
+            resultBP.value.damageMult = workingBP.value.damageMult;
+        }
     }
 
     function cancel() {

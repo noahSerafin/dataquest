@@ -91,7 +91,8 @@
                 extraUnicode: secondary.unicode,
                 hybridIconID: secondary.iconID,
                 immunities: combinedImmunities,
-                variantName: primary.variantName
+                variantName: primary.variantName,
+                damageMult: primary.damageMult
             }
         }
         return {
@@ -114,7 +115,8 @@
             extraUnicode: secondary.unicode,
             hybridIconID: secondary.iconID,
             immunities: combinedImmunities,
-            variantName: primary.variantName
+            variantName: primary.variantName,
+            damageMult: primary.damageMult
         }
     };
 

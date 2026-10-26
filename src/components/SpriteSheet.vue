@@ -179,7 +179,8 @@ const allIcons = computed(() => {
     'U+1F3DC',
     'U+1F3DA',
     'U+1F3DF',
-    'U+1F36D'
+    'U+1F36D',
+    'U+1F322'//ink
   ];
   statuses.forEach((unicode, index) => {
     result.push({

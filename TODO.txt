@@ -47,6 +47,9 @@ BUGS -
 -variant pieces still have original moves/defence on first turn
 -statuses affecting copys even when copy does not have that status
 -hybrid preview still using unicode
+-ink has no sprite
+damage mult break workbench
+left/right hand path retriggers on node retry
 archer not using special
 immunity items still applying to duplicates
 dove allowing moving after placing even not on first turn
@@ -57,6 +60,7 @@ workbench + compiler + duplicator do not preserve damagemult
 NICE TO HAVE
 You win screen more obvious, change button to endless mode here
 improve UI and button styles
+remember what infamy you last started on with an OS
 differentiate P/I/A top left better, shapes? move to bottom right?
 nerf hybrids - average rounded up? +1?
 get dracula to attack friendlies

@@ -734,7 +734,7 @@ export class Dove extends Admin {
 class Stonks extends Admin {
   static iconID = 316;
   static name = "Stonks";
-  static description = "+1 bonus interest for every $5 you have";
+  static description = "+1 bonus interest for every $5 you have under the current interest cap (default $5)";
   static unicode = "U+1F4C8";
   static color = "#55ff6cff";
   static rarity = 3;
@@ -748,7 +748,7 @@ class Stonks extends Admin {
     if (noOfFives > 0) {
       this.isTriggering = true;
       setTimeout(() => this.isTriggering = false, 500);
-      player.bonusInterest += noOfFives//reset after round
+      player.bonusInterest += Math.min(player.interestCap, noOfFives);//reset after round
     }
   }
 
@@ -2453,7 +2453,7 @@ class Camp extends Admin {
     this.count++;
     for (const piece of activePieces) {
       if (piece.team === 'player' && piece.name !== 'Spawn' && !piece.statuses.hidden) {
-        if (piece.movesRemaining === piece.getStat('moves')) {
+        if (!piece.hasMoved){//(piece.movesRemaining === piece.getStat('moves') || piece.statuses.frozen) 
           if (this.count === 2) {
             piece.addModifier({ range: 1 });//encourages camping, seemingly only temporary. If so change to attack
             //piece.addTempModifier({defence : 1})
@@ -3231,7 +3231,7 @@ class Chime extends Admin {
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces) {
-      if (p.team === 'enemy' && p.movesRemaining < p.getStat('moves')) {
+      if (p.hasMoved){//(p.team === 'enemy' && p.movesRemaining < p.getStat('moves')) {
         p.addTempModifier({ defence: -1 });
         this.isTriggering = true;
         setTimeout(() => this.isTriggering = false, 500);
@@ -3574,7 +3574,7 @@ class Daisy extends Admin {
 class Meditation extends Admin {
   static iconID = 371;
   static name = "Meditation";
-  static description = "Your non-hidden programs that don't move temoprarily gain +1 to all stats";// to all stats on the end of your turn";
+  static description = "Your non-hidden programs that don't move temoprarily gain the zen status";// to all stats on the end of your turn";
   static unicode = "U+1F9D8";
   static color = "rgb(145, 247, 254)";
   static rarity = 5;
@@ -3585,7 +3585,7 @@ class Meditation extends Admin {
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const piece of activePieces) {
       if (piece.team === 'player' && piece.name !== 'Spawn' && !piece.statuses.hidden) {
-        if (piece.movesRemaining === piece.getStat('moves')) {
+        if (!piece.hasMoved){//(piece.movesRemaining === piece.getStat('moves')) {
           piece.statuses.zen = true;
           this.isTriggering = true;
           setTimeout(() => this.isTriggering = false, 500);

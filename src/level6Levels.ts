@@ -3397,12 +3397,12 @@ const crater: Level = {
       "team": "player",
       "headPosition": {
         "x": 1,
-        "y": 8
+        "y": 7
       },
       "tiles": [
         {
           "x": 1,
-          "y": 8
+          "y": 7
         }
       ],
       "rarity": 1

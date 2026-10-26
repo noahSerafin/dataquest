@@ -51,6 +51,7 @@ export abstract class Piece {
   isBusy: boolean = false;//for AI
   isTriggering: boolean = false; //for trap animations
   quickSanded: boolean = false;
+  hasMoved: boolean = false;
   appliesStatuses: StatusKey[] = [];
   popups: { id: string; text: string; color: string; type: string; isFixed?: boolean }[] = [];
 
@@ -252,12 +253,15 @@ export abstract class Piece {
   }
 
   resetMoves() {
+    this.hasMoved = false;
     if (this.quickSanded) {
       this.movesRemaining -= 1;
       this.addTempModifier({ moves: -1 });
     }
     if (!this.statuses.frozen) {
       this.movesRemaining = this.getStat('moves');
+    } else {
+      this.movesRemaining = 0;
     }
   }
   resetDefence() {
@@ -293,6 +297,7 @@ export abstract class Piece {
   }
 
   moveTo(newPosition: Coordinate): void {//make a free version
+    this.hasMoved = true;
     this.move(newPosition)
     this.useMove();
     if (!this.statuses.hidden) {
@@ -371,10 +376,10 @@ export abstract class Piece {
     if (this.statuses.poisoned) {
       this.addModifier({ defence: -(1 * Math.abs(mult)) });
     }
-    if (this.statuses.frozen) {
+    /*if (this.statuses.frozen) {
       //this.moves = 0;
       this.movesRemaining = 0;//change so you can't move instead
-    }
+    }*/
     if (this.statuses.burning) {
       for (let i = 0; i < mult; i++) {
         this.tiles.pop();
@@ -653,7 +658,7 @@ class Tree extends Piece {
 class Coconut extends Piece {
   static iconID = 47;
   static name = "Coconut";
-  static description = "A program that can grow into a Palm tree by ";
+  static description = "A program that can grow into a Palm tree by targeting an empty space";
   static unicode = "U+1F965";
   static color = "rgb(224, 207, 108)";
   static rarity = 3;
@@ -2253,6 +2258,7 @@ class Dragon extends Piece {
 }
 
 class Ink extends Piece {
+  static iconID = 524;
   static name = "Ink";
   static description = "An ink decoy that reduces range by 1 and applies blinded";
   static unicode = "U+1F322";//"U+26AB";
@@ -2277,8 +2283,6 @@ class Ink extends Piece {
 
 class Squid extends Piece {
   static iconID = 111;
-
-
   static name = "Squid";
   static description = "A program that can creat ink decoy tiles that blinds enemies and reduces their range by 1 immediately, immune to being blinded itself";
   static unicode = "U+1F991";
@@ -3606,7 +3610,7 @@ class Rex extends Piece {
     this.targetType = 'piece';
   }
   async special(targetPiece: Piece): Promise<void> {
-    if (targetPiece.movesRemaining < targetPiece.getStat('moves')) {
+    if (targetPiece.hasMoved){//(targetPiece.movesRemaining < targetPiece.getStat('moves')) {
       await targetPiece.takeDamage(this.getStat('attack') * 2);
     } else {
       await targetPiece.takeDamage(this.getStat('attack'));

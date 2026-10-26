@@ -963,7 +963,7 @@ class Quicksand extends Admin {
     }
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
         for (const p of activePieces) {
-            if (p.team === 'player' && p.movesRemaining < p.getStat('moves')) {
+            if (p.team === 'player' && p.hasMoved){//p.movesRemaining < p.getStat('moves')) {
                 p.quickSanded = true;
                 this.isTriggering = true;
                 setTimeout(() => this.isTriggering = false, 500);
@@ -1085,7 +1085,7 @@ class TrafficLight extends Admin {
     async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
         if (this.count === 2) {
             for (const p of activePieces) {
-                if (p.team === 'player' && (p.actions < 1 || p.getStat('moves') > p.movesRemaining)) {
+                if (p.team === 'player' && (p.actions < 1 || p.hasMoved)){//p.getStat('moves') > p.movesRemaining)) {
                     await p.takeDamage(player.difficulty)
                 }
             }
@@ -1273,9 +1273,10 @@ class Butter extends Admin {
                 freeSpaces.push(spaceToCheck);
             }
         }
-         if(spacesToCheck.length > 0 ){
-            piece.moveTo(Random.pick(freeSpaces));
+        if(freeSpaces.length === 0 ){
+            return;
         }
+        piece.moveTo(Random.pick(freeSpaces));
     }
 }
 
@@ -1321,7 +1322,7 @@ class Clapback extends Admin {
 class Avalanche extends Admin {
     static iconID = 521;
     static name = "Avalanche";
-    static description = "Damaging an enemy increases other enemies attack by 1, and moves by 1";
+    static description = "Damaging an enemy increases other enemies' attack by 1, and moves by 1";
     static unicode = "U+1F6D8";
     static color = "rgb(223, 243, 237)";
     static rarity = 4;

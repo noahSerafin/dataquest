@@ -116,16 +116,20 @@ class Downturn extends Admin {
     static iconID = 403;
     static rarity = 2;
     static name = "Downturn";
-    static description = "Lose $1 after every turn";
+    static description = "Lose $1 every 2 turns";
     static unicode = "U+1F4C9";
     static color = "#f11212ff";
     constructor() {
         super(Downturn.name, Downturn.description, Downturn.unicode, Downturn.color, 5, Downturn.rarity, 'player', 'onTurnEnd')
     }
+    private count = 0;
     async apply({ player }: { player: Player }) {
-        player.money--;
-        this.isTriggering = true;
-        setTimeout(() => this.isTriggering = false, 500);
+        this.count ++
+        if(this.count%2 === 0){
+            player.money--;
+            this.isTriggering = true;
+            setTimeout(() => this.isTriggering = false, 500);
+        }
     }
 }
 
@@ -1145,24 +1149,18 @@ class Taxman extends Admin {
     static iconID = 399;
     static rarity = 1;
     static name = "Taxman";
-    static description = "All your program's max size are nerfed by -1 for every $5 you have on load";
+    static description = "Lose $1 every tile lost";//too similar to battery, set money to 0 after something happens
     static unicode = "U+1F4D2";
     static color = "rgb(70, 70, 70)";
     constructor() {
-        super(Taxman.name, Taxman.description, Taxman.unicode, Taxman.color, 5, Taxman.rarity, 'playerAndGame', 'onPlacement')
+        super(Taxman.name, Taxman.description, Taxman.unicode, Taxman.color, 5, Taxman.rarity, 'playerAndGame', 'onReceiveDamage')
     }
 
-    async apply({ id: id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
-        const noOfFives = Math.floor(player.money / 5) //round down
-        if (noOfFives > 0) {
-            this.isTriggering = true;
-            setTimeout(() => this.isTriggering = false, 500);
-            const idx = activePieces.findIndex(p => p.id === id);
-            const p = activePieces[idx]
-            if (p.team === 'player') {
-                p.addModifier({ maxSize: -noOfFives });
-                //p.addModifier({attack: -noOfFives})
-            }
+    async apply({ id: id, activePieces, player, piece }: { id: string, activePieces: Piece[], player: Player, piece: Piece }) {
+        //const noOfFives = Math.floor(player.money / 5) //round down
+        const idx = activePieces.findIndex(p => p.id === id);
+        if (activePieces[idx].getStat('attack') > piece.defenceRemaining) {
+            player.money -= activePieces[idx].getStat('attack') - piece.defenceRemaining
         }
     }
 }
@@ -1396,6 +1394,14 @@ class Love extends Admin {
         this.candidate = '';
     }
 }
+
+//Technocore bosses
+//Blackwall/Lockdown - places Blackwall enemies next to player (20ms, 4moves, 0range, 10def, 0atk)
+//Air Gap - removes tiles from level creating seperate islands
+//Paywall - player money buffs all enemy stats + 1 per $5
+//Zero Day - player spawns are put next to enemies
+//Soulkiller - uses the players blueprints , negative mirror
+//Battle Royale - removes edge of map tiles every 3 turns until tileset is min 2x2
 
 export const allBosses = [Concussion, LowBattery, NorthWind, Taxman, TrafficLight, Quicksand, Butter, Customs, Downturn, Hook, Mirror, Rage, Salsa, Shrine, Snoozefest, Whale, Anchor, Hammer, Castle, Circus, Clapback, ClipBoard, Izakaya, Mountain, Tsunami, Wilt, Autumn, Avalanche, Biohazard, Cocktail, Coral, Eclipse, Lock, Factory, Jack, Coaster, Blackmail, Snowflake, Love, Bones, Frog, Singularity, Seething, Tornado, Volcano, Snow, Sun, Fog, Nightfall, Nofun, Omega, Reaper, REDACTED, Wrath]
 export const nonStackableBosses = [Mirror, Customs, Snowflake, Sun, Frog, Biohazard, Coral, Izakaya, REDACTED, Fog, Singularity, Tornado, Cocktail]

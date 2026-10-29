@@ -259,9 +259,16 @@ function rollRarity(clovers: number, hasCollector: boolean = false) {
  * @param excludeNames boss names to avoid (ignored if it would leave no options)
  */
 export function rollBoss(difficulty: number, currentBosses: Admin[], excludeNames: string[] = []): Admin {
-  const bossPool = difficulty > 6 ? allBosses : allBosses.filter(
-    boss => boss.rarity <= difficulty && boss.rarity >= difficulty - 1
-  );
+  let bossPool: typeof allBosses;
+  if (difficulty === 7) {
+    bossPool = allBosses.filter(boss => boss.rarity === 7);
+  } else if (difficulty > 7) {
+    bossPool = allBosses;
+  } else {
+    bossPool = allBosses.filter(
+      boss => boss.rarity <= difficulty && boss.rarity >= difficulty - 1
+    );
+  }
   const pool = bossPool.length > 0 ? bossPool : allBosses;
 
   //don't add bosses whose effects don't stack

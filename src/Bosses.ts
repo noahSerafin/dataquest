@@ -1,5 +1,5 @@
 import { Admin } from "./AdminPrograms";
-import { Piece, allPieces } from "./Pieces";
+import { Blackwall, Piece, allPieces } from "./Pieces";
 import { Player } from "./Player";
 import type { Coordinate } from "./types";
 import { DIFFICULTY_RARITY } from "./constants";
@@ -81,7 +81,7 @@ class Mirror extends Admin {
     static iconID = 405;
     static rarity = 2;
     static name = "Mirror";
-    static description = "Enemy program's classes are chosen from blueprints in your inventory";
+    static description = "Enemy program's classes are chosen from ones in your inventory";
     static unicode = "U+1FA9E";
     static color = "rgb(172, 5, 213)";
     constructor() {
@@ -124,8 +124,8 @@ class Downturn extends Admin {
     }
     private count = 0;
     async apply({ player }: { player: Player }) {
-        this.count ++
-        if(this.count%2 === 0){
+        this.count++
+        if (this.count % 2 === 0) {
             player.money--;
             this.isTriggering = true;
             setTimeout(() => this.isTriggering = false, 500);
@@ -967,7 +967,7 @@ class Quicksand extends Admin {
     }
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
         for (const p of activePieces) {
-            if (p.team === 'player' && p.hasMoved){//p.movesRemaining < p.getStat('moves')) {
+            if (p.team === 'player' && p.hasMoved) {//p.movesRemaining < p.getStat('moves')) {
                 p.quickSanded = true;
                 this.isTriggering = true;
                 setTimeout(() => this.isTriggering = false, 500);
@@ -1089,7 +1089,7 @@ class TrafficLight extends Admin {
     async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
         if (this.count === 2) {
             for (const p of activePieces) {
-                if (p.team === 'player' && (p.actions < 1 || p.hasMoved)){//p.getStat('moves') > p.movesRemaining)) {
+                if (p.team === 'player' && (p.actions < 1 || p.hasMoved)) {//p.getStat('moves') > p.movesRemaining)) {
                     await p.takeDamage(player.difficulty)
                 }
             }
@@ -1271,7 +1271,7 @@ class Butter extends Admin {
                 freeSpaces.push(spaceToCheck);
             }
         }
-        if(freeSpaces.length === 0 ){
+        if (freeSpaces.length === 0) {
             return;
         }
         piece.moveTo(Random.pick(freeSpaces));
@@ -1364,7 +1364,7 @@ class Love extends Admin {
     static name = "Love Triangle";
     static description = "After 3 turns, charms one of your programs. Then charms a different one each following turn, removing charmed from the previous program";
     static unicode = "U+1F49E";
-    static color = "rgb(211, 108, 243)";
+    static color = "rgb(234, 167, 255)";
     static rarity = 5;
     constructor() {
         super(Love.name, Love.description, Love.unicode, Love.color, 3, Love.rarity, 'gameState', 'onTurnEnd')
@@ -1396,15 +1396,415 @@ class Love extends Admin {
 }
 
 //Technocore bosses
-//Blackwall/Lockdown - places Blackwall enemies next to player (20ms, 4moves, 0range, 10def, 0atk)
-//Air Gap - removes tiles from level creating seperate islands
-//Paywall - player money buffs all enemy stats + 1 per $5
-//Zero Day - player spawns are put next to enemies
-//Soulkiller - uses the players blueprints , negative mirror
-//Battle Royale - removes edge of map tiles every 3 turns until tileset is min 2x2
 
-export const allBosses = [Concussion, LowBattery, NorthWind, Taxman, TrafficLight, Quicksand, Butter, Customs, Downturn, Hook, Mirror, Rage, Salsa, Shrine, Snoozefest, Whale, Anchor, Hammer, Castle, Circus, Clapback, ClipBoard, Izakaya, Mountain, Tsunami, Wilt, Autumn, Avalanche, Biohazard, Cocktail, Coral, Eclipse, Lock, Factory, Jack, Coaster, Blackmail, Snowflake, Love, Bones, Frog, Singularity, Seething, Tornado, Volcano, Snow, Sun, Fog, Nightfall, Nofun, Omega, Reaper, REDACTED, Wrath]
-export const nonStackableBosses = [Mirror, Customs, Snowflake, Sun, Frog, Biohazard, Coral, Izakaya, REDACTED, Fog, Singularity, Tornado, Cocktail]
+//Air Gap - removes tiles from level creating seperated islands
+class AirGap extends Admin {//to finish
+    static iconID = 524;
+    static rarity = 7;
+    static name = "Air Gapped";
+    static description = "Removes tiles from nodes creating seperated islands";
+    static unicode = "U+1F3DD";//U+26A0";
+    static color = "rgb(31, 173, 255)";
+    constructor() {
+        super(AirGap.name, AirGap.description, AirGap.unicode, AirGap.color, 5, AirGap.rarity, 'piecesAndBoard', 'onRoundStart')
+    }
+
+    async apply({ activePieces, board }: { activePieces: Piece[], board: Coordinate[] }) {
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
+        const playerSpawnPieces = activePieces.filter(p => p.team === 'player' && p.name === 'Spawn');
+        const enemyPieces = activePieces.filter(p => p.team === 'enemy');
+        const unoccupiedTiles = board.filter(t => !activePieces.some(p => p.tiles.some(pt => pt.x === t.x && pt.y === t.y)));
+        if (playerSpawnPieces.length === 0 || enemyPieces.length === 0 || unoccupiedTiles.length === 0) return;
+
+        //find unnoccupied tiles between player spawn pieces and enemy pieces
+        const playerCoords = playerSpawnPieces.flatMap(p => p.tiles);
+        const enemyCoords = enemyPieces.flatMap(p => p.tiles);
+
+        const pAvgX = playerCoords.reduce((sum, c) => sum + c.x, 0) / playerCoords.length;
+        const pAvgY = playerCoords.reduce((sum, c) => sum + c.y, 0) / playerCoords.length;
+        const eAvgX = enemyCoords.reduce((sum, c) => sum + c.x, 0) / enemyCoords.length;
+        const eAvgY = enemyCoords.reduce((sum, c) => sum + c.y, 0) / enemyCoords.length;
+
+        const minX = Math.min(...board.map(t => t.x));
+        const maxX = Math.max(...board.map(t => t.x));
+        const minY = Math.min(...board.map(t => t.y));
+        const maxY = Math.max(...board.map(t => t.y));
+
+        const unoccupiedSet = new Set(unoccupiedTiles.map(t => `${t.x},${t.y}`));
+        const isUnoccupied = (x: number, y: number) => unoccupiedSet.has(`${x},${y}`);
+
+        const pathToRemove = new Set<string>();
+
+        // Divide horizontally (step across X) if separated more vertically, else divide vertically (step across Y)
+        const stepAcrossX = Math.abs(pAvgY - eAvgY) >= Math.abs(pAvgX - eAvgX);
+
+        if (stepAcrossX) {
+            const pMinY = Math.min(...playerCoords.map(c => c.y));
+            const pMaxY = Math.max(...playerCoords.map(c => c.y));
+            const eMinY = Math.min(...enemyCoords.map(c => c.y));
+            const eMaxY = Math.max(...enemyCoords.map(c => c.y));
+
+            const lowY = Math.min(pMaxY, eMaxY);
+            const highY = Math.max(pMinY, eMinY);
+            const bandMinY = lowY < highY ? lowY : Math.floor(Math.min(pAvgY, eAvgY));
+            const bandMaxY = lowY < highY ? highY : Math.ceil(Math.max(pAvgY, eAvgY));
+            const midY = (pAvgY + eAvgY) / 2;
+
+            let currentY = Math.round(midY);
+            const startCandidates = unoccupiedTiles.filter(t => t.x === minX && t.y >= bandMinY && t.y <= bandMaxY);
+            if (startCandidates.length > 0) {
+                currentY = Random.pick(startCandidates).y;
+            } else {
+                const colTiles = unoccupiedTiles.filter(t => t.x === minX);
+                if (colTiles.length > 0) {
+                    colTiles.sort((a, b) => Math.abs(a.y - midY) - Math.abs(b.y - midY));
+                    currentY = colTiles[0].y;
+                }
+            }
+
+            if (isUnoccupied(minX, currentY)) {
+                pathToRemove.add(`${minX},${currentY}`);
+            }
+
+            for (let x = minX + 1; x <= maxX; x++) {
+                // Step orthogonally or diagonally to x (dy in -1, 0, 1)
+                let candidates = [-1, 0, 1]
+                    .map(dy => currentY + dy)
+                    .filter(y => y >= bandMinY && y <= bandMaxY && isUnoccupied(x, y));
+
+                if (candidates.length === 0) {
+                    candidates = [-1, 0, 1]
+                        .map(dy => currentY + dy)
+                        .filter(y => isUnoccupied(x, y));
+                }
+
+                if (candidates.length > 0) {
+                    const nextY = Random.pick(candidates);
+                    // Optionally add an orthogonal turn tile at (x - 1, nextY) or (x, currentY) to vary orthogonal/diagonal steps
+                    if (nextY !== currentY && Random.bool(0.5)) {
+                        if (isUnoccupied(x - 1, nextY)) {
+                            pathToRemove.add(`${x - 1},${nextY}`);
+                        } else if (isUnoccupied(x, currentY)) {
+                            pathToRemove.add(`${x},${currentY}`);
+                        }
+                    }
+                    currentY = nextY;
+                    pathToRemove.add(`${x},${currentY}`);
+                } else {
+                    // Fallback: find the nearest unoccupied tile in column x and step orthogonally toward it
+                    const colTiles = unoccupiedTiles.filter(t => t.x === x);
+                    if (colTiles.length > 0) {
+                        colTiles.sort((a, b) => Math.abs(a.y - currentY) - Math.abs(b.y - currentY));
+                        const targetY = colTiles[0].y;
+                        const dir = Math.sign(targetY - currentY);
+                        for (let y = currentY; y !== targetY + dir; y += dir) {
+                            if (isUnoccupied(x - 1, y)) pathToRemove.add(`${x - 1},${y}`);
+                            if (isUnoccupied(x, y)) pathToRemove.add(`${x},${y}`);
+                        }
+                        currentY = targetY;
+                    }
+                }
+            }
+        } else {
+            const pMinX = Math.min(...playerCoords.map(c => c.x));
+            const pMaxX = Math.max(...playerCoords.map(c => c.x));
+            const eMinX = Math.min(...enemyCoords.map(c => c.x));
+            const eMaxX = Math.max(...enemyCoords.map(c => c.x));
+
+            const lowX = Math.min(pMaxX, eMaxX);
+            const highX = Math.max(pMinX, eMinX);
+            const bandMinX = lowX < highX ? lowX : Math.floor(Math.min(pAvgX, eAvgX));
+            const bandMaxX = lowX < highX ? highX : Math.ceil(Math.max(pAvgX, eAvgX));
+            const midX = (pAvgX + eAvgX) / 2;
+
+            let currentX = Math.round(midX);
+            const startCandidates = unoccupiedTiles.filter(t => t.y === minY && t.x >= bandMinX && t.x <= bandMaxX);
+            if (startCandidates.length > 0) {
+                currentX = Random.pick(startCandidates).x;
+            } else {
+                const rowTiles = unoccupiedTiles.filter(t => t.y === minY);
+                if (rowTiles.length > 0) {
+                    rowTiles.sort((a, b) => Math.abs(a.x - midX) - Math.abs(b.x - midX));
+                    currentX = rowTiles[0].x;
+                }
+            }
+
+            if (isUnoccupied(currentX, minY)) {
+                pathToRemove.add(`${currentX},${minY}`);
+            }
+
+            for (let y = minY + 1; y <= maxY; y++) {
+                // Step orthogonally or diagonally to y (dx in -1, 0, 1)
+                let candidates = [-1, 0, 1]
+                    .map(dx => currentX + dx)
+                    .filter(x => x >= bandMinX && x <= bandMaxX && isUnoccupied(x, y));
+
+                if (candidates.length === 0) {
+                    candidates = [-1, 0, 1]
+                        .map(dx => currentX + dx)
+                        .filter(x => isUnoccupied(x, y));
+                }
+
+                if (candidates.length > 0) {
+                    const nextX = Random.pick(candidates);
+                    if (nextX !== currentX && Random.bool(0.5)) {
+                        if (isUnoccupied(nextX, y - 1)) {
+                            pathToRemove.add(`${nextX},${y - 1}`);
+                        } else if (isUnoccupied(currentX, y)) {
+                            pathToRemove.add(`${currentX},${y}`);
+                        }
+                    }
+                    currentX = nextX;
+                    pathToRemove.add(`${currentX},${y}`);
+                } else {
+                    const rowTiles = unoccupiedTiles.filter(t => t.y === y);
+                    if (rowTiles.length > 0) {
+                        rowTiles.sort((a, b) => Math.abs(a.x - currentX) - Math.abs(b.x - currentX));
+                        const targetX = rowTiles[0].x;
+                        const dir = Math.sign(targetX - currentX);
+                        for (let x = currentX; x !== targetX + dir; x += dir) {
+                            if (isUnoccupied(x, y - 1)) pathToRemove.add(`${x},${y - 1}`);
+                            if (isUnoccupied(x, y)) pathToRemove.add(`${x},${y}`);
+                        }
+                        currentX = targetX;
+                    }
+                }
+            }
+        }
+
+        //remove board tiles that no pieces occupy, creating an impassable gap.
+        for (let i = board.length - 1; i >= 0; i--) {
+            if (pathToRemove.has(`${board[i].x},${board[i].y}`)) {
+                board.splice(i, 1);
+            }
+        }
+    }
+}
+//Battle Royale - removes edge of map tiles every 3 turns until tileset is min 2x2
+class Battle extends Admin {//to finish
+    static iconID = 525;
+    static rarity = 7;
+    static name = "Battle Royale";
+    static description = "Removes all spaces on the edge of a node every 3 turns";
+    static unicode = "U+1F3DF";////STADIUM, U+1F3DF colloseum
+    static color = "rgb(25, 124, 204)";
+    constructor() {
+        super(Battle.name, Battle.description, Battle.unicode, Battle.color, 5, Battle.rarity, 'piecesAndBoard', 'onTurnEnd')
+    }
+    private count: number = 0;
+    async apply({ activePieces, board }: { activePieces: Piece[], board: Coordinate[] }) {
+        this.count++
+        if (this.count % 3 === 0) {
+            if (board.length === 0) return;
+            //look at width and height of board (highest x and y values of all spaces)
+            const maxX = Math.max(...board.map(t => t.x));
+            const maxY = Math.max(...board.map(t => t.y));
+            //look at lowest current x and y values of spaces
+            const minX = Math.min(...board.map(t => t.x));
+            const minY = Math.min(...board.map(t => t.y));
+
+            //guard here to not remove middle tile (or middle 2 tiles on level of even width)
+            const canShrinkX = (maxX - minX) >= 2;
+            const canShrinkY = (maxY - minY) >= 2;
+            if (!canShrinkX && !canShrinkY) return;
+
+            this.isTriggering = true;
+            setTimeout(() => this.isTriggering = false, 500);
+
+            //remove all around the edge (all spaces that have either the current lowest or highest x or y values)
+            const removedCoords = new Set<string>();
+            for (let i = board.length - 1; i >= 0; i--) {
+                const tile = board[i];
+                const isEdgeX = canShrinkX && (tile.x === minX || tile.x === maxX);
+                const isEdgeY = canShrinkY && (tile.y === minY || tile.y === maxY);
+                if (isEdgeX || isEdgeY) {
+                    removedCoords.add(`${tile.x},${tile.y}`);
+                    board.splice(i, 1);
+                }
+            }
+
+            //if any pieces have tiles in these spaces, remove those as well
+            for (const piece of [...activePieces]) {
+                const hadTiles = piece.tiles.length > 0;
+                piece.tiles = piece.tiles.filter(t => !removedCoords.has(`${t.x},${t.y}`));
+                if (hadTiles && piece.tiles.length === 0) {
+                    if (piece.removeCallback) {
+                        piece.removeCallback(piece);
+                    } else {
+                        const idx = activePieces.indexOf(piece);
+                        if (idx !== -1) activePieces.splice(idx, 1);
+                    }
+                } else if (piece.tiles.length > 0 && removedCoords.has(`${piece.headPosition.x},${piece.headPosition.y}`)) {
+                    piece.headPosition = { ...piece.tiles[0] };
+                }
+            }
+        }
+    }
+
+    onRoundEnd() {
+        this.count = 0;
+    }
+}
+//Lockdown - places Blackwall enemies next to player (20ms, 4moves, 0range, 10def, 0atk)// 
+class Lockdown extends Admin {//to test
+    static iconID = 526;
+    static name = "Lockdown";
+    static description = "Places Blackwall enemies next to player spawns";
+    static unicode = "U+1F3D7";
+    static color = "rgb(84, 139, 138)";
+    static rarity = 7;
+    constructor() {
+        super(Lockdown.name, Lockdown.description, Lockdown.unicode, Lockdown.color, 5, Lockdown.rarity, 'all', 'onRoundStart')
+    }
+    async apply({ activePieces, board, playerSpawns }: { activePieces: Piece[], board: Coordinate[], playerSpawns?: Coordinate[] }) {
+        if (!playerSpawns) return;
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
+
+        const playerSpawnPieces = activePieces.filter(p => p.team === 'player' && p.name === 'Spawn');
+        const unoccupiedTiles = board.filter(t => !activePieces.some(p => p.tiles.some(pt => pt.x === t.x && pt.y === t.y)));
+
+        //find unoccupied tiles next to player headpositions
+        for (let i = 0; i < playerSpawnPieces.length; i++) {
+            if (playerSpawnPieces.length === 0) break;
+            const nextToPlayerHeads: Coordinate[] = [];
+            nextToPlayerHeads.push({ x: playerSpawnPieces[i].headPosition.x + 1, y: playerSpawnPieces[i].headPosition.y })
+            nextToPlayerHeads.push({ x: playerSpawnPieces[i].headPosition.x, y: playerSpawnPieces[i].headPosition.y + 1 })
+            nextToPlayerHeads.push({ x: playerSpawnPieces[i].headPosition.x - 1, y: playerSpawnPieces[i].headPosition.y })
+            nextToPlayerHeads.push({ x: playerSpawnPieces[i].headPosition.x, y: playerSpawnPieces[i].headPosition.y - 1 })
+            const candidates = nextToPlayerHeads.filter(element => unoccupiedTiles.includes(element));//coords are {x: number, y: number} , will .filter work??
+            if (candidates.length === 0) break;
+            new Blackwall(Random.pick(candidates), 'enemy', playerSpawnPieces[i].removeCallback, crypto.randomUUID());
+        }
+
+    }
+}
+
+//Paywall - player money buffs all enemy stats + 1 per $5
+class Paywall extends Admin {//to test
+    static iconID = 527;
+    static rarity = 7;
+    static name = "Paywall";
+    static description = "Every $5 owned by the player boosts all enemy stats by 1 at the start of a round";
+    static unicode = "U+1F4CA";//U+1F4DC //abacus??
+    static color = "rgb(255, 196, 0)";
+    constructor() {
+        super(Paywall.name, Paywall.description, Paywall.unicode, Paywall.color, 5, Paywall.rarity, 'playerAndGame', 'onRoundStart')
+    }
+
+    async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+        const noOfFives = Math.floor(player.money / 5) //round down
+        const enemyPieces = activePieces.filter(p => p.team === 'enemy');
+        for (let i = 0; i < enemyPieces.length; i++) {
+            if (enemyPieces.length === 0) break;
+            enemyPieces[i].addModifier({
+                attack: noOfFives,
+                defence: noOfFives,
+                maxSize: noOfFives,
+                moves: noOfFives,
+                range: noOfFives
+            });
+        }
+    }
+}
+
+//Soulkiller - uses the players blueprints , negative mirror
+class SoulKiller extends Admin {//to test
+    static iconID = 528;
+    static rarity = 7;
+    static name = "Soulkiller";
+    static description = "Enemy programs are replaced with copies of your own";
+    static unicode = "U+1FA9E";
+    static color = "rgb(0, 0, 0)";
+    constructor() {
+        super(SoulKiller.name, SoulKiller.description, SoulKiller.unicode, SoulKiller.color, 5, SoulKiller.rarity, 'playerAndGame', 'onRoundStart')
+    }
+
+    async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
+        const enemyPieces: Piece[] = []
+        for (const piece of activePieces) {
+            if (piece.team === 'enemy') {
+                enemyPieces.push(piece)
+            }
+        };
+
+        for (const piece of enemyPieces) {
+            const blueprint = Random.pick(player.programs);//random name from player pieceBlueprints
+            const enemyClassName = blueprint.name;
+            const EnemyClass = allPieces.find(p => p.name === enemyClassName);
+            if (EnemyClass) {
+                const enemyInstance = new EnemyClass(piece.headPosition, 'enemy', piece.removeCallback, crypto.randomUUID());//check later
+                enemyInstance.maxSize = blueprint.maxSize;
+                enemyInstance.moves = blueprint.moves;
+                enemyInstance.range = blueprint.range;
+                enemyInstance.attack = blueprint.attack;
+                enemyInstance.defence = blueprint.defence;
+                activePieces.push(enemyInstance);
+                //piece.removeCallback?.(piece);//checks for round end    
+            }
+            const idx = activePieces.findIndex(p => p.id === piece.id);
+            activePieces.splice(idx, 1);
+        }  //does this always end the round??
+    }
+}
+
+//Zero Day - player spawns are put next to enemies
+class Zero extends Admin {//to test
+    static iconID = 529;
+    static name = "Zero Day";
+    static description = "Places all spawns next to enemy programs' head positions";
+    static unicode = "U+26A0";
+    static color = "rgb(255, 0, 0)";
+    static rarity = 7;
+    constructor() {
+        super(Zero.name, Zero.description, Zero.unicode, Zero.color, 5, Zero.rarity, 'all', 'onRoundStart')
+    }
+    async apply({ activePieces, board, playerSpawns }: { activePieces: Piece[], board: Coordinate[], playerSpawns?: Coordinate[] }) {
+        if (!playerSpawns) return;
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
+
+        const playerSpawnPieces = activePieces.filter(p => p.team === 'player' && p.name === 'Spawn');
+        const enemyPieces = activePieces.filter(p => p.team === 'enemy');
+
+        const unoccupiedTiles = board.filter(t => !activePieces.some(p => p.tiles.some(pt => pt.x === t.x && pt.y === t.y)));
+        //find unoccupied tiles next to enemy headpositions
+        const nextToEnemyHeads: Coordinate[] = [];
+        for (let i = 0; i < enemyPieces.length; i++) {
+            if (enemyPieces.length === 0) break;
+            nextToEnemyHeads.push({ x: enemyPieces[i].headPosition.x + 1, y: enemyPieces[i].headPosition.y })
+            nextToEnemyHeads.push({ x: enemyPieces[i].headPosition.x, y: enemyPieces[i].headPosition.y + 1 })
+            nextToEnemyHeads.push({ x: enemyPieces[i].headPosition.x - 1, y: enemyPieces[i].headPosition.y })
+            nextToEnemyHeads.push({ x: enemyPieces[i].headPosition.x, y: enemyPieces[i].headPosition.y - 1 })
+        }
+
+        const candidates = nextToEnemyHeads.filter(element => unoccupiedTiles.includes(element));//coords are {x: number, y: number} , will .filter work??
+
+        const newSpawns: Coordinate[] = [];
+        for (let i = 0; i < playerSpawns.length; i++) {
+            if (candidates.length === 0) break;
+            const randIdx = Random.floor(unoccupiedTiles.length);
+            newSpawns.push(candidates[randIdx]);
+            candidates.splice(randIdx, 1);
+        }
+
+        for (let i = 0; i < playerSpawnPieces.length; i++) {
+            const coord = newSpawns[i];
+            if (coord) {
+                playerSpawnPieces[i].headPosition = coord;
+                playerSpawnPieces[i].tiles = [coord];
+            }
+        }
+
+        playerSpawns.splice(0, playerSpawns.length, ...newSpawns);
+    }
+}
+
+export const allBosses = [Concussion, LowBattery, NorthWind, Taxman, TrafficLight, Quicksand, Butter, Customs, Downturn, Hook, Mirror, Rage, Salsa, Shrine, Snoozefest, Whale, Anchor, Hammer, Castle, Circus, Clapback, ClipBoard, Izakaya, Mountain, Tsunami, Wilt, Autumn, Avalanche, Biohazard, Cocktail, Coral, Eclipse, Lock, Factory, Jack, Coaster, Blackmail, Snowflake, Love, Bones, Frog, Singularity, Seething, Tornado, Volcano, Snow, Sun, Fog, Nightfall, Nofun, Omega, Reaper, REDACTED, Wrath, AirGap, Battle, Lockdown, Paywall, SoulKiller, Zero];
+export const nonStackableBosses = [Mirror, Customs, Snowflake, Sun, Frog, Biohazard, Coral, Izakaya, REDACTED, Fog, Singularity, Tornado, Cocktail];
 
 console.log('bosses length: ', allBosses.length)
 let adminLogs = {

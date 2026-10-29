@@ -3928,7 +3928,6 @@ console.log("Admins of rarity 6: ", adminLogs.rarity6)
 
 // U+1F3C4 surfing
 //JEANS, U+1F456 all hidden nodes are compilers - cost gets more expensive each time //gene hybrids appear in shop
-//LIPSTICK, U+1F484 retaliations charm enemies - piece.willRetaliate: hedgehog, fencer, puffer. Admins: Blackbelt(willRetaliate) Cactus Pong
 //U+1F4FA TELEVISION enemies first turn is disabled
 //Boots, U+1F462 +1 moves, +1 max size, -1 attack/def
 // U+1F5D1 WASTEBASKET - Recycle bin 

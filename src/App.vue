@@ -2203,7 +2203,7 @@ const combinedMapSeed = computed(() => {
 });
 async function increaseDifficulty() {
   
-  if (player.value.difficulty < 6 && player.value.stake < 2) {//cumulate bosses in endless mode or stake 1+
+  if (player.value.difficulty < 7 && player.value.stake < 2) {//cumulate bosses in endless mode or stake 1+
     bossAdmins.value = [];
   } else {
     // Mirror gets repetitive when carried over, so replace it with a boss rolled for the new difficulty

@@ -45,6 +45,7 @@ function rarityStyle(rarity: number) {
     case 4: return { label: "Very Rare", color: "#9052f3ff" };
     case 5: return { label: "Black Market", color: "#ff0df3ff" };
     case 6: return { label: "Legendary", color: "#ffd700" };
+    case 7: return { label: "Classified", color: "#000000" };
     default: return { label: "Unknown", color: "grey" };
   }
 }

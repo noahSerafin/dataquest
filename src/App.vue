@@ -19,6 +19,7 @@ import { Spawn, allPieces } from "./Pieces"
 import type { Coordinate, PieceBlueprint, Level, OS, Company } from "./types";
 import { runEnemyStateMachine } from "./Enemy";
 import WorldMap from "./components/WorldMap.vue";
+import { getNodeRow } from "./worldBuilder";
 import { coordKey, findAnyPiecesInRange, getOccupiedTileSet, getTilesInRange, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, isSoundEnabled, playSoundFx, preloadSound, resumeAudioContext } from "./helperFunctions";
 import dieSoundUrl from '../sfx/die.ogg';
 import dieAltSoundUrl from '../sfx/dieAlt.ogg';
@@ -475,9 +476,18 @@ function handleCampaignNodeCleared(nodeId: string) {
   messagingSystemRef.value?.triggerNodeCleared(nodeId);
 }
 
-function incrementMapProgress() {
+function incrementMapProgress(row?: number) {
   player.value.extraDifficulty = 0;
-  player.value.mapProgress++
+  if (typeof row === 'number') {
+    player.value.mapProgress = row;
+  } else {
+    const currentNode = worldMapRef.value?.world?.nodes?.[worldMapRef.value?.currentNodeId];
+    if (currentNode) {
+      player.value.mapProgress = getNodeRow(currentNode);
+    } else {
+      player.value.mapProgress++;
+    }
+  }
   //console.log('progress increased:', mapProgress.value)
   if (player.value.hasAdmin('Clippy')) {
     reapplyTutorialTooltips(200);
@@ -2461,7 +2471,7 @@ function cancelConfirm() {
         :staticWorld="campaignWorldMap"
         @selectLevel="selectLevel" @openShop="openShop" @openDisabledShop="openDisabledShop"
         @openCompiler="openCompiler" @openAltar="openAltar" @openDuplicator="openDuplicator"
-        @openWorkbench="openWorkbench" @incrementProgress="incrementMapProgress(); saveGameState()"
+        @openWorkbench="openWorkbench" @incrementProgress="(row) => { incrementMapProgress(row); saveGameState(); }"
         @addBoss="addBossAdmin" @replaceBosses="replaceBosses" @increaseDifficulty="increaseDifficulty" />
       <CampaignWorldMap v-if="!displayEditor && currentAppMode === 'campaign'" class="stage-panel" :class="{ active: showMap }"
         :player="player" :cssclass="mapClass" :staticWorld="campaignWorldMap" :clearedNodes="campaignClearedNodes"

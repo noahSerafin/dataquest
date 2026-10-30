@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref } from 'vue';
+    import { ref, version } from 'vue';
     import type { PieceBlueprint, Immunities, StatusKey } from '../types';
     import { Player } from '../Player';
     import BlueprintView from './BlueprintView.vue';
@@ -58,6 +58,13 @@
         }
     }
 
+    function calcVersion(p:number | undefined , s:number | undefined ){
+        if(p && s) return p-1 + s-1
+        if(p) return p
+        if(s) return s
+        return 1
+    }
+
     function createHybridBlueprint(
         primary: PieceBlueprint,
         secondary: PieceBlueprint
@@ -92,7 +99,8 @@
                 hybridIconID: secondary.iconID,
                 immunities: combinedImmunities,
                 variantName: primary.variantName,
-                damageMult: primary.damageMult
+                damageMult: primary.damageMult,
+                version: calcVersion(primary.version, secondary.version)
             }
         }
         return {

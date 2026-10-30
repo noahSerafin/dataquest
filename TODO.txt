@@ -52,6 +52,9 @@ BUGS -
 -compressed items have negative description
 -open for too long chugs performance, maybe the shader causing this?
 -leaving during a shop shows a different set of items
+-refresh BEFORE returning to main menu on loss
+hybrid suffix needs to go to lowercase
+offroader dashed line to your row horizontally
 damage mult break workbench
 left/right hand path retriggers on node retry
 archer not using special

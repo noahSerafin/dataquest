@@ -2258,7 +2258,7 @@ class Dragon extends Piece {
 }
 
 class Ink extends Piece {
-  static iconID = 524;
+  static iconID = 530;
   static name = "Ink";
   static description = "An ink decoy that reduces range by 1 and applies blinded";
   static unicode = "U+1F322";//"U+26AB";

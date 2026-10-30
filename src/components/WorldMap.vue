@@ -8,7 +8,7 @@ import { watch } from "vue";
 import { reapplyTutorialTooltips, showTutorialTip } from "../tutorial";
 import { Player } from "../Player";
 import type { WorldMap, WorldNode } from "../worldBuilder";
-import { generateWorld } from "../worldBuilder";
+import { generateWorld, getNodeRow } from "../worldBuilder";
 import type { Company, Level, PieceBlueprint, SkipReward } from "../types";
 import { level1Levels } from "../level1Levels";
 import { level2Levels } from "../level2Levels";
@@ -48,7 +48,7 @@ const emit = defineEmits<{
     (e: "addBoss", admin: Admin): void;
     (e: "replaceBosses", admins: Admin[]): void;
     (e: "increaseDifficulty"): void;
-    (e: "incrementProgress"): void;
+    (e: "incrementProgress", row?: number): void;
 }>();
 
 const levelTiers = [
@@ -176,7 +176,6 @@ function canSkip(node: WorldNode) {
 function skipNode(node: WorldNode) {
     selectedPreviewNode.value = null;
     world.value.nodes[currentNodeId.value].visited = true;
-    currentNodeId.value = node.id;
     if (!props.player.hasAdmin('Leg Up') || skipsThisLevel.value !== 0) {
         props.player.spend(5)
     } else {
@@ -185,7 +184,7 @@ function skipNode(node: WorldNode) {
     //node.visible = true;
     previousNodeId.value = currentNodeId.value;
     currentNodeId.value = node.id;
-    emit('incrementProgress');
+    emit('incrementProgress', getNodeRow(node));
 }
 
 function enterNode(node: WorldNode) {
@@ -219,6 +218,7 @@ function enterNode(node: WorldNode) {
         emit("addBoss", boss.value);
     }
     if (node.level) {
+        props.player.mapProgress = Math.max(0, getNodeRow(node) - 1);
         showTutorialTip('board');
         //just pass the compamy for extra visual styling?
         emit("selectLevel", node.level, node.company, node.difficultyMod, (node.reward + props.player.bonusReward));
@@ -515,11 +515,12 @@ function takeSkipReward(node: WorldNode) {//ask about this next
             break;
     }
     world.value.nodes[currentNodeId.value].visited = true;
+    previousNodeId.value = currentNodeId.value;
     currentNodeId.value = node.id
     selectedPreviewNode.value = null;
     canReroll.value = true;
     node.visible = true;
-    emit('incrementProgress');
+    emit('incrementProgress', getNodeRow(node));
     if (props.player.hasAdmin('Clippy')) {
         reapplyTutorialTooltips(200);
     }
@@ -530,6 +531,7 @@ function rollbackNode() {
         // The node we are moving BACK to was marked visited when we entered the current one
         world.value.nodes[previousNodeId.value].visited = false;
         currentNodeId.value = previousNodeId.value;
+        props.player.mapProgress = getNodeRow(world.value.nodes[previousNodeId.value]);
         // previousNodeId.value = null; // optional: clear it so we can't rollback twice? 
         // the user said "returning could take the player back to their last visited node", 
         // so maybe we only allow one rollback.
@@ -625,7 +627,7 @@ watch(currentNodeId, () => {
         @mouseleave="handleMapMouseUpOrLeave">
         <div class="node-map">
             <!-- Nodes -->
-            <div v-for="node in worldNodes" :key="node.id" class="node " :class="{
+            <div v-for="node in worldNodes" :key="node.id" :id="node.id" class="node " :class="{
                 clickable: canClick(node),
                 current: node.id === currentNodeId,
                 unrevealed: !revealedNodeIds.has(node.id),
@@ -731,7 +733,7 @@ watch(currentNodeId, () => {
             <h6 v-if="selectedPreviewNode.type === 'hybrid compiler'">Combine two programs stats into one. Keep the
                 primary's special move.</h6>
             <h6 v-if="selectedPreviewNode.type === 'skip'">(Must have room)</h6>
-            <h4 v-if="selectedPreviewNode.type !== 'boss' && selectedPreviewNode.type === 'level'">{{
+            <h4 v-if="selectedPreviewNode.type === 'boss' || selectedPreviewNode.type === 'level'">{{
                 selectedPreviewNode.company.name }}</h4>
             <div v-if="selectedPreviewNode.type !== 'boss' && selectedPreviewNode.type === 'level'" :style="getIconStyle(selectedPreviewNode, 32)">
                 <template v-if="!getIconStyle(selectedPreviewNode).backgroundImage">
@@ -766,7 +768,7 @@ watch(currentNodeId, () => {
             <div class="btns">
                 <button
                     v-if="selectedPreviewNode?.type === 'skip' && (selectedPreviewNode.skipReward?.kind === 'blueprint' || selectedPreviewNode.skipReward?.kind === 'item')"
-                    :disabled="!player.hasMemorySpace" @click="takeSkipReward(selectedPreviewNode)">
+                    :disabled="!player.hasMemorySpace || selectedPreviewNode.visited" @click="takeSkipReward(selectedPreviewNode)">
                     Accept Reward
                 </button>
                 <button

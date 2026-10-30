@@ -19,6 +19,7 @@ export interface WorldNode {
   type: "start" | "level" | "skip" | "shop" | "boss" | "hybrid compiler" | "sacrificial altar" | "duplicator" | "workbench";
   next: string[];            // IDs of next nodes
   position: { x: number; y: number }; // For layout on screen
+  row?: number;
   company: Company;
   difficultyMod: number;
   reward: number;
@@ -29,6 +30,19 @@ export interface WorldNode {
   resolved?: boolean;          // skip nodes only
   visible?: boolean;
   bossName?: string;
+}
+
+export function getNodeRow(node?: WorldNode | null): number {
+  if (!node) return 0;
+  if (typeof node.row === "number") return node.row;
+  if (node.id === "start" || node.type === "start") return 0;
+  if (node.id === "boss" || node.type === "boss") return 3;
+  if (node.id === "shop") return 2;
+  if (node.id.startsWith("path_")) {
+    if (node.id.endsWith("_2")) return 2;
+    return 1;
+  }
+  return 0;
 }
 
 export interface WorldMap {
@@ -568,6 +582,7 @@ export function generateWorld(
 
 
   for (const node of Object.values(nodes)) {
+    node.row = getNodeRow(node);
     if (!node.hiddenUntilVisited) {
       node.visible = true;
     } else {

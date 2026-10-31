@@ -2637,8 +2637,8 @@ class Bug extends Piece {
 
 class Cockroach extends Piece {
   static iconID = 88;
-  static name = "Cockroach";
-  static description = "A faster, tougher bug. Can bite to damage and spread disease";
+  static name = "Roach";
+  static description = "A faster, tougher beetle. Can bite to damage and spread disease";
   static unicode = "U+1FAB3";
   static color = "#e09f79ff";
   static rarity = 4;
@@ -3377,7 +3377,7 @@ class Lighthouse extends Piece {
           t.statuses.hidden = false;
           t.statuses.exposed = true;
         }
-      } else if(t.id !== this.id){
+      } else if (t.id !== this.id) {
         t.addTempModifier({ range: 1 });
       }
     }
@@ -3610,7 +3610,7 @@ class Rex extends Piece {
     this.targetType = 'piece';
   }
   async special(targetPiece: Piece): Promise<void> {
-    if (targetPiece.hasMoved){//(targetPiece.movesRemaining < targetPiece.getStat('moves')) {
+    if (targetPiece.hasMoved) {//(targetPiece.movesRemaining < targetPiece.getStat('moves')) {
       await targetPiece.takeDamage(this.getStat('attack') * 2);
     } else {
       await targetPiece.takeDamage(this.getStat('attack'));

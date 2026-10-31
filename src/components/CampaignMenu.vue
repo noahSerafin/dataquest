@@ -18,7 +18,7 @@ const showIconPicker = ref(false);
 const showDeletePrompt = ref(false);
 const selectedSlotIndex = ref<number>(-1);
 const slotToDelete = ref<number>(-1);
-const availableIcons = [460, 461, 462, 463, 511, 512, 513, 517, 473, 459, 464, 505];
+const availableIcons = [460, 461, 462, 463,513, 517,  459, 505, 473,  511, 512, 464];
 
 onMounted(() => {
   slots.value = StorageManager.getCampaignSlots();

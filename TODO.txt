@@ -21,6 +21,8 @@ player gets a 'virus' on this sector? HAL starts adding bosses to levels
 sector 6
 player is definitely overpowered at this point - make every node a boss node of some kind.
 
+Sector 7? - bosses only
+
 FINALISE
 make selcting "I've done this before" disable future message popups in sector 0 completely
 boss description needs the highest z-index
@@ -53,6 +55,7 @@ BUGS -
 -open for too long chugs performance, maybe the shader causing this?
 -leaving during a shop shows a different set of items
 -refresh BEFORE returning to main menu on loss
+-accordion appearing for fortran?
 hybrid suffix needs to go to lowercase
 offroader dashed line to your row horizontally
 damage mult break workbench
@@ -64,20 +67,20 @@ charmed watchman still exposes enemies (in general the check is only if team mat
 next sector needs to close shop
 workbench + compiler + duplicator do not preserve damagemult
 
-NICE TO HAVE
+NICE TO HAVE - VISUAL IMPROVEMENTS
 You win screen more obvious, change button to endless mode here
 improve UI and button styles
 remember what infamy you last started on with an OS
 differentiate P/I/A top left better, shapes? move to bottom right?
-nerf hybrids - average rounded up? +1?
+?nerf hybrids - average rounded up? +1?
+
 get dracula to attack friendlies
 get dataworm to keep using special when defence is too high?
 
 remove x(close)button on skip preview
 
-!attacking hidden pieces should reveal them while they are taking damage - or just display dmg numbers?
+?attacking hidden pieces should reveal them while they are taking damage - or just display dmg numbers?
 Normalise all food, can be used on program in or out of node? Sandwich +1 blessing +2
-make cane only effect traps by head positions - done? test
 
 SPECIAL nodes
 variant maker?

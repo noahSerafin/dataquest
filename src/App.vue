@@ -6,7 +6,7 @@ import Board from './components/Board.vue';
 import Leveleditor from './components/Leveleditor.vue';
 import { castled, level1Levels } from './level1Levels';
 import { Player } from "./Player";
-import { Item, allItems } from "./Items";
+import { Item, Voucher, allItems } from "./Items";
 import type { ItemConstructor } from "./Items";
 import { allAdmins } from "./AdminPrograms";
 import { Admin } from "./AdminPrograms";
@@ -234,28 +234,24 @@ const testShield = {
   cost: 1,
   immunities: {}
 }
-/*const test = {
-  iconID: 30,
+
+const testSling = {
+  iconID: 8,
   id: "274ec329-8c17-4265-8c12-e9a28bcf0112",
-  name: "Lance",
-  description: "A test piece",
-  unicode: "U+1F3A0",
-  maxSize: 3,
+  name: "Sling",
+  description: "A basic ranged piece",
+  unicode: "U+1F94F",
+  maxSize: 2,
   moves: 2,
-  range: 3,
-  attack: 2,
+  range: 2,
+  attack: 1,
   defence: 0,
   rarity: 1,
-  color: "#2fc5ebff",
+  color: "#019700",
   isPlaced: false,
   cost: 1,
-  hybridName: 'LanceHog',
-  extraUnicode: 'U+1F994',
-  hybridIconID: 39,
   immunities: {}
 }
-//const testVoucher = new Voucher();
-*/
 
 const swapDisplay = () => {
   displayEditor.value = !displayEditor.value;//add map later, make shop an overlay?
@@ -270,8 +266,8 @@ const player = ref(new Player(
   0, // starting money
   5,  // memory limit
   4, //admin slots
-  [], // no items yet
-  [testSword, testShield], // starting pieces
+  [new Voucher()], // no items yet
+  [testSword, testShield, testSling], // starting pieces
   [],//no admins yet
   0,//security level
   5,
@@ -341,7 +337,7 @@ function startCampaign(slotIndex: number, iconID: number) {
   
   player.value = new Player(
     'U+1F60A',
-    0, 5, 4, [], [testSword, testShield], [], 0, 5, 0, 0, 0, 0, stake.value
+    0, 5, 4, [new Voucher()], [testSword, testShield, testSling], [], 0, 5, 0, 0, 0, 0, stake.value
   );
   player.value.difficulty = 0; // campaign starts at difficulty 0
   
@@ -495,12 +491,12 @@ function incrementMapProgress(row?: number) {
 }
 
 function openMainMenu() {
+  window.location.reload();
   showBoard.value = false;
   showSummary.value = false;
   currentAppMode.value = 'mainMenu';
   //sessionStorage.clear();
   //localStorage.clear(); // only if you aren't using it yet
-  window.location.reload();
 }
 const showFastControls = ref<boolean>(true);
 function toggleFastControls() {
@@ -592,6 +588,27 @@ function handleApplyItem(payload: { item: Item, id: string }) {
 
   if (item.targetType === "shopItem" && item.name === 'Voucher') {
     console.log('using voucher on ', shopTarget.value?.name)
+    if(currentAppMode.value === 'campaign'){
+      if (shopTarget.value?.id) {
+      const id = shopTarget.value.id;
+      const shopBP = campaignBlueprints.value.find(p => p.id === id);
+      const shopItem = shopItems.value.find(i => i.id === id);
+      const shopAdmin = campaignAdmins.value.find(a => a.id === id);
+      if (shopBP) {
+        item.apply(shopBP, 1)
+        player.value.removeItem(item)
+      }
+      if (shopItem) {
+        item.apply(shopItem, 1)
+        player.value.removeItem(item)
+      }
+      if (shopAdmin) {
+        item.apply(shopAdmin, 1)
+        player.value.removeItem(item)
+      }
+    }
+      
+    }
     if (shopTarget.value?.id) {
       const id = shopTarget.value.id;
       const shopBp = shopBlueprints.value.find(p => p.id === id);
@@ -786,8 +803,8 @@ function trackCampaignShopPurchase(itemName: string) {
 async function buyItem(item: Item) {
   shopItems.value = shopItems.value.filter(i => i.id !== item.id);
   campaignItems.value = campaignItems.value.filter(i => i.id !== item.id);
-  campaignAdmins.value = campaignAdmins.value.filter(i => i.id !== item.id);
-  trackCampaignShopPurchase(item.name);
+    campaignAdmins.value = campaignAdmins.value.filter(i => i.id !== item.id);
+    trackCampaignShopPurchase(item.name);
   player.value.spend(item.cost);
   if (player.value.hasAdmin('Piggy')) {
     player.value.money += 2;

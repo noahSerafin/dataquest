@@ -580,7 +580,7 @@ const Explorer: OS = {
     items: [],
     admins: [new OffRoader, new AdminMap, new Compass],
     lives: 1,
-    description: "Gets around the overworld with ease. Start with some pocket money."
+    description: "Gets around the overworld with ease, but vunerable with only 1 life. Start with some pocket money."
 }
 
 const Satoshi: OS = {

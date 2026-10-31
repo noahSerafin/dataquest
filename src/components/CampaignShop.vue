@@ -100,6 +100,13 @@ const canStealTargetPiece = (() => {
 const type = ((item: Item) => {
   return ((item instanceof Admin) ? "admin" : "consumable")
 });
+
+function checkPlayerAlreadyOwns(admin: Admin) {
+  if (admin instanceof Admin) {
+    return props.player.hasAdmin(admin.name);
+  }
+  return false;
+}
 </script>
 
 <template>
@@ -164,6 +171,7 @@ const type = ((item: Item) => {
           @steal="handleBuyItem" 
           @select="openShopController"
           @deselect="deselect"
+          :disabled="checkPlayerAlreadyOwns(admin)"
         />
       </li>
     </div>

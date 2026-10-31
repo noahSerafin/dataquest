@@ -262,7 +262,7 @@ body,
   pointer-events: none;
 }
 
-#overlay-root > * {
+#overlay-root>* {
   pointer-events: auto;
 }
 
@@ -283,7 +283,7 @@ body,
 }
 
 .text-red {
-  color: #b80000;
+  color: #f32323;
 }
 
 .text-green {

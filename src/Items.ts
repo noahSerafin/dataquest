@@ -483,7 +483,7 @@ export class Voucher extends Item<Item> {
 
 
     static name = "Voucher";
-    static description = "Makes one item in the shop free";
+    static description = "Makes a selected item in the shop free";
     static unicode = "U+1F9FE";
     static color = "#ffd000ff";
     static rarity = 1;

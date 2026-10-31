@@ -23,7 +23,7 @@ export const tutorialDialogue = {
       "id": "node_2",
       "elementID": "node_g41ksufcp",
       "speaker": "Al",
-      "text": "The ciruit represents a map of available nodes. Here's your current position in this circuit. The blue wires indicate other nodes that can travel to",
+      "text": "The ciruit represents a map of available nodes. Here's your current position in this circuit. The blue wires indicate other nodes that you can travel to",
       "choices": [
         {
           "text": "Got it.",
@@ -107,7 +107,7 @@ export const tutorialDialogue = {
       "id": "node_17",
       "speaker": "Al",
       "elementID": "274ec329-8c17-4265-8c12-e9a28bcf0110",
-      "text": "Your Shield has 0 attack, so won't be very effective against that guard. I'd reccomend using the Knife.",
+      "text": "Your Shield has 0 <span class='text-red'>attack</span>, so won't be very effective against that guard. And your sling does 1 damage, which also won't be able to break the guard's <span class='text-cyan'>defence</span>. I'd reccomend using the Knife.",
     },
     "node_1705": {
       "id": "node_17",
@@ -220,7 +220,7 @@ export const tutorialDialogue = {
     "s0node_2": {
       "id": "s0node_2",
       "speaker": "Hamuel",
-      "text": "Al's clearly been slacking on the training! Admins are programs that run passively in the background, they take up admin slots instead of inventory memory. You can currently hold up to 4. Depending on what triggers them, you will get different bonuses. Some might modify you programs when you load them, some might generate extra money from completed nodes, and some might drastically change the way programs behave.",
+      "text": "Admins are programs that run passively in the background, they take up admin slots instead of inventory memory. You can currently hold up to 4. Depending on what triggers them, you will get different bonuses. Some might modify you programs when you load them, some might generate extra money from completed nodes, and some might drastically change the way programs behave.",
       "choices": [
         {
           "text": "What about consumables?",

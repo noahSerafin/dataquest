@@ -501,7 +501,7 @@ export class CreditCard extends Admin {
   //shop lower limit change
 }
 
-class Needle extends Admin {
+export class Needle extends Admin {
   static iconID = 387;
   static name = "Needle";
   static description = "Winning a round with one program placed boosts all it's stats by one permanently";
@@ -521,7 +521,7 @@ class Needle extends Admin {
       if (playerPieces.length === 1) {//we find by activepieces, not by no. of placed bps
         //needs to interact with the blueprint
         const bpID = playerPieces[0].id
-        const idx = player.programs.findIndex(p => p.id === bpID) ? player.programs.findIndex(p => p.id === bpID) : player.programs.findIndex(p => p.id === bpID.slice(0, -5));
+        const idx = player.programs.findIndex(p => p.id === bpID) !== -1 ? player.programs.findIndex(p => p.id === bpID) : player.programs.findIndex(p => p.id === bpID.slice(0, -5));
         if (idx !== -1) {
           this.isTriggering = true;
           setTimeout(() => this.isTriggering = false, 500);
@@ -3759,7 +3759,7 @@ export class Booty extends Admin {
 export class Cane extends Admin {
   static iconID = 225;
   static name = "Cane";
-  static description = "Triggers all enemy traps within 1 range of your programs' heads on the end of your turn";
+  static description = "Unhides enemies and triggers all enemy traps within 1 range of your programs' heads on the end of your turn";
   static unicode = "U+1F9AF";
   static color = "rgba(235, 235, 235, 1)";
   static rarity = 1;
@@ -3771,14 +3771,17 @@ export class Cane extends Admin {
     for (const p of activePieces) {
       if (p.team === 'player') {
         for (const enemy of activePieces) {
-          if (enemy.team === 'enemy' && enemy.targetType === 'trapPiece') {
+          if (enemy.team === 'enemy') {
             const isAdjacent = enemy.tiles.some(tt =>
               Math.abs(p.headPosition.x - tt.x) + Math.abs(p.headPosition.y - tt.y) <= 1
             )
             //p.tiles.some(st =>//change to headposition
             //);
             if (isAdjacent) {
-              trapsToTrigger.add(enemy);
+              enemy.statuses.hidden = false;
+              if (enemy.targetType === 'trapPiece') {
+                trapsToTrigger.add(enemy);
+              }
             }
           }
         }

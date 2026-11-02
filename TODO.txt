@@ -97,6 +97,6 @@ POLISHING
 fix BUGS
 finish styles
 hand holdy rogue tutorial
-infamy pickers in memory
 debug mode hotkey
+balancing around secret bosses (an end to 'endless'?)
 ads

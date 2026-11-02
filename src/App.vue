@@ -392,6 +392,7 @@ function loadCampaignGame(slotIndex: number, data: any) {
   bossAdmins.value = [];
   playerSpawns.value = [];
   originalSpawns.value = [];
+  originalTiles.value = [];
 
   nextTick(() => {
     messagingSystemRef.value?.loadState(data.messagingState || {});
@@ -978,6 +979,7 @@ const renewBlueprints = async () => {
 const lastTurnPieces = ref<InstanceType<typeof Piece>[]>([]);//player
 const originalPieces = ref<InstanceType<typeof Piece>[]>([]);//player
 const originalSpawns = ref<Coordinate[]>([]);//player
+const originalTiles = ref<Coordinate[]>([]);
 const originalPlayerPieceIds = ref<string[]>([]);
 const currentCompany = ref<Company>({ iconID: 499, name: 'Player', abbr: '', unicode: player.value.osunicode || '', pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "rgb(156, 201, 84)" });
 
@@ -1003,6 +1005,7 @@ async function selectLevel(newLevel: Level, company: Company, difficultyMod: num
   graveyard.value = [];
   const clonedLevel = JSON.parse(JSON.stringify(newLevel));
   level.value = clonedLevel;
+  originalTiles.value = clonedLevel.tiles.map((t: Coordinate) => ({ ...t }));
   player.value.nextReward = lReward;
   const newPieces = rehydratePieces(clonedLevel.pieces);
   player.value.extraDifficulty = difficultyMod;
@@ -1128,6 +1131,9 @@ async function reloadLevel() {
     if (admin.onRoundEnd) admin.onRoundEnd(bossAdmins.value);
   };
   renewBlueprints();
+  if (originalTiles.value.length > 0) {
+    level.value.tiles = originalTiles.value.map(t => ({ ...t }));
+  }
   activePieces.value = originalPieces.value.map(p => p.clone());
   originalPlayerPieceIds.value = [];
   //if piece has no tiles, use headposition
@@ -1217,6 +1223,7 @@ function saveGameState() {
     bossAdmins: bossAdmins.value,
     playerSpawns: playerSpawns.value,
     originalSpawns: originalSpawns.value,
+    originalTiles: originalTiles.value,
     level: level.value
   };
 
@@ -1313,6 +1320,7 @@ function loadSavedGame() {
     playerSpawns.value = state.boardState.playerSpawns || [];
     originalSpawns.value = state.boardState.originalSpawns || [];
     level.value = state.boardState.level || castled;
+    originalTiles.value = state.boardState.originalTiles || level.value.tiles.map((t: Coordinate) => ({ ...t }));
 
     activePieces.value.forEach(p => p.removeCallback = removePiece);
     originalPieces.value.forEach(p => p.removeCallback = removePiece);
@@ -1524,6 +1532,7 @@ onMounted(() => {
   activePieces.value = processedPieces;
   playerSpawns.value = playerSpawnCoords;
   originalSpawns.value = playerSpawnCoords.map(s => ({ ...s }));
+  originalTiles.value = level.value.tiles.map(t => ({ ...t }));
   refreshShop(true)//handle in round, or don't for crystal ball
 });
 
@@ -2205,6 +2214,7 @@ const endTurn = async () => {
 const handleExport = (levelData: any) => {
   level.value.tiles = levelData.tiles;
   level.value.pieces = levelData.pieces;
+  originalTiles.value = levelData.tiles.map((t: Coordinate) => ({ ...t }));
   // Hydrate pieces once
   const initPieces = rehydratePieces(level.value.pieces);
   activePieces.value = initPieces; // processSpawnPoints removed, assume pre-processed or markers handled in rehydrate

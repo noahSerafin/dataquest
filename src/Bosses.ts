@@ -1665,19 +1665,26 @@ class Lockdown extends Admin {//to test
         const playerSpawnPieces = activePieces.filter(p => p.team === 'player' && p.name === 'Spawn');
         const unoccupiedTiles = board.filter(t => !activePieces.some(p => p.tiles.some(pt => pt.x === t.x && pt.y === t.y)));
 
-        //find unoccupied tiles next to player headpositions
+        //find unoccupied tiles next to player spawn headpositions
         for (let i = 0; i < playerSpawnPieces.length; i++) {
-            if (playerSpawnPieces.length === 0) break;
-            const nextToPlayerHeads: Coordinate[] = [];
-            nextToPlayerHeads.push({ x: playerSpawnPieces[i].headPosition.x + 1, y: playerSpawnPieces[i].headPosition.y })
-            nextToPlayerHeads.push({ x: playerSpawnPieces[i].headPosition.x, y: playerSpawnPieces[i].headPosition.y + 1 })
-            nextToPlayerHeads.push({ x: playerSpawnPieces[i].headPosition.x - 1, y: playerSpawnPieces[i].headPosition.y })
-            nextToPlayerHeads.push({ x: playerSpawnPieces[i].headPosition.x, y: playerSpawnPieces[i].headPosition.y - 1 })
-            const candidates = nextToPlayerHeads.filter(element => unoccupiedTiles.includes(element));//coords are {x: number, y: number} , will .filter work??
-            if (candidates.length === 0) break;
-            new Blackwall(Random.pick(candidates), 'enemy', playerSpawnPieces[i].removeCallback, crypto.randomUUID());
+            const head = playerSpawnPieces[i].headPosition;
+            const nextToPlayerHeads: Coordinate[] = [
+                { x: head.x + 1, y: head.y },
+                { x: head.x, y: head.y + 1 },
+                { x: head.x - 1, y: head.y },
+                { x: head.x, y: head.y - 1 },
+            ];
+            const candidates = nextToPlayerHeads.filter(el =>
+                unoccupiedTiles.some(ut => ut.x === el.x && ut.y === el.y)
+            );
+            if (candidates.length === 0) continue;
+            const chosen = Random.pick(candidates);
+            const bw = new Blackwall(chosen, 'enemy', activePieces[0].removeCallback ?? playerSpawnPieces[i].removeCallback, crypto.randomUUID());
+            activePieces.push(bw);
+            // Mark tile as occupied so subsequent spawns don't place on the same tile
+            const idx = unoccupiedTiles.findIndex(ut => ut.x === chosen.x && ut.y === chosen.y);
+            if (idx !== -1) unoccupiedTiles.splice(idx, 1);
         }
-
     }
 }
 
@@ -1725,7 +1732,7 @@ class Variantr extends Admin {//to test
         for (let i = 0; i < enemyPieces.length; i++) {
             if (enemyPieces.length === 0) break;
             const variant = rollVariant(0.1, 10);
-            if(variant){
+            if (variant) {
                 applyVariant(enemyPieces[i], variant);
             }
         }
@@ -1804,12 +1811,13 @@ class Zero extends Admin {//to test
             nextToEnemyHeads.push({ x: enemyPieces[i].headPosition.x, y: enemyPieces[i].headPosition.y - 1 })
         }
 
-        const candidates = nextToEnemyHeads.filter(element => unoccupiedTiles.includes(element));//coords are {x: number, y: number} , will .filter work??
-
+        const candidates = nextToEnemyHeads.filter(el =>
+            unoccupiedTiles.some(ut => ut.x === el.x && ut.y === el.y)
+        );
         const newSpawns: Coordinate[] = [];
         for (let i = 0; i < playerSpawns.length; i++) {
             if (candidates.length === 0) break;
-            const randIdx = Random.floor(unoccupiedTiles.length);
+            const randIdx = Random.floor(candidates.length);
             newSpawns.push(candidates[randIdx]);
             candidates.splice(randIdx, 1);
         }

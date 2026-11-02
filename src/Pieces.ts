@@ -2014,7 +2014,7 @@ export class Pawn extends Piece {
     promoted.damageMult = targetPiece.damageMult;
     promoted.immunities = targetPiece.immunities;
     promoted.version = targetPiece.version;
-    if(targetPiece.variantName){
+    if (targetPiece.variantName) {
       promoted.variantName = targetPiece.variantName;
     }
     if (targetPiece.hybridName) {
@@ -2852,9 +2852,15 @@ class Ghost extends Piece {
     if (!this.statuses.exposed) {
       this.statuses.hidden = true;
     }
-    //steal hopper function???
     this.actions--
-  }
+  }/*
+  async special({ target, activePieces: _activePieces }: { target: Coordinate, activePieces: Piece[] }): Promise<void> {
+    this.moveTo(target);
+    if (!this.statuses.exposed) {
+      this.statuses.hidden = true;
+    }
+    this.actions--
+  }*/
 }
 
 
@@ -4827,16 +4833,22 @@ class Pentagram extends Piece {
 export class Blackwall extends Piece {
   static iconID = 442;//or empty?
   static name = "Blackwall";
-  static description = "A high defence, high movement program that loads hidden"
+  static description = "A high defence, high movement program that loads hidden, and can hide itself"
   static unicode = "U+2B1B";
   static color = "rgb(126, 0, 0)";
   static rarity = 7;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
     super(Blackwall.name, Blackwall.description, Blackwall.unicode, 16, 4, 0, 0, 10, Blackwall.color, headPosition, [headPosition], team, Blackwall.rarity, removeCallback, id)
     this.statuses.hidden = true;
+    this.specialName = 'Mask';
+    this.targetType = 'self';
   }
-  /*async special({ target, activePieces }: { target: Coordinate, activePieces: Piece[] }): Promise<void> {
-  }*/
+  async special(_target: Coordinate): Promise<void> {
+    if (!this.statuses.exposed) {
+      this.statuses.hidden = true;
+    }
+    this.actions--
+  }
 }
 
 export const allPieces = [Ant, Banana, Bee, Egg, Knife, Potato, Rat, Shield, Sling, Snail, TP, Acorn, Aegis, Banner, Beetle, Bow, Bull, Chick, Chicken, Dagger, Decoy, Dog, Fence, Frond, Doctor, Gecko, Guard, Hedgehog, Jellyfish, Larva, Lance, Tree, Flute, Rooster, Saw, Snake, Tar, Germ, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Buffalo, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, Hopper, LabRat, LadyBeetle, Magnet, Medic, Mosquito, Ninja, Octopus, Officer, Paladin, Wasp, Pawn, Peacock, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Vulture, Alien, Arms, Axe, Bison, Cannon, Lightning, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Kite, Leopard, Lighthouse, Mammoth, Mine, Nerf, Oil, Palm, Parrot, Poop, Puffer, Rabbit, Scarab, Shark, Soldier, Squid, Teargas, Tiger, Tradie, Bat, Wizard, Wolf, Zebra, Archdaemon, Recurve, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Firework, Gman, Giraffe, Hippo, Lion, Lovebomb, Harp, Orangutan, Paragon, Pentagram, Rhino, Screwdriver, Shovel, Shrike, Snowman, Stopwatch, Tank, Coat, UFO, Zombie, Vampire, Greatshield, Bear, Helicopter, Gorilla, Lich, Dolls, Nuke, Oni, Sol, Sponge, Super, Rex, Unicorn]; //100 +2 (web, ink)

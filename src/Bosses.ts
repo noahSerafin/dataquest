@@ -2,7 +2,7 @@ import { Admin } from "./AdminPrograms";
 import { Blackwall, Piece, allPieces } from "./Pieces";
 import { Player } from "./Player";
 import type { Coordinate } from "./types";
-import { DIFFICULTY_RARITY } from "./constants";
+import { DIFFICULTY_RARITY, PIECE_VARIANTS } from "./constants";
 import { applyVariant, getRandomUnoccupiedTile, rollVariant } from "./helperFunctions";
 import { Random } from "./Random";
 
@@ -1720,7 +1720,7 @@ class Variantr extends Admin {//to test
     static iconID = 547;
     static rarity = 7;
     static name = "Rainbow Coalition";
-    static description = "Every enemy program is a variant";
+    static description = "Every enemy program is Holographic";
     static unicode = "U+1F4CA";//U+1F4DC //abacus??
     static color = "rgb(255, 196, 0)";
     constructor() {
@@ -1728,12 +1728,15 @@ class Variantr extends Admin {//to test
     }
 
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-        const enemyPieces = activePieces.filter(p => p.team === 'enemy');
-        for (let i = 0; i < enemyPieces.length; i++) {
-            if (enemyPieces.length === 0) break;
-            const variant = rollVariant(0.1, 10);
-            if (variant) {
-                applyVariant(enemyPieces[i], variant);
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
+        for (const piece of [...activePieces]) {
+            if (piece.team === 'enemy') {
+                const variant = PIECE_VARIANTS[21]
+                const idx = activePieces.indexOf(piece);
+                if (variant) {
+                    applyVariant(activePieces[idx], variant);
+                }
             }
         }
     }

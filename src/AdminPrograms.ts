@@ -324,6 +324,7 @@ class Heartbreaker extends Admin {
     setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].immunities.charmed = true;
+    activePieces[idx].version += 0.1;
   }
 }
 
@@ -519,15 +520,17 @@ class Needle extends Admin {
       }
       if (playerPieces.length === 1) {//we find by activepieces, not by no. of placed bps
         //needs to interact with the blueprint
-        this.isTriggering = true;
-        setTimeout(() => this.isTriggering = false, 500);
         const bpID = playerPieces[0].id
-        const idx = player.programs.findIndex(p => p.id === bpID);
-        player.programs[idx].maxSize += 1;
-        player.programs[idx].moves += 1;
-        player.programs[idx].attack += 1;
-        player.programs[idx].range += 1;
-        player.programs[idx].defence += 1;
+        const idx = player.programs.findIndex(p => p.id === bpID) ? player.programs.findIndex(p => p.id === bpID) : player.programs.findIndex(p => p.id === bpID.slice(0, -5));
+        if (idx !== -1) {
+          this.isTriggering = true;
+          setTimeout(() => this.isTriggering = false, 500);
+          player.programs[idx].maxSize += 1;
+          player.programs[idx].moves += 1;
+          player.programs[idx].attack += 1;
+          player.programs[idx].range += 1;
+          player.programs[idx].defence += 1;
+        }
       }
     }
   }
@@ -603,6 +606,7 @@ class Aesculapius extends Admin {
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].immunities.poisoned = true
     activePieces[idx].immunities.diseased = true
+    activePieces[idx].version += 0.2;
   }
 }
 
@@ -1398,6 +1402,7 @@ class FireEngine extends Admin {
     setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].immunities.burning = true
+    activePieces[idx].version += 0.1;
   }
 }
 
@@ -1511,7 +1516,10 @@ export class Hermes extends Admin {
       if (p.team === 'player' && p.name !== 'Spawn') {
         p.addModifier({ moves: 1 })
         p.movesRemaining += 1;
-        p.immunities.slowed = true;
+        if (!p.immunities.slowed) {
+          p.immunities.slowed = true;
+          p.version += 0.1;
+        }
       }
     }
   }
@@ -1533,6 +1541,7 @@ class Scarf extends Admin {
     setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].immunities.frozen = true;
+    activePieces[idx].version += 0.1;
   }
 }
 
@@ -1579,6 +1588,7 @@ class FakeID extends Admin {
     setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].immunities.exposed = true;
+    activePieces[idx].version += 0.1;
   }
 }
 
@@ -1597,6 +1607,7 @@ class Shades extends Admin {
     setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].immunities.blinded = true;
+    activePieces[idx].version += 0.1;
   }
 }
 
@@ -2453,7 +2464,7 @@ class Camp extends Admin {
     this.count++;
     for (const piece of activePieces) {
       if (piece.team === 'player' && piece.name !== 'Spawn' && !piece.statuses.hidden) {
-        if (!piece.hasMoved){//(piece.movesRemaining === piece.getStat('moves') || piece.statuses.frozen) 
+        if (!piece.hasMoved) {//(piece.movesRemaining === piece.getStat('moves') || piece.statuses.frozen) 
           if (this.count === 2) {
             piece.addModifier({ range: 1 });//encourages camping, seemingly only temporary. If so change to attack
             //piece.addTempModifier({defence : 1})
@@ -2691,10 +2702,10 @@ class School extends Admin {
     }
   }
   onRoundEnd() {
-    if(this.count >= 7){
+    if (this.count >= 7) {
       this.disabled = true;
     }
-  } 
+  }
 }
 
 class Dharma extends Admin {
@@ -2749,6 +2760,7 @@ class Smoker extends Admin {
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({ maxSize: -1 });
     activePieces[idx].immunities.confused = true;
+    activePieces[idx].version += 0.1;
   }
 }
 
@@ -2878,15 +2890,42 @@ class Cards extends Admin {
         defence: defenceMod + blessingBonus
       });
 
-      if (burnImmunity) activePieces[idx].immunities.burning = true;
-      if (freezeImmunity) activePieces[idx].immunities.frozen = true;
-      if (slowImmunity) activePieces[idx].immunities.slowed = true;
-      if (diseaseImmunity) activePieces[idx].immunities.diseased = true;
-      if (poisonImmunity) activePieces[idx].immunities.poisoned = true;
-      if (blindImmunity) activePieces[idx].immunities.blinded = true;
-      if (charmImmunity) activePieces[idx].immunities.charmed = true;
-      if (confuseImmunity) activePieces[idx].immunities.confused = true;
-      if (exposeImmunity) activePieces[idx].immunities.exposed = true;
+      if (burnImmunity) {
+        activePieces[idx].immunities.burning = true;
+        activePieces[idx].version += 0.1;
+      }
+      if (freezeImmunity) {
+        activePieces[idx].immunities.frozen = true;
+        activePieces[idx].version += 0.1;
+      }
+      if (slowImmunity) {
+        activePieces[idx].immunities.slowed = true;
+        activePieces[idx].version += 0.1;
+      }
+      if (diseaseImmunity) {
+        activePieces[idx].immunities.diseased = true;
+        activePieces[idx].version += 0.1;
+      }
+      if (poisonImmunity) {
+        activePieces[idx].immunities.poisoned = true;
+        activePieces[idx].version += 0.1;
+      }
+      if (blindImmunity) {
+        activePieces[idx].immunities.blinded = true;
+        activePieces[idx].version += 0.1;
+      }
+      if (charmImmunity) {
+        activePieces[idx].immunities.charmed = true;
+        activePieces[idx].version += 0.1;
+      }
+      if (confuseImmunity) {
+        activePieces[idx].immunities.confused = true;
+        activePieces[idx].version += 0.1;
+      }
+      if (exposeImmunity) {
+        activePieces[idx].immunities.exposed = true;
+        activePieces[idx].version += 0.1;
+      }
     }
   }
 }
@@ -3052,8 +3091,6 @@ class Coin extends Admin {
 
 class Monarch extends Admin {
   static iconID = 373;
-
-
   static name = "Monarch";
   static description = "Charm a random enemy at the start of a round";
   static unicode = "U+1F98B";
@@ -3231,7 +3268,7 @@ class Chime extends Admin {
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces) {
-      if (p.hasMoved){//(p.team === 'enemy' && p.movesRemaining < p.getStat('moves')) {
+      if (p.hasMoved) {//(p.team === 'enemy' && p.movesRemaining < p.getStat('moves')) {
         p.addTempModifier({ defence: -1 });
         this.isTriggering = true;
         setTimeout(() => this.isTriggering = false, 500);
@@ -3402,10 +3439,10 @@ class Nose extends Admin {
     for (const p of activePieces) {
       if (p.team === 'enemy' && p.movesRemaining < p.getStat('moves')) {
         //if (!p.immunities.exposed) {
-          p.statuses.hidden = false;
-          //p.statuses.exposed = true;
-          this.isTriggering = true;
-          setTimeout(() => this.isTriggering = false, 500);
+        p.statuses.hidden = false;
+        //p.statuses.exposed = true;
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
         //}
       }
     };
@@ -3585,7 +3622,7 @@ class Meditation extends Admin {
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const piece of activePieces) {
       if (piece.team === 'player' && piece.name !== 'Spawn' && !piece.statuses.hidden) {
-        if (!piece.hasMoved){//(piece.movesRemaining === piece.getStat('moves')) {
+        if (!piece.hasMoved) {//(piece.movesRemaining === piece.getStat('moves')) {
           piece.statuses.zen = true;
           this.isTriggering = true;
           setTimeout(() => this.isTriggering = false, 500);

@@ -387,9 +387,7 @@ export class Blessing extends Item<PieceBlueprint> {
 
 export class Supplement extends Item<Piece> {
     static iconID = 207;
-
-
-    static name = "Supplement";
+    static name = "Supplements";
     static description = "Increases all a placed program's stats by 1 for one round";
     static unicode = "U+1F48A";
     static color = "#6e0c8bff";

@@ -508,7 +508,7 @@ class Dagger extends Piece {
 class Paladin extends Piece {
   static iconID = 66;
   static name = "Paladin";
-  static description = "A defensive piece that can share it's defence with another for one turn";
+  static description = "A defensive program that can share it's defence with another for one turn";
   static unicode = "U+1F540";
   static color = "rgb(84, 160, 190)";
   static rarity = 3;
@@ -532,7 +532,7 @@ class Paladin extends Piece {
 class Arms extends Piece {
   static iconID = 83;
   static name = "Arms";
-  static description = "A stronger attacking piece that can attack all enemies in range";
+  static description = "A stronger attacking pprogram that can attack all enemies in range";
   static unicode = "U+2694";
   static color = "#1b84caff";
   static rarity = 4;
@@ -554,19 +554,26 @@ class Arms extends Piece {
 class Shield extends Piece {
   static iconID = 7;
   static name = "Shield";
-  static description = "A basic defensive piece";//can share defence?
+  static description = "A basic defensive program that can add empty spaces to it's own tileset";//can share defence?
   static unicode = "U+1F6E1";
   static color = "#2fa7ca";
   static rarity = 1;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
-    super(Shield.name, Shield.description, Shield.unicode, 3, 2, 0, 0, 1, Shield.color, headPosition, [headPosition], team, Shield.rarity, removeCallback, id)
+    super(Shield.name, Shield.description, Shield.unicode, 3, 1, 1, 0, 1, Shield.color, headPosition, [headPosition], team, Shield.rarity, removeCallback, id)
+    this.specialName = 'Blockade'
+    this.targetType = 'space'
+  }
+
+  async special({ target, activePieces: _activePieces, }: { target: Coordinate; activePieces: Piece[]; }): Promise<void> {
+    this.tiles.push(target);
+    this.actions--
   }
 }
 
 class Aegis extends Piece {
   static iconID = 12;
   static name = "Aegis";
-  static description = "An advanced defensive piece that can use it's special move to retaliate against attacks";//damaging special? buckler for parry?
+  static description = "An advanced defensive program that can use it's special move to retaliate against attacks";//damaging special? buckler for parry?
   static unicode = "U+26FB";
   static color = "#06789bff";
   static rarity = 2;
@@ -970,7 +977,7 @@ class Mole extends Piece {//unfinished - test negative
 class Lance extends Piece {
   static iconID = 30;
   static name = "Lance";
-  static description = "An attacking piece that can charge, damaging targets in a staight line and moving forward until stopped";
+  static description = "An attacking program that can charge, damaging targets in a staight line and moving forward until stopped";
   static unicode = "U+1F3A0";
   static color = "#27ced0";
   static rarity = 2;
@@ -1760,7 +1767,7 @@ class Nuke extends Piece {
 class Highwayman extends Piece {
   static iconID = 55;
   static name = "Highwayman";
-  static description = "A program that can generate money once from an enemy piece based on it's rarity, or steal money from the player (starting pieces only, will not work on summons)";
+  static description = "A program that can generate money once from an enemy program based on it's rarity, or steal money from the player (starting pieces only, will not work on summons)";
   static unicode = "U+1F9B9";
   static color = "#494646ff";
   static rarity = 3;
@@ -1968,7 +1975,7 @@ class Fencer extends Piece {
 export class Pawn extends Piece {
   static iconID = 68;
   static name = "Pawn";
-  static description = "A slow program that can be promoted into another piece in range";
+  static description = "A slow program that can be promoted into another program in range";
   static unicode = "U+265F";//♟️
   static color = "#131313ff";
   static rarity = 3;//4?
@@ -2003,9 +2010,13 @@ export class Pawn extends Piece {
     promoted.range = targetPiece.range;
     promoted.attack = targetPiece.attack;
     promoted.defence = targetPiece.defence;
-    promoted.statModifiers = this.statModifiers
-    promoted.damageMult = this.damageMult;
-    promoted.immunities = this.immunities;
+    promoted.statModifiers = targetPiece.statModifiers
+    promoted.damageMult = targetPiece.damageMult;
+    promoted.immunities = targetPiece.immunities;
+    promoted.version = targetPiece.version;
+    if(targetPiece.variantName){
+      promoted.variantName = targetPiece.variantName;
+    }
     if (targetPiece.hybridName) {
       promoted.hybridName = targetPiece.hybridName;
       promoted.description = targetPiece.description;
@@ -2069,7 +2080,7 @@ class Larva extends Piece {
 class Wasp extends Piece {
   static iconID = 67;
   static name = "Parasitic Wasp";
-  static description = "A program that can replace an enemy body piece with a larva";
+  static description = "A program that can replace an enemy body tile a larva";
   static unicode = "U+131A4";
   static color = "#b4b359ff";
   static rarity = 3;
@@ -2172,7 +2183,7 @@ class Rabbit extends Piece {
 class LabRat extends Piece {
   static iconID = 58;
   static name = "Lab Rat";
-  static description = "A small and fast program that can spread disease, reducing max size"
+  static description = "A small and fast program that can spread disease, reducing the target's max size"
   static unicode = "U+1F401";
   static color = "rgb(174, 255, 171)";
   static rarity = 3;
@@ -2524,7 +2535,7 @@ class Medic extends Piece {
 class Paragon extends Piece {
   static iconID = 138;
   static name = "Paragon";
-  static description = "A strong defensive piece that can remove any harmful statuses from a group of friendlies and give them a temporary +1 defence"//, and give them a temporary defence equal to its own.";//a group of friendlies"
+  static description = "A strong defensive program that can remove any harmful statuses from a group of friendlies and give them a temporary +1 defence"//, and give them a temporary defence equal to its own.";//a group of friendlies"
   static unicode = "U+26E8";
   static color = "rgb(14, 202, 177)";
   static rarity = 5;//3?
@@ -2645,6 +2656,8 @@ class Cockroach extends Piece {
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
     super(Cockroach.name, Cockroach.description, Cockroach.unicode, 2, 6, 1, 2, 2, Cockroach.color, headPosition, [headPosition], team, Cockroach.rarity, removeCallback, id)
     this.immunities.diseased = true;
+    this.specialName = 'Bite'
+    this.targetType = 'piece'
   }
   async special(targetPiece: Piece): Promise<void> {
     if (!targetPiece.immunities.diseased) {
@@ -3181,6 +3194,7 @@ class Vampire extends Piece {
   static rarity = 6;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
     super(Vampire.name, Vampire.description, Vampire.unicode, 4, 3, 1, 3, 1, Vampire.color, headPosition, [headPosition], team, Vampire.rarity, removeCallback, id)
+    this.hasNeutralSpecial = true;
     this.targetType = 'pieceAndPlace'
     this.specialName = 'Siphon'
   }
@@ -3214,7 +3228,7 @@ class Vampire extends Piece {
 class Centipede extends Piece {
   static iconID = 123;
   static name = "Centipede";
-  static description = "A large piece with a high attack that can bite inflicitng poision and damage";
+  static description = "A large program with a high attack that can bite inflicitng poision and damage";
   static unicode = "U+131A8";
   static color = "rgb(177, 115, 57)";
   static rarity = 5;

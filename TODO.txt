@@ -92,3 +92,11 @@ Quick match mode
 choose starting money and difficulty, open a shop then gen a level
 
 Don't limit infamy to completed with that operator
+
+POLISHING
+fix BUGS
+finish styles
+hand holdy rogue tutorial
+infamy pickers in memory
+debug mode hotkey
+ads

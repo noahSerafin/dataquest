@@ -77,11 +77,11 @@ const shield = {
     iconID: 7,
     id: crypto.randomUUID(),
     name: "Shield",
-    description: "A basic defensive program",
+    description: "A basic defensive program that can add empty spaces to it's own tileset",
     unicode: "U+1F6E1",
     maxSize: 3,
     moves: 1,
-    range: 0,
+    range: 1,
     attack: 0,
     defence: 1,
     rarity: 1,
@@ -455,11 +455,11 @@ const Apple: OS = {
     money: 10,
     memory: 7,
     adminSlots: 4,
-    blueprints: [ant, bee, shield],
-    items: [new Mushroom, new Iron],
+    blueprints: [ant, bee, shield, sling],
+    items: [],
     admins: [],
     lives: 3,
-    description: 'Limited admin functionality, but start with excess money and some consumable items.'
+    description: 'Limited admin functionality, but start with excess money.'
 }
 
 const Temple: OS = {

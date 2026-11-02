@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref, computed, onMounted, watchEffect } from 'vue';
+    import { ref, computed, onMounted, watch } from 'vue';
     import type { OS } from '../types';
     import { allOSes } from '../Operators';
     import { StorageManager } from '../StorageManager';
@@ -17,18 +17,24 @@
         (e: 'resumeGame'): void;
         (e: 'increaseStake'): void;
         (e: 'decreaseStake'): void;
+        (e: 'setStake', stake: number): void;
     }>();
 
+    const selectedIndex = ref<number>(0);
+
     function decreaseStake() {
+        const nextStake = Math.max(0, props.stake - 1);
+        StorageManager.setLastStakeForOS(allOSes[selectedIndex.value].unicode, nextStake);
         emit('decreaseStake');
     }
 
     function increaseStake() {
+        const nextStake = Math.min(maxStakeForSelectedOS.value, props.stake + 1);
+        StorageManager.setLastStakeForOS(allOSes[selectedIndex.value].unicode, nextStake);
         emit('increaseStake');
     }
 
     const seedInput = ref<string>('');
-    const selectedIndex = ref<number>(0);
 
     const leftIndex = computed(() => (selectedIndex.value - 1 + allOSes.length) % allOSes.length);
     const rightIndex = computed(() => (selectedIndex.value + 1) % allOSes.length);
@@ -135,9 +141,16 @@
         return Math.max(...wins) + 1;
     });
 
-    watchEffect(() => {
-        if (props.stake > maxStakeForSelectedOS.value) {
-            emit('decreaseStake');
+    watch(selectedIndex, (newIndex) => {
+        const currentOS = allOSes[newIndex];
+        const savedStake = StorageManager.getLastStakeForOS(currentOS.unicode);
+        const clampedStake = Math.max(0, Math.min(savedStake, maxStakeForSelectedOS.value));
+        emit('setStake', clampedStake);
+    }, { immediate: true });
+
+    watch(maxStakeForSelectedOS, (newMax) => {
+        if (props.stake > newMax) {
+            emit('setStake', newMax);
         }
     });
 

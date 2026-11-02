@@ -6,7 +6,7 @@ export interface PlayerCollection {
 }
 
 export interface PlayerStats {
-  osStats: Record<string, { totalWins: number; winsByStake: Record<number, number> }>;
+  osStats: Record<string, { totalWins: number; winsByStake: Record<number, number>; lastStake?: number }>;
   usageStats?: {
     programs: Record<string, number>;
     items: Record<string, number>;
@@ -168,6 +168,20 @@ export const StorageManager = {
       .map(k => parseInt(k, 10))
       .filter(k => wins[k] > 0)
       .sort((a, b) => a - b);
+  },
+
+  getLastStakeForOS(osunicode: string): number {
+    const stats = this.getStats();
+    return stats.osStats[osunicode]?.lastStake ?? 0;
+  },
+
+  setLastStakeForOS(osunicode: string, stake: number) {
+    const stats = this.getStats();
+    if (!stats.osStats[osunicode]) {
+      stats.osStats[osunicode] = { totalWins: 0, winsByStake: {} };
+    }
+    stats.osStats[osunicode].lastStake = stake;
+    this.saveStats(stats);
   },
 
   getSavedGame(): any | null {

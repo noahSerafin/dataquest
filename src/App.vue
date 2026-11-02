@@ -448,6 +448,7 @@ function createNewPlayer(payload: { os: OS, seed: string, stake?: number }) {
 
   // Track this OS as played
   StorageManager.recordOS(os.unicode);
+  StorageManager.setLastStakeForOS(os.unicode, stake.value);
 
   // Unlock starting inventory in the collection
   os.blueprints.forEach(bp => StorageManager.unlockPiece(bp.name));
@@ -1660,7 +1661,7 @@ async function placePieceOnBoardAt(coord: Coordinate) {
   // Reset placement state
   await handleApplyAdmins('onPlacement', PieceInstance.id);
   clearFog();
-
+  
   // Reassign spawn highlights based on isFirstTurn and Palette admin
   if (isFirstTurn.value) {
     if (hasPalette || hasCopier) {
@@ -1884,7 +1885,7 @@ const damagePieceAt = async (coord: Coordinate) => {
   if (selectedPiece.value.statuses.hidden) {
     selectedPiece.value.statuses.hidden = false;
   }
-  if (damageReceiver.willRetaliate || damageReceiver.name === 'Hedgehog') {
+  if (damageReceiver.willRetaliate || damageReceiver.name.includes('Hedgehog')) {
     await selectedPiece.value.takeDamage(damageReceiver.getStat('attack'));
     await handleApplyAdmins('onReceiveDamage', damageReceiver.id, selectedPiece.value)
     if (damageReceiver.name === 'Puffer' && !selectedPiece.value.immunities.poisoned) {
@@ -2375,7 +2376,7 @@ function cancelConfirm() {
     
     <RogueMenu v-if="currentAppMode === 'rogueMenu'" @createNewPlayer="createNewPlayer" @resumeGame="loadSavedGame"
       class="stage-panel active" :debugMode="debugMode" :stake="stake"
-      @increaseStake="increaseStake" @decreaseStake="decreaseStake" />
+      @increaseStake="increaseStake" @decreaseStake="decreaseStake" @setStake="stake = $event" />
       
     <CampaignMenu v-if="currentAppMode === 'campaignMenu'" @back="currentAppMode = 'mainMenu'" @startCampaign="startCampaign" class="stage-panel active" />
   </WelcomeScreen>

@@ -3,7 +3,7 @@ import { Blackwall, Piece, allPieces } from "./Pieces";
 import { Player } from "./Player";
 import type { Coordinate } from "./types";
 import { DIFFICULTY_RARITY } from "./constants";
-import { getRandomUnoccupiedTile } from "./helperFunctions";
+import { applyVariant, getRandomUnoccupiedTile, rollVariant } from "./helperFunctions";
 import { Random } from "./Random";
 
 //lower difficulty of +1 bosses, more +2 bosses
@@ -835,7 +835,7 @@ class Tsunami extends Admin {
 class Coaster extends Admin {
     static iconID = 427;
     static name = "Up and Up";//cranking up
-    static description = "Every player piece takes a cumulating +1 damage after every 2 turns";//turn count is damage?
+    static description = "Every player piece takes a cumulating +1 damage after every 2 turns, resets each round";//turn count is damage?
     static unicode = "U+1F3A2";//"U+1F3D4";//mountain
     static color = "rgb(196, 233, 245)";
     static rarity = 4;
@@ -1078,7 +1078,7 @@ class ClipBoard extends Admin {
 class TrafficLight extends Admin {
     static iconID = 400;
     static name = "Traffic Light";
-    static description = "Programs that move or action when the light is red take damage equal to your security level at the end of your turn";
+    static description = "Programs that move when the light is red take damage equal to your security level at the end of your turn";//or action needs hasActioned bool to exist
     static unicode = "U+1F6A6";
     static color = "hsl(0, 0%, 69%)";
     static rarity = 1;
@@ -1089,7 +1089,7 @@ class TrafficLight extends Admin {
     async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
         if (this.count === 2) {
             for (const p of activePieces) {
-                if (p.team === 'player' && (p.actions < 1 || p.hasMoved)) {//p.getStat('moves') > p.movesRemaining)) {
+                if (p.team === 'player' && (p.hasMoved)) {//p.actions < 1 ||  //p.getStat('moves') > p.movesRemaining)) {
                     await p.takeDamage(player.difficulty)
                 }
             }
@@ -1682,7 +1682,7 @@ class Lockdown extends Admin {//to test
 }
 
 //Paywall - player money buffs all enemy stats + 1 per $5
-class Paywall extends Admin {//to test
+/*class Paywall extends Admin {//to test
     static iconID = 527;
     static rarity = 7;
     static name = "Paywall";
@@ -1705,6 +1705,29 @@ class Paywall extends Admin {//to test
                 moves: noOfFives,
                 range: noOfFives
             });
+        }
+    }
+}*/
+
+class Variantr extends Admin {//to test
+    static iconID = 547;
+    static rarity = 7;
+    static name = "Rainbow Coalition";
+    static description = "Every enemy program is a variant";
+    static unicode = "U+1F4CA";//U+1F4DC //abacus??
+    static color = "rgb(255, 196, 0)";
+    constructor() {
+        super(Variantr.name, Variantr.description, Variantr.unicode, Variantr.color, 5, Variantr.rarity, 'gameState', 'onRoundStart')
+    }
+
+    async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+        const enemyPieces = activePieces.filter(p => p.team === 'enemy');
+        for (let i = 0; i < enemyPieces.length; i++) {
+            if (enemyPieces.length === 0) break;
+            const variant = rollVariant(0.1, 10);
+            if(variant){
+                applyVariant(enemyPieces[i], variant);
+            }
         }
     }
 }
@@ -1803,7 +1826,7 @@ class Zero extends Admin {//to test
     }
 }
 
-export const allBosses = [Concussion, LowBattery, NorthWind, Taxman, TrafficLight, Quicksand, Butter, Customs, Downturn, Hook, Mirror, Rage, Salsa, Shrine, Snoozefest, Whale, Anchor, Hammer, Castle, Circus, Clapback, ClipBoard, Izakaya, Mountain, Tsunami, Wilt, Autumn, Avalanche, Biohazard, Cocktail, Coral, Eclipse, Lock, Factory, Jack, Coaster, Blackmail, Snowflake, Love, Bones, Frog, Singularity, Seething, Tornado, Volcano, Snow, Sun, Fog, Nightfall, Nofun, Omega, Reaper, REDACTED, Wrath, AirGap, Battle, Lockdown, Paywall, SoulKiller, Zero];
+export const allBosses = [Concussion, LowBattery, NorthWind, Taxman, TrafficLight, Quicksand, Butter, Customs, Downturn, Hook, Mirror, Rage, Salsa, Shrine, Snoozefest, Whale, Anchor, Hammer, Castle, Circus, Clapback, ClipBoard, Izakaya, Mountain, Tsunami, Wilt, Autumn, Avalanche, Biohazard, Cocktail, Coral, Eclipse, Lock, Factory, Jack, Coaster, Blackmail, Snowflake, Love, Bones, Frog, Singularity, Seething, Tornado, Volcano, Snow, Sun, Fog, Nightfall, Nofun, Omega, Reaper, REDACTED, Wrath, AirGap, Battle, Lockdown, Variantr, SoulKiller, Zero];
 export const nonStackableBosses = [Mirror, Customs, Snowflake, Sun, Frog, Biohazard, Coral, Izakaya, REDACTED, Fog, Singularity, Tornado, Cocktail];
 
 console.log('bosses length: ', allBosses.length)

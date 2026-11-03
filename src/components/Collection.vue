@@ -218,7 +218,10 @@ function copySeed() {
 
         <!-- STATS TAB -->
         <div v-if="activeTab === 'stats'" class="stats-layout">
-          <h3>Win History</h3>
+          <div class="flex">
+            <h3>Win History</h3>
+            <h3>Highest Security Reached: {{ StorageManager.getStats().highestDifficulty ?? 0}}</h3>
+          </div>
           <div v-if="Object.keys(stats.osStats).length === 0" class="no-stats">
             No characters played yet. Keep playing!
           </div>
@@ -701,5 +704,10 @@ function copySeed() {
   text-overflow: ellipsis;
   text-align: right;
   right: 0;
+}
+
+.flex{
+  display: flex;
+  justify-content: space-between;
 }
 </style>

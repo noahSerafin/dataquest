@@ -729,7 +729,7 @@ class Biohazard extends Admin {
 class Nofun extends Admin {
     static iconID = 439;
     static name = "No Fun Allowed";
-    static description = "Disables 1 random admin after each turn";
+    static description = "Disables 1 random admin after each turn";//all admins on round start?
     static unicode = "U+1F6D1"; //NO ENTRY, U+26D4
     static color = "rgb(244, 152, 16)";
     static rarity = 6;
@@ -1586,7 +1586,7 @@ class Battle extends Admin {//to finish
     static iconID = 525;
     static rarity = 7;
     static name = "Battle Royale";
-    static description = "Removes all spaces on the edge of a node every 3 turns";
+    static description = "Every 3 turns, removes all spaces on the edge of a node";
     static unicode = "U+1F3DF";////STADIUM, U+1F3DF colloseum
     static color = "rgb(25, 124, 204)";
     constructor() {

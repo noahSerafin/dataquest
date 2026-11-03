@@ -2255,6 +2255,7 @@ async function increaseDifficulty() {
     }
   }
   player.value.difficulty += 1;
+  StorageManager.recordDifficultyReached(player.value.difficulty);
   refreshShop(true);
   worldSeed.value++
 }

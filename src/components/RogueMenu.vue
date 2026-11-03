@@ -109,13 +109,13 @@
             if (!props.debugMode && !StorageManager.hasStakeWin(3)) return "Win with at least 3 infamy";
         }
         if (osName === 'BeOS') {
-            if (!props.debugMode && !StorageManager.hasStakeWin(4)) return "Win with at least 3 infamy with two different operators";
-        }
-        if (osName === 'Explorer') {
             if (!props.debugMode && StorageManager.getUniqueWinsCount() < 6) return "Win with at least 6 different operators";
         }
+        if (osName === 'Explorer') {
+            if (!props.debugMode && !StorageManager.hasBeatLevel(10)) return "Reach security level 10";
+        }
         if (osName === 'Satoshi') {
-            if (!props.debugMode && !StorageManager.hasStakeWin(5)) return "Win with at least 3 infamy with 3 different operators";
+            if (!props.debugMode && !StorageManager.hasBeatLevel(15)) return "Reach security level 15";
         }
         //Explorer, Satoshi, Debugger
         return null;

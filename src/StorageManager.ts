@@ -13,6 +13,7 @@ export interface PlayerStats {
     admins: Record<string, number>;
   };
   hasPlayedOnce?: boolean;
+  highestDifficulty?: number;
 }
 
 const COLLECTION_KEY = 'dataquest_collection';
@@ -148,6 +149,19 @@ export const StorageManager = {
       stats.hasPlayedOnce = true;
       this.saveStats(stats);
     }
+  },
+
+  recordDifficultyReached(difficulty: number) {
+    const stats = this.getStats();
+    if ((stats.highestDifficulty ?? 0) < difficulty) {
+      stats.highestDifficulty = difficulty;
+      this.saveStats(stats);
+    }
+  },
+
+  hasBeatLevel(difficulty: number): boolean {
+    const stats = this.getStats();
+    return (stats.highestDifficulty ?? 0) >= difficulty;
   },
 
   getUniqueWinsCount(): number {

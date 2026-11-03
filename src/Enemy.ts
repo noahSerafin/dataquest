@@ -6,7 +6,7 @@ import { Random } from "./Random";
 
 type EnemyIntent =
   | { type: 'attack'; target: Piece }
-  | { type: 'special'; target: Piece | Coordinate | Piece[] | {piece: Piece, target: Coordinate} | {piece: Piece, player: Player, originalPieceIds?: string[]} | {line: Coordinate[], activePieces: Piece[]} | {target: Coordinate, activePieces: Piece[], player?: Player} | null }
+  | { type: 'special'; target: Piece | Coordinate | Piece[] | { piece: Piece, target: Coordinate } | { piece: Piece, player: Player, originalPieceIds?: string[] } | { line: Coordinate[], activePieces: Piece[] } | { target: Coordinate, activePieces: Piece[], player?: Player } | null }
   | { type: 'move'; path: Coordinate[] }
   | { type: 'wander'; space: Coordinate }
   | { type: 'wait' };
@@ -39,7 +39,7 @@ function decideEnemyIntent(
   const target = findWeakestPlayerInRange(enemy, playerPieces);//returning null even when there is a piece??!!!
   console.log('finding ', enemy.name, ' intent...')
   console.log('target: ', target)
-  if (target && enemy.actions > 0 ){//target found
+  if (target && enemy.actions > 0) {//target found
     console.log('target found');
     if ((enemy.targetType === 'pieceAndPlace' || enemy.targetType === 'placeAndPieces') && !enemy.hasFriendlySpecial) {
       if (target.place.x === target.piece.headPosition.x && target.place.y === target.piece.headPosition.y) {
@@ -54,24 +54,24 @@ function decideEnemyIntent(
         }
       }
     }
-    if(enemy.canAttack && enemy.getStat('attack') > 0 && target.piece.defenceRemaining + target.piece.tiles.length <= enemy.getStat('attack')){//can we kill a player piece?
-      return {type: 'attack', target: target.piece}
+    if (enemy.canAttack && enemy.getStat('attack') > 0 && target.piece.defenceRemaining + target.piece.tiles.length <= enemy.getStat('attack')) {//can we kill a player piece?
+      return { type: 'attack', target: target.piece }
     }
-    if(enemy.specialName && !enemy.hasFriendlySpecial && enemy.targetType !== 'trapPiece'){
+    if (enemy.specialName && !enemy.hasFriendlySpecial && enemy.targetType !== 'trapPiece') {
       //if not, can we use an attacking special?
       //line and pieceAndplace types also need the target location
-      if(enemy.targetType === 'line'){//line type pieces
+      if (enemy.targetType === 'line') {//line type pieces
         const options = getAllTilesInStraightLines(enemy.headPosition, enemy.getStat('range'), tileSet);//all line tiles in range
         const optionSet = new Set(options.map(t => `${t.x},${t.y}`));
         let newTarget: { piece: Piece; place: Coordinate } | null = null;
         for (const player of playerPieces) {
           if (player.statuses.hidden) continue;
           for (const tile of player.tiles) {
-             const key = `${tile.x},${tile.y}`;
+            const key = `${tile.x},${tile.y}`;
             if (optionSet.has(key)) {
               const lineTiles = getTilesInLine(enemy, tile);
-              const hitsFriendly = enemyPieces.some(p => 
-                p.id !== enemy.id && 
+              const hitsFriendly = enemyPieces.some(p =>
+                p.id !== enemy.id &&
                 p.tiles.some(pt => lineTiles.some(lt => lt.x === pt.x && lt.y === pt.y))
               );
               if (!hitsFriendly) {
@@ -82,26 +82,26 @@ function decideEnemyIntent(
           }
           if (newTarget) break;
         }
-        if (newTarget)  return { type: 'special', target: {line: getTilesInLine(enemy, newTarget.place), activePieces: activePieces} }
+        if (newTarget) return { type: 'special', target: { line: getTilesInLine(enemy, newTarget.place), activePieces: activePieces } }
       }
       //if(enemy.targetType == 'pieceAndPlace'){ see if we can target a non head tile first
-      if(enemy.targetType == 'pieceAndPlace' && (target.piece.headPosition.x !== target.place.x || target.piece.headPosition.y !== target.place.y) && specialAttempts < 1){//rectify attempts later
+      if (enemy.targetType == 'pieceAndPlace' && (target.piece.headPosition.x !== target.place.x || target.piece.headPosition.y !== target.place.y) && specialAttempts < 1) {//rectify attempts later
         const willDamageMoreThanOne = enemy.getStat('attack') > target.piece.defenceRemaining + 1;
         const allAlreadyHaveStatus = enemy.appliesStatuses.length > 0 && enemy.appliesStatuses.every(s => target.piece.statuses[s] || target.piece.immunities[s]);
-        if((willDamageMoreThanOne || allAlreadyHaveStatus) && enemy.canAttack && enemy.getStat('attack') > 0){
+        if (((willDamageMoreThanOne && !enemy.hasDamagingSpecial) || allAlreadyHaveStatus) && enemy.canAttack && enemy.getStat('attack') > 0) {
           return { type: 'attack', target: target.piece };
         }
-        return { type: 'special', target: {piece: target.piece, target: target.place}}//enemy still attacking- but should use this
+        return { type: 'special', target: { piece: target.piece, target: target.place } }//enemy still attacking- but should use this
       }
-      if(enemy.targetType == 'placeAndPieces' && (target.piece.headPosition.x !== target.place.x || target.piece.headPosition.y !== target.place.y) && specialAttempts < 1){//rectify attempts later
-        return { type: 'special', target: {target: target.place, activePieces: activePieces}}
+      if (enemy.targetType == 'placeAndPieces' && (target.piece.headPosition.x !== target.place.x || target.piece.headPosition.y !== target.place.y) && specialAttempts < 1) {//rectify attempts later
+        return { type: 'special', target: { target: target.place, activePieces: activePieces } }
       }
-      if((enemy.targetType === 'piece' || enemy.targetType === 'pieceAndPlayer') && specialAttempts < 1){ ///can execute a special
+      if ((enemy.targetType === 'piece' || enemy.targetType === 'pieceAndPlayer') && specialAttempts < 1) { ///can execute a special
         const allStatusesApplied = enemy.appliesStatuses.length > 0 && enemy.appliesStatuses.every(s => target.piece.statuses[s] || target.piece.immunities[s]);
-        if(allStatusesApplied && enemy.canAttack && enemy.getStat('attack') > 0){
+        if (allStatusesApplied && enemy.canAttack && enemy.getStat('attack') > 0) {
           return { type: 'attack', target: target.piece };
         }
-        if(enemy.attack > 2 && (enemy.specialName === 'Imitate' || enemy.specialName === 'Absorb')){
+        if (enemy.attack > 2 && (enemy.specialName === 'Imitate' || enemy.specialName === 'Absorb')) {
           return { type: 'attack', target: target.piece };
         } else {
           if (enemy.targetType === 'pieceAndPlayer') {
@@ -110,56 +110,56 @@ function decideEnemyIntent(
           return { type: 'special', target: target.piece };
         }
       }
-      if(enemy.targetType === 'group'){//bomb type pieces
+      if (enemy.targetType === 'group') {//bomb type pieces
         const inRange = findAnyPiecesInRange(enemy, activePieces);
-        if(enemy.appliesStatuses.length > 0 && inRange){
+        if (enemy.appliesStatuses.length > 0 && inRange) {
           const playerTargets = inRange.filter(p => getSide(p) === 'player' && !p.statuses.hidden);
-          const allAlreadyHaveStatus = playerTargets.length > 0 && playerTargets.every(p => 
+          const allAlreadyHaveStatus = playerTargets.length > 0 && playerTargets.every(p =>
             enemy.appliesStatuses.every(s => p.statuses[s] || p.immunities[s])
           );
-          if(allAlreadyHaveStatus && enemy.canAttack && enemy.getStat('attack') > 0 && target){
+          if (allAlreadyHaveStatus && enemy.canAttack && enemy.getStat('attack') > 0 && target) {
             return { type: 'attack', target: target.piece };
           }
         }
-        return { type: 'special', target: inRange ? inRange : []}
+        return { type: 'special', target: inRange ? inRange : [] }
       }
       console.log('no special moves');
       //if target is not attackable, is there one that is?
     }
-    if(enemy.canAttack && enemy.getStat('attack') > 0){//no special to use, can we attack? //&&target.piece.getStat('defence') < enemy.getStat('attack')
+    if (enemy.canAttack && enemy.getStat('attack') > 0) {//no special to use, can we attack? //&&target.piece.getStat('defence') < enemy.getStat('attack')
       console.log('attacking target');
-      return {type: 'attack', target: target.piece}
+      return { type: 'attack', target: target.piece }
     }
   }
 
   //no immediate attackable target, expose if possible
-  if(enemy.actions > 0 && enemy.hasExposingSpecial && enemy.targetType === 'group'){//and group
+  if (enemy.actions > 0 && enemy.hasExposingSpecial && enemy.targetType === 'group') {//and group
     const inRange = findAnyPiecesInRange(enemy, activePieces);
-    return {type: 'special', target: inRange ? inRange : []}
+    return { type: 'special', target: inRange ? inRange : [] }
   }
 
   //can we help another enemy?
   const friendlyTarget = findWeakestPlayerInRange(enemy, enemyPieces);
-  if(friendlyTarget && (enemy.hasFriendlySpecial || enemy.hasNeutralSpecial) && enemy.actions > 0){
-    if(enemy.targetType === 'group'){
-      return {type: 'special', target: (findAnyPiecesInRange(enemy, activePieces))}
-    } else if(enemy.targetType == 'placeAndPieces' && specialAttempts < 1){//rectify attempts later
-      return { type: 'special', target: {target: friendlyTarget.place, activePieces: activePieces}}
-    } else if(enemy.targetType === 'piece' || enemy.targetType === 'pieceAndPlayer'){//piece
+  if (friendlyTarget && (enemy.hasFriendlySpecial || enemy.hasNeutralSpecial) && enemy.actions > 0) {
+    if (enemy.targetType === 'group') {
+      return { type: 'special', target: (findAnyPiecesInRange(enemy, activePieces)) }
+    } else if (enemy.targetType == 'placeAndPieces' && specialAttempts < 1) {//rectify attempts later
+      return { type: 'special', target: { target: friendlyTarget.place, activePieces: activePieces } }
+    } else if (enemy.targetType === 'piece' || enemy.targetType === 'pieceAndPlayer') {//piece
       if (enemy.targetType === 'pieceAndPlayer') {
         return { type: 'special', target: { piece: friendlyTarget.piece, player: player, originalPieceIds: originalPieceIds } };
       }
-      return {type: 'special', target: friendlyTarget.piece}
+      return { type: 'special', target: friendlyTarget.piece }
     }
   }
 
   //is there a frond (friendly trap) to hide in?
-  const friendlyTrap = enemyPieces.find(p => 
+  const friendlyTrap = enemyPieces.find(p =>
     p.name === 'Frond'// && p.hasFriendlySpecial && p.targetType === 'trapPiece';
   )
-  if(friendlyTrap && enemy.movesRemaining > 0 && !enemy.statuses.exposed){
-    const pathToFrond = findShortestPath(enemy, enemy.headPosition, friendlyTrap.headPosition, tileSet, activePieces, true); 
-    if(pathToFrond){
+  if (friendlyTrap && enemy.movesRemaining > 0 && !enemy.statuses.exposed) {
+    const pathToFrond = findShortestPath(enemy, enemy.headPosition, friendlyTrap.headPosition, tileSet, activePieces, true);
+    if (pathToFrond) {
       return { type: 'move', path: pathToFrond };
     }
   }
@@ -178,8 +178,8 @@ function decideEnemyIntent(
     }
   }
 
-  if(enemy.actions > 0  && specialAttempts < 1){//still have an action? 
-    if (enemy.specialName === 'Charge' || enemy.specialName === 'Trample' || enemy.specialName === 'Pounce' || enemy.specialName === 'Dash') {
+  if (enemy.actions > 0 && specialAttempts < 1) {//still have an action? 
+    if (enemy.specialName === 'Charge' || enemy.specialName === 'Yo' || enemy.specialName === 'Trample' || enemy.specialName === 'Pounce' || enemy.specialName === 'Dash' || enemy.specialName === 'Maul') {//Action can be used to grow
       const targetCoord = nearest || target?.piece.headPosition;
       if (targetCoord) {
         const directions = [
@@ -221,52 +221,52 @@ function decideEnemyIntent(
         }
       }
     }
-    if(enemy.targetType === 'self'){
+    if (enemy.targetType === 'self') {
       const randTile = Random.pick(enemy.tiles);
-      return {type: 'special', target: randTile}
+      return { type: 'special', target: randTile }
     }
-    if(enemy.targetType === 'space'){
+    if (enemy.targetType === 'space') {
       const space = getAnySpaceInRange(enemy, activePieces, tileSet)
-      if(space) return {type: 'special', target: {target: space, activePieces: activePieces, player: player}}
+      if (space) return { type: 'special', target: { target: space, activePieces: activePieces, player: player } }
     }
-    if(enemy.hasFriendlySpecial){
-      if(enemy.targetType === 'placeAndPieces'){//pawn
+    if (enemy.hasFriendlySpecial) {
+      if (enemy.targetType === 'placeAndPieces') {//pawn
         const strongest = findStrongestInRange(enemy, activePieces)
         console.log('strongest: ', strongest)
-        if (strongest) return {type: 'special', target: {target: strongest.place, activePieces: activePieces}}
+        if (strongest) return { type: 'special', target: { target: strongest.place, activePieces: activePieces } }
       }
-      if(enemy.targetType === 'group'){
-        return {type: 'special', target: (findAnyPiecesInRange(enemy, enemyPieces))}
+      if (enemy.targetType === 'group') {
+        return { type: 'special', target: (findAnyPiecesInRange(enemy, enemyPieces)) }
       }
-      if(enemy.targetType === 'piece' || enemy.targetType === 'pieceAndPlayer'){
+      if (enemy.targetType === 'piece' || enemy.targetType === 'pieceAndPlayer') {
         const ally = findWeakestPlayerInRange(enemy, enemyPieces)?.piece
-        if(ally){
+        if (ally) {
           if (enemy.targetType === 'pieceAndPlayer') {
             return { type: 'special', target: { piece: ally, player: player, originalPieceIds: originalPieceIds } };
           }
-          return {type: 'special', target: ally};
+          return { type: 'special', target: ally };
         } //else find and path to an ally and move there
       }
-      if(enemy.targetType === 'trapPiece' && enemy.movesRemaining > 0){//frond
+      if (enemy.targetType === 'trapPiece' && enemy.movesRemaining > 0) {//frond
         const allyPos = findWeakestPlayerInRange(enemy, enemyPieces)?.place
-        if(allyPos){
+        if (allyPos) {
           const path = findShortestPath(enemy, enemy.headPosition, allyPos, tileSet, activePieces, true)
-          if(path){
-            return {type: 'move', path: path}
+          if (path) {
+            return { type: 'move', path: path }
           }
         }
       }
     }
   }
-  
+
   //no targets, or no actions left
-  if(enemy.tiles.length < enemy.maxSize && enemy.movesRemaining > 0 && !enemy.statuses.frozen){
+  if (enemy.tiles.length < enemy.maxSize && enemy.movesRemaining > 0 && !enemy.statuses.frozen) {
     //move somewhere free to reach max size
     const spaces = getAdjacentEmptySpaces(enemy.headPosition, activePieces, tileSet)
-    if(spaces) return { type: 'wander', space: Random.pick(spaces) };
+    if (spaces) return { type: 'wander', space: Random.pick(spaces) };
   }
   //is already max size, or no moves left, or no space to move into
-  return {type: 'wait'};
+  return { type: 'wait' };
 }
 
 async function executeEnemyIntent(
@@ -274,21 +274,21 @@ async function executeEnemyIntent(
   activePieces: Piece[],
   tileSet: Set<string>,
   intent: EnemyIntent,
-  helpers: {  
+  helpers: {
     highlightMoves: (piece: Piece) => void,
     highlightTargets: (piece: Piece) => void,
-    clearHighlights: () => void, 
+    clearHighlights: () => void,
     onReceiveDamage: (id: string, receiver: Piece) => void,
-    delay: number 
+    delay: number
   },
   isAborted: () => boolean = () => false
 ) {
-  if(enemy.isBusy) return;
+  if (enemy.isBusy) return;
   enemy.isBusy = true;
   console.log('enemyPiece: ', enemy.name, ' executing: ', intent.type)
   switch (intent.type) {
     case 'special':
-      if(!enemy.statuses.hidden){
+      if (!enemy.statuses.hidden) {
         helpers.highlightTargets(enemy);
       }
       await sleep(helpers.delay);
@@ -306,22 +306,22 @@ async function executeEnemyIntent(
       await attackPiece(enemy, intent.target);
       helpers.onReceiveDamage(enemy.id, intent.target);
       helpers.clearHighlights();
-      if(enemy.statuses.hidden) enemy.statuses.hidden = false;
+      if (enemy.statuses.hidden) enemy.statuses.hidden = false;
       break;
 
     case 'move': //moving over players?
       for (const step of intent.path.slice(1)) {//make sure a path is found once, and then stick to it
         if (isAborted() || !enemy.movesRemaining || enemy.statuses.frozen || !activePieces.includes(enemy)) break;
-        if(!enemy.statuses.hidden){
+        if (!enemy.statuses.hidden) {
           helpers.highlightMoves(enemy);
         }
         await sleep(helpers.delay);
         if (isAborted()) return;
-        if(enemy.statuses.confused){
+        if (enemy.statuses.confused) {
           const allMoves = getAdjacentEmptySpaces(enemy.headPosition, activePieces, tileSet);
-          if(allMoves){
+          if (allMoves) {
             enemy.moveTo(Random.pick(allMoves));
-          } 
+          }
         } else {
           enemy.moveTo(step);//cant move here if its occupied
           const trap = activePieces.find(p =>
@@ -330,11 +330,11 @@ async function executeEnemyIntent(
           if (trap && trap.id !== enemy.id) {
             await trap.triggerTrap(enemy);
           }
-          if(enemy.targetType === 'trapPiece'){//frond logic
+          if (enemy.targetType === 'trapPiece') {//frond logic
             const otherPiece = activePieces.find(p =>
               p.id !== enemy.id && p.tiles.some(t => t.x === step.x && t.y === step.y)
             );
-            if(otherPiece){
+            if (otherPiece) {
               await enemy.triggerTrap(otherPiece);//
             }
           }
@@ -345,7 +345,7 @@ async function executeEnemyIntent(
 
     case 'wander':
       while (enemy.movesRemaining > 0 && !enemy.statuses.frozen && activePieces.includes(enemy)) {
-        if(!enemy.statuses.hidden){
+        if (!enemy.statuses.hidden) {
           helpers.highlightMoves(enemy);
         }
         const trap = activePieces.find(p =>//might be finding itself
@@ -374,11 +374,11 @@ export async function runEnemyStateMachine(
   originalPieceIds: string[] = [],
   delay = 200, // ms between moves for visibility
   isAborted: () => boolean = () => false
-){
+) {
   let passCount = 0;
   let changed = true;
 
-  const helpers = {  
+  const helpers = {
     highlightMoves,
     highlightTargets,
     clearHighlights,
@@ -404,7 +404,7 @@ export async function runEnemyStateMachine(
       if (isAborted()) return;
       if (!activePieces.includes(enemy)) continue;
       if (enemy.movesRemaining <= 0 && enemy.actions <= 0) continue;
-      
+
       let specialAttempts = 0;
       while (enemy.movesRemaining > 0 || enemy.actions > 0) {
         if (isAborted()) return;
@@ -418,15 +418,15 @@ export async function runEnemyStateMachine(
         if (intent.type === 'wait') break;
 
         // If we are here, we are doing something other than wait
-        changed = true; 
+        changed = true;
 
-        if(intent.type === 'special'){
+        if (intent.type === 'special') {
           specialAttempts += 1;
         }
         await executeEnemyIntent(enemy, activePieces, tileSet, intent, helpers, isAborted);
         if (isAborted()) return;
         await sleep(helpers.delay);
-      } 
+      }
     }
   }
 }
@@ -438,12 +438,12 @@ function sleep(ms: number) {
 }
 
 async function attackPiece(attacker: Piece, defender: Piece) {
-  if(attacker.actions > 0 && attacker.canAttack){//!canAttack should do special
+  if (attacker.actions > 0 && attacker.canAttack) {//!canAttack should do special
     const damage = attacker.getStat('attack');
     await defender.takeDamage(Math.floor(damage * attacker.damageMult));
-    if(defender.willRetaliate || defender.name.includes('Hedgehog')){
+    if (defender.willRetaliate || defender.name.includes('Hedgehog')) {
       await attacker.takeDamage(Math.floor(defender.getStat('attack') * defender.damageMult));
-      if(defender.name === 'Puffer' && !attacker.immunities.poisoned){
+      if (defender.name === 'Puffer' && !attacker.immunities.poisoned) {
         attacker.statuses.poisoned = true;
       }
     }
@@ -460,13 +460,13 @@ function findAllAttackableCoordinatesSorted(
   const attackable = playerPieces.filter(p => !p.statuses.hidden);//&& enemy.attack > p.defence 
   if (attackable.length === 0) return [];
 
-  const allCoords: {coord: Coordinate, dist: number}[] = [];
+  const allCoords: { coord: Coordinate, dist: number }[] = [];
 
   for (const player of attackable) {
     for (const tile of player.tiles) {
       const dist = Math.abs(enemy.headPosition.x - tile.x)
-                 + Math.abs(enemy.headPosition.y - tile.y);
-      allCoords.push({coord: tile, dist: dist});
+        + Math.abs(enemy.headPosition.y - tile.y);
+      allCoords.push({ coord: tile, dist: dist });
     }
   }
 
@@ -478,14 +478,14 @@ function findAllPieceCoordinatesSorted(//player/ enemy
   otherPieces: Piece[]
 ): Coordinate[] {
 
-  const allCoords: {coord: Coordinate, dist: number}[] = [];
+  const allCoords: { coord: Coordinate, dist: number }[] = [];
 
   for (const player of otherPieces) {
     for (const tile of player.tiles) {
-      if(player.statuses.hidden) continue;
+      if (player.statuses.hidden) continue;
       const dist = Math.abs(enemy.headPosition.x - tile.x)
-      + Math.abs(enemy.headPosition.y - tile.y);
-      allCoords.push({coord: tile, dist: dist});
+        + Math.abs(enemy.headPosition.y - tile.y);
+      allCoords.push({ coord: tile, dist: dist });
     }
   }
 
@@ -562,7 +562,7 @@ function findShortestPath(
   for (const p of activePieces) {
     if (p.statuses.negative && getSide(p) === 'enemy' && p.hasFriendlySpecial) continue;
     if (p.statuses.negative && p.statuses.hidden && getSide(p) === 'player') continue;
-    
+
     for (const t of p.tiles) {
       occupiedTiles.add(`${t.x},${t.y}`);
     }
@@ -573,12 +573,12 @@ function findShortestPath(
     const { pos, path } = current;
     //console.log('current: ', current)
     // Reached goal
-    if (pos.x === goal.x && pos.y === goal.y && path.length > 1){//shortest path that can reach goal will be origin+goal, so 2 spaces
+    if (pos.x === goal.x && pos.y === goal.y && path.length > 1) {//shortest path that can reach goal will be origin+goal, so 2 spaces
       //infinite loop caused by trying to move into goal
       if (!keepGoal) path.pop();//remove goal
       return path;
     }
-      
+
 
     for (const dir of directions) {
       const next = { x: pos.x + dir.x, y: pos.y + dir.y };
@@ -717,7 +717,7 @@ function getTilesInLine(piece: Piece, target: Coordinate) {
   let x = ax + dx;
   let y = ay + dy;
   while (x !== tx || y !== ty) {
-    tilesInLine.push({x, y})    
+    tilesInLine.push({ x, y })
     x += dx;
     y += dy;
   }
@@ -746,7 +746,7 @@ function findStrongestInRange(//for pawn
         break; // one tile in range is enough per piece
       }
     }
-    
+
   }
 
   if (candidates.length === 0) return null;
@@ -756,7 +756,7 @@ function findStrongestInRange(//for pawn
     (a, b) => a.piece.getStat('attack') - b.piece.getStat('attack')
   );
 
-  return candidates[candidates.length-1];
+  return candidates[candidates.length - 1];
 }
 
 /*

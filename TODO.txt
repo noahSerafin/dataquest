@@ -96,7 +96,8 @@ Don't limit infamy to completed with that operator
 POLISHING
 fix BUGS
 finish styles
-hand holdy rogue tutorial
+add loading bar to start, wait for spritesheet
+hand holdy rogue tutorial - utilise a "level 0" with set nodes
 debug mode hotkey
 balancing around secret bosses (an end to 'endless'?)
 ads

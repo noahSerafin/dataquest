@@ -67,6 +67,7 @@ export abstract class Item<TTarget = any> {
         const before = {
             maxSize: target.maxSize,
             moves: target.moves,
+            range: target.range,
             attack: target.attack,
             defence: target.defence,
         };
@@ -237,8 +238,6 @@ class Pie extends Item<PieceBlueprint> {
 
 class Pepper extends Item<PieceBlueprint> {
     static iconID = 169;
-
-
     static name = "Pepper";
     static description = "Increases a held program's range by 1";
     static unicode = "U+1FAD1" //Radish U+1FADC
@@ -327,8 +326,6 @@ export class Coffee extends Item<PieceBlueprint> {
 
 export class Roids extends Item<PieceBlueprint> {
     static iconID = 194;
-
-
     static name = "Roids";
     static description = "Increase a held program's attack by 1, and moves by 1";//make a program?
     static unicode = "U+1F489";

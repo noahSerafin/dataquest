@@ -2,7 +2,8 @@ import { pickWeightedRandomItem } from "./helperFunctions";
 import { Box, Gift, Item, Pinata, upgradeItems } from "./Items";
 import { Piece, allPieces } from "./Pieces";
 import { Player } from "./Player";
-import type { Coordinate, PieceBlueprint, StatModifier, StatusKey } from "./types";
+import type { Coordinate, PieceBlueprint, StatKey, StatModifier, StatusKey } from "./types";
+import { addVersion, getStatVersionDelta } from "./version";
 
 export type AdminTrigger =
   | 'onPlacement'
@@ -49,6 +50,17 @@ export abstract class Admin<
   }
 
   onRoundEnd?(params?: any): void | Promise<void>;
+
+  upgradeBlueprint(bp: PieceBlueprint, stats: Partial<Record<StatKey, number>>): void {
+    for (const [key, val] of Object.entries(stats) as [StatKey, number][]) {
+      if (val !== undefined && key in bp) {
+        bp[key] += val;
+      }
+    }
+    if (this.affectsVersion) {
+      bp.version = addVersion(bp.version, getStatVersionDelta(stats));
+    }
+  }
 }
 
 class Meteor extends Admin {
@@ -525,11 +537,7 @@ export class Needle extends Admin {
         if (idx !== -1) {
           this.isTriggering = true;
           setTimeout(() => this.isTriggering = false, 500);
-          player.programs[idx].maxSize += 1;
-          player.programs[idx].moves += 1;
-          player.programs[idx].attack += 1;
-          player.programs[idx].range += 1;
-          player.programs[idx].defence += 1;
+          this.upgradeBlueprint(player.programs[idx], { maxSize: 1, moves: 1, attack: 1, range: 1, defence: 1 });
         }
       }
     }
@@ -1130,7 +1138,7 @@ class Candle extends Admin {
   static color = "rgb(255, 168, 55)";
   static rarity = 1;
   constructor() {
-    super(Candle.name, Candle.description, Candle.unicode, Candle.color, 4, Candle.rarity, 'gameState', 'onPlacement')
+    super(Candle.name, Candle.description, Candle.unicode, Candle.color, 3, Candle.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     this.isTriggering = true;
@@ -2351,7 +2359,7 @@ class Balloon extends Admin {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
     for (const p of player.programs) {
-      p.maxSize += 1;
+      this.upgradeBlueprint(p, { maxSize: 1 });
     }
   }
 }
@@ -2540,7 +2548,7 @@ class Stiletto extends Admin {
   static color = "rgb(182, 21, 126)";
   static rarity = 2;
   constructor() {
-    super(Stiletto.name, Stiletto.description, Stiletto.unicode, Stiletto.color, 6, Stiletto.rarity, 'gameState', 'onPlacement')
+    super(Stiletto.name, Stiletto.description, Stiletto.unicode, Stiletto.color, 4, Stiletto.rarity, 'gameState', 'onPlacement')
   }
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     this.isTriggering = true;
@@ -2689,11 +2697,7 @@ class School extends Admin {
       setTimeout(() => this.isTriggering = false, 500);
       for (const bp of player.programs) {
         if (!bp.isPlaced) {
-          bp.maxSize += 1;
-          bp.moves += 1;
-          bp.attack += 1;
-          bp.range += 1;
-          bp.defence += 1;
+          this.upgradeBlueprint(bp, { maxSize: 1, moves: 1, attack: 1, range: 1, defence: 1 });
         }
       };
       this.count++
@@ -3495,11 +3499,7 @@ class Salt extends Admin {
   }
   async apply({ player }: { player: Player }) {
     for (const bp of player.programs) {
-      bp.maxSize += 1;
-      bp.moves += 1;
-      bp.range += 1;
-      bp.attack += 1;
-      bp.defence += 1;
+      this.upgradeBlueprint(bp, { maxSize: 1, moves: 1, range: 1, attack: 1, defence: 1 });
     }
   }
 }
@@ -3560,7 +3560,7 @@ class Selfie extends Admin {
   static description = "Programs that attack themselves gain +1 attack";
   static unicode = "U+1F933";
   static color = "rgb(36, 255, 138)";
-  static rarity = 4;
+  static rarity = 4;//lower
   constructor() {
     super(Selfie.name, Selfie.description, Selfie.unicode, Selfie.color, 7, Selfie.rarity, 'gameState', 'onReceiveDamage')//pieces?
   }
@@ -3711,7 +3711,7 @@ class Lefty extends Admin {
       this.isTriggering = true;
       setTimeout(() => this.isTriggering = false, 500);
       for (const bp of player.programs) {
-        bp.attack += 1;
+        this.upgradeBlueprint(bp, { attack: 1 });
       }
     }
   }
@@ -3732,7 +3732,7 @@ class Righty extends Admin {
       this.isTriggering = true;
       setTimeout(() => this.isTriggering = false, 500);
       for (const bp of player.programs) {
-        bp.defence += 1;
+        this.upgradeBlueprint(bp, { defence: 1 });
       }
     }
   }
@@ -3857,7 +3857,7 @@ export class Collector extends Admin {
   static color = "rgba(8, 56, 111, 1)";
   static rarity = 2;//1?
   constructor() {
-    super(Collector.name, Collector.description, Collector.unicode, Collector.color, 1, Collector.rarity, 'gameState', 'other');
+    super(Collector.name, Collector.description, Collector.unicode, Collector.color, 5, Collector.rarity, 'gameState', 'other');
   }
   async apply({ id: _id, activePieces: _activePieces }: { id: string, activePieces: Piece[] }) {
     //do nothing - rarity changes should happen in rollRarity

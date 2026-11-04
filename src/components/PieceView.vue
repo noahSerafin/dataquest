@@ -214,7 +214,7 @@ function pieceTipClass(){
         v-for="([key]) in activeStatuses"
         :key="key"
         class="status-icon"
-        title="key"          
+        :title="key"          
       >
         <div v-if="STATUS_ICONIDS[key]" :style="{...getSpriteStyle(STATUS_ICONIDS[key]), width: '20px', height: '20px'}"></div>
         <template v-else>{{ STATUS_ICONS[key] ?? '?' }}</template>
@@ -267,6 +267,7 @@ function pieceTipClass(){
   text-align: center;
   transition: all 0.2s ease;
   border: outset;
+  overflow: visible;
 }
 .team-enemy{
   border: outset red;
@@ -326,11 +327,20 @@ function pieceTipClass(){
   position: absolute;
   display: flex;
   flex-direction: row;
+  align-items: center;
   gap: 2px;
   font-size: 0.3em;
-  height: 0.3em;
   margin-left: 0.2rem;
-  top: -15%;
+  bottom: 100%;
+  margin-bottom: 2px;
+  z-index: 20;
+  line-height: 1;
+}
+.status-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
 }
 .action-btn, .deselect-btn{
   position: absolute;

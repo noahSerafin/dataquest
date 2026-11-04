@@ -97,7 +97,7 @@ POLISHING
 fix BUGS
 finish styles
 add loading bar to start, wait for spritesheet
-hand holdy rogue tutorial - utilise a "level 0" with set nodes
+hand holdy rogue tutorial - utilise a "level 0" with set nodes, put voucher in as item - remove from classic95's set
 debug mode hotkey
 balancing around secret bosses (an end to 'endless'?)
 ads

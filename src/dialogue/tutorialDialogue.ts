@@ -23,7 +23,7 @@ export const tutorialDialogue = {
       "id": "node_2",
       "elementID": "node_g41ksufcp",
       "speaker": "Al",
-      "text": "The ciruit represents a map of available nodes. Here's your current position in this circuit. The blue wires indicate other nodes that you can travel to",
+      "text": "The circuit represents a map of available nodes. Here's your current position in this circuit. The blue wires indicate other nodes that you can travel to",
       "choices": [
         {
           "text": "Got it.",

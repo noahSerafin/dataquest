@@ -450,7 +450,7 @@ steel
 .variant-item {
   background-color: unset;
   background: linear-gradient(to left, rgb(226, 226, 226), rgba(255, 255, 255, 0));
-  overflow: hidden;
+  overflow: visible;
   position: relative;
 }
 

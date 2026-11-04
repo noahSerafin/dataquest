@@ -1686,7 +1686,7 @@ async function placePieceOnBoardAt(coord: Coordinate) {
 
   // Do not force the turn to end unless there are no player spawns left in activePieces
   const spawnsLeft = activePieces.value.some(p => p.team === 'player' && p.name === 'Spawn');
-  if (!spawnsLeft && !player.value.hasAdmin('Dove')) {
+  if (!isFirstTurn.value || (!spawnsLeft && !player.value.hasAdmin('Dove'))) {
     await endTurn();
   }
 

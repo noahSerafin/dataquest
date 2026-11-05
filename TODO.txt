@@ -46,10 +46,8 @@ overworld map?
 background colours for node maps (use company owner)//levels array (make map have a starting copmany)
 
 BUGS - 
--variant pieces still have original moves/defence on first turn
 -statuses affecting copys even when copy does not have that status
 -hybrid preview still using unicode
--ink has no sprite
 -compressed items have negative description
 -open for too long chugs performance, maybe the shader causing this?
 -leaving during a shop shows a different set of items

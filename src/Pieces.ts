@@ -1253,7 +1253,7 @@ class Snake extends Piece {
     piece.tiles.splice(tileIndex, 1);
     this.addModifier({ maxSize: 1 });
     this.addModifier({ moves: 1 });
-    this.movesRemaining +=1;
+    this.movesRemaining += 1;
     // --- 4. Move Snake into that tile ---
     this.move(target);
     this.actions--
@@ -2016,6 +2016,7 @@ export class Pawn extends Piece {
     promoted.range = targetPiece.range;
     promoted.attack = targetPiece.attack;
     promoted.defence = targetPiece.defence;
+    promoted.defenceRemaining = targetPiece.defenceRemaining;
     promoted.statModifiers = targetPiece.statModifiers
     promoted.damageMult = targetPiece.damageMult;
     promoted.immunities = targetPiece.immunities;
@@ -3367,7 +3368,7 @@ class Saw extends Piece {
     this.move(target);
     //add a pause here to visualise it
     await sleep(250);
-    if(this.tiles.length > 0){
+    if (this.tiles.length > 0) {
       this.move(this.tiles[1]);
     }
     //piece.addModifier({maxSize: -1})//this.movesRemaining += 1;
@@ -4826,12 +4827,12 @@ class Hat extends Piece {//test
   static unicode = "U+1F3A9";////add to srpitesheet
   static color = "#6ea1caff";
   static rarity = 5;
-  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
-   super(Hat.name, Hat.description, Hat.unicode, 1, 1, 3, 1, 1, Hat.color, headPosition, [headPosition], team, Hat.rarity, removeCallback, id)
-   this.specialName='Hat Trick';
-   this.targetType='space';
-   this.canAttack=false;
-   
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
+    super(Hat.name, Hat.description, Hat.unicode, 1, 1, 3, 1, 1, Hat.color, headPosition, [headPosition], team, Hat.rarity, removeCallback, id)
+    this.specialName = 'Hat Trick';
+    this.targetType = 'space';
+    this.canAttack = false;
+
   }
   /*
   async special({ line, activePieces }: { line: Coordinate[], activePieces: Piece[] }): Promise<void> {
@@ -4849,7 +4850,7 @@ class Hat extends Piece {//test
     this.actions--
     this.removeCallback?.(this);
   } */
-  async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
+  async special({ target, activePieces }: { target: Coordinate, activePieces: Piece[] }): Promise<void> {
     const newRabbit = new Rabbit(target, this.team, this.removeCallback, crypto.randomUUID());
     newRabbit.actions = 0;
     newRabbit.movesRemaining = 0;
@@ -4877,8 +4878,8 @@ class Camel extends Piece {//not working
     this.hasFriendlySpecial = true;
   }
   async special(_target: Coordinate): Promise<void> {
-    if (this.tiles.length > 1){
-      this.tiles.splice(this.tiles.length-1, 1)
+    if (this.tiles.length > 1) {
+      this.tiles.splice(this.tiles.length - 1, 1)
       this.resetMoves();
     }
   }
@@ -4955,13 +4956,13 @@ class Television extends Piece {
   async special(targets: Piece[]): Promise<void> {
     for (const t of targets) {
       if (t.team !== this.team && !t.statuses.charmed) {
-        if(!t.immunities.disarmed){
+        if (!t.immunities.disarmed) {
           t.statuses.disarmed = true;
         }
       }
     }
-    this.actions --
-  } 
+    this.actions--
+  }
 }
 
 //U+1F420 TROPICAL FISH rare fish slips 2 spaces

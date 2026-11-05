@@ -1884,6 +1884,7 @@ const damagePieceAt = async (coord: Coordinate) => {
   );
   if (!damageReceiver) return;
   selectedPiece.value.actions--//prevent double clicking
+  isAwaitingAction.value = true;
   //console.log('receiver: ', damageReceiver?.name)
   //if (!damageReceiver || (damageReceiver.team === selectedPiece.value.team && !selectedPiece.value.statuses.charmed)) return;
   //console.log("Damage call:", coord, damage)
@@ -1928,6 +1929,7 @@ const damagePieceAt = async (coord: Coordinate) => {
   //console.log(damageReceiver?.name, ' tiles afterdmg: ', damageReceiver.tiles)
   boardRef.value.clearHighlights();
   checkForRoundEnd();
+  isAwaitingAction.value = false;
 }
 
 const handleSpecialActionAt = async (target: Coordinate) => {
@@ -1935,6 +1937,7 @@ const handleSpecialActionAt = async (target: Coordinate) => {
   if (!selectedPiece.value || selectedPiece.value.actions <= 0) return;
   if ((selectedPiece.value.team === 'enemy' && !selectedPiece.value.statuses.charmed) || selectedPiece.value.team === 'player' && selectedPiece.value.statuses.charmed) return;
   boardRef.value.clearHighlights();
+  isAwaitingAction.value = true;
   // find piece at targeted coordinate
   const piecesActions = selectedPiece.value.actions;
   const targetPiece = activePieces.value.find(piece =>
@@ -2004,6 +2007,7 @@ const handleSpecialActionAt = async (target: Coordinate) => {
     if (ax !== tx && ay !== ty) {
       // optional: warn player
       selectedPiece.value = null;
+      isAwaitingAction.value = false;
       return;
     }
     const dx = Math.sign(tx - ax);
@@ -2046,13 +2050,19 @@ const handleSpecialActionAt = async (target: Coordinate) => {
   selectedPiece.value = null;
   clearFog();
   checkForRoundEnd();
+  isAwaitingAction.value = false;
   return;
 };
 
 const hasWonRound = ref<boolean>(false);
+const isAwaitingAction = ref<boolean>(false);
 
 const hasPlacedPiece = computed(() => {
   return activePieces.value.some(p => p.team === 'player' && p.name !== 'Spawn');
+});
+
+const canEndTurn = computed(() => {
+  return !isAwaitingAction.value && !hasFinishedTurn.value && ((!displayEditor.value && roundHasStarted.value && hasPlacedPiece.value) || debugMode.value);
 });
 
 const endRound = async (roundWon: boolean) => {
@@ -2327,7 +2337,9 @@ function onKeydown(e: KeyboardEvent) {
     case 'Space':
     case 'Enter':
       e.preventDefault(); // stop page scroll
-      endTurn();
+      if (canEndTurn.value) {
+        endTurn();
+      }
       break;
     case 'Tab':
       //cycle thru activepieces
@@ -2587,7 +2599,7 @@ function cancelConfirm() {
         @highlightTargets="boardRef.highlightTargets" @highlightSpecials="boardRef.highlightSpecials"
         @close="deselectPiece" />
       <div id="player-actions" v-if="!displayEditor" class="player-actions">
-        <button v-if="(!displayEditor && roundHasStarted && !hasFinishedTurn && hasPlacedPiece) || debugMode" class="end-turn"
+        <button :disabled="!canEndTurn" v-if="(!displayEditor && roundHasStarted) || debugMode" class="end-turn"
           v-on:click="endTurn()">End Turn</button>
         <button :disabled="hasFinishedTurn" v-if="!displayEditor && roundHasStarted && (currentAppMode === 'campaign' || player.lives > 1)"
           class="retry-btn" v-on:click="requestRetry()">Retry</button>
@@ -2730,6 +2742,11 @@ function cancelConfirm() {
   border: 1px solid white;
   z-index: 9999;
   margin-bottom: 0.5rem;
+}
+
+.end-turn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .logo {

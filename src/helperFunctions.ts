@@ -205,6 +205,8 @@ export function applyVariant(piece: Piece, variant: PieceVariant) {
   if (variant.name === 'Holographic') {
     piece.damageMult += 0.5;
   }
+  piece.resetMoves();
+  piece.resetDefence();
 }
 
 // Blueprint equivalent of applyVariant, mutates a held program directly so existing upgrades are preserved

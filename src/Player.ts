@@ -28,6 +28,9 @@ export class Player {
     osunicode: string;
     nextInterest: number;
     nextReward: number;
+    itemMult: number = 1;
+    statusMult: number = 1;
+    cloverCount: number = 0;
     //adminModifiers: Record<string, StatModifier>
     constructor(
         osunicode = '',
@@ -61,6 +64,11 @@ export class Player {
         this.nextReward = nextReward;
         this.stake = stake;
         //this.adminModifiers = adminModifiers;
+        for (const admin of this.admins) {
+            if (admin.targetType === 'player' && admin.triggerType === 'other') {
+                admin.apply({ player: this });
+            }
+        }
     }
 
     /** Total "memory" usage from items + programs */
@@ -93,7 +101,7 @@ export class Player {
     if(admin.compressed || this.hasAdminSpace){
       this.admins.push(admin)
       if(admin.targetType === 'player' && admin.triggerType === 'other'){
-        admin.apply(this);
+        admin.apply({ player: this });
       }
     }
   }
@@ -103,7 +111,7 @@ export class Player {
     const i = this.admins.indexOf(admin);
     if (i !== -1) this.admins.splice(i, 1);
     if(admin.targetType === 'player' && admin.triggerType === 'other'){
-      admin.remove(target);
+      admin.remove({ player: target });
     }
   }
 

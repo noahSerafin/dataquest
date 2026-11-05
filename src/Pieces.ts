@@ -7,7 +7,7 @@ import move1SoundUrl from '../sfx/move1.ogg';
 import move2SoundUrl from '../sfx/move2.ogg';
 import move3SoundUrl from '../sfx/move3.ogg';
 import move4SoundUrl from '../sfx/move4.ogg';
-import { playSoundFx, preloadSound } from "./helperFunctions";
+import { playSoundFx, preloadSound, sleep } from "./helperFunctions";
 import { Random } from "./Random";
 import { DEFAULT_VERSION, addVersion, getStatVersionDelta } from "./version";
 
@@ -1185,7 +1185,7 @@ class Dataworm extends Piece {
     super(Dataworm.name, Dataworm.description, Dataworm.unicode, 6, 3, 1, 4, 2, Dataworm.color, headPosition, [headPosition], team, Dataworm.rarity, removeCallback, id)
     this.specialName = 'Tunnel';
     this.targetType = 'pieceAndPlace'
-    //this.appliesStatuses = ['diseased']; //comment out to get enemy to keep using special
+    this.appliesStatuses = ['diseased'];
   }
 
   async special({ piece, target }: { piece: Piece, target: Coordinate }): Promise<void> {
@@ -1845,7 +1845,7 @@ class Elephant extends Piece {
   static name = "Elephant";
   static description = "A large program with strong stats, that can trample a line of targets, reducing their max size by 1";
   static unicode = "U+1F418";
-  static color = "rgb(228, 217, 195)";
+  static color = "rgb(253, 208, 118)";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
     super(Elephant.name, Elephant.description, Elephant.unicode, 5, 2, 1, 3, 2, Elephant.color, headPosition, [headPosition], team, Elephant.rarity, removeCallback, id)
@@ -3347,12 +3347,12 @@ class TP extends Piece {
 class Saw extends Piece {
   static iconID = 34;
   static name = "Saw";
-  static description = "A program that can remove a body tile from an enemy, reducing the target's max size";
+  static description = "A program that can remove a body tile from an enemy by moving into the tile and back on itself"//, reducing the target's max size";
   static unicode = "U+1FA9A";
   static color = "#ffb20dff";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
-    super(Saw.name, Saw.description, Saw.unicode, 3, 2, 1, 1, 1, Saw.color, headPosition, [headPosition], team, Saw.rarity, removeCallback, id)
+    super(Saw.name, Saw.description, Saw.unicode, 2, 2, 1, 1, 1, Saw.color, headPosition, [headPosition], team, Saw.rarity, removeCallback, id)
     this.specialName = 'Hack'
     this.targetType = 'pieceAndPlace'
   }
@@ -3364,7 +3364,13 @@ class Saw extends Piece {
     if (tileIndex === 0) return;
     // --- 3. Remove that tile from the piece ---
     piece.tiles.splice(tileIndex, 1);
-    piece.addModifier({maxSize: -1})//this.movesRemaining += 1;
+    this.move(target);
+    //add a pause here to visualise it
+    await sleep(250);
+    if(this.tiles.length > 0){
+      this.move(this.tiles[1]);
+    }
+    //piece.addModifier({maxSize: -1})//this.movesRemaining += 1;
     this.actions--
   }
 }
@@ -3713,15 +3719,13 @@ class Peacock extends Piece {
 
 class Dog extends Piece {
   static iconID = 21;
-
-
   static name = "Dog";
   static description = "A program that can expose other programs, making them unable to hide";
   static unicode = "U+1F415";
   static color = "#b98003ff";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
-    super(Dog.name, Dog.description, Dog.unicode, 2, 3, 1, 2, 0, Dog.color, headPosition, [headPosition], team, Dog.rarity, removeCallback, id)
+    super(Dog.name, Dog.description, Dog.unicode, 3, 3, 1, 2, 0, Dog.color, headPosition, [headPosition], team, Dog.rarity, removeCallback, id)
     this.targetType = 'group'
     this.specialName = 'Sniff'
     this.hasExposingSpecial = true;
@@ -4742,8 +4746,7 @@ class Zombie extends Piece {
       activePieces.push(newZombie);
     }
     targetPiece.takeDamage(this.getStat('attack'));
-    if (targetPiece.immunities.diseased)
-      this.actions--
+    this.actions--
   }
 }
 
@@ -4819,16 +4822,18 @@ class Pentagram extends Piece {
 class Hat extends Piece {//test
   static iconID = 542;
   static name = "Top Hat";
-  static description = "A program that can summon rabbits in a line, removing itself";
+  static description = "A program that can summon 2 rabbits, removing itself";//summon 3 somehow?
   static unicode = "U+1F3A9";////add to srpitesheet
   static color = "#6ea1caff";
   static rarity = 5;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?:  string){
    super(Hat.name, Hat.description, Hat.unicode, 1, 1, 3, 1, 1, Hat.color, headPosition, [headPosition], team, Hat.rarity, removeCallback, id)
    this.specialName='Hat Trick';
-   this.targetType='line';
+   this.targetType='space';
    this.canAttack=false;
+   
   }
+  /*
   async special({ line, activePieces }: { line: Coordinate[], activePieces: Piece[] }): Promise<void> {
     for (const tile of line) {
         const occupier = activePieces.find(p =>
@@ -4843,15 +4848,19 @@ class Hat extends Piece {//test
       }
     this.actions--
     this.removeCallback?.(this);
-  } 
-  /*
+  } */
   async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
     const newRabbit = new Rabbit(target, this.team, this.removeCallback, crypto.randomUUID());
     newRabbit.actions = 0;
     newRabbit.movesRemaining = 0;
     activePieces.push(newRabbit);
+    const newRabbit2 = new Rabbit(this.headPosition, this.team, this.removeCallback, crypto.randomUUID());
+    newRabbit2.actions = 0;
+    newRabbit2.movesRemaining = 0;
+    activePieces.push(newRabbit2);
     this.actions--
-  }*/
+    this.removeCallback?.(this);
+  }
 }
 
 class Camel extends Piece {//not working
@@ -4879,7 +4888,7 @@ class Camel extends Piece {//not working
 class Scissors extends Piece {
   static iconID = 541;
   static name = "Scissors";
-  static description = "A program that can remove a body tile from an enemy, regardless of its defence";
+  static description = "A program that can remove a body tile from an enemy, regardless of its defence, and move into the empty space";
   static unicode = "U+2702";//add to spritesheet
   static color = "rgb(253, 244, 201)";
   static rarity = 1;
@@ -4896,6 +4905,7 @@ class Scissors extends Piece {
     if (tileIndex === 0) return;
     // --- 3. Remove that tile from the piece ---
     piece.tiles.splice(tileIndex, 1);
+    this.move(target)
     this.actions--
   }
 }

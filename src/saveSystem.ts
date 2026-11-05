@@ -69,6 +69,16 @@ export function rehydrateGameState(data: any): any {
     return inst;
   }).filter(Boolean);
 
+  // Restore LLM copied methods after rehydrating all admins
+  for (let i = 0; i < player.admins.length; i++) {
+    const current = player.admins[i];
+    if (current.name === 'LLM' && 'copyAdmin' in current) {
+      // Clear copiedSourceId before re-copying so copyAdmin re-binds apply/remove/onRoundEnd without re-applying stats
+      (current as any).copiedSourceId = null;
+      (current as any).copyAdmin(i > 0 ? player.admins[i - 1] : undefined);
+    }
+  }
+
   // 2. Rehydrate Boss
   const BossCls = allPossibleAdmins.find((a: any) => a.name === data.bossName);
   const boss = BossCls ? new BossCls() : null;

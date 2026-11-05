@@ -79,6 +79,7 @@ export abstract class Item<TTarget = any> {
         const statDelta = getStatVersionDelta({
             maxSize: target.maxSize - before.maxSize,
             moves: target.moves - before.moves,
+            range: target.range - before.range,
             attack: target.attack - before.attack,
             defence: target.defence - before.defence,
         });

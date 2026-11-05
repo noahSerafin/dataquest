@@ -156,12 +156,13 @@
     }
 
     function cancel() {
-        if (primaryBP.value) primaryBP.value.isPlaced = false
-        if (secondaryBP.value) secondaryBP.value.isPlaced = false
+        if (primaryBP.value) primaryBP.value.isPlaced = false;
+        if (secondaryBP.value) secondaryBP.value.isPlaced = false;
 
-        primaryBP.value = null
-        secondaryBP.value = null
-        resultBP.value = null
+        primaryBP.value = null;
+        secondaryBP.value = null;
+        resultBP.value = null;
+        selectedBP.value = null;
     }
 
     function skip(){

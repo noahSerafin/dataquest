@@ -719,7 +719,7 @@ watch(currentNodeId, () => {
 
         <!-- Preview modal -->
         <div v-if="selectedPreviewNode" :class="`preview-modal ${selectedPreviewNode.company.abbr}`"
-            :style="selectedPreviewNode.type !== 'boss' && selectedPreviewNode.type === 'level' ? { backgroundColor: `${selectedPreviewNode.company.tileColor}`, border: `2px solid ${selectedPreviewNode.company.edgeColor}` } : {}">
+            :style="selectedPreviewNode.type === 'boss' || selectedPreviewNode.type === 'level' ? { backgroundColor: `${selectedPreviewNode.company.tileColor}`, border: `2px solid ${selectedPreviewNode.company.edgeColor}` } : {}">
             <h3>{{ selectedPreviewNode.type.toUpperCase() }}</h3>
             <h6 v-if="selectedPreviewNode.type === 'boss'"></h6>
             <button :disabled="player.effectiveMoney >= rerollBossCost"

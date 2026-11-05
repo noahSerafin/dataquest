@@ -9,7 +9,7 @@ import { Player } from "./Player";
 import { Item, Voucher, allItems } from "./Items";
 import type { ItemConstructor } from "./Items";
 import { allAdmins } from "./AdminPrograms";
-import { Admin } from "./AdminPrograms";
+import { Admin, LLM } from "./AdminPrograms";
 import { rollBoss } from "./helperFunctions.ts";
 import type { AdminTrigger } from "./AdminPrograms";
 import PlayerView from "./components/PlayerView.vue";
@@ -533,6 +533,25 @@ function sellItem(itemId: string) {
   player.value.money += Math.round(item.cost / appraisalBonus);
 }
 
+async function syncLLMAdmins(adminsList = player.value.admins) {
+  if (!adminsList.some(a => a.name === 'LLM')) return;
+  for (let i = 0; i < adminsList.length; i++) {
+    const current = adminsList[i];
+    if (current instanceof LLM) {
+      await current.copyAdmin(i > 0 ? adminsList[i - 1] : undefined, {
+        player: player.value,
+        increaseDifficulty,
+        decreaseDifficulty
+      });
+    }
+  }
+}
+
+async function handleReorderAdmins(newOrder: Admin[]) {
+  player.value.admins = newOrder;
+  await syncLLMAdmins(newOrder);
+}
+
 async function sellAdmin(itemId: string) {//TODO NEXT
   const idx = player.value.admins.findIndex(i => i.id === itemId);
   if (idx === -1) return;
@@ -541,13 +560,14 @@ async function sellAdmin(itemId: string) {//TODO NEXT
     await admin.remove({ player: player.value, increaseDifficulty, decreaseDifficulty });
   }
   player.value.admins.splice(idx, 1);
+  await syncLLMAdmins();
   const appraisalBonus = player.value.hasAdmin('Appraisal') ? 1 : 2;
   player.value.money += Math.round(admin.cost / appraisalBonus);
 }
 
 function handleApplyItem(payload: { item: Item, id: string }) {
   const item = payload.item;
-  const itemMult = 1 + player.value.admins.filter(a => a.name === 'Chemistry').length;
+  const itemMult = player.value.itemMult;
   console.log('itemMult:', itemMult);
   if (item.targetType === 'playerAndGame' && selectedPiece.value) {
     if (item.name === 'Jar' && selectedPiece.value.team === 'enemy' && selectedPiece.value.defenceRemaining <= 0 && selectedPiece.value.tiles.length <= 1) {
@@ -1563,6 +1583,7 @@ async function removePiece(piece: Piece) {
     piece.tiles = [piece.headPosition];
     const index = player.value.admins.findIndex(a => a.name === 'Parachute');
     if (index !== -1) player.value.admins.splice(index, 1);
+    await syncLLMAdmins();
   } else {
     const idx = activePieces.value.findIndex(p => p.id === piece.id);
     if (idx !== -1) {
@@ -2072,6 +2093,7 @@ const endRound = async (roundWon: boolean) => {
     if (player.value.hasAdmin('Onion')) {
       const index = player.value.admins.findIndex(a => a.name === 'Onion');
       if (index !== -1) player.value.admins.splice(index, 1);
+      await syncLLMAdmins();
     }
     else if (player.value.lives > 0 || currentAppMode.value === 'campaign') {
       if (currentAppMode.value !== 'campaign') {
@@ -2160,7 +2182,7 @@ const endTurn = async () => {
   activePieces.value = activePieces.value.filter(p => !(p.team === 'player' && p.name === 'Spawn'));
 
   await handleApplyAdmins('onTurnEnd', '');//sprinkler
-  const statusMult = 1 + player.value.admins.filter(a => a.name === 'Volatile').length;
+  const statusMult = player.value.statusMult;
   for (const piece of activePieces.value) {
     if (piece.team === 'player') {
       await piece.applyStatusEffects(statusMult);
@@ -2557,7 +2579,7 @@ function cancelConfirm() {
       <!-- PlayerView + End Turn / Retry -->
       <PlayerView v-if="!displayEditor" ref="playerViewRef" :player="player" :showInventory="showInventory" :isCampaign="currentAppMode === 'campaign'" :companyIconId="campaignPlayerIconID"
         @highlightPlacements="highlightPlacements" @sellBlueprint="sellBlueprint" @sellItem="sellItem"
-        @applyItem="handleApplyItem" @sellAdmin="sellAdmin" @reorderAdmins="player.admins = $event"
+        @applyItem="handleApplyItem" @sellAdmin="sellAdmin" @reorderAdmins="handleReorderAdmins"
         @startPlacementDrag="startPlacementDrag" @closeInventory="toggleInventory" @openInventory="toggleInventory" />
       <PieceController v-if="selectedPiece && !hasFinishedTurn" :piece="selectedPiece" mode="action"
         :hasFinishedTurn="hasFinishedTurn" :canBuy="false" :canMove="player.canMove" :canAction="player.canAction"

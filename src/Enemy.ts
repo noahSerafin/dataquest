@@ -1,6 +1,6 @@
 import type { Piece } from "./Pieces";
 import type { Coordinate } from "./types";
-import { findAnyPiecesInRange } from "./helperFunctions";
+import { sleep, findAnyPiecesInRange } from "./helperFunctions";
 import type { Player } from "./Player";
 import { Random } from "./Random";
 
@@ -432,10 +432,6 @@ export async function runEnemyStateMachine(
 }
 
 // --- HELPER FUNCTIONS ---
-
-function sleep(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 async function attackPiece(attacker: Piece, defender: Piece) {
   if (attacker.actions > 0 && attacker.canAttack) {//!canAttack should do special

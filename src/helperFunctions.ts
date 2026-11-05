@@ -8,13 +8,12 @@ import { StorageManager } from "./StorageManager";
 import { Random } from "./Random";
 import { allBosses, nonStackableBosses } from "./Bosses";
 import type { Admin } from "./AdminPrograms";
+import iconsUrl from "../public/large-spritesheet.png";
 
 export const isSoundEnabled = ref(false);
 
 let audioCtx: AudioContext | null = null;
 const audioBufferCache = new Map<string, AudioBuffer>();
-
-import iconsUrl from "../public/large-spritesheet.png";
 
 export const spritesheetState = ref({ loaded: false, error: false });
 export { iconsUrl };
@@ -91,6 +90,10 @@ export function playSoundFx(url: string, rate: number = 1.0) {
   }
 
   playBuffer(ctx, buffer, rate);
+}
+
+export function sleep(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 export function coordKey(c: Coordinate): string {
@@ -329,7 +332,7 @@ export function rollBoss(difficulty: number, currentBosses: Admin[], excludeName
 }*/
 export function pickWeightedRandom(PieceClasses: any[], player: Player) {
 
-  const cloverCount = player.admins.filter(a => a.name === 'Clover').length;
+  const cloverCount = player.cloverCount;
   const hasCollector = player.admins.some(a => a.name === 'Collector');
 
   const rarity = rollRarity(cloverCount, hasCollector);
@@ -353,7 +356,7 @@ export function pickWeightedRandom(PieceClasses: any[], player: Player) {
 
 export function pickWeightedRandomItem(itemClasses: any[], player: Player, costReduction?: number) {//move to items.ts?
 
-  const cloverCount = player.admins.filter(a => a.name === 'Clover').length;
+  const cloverCount = player.cloverCount;
   const hasCollector = player.admins.some(a => a.name === 'Collector');
   const rarity = rollRarity(cloverCount, hasCollector);
 

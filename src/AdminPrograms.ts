@@ -63,7 +63,7 @@ export abstract class Admin<
   }
 }
 
-export class Meteor extends Admin {
+class Meteor extends Admin {
   static iconID = 372;
   static name = "Meteor";
   static description = "Deals 3 damage to every piece at the start of a round";//3?
@@ -156,9 +156,14 @@ class Clover extends Admin {
   static color = "#00ff0dff";
   static rarity = 2;
   constructor() {
-    super(Clover.name, Clover.description, Clover.unicode, Clover.color, 5, Clover.rarity, 'gameState', 'other')//shop state, on round end? on OpenShop?
+    super(Clover.name, Clover.description, Clover.unicode, Clover.color, 5, Clover.rarity, 'player', 'other')//shop state, on round end? on OpenShop?
   }
-  //interact with shop, modify shop for this
+  async apply({ player }: { player: Player }) {
+    player.cloverCount += 1;
+  }
+  remove({ player }: { player: Player }) {
+    player.cloverCount -= 1;
+  }
 }
 
 class Onion extends Admin {
@@ -191,7 +196,7 @@ class Blood extends Admin {
   //on damage
   private ids: string[] = []//track already stolen pieces?
   async apply({ id: _id, activePieces: _activePieces, player, piece }: { id: string, activePieces: Piece[], player: Player, piece?: Piece }) {
-    if(!piece) return;
+    if (!piece) return;
     if (!this.ids.includes(piece.id)) {
       this.isTriggering = true;
       setTimeout(() => this.isTriggering = false, 500);
@@ -290,29 +295,64 @@ class Department extends Admin {
   //modify shop/player bool for this
 }
 
-class LLM extends Admin {
+export class LLM extends Admin {
   static iconID = 470;
-  static name: "LLM";
+  static name = "LLM";
   static description = "Copies the ability of the admin to it's left";
   static unicode = "U+1F5B2";
   static color = "rgb(31, 31, 31)";
   static rarity = 5;
+  private count = 0;
+  private ids: string[] = [];
+  private candidates: Record<string, number> = {};
+  private firstId: string = '';
+  copiedSourceId: string | null = null;
   constructor() {
-    super(LLM.name, LLM.description, LLM.unicode, LLM.color, 8, LLM.rarity, 'player', 'other')//handle on purchase, and when the player drags it
+    super(LLM.name, LLM.description, LLM.unicode, LLM.color, 10, LLM.rarity, 'player', 'other')//handle on purchase, and when the player drags it
   }
 
-  async apply({ player }: { player: Player }) {
-    const a = player.admins[player.admins.length -2];
+  async copyAdmin(
+    a: Admin | undefined,
+    context?: { player: Player; increaseDifficulty?: () => Promise<void>; decreaseDifficulty?: () => void }
+  ) {
+    const effectiveSourceId = !a ? null : a instanceof LLM ? a.copiedSourceId : a.id;
+
+    if (this.copiedSourceId === effectiveSourceId) return;
+
+    // If we previously copied a one-shot player admin, undo its effect first
+    if (context && this.copiedSourceId !== null && this.triggerType === 'other' && this.targetType === 'player') {
+      await this.remove(context);
+    }
+
+    if (!a || effectiveSourceId === null) {
+      // Nothing to the left (index 0) or unconfigured LLM to the left: reset to idle
+      this.copiedSourceId = null;
+      this.triggerType = 'other';
+      this.targetType = 'player';
+      this.apply = async () => { };
+      this.remove = async () => { };
+      this.onRoundEnd = undefined;
+      return;
+    }
+
+    this.copiedSourceId = effectiveSourceId;
     this.triggerType = a.triggerType;
     this.targetType = a.targetType;
-    this.apply = a.apply;//if this is not possible, create a compressed new admin copy that is hidden from the players view to perform the apply, remove it when admin is dragged
-    //store that ones id, if it is triggering, also trigger this one (for the visual)
+    this.apply = a.apply;
+    this.onRoundEnd = a.onRoundEnd;
+    this.remove = a.remove;
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
-    for (const admin of player.admins) {//when dragged
-      //find the admin to the left of this one
-      //
+
+    // If the newly copied admin is a one-shot player admin, apply its effect immediately
+    if (context && this.triggerType === 'other' && this.targetType === 'player') {
+      await this.apply(context);
     }
+  }
+
+  async apply(context: { player: Player; increaseDifficulty?: () => Promise<void>; decreaseDifficulty?: () => void }) {
+    const idx = context.player.admins.indexOf(this);
+    await this.copyAdmin(idx > 0 ? context.player.admins[idx - 1] : undefined, context);
   }
 }
 
@@ -489,7 +529,13 @@ export class Volatile extends Admin {
   static color = "#00ff22c7";
   static rarity = 4;
   constructor() {
-    super(Volatile.name, Volatile.description, Volatile.unicode, Volatile.color, 6, Volatile.rarity, 'gameState', 'onTurnEnd')
+    super(Volatile.name, Volatile.description, Volatile.unicode, Volatile.color, 6, Volatile.rarity, 'player', 'other')
+  }
+  async apply({ player }: { player: Player }) {
+    player.statusMult += 1;
+  }
+  remove({ player }: { player: Player }) {
+    player.statusMult -= 1;
   }
 }
 
@@ -601,9 +647,14 @@ export class Chemistry extends Admin {
   static color = "#4eb95cff";
   static rarity = 5;
   constructor() {
-    super(Chemistry.name, Chemistry.description, Chemistry.unicode, Chemistry.color, 6, Chemistry.rarity, 'gameState', 'other')//on Item use
+    super(Chemistry.name, Chemistry.description, Chemistry.unicode, Chemistry.color, 6, Chemistry.rarity, 'player', 'other')//on Item use
   }
-  //seperate flag for this
+  async apply({ player }: { player: Player }) {
+    player.itemMult += 1;
+  }
+  remove({ player }: { player: Player }) {
+    player.itemMult -= 1;
+  }
 }
 
 class Aesculapius extends Admin {
@@ -951,7 +1002,7 @@ class Cactus extends Admin {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
-    await activePieces[idx].takeDamage(Math.round(player.difficulty/2));
+    await activePieces[idx].takeDamage(Math.round(player.difficulty / 2));
   }
 }
 
@@ -2321,7 +2372,7 @@ class Knot extends Admin {
   }
 }
 
-class Rainbow extends Admin {
+export class Rainbow extends Admin {
   static iconID = 244;
   static name = "Pot of Gold";
   static description = "+$10 After beating a boss";//nerf to 5? 7?
@@ -2869,7 +2920,7 @@ class Cards extends Admin {
   static name = "Hidden Hand";
   static description = "Held upgrade item's effects apply to all your programs on load";
   static unicode = "U+1FAAD"; //FOLDING HAND FAN, 
-  static color = "rgb(250, 54, 230)";
+  static color = "rgb(143, 26, 131)";
   static rarity = 5;
   constructor() {
     super(Cards.name, Cards.description, Cards.unicode, Cards.color, 7, Cards.rarity, 'playerAndGame', 'onPlacement')
@@ -3172,7 +3223,7 @@ class BlackBelt extends Admin {
     if (attackerIdx === -1) return;
     const attacker = activePieces[attackerIdx];
     attacker.takeDamage(piece.getStat('attack'));
-    if(!attacker.immunities.disarmed){
+    if (!attacker.immunities.disarmed) {
       attacker.statuses.disarmed = true;
     }
   }
@@ -3950,7 +4001,7 @@ export class Clippy extends Admin {
   //handle in player
 }
 
-export const allAdmins = [Bank, Bucket, Candle, Cane, Cheese, Clippy, Smoker, Compass, CreditCard, Crystal, Glasses, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Schoolbag, Seed, Slots, Sprinkler, Tempura, Sneakers, Chime, Abacus, Aesculapius, Appraisal, Balloon, Bone, Briefcase, Bubble, Cactus, Coin, Purse, Collector, Convenience, FireEngine, Heart, Dice, Joker, Clover, Microscope, Newspaper, Pickup, Putter, Relay, Rune, Scarf, Stiletto, Mail, Bowling, Nose, Bipolar, Violin, Vitamins, Wings, AdminMap, Barber, Ace, AirSupport, Bouquet, Broom, Camp, Huzzah, Luggage, Chain, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Jammer, Roger, Juggler, Ladder, Loot, Drunk, Puzzle, Razor, Sled, Shades, Spoon, Pants, StoneAge, Stonks, Christmas, Telescope, Toolbox, Tracker, Ambulance, Backdoor, Bassline, BionicArm, BionicLeg, Crash, Blood, DartBoard, Butler, Dove, Evergreen, Discount, Fountain, Feather, Fuel, Howzat, Liberty, Lightbulb, Ollie, Palette, Pazzaz, PetriDish, Prayer, Wheel, Salt, Selfie, Crown, Variety, Volatile, Djembe, Artic, BlackBelt, Booty, Lungs, Chemistry, Chivalry, Toilet, Copier, Daisy, Diamond, Disco, Hamsa, Skyscraper, Hermes, Cards, Inheritance, Cherries, Lotus, Brain, Meditation, Meteor, Monarch, Onion, PeaPod, Teddy, Pong, RollerBlades, Bell, Baseball, Taoism, Ice, Ballet, Bath, Lefty, Minerva, Needle, Pi, Osiris, Righty, Ring, Silly, School, Umbrella, Dharma];
+export const allAdmins = [Bank, Bucket, Candle, Cane, Cheese, Clippy, Smoker, Compass, CreditCard, Crystal, Glasses, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Schoolbag, Seed, Slots, Sprinkler, Tempura, Sneakers, Chime, Abacus, Aesculapius, Appraisal, Balloon, Bone, Briefcase, Bubble, Cactus, Coin, Purse, Collector, Convenience, FireEngine, Heart, Dice, Joker, Clover, Microscope, Newspaper, Pickup, Putter, Relay, Rune, Scarf, Stiletto, Mail, Bowling, Nose, Bipolar, Violin, Vitamins, Wings, AdminMap, Barber, Ace, AirSupport, Bouquet, Broom, Camp, Huzzah, Luggage, Chain, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Jammer, Roger, Juggler, Ladder, Loot, Drunk, Puzzle, Razor, Sled, Shades, Spoon, Pants, StoneAge, Stonks, Christmas, Telescope, Toolbox, Tracker, Ambulance, Backdoor, Bassline, BionicArm, BionicLeg, Crash, Blood, DartBoard, Butler, Dove, Evergreen, Discount, Fountain, Feather, Fuel, Howzat, Liberty, Lightbulb, Ollie, Palette, Pazzaz, PetriDish, Prayer, Wheel, Salt, Selfie, Crown, Variety, Volatile, Djembe, Artic, BlackBelt, Booty, Lungs, Chemistry, Chivalry, Toilet, Copier, Daisy, Diamond, Disco, Hamsa, Skyscraper, Hermes, Cards, Inheritance, Cherries, LLM, Lotus, Brain, Meditation, Meteor, Monarch, Onion, PeaPod, Teddy, Pong, RollerBlades, Bell, Baseball, Taoism, Ice, Ballet, Bath, Lefty, Minerva, Needle, Pi, Osiris, Righty, Ring, Silly, School, Umbrella, Dharma];
 console.log('admins length: ', allAdmins.length)
 let adminLogs = {
   rarity1: 0,

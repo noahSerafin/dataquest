@@ -799,15 +799,6 @@ watch(currentNodeId, () => {
 
 
 <style scoped>
-.visible {
-    transform: translateY(0);
-}
-
-.collapsed {
-    transform: translateY(500%);
-    top: 100%;
-}
-
 .world-map {
     background-color: rgb(8, 47, 0);
     z-index: 3;

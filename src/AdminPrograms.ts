@@ -63,10 +63,10 @@ export abstract class Admin<
   }
 }
 
-class Meteor extends Admin {
+export class Meteor extends Admin {
   static iconID = 372;
   static name = "Meteor";
-  static description = "Deals 2 damage to every piece at the start of a round";
+  static description = "Deals 3 damage to every piece at the start of a round";//3?
   static unicode = "U+2604";//"U+1F71A"
   static color = "#000000ff";
   static rarity = 5;
@@ -78,7 +78,7 @@ class Meteor extends Admin {
     setTimeout(() => this.isTriggering = false, 500);
     for (const p of activePieces) {
       if (p.team === 'enemy') {
-        await p.takeDamage(2);
+        await p.takeDamage(3);//3
       }
     }
   }
@@ -180,21 +180,28 @@ class Onion extends Admin {
 class Blood extends Admin {
   static iconID = 327;
   static name = "Blood Tax";
-  static description = "Each time your attacks deal damage, earn $1";//overkills only?
+  static description = "Each time your attacks deal damage to a program for the first time, earn $1";//can still farm off
   static unicode = "U+1FA78";
   static color = "#790000ff";
   static rarity = 4;
   constructor() {
-    super(Blood.name, Blood.description, Blood.unicode, Blood.color, 10, Blood.rarity, 'player', 'onDealDamage')//player?
+    super(Blood.name, Blood.description, Blood.unicode, Blood.color, 10, Blood.rarity, 'playerAndGame', 'onDealDamage')//player?
   }
 
   //on damage
-  async apply({ player }: { player: Player }) {
-    player.money += 1 //enemy pieces only?
-    this.isTriggering = true;
-    setTimeout(() => this.isTriggering = false, 500);
+  private ids: string[] = []//track already stolen pieces?
+  async apply({ id: _id, activePieces: _activePieces, player, piece }: { id: string, activePieces: Piece[], player: Player, piece?: Piece }) {
+    if(!piece) return;
+    if (!this.ids.includes(piece.id)) {
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
+      player.money += 1 //enemy pieces only?
+      this.ids.push(piece.id)
+    }
   }
-
+  onRoundEnd() {
+    this.ids = [];
+  }
 }
 
 class Razor extends Admin {
@@ -283,25 +290,28 @@ class Department extends Admin {
   //modify shop/player bool for this
 }
 
-class Eye extends Admin {
-  static iconID = 332;
-  static name = "Evil Eye";
-  static description = "Lower's the defences of all enemy progams by 1 at the start of a round";
-  static unicode = "U+1F9FF";
-  static color = "#020072ff";
-  static rarity = 4;
+class LLM extends Admin {
+  static iconID = 470;
+  static name: "LLM";
+  static description = "Copies the ability of the admin to it's left";
+  static unicode = "U+1F5B2";
+  static color = "rgb(31, 31, 31)";
+  static rarity = 5;
   constructor() {
-    super(Eye.name, Eye.description, Eye.unicode, Eye.color, 8, Eye.rarity, 'gameState', 'onRoundStart')
+    super(LLM.name, LLM.description, LLM.unicode, LLM.color, 8, LLM.rarity, 'player', 'other')//handle on purchase, and when the player drags it
   }
 
-  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+  async apply({ player }: { player: Player }) {
+    const a = player.admins[player.admins.length -2];
+    this.triggerType = a.triggerType;
+    this.targetType = a.targetType;
+    this.apply = a.apply;//if this is not possible, create a compressed new admin copy that is hidden from the players view to perform the apply, remove it when admin is dragged
+    //store that ones id, if it is triggering, also trigger this one (for the visual)
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
-    for (const p of activePieces) {
-      if (p.team === 'enemy') {
-        p.addModifier({ defence: -1 })//enemy pieces only?
-        p.defenceRemaining -= 1;
-      }
+    for (const admin of player.admins) {//when dragged
+      //find the admin to the left of this one
+      //
     }
   }
 }
@@ -928,7 +938,7 @@ class Crown extends Admin {
 class Cactus extends Admin {
   static iconID = 262;
   static name = "Cactus";
-  static description = "Programs retaliate with your current security level of damage when they are attacked";//current security
+  static description = "Programs retaliate with half your current security level of damage (rounded up) when they are attacked";//current security
   static unicode = "U+1F335";
   static color = "#dfb372ff";
   static rarity = 2;
@@ -941,7 +951,7 @@ class Cactus extends Admin {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
-    await activePieces[idx].takeDamage(player.difficulty);
+    await activePieces[idx].takeDamage(Math.round(player.difficulty/2));
   }
 }
 
@@ -2609,7 +2619,7 @@ class Nest extends Admin {
 class Sled extends Admin {
   static iconID = 311;
   static name = "Rosebud";
-  static description = "Your last loaded program starts hidden";
+  static description = "Your last loaded program in your inventory starts hidden";//last spawn used?
   static unicode = "U+1F6F7";
   static color = "rgb(185, 185, 185)";
   static rarity = 3;
@@ -2727,7 +2737,7 @@ class Dharma extends Admin {
 class Putter extends Admin {
   static iconID = 275;
   static name = "Putter";
-  static description = "After a program is destroyed, the last remaining enemy program loses -1 to all stats";//0 defence?
+  static description = "The last remaining enemy program loses -1 to all stats";//0 defence?
   static unicode = "U+26F3";
   static color = "rgb(25, 215, 107)";
   static rarity = 2;//1?
@@ -3140,14 +3150,14 @@ class BlackBelt extends Admin {
 
 
   static name = "Black Belt";
-  static description = "Your programs with an action remaining on the end of your turn will retaliate with their attack on incoming damage";
+  static description = "Your programs with an action remaining when attacked will retaliate with their own attack, and disarm the attacker";
   static unicode = "U+1F94B";
   static color = "rgb(0, 0, 0)";
   static rarity = 5;
   constructor() {
-    super(BlackBelt.name, BlackBelt.description, BlackBelt.unicode, BlackBelt.color, 9, BlackBelt.rarity, 'gameState', 'onTurnEnd')
+    super(BlackBelt.name, BlackBelt.description, BlackBelt.unicode, BlackBelt.color, 9, BlackBelt.rarity, 'gameState', 'onReceiveDamage')
   }
-  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+  /*async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (let index = 0; index < activePieces.length; index++) {
       const p = activePieces[index];
       if (p.team === 'player' && p.name !== 'Spawn' && p.actions >= 1) {
@@ -3155,6 +3165,15 @@ class BlackBelt extends Admin {
         this.isTriggering = true;
         setTimeout(() => this.isTriggering = false, 500);
       }
+    }*/
+  async apply({ id, activePieces, piece }: { id: string, activePieces: Piece[], piece?: Piece }) {
+    if (!piece || piece.actions === 0) return;
+    const attackerIdx = activePieces.findIndex(p => p.id === id);
+    if (attackerIdx === -1) return;
+    const attacker = activePieces[attackerIdx];
+    attacker.takeDamage(piece.getStat('attack'));
+    if(!attacker.immunities.disarmed){
+      attacker.statuses.disarmed = true;
     }
   }
 }
@@ -3931,7 +3950,7 @@ export class Clippy extends Admin {
   //handle in player
 }
 
-export const allAdmins = [Bank, Bucket, Candle, Cane, Cheese, Clippy, Smoker, Compass, CreditCard, Crystal, Glasses, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Schoolbag, Seed, Slots, Sprinkler, Tempura, Sneakers, Chime, Abacus, Aesculapius, Appraisal, Balloon, Bone, Briefcase, Bubble, Cactus, Coin, Purse, Collector, Convenience, FireEngine, Heart, Dice, Joker, Clover, Microscope, Newspaper, Pickup, Putter, Relay, Rune, Scarf, Stiletto, Mail, Bowling, Nose, Bipolar, Violin, Vitamins, Wings, AdminMap, Barber, Ace, AirSupport, Bouquet, Broom, Camp, Huzzah, Luggage, Chain, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Jammer, Roger, Juggler, Ladder, Loot, Drunk, Puzzle, Razor, Sled, Shades, Spoon, Pants, StoneAge, Stonks, Christmas, Telescope, Toolbox, Tracker, Ambulance, Backdoor, Bassline, BionicArm, BionicLeg, Crash, Blood, DartBoard, Butler, Dove, Evergreen, Eye, Discount, Fountain, Feather, Fuel, Howzat, Liberty, Lightbulb, Ollie, Palette, Pazzaz, PetriDish, Prayer, Wheel, Salt, Selfie, Crown, Variety, Volatile, Djembe, Artic, BlackBelt, Booty, Lungs, Chemistry, Chivalry, Toilet, Copier, Daisy, Diamond, Disco, Hamsa, Skyscraper, Hermes, Cards, Inheritance, Cherries, Lotus, Brain, Meditation, Meteor, Monarch, Onion, PeaPod, Teddy, Pong, RollerBlades, Bell, Baseball, Taoism, Ice, Ballet, Bath, Lefty, Minerva, Needle, Pi, Osiris, Righty, Ring, Silly, School, Umbrella, Dharma];
+export const allAdmins = [Bank, Bucket, Candle, Cane, Cheese, Clippy, Smoker, Compass, CreditCard, Crystal, Glasses, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Schoolbag, Seed, Slots, Sprinkler, Tempura, Sneakers, Chime, Abacus, Aesculapius, Appraisal, Balloon, Bone, Briefcase, Bubble, Cactus, Coin, Purse, Collector, Convenience, FireEngine, Heart, Dice, Joker, Clover, Microscope, Newspaper, Pickup, Putter, Relay, Rune, Scarf, Stiletto, Mail, Bowling, Nose, Bipolar, Violin, Vitamins, Wings, AdminMap, Barber, Ace, AirSupport, Bouquet, Broom, Camp, Huzzah, Luggage, Chain, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Jammer, Roger, Juggler, Ladder, Loot, Drunk, Puzzle, Razor, Sled, Shades, Spoon, Pants, StoneAge, Stonks, Christmas, Telescope, Toolbox, Tracker, Ambulance, Backdoor, Bassline, BionicArm, BionicLeg, Crash, Blood, DartBoard, Butler, Dove, Evergreen, Discount, Fountain, Feather, Fuel, Howzat, Liberty, Lightbulb, Ollie, Palette, Pazzaz, PetriDish, Prayer, Wheel, Salt, Selfie, Crown, Variety, Volatile, Djembe, Artic, BlackBelt, Booty, Lungs, Chemistry, Chivalry, Toilet, Copier, Daisy, Diamond, Disco, Hamsa, Skyscraper, Hermes, Cards, Inheritance, Cherries, Lotus, Brain, Meditation, Meteor, Monarch, Onion, PeaPod, Teddy, Pong, RollerBlades, Bell, Baseball, Taoism, Ice, Ballet, Bath, Lefty, Minerva, Needle, Pi, Osiris, Righty, Ring, Silly, School, Umbrella, Dharma];
 console.log('admins length: ', allAdmins.length)
 let adminLogs = {
   rarity1: 0,
@@ -3966,15 +3985,13 @@ console.log("Admins of rarity 4: ", adminLogs.rarity4)
 console.log("Admins of rarity 5: ", adminLogs.rarity5)
 console.log("Admins of rarity 6: ", adminLogs.rarity6)
 
-// U+1F3C4 surfing
-//JEANS, U+1F456 all hidden nodes are compilers - cost gets more expensive each time //gene hybrids appear in shop
-//U+1F4FA TELEVISION enemies first turn is disabled
-//Boots, U+1F462 +1 moves, +1 max size, -1 attack/def
+//CRUTCH, U+1FA7C immune to being disarmed
+// U+1F3C4 surfing Kali Yuga - like butter for friendlies
+//Boots, U+1F462 +1 moves, +1 max size, +1 attack, -1 def
 // U+1F5D1 WASTEBASKET - Recycle bin 
-
 //Swish, U+1F3C0 - range of 3+ gets +3 attack
-//CRUTCH, U+1FA7C
-//FINGERPRINT, U+1FAC6 forensics
+//JEANS, U+1F456 all hidden nodes are compilers - cost gets more expensive each time //gene hybrids appear in shop
+
 // MOUNT FUJI, U+1F5FB
 //U+1F4FB RADIO
 //SLEUTH OR SPY, U+1F575

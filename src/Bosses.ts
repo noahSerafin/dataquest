@@ -125,7 +125,7 @@ class Downturn extends Admin {
     private count = 0;
     async apply({ player }: { player: Player }) {
         this.count++
-        if (this.count % 2 === 0) {
+        if (this.count % 3 === 0) {
             player.money--;
             this.isTriggering = true;
             setTimeout(() => this.isTriggering = false, 500);
@@ -831,7 +831,7 @@ class Tsunami extends Admin {
         this.count = 0;
     }
 }
-
+/*
 class Coaster extends Admin {
     static iconID = 427;
     static name = "Up and Up";//cranking up
@@ -858,6 +858,29 @@ class Coaster extends Admin {
     onRoundEnd() {
         this.count = 0;
     }
+}*/
+
+class Eye extends Admin {
+  static iconID = 332;
+  static name = "Evil Eye";
+  static description = "Lowers the defences of all enemy progams by 1 on load";
+  static unicode = "U+1F9FF";
+  static color = "#020072ff";
+  static rarity = 4;
+  constructor() {
+    super(Eye.name, Eye.description, Eye.unicode, Eye.color, 8, Eye.rarity, 'gameState', 'onPlacement')
+  }
+
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
+    for (const p of activePieces) {
+      if (p.team === 'player') {
+        p.addModifier({ defence: -1 })//enemy pieces only?
+        p.defenceRemaining -= 1;
+      }
+    }
+  }
 }
 
 class Singularity extends Admin {
@@ -1837,8 +1860,8 @@ class Zero extends Admin {//to test
     }
 }
 
-export const allBosses = [Concussion, LowBattery, NorthWind, Taxman, TrafficLight, Quicksand, Butter, Customs, Downturn, Hook, Mirror, Rage, Salsa, Shrine, Snoozefest, Whale, Anchor, Hammer, Castle, Circus, Clapback, ClipBoard, Izakaya, Mountain, Tsunami, Wilt, Autumn, Avalanche, Biohazard, Cocktail, Coral, Eclipse, Lock, Factory, Jack, Coaster, Blackmail, Snowflake, Love, Bones, Frog, Singularity, Seething, Tornado, Volcano, Snow, Sun, Fog, Nightfall, Nofun, Omega, Reaper, REDACTED, Wrath, AirGap, Battle, Lockdown, Variantr, SoulKiller, Zero];
-export const nonStackableBosses = [Mirror, Customs, Snowflake, Sun, Frog, Biohazard, Coral, Izakaya, REDACTED, Fog, Singularity, Tornado, Cocktail];
+export const allBosses = [Concussion, LowBattery, NorthWind, Taxman, TrafficLight, Quicksand, Butter, Customs, Downturn, Hook, Mirror, Rage, Salsa, Shrine, Snoozefest, Whale, Anchor, Hammer, Castle, Circus, Clapback, ClipBoard, Izakaya, Mountain, Tsunami, Wilt, Autumn, Avalanche, Biohazard, Cocktail, Coral, Eclipse, Lock, Eye, Factory, Jack, Blackmail, Snowflake, Love, Bones, Frog, Singularity, Seething, Tornado, Volcano, Snow, Sun, Fog, Nightfall, Nofun, Omega, Reaper, REDACTED, Wrath, AirGap, Battle, Lockdown, Variantr, SoulKiller, Zero];
+export const nonStackableBosses = [Mirror, Customs, Snowflake, Sun, Frog, Biohazard, Coral, Izakaya, REDACTED, Fog, Singularity, Tornado, Cocktail, AirGap, Battle, Lockdown, Variantr, SoulKiller, Zero];
 
 console.log('bosses length: ', allBosses.length)
 let adminLogs = {

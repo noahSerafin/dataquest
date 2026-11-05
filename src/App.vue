@@ -991,6 +991,9 @@ async function selectLevel(newLevel: Level, company: Company, difficultyMod: num
   pieceToPlace.value = null;
   currentCompany.value = { ...company };
   showBoard.value = true;
+  showMap.value = false;
+  hasWonRound.value = false;
+  roundHasStarted.value = true;
   renewBlueprints()//shouldnt be needed in final;
   for (const admin of player.value.admins) {
     admin.disabled = false;
@@ -1043,9 +1046,6 @@ async function selectLevel(newLevel: Level, company: Company, difficultyMod: num
     foggedTiles.value = [...level.value.tiles];
     clearFog();
   }
-  showMap.value = false;
-  hasWonRound.value = false;
-  roundHasStarted.value = true;
 }
 
 async function handleProceed() {
@@ -2723,10 +2723,6 @@ function cancelConfirm() {
 
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
-}
-
-.collapsed {
-  top: 100%;
 }
 
 .mobile-menu-toggle {

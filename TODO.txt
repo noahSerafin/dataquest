@@ -56,6 +56,8 @@ BUGS -
 -refresh BEFORE returning to main menu on loss
 -accordion appearing for fortran?
 -playericon still using unicode
+enemy pieces trying to use special before reaching max size (bool for those that need it)
+buff map (preview button to show disabled board)?
 hybrid suffix needs to go to lowercase
 offroader dashed line to your row horizontally
 damage mult break workbench

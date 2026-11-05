@@ -2573,7 +2573,7 @@ function cancelConfirm() {
         :tileColor="currentCompany.tileColor" :edgeColor="currentCompany.edgeColor" @placeOnBoard="placePieceOnBoardAt"
         @handlePieceSelect="handlePieceSelect" @deselect="deselectPiece" @movePiece="movePiece"
         @damagePieceAt="damagePieceAt" @specialActionAt="handleSpecialActionAt" @placeAt="placeAt" gameStart="true" />
-      <Collection class="stage-panel" :class="{ active: showCollection }" @close="showCollection = false"
+      <Collection v-if="showCollection" class="stage-panel" :class="{ active: showCollection }" @close="showCollection = false"
         :debugMode="debugMode" :currentSeed="currentSeed" />
       <SpriteSheet v-if="showSpriteSheet" @close="showSpriteSheet = false" />
 

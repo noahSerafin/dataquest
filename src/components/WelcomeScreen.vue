@@ -7,6 +7,10 @@ let gl: WebGLRenderingContext | null = null;
 let programInfo: any = null;
 let bufferInfo: any = null;
 let textureInfo: WebGLTexture | null = null;
+let resizeCanvasHandler: (() => void) | null = null;
+let vertexShaderRef: WebGLShader | null = null;
+let fragmentShaderRef: WebGLShader | null = null;
+let textureImage: HTMLImageElement | null = null;
 
 onMounted(() => {
   const canvas = canvasRef.value;
@@ -21,14 +25,14 @@ onMounted(() => {
 
   // Handle high DPI displays
   const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-  const resizeCanvas = () => {
+  resizeCanvasHandler = () => {
     canvas.width = window.innerWidth * dpr;
     canvas.height = window.innerHeight * dpr;
     gl?.viewport(0, 0, canvas.width, canvas.height);
   };
   
-  window.addEventListener('resize', resizeCanvas);
-  resizeCanvas();
+  window.addEventListener('resize', resizeCanvasHandler);
+  resizeCanvasHandler();
 
   // Vertex shader
   const vsSource = `
@@ -111,6 +115,8 @@ onMounted(() => {
   const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
 
   if (!vertexShader || !fragmentShader) return;
+  vertexShaderRef = vertexShader;
+  fragmentShaderRef = fragmentShader;
 
   const shaderProgram = gl.createProgram();
   if (!shaderProgram) return;
@@ -157,8 +163,18 @@ onMounted(() => {
     position: positionBuffer,
   };
 
+  let lastFrameTime = 0;
+  const FRAME_INTERVAL = 1000 / 30; // Cap at ~30 FPS
+
   const render = (now: number) => {
     if (!gl || !programInfo) return;
+
+    animationFrameId = requestAnimationFrame(render);
+
+    if (document.hidden || now - lastFrameTime < FRAME_INTERVAL) {
+      return;
+    }
+    lastFrameTime = now;
 
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -176,7 +192,8 @@ onMounted(() => {
 
     gl.useProgram(programInfo.program);
 
-    gl.uniform1f(programInfo.uniformLocations.time, now / 1000.0);
+    // Wrap time every hour to preserve float precision
+    gl.uniform1f(programInfo.uniformLocations.time, (now / 1000.0) % 3600.0);
     gl.uniform2f(programInfo.uniformLocations.resolution, canvas.width, canvas.height);
     
     // Bind texture
@@ -185,8 +202,6 @@ onMounted(() => {
     gl.uniform1i(programInfo.uniformLocations.channel0, 0);
 
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-
-    animationFrameId = requestAnimationFrame(render);
   };
 
   animationFrameId = requestAnimationFrame(render);
@@ -194,7 +209,26 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   cancelAnimationFrame(animationFrameId);
-  window.removeEventListener('resize', () => {}); 
+  if (resizeCanvasHandler) {
+    window.removeEventListener('resize', resizeCanvasHandler);
+    resizeCanvasHandler = null;
+  }
+  if (textureImage) {
+    textureImage.onload = null;
+    textureImage.onerror = null;
+    textureImage = null;
+  }
+  if (gl) {
+    if (textureInfo) gl.deleteTexture(textureInfo);
+    if (bufferInfo?.position) gl.deleteBuffer(bufferInfo.position);
+    if (programInfo?.program) gl.deleteProgram(programInfo.program);
+    if (vertexShaderRef) gl.deleteShader(vertexShaderRef);
+    if (fragmentShaderRef) gl.deleteShader(fragmentShaderRef);
+    gl = null;
+  }
+  textureInfo = null;
+  programInfo = null;
+  bufferInfo = null;
 });
 
 function loadShader(gl: WebGLRenderingContext, type: number, source: string) {
@@ -229,8 +263,10 @@ function loadTexture(gl: WebGLRenderingContext, url: string) {
   gl.texImage2D(gl.TEXTURE_2D, level, internalFormat, width, height, border, srcFormat, srcType, pixel);
 
   const image = new Image();
+  textureImage = image;
   
   image.onload = function() {
+    if (!gl || !texture) return;
     console.log('WelcomeScreen: Texture loaded successfully');
     gl.bindTexture(gl.TEXTURE_2D, texture);
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);

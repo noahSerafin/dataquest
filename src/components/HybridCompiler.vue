@@ -53,7 +53,7 @@
         } else {
             // Single word → last 3 letters (or whole word if shorter)
             const word = secondaryParts[0];
-            secondaryPart = word.slice(-4);
+            secondaryPart = word.slice(-4).toLowerCase();
              return `${primaryWord}${secondaryPart}`;
         }
     }

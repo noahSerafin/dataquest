@@ -182,23 +182,30 @@ defineExpose({
 const overlayRect = ref({ top: 0, bottom: 0, left: 0, right: 0 });
 let overlayInterval: number;
 
+function setOverlayRect(left: number, top: number, right: number, bottom: number) {
+    const cur = overlayRect.value;
+    if (cur.left !== left || cur.top !== top || cur.right !== right || cur.bottom !== bottom) {
+        overlayRect.value = { left, top, right, bottom };
+    }
+}
+
 function updateOverlay() {
     if (currentNode.value !== null && !isMinimized.value && !waitingForMapNode.value && currentNode.value?.elementID) {
         const el = document.getElementById(currentNode.value.elementID);
         if (el) {
             const rect = el.getBoundingClientRect();
             const p = 4; // padding
-            overlayRect.value = {
-                left: Math.max(0, rect.left - p),
-                top: Math.max(0, rect.top - p),
-                right: Math.min(window.innerWidth, rect.right + p),
-                bottom: Math.min(window.innerHeight, rect.bottom + p)
-            };
+            setOverlayRect(
+                Math.max(0, rect.left - p),
+                Math.max(0, rect.top - p),
+                Math.min(window.innerWidth, rect.right + p),
+                Math.min(window.innerHeight, rect.bottom + p)
+            );
         } else {
-            overlayRect.value = { top: 0, bottom: 0, left: 0, right: 0 };
+            setOverlayRect(0, 0, 0, 0);
         }
     } else {
-        overlayRect.value = { top: 0, bottom: 0, left: 0, right: 0 };
+        setOverlayRect(0, 0, 0, 0);
     }
 }
 

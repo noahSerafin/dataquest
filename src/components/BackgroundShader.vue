@@ -25,6 +25,9 @@ let animationFrameId: number;
 let gl: WebGLRenderingContext | null = null;
 let programInfo: any = null;
 let bufferInfo: any = null;
+let resizeCanvasHandler: (() => void) | null = null;
+let vertexShaderRef: WebGLShader | null = null;
+let fragmentShaderRef: WebGLShader | null = null;
 
 let parsedEdgeColor = parseRGB(props.edgeColor);
 let parsedTileColor = parseRGB(props.tileColor);
@@ -49,14 +52,14 @@ onMounted(() => {
 
   // Handle high DPI displays - capped for performance
   const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-  const resizeCanvas = () => {
+  resizeCanvasHandler = () => {
     canvas.width = window.innerWidth * dpr;
     canvas.height = window.innerHeight * dpr;
     gl?.viewport(0, 0, canvas.width, canvas.height);
   };
   
-  window.addEventListener('resize', resizeCanvas);
-  resizeCanvas();
+  window.addEventListener('resize', resizeCanvasHandler);
+  resizeCanvasHandler();
 
   // Vertex shader
   const vsSource = `
@@ -235,6 +238,8 @@ onMounted(() => {
   const fragmentShader = loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
 
   if (!vertexShader || !fragmentShader) return;
+  vertexShaderRef = vertexShader;
+  fragmentShaderRef = fragmentShader;
 
   const shaderProgram = gl.createProgram();
   if (!shaderProgram) return;
@@ -280,12 +285,26 @@ onMounted(() => {
     position: positionBuffer,
   };
 
-  let currentProgress = 0;
+  let currentProgress = props.progress;
+  let lastFrameTime = 0;
+  const FRAME_INTERVAL = 1000 / 30; // Cap at ~30 FPS to prevent sustained GPU load
 
   const render = (now: number) => {
     if (!gl || !programInfo) return;
 
-    currentProgress += (props.progress - currentProgress) * 0.05;
+    animationFrameId = requestAnimationFrame(render);
+
+    if (document.hidden || now - lastFrameTime < FRAME_INTERVAL) {
+      return;
+    }
+    lastFrameTime = now;
+
+    const progressDiff = props.progress - currentProgress;
+    if (Math.abs(progressDiff) > 0.0005) {
+      currentProgress += progressDiff * 0.05;
+    } else {
+      currentProgress = props.progress;
+    }
 
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -304,15 +323,14 @@ onMounted(() => {
     gl.useProgram(programInfo.program);
 
     gl.uniform1f(programInfo.uniformLocations.progress, currentProgress);
-    gl.uniform1f(programInfo.uniformLocations.time, now / 1000.0);
+    // Wrap time every hour so float precision in sin/hash never degrades over long sessions
+    gl.uniform1f(programInfo.uniformLocations.time, (now / 1000.0) % 3600.0);
     gl.uniform2f(programInfo.uniformLocations.resolution, canvas.width, canvas.height);
     
     gl.uniform3fv(programInfo.uniformLocations.edgeColor, parsedEdgeColor);
     gl.uniform3fv(programInfo.uniformLocations.tileColor, parsedTileColor);
 
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-
-    animationFrameId = requestAnimationFrame(render);
   };
 
   animationFrameId = requestAnimationFrame(render);
@@ -320,7 +338,19 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   cancelAnimationFrame(animationFrameId);
-  window.removeEventListener('resize', () => {}); // A bit sloppy, but ok for now
+  if (resizeCanvasHandler) {
+    window.removeEventListener('resize', resizeCanvasHandler);
+    resizeCanvasHandler = null;
+  }
+  if (gl) {
+    if (bufferInfo?.position) gl.deleteBuffer(bufferInfo.position);
+    if (programInfo?.program) gl.deleteProgram(programInfo.program);
+    if (vertexShaderRef) gl.deleteShader(vertexShaderRef);
+    if (fragmentShaderRef) gl.deleteShader(fragmentShaderRef);
+    gl = null;
+  }
+  programInfo = null;
+  bufferInfo = null;
 });
 
 function loadShader(gl: WebGLRenderingContext, type: number, source: string) {

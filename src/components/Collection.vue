@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue";
+import { ref, onMounted, onBeforeUnmount, computed } from "vue";
 import { allPieces, Spawn } from "../Pieces";
 import { allItems, Item } from "../Items";
 import { allAdmins } from "../AdminPrograms";
@@ -33,24 +33,31 @@ function deselectItem(){
   return;
 }
 
+const handleCollectionUpdate = (e: Event) => {
+  collection.value = (e as CustomEvent<PlayerCollection>).detail;
+};
+const handleStatsUpdate = (e: Event) => {
+  stats.value = (e as CustomEvent<PlayerStats>).detail;
+};
+
 onMounted(() => {
   collection.value = StorageManager.getCollection();
   stats.value = StorageManager.getStats();
   console.log('Collection: ', collection.value)
 
-  const handleCollectionUpdate = (e: Event) => {
-    collection.value = (e as CustomEvent<PlayerCollection>).detail;
-  };
-  const handleStatsUpdate = (e: Event) => {
-    stats.value = (e as CustomEvent<PlayerStats>).detail;
-  };
-
   window.addEventListener('storageManagerCollection', handleCollectionUpdate);
   window.addEventListener('storageManagerStats', handleStatsUpdate);
 });
 
+onBeforeUnmount(() => {
+  window.removeEventListener('storageManagerCollection', handleCollectionUpdate);
+  window.removeEventListener('storageManagerStats', handleStatsUpdate);
+});
+
 // We only want to display actual playable pieces (not Spawn)
 const playablePieces = computed(() => allPieces.filter(p => p.name !== Spawn.name));
+const blueprintCache = new Map<string, PieceBlueprint>();
+const itemCache = new Map<string, Item>();
 
 function isPieceUnlocked(name: string): boolean {
   return props.debugMode ? true : collection.value.pieces.includes(name);
@@ -68,13 +75,23 @@ function isItemUnlocked(name: string): boolean {
   return props.debugMode ? true : collection.value.items.includes(name);
 }
 
-// Generate an instance just for display properties
+// Generate an instance once and cache it for display properties
 function getPieceBlueprint(PieceClass: any): PieceBlueprint {
-  return makeBlueprint(PieceClass);
+  let bp = blueprintCache.get(PieceClass.name);
+  if (!bp) {
+    bp = makeBlueprint(PieceClass);
+    blueprintCache.set(PieceClass.name, bp);
+  }
+  return bp;
 }
 
-function getItemInstance(ItemClass: any) {
-  return new ItemClass();
+function getItemInstance(ItemClass: any): Item {
+  let inst = itemCache.get(ItemClass.name);
+  if (!inst) {
+    inst = new ItemClass();
+    itemCache.set(ItemClass.name, inst!);
+  }
+  return inst!;
 }
 
 const activeTab = ref<'pieces' | 'items' | 'admins' | 'bosses' | 'stats' | 'run' | 'history'>(props.currentSeed ? 'run' : 'stats');

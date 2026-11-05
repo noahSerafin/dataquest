@@ -4960,6 +4960,7 @@ class Television extends Piece {
         }
       }
     }
+    this.actions --
   } 
 }
 

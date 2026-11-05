@@ -664,9 +664,9 @@ class REDACTED extends Admin {
 }
 
 class Fog extends Admin {
-    static iconID = 437;//😶‍🌫️🌫️
+    static iconID = 437;//😶‍🌫️//multiple unicodes
     static name = "Fog of War";
-    static description = "All tiles outside your programs range are obscured";//handle in app
+    static description = "All tiles outside your programs' range are obscured";//handle in app
     static unicode = "U+1F301";//fog //"U+1FAEF";//fight //"U+2601"; //cloud
     static color = "#575757ff";
     static rarity = 6;

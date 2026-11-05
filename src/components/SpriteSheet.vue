@@ -179,6 +179,7 @@ const allIcons = computed(() => {
     'U+1F3DA',//old house
     'U+1F36D',//lolly
     'U+1F5D1',//recycle bin
+    'U+1FAEF'
   ];
   statuses.forEach((unicode, index) => {
     result.push({

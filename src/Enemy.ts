@@ -139,10 +139,29 @@ function decideEnemyIntent(
   }
 
   //can we help another enemy?
-  const friendlyTarget = findWeakestPlayerInRange(enemy, enemyPieces);
+  const friendlyCandidates = (enemy.targetType === 'pieceAndPlace' && !enemy.hasFriendlySpecial)
+    ? enemyPieces.filter(p => p.tiles.length > 1)
+    : enemyPieces;
+  const friendlyTarget = findWeakestPlayerInRange(enemy, friendlyCandidates);
   if (friendlyTarget && (enemy.hasFriendlySpecial || enemy.hasNeutralSpecial) && enemy.actions > 0) {
+    if ((enemy.targetType === 'pieceAndPlace' || enemy.targetType === 'placeAndPieces') && !enemy.hasFriendlySpecial) {
+      if (friendlyTarget.place.x === friendlyTarget.piece.headPosition.x && friendlyTarget.place.y === friendlyTarget.piece.headPosition.y) {
+        for (const tile of friendlyTarget.piece.tiles) {
+          if (tile.x !== friendlyTarget.piece.headPosition.x || tile.y !== friendlyTarget.piece.headPosition.y) {
+            const dist = Math.abs(enemy.headPosition.x - tile.x) + Math.abs(enemy.headPosition.y - tile.y);
+            if (dist <= enemy.getStat('range')) {
+              friendlyTarget.place = tile;
+              break;
+            }
+          }
+        }
+      }
+    }
+
     if (enemy.targetType === 'group') {
       return { type: 'special', target: (findAnyPiecesInRange(enemy, activePieces)) }
+    } else if (enemy.targetType === 'pieceAndPlace' && (friendlyTarget.piece.headPosition.x !== friendlyTarget.place.x || friendlyTarget.piece.headPosition.y !== friendlyTarget.place.y) && (specialAttempts < 1 || enemy.name === 'Dracula')) {
+      return { type: 'special', target: { piece: friendlyTarget.piece, target: friendlyTarget.place } }
     } else if (enemy.targetType == 'placeAndPieces' && specialAttempts < 1) {//rectify attempts later
       return { type: 'special', target: { target: friendlyTarget.place, activePieces: activePieces } }
     } else if (enemy.targetType === 'piece' || enemy.targetType === 'pieceAndPlayer') {//piece

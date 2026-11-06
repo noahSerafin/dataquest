@@ -17,7 +17,6 @@ import { level4Levels } from "../level4Levels";
 import { level5Levels } from "../level5Levels";
 import { allPieces } from "../Pieces";
 import { allAdmins } from "../AdminPrograms";
-import { allOSes } from "../Operators";
 import { makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, getSpriteStyle } from "../helperFunctions";
 import BlueprintView from "./BlueprintView.vue";
 import ItemView from "./ItemView.vue";
@@ -291,8 +290,7 @@ function getIconStyle(node: WorldNode, size: number = 24): Record<string, any> {
     }
 
     if (node.id === currentNodeId.value) {
-        const os = allOSes.find(o => o.unicode === props.player.osunicode);
-        iconID = os?.iconID;
+        iconID = props.player.iconID;
     } else if (node.type === 'skip' && node.skipReward) {
         iconID = node.skipReward.value.iconID;
     } else if (node.type === 'level') {

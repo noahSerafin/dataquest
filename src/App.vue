@@ -337,7 +337,7 @@ function startCampaign(slotIndex: number, iconID: number) {
   
   player.value = new Player(
     'U+1F60A',
-    0, 5, 4, [new Voucher()], [testSword, testShield, testSling], [], 0, 5, 0, 0, 0, 0, stake.value
+    0, 5, 4, [new Voucher()], [testSword, testShield, testSling], [], 0, 5, 0, 0, 0, 0, stake.value, iconID
   );
   player.value.difficulty = 0; // campaign starts at difficulty 0
   
@@ -361,6 +361,7 @@ function loadCampaignGame(slotIndex: number, data: any) {
   campaignClearedNodes.value = data.campaignClearedNodes || [];
   campaignShopPurchases.value = data.campaignShopPurchases || {};
   campaignPlayerIconID.value = data.campaignPlayerIconID || data.metadata?.iconID || 499;
+  player.value.iconID = campaignPlayerIconID.value;
   currentCampaignNodeId.value = data.currentCampaignNodeId || null;
   
   campaignWorldMap.value = state.world;
@@ -443,7 +444,8 @@ function createNewPlayer(payload: { os: OS, seed: string, stake?: number }) {
     0,
     0,
     0,
-    stake.value
+    stake.value,
+    os.iconID
   )
   player.value.difficulty = 1; // rogue mode starts at difficulty 1
 
@@ -459,7 +461,7 @@ function createNewPlayer(payload: { os: OS, seed: string, stake?: number }) {
   currentAppMode.value = 'rogue';
   showMap.value = true;
   gameStarted.value = true;
-  currentCompany.value = { iconID: 499, name: 'Player', abbr: '', unicode: player.value.osunicode, pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "rgb(156, 201, 84)" };
+  currentCompany.value = { iconID: os.iconID, name: 'Player', abbr: '', unicode: player.value.osunicode, pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "rgb(156, 201, 84)" };
   refreshShop(true);
   player.value.canPlace = false;
 }
@@ -2589,7 +2591,7 @@ function cancelConfirm() {
     </div>
     <div v-if="gameStarted || debugMode" class="player-area">
       <!-- PlayerView + End Turn / Retry -->
-      <PlayerView v-if="!displayEditor" ref="playerViewRef" :player="player" :showInventory="showInventory" :isCampaign="currentAppMode === 'campaign'" :companyIconId="campaignPlayerIconID"
+      <PlayerView v-if="!displayEditor" ref="playerViewRef" :player="player" :showInventory="showInventory" :isCampaign="currentAppMode === 'campaign'"
         @highlightPlacements="highlightPlacements" @sellBlueprint="sellBlueprint" @sellItem="sellItem"
         @applyItem="handleApplyItem" @sellAdmin="sellAdmin" @reorderAdmins="handleReorderAdmins"
         @startPlacementDrag="startPlacementDrag" @closeInventory="toggleInventory" @openInventory="toggleInventory" />

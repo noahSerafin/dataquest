@@ -43,7 +43,7 @@ export function rehydrateGameState(data: any): any {
   const player = new Player(
     pData.osunicode, pData.money, pData.memory, pData.adminSlots,
     [], [], [], pData.lives, pData.interestCap, pData.bonusInterest,
-    pData.bonusReward, pData.nextInterest, pData.nextReward, pData.stake
+    pData.bonusReward, pData.nextInterest, pData.nextReward, pData.stake, pData.iconID
   );
   
   Object.assign(player, pData); // merges flat stats (difficulty, fogged, etc.)

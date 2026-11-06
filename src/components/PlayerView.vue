@@ -73,8 +73,7 @@
     const props = defineProps<{
         player: Player,
         showInventory: boolean,
-        isCampaign?: boolean,
-        companyIconId?: number
+        isCampaign?: boolean
     }>();
     
     const emit = defineEmits<{
@@ -243,7 +242,7 @@
             <!-- Money -->
             <div class="player-info">
                 <span class="os">
-                    <div v-if="isCampaign && companyIconId" class="sprite-icon" :style="getSpriteStyle(companyIconId)"></div>
+                    <div v-if="player.iconID !== undefined && player.iconID >= 0" class="sprite-icon" :style="getSpriteStyle(player.iconID)"></div>
                     <template v-else>
                         {{ String.fromCodePoint(parseInt(player.osunicode.replace('U+', ''), 16), 0xFE0F) }}
                     </template>

@@ -26,6 +26,7 @@ export class Player {
     canMove: boolean = true;
     canAction: boolean = true;
     osunicode: string;
+    iconID: number;
     nextInterest: number;
     nextReward: number;
     itemMult: number = 1;
@@ -46,10 +47,12 @@ export class Player {
         bonusReward: number,
         nextInterest: number,
         nextReward: number,
-        stake: number
+        stake: number,
+        iconID: number = 499
         //adminModifiers: Record<string, StatModifier> = {}
     ) {
         this.osunicode = osunicode
+        this.iconID = iconID;
         this.money = money;
         this.memory = memory;
         this.adminSlots = adminSlots;

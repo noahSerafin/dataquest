@@ -14,7 +14,7 @@ export const shopCompany: Company = Object.freeze({iconID: 499, name: 'SPEC', ab
 export const playerCompany: Company = Object.freeze({iconID: 499, name: 'SPEC', abbr: '???', unicode: "", pieceList: allPieces, tileColor: "rgb(34, 53, 12)", edgeColor: "rgb(156, 201, 84)"});
 export const bossCompany: Company = Object.freeze({iconID: 499, name: 'Umbrella', abbr: 'BOSS', unicode: "", pieceList: allPieces, tileColor: "rgb(34, 53, 12)", edgeColor: "rgb(156, 201, 84)"});
 export const companies: Company[] = [
-    {iconID: 444, name: 'Saturn Solutions', abbr: 'SSL', unicode: "U+1FA90", pieceList: allPieces, tileColor: "rgb(74, 74, 74)", edgeColor: "rgb(233, 233, 233)"},
+    {iconID: 444, name: 'Saturn Solutions', abbr: 'SSL', unicode: "U+1FA90", pieceList: allPieces, tileColor: "rgb(34, 53, 12)", edgeColor: "rgb(255, 139, 31)"},
     {iconID: 445, name: 'Nightbridge Corp', abbr: 'NBC',  unicode: "U+1F309", pieceList: NightbridgePieces, tileColor: "rgb(47, 11, 86)", edgeColor: "rgb(247, 172, 238)"},
     {iconID: 446, name: 'Meridian Security Inc.', abbr: 'MSI', unicode: "U+1F310", pieceList: MeridianPieces, tileColor: "rgb(14, 10, 77)", edgeColor: "rgb(89, 240, 243)"},
     {iconID: 447, name: 'Longhouse Web Services', abbr: 'LWS', unicode: "U+1F6D6", pieceList: longHousePieces, tileColor: "rgb(63, 28, 4)", edgeColor: "rgb(227, 151, 64)"},

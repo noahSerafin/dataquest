@@ -10,7 +10,6 @@ import type { WorldMap, WorldNode } from "../worldBuilder";
 import type { Company, Level, PieceBlueprint, SkipReward } from "../types";
 import { allPieces } from "../Pieces";
 import { allAdmins } from "../AdminPrograms";
-import { allOSes } from "../Operators";
 import { companies, shopCompany, bossCompany, playerCompany } from "../companies";
 import { sector0Levels } from "../campaignLevels/sector0Lvls.ts";
 import { sector1Levels } from "../campaignLevels/sector1Lvls.ts";
@@ -362,8 +361,7 @@ function getIconStyle(node: WorldNode, size: number = 24): Record<string, any> {
     } else if(node.type === 'hybrid compiler'){
         iconID = 478;
     } else if (node.type === 'start') {
-        const os = allOSes.find(o => o.unicode === props.player.osunicode);
-        iconID = os?.iconID;
+        iconID = props.player.iconID;
     }
 
     if (iconID !== undefined && iconID >= 0) {

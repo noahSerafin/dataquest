@@ -68,7 +68,7 @@
                 // blueprint-only fields:
                 isPlaced: false,
                 cost: primaryBP.value.cost,
-                immunities: primaryBP.value.immunities,
+                immunities: { ...primaryBP.value.immunities },
                 version: primaryBP.value.version
             }
             if(primaryBP.value.damageMult){

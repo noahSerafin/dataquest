@@ -896,11 +896,11 @@ class Singularity extends Admin {
     private count: number = 0
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
         if (this.count >= 3) {
+            this.isTriggering = true;
+            setTimeout(() => this.isTriggering = false, 500);
             for (const piece of activePieces) {
                 if (piece.team === 'enemy') {
-                    piece.actions = 2;
-                    this.isTriggering = true;
-                    setTimeout(() => this.isTriggering = false, 500);
+                    piece.statuses.juiced = true;
                 }
             };
         }
@@ -1240,26 +1240,27 @@ class Snoozefest extends Admin {
     static color = "rgb(25, 25, 21)";
     static rarity = 2;
     constructor() {
-        super(Snoozefest.name, Snoozefest.description, Snoozefest.unicode, Snoozefest.color, 3, Snoozefest.rarity, 'gameState', 'onTurnEnd')
+        super(Snoozefest.name, Snoozefest.description, Snoozefest.unicode, Snoozefest.color, 3, Snoozefest.rarity, 'gameState', 'onTurnStart')
     }
-    private candidates: Record<string, number> = {};
+    //private candidates: Record<string, number> = {};
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
         for (const piece of activePieces) {
             if (piece.team === 'player') {
-                this.candidates[piece.id] = (this.candidates[piece.id] || 0) + 1;
+                piece.actions --;
+                /*this.candidates[piece.id] = (this.candidates[piece.id] || 0) + 1;
                 if (this.candidates[piece.id] < 2) {
                     piece.statuses.disarmed = true;
                     this.isTriggering = true;
                     setTimeout(() => this.isTriggering = false, 500);
                 } else {
                     piece.statuses.disarmed = false;
-                }
+                }*/
             }
         };
     }
-    onRoundEnd() {
+    /*onRoundEnd() {
         this.candidates = {};
-    }
+    }*/
 }
 
 //U+1F9C8 Butter - Moves enemy programs randomly after they are attacked
@@ -1323,7 +1324,7 @@ class Salsa extends Admin {
 class Clapback extends Admin {
     static iconID = 520;
     static name = "Clapback";
-    static description = "All enemies always retaliate when attacked";
+    static description = "Enemies always retaliate when attacked";
     static unicode = "U+1F44F";
     static color = "rgb(250, 45, 45)";
     static rarity = 3;

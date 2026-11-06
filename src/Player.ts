@@ -4,81 +4,81 @@ import { Admin } from "./AdminPrograms";
 import { StorageManager } from "./StorageManager";
 
 export class Player {
-    difficulty: number = 1;
-    extraDifficulty: number = 0;
-    stake: number;
-    bossesCleared: number = 0;
-    mapProgress: number = 0;
-    hasWonGame: boolean = false;
-    fogged: boolean = false;
-    money: number
-    memory: number
-    adminSlots: number
-    // /InstanceType typeof 
-    items: Item[]
-    programs: PieceBlueprint[]
-    admins: Admin[]
-    lives: number
-    interestCap: number
-    bonusInterest: number
-    bonusReward: number
-    canPlace: boolean = true;
-    canMove: boolean = true;
-    canAction: boolean = true;
-    osunicode: string;
-    iconID: number;
-    nextInterest: number;
-    nextReward: number;
-    itemMult: number = 1;
-    statusMult: number = 1;
-    cloverCount: number = 0;
-    //adminModifiers: Record<string, StatModifier>
-    constructor(
-        osunicode = '',
-        money = 5,
-        memory = 4,
-        adminSlots = 4,
-        items: Item[] = [],
-        programs: PieceBlueprint[] = [],
-        admins: Admin[] = [],
-        lives: number,
-        interestCap: number,
-        bonusInterest: number,
-        bonusReward: number,
-        nextInterest: number,
-        nextReward: number,
-        stake: number,
-        iconID: number = 499
-        //adminModifiers: Record<string, StatModifier> = {}
-    ) {
-        this.osunicode = osunicode
-        this.iconID = iconID;
-        this.money = money;
-        this.memory = memory;
-        this.adminSlots = adminSlots;
-        this.items = items;
-        this.programs = programs;
-        this.admins = admins;
-        this.lives = lives;
-        this.interestCap = interestCap;
-        this.bonusInterest = bonusInterest;
-        this.bonusReward = bonusReward;
-        this.nextInterest = nextInterest;
-        this.nextReward = nextReward;
-        this.stake = stake;
-        //this.adminModifiers = adminModifiers;
-        for (const admin of this.admins) {
-            if (admin.targetType === 'player' && admin.triggerType === 'other') {
-                admin.apply({ player: this });
-            }
-        }
+  difficulty: number = 1;
+  extraDifficulty: number = 0;
+  stake: number;
+  bossesCleared: number = 0;
+  mapProgress: number = 0;
+  hasWonGame: boolean = false;
+  fogged: boolean = false;
+  money: number
+  memory: number
+  adminSlots: number
+  // /InstanceType typeof 
+  items: Item[]
+  programs: PieceBlueprint[]
+  admins: Admin[]
+  lives: number
+  interestCap: number
+  bonusInterest: number
+  bonusReward: number
+  canPlace: boolean = true;
+  canMove: boolean = true;
+  canAction: boolean = true;
+  osunicode: string;
+  iconID: number;
+  nextInterest: number;
+  nextReward: number;
+  itemMult: number = 1;
+  statusMult: number = 1;
+  cloverCount: number = 0;
+  //adminModifiers: Record<string, StatModifier>
+  constructor(
+    osunicode = '',
+    money = 5,
+    memory = 4,
+    adminSlots = 4,
+    items: Item[] = [],
+    programs: PieceBlueprint[] = [],
+    admins: Admin[] = [],
+    lives: number,
+    interestCap: number,
+    bonusInterest: number,
+    bonusReward: number,
+    nextInterest: number,
+    nextReward: number,
+    stake: number,
+    iconID: number = 499
+    //adminModifiers: Record<string, StatModifier> = {}
+  ) {
+    this.osunicode = osunicode
+    this.iconID = iconID;
+    this.money = money;
+    this.memory = memory;
+    this.adminSlots = adminSlots;
+    this.items = items;
+    this.programs = programs;
+    this.admins = admins;
+    this.lives = lives;
+    this.interestCap = interestCap;
+    this.bonusInterest = bonusInterest;
+    this.bonusReward = bonusReward;
+    this.nextInterest = nextInterest;
+    this.nextReward = nextReward;
+    this.stake = stake;
+    //this.adminModifiers = adminModifiers;
+    for (const admin of this.admins) {
+      if (admin.targetType === 'player' && admin.triggerType === 'other') {
+        admin.apply({ player: this });
+      }
     }
+  }
 
-    /** Total "memory" usage from items + programs */
+  /** Total "memory" usage from items + programs */
   get usedMemory(): number {
     const uncompressedItems = this.items.filter(i => !i.compressed).length;
-    const itemUsage = this.hasAdmin('Schoolbag') ? (uncompressedItems/2) : uncompressedItems 
-    const bpUsage = this.hasAdmin('Toolbox') ? (this.programs.length/2) : this.programs.length 
+    const itemUsage = this.hasAdmin('Schoolbag') ? (uncompressedItems / 2) : uncompressedItems
+    const bpUsage = this.hasAdmin('Toolbox') ? (this.programs.length / 2) : this.programs.length
     return itemUsage + bpUsage;
   }
 
@@ -101,19 +101,19 @@ export class Player {
 
   addAdmin(admin: Admin) {
     StorageManager.unlockAdmin(admin.name);
-    if(admin.compressed || this.hasAdminSpace){
+    if (admin.compressed || this.hasAdminSpace) {
       this.admins.push(admin)
-      if(admin.targetType === 'player' && admin.triggerType === 'other'){
+      if (admin.targetType === 'player' && admin.triggerType === 'other') {
         admin.apply({ player: this });
       }
     }
   }
 
-  removeAdmin(admin: Admin, target: Player ) {
+  removeAdmin(admin: Admin, target: Player) {
     this.admins = this.admins.filter(a => a.id !== admin.id)
     const i = this.admins.indexOf(admin);
     if (i !== -1) this.admins.splice(i, 1);
-    if(admin.targetType === 'player' && admin.triggerType === 'other'){
+    if (admin.targetType === 'player' && admin.triggerType === 'other') {
       admin.remove({ player: target });
     }
   }
@@ -140,16 +140,16 @@ export class Player {
     return false;
   }
 
-    /** Remove an item by reference */
+  /** Remove an item by reference */
   removeItem(item: Item): void {
     this.items = this.items.filter(i => i !== item);
   }
 
   get effectiveMoney(): number {
-    return this.hasAdmin('Credit Card')? this.money + 20 : this.money;
+    return this.hasAdmin('Credit Card') ? this.money + 20 : this.money;
   }
 
-  applyItemToPieceBlueprint(payload : {item: Item, id: string}, itemMult: number) {
+  applyItemToPieceBlueprint(payload: { item: Item, id: string }, itemMult: number) {
     //check item type
     //check target id's type
     //decide which function to use
@@ -183,18 +183,18 @@ export class Player {
     this.memory = Math.max(0, this.memory + delta);
   }
 
-  spend(amount: number){
-    if(this.hasAdmin('Coinpurse')){
+  spend(amount: number) {
+    if (this.hasAdmin('Coinpurse')) {
       this.money -= (amount - 1);
     } else {
       this.money -= amount;
     }
-    if(this.hasAdmin('Piggy Bank')){
+    if (this.hasAdmin('Piggy Bank')) {
       this.money += 2;
     }
   }
 
-  hasAdmin(name: string){
+  hasAdmin(name: string) {
     return this.admins.some(a => a.name === name);
   }
 
@@ -202,28 +202,28 @@ export class Player {
     return this.admins.filter(a => a.name === name).length;
   }
 
-  calcInterest(){
+  calcInterest() {
     const baseMoney = Math.max(0, this.money);   // ← prevents negative interest
     const noOfFives = Math.floor(baseMoney / 5);
-    if(noOfFives > this.interestCap){
+    if (noOfFives > this.interestCap) {
       this.nextInterest += this.interestCap;
     } else {
       this.nextInterest += noOfFives;
     }
     //bubble
     this.nextInterest += this.bonusInterest;
-    if(this.hasAdmin('Inheritance')){
+    if (this.hasAdmin('Inheritance')) {
       this.nextInterest = (this.nextInterest * 2)
     }
     this.nextReward += this.bonusReward;
   }
 
-  collectMoney(bonus: number){
+  collectMoney(bonus: number) {
     console.log(this.nextInterest, this.nextReward)
     this.money += this.nextInterest + this.bonusInterest + this.nextReward + this.bonusReward + bonus;
   }
 
-  resetInterestAndReward(){
+  resetInterestAndReward() {
     this.nextInterest = 0;
     this.nextReward = 0;
     this.bonusInterest = 0;

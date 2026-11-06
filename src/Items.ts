@@ -1169,7 +1169,7 @@ export class Headphones extends Item<PieceBlueprint> {
         super(Headphones.name, Headphones.description, Headphones.unicode, Headphones.color, 3, Headphones.rarity, 'blueprint')
     }
     apply(target: PieceBlueprint, _itemMult: number) {
-        target.immunities.confused = true;
+        target.immunities = { ...target.immunities, confused: true };
     }
 }
 class Disguise extends Item<PieceBlueprint> {
@@ -1185,7 +1185,7 @@ class Disguise extends Item<PieceBlueprint> {
         super(Disguise.name, Disguise.description, Disguise.unicode, Disguise.color, 9, Disguise.rarity, 'blueprint')
     }
     apply(target: PieceBlueprint, _itemMult: number) {
-        target.immunities.exposed = true;
+        target.immunities = { ...target.immunities, exposed: true };
     }
 }
 class Goggles extends Item<PieceBlueprint> {
@@ -1201,7 +1201,7 @@ class Goggles extends Item<PieceBlueprint> {
         super(Goggles.name, Goggles.description, Goggles.unicode, Goggles.color, 5, Goggles.rarity, 'blueprint')
     }
     apply(target: PieceBlueprint, _itemMult: number) {
-        target.immunities.blinded = true;
+        target.immunities = { ...target.immunities, blinded: true };
     }
 }
 class Gloves extends Item<PieceBlueprint> {
@@ -1217,7 +1217,7 @@ class Gloves extends Item<PieceBlueprint> {
         super(Gloves.name, Gloves.description, Gloves.unicode, Gloves.color, 6, Gloves.rarity, 'blueprint')
     }
     apply(target: PieceBlueprint, _itemMult: number) {
-        target.immunities.frozen = true;
+        target.immunities = { ...target.immunities, frozen: true };
     }
 }
 class Labcoat extends Item<PieceBlueprint> {
@@ -1233,7 +1233,7 @@ class Labcoat extends Item<PieceBlueprint> {
         super(Labcoat.name, Labcoat.description, Labcoat.unicode, Labcoat.color, 3, Labcoat.rarity, 'blueprint')
     }
     apply(target: PieceBlueprint, _itemMult: number) {
-        target.immunities.diseased = true;
+        target.immunities = { ...target.immunities, diseased: true };
     }
 }
 class Frogman extends Item<PieceBlueprint> {
@@ -1249,7 +1249,7 @@ class Frogman extends Item<PieceBlueprint> {
         super(Frogman.name, Frogman.description, Frogman.unicode, Frogman.color, 2, Frogman.rarity, 'blueprint')
     }
     apply(target: PieceBlueprint, _itemMult: number) {
-        target.immunities.poisoned = true;
+        target.immunities = { ...target.immunities, poisoned: true };
     }
 }
 class Blackheart extends Item<PieceBlueprint> {
@@ -1265,7 +1265,7 @@ class Blackheart extends Item<PieceBlueprint> {
         super(Blackheart.name, Blackheart.description, Blackheart.unicode, Blackheart.color, 5, Blackheart.rarity, 'blueprint')
     }
     apply(target: PieceBlueprint, _itemMult: number) {
-        target.immunities.charmed = true;
+        target.immunities = { ...target.immunities, charmed: true };
     }
 }
 class Plunger extends Item<PieceBlueprint> {
@@ -1279,7 +1279,7 @@ class Plunger extends Item<PieceBlueprint> {
         super(Plunger.name, Plunger.description, Plunger.unicode, Plunger.color, 2, Plunger.rarity, 'blueprint')
     }
     apply(target: PieceBlueprint, _itemMult: number) {
-        target.immunities.slowed = true;
+        target.immunities = { ...target.immunities, slowed: true };
     }
 }
 ////POURING LIQUID, U+1FAD7, spillage
@@ -1296,7 +1296,7 @@ class Extinguisher extends Item<PieceBlueprint> {
         super(Extinguisher.name, Extinguisher.description, Extinguisher.unicode, Extinguisher.color, 4, Extinguisher.rarity, 'blueprint')
     }
     apply(target: PieceBlueprint, _itemMult: number) {
-        target.immunities.burning = true;
+        target.immunities = { ...target.immunities, burning: true };
     }
 }
 

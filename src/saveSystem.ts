@@ -45,12 +45,12 @@ export function rehydrateGameState(data: any): any {
     [], [], [], pData.lives, pData.interestCap, pData.bonusInterest,
     pData.bonusReward, pData.nextInterest, pData.nextReward, pData.stake, pData.iconID
   );
-  
+
   Object.assign(player, pData); // merges flat stats (difficulty, fogged, etc.)
-  
+
   // Ensure numeric fields are valid
   if (isNaN(player.lives)) player.lives = pData.lives ?? 0;
-  
+
   // Rehydrate player.items
   player.items = (pData.items || []).map((iData: any) => {
     const Cls = allItems.find(i => i.name === iData.name);
@@ -85,17 +85,17 @@ export function rehydrateGameState(data: any): any {
 
   // 3. Rehydrate World Map (Restore Skip reward classes)
   const world = data.world;
-  if(world && world.nodes) {
+  if (world && world.nodes) {
     Object.values(world.nodes).forEach((node: any) => {
-      
+
       // Rehydrate Company Reference
       if (node.company) {
         let matchingComp = companies.find(c => c.name === node.company.name && c.abbr === node.company.abbr);
         if (!matchingComp) {
-            if (node.company.abbr === 'BOSS') matchingComp = bossCompany;
-            else if (node.company.abbr === 'SHOP') matchingComp = shopCompany;
-            else if (node.company.abbr === '???') matchingComp = playerCompany;
-            else matchingComp = companies[0]; // fallback
+          if (node.company.abbr === 'BOSS') matchingComp = bossCompany;
+          else if (node.company.abbr === 'SHOP') matchingComp = shopCompany;
+          else if (node.company.abbr === '???') matchingComp = playerCompany;
+          else matchingComp = companies[0]; // fallback
         }
         node.company = matchingComp;
       }
@@ -128,7 +128,7 @@ export function rehydrateGameState(data: any): any {
     boardState.originalPieces = rehydratePieceArray(boardState.originalPieces || []);
     boardState.lastTurnPieces = rehydratePieceArray(boardState.lastTurnPieces || []);
     boardState.graveyard = rehydratePieceArray(boardState.graveyard || []);
-    
+
     boardState.bossAdmins = (boardState.bossAdmins || []).map((aData: any) => {
       const Cls = allPossibleAdmins.find(a => a.name === aData.name);
       if (!Cls) return null;
@@ -156,19 +156,19 @@ export function rehydratePieceArray(rawPieces: any[]): Piece[] {
   return rawPieces.map(p => {
     const PieceClass = pieceClasses.find(cls => cls.name === p.name);
     if (PieceClass) {
-        const inst = new PieceClass(p.headPosition, p.team, undefined, p.id);
-        Object.assign(inst, p); // restores modifiers, remaining moves, etc.
-        inst.tiles = (p.tiles && p.tiles.length > 0)
-            ? p.tiles.map((t: any) => ({ ...t }))
-            : (p.headPosition ? [{ ...p.headPosition }] : []);
-        // Ensure critical stats are valid numbers
-        if (isNaN(inst.defenceRemaining)) {
-            inst.defenceRemaining = inst.getStat('defence') || 0;
-        }
-        if (isNaN(inst.movesRemaining)) {
-            inst.movesRemaining = inst.getStat('moves') || 0;
-        }
-        return inst;
+      const inst = new PieceClass(p.headPosition, p.team, undefined, p.id);
+      Object.assign(inst, p); // restores modifiers, remaining moves, etc.
+      inst.tiles = (p.tiles && p.tiles.length > 0)
+        ? p.tiles.map((t: any) => ({ ...t }))
+        : (p.headPosition ? [{ ...p.headPosition }] : []);
+      // Ensure critical stats are valid numbers
+      if (isNaN(inst.defenceRemaining)) {
+        inst.defenceRemaining = inst.getStat('defence') || 0;
+      }
+      if (isNaN(inst.movesRemaining)) {
+        inst.movesRemaining = inst.getStat('moves') || 0;
+      }
+      return inst;
     }
     return p;
   });

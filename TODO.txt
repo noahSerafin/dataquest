@@ -54,12 +54,11 @@ BUGS -
 enemy pieces trying to use special before reaching max size (bool for those that need it)
 buff map (preview button to show disabled board)?
 archer not using special
-immunity items still applying to duplicated blueprints, but stat items don't do this
 - campaign - next sector needs to close shop
 
 NICE TO HAVE - VISUAL IMPROVEMENTS
 You win screen more obvious, change button to endless mode here
-improve UI and button styles
++endless mode have variants where their version num + rarity = current level - then companies can have fewer pieces in their lists
 differentiate P/I/A top left better, shapes? move to bottom right?
 ?nerf hybrids - average rounded up? +1?
 donkey, zebra, girraffe - special kick targets from rear tile?

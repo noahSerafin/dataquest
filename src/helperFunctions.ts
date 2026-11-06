@@ -265,8 +265,8 @@ function rollRarity(clovers: number, hasCollector: boolean = false) {
  */
 export function rollBoss(difficulty: number, currentBosses: Admin[], excludeNames: string[] = []): Admin {
   let bossPool: typeof allBosses;
-  if (difficulty === 10) {//true ending
-    bossPool = allBosses.filter(boss => boss.rarity === 7);
+  if (difficulty === 12) {//true ending
+    bossPool = allBosses.filter(boss => boss.rarity === 12);
   } else if (difficulty > 7) {
     bossPool = allBosses;
   } else {

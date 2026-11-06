@@ -1072,7 +1072,6 @@ h6 {
     inset: 0;
     background-color: rgba(0, 0, 0, 0.5);
     pointer-events: none;
-    z-index: 5;
 }
 
 @media (max-width: 500px) {

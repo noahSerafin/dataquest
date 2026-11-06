@@ -1242,25 +1242,25 @@ class Snoozefest extends Admin {
     constructor() {
         super(Snoozefest.name, Snoozefest.description, Snoozefest.unicode, Snoozefest.color, 3, Snoozefest.rarity, 'gameState', 'onTurnStart')
     }
-    //private candidates: Record<string, number> = {};
+    private candidates: Record<string, number> = {};
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
         for (const piece of activePieces) {
             if (piece.team === 'player') {
-                piece.actions --;
-                /*this.candidates[piece.id] = (this.candidates[piece.id] || 0) + 1;
+                this.candidates[piece.id] = (this.candidates[piece.id] || 0) + 1;
                 if (this.candidates[piece.id] < 2) {
-                    piece.statuses.disarmed = true;
+                    //piece.statuses.disarmed = true;
+                    piece.actions --;
                     this.isTriggering = true;
                     setTimeout(() => this.isTriggering = false, 500);
-                } else {
-                    piece.statuses.disarmed = false;
-                }*/
+                }// else {
+                   // piece.statuses.disarmed = false;
+                //}
             }
         };
     }
-    /*onRoundEnd() {
+    onRoundEnd() {
         this.candidates = {};
-    }*/
+    }
 }
 
 //U+1F9C8 Butter - Moves enemy programs randomly after they are attacked
@@ -1424,7 +1424,7 @@ class Love extends Admin {
 //Air Gap - removes tiles from level creating seperated islands
 class AirGap extends Admin {//to finish
     static iconID = 524;
-    static rarity = 7;
+    static rarity = 12;
     static name = "Air Gapped";
     static description = "Removes tiles from nodes creating seperated islands";
     static unicode = "U+1F3DD";//U+26A0";
@@ -1608,7 +1608,7 @@ class AirGap extends Admin {//to finish
 //Battle Royale - removes edge of map tiles every 3 turns until tileset is min 2x2
 class Battle extends Admin {//to finish
     static iconID = 525;
-    static rarity = 7;
+    static rarity = 12;
     static name = "Battle Royale";
     static description = "Every 3 turns, removes all spaces on the edge of a node";
     static unicode = "U+1F3DF";////STADIUM, U+1F3DF colloseum
@@ -1677,7 +1677,7 @@ class Lockdown extends Admin {//to test
     static description = "Places Blackwall enemies next to player spawns";
     static unicode = "U+1F3D7";
     static color = "rgb(84, 139, 138)";
-    static rarity = 7;
+    static rarity = 12;
     constructor() {
         super(Lockdown.name, Lockdown.description, Lockdown.unicode, Lockdown.color, 5, Lockdown.rarity, 'all', 'onRoundStart')
     }
@@ -1715,7 +1715,7 @@ class Lockdown extends Admin {//to test
 //Paywall - player money buffs all enemy stats + 1 per $5
 /*class Paywall extends Admin {//to test
     static iconID = 527;
-    static rarity = 7;
+    static rarity = 12;
     static name = "Paywall";
     static description = "Every $5 owned by the player boosts all enemy stats by 1 at the start of a round";
     static unicode = "U+1F4CA";//U+1F4DC //abacus??
@@ -1742,7 +1742,7 @@ class Lockdown extends Admin {//to test
 
 class Variantr extends Admin {//to test
     static iconID = 547;
-    static rarity = 7;
+    static rarity = 12;
     static name = "Rainbow Coalition";
     static description = "Every enemy program is Holographic";
     static unicode = "U+1F4CA";//U+1F4DC //abacus??
@@ -1769,7 +1769,7 @@ class Variantr extends Admin {//to test
 //Soulkiller - uses the players blueprints , negative mirror
 class SoulKiller extends Admin {//to test
     static iconID = 528;
-    static rarity = 7;
+    static rarity = 12;
     static name = "Soulkiller";
     static description = "Enemy programs are replaced with copies of your own";
     static unicode = "U+1FA9E";
@@ -1815,7 +1815,7 @@ class Zero extends Admin {//to test
     static description = "Places all spawns next to enemy programs' head positions";
     static unicode = "U+26A0";
     static color = "rgb(255, 0, 0)";
-    static rarity = 7;
+    static rarity = 12;
     constructor() {
         super(Zero.name, Zero.description, Zero.unicode, Zero.color, 5, Zero.rarity, 'all', 'onRoundStart')
     }

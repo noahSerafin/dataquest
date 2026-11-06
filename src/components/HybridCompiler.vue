@@ -124,7 +124,8 @@
             hybridIconID: secondary.iconID,
             immunities: combinedImmunities,
             variantName: primary.variantName,
-            damageMult: primary.damageMult
+            damageMult: primary.damageMult,
+            version: calcVersion(primary.version, secondary.version)
         }
     };
 
@@ -178,22 +179,22 @@
     function tryAssignPrimary() {
         if (!props.isDraggingPlacement) return
         if (!props.pieceToPlace) return
-        //if (primaryBP.value) return
-
+        if (secondaryBP.value){
+            if(secondaryBP.value.name.includes(props.pieceToPlace.name)) return
+        }
         primaryBP.value = props.pieceToPlace
         primaryBP.value.isPlaced = true
-
         emit('clear-drag')
     }
 
     function tryAssignSecondary() {
         if (!props.isDraggingPlacement) return
         if (!props.pieceToPlace) return
-        //if (secondaryBP.value) return
-
+        if (primaryBP.value){
+            if (primaryBP.value.name.includes(props.pieceToPlace.name)) return
+        }
         secondaryBP.value = props.pieceToPlace
         secondaryBP.value.isPlaced = true
-
         emit('clear-drag')
     }
 
@@ -203,7 +204,7 @@
 <template>
   <div class="container hybrid-compiler">
     <h4>HYBRID COMPILER {{ String.fromCodePoint(parseInt("U+1F9EC".replace('U+', ''), 16), 0xFE0F) }}</h4>
-    <p class="padded">Choose 2 programs to combine into 1, adding their stats and immunities together, and keeping the primary program's special move and variant name.</p>
+    <p class="padded">Choose 2 different programs to combine into 1, adding their stats and immunities together, keeping the primary program's special move and variant name.</p>
     <!-- Slots -->
     <div class="slots">
         <div class="slot-container">

@@ -360,7 +360,24 @@ const banana = {
     cost: 1,
     immunities: createDefaultStatuses()
 }
-//1, 1, 0, 0, 0,
+//2, 2, 1, 1, 0,
+const scissors = {
+    iconID: 541,
+    id: crypto.randomUUID(),
+    name: "Scissors",
+    description: "A program that can remove a body tile from an enemy, regardless of its defence, and move into the empty space",
+    unicode: "U+2702",
+    maxSize: 2,
+    moves: 2,
+    range: 1,
+    attack: 1,
+    defence: 0,
+    rarity: 1,
+    color: "rgb(253, 244, 201)",
+    isPlaced: false,
+    cost: 1,
+    immunities: createDefaultStatuses()
+}
 
 const testhybrid = {
     iconID: 1,
@@ -455,11 +472,11 @@ const Apple: OS = {
     money: 10,
     memory: 7,
     adminSlots: 4,
-    blueprints: [ant, bee, shield, sling],
+    blueprints: [scissors, sling, shield, ant, bee],
     items: [],
     admins: [],
     lives: 3,
-    description: 'Limited admin functionality, but start with excess money.'
+    description: 'Limited admin functionality, but start with excess money and varied programs'
 }
 
 const Temple: OS = {

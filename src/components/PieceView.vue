@@ -4,6 +4,7 @@ import type { Coordinate } from "../types";
 import { Piece } from "../Pieces";
 import { STATUS_ICONS, STATUS_ICONIDS } from "../statuses";
 import { getSpriteStyle } from "../helperFunctions";
+import { formatVersion, hasVersionSuffix } from "../version";
 
 //construction-------------
 
@@ -192,6 +193,8 @@ function pieceTipClass(){
     :style="pieceStyle"
     @click="handleSelect"
   >
+    <span class="version-badge" v-if="hasVersionSuffix(piece.version)">{{ formatVersion(piece.version) }}</span>
+
     <template v-if="!useUnicode">
       <div class="sprite-icon primary-sprite" :class="{ hybrid: !!piece.hybridIconID }" :style="spriteStyle"></div>
       <div v-if="piece.hybridIconID !== undefined" class="sprite-icon extra-sprite" :style="hybridSpriteStyle"></div>
@@ -322,6 +325,18 @@ function pieceTipClass(){
 }
 .move-btn:hover {
   background: rgba(0, 0, 0, 0.7);
+}
+.version-badge{
+  position: absolute;
+  top: 1px;
+  right: 2px;
+  z-index: 3;
+  font-size: 9px;
+  line-height: 1;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 2px black, 0 0 2px black;
+  pointer-events: none;
 }
 .status-icons {
   position: absolute;

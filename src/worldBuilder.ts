@@ -6,6 +6,7 @@ import { generateNode } from "./nodeBuilder";
 import { Random } from "./Random";
 import type { Piece } from "./Pieces"
 import { playerCompany, shopCompany, bossCompany, companies } from "./companies";
+import { upgradePieceToDifficulty } from "./version";
 
 interface Level {
   name: string;
@@ -621,6 +622,7 @@ function processSpawnPoints(
       const spawnSize = piece.tiles.length;
       // Enemy spawn → replace with random enemy piece
       if (piece.team === 'enemy') {
+        const isEndless = difficulty >= 7;
         let trueDifficulty = 0;
         if (difficulty + mod > 6) {
           trueDifficulty = 6;
@@ -632,7 +634,8 @@ function processSpawnPoints(
         const { min, max } = DIFFICULTY_RARITY[trueDifficulty];
 
         const difficultyMatched = companyPieces.filter(EnemyClass => {
-          if (!EnemyClass || (difficulty < 7 && EnemyClass.name === "Nuke")) return false;//allow nukes in endless mode
+          if (!EnemyClass || (!isEndless && EnemyClass.name === "Nuke")) return false;//allow nukes in endless mode
+          if (isEndless) return true;
           const temp = new EnemyClass(piece.headPosition, 'enemy');
           return temp.rarity >= min && temp.rarity <= max;
         });
@@ -648,7 +651,12 @@ function processSpawnPoints(
 
         const EnemyClass = Random.pick(pool);
         const enemyInstance = new EnemyClass(piece.headPosition, 'enemy');
-        enemyInstance.tiles = piece.tiles.slice(0, enemyInstance.maxSize);
+
+        if (isEndless) {
+          upgradePieceToDifficulty(enemyInstance, (difficulty + mod) - 1);
+        }
+
+        enemyInstance.tiles = piece.tiles.slice(0, enemyInstance.getStat('maxSize'));
 
         const variantChance = Math.min((0.1 * trueDifficulty - 0.1), 1);
         const variant = rollVariant(variantChance, trueDifficulty);

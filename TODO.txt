@@ -51,8 +51,10 @@ BUGS -
 -damage mult breaks workbench - dmgmult should be a stat - compiler/duplicator, + Pieces will be affected
 -compressed items have negative description - test
 -leaving during a shop shows a different set of items 
+-count not showing on reaper/bosses
 enemy pieces trying to use special before reaching max size (bool for those that need it)
 buff map (preview button to show disabled board)?
+lower pallette/raise backdoor rarity
 archer not using special
 - campaign - next sector needs to close shop
 

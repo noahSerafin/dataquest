@@ -216,19 +216,19 @@ class Reaper extends Admin {
     constructor() {
         super(Reaper.name, Reaper.description, Reaper.unicode, Reaper.color, 5, Reaper.rarity, 'player', 'onTurnEnd')
     }
-    private count: number = 0
+    private count: number = 10
     async apply({ player }: { player: Player }) {
-        this.count += 1
-        if (this.count === 10) {
+        this.count--
+        if (this.count === 0) {
             this.isTriggering = true;
             setTimeout(() => this.isTriggering = false, 500);
             player.lives--
-            this.count = 0;
+            this.count = 10;
         }
 
     }
     onRoundEnd() {
-        this.count = 0;
+        this.count = 10;
     }
 }
 
@@ -732,7 +732,7 @@ class Nofun extends Admin {
     static description = "Disables 1 random admin after each turn";//all admins on round start?
     static unicode = "U+1F6D1"; //NO ENTRY, U+26D4
     static color = "rgb(244, 152, 16)";
-    static rarity = 6;
+    static rarity = 5;
     constructor() {
         super(Nofun.name, Nofun.description, Nofun.unicode, Nofun.color, 6, Nofun.rarity, 'player', 'onTurnEnd')
     }
@@ -861,26 +861,26 @@ class Coaster extends Admin {
 }*/
 
 class Eye extends Admin {
-  static iconID = 332;
-  static name = "Evil Eye";
-  static description = "Lowers the defences of all enemy progams by 1 on load";
-  static unicode = "U+1F9FF";
-  static color = "#020072ff";
-  static rarity = 4;
-  constructor() {
-    super(Eye.name, Eye.description, Eye.unicode, Eye.color, 8, Eye.rarity, 'gameState', 'onPlacement')
-  }
-
-  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-    this.isTriggering = true;
-    setTimeout(() => this.isTriggering = false, 500);
-    for (const p of activePieces) {
-      if (p.team === 'player') {
-        p.addModifier({ defence: -1 })//enemy pieces only?
-        p.defenceRemaining -= 1;
-      }
+    static iconID = 332;
+    static name = "Evil Eye";
+    static description = "Lowers the defences of all enemy progams by 1 on load";
+    static unicode = "U+1F9FF";
+    static color = "#020072ff";
+    static rarity = 4;
+    constructor() {
+        super(Eye.name, Eye.description, Eye.unicode, Eye.color, 8, Eye.rarity, 'gameState', 'onPlacement')
     }
-  }
+
+    async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
+        for (const p of activePieces) {
+            if (p.team === 'player') {
+                p.addModifier({ defence: -1 })//enemy pieces only?
+                p.defenceRemaining -= 1;
+            }
+        }
+    }
 }
 
 class Singularity extends Admin {
@@ -889,9 +889,9 @@ class Singularity extends Admin {
     static description = "After 3 turns, all enemies' actions are doubled";
     static unicode = "U+1F916";
     static color = "rgb(59, 59, 59)";
-    static rarity = 5;
+    static rarity = 6;
     constructor() {
-        super(Singularity.name, Singularity.description, Singularity.unicode, Singularity.color, 5, 5, 'all', 'onTurnEnd')
+        super(Singularity.name, Singularity.description, Singularity.unicode, Singularity.color, 5, Singularity.rarity, 'all', 'onTurnEnd')
     }
     private count: number = 0
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
@@ -1249,11 +1249,11 @@ class Snoozefest extends Admin {
                 this.candidates[piece.id] = (this.candidates[piece.id] || 0) + 1;
                 if (this.candidates[piece.id] < 2) {
                     //piece.statuses.disarmed = true;
-                    piece.actions --;
+                    piece.actions--;
                     this.isTriggering = true;
                     setTimeout(() => this.isTriggering = false, 500);
                 }// else {
-                   // piece.statuses.disarmed = false;
+                // piece.statuses.disarmed = false;
                 //}
             }
         };
@@ -1364,7 +1364,7 @@ class Avalanche extends Admin {
 
 //U+1F624 Seething - All enemies get +0.5 damage mult at the start of the round - 5 - onRoundStart
 class Seething extends Admin {
-    static iconID = 522;
+    static iconID = 549;
     static name = "Seething";
     static description = "All enemies get +0.5 damage mult at the start of the round";//does damage mult get reset on turns? change to on turn end if so
     static unicode = "U+1F624";
@@ -1861,7 +1861,7 @@ class Zero extends Admin {//to test
     }
 }
 
-export const allBosses = [Concussion, LowBattery, NorthWind, Taxman, TrafficLight, Quicksand, Butter, Customs, Downturn, Hook, Mirror, Rage, Salsa, Shrine, Snoozefest, Whale, Anchor, Hammer, Castle, Circus, Clapback, ClipBoard, Izakaya, Mountain, Tsunami, Wilt, Autumn, Avalanche, Biohazard, Cocktail, Coral, Eclipse, Lock, Eye, Factory, Jack, Blackmail, Snowflake, Love, Bones, Frog, Singularity, Seething, Tornado, Volcano, Snow, Sun, Fog, Nightfall, Nofun, Omega, Reaper, REDACTED, Wrath, AirGap, Battle, Lockdown, Variantr, SoulKiller, Zero];
+export const allBosses = [Concussion, LowBattery, NorthWind, Taxman, TrafficLight, Quicksand, Butter, Customs, Downturn, Hook, Mirror, Rage, Salsa, Shrine, Snoozefest, Whale, Anchor, Hammer, Castle, Circus, Clapback, ClipBoard, Izakaya, Mountain, Tsunami, Wilt, Autumn, Avalanche, Biohazard, Cocktail, Coral, Eclipse, Lock, Eye, Factory, Jack, Blackmail, Snowflake, Love, Bones, Nofun, Frog, Seething, Tornado, Volcano, Snow, Sun, Fog, Nightfall, Omega, Reaper, REDACTED, Singularity, Wrath, AirGap, Battle, Lockdown, Variantr, SoulKiller, Zero];
 export const nonStackableBosses = [Mirror, Customs, Snowflake, Sun, Frog, Biohazard, Coral, Izakaya, REDACTED, Fog, Singularity, Tornado, Cocktail, AirGap, Battle, Lockdown, Variantr, SoulKiller, Zero];
 
 console.log('bosses length: ', allBosses.length)

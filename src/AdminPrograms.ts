@@ -720,7 +720,7 @@ class Bone extends Admin {
 class RollerBlades extends Admin {
   static iconID = 378;
   static name = "Rollers";
-  static description = "Programs all gain +3 moves on placement";
+  static description = "Programs all gain +3 moves on load";
   static unicode = "U+1F6FC";
   static color = "#0e409eff";
   static rarity = 5;
@@ -3112,7 +3112,7 @@ class Howzat extends Admin {
 export class Cherries extends Admin {
   static iconID = 368;
   static name = "Jackpot";
-  static description = "Unplaced programs of the same base type in your inventory add their stats to the loaded program";
+  static description = "Unplaced programs of the same base type in your inventory add their stats and immunities to the loaded program";
   static unicode = "U+1F352";
   static color = "rgb(0, 0, 0)";
   static rarity = 5;
@@ -3128,8 +3128,8 @@ export class Cherries extends Admin {
     for (const bp of matchingBps) {
       this.isTriggering = true;
       setTimeout(() => this.isTriggering = false, 500);
-      activePieces[idx].addModifier({ maxSize: bp.maxSize, moves: bp.moves, range: bp.range, attack: bp.attack, defence: bp.defence })
-      //activePieces[idx].addModifier({maxSize: 1, moves: 1, range: 1, attack: 1, defence: 1})
+      activePieces[idx].addModifier({ maxSize: bp.maxSize, moves: bp.moves, range: bp.range, attack: bp.attack, defence: bp.defence });
+      activePieces[idx].immunities = {...activePieces[idx], ... bp.immunities};
     };
   }
 }

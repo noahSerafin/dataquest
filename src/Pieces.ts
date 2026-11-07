@@ -48,6 +48,7 @@ export abstract class Piece {
   hasFriendlySpecial: boolean = false;//use in enemyAI
   hasNeutralSpecial: boolean = false;//use in enemyAI
   hasExposingSpecial: boolean = false;//use in enemyAI
+  needsToBeMaxSize: boolean = false;//use in enemyAI
   redacted: boolean = false;//for boss
   isBusy: boolean = false;//for AI
   isTriggering: boolean = false; //for trap animations
@@ -657,6 +658,7 @@ class Tree extends Piece {
     super(Tree.name, Tree.description, Tree.unicode, 5, 1, 1, 0, 1, Tree.color, headPosition, [headPosition], team, Tree.rarity, removeCallback, id)
     this.specialName = 'Seed';
     this.targetType = 'space';
+    this.needsToBeMaxSize = true;
   }
   async special({ target, activePieces }: { target: Coordinate, activePieces: Piece[] }): Promise<void> {
     if (this.tiles.length >= this.getStat('maxSize')) {
@@ -704,6 +706,7 @@ class Palm extends Piece {
     super(Palm.name, Palm.description, Palm.unicode, 3, 1, 1, 0, 2, Palm.color, headPosition, [headPosition], team, Palm.rarity, removeCallback, id)
     this.specialName = 'Fruit';
     this.targetType = 'space';
+    this.needsToBeMaxSize = true;
   }
   async special({ target, activePieces }: { target: Coordinate, activePieces: Piece[] }): Promise<void> {
     if (this.tiles.length >= this.getStat('maxSize')) {
@@ -762,6 +765,7 @@ class Chick extends Piece {
     super(Chick.name, Chick.description, Chick.unicode, 2, 1, 1, 0, 0, Chick.color, headPosition, [headPosition], team, Chick.rarity, removeCallback, id)
     this.specialName = 'Mature';
     this.targetType = 'space';
+    this.needsToBeMaxSize = true;
   }
   async special({ target, activePieces }: { target: Coordinate, activePieces: Piece[] }): Promise<void> {
     if (this.tiles.length >= this.getStat('maxSize')) {
@@ -2060,6 +2064,7 @@ class Larva extends Piece {
     this.specialName = 'Feed';
     this.targetType = 'placeAndPieces';
     this.hasFriendlySpecial = false;
+    this.needsToBeMaxSize = true;
   }
   async special({ target, activePieces }: { target: Coordinate; activePieces: Piece[] }): Promise<void> {
     //Find the piece that owns the target tile
@@ -2179,6 +2184,7 @@ class Rabbit extends Piece {
     super(Rabbit.name, Rabbit.description, Rabbit.unicode, 2, 4, 1, 1, 0, Rabbit.color, headPosition, [headPosition], team, Rabbit.rarity, removeCallback, id)
     this.specialName = 'Breed'
     this.targetType = 'space'
+    this.needsToBeMaxSize = true;
   }
   async special({ target, activePieces }: { target: Coordinate, activePieces: Piece[] }): Promise<void> {
     if (this.tiles.length >= this.getStat('maxSize')) {
@@ -4851,7 +4857,7 @@ class Camel extends Piece {//not working
   static color = "rgb(248, 222, 148)";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
-    super(Camel.name, Camel.description, Camel.unicode, 4, 2, 1, 2, 1, Camel.color, headPosition, [headPosition], team, Camel.rarity, removeCallback, id)
+    super(Camel.name, Camel.description, Camel.unicode, 3, 2, 1, 2, 1, Camel.color, headPosition, [headPosition], team, Camel.rarity, removeCallback, id)
     this.specialName = 'Endurance';
     this.targetType = 'self';
     this.hasFriendlySpecial = true;
@@ -4860,6 +4866,7 @@ class Camel extends Piece {//not working
     if (this.tiles.length > 1) {
       this.tiles.splice(this.tiles.length - 1, 1)
       this.resetMoves();
+      this.actions--;
     }
   }
 }

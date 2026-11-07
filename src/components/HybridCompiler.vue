@@ -1,9 +1,10 @@
 <script setup lang="ts">
-    import { ref, version } from 'vue';
+    import { ref } from 'vue';
     import type { PieceBlueprint, Immunities, StatusKey } from '../types';
     import { Player } from '../Player';
     import BlueprintView from './BlueprintView.vue';
     import BlueprintController from './BlueprintController.vue';
+    import { DEFAULT_VERSION, addVersion } from '../version';
 
     const props = defineProps<{
         player: Player;
@@ -58,11 +59,10 @@
         }
     }
 
-    function calcVersion(p:number | undefined , s:number | undefined ){
-        if(p && s) return p-1 + s-1
-        if(p) return p
-        if(s) return s
-        return 1
+    function calcVersion(p: number | undefined, s: number | undefined): number {
+        const pExtra = (p ?? DEFAULT_VERSION) - DEFAULT_VERSION;
+        const sExtra = (s ?? DEFAULT_VERSION) - DEFAULT_VERSION;
+        return addVersion(DEFAULT_VERSION, pExtra + sExtra);
     }
 
     function createHybridBlueprint(

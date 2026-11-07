@@ -11,7 +11,7 @@ class NorthWind extends Admin {
     static iconID = 398;//🌬️//dash U+1F4A8
     static rarity = 1;
     static name = "North Wind";
-    static description = "All player pieces are moved down 1 space after every turn";
+    static description = "All player programs are moved down 1 space after every turn";
     static unicode = "U+1F32C";//"U+1F38F";//carp windsock//U+1F4A8 dash cloud//wind face "U+1F32C";
     static color = "rgb(207, 238, 238)";
     constructor() {
@@ -47,7 +47,7 @@ class Hook extends Admin {
     static iconID = 404;
     static rarity = 2;
     static name = "Hook";
-    static description = "All player pieces are moved up 1 space after every turn";
+    static description = "All player programs are moved up 1 space after every turn";
     static unicode = "U+1FA9D";
     static color = "#0a1179ff";
     constructor() {
@@ -177,7 +177,7 @@ class Factory extends Admin {
 class Wrath extends Admin {
     static iconID = 443;//⛈️//🌩️
     static name = "Wrath";
-    static description = "A random player piece loses their remaining defence and a tile each turn after the first";
+    static description = "A random player program loses their remaining defence and a tile each turn after the first";
     static unicode = "U+1F329";
     static color = "rgb(9, 2, 107)";
     static rarity = 6;
@@ -835,7 +835,7 @@ class Tsunami extends Admin {
 class Coaster extends Admin {
     static iconID = 427;
     static name = "Up and Up";//cranking up
-    static description = "Every player piece takes a cumulating +1 damage after every 2 turns, resets each round";//turn count is damage?
+    static description = "Every player program takes a cumulating +1 damage after every 2 turns, resets each round";//turn count is damage?
     static unicode = "U+1F3A2";//"U+1F3D4";//mountain
     static color = "rgb(196, 233, 245)";
     static rarity = 4;
@@ -1047,7 +1047,7 @@ class Nightfall extends Admin {
 class Blackmail extends Admin {
     static iconID = 428;
     static name = "Blackmail";
-    static description = "After 5 turns, a random player piece switches sides.";
+    static description = "After 5 turns, a random player program switches sides.";
     static unicode = "U+1F4D3";
     static color = "rgb(9, 2, 107)";
     static rarity = 5;
@@ -1172,7 +1172,7 @@ class Taxman extends Admin {
     static iconID = 399;
     static rarity = 1;
     static name = "Taxman";
-    static description = "Lose $1 every tile lost";//too similar to battery, set money to 0 after something happens
+    static description = "Lose $1 every tile lost from attacks";//too similar to battery, set money to 0 after something happens
     static unicode = "U+1F4D2";
     static color = "rgb(70, 70, 70)";
     constructor() {
@@ -1180,6 +1180,8 @@ class Taxman extends Admin {
     }
 
     async apply({ id: id, activePieces, player, piece }: { id: string, activePieces: Piece[], player: Player, piece: Piece }) {
+        if (!piece) return;
+        if (piece.team === 'enemy') return;
         //const noOfFives = Math.floor(player.money / 5) //round down
         const idx = activePieces.findIndex(p => p.id === id);
         if (activePieces[idx].getStat('attack') > piece.defenceRemaining) {

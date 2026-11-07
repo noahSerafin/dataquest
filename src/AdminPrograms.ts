@@ -1748,12 +1748,12 @@ class Ballet extends Admin {
   constructor() {
     super(Ballet.name, Ballet.description, Ballet.unicode, Ballet.color, 5, Ballet.rarity, 'gameState', 'onTurnEnd')
   }
-  private count = 0;
+  private count = 0;//use candidates instead to save them on first turn?
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     this.count += 1;
     for (const piece of activePieces) {
       if (piece.team === 'player') {
-        if (this.count === 2 && !piece.statuses.exposed) {
+        if (this.count <= 3 && !piece.statuses.exposed) {
           piece.statuses.hidden = true
           this.isTriggering = true;
           setTimeout(() => this.isTriggering = false, 500);
@@ -3129,7 +3129,7 @@ export class Cherries extends Admin {
       this.isTriggering = true;
       setTimeout(() => this.isTriggering = false, 500);
       activePieces[idx].addModifier({ maxSize: bp.maxSize, moves: bp.moves, range: bp.range, attack: bp.attack, defence: bp.defence });
-      activePieces[idx].immunities = {...activePieces[idx], ... bp.immunities};
+      activePieces[idx].immunities = { ...activePieces[idx], ...bp.immunities };
     };
   }
 }
@@ -3511,7 +3511,7 @@ class Nose extends Admin {
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces) {
-      if (p.team === 'enemy' && p.movesRemaining < p.getStat('moves')) {
+      if (p.team === 'enemy' && p.hasMoved) { //p.movesRemaining < p.getStat('moves')) {
         //if (!p.immunities.exposed) {
         p.statuses.hidden = false;
         //p.statuses.exposed = true;

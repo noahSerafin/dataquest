@@ -3981,7 +3981,7 @@ class Hippo extends Piece {
   }
 }
 
-class Tail extends Piece {
+export class Tail extends Piece {
   static iconID = 25;
   static name = "Gecko Tail";
   static description = "An decoy program spawned by a Gecko";

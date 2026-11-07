@@ -15,7 +15,7 @@ import type { AdminTrigger } from "./AdminPrograms";
 import PlayerView from "./components/PlayerView.vue";
 import MessagingSystem from "./components/MessagingSystem.vue";
 import type { Piece } from "./Pieces"
-import { Spawn, allPieces } from "./Pieces"
+import { Blackwall, Spawn, Tail, allPieces } from "./Pieces"
 import type { Coordinate, PieceBlueprint, Level, OS, Company } from "./types";
 import { runEnemyStateMachine } from "./Enemy";
 import WorldMap from "./components/WorldMap.vue";
@@ -1525,7 +1525,7 @@ const newPlacementHighlights = (): Coordinate[] => {//board should only show the
 
 
 function rehydratePieces(rawPieces: any[]): InstanceType<typeof Piece>[] {
-  const pieceClasses = [...allPieces];
+  const pieceClasses = [...allPieces, Spawn, Tail, Blackwall];
   pieceClasses.unshift(Spawn);
   return rawPieces.map(p => {
     const PieceClass = pieceClasses.find(cls => cls.name === p.name);

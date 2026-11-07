@@ -1,5 +1,5 @@
 import { Player } from "./Player";
-import { Piece, Spawn } from "./Pieces";
+import { Blackwall, Piece, Spawn, Tail } from "./Pieces";
 import { allPieces } from "./Pieces";
 import { allItems } from "./Items";
 import { allAdmins } from "./AdminPrograms";
@@ -152,7 +152,7 @@ export function rehydrateGameState(data: any): any {
 }
 
 export function rehydratePieceArray(rawPieces: any[]): Piece[] {
-  const pieceClasses = [Spawn, ...allPieces] as any[];
+  const pieceClasses = [Spawn, Tail, Blackwall, ...allPieces] as any[];
   return rawPieces.map(p => {
     const PieceClass = pieceClasses.find(cls => cls.name === p.name);
     if (PieceClass) {

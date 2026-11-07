@@ -1315,8 +1315,10 @@ class Salsa extends Admin {
     }
     async apply({ id: id, activePieces: activePieces, piece: _piece }: { id: string, activePieces: Piece[], piece?: Piece }) {
         const idx = activePieces.findIndex(p => p.id === id);
-        activePieces[idx].addModifier({ moves: 1 });
-        activePieces[idx].movesRemaining += 1;
+        if (activePieces[idx]) {
+            activePieces[idx].addModifier({ moves: 1 });
+            activePieces[idx].movesRemaining += 1;
+        }
     }
 }
 

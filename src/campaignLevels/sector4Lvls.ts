@@ -1113,7 +1113,7 @@ const heavy :Level = {
     },
     {
       "id": "a3276cf4-8b40-4b1d-b833-e2fd735531bc",
-      "name": "Cockroach",
+      "name": "Roach",
       "team": "enemy",
       "headPosition": {
         "x": 4,
@@ -1927,7 +1927,7 @@ const lockdown:Level = {
     },
     {
       "id": "7b8462e5-b5ff-42e3-98f9-7584b1e61c2a",
-      "name": "Kite",
+      "name": "Tackle",
       "team": "enemy",
       "headPosition": {
         "x": 2,
@@ -2374,7 +2374,7 @@ const safari:Level = {
     },
     {
       "id": "e9bef0ff-b93f-4ab2-99f8-e115e9375ce8",
-      "name": "Kite",
+      "name": "Tackle",
       "team": "enemy",
       "headPosition": {
         "x": 3,
@@ -7452,7 +7452,7 @@ const excape:Level = {
     },
     {
       "id": "44a884ce-56db-4cf4-ba30-8daac9fa5be8",
-      "name": "Kite",
+      "name": "Tackle",
       "team": "enemy",
       "headPosition": {
         "x": 6,
@@ -8091,7 +8091,7 @@ const vault:Level = {
     },
     {
       "id": "3a426c77-9ad8-466c-9a30-26317e51060a",
-      "name": "Cockroach",
+      "name": "Roach",
       "team": "enemy",
       "headPosition": {
         "x": 5,

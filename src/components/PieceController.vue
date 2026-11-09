@@ -377,11 +377,11 @@ p{
     }
   }
 }
-.symbol, .variant, .name, .desc, .stat{
+.symbol, .sprite-icon, .variant, .name, .desc, .stat, .immunities{
   position: relative;
 }
 
-.redacted-true .symbol::after, .redacted-true .variant::after, .redacted-true .name::after, .redacted-true .desc::after, .redacted-true .stat::after, .redacted-true .immunities::after{
+.redacted-true .symbol::after, .redacted-true .sprite-icon::after, .redacted-true .variant::after, .redacted-true .name::after, .redacted-true .desc::after, .redacted-true .stat::after, .redacted-true .immunities::after{
   content: '';
   position: absolute;
   width: 100%;
@@ -408,8 +408,5 @@ p{
   left: 20%;
   top: 10%;
   z-index: 0;
-}
-.stat{
-  position: relative;
 }
 </style>

@@ -297,7 +297,7 @@ function getAvailableMoves(
     { x, y: y + 1, direction: "down" },
     { x, y: y - 1, direction: "up" },//include regular moves too?? push these on instead of ternary
   ]
-  if (props.player.hasAdmin('Ollie') || piece.name === 'Helicopter') {
+  if (props.player.hasAdmin('Ollie') || piece.name.includes('Helicopter')) {
     const ollies =
       [
         { x: x + 2, y, direction: "right" },

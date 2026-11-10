@@ -143,7 +143,7 @@ defineEmits(["buy", "steal", "sell", "highlightPlacements", "close"])
         </div>
         <span v-if="piece.variantName" class="variant"><FormattedDescription :description="piece.variantName" :isHeader="true" /></span>
         <span class="name">{{ piece.hybridName ? piece.hybridName : piece.name }}{{ hasVersionSuffix(piece.version) ? ' ' + formatVersion(piece.version) : '' }}</span>
-        <button class="close" @click="$emit('close', piece)">X</button>
+        <button class="close text-red" @click="$emit('close', piece)">X</button>
       </div>
       <div class='bp-rarity' :style="{ color: rarityInfo.color }">
         {{ rarityInfo.text }}
@@ -182,8 +182,8 @@ defineEmits(["buy", "steal", "sell", "highlightPlacements", "close"])
         </template>
 
         <template v-if="mode === 'inventory'" class="action-btns">
-          <button :disabled="!canPlace" @click="$emit('highlightPlacements', piece)" style="margin-right: 0.2rem;">Place</button>
-          <button @click="$emit('sell', piece)">Sell (${{ piece.rarity }})</button>
+          <button :disabled="!canPlace" @click="$emit('highlightPlacements', piece)" style="margin-right: 0.2rem; color:rgba(21, 255, 0, 1); border: 3px solid rgba(21, 255, 0, 0.432);">Place</button>
+          <button @click="$emit('sell', piece)" class="border-gold text-gold">Sell (${{ piece.rarity }})</button>
         </template>
       </div>
     </div>
@@ -268,8 +268,6 @@ defineEmits(["buy", "steal", "sell", "highlightPlacements", "close"])
 
 button {
   background: #555;
-  color: white;
-  border: none;
   padding: 0.3rem 0.6rem;
   border-radius: 6px;
   cursor: pointer;
@@ -331,5 +329,8 @@ p{
 }
 .stat{
   position: relative;
+}
+.close{
+  font-weight: bold;
 }
 </style>

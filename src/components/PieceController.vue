@@ -207,20 +207,20 @@ const spriteStyle = computed(() => {
 
     <div class="actions">
       <button
-        class="mv-btn"
+        class="btn mv-btn"
         :disabled="!canMove || piece.moves <= 0" 
         v-if="((piece.team === 'player' && !piece.statuses.charmed) || (piece.team === 'enemy' && piece.statuses.charmed))" @click="$emit('highlightMoves', piece)">
         Move
       </button>
       <button
-        class="atk-btn"
+        class="btn atk-btn"
         :disabled="!canAction || piece.actions <= 0"
         v-if="((piece.team === 'player' && !piece.statuses.charmed) || (piece.team === 'enemy' && piece.statuses.charmed)) && piece.canAttack"
         @click="$emit('highlightTargets', piece)">
         Attack
       </button>
       <button
-        class="special-btn"
+        class="btn special-btn"
         v-if="piece.specialName && ((piece.team === 'player' && !piece.statuses.charmed) || (piece.team === 'enemy' && piece.statuses.charmed))"
         :disabled="!canAction || piece.actions <= 0"
         @click="$emit('highlightSpecials', piece)">
@@ -228,7 +228,7 @@ const spriteStyle = computed(() => {
       </button>
 
       <button
-        class="atk-btn"
+        class="btn atk-btn"
         v-if="piece.team === 'enemy'"
         @click="$emit('highlightTargets', piece)">
         Show Range
@@ -390,6 +390,9 @@ p{
   z-index: 3;
   top: 0;
   left: 0;
+}
+.btn{
+  border: 1px solid white;
 }
 .mv-btn{
   border-color: rgb(0, 162, 255);

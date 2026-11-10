@@ -36,6 +36,18 @@ function decideEnemyIntent(
   originalPieceIds?: string[]
 ): EnemyIntent {
   //first look for a player to attack or use special on
+  const canUseSpecial = !enemy.needsToBeMaxSize || enemy.tiles.length >= enemy.getStat('maxSize');
+  if (enemy.needsToBeMaxSize && !canUseSpecial && enemy.movesRemaining > 0 && !enemy.statuses.frozen) {
+    let nearestCoords = (enemy.specialName && !enemy.hasFriendlySpecial && enemy.targetType !== 'trapPiece') ? findAllPieceCoordinatesSorted(enemy, playerPieces) : findAllAttackableCoordinatesSorted(enemy, playerPieces);
+    for (const coord of nearestCoords) {
+      const path = findShortestPath(enemy, enemy.headPosition, coord, tileSet, activePieces, enemy.targetType === 'trapPiece');
+      if (path && path.length > 1) {
+        return { type: 'move', path: path };
+      }
+    }
+    const spaces = getAdjacentEmptySpaces(enemy.headPosition, activePieces, tileSet);
+    if (spaces) return { type: 'wander', space: Random.pick(spaces) };
+  }
   const target = findWeakestPlayerInRange(enemy, playerPieces);//returning null even when there is a piece??!!!
   console.log('finding ', enemy.name, ' intent...')
   console.log('target: ', target)
@@ -57,7 +69,7 @@ function decideEnemyIntent(
     if (!enemy.hasDamagingSpecial && enemy.canAttack && enemy.getStat('attack') > 0 && target.piece.defenceRemaining + target.piece.tiles.length <= enemy.getStat('attack')) {//can we kill a player piece?
       return { type: 'attack', target: target.piece }
     }
-    if (enemy.specialName && !enemy.hasFriendlySpecial && enemy.targetType !== 'trapPiece') {
+    if (canUseSpecial && enemy.specialName && !enemy.hasFriendlySpecial && enemy.targetType !== 'trapPiece') {
       //if not, can we use an attacking special?
       //line and pieceAndplace types also need the target location
       if (enemy.targetType === 'line') {//line type pieces
@@ -133,7 +145,7 @@ function decideEnemyIntent(
   }
 
   //no immediate attackable target, expose if possible
-  if (enemy.actions > 0 && enemy.hasExposingSpecial && enemy.targetType === 'group') {//and group
+  if (canUseSpecial && enemy.actions > 0 && enemy.hasExposingSpecial && enemy.targetType === 'group') {//and group
     const inRange = findAnyPiecesInRange(enemy, activePieces);
     return { type: 'special', target: inRange ? inRange : [] }
   }
@@ -143,7 +155,7 @@ function decideEnemyIntent(
     ? enemyPieces.filter(p => p.tiles.length > 1)
     : enemyPieces;
   const friendlyTarget = findWeakestPlayerInRange(enemy, friendlyCandidates);
-  if (friendlyTarget && (enemy.hasFriendlySpecial || enemy.hasNeutralSpecial) && enemy.actions > 0) {
+  if (canUseSpecial && friendlyTarget && (enemy.hasFriendlySpecial || enemy.hasNeutralSpecial) && enemy.actions > 0) {
     if ((enemy.targetType === 'pieceAndPlace' || enemy.targetType === 'placeAndPieces') && !enemy.hasFriendlySpecial) {
       if (friendlyTarget.place.x === friendlyTarget.piece.headPosition.x && friendlyTarget.place.y === friendlyTarget.piece.headPosition.y) {
         for (const tile of friendlyTarget.piece.tiles) {
@@ -197,7 +209,7 @@ function decideEnemyIntent(
     }
   }
 
-  if (enemy.actions > 0 && specialAttempts < 1) {//still have an action? 
+  if (canUseSpecial && enemy.actions > 0 && specialAttempts < 1) {//still have an action? 
     if (enemy.specialName === 'Charge' || enemy.specialName === 'Yo' || enemy.specialName === 'Trample' || enemy.specialName === 'Pounce' || enemy.specialName === 'Dash' || enemy.specialName === 'Maul') {//Action can be used to grow
       const targetCoord = nearest || target?.piece.headPosition;
       if (targetCoord) {
@@ -279,7 +291,7 @@ function decideEnemyIntent(
   }
 
   //no targets, or no actions left
-  if (enemy.tiles.length < enemy.maxSize && enemy.movesRemaining > 0 && !enemy.statuses.frozen) {
+  if (enemy.tiles.length < enemy.getStat('maxSize') && enemy.movesRemaining > 0 && !enemy.statuses.frozen) {
     //move somewhere free to reach max size
     const spaces = getAdjacentEmptySpaces(enemy.headPosition, activePieces, tileSet)
     if (spaces) return { type: 'wander', space: Random.pick(spaces) };

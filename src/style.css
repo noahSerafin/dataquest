@@ -278,6 +278,10 @@ body,
   color: rgb(243, 194, 32);
 }
 
+.border-gold {
+  border: 3px solid rgb(243, 194, 32);
+}
+
 .text-blue {
   color: #1b9feb;
 }

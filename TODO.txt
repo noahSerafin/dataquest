@@ -40,31 +40,31 @@ circuitboard map edge non square (contour path edges)
 Review appearance of special nodes vs reward nodes
 Dialogue after tutorial
 put variants in campaign levels
-secret bonus nodes
+secret bonus nodes - classified bosses
 -
 overworld map?
 background colours for node maps (use company owner)//levels array (make map have a starting copmany)
 
 BUGS - 
 -refresh BEFORE returning to main menu on loss - display seed on game over summary
--statuses affecting copys even when copy does not have that status - test
 -damage mult breaks workbench - dmgmult should be a stat - compiler/duplicator, + Pieces will be affected
--compressed items have negative description - test
--leaving during a shop shows a different set of items 
 -count not showing on reaper/bosses
-enemy pieces trying to use special before reaching max size (bool for those that need it)
-buff map (preview button to show disabled board)?
+leaving during a shop shows a different set of items 
+buff map/crystal ball (preview button to show disabled board)?
 lower pallette/raise backdoor rarity
-archer not using special
 - campaign - next sector needs to close shop
+
+Fixes to test:
+enemy pieces trying to use special before reaching max size (bool for those that need it) - test
+-statuses affecting copys even when copy does not have that status - test
 
 NICE TO HAVE - VISUAL IMPROVEMENTS
 You win screen more obvious, change button to endless mode here
-+endless mode have variants where their version num + rarity = current level - then companies can have fewer pieces in their lists
 differentiate P/I/A top left better, shapes? move to bottom right?
 ?nerf hybrids - average rounded up? +1?
 donkey, zebra, girraffe - special kick targets from rear tile?
 special specific sound FX
+branch to test more limited company programs while using the upgradeToVersion function
 
 remove x(close)button on skip preview
 

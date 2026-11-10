@@ -495,11 +495,11 @@ function incrementMapProgress(row?: number) {
 }
 
 function openMainMenu() {
-  window.location.reload();
+  //window.location.reload();
   showBoard.value = false;
   showSummary.value = false;
   currentAppMode.value = 'mainMenu';
-  //sessionStorage.clear();
+  sessionStorage.clear();
   //localStorage.clear(); // only if you aren't using it yet
 }
 const showFastControls = ref<boolean>(true);
@@ -2529,7 +2529,7 @@ function cancelConfirm() {
       <WorldEditor v-if="currentAppMode === 'worldEditor'" class="stage-panel active" />
 
       <RoundSummary v-if="showSummary" class="stage-panel" :class="{ active: showSummary }" :hasWonRound="hasWonRound"
-        :player="player" :bosses="bossAdmins" :roundHasStarted="roundHasStarted" :isCampaign="currentAppMode === 'campaign'" @proceedFromEndOfRound="handleProceed"
+        :player="player" :bosses="bossAdmins" :roundHasStarted="roundHasStarted" :isCampaign="currentAppMode === 'campaign'" :currentSeed="currentSeed" @proceedFromEndOfRound="handleProceed"
         @reloadLevel="reloadLevel" @mainMenu="openMainMenu" @returnToMap="handleReturnToMap" />
       <WorldMap ref="worldMapRef" v-if="!displayEditor && currentAppMode !== 'campaign'" class="stage-panel" :class="{ active: showMap }"
         :allLevels="level1Levels" :player="player" :seed="combinedMapSeed" :cssclass="mapClass" :bosses="bossAdmins"

@@ -268,7 +268,9 @@ export function rollBoss(difficulty: number, currentBosses: Admin[], excludeName
   if (difficulty === 12) {//true ending
     bossPool = allBosses.filter(boss => boss.rarity === 12);
   } else if (difficulty > 7) {
-    bossPool = allBosses;
+    bossPool = allBosses.filter(
+      boss => boss.rarity <= difficulty
+    );
   } else {
     bossPool = allBosses.filter(
       boss => boss.rarity <= difficulty && boss.rarity >= difficulty - 1

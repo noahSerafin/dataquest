@@ -1,7 +1,7 @@
 <script setup lang="ts">
     import { Player } from '../Player';
     import { Admin } from '../AdminPrograms';
-    import { computed, onMounted } from 'vue';
+    import { computed, onMounted, ref } from 'vue';
     import { reapplyTutorialTooltips } from '../tutorial';
     import cashOutSound from '../../sfx/cash.ogg';
     import { playSoundFx, preloadSound } from '../helperFunctions';
@@ -13,9 +13,19 @@
         player: Player,
         bosses: Admin[],
         roundHasStarted: boolean,
-        isCampaign?: boolean
+        isCampaign?: boolean,
+        currentSeed?: string
     }
     const props = defineProps<Props>()
+
+    const seedCopied = ref(false);
+
+    function copySeed() {
+        if (props.currentSeed) {
+            navigator.clipboard.writeText(props.currentSeed);
+            seedCopied.value = true;
+        }
+    }
 
     const emit = defineEmits<{
         (e: 'proceedFromEndOfRound'): void;
@@ -136,9 +146,15 @@
             <button v-if="props.player.mapProgress < 2" @click="emit('returnToMap')" :disabled="roundHasStarted">Return to Map</button>
         </div>
         <div class="if-lost" v-else-if="!hasWonRound && player.lives <= 0">
-            <h3>
-                Game Over
-            </h3>
+            <H2>
+                GAME OVER
+            </h2>
+            <div v-if="currentSeed" class="seed-display">
+                <span class="seed-label">Seed:</span>
+                <span class="seed-value">{{ currentSeed }}</span>
+                <button class="copy-btn" @click="copySeed">Copy Seed</button>
+                <span v-if="seedCopied">Seed copied!</span>
+            </div>
             <button @click="emit('mainMenu')">Main Menu</button>
         </div>
     </div>
@@ -151,6 +167,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        text-align: center;
     }
     .reward-summary{
         margin-bottom: 10px;
@@ -169,5 +186,38 @@
     .btn-grey{
         background-color: #acacac;
         border: 1px solid white;
+    }
+    .seed-display {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        background: #2a2a2a;
+        padding: 0.75rem 1rem;
+        border-radius: 6px;
+        border: 1px solid #444;
+        margin-bottom: 1rem;
+    }
+    .seed-label {
+        font-weight: bold;
+        color: #888;
+    }
+    .seed-value {
+        font-family: monospace;
+        font-size: 1.2rem;
+        color: #4CAF50;
+        letter-spacing: 1px;
+    }
+    .copy-btn {
+        background: #444;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 0.4rem 0.8rem;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+    .copy-btn:hover {
+        background: #555;
     }
 </style>

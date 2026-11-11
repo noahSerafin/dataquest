@@ -48,8 +48,6 @@ background colours for node maps (use company owner)//levels array (make map hav
 BUGS - 
 -damage mult breaks workbench - dmgmult should be a stat - compiler/duplicator, + Pieces will be affected
 -count not showing on reaper/bosses
-leaving during a shop shows a different set of items 
-buff map/crystal ball (preview button to show disabled board)?
 lower pallette/raise backdoor rarity
 -refresh BEFORE returning to main menu on loss - display seed on game over summary - test piece clearance
 - campaign - next sector needs to close shop

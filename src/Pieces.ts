@@ -269,8 +269,8 @@ export abstract class Piece {
   resetDefence() {
     this.defenceRemaining = this.getStat('defence');
   }
-  resetActions(){
-    if(!this.statuses.disarmed){
+  resetActions() {
+    if (!this.statuses.disarmed) {
       this.actions = this.statuses.juiced ? 2 : 1;
     }
   }
@@ -473,12 +473,12 @@ export abstract class Piece {
 export class Spawn extends Piece {
   static iconID = 496;
   static name = "Spawn";
-  static description = "A load point for programs";
+  static description = "A load point for your programs";
   static unicode = "U+1F532";//"U+2BD0";
-  static color = "#242424ff";
+  static color = "#57ce39ff";
   static rarity = 1;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
-    super(Spawn.name, Spawn.description, Spawn.unicode, 50, 0, 0, 0, 0, Spawn.color, headPosition, [headPosition], team, 1, removeCallback, id);
+    super(Spawn.name, Spawn.description, Spawn.unicode, 1, 0, 0, 0, 0, Spawn.color, headPosition, [headPosition], team, 1, removeCallback, id);
   }
 }
 
@@ -1576,7 +1576,7 @@ class Watchman extends Piece {
   }
   async special(targets: Piece[]): Promise<void> {
     for (const target of targets) {
-      if ((!this.statuses.charmed && target.team !== this.team )||( this.statuses.charmed && target.team === this.team)) {
+      if ((!this.statuses.charmed && target.team !== this.team) || (this.statuses.charmed && target.team === this.team)) {
         if (target.getStat('defence') > 0 || target.defenceRemaining > 0 || !target.statuses.exposed) {
           if (!target.immunities.exposed) {
             target.statuses.hidden = false;
@@ -3256,7 +3256,7 @@ class Vampire extends Piece {
       piece.actions--;
       this.actions += 1;
     }
-    if(!piece.immunities.disarmed){
+    if (!piece.immunities.disarmed) {
       piece.statuses.disarmed = true;
     }
     this.actions--
@@ -4970,7 +4970,7 @@ class Swan extends Piece {
   }
   async special(target: Piece): Promise<void> {
     await target.takeDamage(this.getStat('attack'));
-    target.addModifier({range: -1});//change if we change defence later
+    target.addModifier({ range: -1 });//change if we change defence later
     this.actions--
   }
 }
@@ -4990,9 +4990,9 @@ class FishingPole extends Piece {
   }
   async special(targetPiece: Piece): Promise<void> {
     //const target = targetPiece.headPosition;
-    targetPiece.headPosition = this.tiles[this.tiles.length -1];
-    targetPiece.tiles[0] = this.tiles[this.tiles.length -1];
-    this.tiles.splice(this.tiles.length -1, 1);
+    targetPiece.headPosition = this.tiles[this.tiles.length - 1];
+    targetPiece.tiles[0] = this.tiles[this.tiles.length - 1];
+    this.tiles.splice(this.tiles.length - 1, 1);
     this.actions--
   }
 }

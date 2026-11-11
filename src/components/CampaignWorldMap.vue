@@ -37,6 +37,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: "selectLevel", level: Level, company: Company, difficultyMod: number, reward: number, playerSpawns?: Coordinate[], nodeId?: string): void;
+    (e: "previewLevel", level: Level, company: Company): void;
     (e: "openShop", node: WorldNode): void;
     (e: "openDisabledShop"): void;
     (e: "openAltar"): void;
@@ -104,6 +105,8 @@ function trySelect(node: WorldNode) {
                 return;
             }
         }
+    } else if (node.type === 'level' || node.type === 'boss') {
+        if (!canClick(node) && !props.player.hasAdmin('World Map') && !props.player.hasAdmin('Crystal Ball')) return;
     } else {
         if (!canClick(node) && !props.player.hasAdmin('World Map')) return;
     }
@@ -137,15 +140,21 @@ function skipNode(node: WorldNode) {
     emit('incrementProgress');
 }
 
+function previewNode(node: WorldNode) {
+    selectedPreviewNode.value = null;
+    if (node.type === 'shop') {
+        emit('openDisabledShop');
+    } else if (node.level) {
+        const comp = getNodeCompany(node) || (node.type === 'boss' ? bossCompany : playerCompany);
+        emit('previewLevel', node.level, comp);
+    }
+}
+
 function enterNode(node: WorldNode) {
     const isReachable = canClick(node);
+    if (!isReachable) return;
     selectedPreviewNode.value = null;
     lastInteractedMapEvent.value = `enter:${node.id}`;
-    
-    if (node.type === 'shop' && !isReachable) {
-        emit('openDisabledShop');
-        return;
-    }
     
     if (node.type === 'shop') {
         emit('clearNode', node.id);
@@ -798,8 +807,10 @@ function handleMapMouseUpOrLeave() {
                 
                 <button id="enterNodeButton"
                     v-if="selectedPreviewNode && selectedPreviewNode?.type !== 'skip'"
-                    :disabled="!canClick(selectedPreviewNode) && selectedPreviewNode.type !== 'shop'"
+                    :disabled="!canClick(selectedPreviewNode)"
                     @click="enterNode(selectedPreviewNode)">Enter</button>
+                <button v-if="selectedPreviewNode && player.hasAdmin('Crystal Ball') && ((selectedPreviewNode.type === 'shop' && !canClick(selectedPreviewNode)) || ((selectedPreviewNode.type === 'level' || selectedPreviewNode.type === 'boss') && !isNodeCleared(selectedPreviewNode.id)))"
+                    @click="previewNode(selectedPreviewNode)">Preview</button>
                 
                 <button v-if="selectedPreviewNode" @click="selectedPreviewNode = null">Close</button>
                 <button v-if="canSkip(selectedPreviewNode)" @click="skipNode(selectedPreviewNode)">Skip <span

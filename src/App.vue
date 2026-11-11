@@ -372,6 +372,7 @@ function loadCampaignGame(slotIndex: number, data: any) {
   appDialogueEvent.value = null;
 
   const ui = state.uiState || {};
+  boardDisabled.value = false;
   showBoard.value = false;
   showMap.value = true;
   showShop.value = ui.showShop ?? false;
@@ -569,6 +570,9 @@ async function sellAdmin(itemId: string) {//TODO NEXT
 
 function handleApplyItem(payload: { item: Item, id: string }) {
   const item = payload.item;
+  if (boardDisabled.value && ['playerAndGame', 'piecesAndBoard', 'piece', 'gameState'].includes(item.targetType)) {
+    return;
+  }
   const itemMult = player.value.itemMult;
   console.log('itemMult:', itemMult);
   if (item.targetType === 'playerAndGame' && selectedPiece.value) {
@@ -1018,6 +1022,7 @@ async function selectLevel(newLevel: Level, company: Company, difficultyMod: num
   if (currentAppMode.value === 'campaign') {
     currentCampaignNodeId.value = nodeId || null;
   }
+  boardDisabled.value = false;
   pieceToPlace.value = null;
   currentCompany.value = { ...company };
   showBoard.value = true;
@@ -1219,6 +1224,47 @@ async function handleReturnToMap() {
 
 //game loop
 const shopDisabled = ref<boolean>(false);
+const boardDisabled = ref<boolean>(false);
+
+function openDisabledBoard(newLevel: Level, company: Company) {
+  boardDisabled.value = true;
+  pieceToPlace.value = null;
+  selectedPiece.value = null;
+  isPlacing.value = false;
+  isMoving.value = false;
+  hasFinishedTurn.value = false;
+  isFirstTurn.value = false;
+  roundHasStarted.value = false;
+  player.value.canPlace = false;
+  player.value.canMove = false;
+  player.value.canAction = false;
+  playerSpawns.value = [];
+
+  currentCompany.value = { ...company };
+  const clonedLevel = JSON.parse(JSON.stringify(newLevel));
+  level.value = clonedLevel;
+  activePieces.value = rehydratePieces(clonedLevel.pieces);
+
+  boardRef.value?.clearHighlights();
+  showMap.value = false;
+  showBoard.value = true;
+}
+
+function closeDisabledBoard() {
+  boardDisabled.value = false;
+  showBoard.value = false;
+  showMap.value = true;
+  selectedPiece.value = null;
+  activePieces.value = [];
+  boardRef.value?.clearHighlights();
+  currentCompany.value.abbr = '';
+  currentCompany.value.unicode = player.value.osunicode;
+  currentCompany.value.tileColor = 'rgb(17, 31, 15)';
+  currentCompany.value.edgeColor = 'rgb(156, 201, 84)';
+  if (currentAppMode.value === 'campaign') {
+    currentCompany.value.iconID = campaignPlayerIconID.value;
+  }
+}
 
 const worldMapRef = ref();
 
@@ -1229,8 +1275,8 @@ function saveGameState() {
   const isCampaign = currentAppMode.value === 'campaign';
 
   const uiState = {
-    showBoard: isCampaign ? false : showBoard.value,
-    showMap: isCampaign ? true : showMap.value,
+    showBoard: (isCampaign || boardDisabled.value) ? false : showBoard.value,
+    showMap: (isCampaign || boardDisabled.value) ? true : showMap.value,
 
     showShop: showShop.value,
     canProceedFromShop: canProceedFromShop.value,
@@ -1591,7 +1637,7 @@ onMounted(() => {
 
 //round state functions
 function highlightPlacements(pieceBlueprint: PieceBlueprint) {
-  if (!roundHasStarted) return
+  if (!roundHasStarted.value) return
   boardRef.value.clearHighlights();
   if (player.value.hasAdmin('Backdoor')) {
     const unnocupiedSpaces: Coordinate[] = [];
@@ -1750,6 +1796,7 @@ async function placePieceOnBoardAt(coord: Coordinate) {
 const isDraggingPlacement = ref(false)
 
 function startPlacementDrag(bp: PieceBlueprint) {
+  if (!roundHasStarted.value || !player.value.canPlace) return;
   console.log('dragging');
   pieceToPlace.value = bp;
   isPlacing.value = true;
@@ -2525,7 +2572,8 @@ function cancelConfirm() {
         Menu ☰
       </button>
       <div class="enemy-info">
-        <div v-if="gameStarted || debugMode" class="enemy-left">
+        <button v-if="boardDisabled" class="preview-back-btn" @click="closeDisabledBoard()">← Back to Map</button>
+        <div v-if="(gameStarted || debugMode) && !boardDisabled" class="enemy-left">
           <span v-if="currentCompany" class="flex">
             <div style="margin-right: 4px;">{{ currentCompany.abbr }}</div>
             <div v-if="currentCompany.iconID" class="sprite-icon" :style="getSpriteStyle(currentCompany.iconID)"></div>
@@ -2535,7 +2583,7 @@ function cancelConfirm() {
           v-if="player.extraDifficulty > 0"> + {{ player.extraDifficulty }}</span></p>
           <p class="infamy"><strong>Infamy: </strong>{{ player.stake }}</p>
         </div>
-        <div class="enemy-bosses">
+        <div v-if="!boardDisabled" class="enemy-bosses">
           <BossView v-if="bossAdmins.length > 0" :admins="bossAdmins" />
         </div>
       </div>
@@ -2565,13 +2613,13 @@ function cancelConfirm() {
       <WorldMap ref="worldMapRef" v-if="!displayEditor && currentAppMode !== 'campaign'" class="stage-panel" :class="{ active: showMap }"
         :allLevels="level1Levels" :player="player" :seed="combinedMapSeed" :cssclass="mapClass" :bosses="bossAdmins"
         :staticWorld="campaignWorldMap"
-        @selectLevel="selectLevel" @openShop="openShop" @openDisabledShop="openDisabledShop"
+        @selectLevel="selectLevel" @previewLevel="openDisabledBoard" @openShop="openShop" @openDisabledShop="openDisabledShop"
         @openCompiler="openCompiler" @openAltar="openAltar" @openDuplicator="openDuplicator"
         @openWorkbench="openWorkbench" @incrementProgress="(row) => { incrementMapProgress(row); saveGameState(); }"
         @addBoss="addBossAdmin" @replaceBosses="replaceBosses" @increaseDifficulty="increaseDifficulty" />
       <CampaignWorldMap v-if="!displayEditor && currentAppMode === 'campaign'" class="stage-panel" :class="{ active: showMap }"
         :player="player" :cssclass="mapClass" :staticWorld="campaignWorldMap" :clearedNodes="campaignClearedNodes"
-        @selectLevel="selectLevel" @openShop="openShop" @openDisabledShop="openDisabledShop"
+        @selectLevel="selectLevel" @previewLevel="openDisabledBoard" @openShop="openShop" @openDisabledShop="openDisabledShop"
         @openCompiler="openCompiler" @openAltar="openAltar" @openDuplicator="openDuplicator"
         @openWorkbench="openWorkbench" @incrementProgress="incrementMapProgress(); saveGameState()"
         @addBoss="addBossAdmin" @clearNode="handleCampaignNodeCleared" @mapEvent="handleMapEvent" />
@@ -2747,6 +2795,24 @@ function cancelConfirm() {
 .enemy-info {
   display: flex;
   gap: 2rem;
+}
+
+.preview-back-btn {
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 0.5rem 1.5rem;
+  background-color: #2563eb;
+  color: white;
+  border: 2px solid white;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 0.4rem 0;
+  transition: transform 0.15s ease, background-color 0.2s ease;
+}
+
+.preview-back-btn:hover {
+  background-color: #1d4ed8;
+  transform: scale(1.05);
 }
 
 .info {

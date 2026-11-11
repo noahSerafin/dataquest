@@ -38,6 +38,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
     (e: "selectLevel", level: Level, company: Company, difficultyMod: number, reward: number, playerSpawns?: Coordinate[]): void;
+    (e: "previewLevel", level: Level, company: Company): void;
     (e: "openShop", node: WorldNode): void;
     (e: "openDisabledShop"): void;
     (e: "openAltar"): void;
@@ -143,13 +144,15 @@ function trySelect(node: WorldNode) {
     if (node.type === 'shop') {
         if (!canClick(node)) {
             if (props.player.hasAdmin('Crystal Ball') && !isHidden) {
-                //emit('openDisabledShop');
                 selectedPreviewNode.value = node;
                 return;
             } else {
                 return;
             }
         }
+    //} else if (node.type === 'level' || node.type === 'boss') {
+    //    if (isHidden && !canClick(node)) return;
+    //    if (!props.player.hasAdmin('World Map') && !props.player.hasAdmin('Crystal Ball') && !canClick(node)) return;
     } else {
         if (isHidden && !canClick(node)) return;
         if (!props.player.hasAdmin('World Map') && !canClick(node)) return;
@@ -186,19 +189,25 @@ function skipNode(node: WorldNode) {
     emit('incrementProgress', getNodeRow(node));
 }
 
+function previewNode(node: WorldNode) {
+    selectedPreviewNode.value = null;
+    if (node.type === 'shop') {
+        emit('openDisabledShop');
+    } else if (node.level) {
+        emit('previewLevel', node.level, node.company);
+    }
+}
+
 function enterNode(node: WorldNode) {
     const current = world.value.nodes[currentNodeId.value];
     const isReachable = canClick(node);
+    if (!isReachable) return;
     selectedPreviewNode.value = null;
-    if (node.type === 'shop' && !isReachable) {
-        emit('openDisabledShop')
-    } else {
-        previousNodeId.value = currentNodeId.value;
-        current.visited = true;
-        currentNodeId.value = node.id;
-        node.visible = true;
-    }
-    if (node.type === 'shop' && isReachable) {
+    previousNodeId.value = currentNodeId.value;
+    current.visited = true;
+    currentNodeId.value = node.id;
+    node.visible = true;
+    if (node.type === 'shop') {
         emit('openShop', node)
     }
     if (node.type === 'sacrificial altar') {
@@ -779,8 +788,10 @@ watch(currentNodeId, () => {
                     Reroll
                 </button>
                 <button v-if="selectedPreviewNode && selectedPreviewNode?.type !== 'skip'"
-                    :disabled="!canClick(selectedPreviewNode) && selectedPreviewNode.type !== 'shop'"
+                    :disabled="!canClick(selectedPreviewNode)"
                     @click="enterNode(selectedPreviewNode)">Enter</button>
+                <button v-if="selectedPreviewNode && player.hasAdmin('Crystal Ball') && ((selectedPreviewNode.type === 'shop' && !canClick(selectedPreviewNode)) || ((selectedPreviewNode.type === 'level' || selectedPreviewNode.type === 'boss') && !selectedPreviewNode.visited))"
+                    @click="previewNode(selectedPreviewNode)">Preview</button>
                 <!--
                 <button 
                 v-if="selectedPreviewNode && selectedPreviewNode?.type !== 'skip' && player.hasAdmin('Ferris Wheel')"

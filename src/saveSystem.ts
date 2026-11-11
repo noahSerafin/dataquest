@@ -20,7 +20,8 @@ export function serializeGameState(
   boss: any,
   seed: string,
   boardState: any, // null if not in a level, or an object if mid-level
-  uiState: any
+  uiState: any,
+  shopState?: any
 ) {
   StorageManager.setHasPlayedOnce();
   return {
@@ -33,7 +34,8 @@ export function serializeGameState(
     skipsThisLevel,
     bossName: boss?.name, // just store constructor name to grab from allBosses
     boardState: boardState ? JSON.parse(JSON.stringify(boardState)) : null,
-    uiState: JSON.parse(JSON.stringify(uiState))
+    uiState: JSON.parse(JSON.stringify(uiState)),
+    shopState: shopState ? JSON.parse(JSON.stringify(shopState)) : null
   };
 }
 
@@ -138,6 +140,22 @@ export function rehydrateGameState(data: any): any {
     }).filter(Boolean);
   }
 
+  // 5. Rehydrate Shop State if present
+  let shopState = null;
+  if (data.shopState) {
+    shopState = {
+      ...data.shopState,
+      shopBlueprints: data.shopState.shopBlueprints || [],
+      shopItems: (data.shopState.shopItems || []).map((iData: any) => {
+        const Cls = [...allItems, ...allAdmins].find(c => c.name === iData.name);
+        if (!Cls) return null;
+        const inst = new Cls();
+        Object.assign(inst, iData);
+        return inst;
+      }).filter(Boolean)
+    };
+  }
+
   return {
     player,
     world,
@@ -147,7 +165,8 @@ export function rehydrateGameState(data: any): any {
     boss,
     seed: data.seed,
     boardState,
-    uiState: data.uiState || {}
+    uiState: data.uiState || {},
+    shopState
   };
 }
 

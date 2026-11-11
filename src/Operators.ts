@@ -595,7 +595,7 @@ const Explorer: OS = {
     adminSlots: 4,
     blueprints: [knife, sling, shield],
     items: [],
-    admins: [new OffRoader, new AdminMap, new Compass],
+    admins: [new OffRoader, new Compass, new AdminMap, new Crystal],
     lives: 1,
     description: "Gets around the overworld with ease, but vunerable with only 1 life. Start with some pocket money."
 }

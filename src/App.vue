@@ -640,10 +640,12 @@ function handleApplyItem(payload: { item: Item, id: string }) {
       if (shopBp) {
         item.apply(shopBp, 1)
         player.value.removeItem(item)
+        saveGameState();
       }
       if (shopItem) {
         item.apply(shopItem, 1)
         player.value.removeItem(item)
+        saveGameState();
       }
     }
   }
@@ -770,7 +772,9 @@ function refreshShop(isFree: boolean) {
   shopItems.value.forEach(item => {
     item.compressed = Random.bool(0.02);
   });
-  //if triggered by player
+  if (!isFree) {
+    saveGameState();
+  }
 }
 
 function addBlueprintToInventory(bp: PieceBlueprint){
@@ -788,6 +792,7 @@ function buyBlueprint(bp: PieceBlueprint) {
     player.value.money += 2;
   }
   addBlueprintToInventory(bp);
+  saveGameState();
 }
 function stealBlueprint(bp: PieceBlueprint) {
   shopBlueprints.value = shopBlueprints.value.filter(b => b.id !== bp.id);
@@ -795,6 +800,7 @@ function stealBlueprint(bp: PieceBlueprint) {
     hasStolenFromThisShop.value = true;
   }
   addBlueprintToInventory(bp);
+  saveGameState();
 }
 async function addItemToinventory(item: Item) {
   // decide which inventory to place it in
@@ -833,7 +839,8 @@ async function buyItem(item: Item) {
   if (player.value.hasAdmin('Piggy')) {
     player.value.money += 2;
   }
-  addItemToinventory(item);
+  await addItemToinventory(item);
+  saveGameState();
 }
 async function stealItem(item: Item) {
   shopItems.value = shopItems.value.filter(i => i.id !== item.id);
@@ -843,7 +850,8 @@ async function stealItem(item: Item) {
   if (player.value.hasAdmin('Five Finger Discount') && !hasStolenFromThisShop.value) {
     hasStolenFromThisShop.value = true;
   }
-  addItemToinventory(item);
+  await addItemToinventory(item);
+  saveGameState();
 }
 
 const showShop = ref(false)
@@ -1225,6 +1233,8 @@ function saveGameState() {
     showMap: isCampaign ? true : showMap.value,
 
     showShop: showShop.value,
+    canProceedFromShop: canProceedFromShop.value,
+    shopDisabled: shopDisabled.value,
     showCompiler: showCompiler.value,
     showAltar: showAltar.value,
     showDuplicator: showDuplicator.value,
@@ -1235,6 +1245,15 @@ function saveGameState() {
     isFirstTurn: isFirstTurn.value,
     foggedTiles: foggedTiles.value,
     currentCompany: currentCompany.value
+  };
+
+  const shopState = isCampaign ? null : {
+    shopBlueprints: shopBlueprints.value,
+    shopItems: shopItems.value,
+    rerollCost: rerollCost.value,
+    prevFib: prevFib.value,
+    currentFib: currentFib.value,
+    hasStolenFromThisShop: hasStolenFromThisShop.value
   };
 
   const boardState = isCampaign ? null : {
@@ -1268,7 +1287,8 @@ function saveGameState() {
     worldMapRef.value?.boss || null,
     currentSeed.value,
     boardState,
-    uiState
+    uiState,
+    shopState
   );
   
   if (isCampaign) {
@@ -1322,6 +1342,8 @@ function loadSavedGame() {
   showBoard.value = ui.showBoard ?? false;
   showMap.value = ui.showMap ?? true;
   showShop.value = ui.showShop ?? false;
+  canProceedFromShop.value = ui.canProceedFromShop ?? false;
+  shopDisabled.value = ui.shopDisabled ?? false;
   showCompiler.value = ui.showCompiler ?? false;
   showAltar.value = ui.showAltar ?? false;
   showDuplicator.value = ui.showDuplicator ?? false;
@@ -1360,7 +1382,16 @@ function loadSavedGame() {
       worldMapRef.value.skipsThisLevel = state.skipsThisLevel;
       worldMapRef.value.boss = state.boss;
     }
-    refreshShop(true);//not deterministic, revise later. save shop in gameState after refreshShop?
+    if (state.shopState) {
+      shopBlueprints.value = state.shopState.shopBlueprints || [];
+      shopItems.value = state.shopState.shopItems || [];
+      rerollCost.value = state.shopState.rerollCost ?? (player.value.hasAdmin('Wheel of Dharma') ? 0 : (player.value.hasAdmin('Slots') ? 3 : 5));
+      prevFib.value = state.shopState.prevFib ?? 0;
+      currentFib.value = state.shopState.currentFib ?? 1;
+      hasStolenFromThisShop.value = state.shopState.hasStolenFromThisShop ?? false;
+    } else {
+      refreshShop(true);
+    }
   });
 }
 

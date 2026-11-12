@@ -111,11 +111,17 @@
         if (osName === 'BeOS') {
             if (!props.debugMode && StorageManager.getUniqueWinsCount() < 6) return "Win with at least 6 different operators";
         }
+        if (osName === 'Solaris') {
+            if (!props.debugMode && !StorageManager.hasBeatLevel(3)) return "Reach security level 4";
+        }
         if (osName === 'Explorer') {
             if (!props.debugMode && !StorageManager.hasBeatLevel(10)) return "Reach security level 10";
         }
         if (osName === 'Satoshi') {
             if (!props.debugMode && !StorageManager.hasBeatLevel(15)) return "Reach security level 15";
+        }
+        if (osName === 'Openclaw') {
+            if (!props.debugMode && !StorageManager.hasBeatLevel(4)) return "Reach security level 5";
         }
         //Explorer, Satoshi, Debugger
         return null;

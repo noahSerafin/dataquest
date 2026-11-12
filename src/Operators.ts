@@ -1,6 +1,6 @@
 import type { OS } from "./types";
 import { Voucher, Mushroom, Garlic, Meat, Genie, Pandora, Update2, Dupe, Jar, Iron } from "./Items";
-import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Clippy, Notepad, StoneAge, Rune, OffRoader, AdminMap, Compass, Backdoor, Miner, Copier, Cherries, Sneakers, Palette, Hermes, Dove, LLM, Rainbow } from "./AdminPrograms";
+import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Clippy, Notepad, StoneAge, Rune, OffRoader, AdminMap, Compass, Backdoor, Miner, Copier, Cherries, Sneakers, Palette, Hermes, Dove, LLM, Rainbow, Convenience, Toolbox, Schoolbag, Brain } from "./AdminPrograms";
 import { createDefaultStatuses } from "./types";
 
 const knife = {
@@ -592,12 +592,27 @@ const Explorer: OS = {
     prefix: 'E',
     money: 9,
     memory: 5,
-    adminSlots: 4,
+    adminSlots: 5,
     blueprints: [knife, sling, shield],
     items: [],
-    admins: [new OffRoader, new Compass, new AdminMap, new Crystal],
+    admins: [new OffRoader, new Compass, new AdminMap, new Crystal, new Convenience],
     lives: 1,
     description: "Gets around the overworld with ease, but vunerable with only 1 life. Start with some pocket money."
+}
+
+const Solaris: OS = {
+    iconID: 436,
+    name: 'Solaris',
+    unicode: 'U+1F323',
+    prefix: 'O',
+    money: 6,
+    memory: 6,
+    adminSlots: 5,
+    blueprints: [knife, sling, shield, aegis],
+    items: [],
+    admins: [new Toolbox, new Schoolbag],
+    lives: 4,
+    description: "Highly efficient storage management"
 }
 
 const Satoshi: OS = {
@@ -615,20 +630,24 @@ const Satoshi: OS = {
     description: "Volatile currency generator, high memory and admin slots"
 }
 
-//Fleet - vehicles: offroader, pickup, van, artic, ambulance, firetruck
+const OpenClaw: OS = {
+    iconID: 552,
+    name: 'OpenClaw',
+    unicode: 'U+1F980',
+    prefix: 'o',
+    money: 0,
+    memory: 6,
+    adminSlots: 4,
+    blueprints: [tp],
+    items: [new Genie],
+    admins: [new Brain, new LLM],
+    lives: 1,
+    description: "Experimental setup reliant on excess memory, start with no money"
+}
 
 /*
-//Solaris
-Developed by Sun Microsystems (later Oracle Corporation)
-Enterprise reliability
-ZFS filesystem
-DTrace performance tools
-Solaris powered many internet servers in the 1990s and 2000s.
-'Highly efficient storage management'
-[toolbox, schoolbag]
-
 /Kali - dragon head
-[daemon, dataworm]
+[daemon, shark, dataworm]
 [backdoor]
 
 //CP/M DESKTOP COMPUTER, U+1F5A5
@@ -674,4 +693,4 @@ const Debugger: OS = {
     description: 'FOR TESTING'
 }
 
-export const allOSes = [Window95, Steam, Window, Apple, Penguin, Temple, Fortran, Cobol, Arch, GNU, Amiga, Beos, Explorer, Satoshi, Debugger];
+export const allOSes = [Window95, Steam, Window, Apple, Penguin, Temple, Fortran, Cobol, Arch, GNU, Amiga, Beos, Explorer, Solaris, Satoshi, OpenClaw, Debugger];

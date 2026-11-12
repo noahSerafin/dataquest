@@ -540,7 +540,7 @@ export const sector5 = {
       "difficultyMod": 0,
       "reward": 0,
       "company": "Saturn Solutions",
-      "shopContents": "Copycat, Dataworm, Firework, Lyre, Paragon, Screwdriver, Shrike, Snowman, Artic, Black Belt, Disco Ball, Meteor, Thaw"
+      "shopContents": "Copycat, Dataworm, Firework, Lyre, Paragon, Shrike, Snowman, Artic, Black Belt, Disco Ball, Meteor, Thaw"
     },
     "node_v8cln2a0v": {
       "id": "node_v8cln2a0v",

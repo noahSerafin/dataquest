@@ -58,6 +58,7 @@ enemy pieces trying to use special before reaching max size (bool for those that
 
 NICE TO HAVE - VISUAL IMPROVEMENTS
 You win screen more obvious, change button to endless mode here
+Gold pieces gen money when unplaced, steel pieces gen defence when unplaced? Or admin for this?
 differentiate P/I/A top left better, shapes? move to bottom right?
 ?nerf hybrids - average rounded up? +1?
 donkey, zebra, girraffe - special kick targets from rear tile?
@@ -79,6 +80,7 @@ fix BUGS
 finish styles
 add loading bar to start, wait for spritesheet
 hand holdy rogue tutorial - utilise a "level 0" with set nodes, put voucher in as item - remove from classic95's set
+balance unlock rules
 debug mode hotkey
 balancing around secret bosses (an end to 'endless'?)
 ads

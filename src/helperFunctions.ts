@@ -225,7 +225,7 @@ export function applyVariantToBlueprint(bp: PieceBlueprint, variant: PieceVarian
   }
 }
 
-function rollRarity(clovers: number, hasCollector: boolean = false) {
+function rollRarity(clovers: number, _hasCollector: boolean = false) {//retiring old collector function for now
 
   const base = [40, 30, 14, 9, 5, 2];
   //const wCollector = [0,35,19,14,10,3];
@@ -250,7 +250,7 @@ function rollRarity(clovers: number, hasCollector: boolean = false) {
     sum += adjusted[i];
     if (roll < sum) {
       const rarity = i + 1;
-      if (hasCollector && rarity === 1) return 2;
+      //if (hasCollector && rarity === 1) return 2;
       return rarity;
     }
   }

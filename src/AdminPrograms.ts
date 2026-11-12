@@ -269,7 +269,7 @@ class BionicLeg extends Admin {
   }
 }
 
-class Convenience extends Admin {
+export class Convenience extends Admin {
   static iconID = 266;
   static name = "Convenience Store";
   static description = "Open the shop any time (still only reloads for free at shop nodes)";
@@ -761,7 +761,7 @@ class Lungs extends Admin {
   }
 }
 
-class Brain extends Admin {
+export class Brain extends Admin {
   static iconID = 370;
   static name = "Machine Learning";
   static description = "Every space of free memory in your inventory gives +1 attack to your programs on load";
@@ -827,7 +827,7 @@ class Stonks extends Admin {
 
 }
 
-class Schoolbag extends Admin {
+export class Schoolbag extends Admin {
   static iconID = 248;
   static name = "Schoolbag";//"Schoolbag";
   static description = "Items only use 0.5 memory each";
@@ -841,8 +841,6 @@ class Schoolbag extends Admin {
 
 export class Toolbox extends Admin {
   static iconID = 319;
-
-
   static name = "Toolbox";
   static description = "Programs only use 0.5 memory each";
   static unicode = "U+1F9F0";
@@ -2517,7 +2515,7 @@ class Appraisal extends Admin {
   //handle in shop
 }
 
-class Camp extends Admin {
+class Camp extends Admin {//track no moves across 2 turns??
   static iconID = 293;
   static name = "Camper";
   static description = "Your non-hidden programs that don't move gain +1 range every 2 turns, ones that do revert their range to their base range";// to all stats on the end of your turn";
@@ -3918,19 +3916,26 @@ export class Silly extends Admin {
   }
 }
 
-//Collector, U+1F5BC (rarity 1) //other Common(rarity 1) classes no longer appear in the shop (rollRarity)
+//Collector
+//Common programs and items can no longer appear in the shop or from items, and 
 export class Collector extends Admin {
   static iconID = 265;
   static name = "Collector";
-  static description = "Common programs and items can no longer appear in the shop or from items.";
+  static description = "Unloaded variant programs each give $1 at the end of a round";
   static unicode = "U+1F5BC";//painting
   static color = "rgba(8, 56, 111, 1)";
   static rarity = 2;//1?
   constructor() {
-    super(Collector.name, Collector.description, Collector.unicode, Collector.color, 5, Collector.rarity, 'gameState', 'other');
+    super(Collector.name, Collector.description, Collector.unicode, Collector.color, 5, Collector.rarity, 'player', 'onRoundEnd');
   }
-  async apply({ id: _id, activePieces: _activePieces }: { id: string, activePieces: Piece[] }) {
-    //do nothing - rarity changes should happen in rollRarity
+  async apply({ player }: { player: Player }) {
+    for (const bp of player.programs) {
+      if (!bp.isPlaced) {
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
+        player.money += 1;
+      }
+    };
   }
 }
 

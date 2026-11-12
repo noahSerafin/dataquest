@@ -474,6 +474,14 @@ async function attackPiece(attacker: Piece, defender: Piece) {
         attacker.statuses.poisoned = true;
       }
     }
+    if (defender.name.includes('Bigfoot')) {
+      if(!attacker.immunities.confused){
+        attacker.statuses.confused = true;
+      }
+      if(!defender.statuses.exposed){
+        defender.statuses.hideen = true;
+      }
+    }
     attacker.actions--;
     // callback to App.vue
   }

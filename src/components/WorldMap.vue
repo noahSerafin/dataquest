@@ -790,7 +790,7 @@ watch(currentNodeId, () => {
                 <button v-if="selectedPreviewNode && selectedPreviewNode?.type !== 'skip'"
                     :disabled="!canClick(selectedPreviewNode)"
                     @click="enterNode(selectedPreviewNode)">Enter</button>
-                <button v-if="selectedPreviewNode && player.hasAdmin('Crystal Ball') && ((selectedPreviewNode.type === 'shop' && !canClick(selectedPreviewNode)) || ((selectedPreviewNode.type === 'level' || selectedPreviewNode.type === 'boss') && !selectedPreviewNode.visited))"
+                <button v-if="selectedPreviewNode && player.hasAdmin('Crystal Ball') && (selectedPreviewNode.type === 'shop' || ((selectedPreviewNode.type === 'level' || selectedPreviewNode.type === 'boss') && !selectedPreviewNode.visited))"
                     @click="previewNode(selectedPreviewNode)">Preview</button>
                 <!--
                 <button 

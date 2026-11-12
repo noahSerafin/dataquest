@@ -55,6 +55,10 @@
         playSoundFx(cashOutSound, 1.0);
     }
 
+    function getUnplaced(player: Player){
+        const unplaced = player.programs.filter(bp => !bp.isPlaced);
+        return unplaced.length;
+    }
     //duplicate admins later??
 </script>
 
@@ -121,6 +125,11 @@
                 <span v-if="player.hasAdmin('Booty') && bosses.length > 0">+ Booty 
                     <span class="text-yellow">
                         ${{ 6 * player.adminCount('Booty') }}
+                    </span>
+                </span>
+                <span v-if="player.hasAdmin('Collector') && player.mapProgress >= 2">+ Collector
+                    <span class="text-yellow">
+                        ${{ getUnplaced(player) * player.adminCount('Collector') }}
                     </span>
                 </span>
                 <span v-if="player.hasAdmin('Pot of Gold') && player.mapProgress >= 2">+ Pot of Gold 

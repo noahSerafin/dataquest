@@ -464,6 +464,12 @@ function createNewPlayer(payload: { os: OS, seed: string, stake?: number }) {
   gameStarted.value = true;
   currentCompany.value = { iconID: os.iconID, name: 'Player', abbr: '', unicode: player.value.osunicode, pieceList: [], tileColor: "rgb(17, 31, 15)", edgeColor: "rgb(156, 201, 84)" };
   refreshShop(true);
+  currentShop.value = {
+    ...futureShop.value,
+    shopBlueprints: [...futureShop.value.shopBlueprints],
+    shopItems: [...futureShop.value.shopItems]
+  };
+  refreshShop(true);
   player.value.canPlace = false;
 }
 const showCollection = ref(false);
@@ -717,40 +723,57 @@ function selectShopTarget(target: Item | PieceBlueprint | null) {
   shopTarget.value = target;
 }
 
-const shopBlueprints = ref<PieceBlueprint[]>([]);
-const shopItems = ref<Item[]>([]);
-const rerollCost = ref(player.value.hasAdmin('Wheel of Dharma') ? 0 : 5);//to be reset after shop
-const prevFib = ref(0);//to be reset after shop
-const currentFib = ref(1);//to be reset after shop
+interface ShopInventory {
+  shopBlueprints: PieceBlueprint[];
+  shopItems: Item[];
+  rerollCost: number;
+  prevFib: number;
+  currentFib: number;
+  hasStolenFromThisShop: boolean;
+}
+
+const currentShop = ref<ShopInventory>({
+  shopBlueprints: [],
+  shopItems: [],
+  rerollCost: player.value.hasAdmin('Wheel of Dharma') ? 0 : 5,
+  prevFib: 0,
+  currentFib: 1,
+  hasStolenFromThisShop: false
+});
+
+const futureShop = ref<ShopInventory>({
+  shopBlueprints: [],
+  shopItems: [],
+  rerollCost: player.value.hasAdmin('Wheel of Dharma') ? 0 : 5,
+  prevFib: 0,
+  currentFib: 1,
+  hasStolenFromThisShop: false
+});
+
+const activeShop = computed(() => shopDisabled.value ? futureShop.value : currentShop.value);
+
+const shopBlueprints = computed({
+  get: () => activeShop.value.shopBlueprints,
+  set: (val) => { activeShop.value.shopBlueprints = val; }
+});
+const shopItems = computed({
+  get: () => activeShop.value.shopItems,
+  set: (val) => { activeShop.value.shopItems = val; }
+});
+const rerollCost = computed({
+  get: () => activeShop.value.rerollCost,
+  set: (val) => { activeShop.value.rerollCost = val; }
+});
+const hasStolenFromThisShop = computed({
+  get: () => activeShop.value.hasStolenFromThisShop,
+  set: (val) => { activeShop.value.hasStolenFromThisShop = val; }
+});
 const canProceedFromShop = ref<boolean>(false);
-const hasStolenFromThisShop = ref<boolean>(false);
 
-function refreshShop(isFree: boolean) {
-  shopTarget.value = null;
-  if (!isFree && !player.value.hasAdmin('Wheel of Dharma')) {//player is rerolling
-    player.value.spend(rerollCost.value);
-    const nextFib = prevFib.value + currentFib.value;
-    prevFib.value = currentFib.value;
-    currentFib.value = nextFib;
-    if (player.value.hasAdmin('Wheel of Dharma')) {
-      rerollCost.value = 0;
-    } else {
-      rerollCost.value += currentFib.value;
-    }
-  } else { //boss/level has been defeated
-    rerollCost.value = player.value.hasAdmin('Slots') ? 3 : 5;
-    prevFib.value = 0;
-    currentFib.value = 1;
-    hasStolenFromThisShop.value = false;
-  }
-  rerollCost.value = player.value.hasAdmin('Wheel of Dharma') ? 0 : rerollCost.value;
-
+function generateShopStock() {
   const appraisalDiscount = 2 * player.value.admins.filter(a => a.name === 'Appraisal').length;
-  
-  //rogue elements
   const ownedAdmins = new Set(player.value.admins.map(a => a.name));
   const availableAdmins = (player.value.hasAdmin('Bouquet')) ? allAdmins : allAdmins.filter(AdminClass => !ownedAdmins.has(AdminClass.name));
-  
   const allItemsAndAdmins: ItemConstructor[] = [...allItems, ...availableAdmins];
 
   const classes = [
@@ -758,26 +781,58 @@ function refreshShop(isFree: boolean) {
     pickWeightedRandom(allPieces, player.value),
     pickWeightedRandom(allPieces, player.value),
   ];
-  shopBlueprints.value = classes.map(c => makeBlueprint(c.class, c.variant ?? undefined, appraisalDiscount));
+  const blueprints = classes.map(c => makeBlueprint(c.class, c.variant ?? undefined, appraisalDiscount));
 
-  shopItems.value = [
+  const items = [
     pickWeightedRandomItem(allItemsAndAdmins, player.value, appraisalDiscount),
     pickWeightedRandomItem(allItemsAndAdmins, player.value, appraisalDiscount),
     pickWeightedRandomItem(allItemsAndAdmins, player.value, appraisalDiscount),
   ];
   if (player.value.hasAdmin('Department Store')) {
     const extraP = pickWeightedRandom(allPieces, player.value);
-    shopBlueprints.value.push(makeBlueprint(extraP.class, extraP.variant ?? undefined, appraisalDiscount));
+    blueprints.push(makeBlueprint(extraP.class, extraP.variant ?? undefined, appraisalDiscount));
     const extraI = pickWeightedRandomItem(allItems, player.value, appraisalDiscount);
     const extraA = pickWeightedRandomItem(availableAdmins, player.value, appraisalDiscount);
-    shopItems.value.push(extraI, extraA);
+    items.push(extraI, extraA);
   }
-  
-  shopItems.value.forEach(item => {
+
+  items.forEach(item => {
     item.compressed = Random.bool(0.02);
   });
+
+  return { blueprints, items };
+}
+
+function refreshShop(isFree: boolean) {
+  shopTarget.value = null;
   if (!isFree) {
+    // Player is rerolling currentShop
+    const shop = currentShop.value;
+    if (!player.value.hasAdmin('Wheel of Dharma')) {
+      player.value.spend(shop.rerollCost);
+      const nextFib = shop.prevFib + shop.currentFib;
+      shop.prevFib = shop.currentFib;
+      shop.currentFib = nextFib;
+      shop.rerollCost += shop.currentFib;
+    } else {
+      shop.rerollCost = 0;
+    }
+    const { blueprints, items } = generateShopStock();
+    shop.shopBlueprints = blueprints;
+    shop.shopItems = items;
     saveGameState();
+  } else {
+    // Standard refresh preps a new futureShop
+    const { blueprints, items } = generateShopStock();
+    const initialRerollCost = player.value.hasAdmin('Wheel of Dharma') ? 0 : (player.value.hasAdmin('Slots') ? 3 : 5);
+    futureShop.value = {
+      shopBlueprints: blueprints,
+      shopItems: items,
+      rerollCost: initialRerollCost,
+      prevFib: 0,
+      currentFib: 1,
+      hasStolenFromThisShop: false
+    };
   }
 }
 
@@ -1294,12 +1349,8 @@ function saveGameState() {
   };
 
   const shopState = isCampaign ? null : {
-    shopBlueprints: shopBlueprints.value,
-    shopItems: shopItems.value,
-    rerollCost: rerollCost.value,
-    prevFib: prevFib.value,
-    currentFib: currentFib.value,
-    hasStolenFromThisShop: hasStolenFromThisShop.value
+    currentShop: currentShop.value,
+    futureShop: futureShop.value
   };
 
   const boardState = isCampaign ? null : {
@@ -1429,13 +1480,19 @@ function loadSavedGame() {
       worldMapRef.value.boss = state.boss;
     }
     if (state.shopState) {
-      shopBlueprints.value = state.shopState.shopBlueprints || [];
-      shopItems.value = state.shopState.shopItems || [];
-      rerollCost.value = state.shopState.rerollCost ?? (player.value.hasAdmin('Wheel of Dharma') ? 0 : (player.value.hasAdmin('Slots') ? 3 : 5));
-      prevFib.value = state.shopState.prevFib ?? 0;
-      currentFib.value = state.shopState.currentFib ?? 1;
-      hasStolenFromThisShop.value = state.shopState.hasStolenFromThisShop ?? false;
+      if (state.shopState.currentShop) {
+        currentShop.value = state.shopState.currentShop;
+      }
+      if (state.shopState.futureShop) {
+        futureShop.value = state.shopState.futureShop;
+      }
     } else {
+      refreshShop(true);
+      currentShop.value = {
+        ...futureShop.value,
+        shopBlueprints: [...futureShop.value.shopBlueprints],
+        shopItems: [...futureShop.value.shopItems]
+      };
       refreshShop(true);
     }
   });
@@ -1449,7 +1506,11 @@ const openDisabledShop = () => {
   saveGameState();
 }
 const toggleShop = () => {
-  showShop.value = !showShop.value;
+  if (showShop.value) {
+    closeShop();
+    return;
+  }
+  showShop.value = true;
   shopDisabled.value = false;
   canProceedFromShop.value = false;
   saveGameState();
@@ -1506,6 +1567,12 @@ const openShop = (node?: any) => {
   }
   if (currentAppMode.value === 'campaign') {
     loadCampaignShop();
+  } else {
+    currentShop.value = {
+      ...futureShop.value,
+      shopBlueprints: [...futureShop.value.shopBlueprints],
+      shopItems: [...futureShop.value.shopItems]
+    };
   }
   showShop.value = true;
   canProceedFromShop.value = true;
@@ -1632,7 +1699,13 @@ onMounted(() => {
   playerSpawns.value = playerSpawnCoords;
   originalSpawns.value = playerSpawnCoords.map(s => ({ ...s }));
   originalTiles.value = level.value.tiles.map(t => ({ ...t }));
-  refreshShop(true)//handle in round, or don't for crystal ball
+  refreshShop(true);//handle in round, or don't for crystal ball
+  currentShop.value = {
+    ...futureShop.value,
+    shopBlueprints: [...futureShop.value.shopBlueprints],
+    shopItems: [...futureShop.value.shopItems]
+  };
+  refreshShop(true);
 });
 
 //round state functions
@@ -2001,6 +2074,14 @@ const damagePieceAt = async (coord: Coordinate) => {
     await handleApplyAdmins('onReceiveDamage', damageReceiver.id, selectedPiece.value)
     if (damageReceiver.name === 'Puffer' && !selectedPiece.value.immunities.poisoned) {
       selectedPiece.value.statuses.poisoned = true;
+    }
+  }
+  if (damageReceiver.name.includes('Bigfoot')) {
+    if(!selectedPiece.value.immunities.confused){
+      selectedPiece.value.statuses.confused = true;
+    }
+    if(!damageReceiver.value.statuses.exposed){
+      damageReceiver.value.statuses.hideen = true;
     }
   }
   selectedPiece.value.willRetaliate = false;//pieces that have enacted defensive option

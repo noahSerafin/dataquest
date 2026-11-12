@@ -180,7 +180,19 @@ const allIcons = computed(() => {
     'U+1F36D',//lolly
     'U+1F5D1',//recycle bin
     'U+1FAEF',
-    'U+1F3A3'//fishingpole
+    'U+1F3A3',//fishingpole
+    'U+1FAC8',//HAIRY CREATURE - Bigfoot
+    'U+1F980',//CRAB
+    'U+1F9AA',//OYSTER/PEARL
+    'U+1F91E', //crossed fingers
+    'U+1F432',//DRAGON FACE
+    'U+1F9A9', //FLAMINGO
+    'U+1F990',//SHRIMP
+    'U+1F42C',//DOLPHIN
+    'U+1F9AD',//SEAL
+    'U+1F9A6',//OTTER
+    'U+1F986',//DUCK
+    'U+1FACD',//ORCA
   ];
   statuses.forEach((unicode, index) => {
     result.push({

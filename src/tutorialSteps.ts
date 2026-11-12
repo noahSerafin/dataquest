@@ -226,7 +226,7 @@ const statusesTip: TutorialStep = {
 }
 const slowedTip: TutorialStep = {
     id: 'slowedTip',
-    tooltip: 'Out of moves? Frozen? If your program has a special move like "charge", you can use this to move for free.'
+    tooltip: 'Out of moves? Frozen? If your program has a special move like "charge", you can use this to move for free. It also will not be counted as a move.'
 }
 const hiddenNodesTip: TutorialStep = {
     id: 'hiddenNodeTip',

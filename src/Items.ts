@@ -1,4 +1,4 @@
-import type { Coordinate, PieceBlueprint } from "./types"
+import { createDefaultStatuses, type Coordinate, type PieceBlueprint } from "./types"
 import { allPieces, Piece } from "./Pieces"
 import type { Player } from "./Player"
 import { getRandomUnoccupiedTile, makeBlueprint, pickWeightedRandom, pickWeightedRandomItem, addItemsUntilFull, applyVariantToBlueprint } from "./helperFunctions"
@@ -359,12 +359,8 @@ export class Formula extends Item<PieceBlueprint> {
     }
 }
 
-// OLIVE, U+1FAD2
-
 export class Blessing extends Item<PieceBlueprint> {
     static iconID = 215;
-
-
     static name = "Blessing";
     static description = "Increases all a held program's stats by 1";
     static unicode = "U+1F389";
@@ -383,23 +379,27 @@ export class Blessing extends Item<PieceBlueprint> {
     }
 }
 
-export class Supplement extends Item<Piece> {
+export class Supplement extends Item<Piece[]> {
     static iconID = 207;
     static name = "Supplements";
-    static description = "Increases all a placed program's stats by 1 for one round";
+    static description = "Increases all your placed program's stats by 1 for one round";
     static unicode = "U+1F48A";
     static color = "#6e0c8bff";
     static rarity = 4;
     constructor() {
         super(Supplement.name, Supplement.description, Supplement.unicode, Supplement.color, 3, Supplement.rarity, 'piece')
     }
-    apply(target: Piece, itemMult: number) {
-        target.maxSize += (1 * itemMult);
-        target.moves += (1 * itemMult);
-        target.movesRemaining += (1 * itemMult);
-        target.range += (1 * itemMult);
-        target.attack += (1 * itemMult);
-        target.defence += (1 * itemMult);
+    apply(activePieces: Piece[], itemMult: number) {
+        activePieces.forEach(target => {
+            if (target.team === 'player') {
+                target.maxSize += (1 * itemMult);
+                target.moves += (1 * itemMult);
+                target.movesRemaining += (1 * itemMult);
+                target.range += (1 * itemMult);
+                target.attack += (1 * itemMult);
+                target.defence += (1 * itemMult);
+            }
+        });
     }
 }
 
@@ -491,37 +491,41 @@ export class Voucher extends Item<Item> {
     }
 }
 
-export class Rations extends Item<Piece> {
+export class Rations extends Item<Piece[]> {
     static iconID = 193;
-
-
     static name = "Rations";
-    static description = "Replenish a programs moves";
+    static description = "Replenish all your loaded programs' moves";
     static unicode = "U+1F96B";
-    static color = "#f7eb45ff";
+    static color = "rgb(21, 51, 221)";
     static rarity = 3;
     constructor() {
         super(Rations.name, Rations.description, Rations.unicode, Rations.color, 2, Rations.rarity, 'piece')
     }
-    apply(target: Piece, _itemMult: number) {
-        target.movesRemaining = target.moves;
+    apply(activePieces: Piece[], _itemMult: number) {//game state from app??
+        activePieces.forEach(target => {
+            if (target.team === 'player'){
+                target.movesRemaining = target.moves;
+            }
+        })
     }
 }
 
-export class Beans extends Item<Piece> {
+export class Beans extends Item<Piece[]> {
     static iconID = 183;
-
-
     static name = "Beans";
-    static description = "Replenish a programs actions";//give a placed piece 2 actions every turn for a round?
+    static description = "Replenish all your loaded programs' actions";
     static unicode = "U+1FAD8";
-    static color = "rgb(101, 179, 192)";
+    static color = "rgb(243, 227, 78)";
     static rarity = 3;
     constructor() {
         super(Beans.name, Beans.description, Beans.unicode, Beans.color, 2, Beans.rarity, 'piece')
     }
-    apply(target: Piece, _itemMult: number) {
-        target.actions = 1;
+    apply(activePieces: Piece[], _itemMult: number) {//game state from app??
+        activePieces.forEach(target => {
+            if (target.team === 'player' && target.actions <= 0){
+                target.actions = 1;
+            }
+        });
     }
 }
 
@@ -548,6 +552,7 @@ export class ShootingStar extends Item<PieceBlueprint> {
             charmed: true,
             confused: true,
             exposed: true,
+            disarmed: true,
             hidden: false,
             negative: false
         }
@@ -555,7 +560,6 @@ export class ShootingStar extends Item<PieceBlueprint> {
 }
 
 //POT OF FOOD, U+1F372
-
 // BENTO BOX, U+1F371 random upgrade item
 //// AMPHORA, U+1F3FA Pandora
 export class Pandora extends Item<Player> {
@@ -857,7 +861,7 @@ class Battery extends Item<Piece[]> {
 }
 
 //SANDWICH, U+1F96A, all rounder? random stat?
-export class Sandwich extends Item<Piece> {
+/*export class Sandwich extends Item<Piece> {
     static iconID = 213;
 
 
@@ -877,7 +881,7 @@ export class Sandwich extends Item<Piece> {
         target.attack += (2 * itemMult);
         target.defence += (2 * itemMult);
     }
-}
+}*/
 
 class Hotline extends Item {
     static iconID = 177;
@@ -905,11 +909,8 @@ class Hotline extends Item {
     }
 }
 
-//target player
 export class Floppy extends Item {
     static iconID = 170;
-
-
     static name = "Update";
     static description = "+1 memory";
     static unicode = "U+1F4BE";
@@ -926,8 +927,6 @@ export class Floppy extends Item {
 
 export class Update2 extends Item {
     static iconID = 196;
-
-
     static name = "Update 2.0";
     static description = "+2 memory";
     static unicode = "U+1F4BF";
@@ -944,8 +943,6 @@ export class Update2 extends Item {
 
 export class Update3 extends Item {
     static iconID = 220;
-
-
     static name = "Hardware Upgrade";
     static description = "+1 admin slot";
     static unicode = " U+1F4BD";//"U+1F4C0"; // MINIDISC, U+1F4BD
@@ -962,8 +959,6 @@ export class Update3 extends Item {
 
 export class Life extends Item {
     static iconID = 214;
-
-
     static name = "1-Up";
     static description = "+1 extra life";
     static unicode = "U+1F493";
@@ -980,8 +975,6 @@ export class Life extends Item {
 
 export class Dupe extends Item<Player> {
     static iconID = 210;
-
-
     static name = "Dupe";
     static description = "Duplicate a random Admin, destroy all other admins";
     static unicode = "U+1F942";
@@ -1003,7 +996,6 @@ export class Dupe extends Item<Player> {
     }
 }
 
-//JAR, U+1FAD9 - piece? capture an enemy of size 1, turn into blueprint
 export class Jar extends Item {
     static iconID = 187;
     static name = "Jar";
@@ -1040,24 +1032,20 @@ export class Jar extends Item {
     }
 }
 
-class Chili extends Item<Piece[]> {
+class Chili extends Item<PieceBlueprint> {
     static iconID = 197;
     static name = "Zing";
-    static description = "Increases all your placed programs' moves and range by 1 for one round";
+    static description = "Increases a held programs' moves, range, and attack by 1";
     static unicode = "U+1F336";
-    static color = "rgb(202, 74, 15)";
-    static rarity = 3;
+    static color = "rgb(33, 11, 36)";
+    static rarity = 5;
     constructor() {
         super(Chili.name, Chili.description, Chili.unicode, Chili.color, 5, Chili.rarity, 'gameState')
     }
-    apply(activePieces: Piece[], itemMult: number) {
-        for (const target of activePieces) {
-            if (target.team === 'player') {
-                target.moves += (1 * itemMult);
-                target.movesRemaining += (1 * itemMult);
-                target.range += (1 * itemMult);
-            }
-        }
+    apply(target: PieceBlueprint, itemMult: number) {
+        target.moves += (1 * itemMult);
+        target.range += (1 * itemMult);
+        target.attack += (1 * itemMult);
     }
 }
 
@@ -1107,11 +1095,10 @@ class Lightning extends Item<Piece[]> {
     }
 }
 
-//toothbrush - single use broom?
 class Toothbrush extends Item<Piece[]> {
     static iconID = 182;
     static name = "Toothbrush";
-    static description = "Removes all enemies with a size of 1 and 0 defence remaining";
+    static description = "Damages all enemies by 1";
     static unicode = "U+1FAA5";
     static color = "rgb(255, 249, 222)";
     static rarity = 2;
@@ -1285,8 +1272,6 @@ class Plunger extends Item<PieceBlueprint> {
 ////POURING LIQUID, U+1FAD7, spillage
 class Extinguisher extends Item<PieceBlueprint> {
     static iconID = 173;
-
-
     static name = "Extinguisher";
     static description = "Make a held program in your inventory permanently immune to burning";
     static unicode = "U+1F9EF";
@@ -1300,13 +1285,55 @@ class Extinguisher extends Item<PieceBlueprint> {
     }
 }
 
-//RING BUOY, U+1F6DF restore the last destroyed program to hand /target a space? or give piece a wontDie bool?
-//lifeboat ROWBOAT, U+1F6A3
-//PUSHPIN, U+1F4CC save node(+game?) state, return to it later.
-//SLEEPING ACCOMMODATION, U+1F6CC reroll next node?
+class Screwdriver extends Item<Piece> {
+    static iconID = 140;
+    static name = "Screwdriver";
+    static description = "Tinker with a program inside a node, removing it's immunities and lowering all it's stats by 1";
+    static unicode = "U+1FA9B";
+    static color = "rgb(146, 79, 34)";
+    static rarity = 4;
+    constructor() {
+        super(Screwdriver.name, Screwdriver.description, Screwdriver.unicode, Screwdriver.color, 4, Screwdriver.rarity, 'blueprint')
+    }
+    apply(target: Piece, itemMult: number) {
+        target.immunities = createDefaultStatuses();
+        target.maxSize -= (1 * itemMult);
+        target.moves -= (1 * itemMult);
+        target.movesRemaining -= (1 * itemMult);
+        target.range -= (1 * itemMult);
+        target.attack -= (1 * itemMult);
+        target.defence -= (1 * itemMult);
+    }
+}
 
-export const allItems = [Blueberry, Battery, Iron, Headphones, Juice, Mushroom, Box, Pepper, Floppy, Voucher, Bandage, Extinguisher, Formula, Frogman, Gift, Hotline, Labcoat, Plunger, Soap, Teapot, Toothbrush, Beans, Blackheart, Bugle, Gloves, Jar, Keygen, Makeover, Melon, Megaphone, Pinata, Rations, Roids, Lips, Spanner, Update2, Chili, Cake, Carrot, Garlic, Goggles, Wand, Lightning, Meat, Pie, Supplement, Coffee, Disguise, Dupe, Genie, Hourglass, Sandwich, Life, Blessing, Feast, Ginger, Beer, Pandora, Update3, ShootingStar];
-export const upgradeItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Blessing, Roids, Formula]
+/*class Pray extends Item<Player> {
+    static iconID = 552;
+    static name = "Prayer";
+    static description = "Advances the current seed by 1 step";
+    static unicode = "U+1F9EF";
+    static color = "rgb(196, 255, 255)";
+    static rarity = 1;
+    constructor() {
+        super(Pray.name, Pray.description, Pray.unicode, Pray.color, 1, Pray.rarity, 'blueprint')
+    }
+    apply(player: Player, itemMult: number) {
+        //add method on the player class to facilitate
+    }
+}*/
+
+
+//remove feast
+//bugle, pep talk, //turn into pieceblueprint targets? raise rarity?
+
+//prayer
+//RING BUOY, U+1F6DF restore the last destroyed program to hand /target a space? or give piece a wontDie bool?
+//lifeboat ROWBOAT, U+1F6A3 //all destroyed programs become unplaced
+//PUSHPIN, U+1F4CC save node(+game?) state, return to it later. 6
+//SLEEPING ACCOMMODATION, U+1F6CC reroll next node(s)
+// OLIVE, U+1FAD2 //defence and range?
+
+export const allItems = [Blueberry, Battery, Iron, Headphones, Juice, Mushroom, Box, Pepper, Floppy, Voucher, Bandage, Extinguisher, Formula, Frogman, Gift, Hotline, Labcoat, Plunger, Soap, Teapot, Toothbrush, Beans, Blackheart, Bugle, Gloves, Jar, Keygen, Makeover, Melon, Megaphone, Pinata, Rations, Roids, Lips, Spanner, Update2, Cake, Carrot, Garlic, Goggles, Wand, Lightning, Meat, Pie, Screwdriver, Supplement, Coffee, Disguise, Dupe, Genie, Hourglass, Chili, Life, Blessing, Feast, Ginger, Beer, Pandora, Update3, ShootingStar];
+export const upgradeItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Chili, Blessing, Roids, Formula]
 
 /*Items.forEach(i => {
     console.log('item name: ', i.name, 'rarity: ', i.rarity);

@@ -141,12 +141,12 @@ export function rehydrateGameState(data: any): any {
   }
 
   // 5. Rehydrate Shop State if present
-  let shopState = null;
-  if (data.shopState) {
-    shopState = {
-      ...data.shopState,
-      shopBlueprints: data.shopState.shopBlueprints || [],
-      shopItems: (data.shopState.shopItems || []).map((iData: any) => {
+  const rehydrateShopInventory = (rawShop: any) => {
+    if (!rawShop) return null;
+    return {
+      ...rawShop,
+      shopBlueprints: rawShop.shopBlueprints || [],
+      shopItems: (rawShop.shopItems || []).map((iData: any) => {
         const Cls = [...allItems, ...allAdmins].find(c => c.name === iData.name);
         if (!Cls) return null;
         const inst = new Cls();
@@ -154,6 +154,22 @@ export function rehydrateGameState(data: any): any {
         return inst;
       }).filter(Boolean)
     };
+  };
+
+  let shopState = null;
+  if (data.shopState) {
+    if (data.shopState.currentShop || data.shopState.futureShop) {
+      shopState = {
+        currentShop: rehydrateShopInventory(data.shopState.currentShop),
+        futureShop: rehydrateShopInventory(data.shopState.futureShop)
+      };
+    } else {
+      const legacy = rehydrateShopInventory(data.shopState);
+      shopState = {
+        currentShop: legacy,
+        futureShop: legacy
+      };
+    }
   }
 
   return {

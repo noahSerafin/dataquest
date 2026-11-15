@@ -285,7 +285,7 @@
       Collect
     </button>
     <div class="btns">
-        <button @click="cancel">Cancel</button>
+        <button :disabled="!primaryBP || !secondaryBP" @click="cancel">Cancel</button>
         <button @click="skip">Skip</button>
     </div>
 

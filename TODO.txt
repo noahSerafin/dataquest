@@ -46,6 +46,8 @@ overworld map?
 background colours for node maps (use company owner)//levels array (make map have a starting copmany)
 
 BUGS - 
+squid not using special 'line' type and is not a charge
+workbench broken - canPlace false?
 -damage mult breaks workbench - dmgmult should be a stat - compiler/duplicator, + Pieces will be affected
 -count not showing on reaper/bosses
 lower pallette/raise backdoor rarity

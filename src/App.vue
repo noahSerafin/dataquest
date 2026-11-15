@@ -1589,34 +1589,50 @@ const closeShop = () => {
 }
 const toggleCompiler = () => {
   showCompiler.value = !showCompiler.value;
+  if(!showCompiler.value){
+    player.value.canPlace = false;
+  }
   saveGameState();
 }
 const openCompiler = () => {
   showCompiler.value = true;
+  player.value.canPlace = true;
   saveGameState();
 }
 const toggleAltar = () => {
   showAltar.value = !showAltar.value;
+  if(!showAltar.value){
+    player.value.canPlace = false;
+  }
   saveGameState();
 }
 const openAltar = () => {
   showAltar.value = true;
+  player.value.canPlace = true;
   saveGameState();
 }
 const toggleDuplicator = () => {
   showDuplicator.value = !showDuplicator.value;
+  if(!showDuplicator.value){
+    player.value.canPlace = false;
+  }
   saveGameState();
 }
 const openDuplicator = () => {
   showDuplicator.value = true;
+  player.value.canPlace = true;
   saveGameState();
 }
 const toggleWorkbench = () => {
   showWorkbench.value = !showWorkbench.value;
+  if(!showWorkbench.value){
+    player.value.canPlace = false;
+  }
   saveGameState();
 }
 const openWorkbench = () => {
   showWorkbench.value = true;
+  player.value.canPlace = true;
   saveGameState();
 }
 
@@ -1869,7 +1885,7 @@ async function placePieceOnBoardAt(coord: Coordinate) {
 const isDraggingPlacement = ref(false)
 
 function startPlacementDrag(bp: PieceBlueprint) {
-  if (!roundHasStarted.value || !player.value.canPlace) return;
+  if (!player.value.canPlace) return;
   console.log('dragging');
   pieceToPlace.value = bp;
   isPlacing.value = true;
@@ -2076,12 +2092,12 @@ const damagePieceAt = async (coord: Coordinate) => {
       selectedPiece.value.statuses.poisoned = true;
     }
   }
-  if (damageReceiver.name.includes('Bigfoot')) {
+  if (damageReceiver.name.includes('Cryptid')) {
     if(!selectedPiece.value.immunities.confused){
       selectedPiece.value.statuses.confused = true;
     }
-    if(!damageReceiver.value.statuses.exposed){
-      damageReceiver.value.statuses.hideen = true;
+    if(!damageReceiver.statuses.exposed){
+      damageReceiver.statuses.hidden = true;
     }
   }
   selectedPiece.value.willRetaliate = false;//pieces that have enacted defensive option

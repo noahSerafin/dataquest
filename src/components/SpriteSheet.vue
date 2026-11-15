@@ -181,7 +181,7 @@ const allIcons = computed(() => {
     'U+1F5D1',//recycle bin
     'U+1FAEF',
     'U+1F3A3',//fishingpole
-    'U+1FAC8',//HAIRY CREATURE - Bigfoot
+    'U+1FAC8',//HAIRY CREATURE - Cryptid
     'U+1F980',//CRAB
     'U+1F9AA',//OYSTER/PEARL
     'U+1F91E', //crossed fingers

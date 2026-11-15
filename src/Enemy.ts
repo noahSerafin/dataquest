@@ -474,7 +474,7 @@ async function attackPiece(attacker: Piece, defender: Piece) {
         attacker.statuses.poisoned = true;
       }
     }
-    if (defender.name.includes('Bigfoot')) {
+    if (defender.name.includes('Cryptid')) {
       if(!attacker.immunities.confused){
         attacker.statuses.confused = true;
       }

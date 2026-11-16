@@ -228,7 +228,6 @@ class Reaper extends Admin {
             player.lives--
             this.count = 10;
         }
-
     }
     onRoundEnd() {
         this.count = 10;
@@ -246,10 +245,9 @@ class Volcano extends Admin {
     constructor() {
         super(Volcano.name, Volcano.description, Volcano.unicode, Volcano.color, 5, Volcano.rarity, 'gameState', 'onEnemyTurnEnd')
     }
-    private count: number = 0
+    private count: number = 3;
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-        this.count += 1
-        if (this.count >= 3) {
+        if (this.count <= 0) {
             for (const piece of activePieces) {
                 if (piece.team === 'player' && !piece.immunities.burning) {
                     piece.statuses.burning = true;
@@ -257,10 +255,12 @@ class Volcano extends Admin {
                     setTimeout(() => this.isTriggering = false, 500);
                 }
             };
+        } else {
+            this.count--;
         }
     }
     onRoundEnd() {
-        this.count = 0;
+        this.count = 3;
     }
 }
 
@@ -896,9 +896,9 @@ class Singularity extends Admin {
     constructor() {
         super(Singularity.name, Singularity.description, Singularity.unicode, Singularity.color, 5, Singularity.rarity, 'all', 'onTurnEnd')
     }
-    private count: number = 0
+    private count: number = 3;
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-        if (this.count >= 3) {
+        if (this.count <= 0) {
             this.isTriggering = true;
             setTimeout(() => this.isTriggering = false, 500);
             for (const piece of activePieces) {
@@ -906,11 +906,12 @@ class Singularity extends Admin {
                     piece.statuses.juiced = true;
                 }
             };
+        } else {
+            this.count--
         }
-        this.count++
     }
     onRoundEnd() {
-        this.count = 0;
+        this.count = 3;
     }
 }
 
@@ -1057,9 +1058,9 @@ class Blackmail extends Admin {
     constructor() {
         super(Blackmail.name, Blackmail.description, Blackmail.unicode, Blackmail.color, 5, Blackmail.rarity, 'gameState', 'onTurnEnd')
     }
-    private count: number = 0
+    private count: number = 5;
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-        if (this.count === 5) {
+        if (this.count === 0) {
             const playerPieces: Piece[] = []
             for (const piece of activePieces) {
                 if (piece.team === 'player') {
@@ -1071,11 +1072,12 @@ class Blackmail extends Admin {
             activePieces[idx].team = 'enemy';
             this.isTriggering = true;
             setTimeout(() => this.isTriggering = false, 500);
+        } else {
+            this.count--
         }
-        this.count++
     }
     onRoundEnd() {
-        this.count = 0;
+        this.count = 5;
     }
 }
 
@@ -1111,21 +1113,21 @@ class TrafficLight extends Admin {
     constructor() {
         super(TrafficLight.name, TrafficLight.description, TrafficLight.unicode, TrafficLight.color, 3, TrafficLight.rarity, 'playerAndGame', 'onTurnEnd')
     }
-    private count = 0;
+    private count = 1;
     async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
-        if (this.count === 2) {
+        if (this.count === 3) {
             for (const p of activePieces) {
                 if (p.team === 'player' && (p.hasMoved)) {//p.actions < 1 ||  //p.getStat('moves') > p.movesRemaining)) {
                     await p.takeDamage(player.difficulty)
                 }
             }
             this.color = 'green';
-            this.count = 0;
+            this.count = 1;
         } else {
             this.count++
-            if (this.count === 1) {
+            if (this.count === 2) {
                 this.color = 'orange';
-            } else if (this.count === 2) {
+            } else if (this.count === 3) {
                 this.color = 'red';
                 this.isTriggering = true;
                 setTimeout(() => this.isTriggering = false, 500);
@@ -1133,7 +1135,7 @@ class TrafficLight extends Admin {
         }
     }
     onRoundEnd() {
-        this.count = 0;
+        this.count = 1;
         this.color = 'green';
     }
 }
@@ -1400,11 +1402,11 @@ class Love extends Admin {
     constructor() {
         super(Love.name, Love.description, Love.unicode, Love.color, 3, Love.rarity, 'gameState', 'onTurnEnd')
     }
-    private count: number = 0;
+    private count: number = 3;
     private candidate: string = '';
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-        this.count++
-        if (this.count <= 3) return;
+        if (this.count <= 0) return;
+        this.count--
         //remove charmed from the previous candidate
 
         //pick a different eligible player program
@@ -1421,7 +1423,7 @@ class Love extends Admin {
     }
 
     onRoundEnd() {
-        this.count = 0;
+        this.count = 3;
         this.candidate = '';
     }
 }
@@ -1435,7 +1437,7 @@ class AirGap extends Admin {//to finish
     static name = "Air Gapped";
     static description = "Removes tiles from nodes creating seperated islands";
     static unicode = "U+1F3DD";//U+26A0";
-    static color = "rgb(31, 173, 255)";
+    static color = "rgba(174, 225, 255, 1)";
     constructor() {
         super(AirGap.name, AirGap.description, AirGap.unicode, AirGap.color, 5, AirGap.rarity, 'piecesAndBoard', 'onRoundStart')
     }
@@ -1683,7 +1685,7 @@ class Lockdown extends Admin {//to test
     static name = "Lockdown";
     static description = "Places Blackwall enemies next to player spawns";
     static unicode = "U+1F3D7";
-    static color = "rgb(84, 139, 138)";
+    static color = "rgba(5, 5, 5, 0.67)";
     static rarity = 12;
     constructor() {
         super(Lockdown.name, Lockdown.description, Lockdown.unicode, Lockdown.color, 5, Lockdown.rarity, 'all', 'onRoundStart')
@@ -1753,7 +1755,7 @@ class Variantr extends Admin {//to test
     static name = "Rainbow Coalition";
     static description = "Every enemy program is Holographic";
     static unicode = "U+1F4CA";//U+1F4DC //abacus??
-    static color = "rgb(255, 196, 0)";
+    static color = "rgba(77, 255, 255, 1)";
     constructor() {
         super(Variantr.name, Variantr.description, Variantr.unicode, Variantr.color, 5, Variantr.rarity, 'gameState', 'onRoundStart')
     }

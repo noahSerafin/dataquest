@@ -853,13 +853,11 @@ export class Toolbox extends Admin {
 
 export class Backdoor extends Admin {
   static iconID = 322;
-
-
   static name = "Backdoor";
   static description = "Load Progams anywhere";
   static unicode = "U+1F6AA";
   static color = "#0a0a0aff";
-  static rarity = 4;
+  static rarity = 5;
   constructor() {
     super(Backdoor.name, Backdoor.description, Backdoor.unicode, Backdoor.color, 8, Backdoor.rarity, 'gameState', 'other')
   }
@@ -1083,7 +1081,7 @@ class Chivalry extends Admin {
   static description = "Programs gain a temporary +1 attack for each ally adjacent to their head at the start of your turn";
   static unicode = "U+1F3F0";
   static color = "#33bcfcff";
-  static rarity = 5;//4?
+  static rarity = 4;
   constructor() {
     super(Chivalry.name, Chivalry.description, Chivalry.unicode, Chivalry.color, 7, Chivalry.rarity, 'gameState', 'onTurnStart')
   }
@@ -1952,10 +1950,10 @@ class Bipolar extends Admin {
 export class Taoism extends Admin {
   static iconID = 381;
   static name = "Taoism";
-  static description = "Each round, after the first turn when the number of enemy programs equals the number of your programs, +1 to all your loaded programs' stats.";
+  static description = "Each round after the first turn, when the number of enemy programs equals the number of your programs, +1 to all your loaded programs' stats.";
   static unicode = "U+262F";
   static color = "rgba(92, 92, 92, 1)ff";
-  static rarity = 5;
+  static rarity = 4;
   constructor() {
     super(Taoism.name, Taoism.description, Taoism.unicode, Taoism.color, 8, Taoism.rarity, 'gameState', 'onTurnEnd')
   }
@@ -2345,7 +2343,7 @@ class Pong extends Admin {
   static description = "Damage received from enemies is returned back to them";
   static unicode = "U+1F3D3";
   static color = "#9ecae4ff";
-  static rarity = 5;
+  static rarity = 4;
   constructor() {
     super(Pong.name, Pong.description, Pong.unicode, Pong.color, 7, Pong.rarity, 'gameState', 'onReceiveDamage')//pieces?
   }
@@ -2439,7 +2437,7 @@ class Wheel extends Admin {
 class Bath extends Admin {
   static iconID = 384;
   static name = "Decontamination";
-  static description = "Removes all statuses (except hidden) from all programs at the end of each turn";
+  static description = "Removes all harmful statuses from all your programs at the end of each turn";
   static unicode = "U+1F6C1";
   static color = "rgb(168, 255, 245)";
   static rarity = 6;//5,4?
@@ -2448,8 +2446,9 @@ class Bath extends Admin {
   }
   async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
     for (const p of activePieces) {
+      if (p.team === 'enemy') continue;
       for (const status in p.statuses) {
-        if (status === 'hidden' || status === 'negative') continue;//decontamination doesn't reveal hidden programs
+        if (status === 'hidden' || status === 'negative' || status === 'zen' || status === 'juiced' || status === 'enraged') continue;
         p.statuses[status] = false;
       }
     };
@@ -2499,7 +2498,6 @@ class Variety extends Admin {
   //handle in shop
 }
 
-////LEFT-POINTING MAGNIFYING GLASS, U+1F50D reveal secrets
 class Appraisal extends Admin {
   static iconID = 257;
 
@@ -2554,8 +2552,6 @@ class Camp extends Admin {//track no moves across 2 turns??
 
 class Piggy extends Admin {
   static iconID = 243;
-
-
   static name = "Piggy Bank";
   static description = "Gain $2 after each shop purchase";
   static unicode = "U+1F416"
@@ -3265,10 +3261,10 @@ class BlackBelt extends Admin {
 class Bell extends Admin {
   static iconID = 379;
   static name = "Saved by the Bell";
-  static description = "Freezes programs attacking yours when there is only 1 player program in a node";
+  static description = "Freezes any programs attacking yours when there is only 1 player program in a node";
   static unicode = "U+1F514";
   static color = "rgb(5, 6, 53)";
-  static rarity = 5;
+  static rarity = 4;
   constructor() {
     super(Bell.name, Bell.description, Bell.unicode, Bell.color, 8, Bell.rarity, 'gameState', 'onReceiveDamage')
   }
@@ -3279,7 +3275,7 @@ class Bell extends Admin {
     if (!dealer || dealer.statuses.frozen || dealer.immunities.frozen) return;
     // Only filter if we actually need to check the win/trigger condition
     const playerPieces = activePieces.filter(p => p.team === 'player');
-    if (playerPieces.length === 1 && dealer.team !== 'player') {
+    if (playerPieces.length === 1) {// && dealer.team !== 'player' || dealer.statuses.charmed...
       this.isTriggering = true;
       setTimeout(() => this.isTriggering = false, 500);
       dealer.statuses.frozen = true;
@@ -4028,8 +4024,6 @@ export class Splash extends Admin {
 
 export class Clippy extends Admin {
   static iconID = 227;
-
-
   static name = "Clippy";
   static description = "Provides tutorial hints";
   static unicode = "U+1F4CE";
@@ -4041,7 +4035,7 @@ export class Clippy extends Admin {
   //handle in player
 }
 
-export const allAdmins = [Bank, Bucket, Candle, Cane, Cheese, Clippy, Smoker, Compass, CreditCard, Glasses, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Schoolbag, Seed, Slots, Sprinkler, Tempura, Sneakers, Chime, AdminMap, Abacus, Aesculapius, Appraisal, Balloon, Bone, Briefcase, Bubble, Cactus, Coin, Purse, Collector, Convenience, Crystal, FireEngine, Heart, Dice, Joker, Clover, Microscope, Newspaper, Pickup, Putter, Relay, Rune, Scarf, Stiletto, Mail, Bowling, Nose, Bipolar, Violin, Vitamins, Wings, Barber, Ace, AirSupport, Bouquet, Broom, Camp, Huzzah, Luggage, Chain, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Jammer, Roger, Juggler, Ladder, Loot, Drunk, Puzzle, Razor, Sled, Shades, Spoon, Pants, StoneAge, Stonks, Christmas, Telescope, Toolbox, Tracker, Ambulance, Backdoor, Bassline, BionicArm, BionicLeg, Crash, Blood, DartBoard, Butler, Dove, Evergreen, Discount, Fountain, Feather, Fuel, Howzat, Liberty, Lightbulb, Ollie, Palette, Pazzaz, PetriDish, Prayer, Wheel, Salt, Selfie, Crown, Variety, Volatile, Djembe, Artic, BlackBelt, Booty, Lungs, Chemistry, Chivalry, Toilet, Copier, Daisy, Diamond, Disco, Hamsa, Skyscraper, Hermes, Cards, Inheritance, Cherries, LLM, Lotus, Brain, Meditation, Meteor, Monarch, Onion, PeaPod, Teddy, Pong, RollerBlades, Bell, Baseball, Taoism, Ice, Ballet, Bath, Lefty, Minerva, Needle, Pi, Osiris, Righty, Ring, Silly, School, Umbrella, Dharma];
+export const allAdmins = [Bank, Bucket, Candle, Cane, Cheese, Clippy, Smoker, Compass, CreditCard, Glasses, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Schoolbag, Seed, Slots, Sprinkler, Tempura, Sneakers, Chime, AdminMap, Abacus, Aesculapius, Appraisal, Balloon, Bone, Briefcase, Bubble, Cactus, Coin, Purse, Collector, Convenience, Crystal, FireEngine, Heart, Dice, Joker, Clover, Microscope, Newspaper, Pickup, Putter, Relay, Rune, Scarf, Stiletto, Mail, Bowling, Nose, Bipolar, Violin, Vitamins, Wings, Barber, Ace, AirSupport, Bouquet, Broom, Camp, Huzzah, Luggage, Chain, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Jammer, Roger, Juggler, Ladder, Loot, Drunk, Puzzle, Razor, Sled, Shades, Spoon, Pants, StoneAge, Stonks, Christmas, Telescope, Toolbox, Tracker, Ambulance, Bassline, Bell, BionicArm, BionicLeg, Crash, Blood, DartBoard, Butler, Chivalry, Dove, Evergreen, Discount, Fountain, Feather, Fuel, Howzat, Liberty, Lightbulb, Ollie, Palette, Pazzaz, PetriDish, Pong, Prayer, Wheel, Salt, Selfie, Taoism, Crown, Variety, Volatile, Djembe, Artic, Backdoor, BlackBelt, Booty, Lungs, Chemistry, Toilet, Copier, Daisy, Diamond, Disco, Hamsa, Skyscraper, Hermes, Cards, Inheritance, Cherries, LLM, Lotus, Brain, Meditation, Meteor, Monarch, Onion, PeaPod, Teddy, RollerBlades, Baseball, Ice, Ballet, Bath, Lefty, Minerva, Needle, Pi, Osiris, Righty, Ring, Silly, School, Umbrella, Dharma];
 console.log('admins length: ', allAdmins.length)
 let adminLogs = {
   rarity1: 0,

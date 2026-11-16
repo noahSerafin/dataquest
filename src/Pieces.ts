@@ -49,6 +49,7 @@ export abstract class Piece {
   hasNeutralSpecial: boolean = false;//use in enemyAI
   hasExposingSpecial: boolean = false;//use in enemyAI
   needsToBeMaxSize: boolean = false;//use in enemyAI
+  doesntRequireTarget: boolean = false;//use in enemyAI
   redacted: boolean = false;//for boss
   isBusy: boolean = false;//for AI
   isTriggering: boolean = false; //for trap animations
@@ -2290,19 +2291,19 @@ class Dragon extends Piece {
 class Ink extends Piece {
   static iconID = 530;
   static name = "Ink";
-  static description = "An ink trap that reduces range by 1 and applies blinded";
+  static description = "A decoy that applies blinded to programs it makes contact with";
   static unicode = "U+1F322";//"U+26AB";
   static color = "#303030ff";
-  static rarity = 3;//should never appear on its own
+  static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
-    super(Ink.name, Ink.description, Ink.unicode, 1, 1, 0, 0, 0, Ink.color, headPosition, [headPosition], team, Ink.rarity, removeCallback, id)
+    super(Ink.name, Ink.description, Ink.unicode, 2, 1, 0, 0, 0, Ink.color, headPosition, [headPosition], team, Ink.rarity, removeCallback, id)
     this.targetType = 'trapPiece';
     this.statuses.negative = true;
-    this.statuses.hidden = true;
+    //this.statuses.hidden = true;
   }
   async special(target: Piece): Promise<void> {
     if (!target.immunities.blinded) {
-      target.range -= 1;
+      //target.range -= 1;
       target.statuses.blinded = true;
     }
     this.actions--
@@ -2315,7 +2316,7 @@ class Ink extends Piece {
 class Squid extends Piece {
   static iconID = 111;
   static name = "Squid";
-  static description = "A program that can creat unhidden ink decoy tiles that blind enemies and reduces their range by 1 immediately, immune to being blinded itself";
+  static description = "A program that is immune to being blinded, and can create an unhidden ink decoy programs that blind enemies, inverting it's tiles, and moving it's head position to it's tail";
   static unicode = "U+1F991";
   static color = "#08004dff";
   static rarity = 4;
@@ -2324,6 +2325,7 @@ class Squid extends Piece {
     this.immunities.blinded = true;
     this.specialName = 'Ink';
     this.targetType = 'line';
+    this.doesntRequireTarget = true;
     this.appliesStatuses = ['blinded'];
   }
 
@@ -2348,6 +2350,8 @@ class Squid extends Piece {
         break;
       }
     }
+    this.headPosition = this.tiles[this.tiles.length - 1];
+    this.tiles.reverse();
     this.actions--
   }
 }
@@ -2355,7 +2359,7 @@ class Squid extends Piece {
 class Snail extends Piece {
   static iconID = 9;
   static name = "Snail";
-  static description = "A slow program that can retract itself to double it's defence temporarily until the next turn";
+  static description = "A slow program that can retract itself to temporarily double it's defence until the next turn";
   static unicode = "U+1F40C";
   static color = "#4d3502ff";
   static rarity = 1;

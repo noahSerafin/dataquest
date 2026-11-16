@@ -578,7 +578,7 @@ export function generateWorld(
     position: { x: 200, y: 30 },
     company: chooseRandomCompany(),
     difficultyMod: 0,
-    reward: Math.min(10, difficulty * 2)// +5;
+    reward: Math.max(4, Math.min(10, (difficulty * 2) + 1))//bass off infamy? (less reward for higher infamy)
   };
 
 

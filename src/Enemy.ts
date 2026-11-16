@@ -252,6 +252,27 @@ function decideEnemyIntent(
         }
       }
     }
+    if (enemy.targetType === 'line' && enemy.doesntRequireTarget) {
+      const occupied = new Set<string>();
+      for (const p of activePieces) {
+        for (const t of p.tiles) {
+          occupied.add(`${t.x},${t.y}`);
+        }
+      }
+      const lineOptions = getAllTilesInStraightLines(enemy.headPosition, enemy.getStat('range'), tileSet)
+        .filter(t => {
+          if (occupied.has(`${t.x},${t.y}`)) return false;
+          const lineTiles = getTilesInLine(enemy, t);
+          return !enemyPieces.some(p =>
+            p.id !== enemy.id &&
+            p.tiles.some(pt => lineTiles.some(lt => lt.x === pt.x && lt.y === pt.y))
+          );
+        });
+      if (lineOptions.length > 0) {
+        const space = Random.pick(lineOptions);
+        return { type: 'special', target: { line: getTilesInLine(enemy, space), activePieces: activePieces } };
+      }
+    }
     if (enemy.targetType === 'self') {
       const randTile = Random.pick(enemy.tiles);
       return { type: 'special', target: randTile }

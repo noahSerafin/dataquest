@@ -1144,7 +1144,7 @@ class Bucket extends Admin {
 class Diamond extends Admin {
   static iconID = 361;
   static name = "Diamond";//payroll
-  static description = "Every $20 you have increases your program's defence by 1 on load";
+  static description = "Every $20 you have increases your programs' defence by 1 on load";
   static unicode = "U+1F48E";
   static color = "#627681";
   static rarity = 5;
@@ -1950,7 +1950,7 @@ class Bipolar extends Admin {
 export class Taoism extends Admin {
   static iconID = 381;
   static name = "Taoism";
-  static description = "Each round after the first turn, when the number of enemy programs equals the number of your programs, +1 to all your loaded programs' stats.";
+  static description = "Each round after the first turn, when the number of enemy programs equals the number of your programs, temporary +1 to all your loaded programs' stats.";
   static unicode = "U+262F";
   static color = "rgba(92, 92, 92, 1)ff";
   static rarity = 4;
@@ -4035,7 +4035,7 @@ export class Clippy extends Admin {
   //handle in player
 }
 
-export const allAdmins = [Bank, Bucket, Candle, Cane, Cheese, Clippy, Smoker, Compass, CreditCard, Glasses, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Schoolbag, Seed, Slots, Sprinkler, Tempura, Sneakers, Chime, AdminMap, Abacus, Aesculapius, Appraisal, Balloon, Bone, Briefcase, Bubble, Cactus, Coin, Purse, Collector, Convenience, Crystal, FireEngine, Heart, Dice, Joker, Clover, Microscope, Newspaper, Pickup, Putter, Relay, Rune, Scarf, Stiletto, Mail, Bowling, Nose, Bipolar, Violin, Vitamins, Wings, Barber, Ace, AirSupport, Bouquet, Broom, Camp, Huzzah, Luggage, Chain, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Jammer, Roger, Juggler, Ladder, Loot, Drunk, Puzzle, Razor, Sled, Shades, Spoon, Pants, StoneAge, Stonks, Christmas, Telescope, Toolbox, Tracker, Ambulance, Bassline, Bell, BionicArm, BionicLeg, Crash, Blood, DartBoard, Butler, Chivalry, Dove, Evergreen, Discount, Fountain, Feather, Fuel, Howzat, Liberty, Lightbulb, Ollie, Palette, Pazzaz, PetriDish, Pong, Prayer, Wheel, Salt, Selfie, Taoism, Crown, Variety, Volatile, Djembe, Artic, Backdoor, BlackBelt, Booty, Lungs, Chemistry, Toilet, Copier, Daisy, Diamond, Disco, Hamsa, Skyscraper, Hermes, Cards, Inheritance, Cherries, LLM, Lotus, Brain, Meditation, Meteor, Monarch, Onion, PeaPod, Teddy, RollerBlades, Baseball, Ice, Ballet, Bath, Lefty, Minerva, Needle, Pi, Osiris, Righty, Ring, Silly, School, Umbrella, Dharma];
+export const allAdmins = [Bank, Bucket, Candle, Cane, Cheese, Clippy, Smoker, Compass, CreditCard, Glasses, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Schoolbag, Seed, Slots, Sprinkler, Tempura, Sneakers, Chime, AdminMap, Abacus, Aesculapius, Appraisal, Balloon, Bone, Briefcase, Bubble, Cactus, Coin, Purse, Collector, Convenience, Crystal, FireEngine, Heart, Dice, Joker, Clover, Microscope, Newspaper, Pickup, Putter, Relay, Rune, Scarf, Stiletto, Mail, Bowling, Nose, Bipolar, Violin, Vitamins, Wings, Barber, Ace, AirSupport, Bouquet, Broom, Camp, Huzzah, Luggage, Chain, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Jammer, Roger, Juggler, Ladder, Loot, Drunk, Puzzle, Razor, Sled, Shades, Spoon, Pants, StoneAge, Stonks, Christmas, Telescope, Toolbox, Tracker, Ambulance, Bassline, BionicArm, BionicLeg, Crash, Blood, DartBoard, Butler, Chivalry, Dove, Evergreen, Discount, Fountain, Feather, Fuel, Howzat, Liberty, Lightbulb, Ollie, Palette, Pazzaz, PetriDish, Pong, Prayer, Wheel, Salt, Bell, Selfie, Taoism, Crown, Variety, Volatile, Djembe, Artic, Backdoor, BlackBelt, Booty, Lungs, Chemistry, Toilet, Copier, Daisy, Diamond, Disco, Hamsa, Skyscraper, Hermes, Cards, Inheritance, Cherries, LLM, Lotus, Brain, Meditation, Meteor, Monarch, Onion, PeaPod, Teddy, RollerBlades, Baseball, Ice, Ballet, Bath, Lefty, Minerva, Needle, Pi, Osiris, Righty, Ring, Silly, School, Umbrella, Dharma];
 console.log('admins length: ', allAdmins.length)
 let adminLogs = {
   rarity1: 0,

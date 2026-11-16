@@ -159,7 +159,8 @@ export type Company = {
   unicode: string,
   pieceList: any[],
   tileColor: string,
-  edgeColor: string
+  edgeColor: string,
+  description?: string
 }
 
 export type SkipReward =

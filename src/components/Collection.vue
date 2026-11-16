@@ -4,11 +4,12 @@ import { allPieces, Spawn } from "../Pieces";
 import { allItems, Item } from "../Items";
 import { allAdmins } from "../AdminPrograms";
 import { allBosses } from "../Bosses";
+import { companies } from "../companies";
 import { StorageManager, type PlayerCollection, type PlayerStats } from "../StorageManager";
 import BlueprintView from "./BlueprintView.vue";
 import ItemView from "./ItemView.vue";
-import { makeBlueprint } from "../helperFunctions";
-import type { PieceBlueprint } from "../types";
+import { makeBlueprint, getSpriteStyle } from "../helperFunctions";
+import type { PieceBlueprint, Company } from "../types";
 
 const props = defineProps<{
   debugMode: boolean;
@@ -94,9 +95,28 @@ function getItemInstance(ItemClass: any): Item {
   return inst!;
 }
 
-const activeTab = ref<'pieces' | 'items' | 'admins' | 'bosses' | 'stats' | 'run' | 'history'>(props.currentSeed ? 'run' : 'stats');
+const activeTab = ref<'pieces' | 'items' | 'admins' | 'bosses' | 'companies' | 'stats' | 'run' | 'history'>(props.currentSeed ? 'run' : 'stats');
 const historySubTab = ref<'programs' | 'items' | 'admins'>('programs');
 const isHistoryExpanded = ref(false);
+
+function getCompanyIconStyle(company: Company, size: number = 32): Record<string, any> {
+  if (company.iconID !== undefined && company.iconID >= 0) {
+    return {
+      ...getSpriteStyle(company.iconID),
+      width: `${size}px`,
+      height: `${size}px`,
+      display: 'inline-block',
+      color: 'transparent'
+    };
+  }
+  return {};
+}
+
+function getCompanyUnicode(company: Company): string {
+  return company.unicode
+    ? String.fromCodePoint(parseInt(company.unicode.replace('U+', ''), 16), 0xFE0F)
+    : '';
+}
 
 const usageData = computed(() => {
   if (!stats.value.usageStats) return { programs: [], items: [], admins: [] };
@@ -160,6 +180,7 @@ function copySeed() {
         <button :class="{ active: activeTab === 'items' }" @click="activeTab = 'items'">Items</button>
         <button :class="{ active: activeTab === 'admins' }" @click="activeTab = 'admins'">Admins</button>
         <button :class="{ active: activeTab === 'bosses' }" @click="activeTab = 'bosses'">Bosses</button>
+        <button :class="{ active: activeTab === 'companies' }" @click="activeTab = 'companies'">Companies</button>
       </div>
 
       <div class="content-area">
@@ -231,6 +252,24 @@ function copySeed() {
               ?
             </div>
           </div>
+        </div>
+
+        <!-- COMPANIES TAB -->
+        <div v-if="activeTab === 'companies'" class="companies-layout">
+          <template v-for="(company, index) in companies" :key="company.name">
+            <div class="company-card" :style="{ backgroundColor: company.tileColor, color: company.edgeColor, borderColor: company.edgeColor }">
+              <div class="company-header">
+                <div class="company-icon" :style="getCompanyIconStyle(company, 32)">
+                  <template v-if="!getCompanyIconStyle(company, 32).backgroundImage">
+                    {{ getCompanyUnicode(company) }}
+                  </template>
+                </div>
+                <h3 class="company-name">{{ company.name }}</h3>
+              </div>
+              <p v-if="company.description" class="company-description">{{ company.description }}</p>
+            </div>
+            <hr v-if="index < companies.length - 1" class="company-divider" />
+          </template>
         </div>
 
         <!-- STATS TAB -->
@@ -363,6 +402,7 @@ function copySeed() {
   margin-bottom: 1rem;
   border-bottom: 1px solid #444;
   padding-bottom: 0.5rem;
+  overflow-x: scroll;
 }
 
 .tabs button {
@@ -726,5 +766,52 @@ function copySeed() {
 .flex{
   display: flex;
   justify-content: space-between;
+}
+
+.companies-layout {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.company-card {
+  padding: 1rem;
+  border-radius: 6px;
+  border: 1px solid;
+  text-align: left;
+}
+
+.company-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.company-icon {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background-repeat: no-repeat;
+}
+
+.company-name {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.company-description {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.company-divider {
+  border: none;
+  border-top: 1px solid #444;
+  margin: 1rem 0;
+  width: 100%;
 }
 </style>

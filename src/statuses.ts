@@ -31,7 +31,11 @@ export const STATUS_ICONIDS: Record<string, number> = {
   enraged: 492,
   zen: 493,
   disarmed: 494,
-  juiced: 495
+  juiced: 495,
+  "🏅️": 510,
+  "🥇️": 511,
+  "🥈️": 512,
+  "🥉️": 513
 };
 
 export const STATUS_INFO: Record<string, string> = {
@@ -75,10 +79,10 @@ export const STATUS_INFO: Record<string, string> = {
   Holographic: "+2 max size, +2 defence, +2 moves, +2 range, +2 attack, +0.5 dmg mult",
   Deadly: "+1 dmg mult",
   Compressed: "Uses 0 Memory/Admin slots",
-  "♺": "Won at 0 infamy",
-  "♳": "Won at 1 infamy",
-  "♴": "Won at 2 infamy",
-  "♵": "Won at 3 infamy",
+  "🏅️": "Won at 0 infamy",
+  "🥇️": "Won at 1 infamy",
+  "🥈️": "Won at 2 infamy",
+  "🥉️": "Won at 3 infamy",
 };
 // 🫨 SHAKING FACE, U+1FAE8
 
@@ -97,8 +101,8 @@ export const STATUS_COLORS: Record<string, string> = {
   enraged: "#ff0000",
   zen: "#ffcc00",
   disarmed: "#ff9900",
-  "♺": "#ffffff",
-  "♳": "#00ff00",
-  "♴": "#ff9900",
-  "♵": "#ff0000",
+  "🏅️": "#ffffff",
+  "🥇️": "#00ff00",
+  "🥈️": "#ff9900",
+  "🥉️": "#ff0000",
 };

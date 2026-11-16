@@ -1242,7 +1242,7 @@ class Autumn extends Admin {
 class Snoozefest extends Admin {
     static iconID = 408;
     static name = "Snoozefest";
-    static description = "Your programs lose 1 action the first turn after they are placed";
+    static description = "Your programs are disarmed when they are loaded in";
     static unicode = "U+1F4A4";
     static color = "rgb(25, 25, 21)";
     static rarity = 2;
@@ -1255,8 +1255,10 @@ class Snoozefest extends Admin {
             if (piece.team === 'player') {
                 this.candidates[piece.id] = (this.candidates[piece.id] || 0) + 1;
                 if (this.candidates[piece.id] < 2) {
-                    //piece.statuses.disarmed = true;
-                    piece.actions--;
+                    if (!piece.immunities.disarmed) {
+                        piece.statuses.disarmed = true;
+                    }
+                    //piece.actions--;
                     this.isTriggering = true;
                     setTimeout(() => this.isTriggering = false, 500);
                 }// else {

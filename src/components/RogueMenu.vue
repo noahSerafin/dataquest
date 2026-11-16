@@ -135,8 +135,14 @@
     }
 
     function getStakeSymbol(stake: number): string {
-        const symbols = ['♺', '♳', '♴', '♵'];
-        return symbols[stake] || `[${stake}]`;
+        const unicodes = [
+            'U+1F3C5',//0 medal
+            'U+1F947 ',//medal 1
+            'U+1F948',//medal 2
+            'U+1F949'//medal 3
+        ];
+        const code = unicodes[stake];
+        return code ? returnUnicode(code.trim()) : `[${stake}]`;
     }
 
     const maxStakeForSelectedOS = computed(() => {
@@ -199,7 +205,7 @@
                         </div>
 
                         <div class="os-wins" v-if="getWinsForOS(item.os.unicode).length > 0">
-                            <FormattedDescription v-for="winStake in getWinsForOS(item.os.unicode)" :key="winStake" :description="getStakeSymbol(winStake)" />
+                            <FormattedDescription v-for="winStake in getWinsForOS(item.os.unicode)" :key="winStake" :description="getStakeSymbol(winStake)" :isHeader="true" />
                         </div>
                         
                         <template v-if="!getUnlockRule(item.os.name)">
@@ -450,12 +456,12 @@
 
     .os-wins {
         position: absolute;
-        top: 22px;
-        right: 15px;
+        top: 16px;
+        left: 15px;
         display: flex;
+        justify-content: space-between;
         gap: 4px;
         font-size: 1.2rem;
-        flex-direction: column;
     }
 
     .os.locked {

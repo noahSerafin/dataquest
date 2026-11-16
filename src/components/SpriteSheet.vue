@@ -192,7 +192,12 @@ const allIcons = computed(() => {
     'U+1F9AD',//SEAL
     'U+1F9A6',//OTTER
     'U+1F986',//DUCK
-    'U+1FACD',//ORCA
+    "U+1F3F5",//rossette orange
+    'U+269C',//scout
+    'U+1F3C5',//0 medal
+    'U+1F947 ',//medal 1
+    'U+1F948',//medal 2
+    'U+1F949'//medal 3
   ];
   statuses.forEach((unicode, index) => {
     result.push({

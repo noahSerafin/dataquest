@@ -797,7 +797,6 @@ class Keygen extends Item<Piece[]> {//make an admin??
 
 class Bugle extends Item<Piece[]> {
     static iconID = 185;
-
     static name = "Bugle";
     static description = "All placed player programs gain +1 attack";
     static unicode = "U+1F4EF";
@@ -818,7 +817,6 @@ class Bugle extends Item<Piece[]> {
 
 class Megaphone extends Item<Piece[]> {
     static iconID = 191;
-
     static name = "Pep Talk";
     static description = "All placed player programs gain +1 moves";
     static unicode = "U+1F4E3";
@@ -1323,7 +1321,8 @@ class Screwdriver extends Item<Piece> {
 //remove feast
 //prayer
 
-//bugle, pep talk, //turn into pieceblueprint targets? raise rarity?
+//3 to remove
+//bugle, pep talk, //turn into pieceblueprint targets? or programs? raise rarity?
 //make keygen an admin?
 
 //RING BUOY, U+1F6DF restore the last destroyed program to hand /target a space? or give piece a wontDie bool?

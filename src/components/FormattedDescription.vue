@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, onMounted, onUnmounted } from 'vue';
-import { STATUS_INFO, STATUS_ICONS, STATUS_COLORS } from '../statuses';
+import { STATUS_INFO, STATUS_ICONS, STATUS_COLORS, STATUS_ICONIDS } from '../statuses';
+import { getSpriteStyle, spritesheetState } from '../helperFunctions';
 
 const props = withDefaults(
   defineProps<{
@@ -111,6 +112,7 @@ const chunks = computed(() => {
         key: statusKey,
         info: STATUS_INFO[statusKey],
         icon: STATUS_ICONS[statusKey],
+        iconID: STATUS_ICONIDS[statusKey],
         color: STATUS_COLORS[statusKey]
       });
     } else {
@@ -189,8 +191,13 @@ onUnmounted(() => {
           @mouseleave="handleMouseLeave(index)"
           @mousemove="handleMouseMove"
         >
-          {{ chunk.content }}
-          <span v-if="!isHeader && chunk.icon" class="status-icon-inline">{{ chunk.icon }}</span>
+          <template v-if="! STATUS_ICONS[chunk.key] && chunk.iconID !== undefined && !spritesheetState.error">
+            <span class="status-sprite-inline" :style="getSpriteStyle(chunk.iconID)"></span>
+          </template>
+          <template v-else>
+            {{ chunk.content }}
+            <span v-if="!isHeader && chunk.icon" class="status-icon-inline">{{ chunk.icon }}</span>
+          </template>
 
           <Teleport to="body">
             <span class="status-tooltip-distinct"
@@ -198,7 +205,8 @@ onUnmounted(() => {
                   :style="{ left: mouseX + 'px', top: (mouseY - 15) + 'px' }">
               <div class="tooltip-header" :style="{ borderBottomColor: chunk.color || '#00ffcc' }">
                 <span v-if="chunk.icon" class="tooltip-icon">{{ chunk.icon }}</span>
-                <span class="tooltip-title" :style="{ color: chunk.color || '#00ffcc' }">{{ chunk.key }}</span>
+                <span v-if="!STATUS_ICONS[chunk.key] && chunk.iconID !== undefined && !spritesheetState.error" class="status-sprite-inline" :style="getSpriteStyle(chunk.iconID)"></span>
+                <span v-else class="tooltip-title" :style="{ color: chunk.color || '#00ffcc' }">{{ chunk.key }}</span>
               </div>
               <div class="tooltip-body">
                 {{ chunk.info }}
@@ -250,6 +258,13 @@ onUnmounted(() => {
   font-size: 0.9em;
   margin-left: 2px;
   filter: saturate(0.8);
+}
+
+.status-sprite-inline {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 /* Premium Tooltip Styling */

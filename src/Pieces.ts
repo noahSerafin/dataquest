@@ -1236,7 +1236,7 @@ class Snake extends Piece {
   static description = "A program that can move into others' tiles (head excluded), removing a piece of memory regardless of defence and adding to its own max size, moves, and moves remaining";
   static unicode = "U+1F40D";
   static color = "#034d22ff";
-  static rarity = 2;
+  static rarity = 2;//1?
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
     super(Snake.name, Snake.description, Snake.unicode, 3, 1, 1, 1, 0, Snake.color, headPosition, [headPosition], team, Snake.rarity, removeCallback, id)
     this.specialName = 'Swallow';
@@ -3066,7 +3066,7 @@ class Jellyfish extends Piece {
 class Axe extends Piece {
   static iconID = 84;
   static name = "Axe";
-  static description = "A short ranged program with a high attack that can chop off a non-head piece of memory and it's neighbours";//and adjacent tiles?
+  static description = "A short ranged program with a high attack that can chop off a non-head piece of memory and it's neighbours by moving into it";//and adjacent tiles?
   static unicode = "U+1FA93";
   static color = "#ff0d0dff";
   static rarity = 4;
@@ -3095,6 +3095,7 @@ class Axe extends Piece {
       .sort((a, b) => b - a)
       .forEach(i => piece.tiles.splice(i, 1));
 
+    this.move(target);
     this.actions--
   }
 }
@@ -3273,7 +3274,7 @@ class UFO extends Piece {
   static description = "A strong ranged program that can pull enemy's heads toward itself, confusing and damaging them.";// that can move enemies away from itself";//without increasing size?? And traverse gaps?
   static unicode = "U+1F6F8";
   static color = "#000d47ff";
-  static rarity = 5;
+  static rarity = 5;//promote ro 6?
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
     super(UFO.name, UFO.description, UFO.unicode, 4, 3, 3, 4, 2, UFO.color, headPosition, [headPosition], team, UFO.rarity, removeCallback, id)
     this.specialName = 'abduct'
@@ -3476,7 +3477,7 @@ class Camera extends Piece {
 class Drum extends Piece {
   static iconID = 49;
   static name = "Drum";//Marching Drum
-  static description = "A program that gives +1 moves remaining to all firendlies in range";
+  static description = "A program that gives +1 moves to all firendlies in range";
   static unicode = "U+1F941";
   static color = "#57b92eff";
   static rarity = 3;
@@ -3489,7 +3490,7 @@ class Drum extends Piece {
   async special(targets: Piece[]): Promise<void> {
     for (const t of targets) {
       if (t.team === this.team) {
-        t.movesRemaining += 1;
+        t.addModifier({moves: 1});
       }
     }
     this.actions--
@@ -4532,6 +4533,7 @@ class Banner extends Piece {
     this.actions--
   }
 }
+
 class Tradie extends Piece {
   static iconID = 115;
   static name = "Tradie";
@@ -4754,50 +4756,6 @@ class Pentagram extends Piece {
   }
 }
 
-// TOP Swan, U+1F3A9 spawns a rabbit
-/*class Hat extends Piece {//test
-  static iconID = 542;
-  static name = "Top Hat";
-  static description = "A program that can summon 2 rabbits, removing itself";//summon 3 somehow?
-  static unicode = "U+1F3A9";////add to srpitesheet
-  static color = "#6ea1caff";
-  static rarity = 5;
-  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
-    super(Hat.name, Hat.description, Hat.unicode, 1, 1, 3, 1, 1, Hat.color, headPosition, [headPosition], team, Hat.rarity, removeCallback, id)
-    this.specialName = 'Hat Trick';
-    this.targetType = 'space';
-    this.canAttack = false;
-
-  }
-  async special({ line, activePieces }: { line: Coordinate[], activePieces: Piece[] }): Promise<void> {
-    for (const tile of line) {
-        const occupier = activePieces.find(p =>
-          p.tiles.some(t => t.x === tile.x && t.y === tile.y)
-        );
-        if(!occupier){
-          const newRabbit = new Rabbit(tile, this.team, this.removeCallback, crypto.randomUUID());
-          newRabbit.actions = 0;
-          newRabbit.movesRemaining = 0;
-          activePieces.push(newRabbit);
-        }
-      }
-    this.actions--
-    this.removeCallback?.(this);
-  }
-  async special({ target, activePieces }: { target: Coordinate, activePieces: Piece[] }): Promise<void> {
-    const newRabbit = new Rabbit(target, this.team, this.removeCallback, crypto.randomUUID());
-    newRabbit.actions = 0;
-    newRabbit.movesRemaining = 0;
-    activePieces.push(newRabbit);
-    const newRabbit2 = new Rabbit(this.headPosition, this.team, this.removeCallback, crypto.randomUUID());
-    newRabbit2.actions = 0;
-    newRabbit2.movesRemaining = 0;
-    activePieces.push(newRabbit2);
-    this.actions--
-    this.removeCallback?.(this);
-  }
-}*/
-
 class Camel extends Piece {//not working
   static iconID = 539;
   static name = "Camel";
@@ -4824,7 +4782,7 @@ class Camel extends Piece {//not working
 class Scissors extends Piece {
   static iconID = 541;
   static name = "Scissors";
-  static description = "A program that can remove a body tile from an enemy, regardless of its defence, and move into the empty space";
+  static description = "A program that can remove a body tile from an enemy regardless of its defence, moving into the empty space";
   static unicode = "U+2702";//add to spritesheet
   static color = "rgb(253, 244, 201)";
   static rarity = 1;
@@ -4850,12 +4808,12 @@ class Scissors extends Piece {
 class Fish extends Piece {
   static iconID = 540;
   static name = "Fish";
-  static description = "A fast program that can use it's action to gain moves equal to it's current size";
+  static description = "A fast program that can use an action to gain moves equal to it's current size";
   static unicode = "U+1F41F";//add to spritesheet
   static color = "rgb(0, 71, 179)";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
-    super(Fish.name, Fish.description, Fish.unicode, 2, 4, 1, 1, 0, Fish.color, headPosition, [headPosition], team, Fish.rarity, removeCallback, id);
+    super(Fish.name, Fish.description, Fish.unicode, 3, 4, 1, 1, 0, Fish.color, headPosition, [headPosition], team, Fish.rarity, removeCallback, id);
     this.specialName = 'Swim'
     this.targetType = 'self'
   }
@@ -4963,13 +4921,147 @@ class Cryptid extends Piece {
   }*/
 }
 /*
+class Hat extends Piece {
+  static iconID = 542;
+  static name = "Top Hat";
+  static description = "A program that can summon up to three rabbits, removing itself";//summon 3 somehow?
+  static unicode = "U+1F3A9";
+  static color = "rgb(37, 6, 45)";
+  static rarity = 5;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
+    super(Hat.name, Hat.description, Hat.unicode, 1, 1, 3, 1, 1, Hat.color, headPosition, [headPosition], team, Hat.rarity, removeCallback, id)
+    this.specialName = 'Hat Trick';
+    this.targetType = 'line';
+    this.canAttack = false;
+    this.doesntRequireTarget = true;
+  }
+  async special({ line, activePieces }: { line: Coordinate[], activePieces: Piece[] }): Promise<void> {
+    for (const tile of line) {
+        const occupier = activePieces.find(p =>
+          p.tiles.some(t => t.x === tile.x && t.y === tile.y)
+        );
+        if(!occupier){
+          const newRabbit = new Rabbit(tile, this.team, this.removeCallback, crypto.randomUUID());
+          newRabbit.actions = 0;
+          newRabbit.movesRemaining = 0;
+          activePieces.push(newRabbit);
+        }
+      }
+    this.actions--
+    this.removeCallback?.(this);
+  }
+}
+
+//Coach - like banner but for moves
+class Coach extends Piece {
+  static iconID = 191;
+  static name = "Coach";
+  static description = "A program that cannot attack, but can temporarily boost the moves of all friendlies in range by it's own moves";//multpie targets?
+  static unicode = "U+1F4E3";//BLACK PENNANT, U+1F3F2 //WAVING BLACK FLAG, U+1F3F4
+  static color = "rgb(59, 72, 255)";
+  static rarity = 3;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
+    super(Coach.name, Coach.description, Coach.unicode, 2, 2, 3, 1, 0, Coach.color, headPosition, [headPosition], team, Coach.rarity, removeCallback, id)
+    this.specialName = 'Pep Talk';
+    this.targetType = 'group';
+    this.hasFriendlySpecial = true;
+    this.canAttack = false;
+  }
+
+  async special(targets: Piece[]): Promise<void> {
+    for (const t of targets) {
+      if (t.team === this.team && t.id !== this.id) {
+        t.addTempModifier({ moves: this.getStat('moves') });
+        t.movesRemaining += this.getStat('moves');
+      }
+    }
+    this.actions--
+  }
+}
+//bugle - like banner but for atk and moves
+class Bugle extends Piece {
+  static iconID = 185;
+  static name = "Bugle";
+  static description = "A program that cannot attack, but can boost the attack of all friendlies in range by it's own attack, and moves by it's ow moves";//multpie targets?
+  static unicode = "U+1F4EF";//BLACK PENNANT, U+1F3F2 //WAVING BLACK FLAG, U+1F3F4
+  static color = "rgb(127, 0, 78)";
+  static rarity = 4;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
+    super(Bugle.name, Bugle.description, Bugle.unicode, 2, 1, 3, 1, 0, Bugle.color, headPosition, [headPosition], team, Bugle.rarity, removeCallback, id)
+    this.specialName = 'Rally';
+    this.targetType = 'group';
+    this.hasFriendlySpecial = true;
+    this.canAttack = false;
+  }
+
+  async special(targets: Piece[]): Promise<void> {
+    for (const t of targets) {
+      if (t.team === this.team && t.id !== this.id) {
+        t.addTempModifier({ attack: this.getStat('attack') });
+        t.addTempModifier({ moves: this.getStat('moves') });
+        t.movesRemaining += this.getStat('moves');
+      }
+    }
+    this.actions--
+  }
+}
+////fleur de lis U+269C scout, lay traps? expose/Temp increase friendlies range.
+class Scout extends Piece {
+  static iconID = 551;
+  static name = "Scout";
+  static description = "A fast program that can expose hidden enemies and increase friendlies range by it's own range";
+  static unicode = "U+269C";
+  static color = "rgb(87, 130, 54)";
+  static rarity = 5;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
+    super(Scout.name, Scout.description, Scout.unicode, 2, 4, 3, 1, 0, Scout.color, headPosition, [headPosition], team, Scout.rarity, removeCallback, id)
+    this.specialName = 'Report';
+    this.targetType = 'group';//'line'
+    this.hasExposingSpecial = true;
+    this.hasFriendlySpecial = true;
+  }
+  async special(targets: Piece[]): Promise<void> {
+    for (const t of targets) {
+      if (t.team !== this.team) {
+        if (!t.immunities.exposed) {
+          t.statuses.hidden = false;
+          t.statuses.exposed = true;
+        }
+      } else {
+        t.addTempModifier({ moves: this.getStat('range') });
+      }
+    }
+    this.actions--
+  }
+}*/
+/*
+class Hamster extends Piece {
+  static iconID = 502;
+  static name = "Hamster";
+  static description = "Can stuff another progam's tile in it's cheeks to add two to it's own tileset";//can share defence?
+  static unicode = "U+1F439";
+  static color = "rgb(218, 207, 155)";
+  static rarity = 2;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
+    super(Hamster.name, Hamster.description, Hamster.unicode, 2, 3, 1, 0, 0, Hamster.color, headPosition, [headPosition], team, Hamster.rarity, removeCallback, id)
+    this.specialName = 'Cheeky'
+    this.targetType = 'pieceAndPlace'
+  }
+  async special({ target, activePieces: _activePieces, }: { target: Coordinate; activePieces: Piece[]; }): Promise<void> {
+    this.tiles.push(target);
+    //look for unnocupied space next to head, prioritise either side (perpendicular to second tile)
+    this.actions--
+  }
+}*/
+
+/*
 class Kite extends Piece {
   static iconID = 95;
   static name = "Kite";
   static description = "A very fast and large program, can move it's head to any space along it's body";
   static unicode = "U+1FA81";
   static color = "rgb(124, 233, 255)";
-  static rarity = 4;
+  static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
     super(Kite.name, Kite.description, Kite.unicode, 8, 6, 1, 2, 0, Kite.color, headPosition, [headPosition], team, Kite.rarity, removeCallback, id)
     this.targetType = 'self';
@@ -4987,50 +5079,12 @@ class Kite extends Piece {
     this.actions--
   }
 }*/
-/*class Screwdriver extends Piece {
-  static iconID = 140;
-  static name = "Screwdriver";
-  static description = "A program that can tinker with another, giving +1 to a friendly's stat, or -1 to an enemy's";
-  static unicode = "U+1FA9B";
-  static color = "rgb(143, 93, 0)";
-  static rarity = 5;
-  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
-    super(Screwdriver.name, Screwdriver.description, Screwdriver.unicode, 1, 1, 1, 0, 0, Screwdriver.color, headPosition, [headPosition], team, Screwdriver.rarity, removeCallback, id)
-    this.specialName = 'Tinker';
-    this.targetType = 'piece';
-    this.hasFriendlySpecial = true;
-  }
 
-  async special(targetPiece: Piece): Promise<void> {
-
-    const possibleStats: (keyof StatModifier)[] = [
-      "maxSize",
-      "moves",
-      "range",
-      "attack",
-      "defence"
-    ];
-
-    // Pick one at random
-    const randomStat = Random.pick(possibleStats);
-
-    // Apply +1 to that stat using your modifier system
-    const mod: StatModifier = { [randomStat]: (targetPiece.team === this.team) ? 1 : -1 };
-
-    targetPiece.addModifier(mod);
-    this.actions--
-  }
-}*/
-
+//PLAYGROUND SLIDE, U+1F6DD like gate but with more range? line target??
 //U+1F420 TROPICAL FISH rare fish slips 2 spaces
-
-//🏗 crane  U+1F3D7 creates a wall around it of 8 tiles
-
 //bus U+1F68C move other pieces (friendly) to it's tail?//this.tiles.splice(this.tiles.length-1, 1); high attack
 //acorn -> sapling -> oak then acorn can be rarity 1
-//taxi U+1F695 /
-////fleur de lis U+269C scout, lay traps? expose/Temp increase friendlies range.
-//PLAYGROUND SLIDE, U+1F6DD like gate but with more range? line target??
+//taxi U+1F695
 
 //Blackwall, high defence and moves
 export class Blackwall extends Piece {
@@ -5183,11 +5237,8 @@ console.log("Pieces of rarity 4: ", adminLogs.rarity4)
 console.log("Pieces of rarity 5: ", adminLogs.rarity5)
 console.log("Pieces of rarity 6: ", adminLogs.rarity6)
 
-//Invisible wall - hi defence hidden piece
 //FROG FACE, U+1F438 //range 3 low atk //poison/hop ability? FROG EGYPTIAN HIEROGLYPH I007, U+1318F
 // KANGAROO, U+1F998 hop
 
 //chequered flag U+1F3C1
 //chess knight special move L shape
-//DANCER, U+1F483 //high movement no damage
-

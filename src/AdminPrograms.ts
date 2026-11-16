@@ -4070,26 +4070,22 @@ console.log("Admins of rarity 4: ", adminLogs.rarity4)
 console.log("Admins of rarity 5: ", adminLogs.rarity5)
 console.log("Admins of rarity 6: ", adminLogs.rarity6)
 
-//CRUTCH, U+1FA7C immune to being disarmed
+//keygen - evil eye effect
+//CRUTCH, U+1FA7C +1 moves for programs not at their max size, immune to being disarmed
 // U+1F3C4 surfing Kali Yuga - like butter for friendlies
-//Boots, U+1F462 +1 moves, +1 max size, +1 attack, -1 def
-// U+1F5D1 WASTEBASKET - Recycle bin 
+//CLAPPER BOARD, U+1F3AC Disarms enemies when a round starts, making them take no actions on their first turn
 //Swish, U+1F3C0 - range of 3+ gets +3 attack
+//Boots, U+1F462 +1 moves, +1 max size, +1 attack, -1 def
 //JEANS, U+1F456 all hidden nodes are compilers - cost gets more expensive each time //gene hybrids appear in shop
+// U+1F5D1 WASTEBASKET - Recycle bin
 
 // MOUNT FUJI, U+1F5FB
 //U+1F4FB RADIO
-//SLEUTH OR SPY, U+1F575
 //TULIP, U+1F337 pair with bubble, some kind of effect based off money???
-//CLAPPER BOARD, U+1F3AC Enemies take no actions on the first turn
 
 // challenge nodes?
-//DESERT ISLAND, U+1F3DD
 //DESERT, U+1F3DC
 //DERELICT HOUSE BUILDING, U+1F3DA
-//STADIUM, U+1F3DF colloseum -  1 on 1
-
-//LOLLIPOP, U+1F36D sweet tooth
 
 //EGYPTIAN HIEROGLYPH L004, U+131A7 Plague of locusts, remove all body tiles from enemies at start of round
 //SNOWBOARDER, U+1F3C2

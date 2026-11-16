@@ -1791,7 +1791,6 @@ class Highwayman extends Piece {
     super(Highwayman.name, Highwayman.description, Highwayman.unicode, 2, 2, 1, 3, 0, Highwayman.color, headPosition, [headPosition], team, Highwayman.rarity, removeCallback, id)
     this.specialName = 'Steal';
     this.targetType = 'pieceAndPlayer'
-    //this.canAttack = false;
   }
   private ids: string[] = []//track already stolen pieces?
   async special({ piece, player, originalPieceIds }: { piece: Piece, player: Player, originalPieceIds?: string[] }): Promise<void> {
@@ -1826,7 +1825,6 @@ class Tengu extends Piece {
     this.specialName = 'Curse';
     this.targetType = 'pieceAndPlayer'
     this.appliesStatuses = ['slowed'];
-    //this.canAttack = false;
   }
   private ids: string[] = []//track already stolen pieces?
   async special({ piece, player, originalPieceIds }: { piece: Piece, player: Player, originalPieceIds?: string[] }): Promise<void> {
@@ -3389,9 +3387,8 @@ class Lighthouse extends Piece {
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
     super(Lighthouse.name, Lighthouse.description, Lighthouse.unicode, 1, 0, 5, 0, 1, Lighthouse.color, headPosition, [headPosition], team, Lighthouse.rarity, removeCallback, id)
-    this.specialName = 'Raise Alarm';
+    this.specialName = 'Alarm';
     this.targetType = 'group'
-    this.canAttack = false;
     this.hasExposingSpecial = true;
     this.hasFriendlySpecial = true;
   }
@@ -3424,7 +3421,6 @@ class Torch extends Piece {
     super(Torch.name, Torch.description, Torch.unicode, 2, 2, 4, 0, 0, Torch.color, headPosition, [headPosition], team, Torch.rarity, removeCallback, id)
     this.specialName = 'Shine';
     this.targetType = 'group';//'line'
-    this.canAttack = false;
     this.hasExposingSpecial = true;
     this.hasFriendlySpecial = true;
   }
@@ -3604,8 +3600,6 @@ class Archdaemon extends Piece {
 //VULTURE EGYPTIAN HIEROGLYPH G014, U+13150 special that increases stats if it can kill, - would need change in ai
 class Vulture extends Piece {
   static iconID = 37;
-
-
   static name = "Vulture";
   static description = "A program that increases it's max size if it destroys them";
   static unicode = "U+13150";
@@ -3762,8 +3756,6 @@ class Wolf extends Piece {
 
 class Bull extends Piece {
   static iconID = 16;
-
-
   static name = "Bull";
   static description = "Low movement. But can charge instead of attacking, damaging and moving forward";
   static unicode = "U+1F402";
@@ -3801,8 +3793,6 @@ class Bull extends Piece {
 
 class Buffalo extends Piece {
   static iconID = 45;
-
-
   static name = "Buffalo";
   static description = "A sturdy program that can charge instead of attacking, damaging and moving forward";
   static unicode = "U+1F403"
@@ -3840,8 +3830,6 @@ class Buffalo extends Piece {
 
 class Bison extends Piece {
   static iconID = 85;
-
-
   static name = "Bison";
   static description = "A Large and strong program that charges instead of attacking, damaging and moving forward";
   static unicode = "U+1F9AC";
@@ -3989,8 +3977,6 @@ class Gecko extends Piece {
 }
 class Yoyo extends Piece {
   static iconID = 42;
-
-
   static name = "Yo-yo";
   static description = "A mobile program that charges instead of attacking, and retracts into it's own tail position after a succesful hit";
   static unicode = "U+1FA80";
@@ -4055,8 +4041,6 @@ class Alien extends Piece {
 
 class Lightning extends Piece {
   static iconID = 87;
-
-
   static name = "Charger";
   static description = "A program that can give an extra action to another";
   static unicode = "U+1F50C";//U+26A1";// ELECTRIC PLUG, U+1F50C
@@ -4067,7 +4051,6 @@ class Lightning extends Piece {
     this.specialName = 'Stim'
     this.targetType = 'piece';
     this.hasFriendlySpecial = true;
-    this.canAttack = false;
   }
   async special(targetPiece: Piece): Promise<void> {
     if (targetPiece.id !== this.id) {

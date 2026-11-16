@@ -208,7 +208,7 @@ function pieceTipClass(){
     @click.stop = "$emit('deselect')"
     >x
     </button>
-    <button v-if="showFastControls && selectedPiece === piece && ((piece.team === 'player' && !piece.statuses.charmed) || (piece.team === 'enemy' && piece.statuses.charmed))" class="action-btn"
+    <button v-if="showFastControls && selectedPiece === piece && !piece.statuses.disarmed && ((piece.team === 'player' && !piece.statuses.charmed) || (piece.team === 'enemy' && piece.statuses.charmed))" class="action-btn"
     @click.stop = "cycleAction"
     >{{ actionToEmit }}
     </button>

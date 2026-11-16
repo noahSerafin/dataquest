@@ -51,7 +51,7 @@ function decideEnemyIntent(
   const target = findWeakestPlayerInRange(enemy, playerPieces);//returning null even when there is a piece??!!!
   console.log('finding ', enemy.name, ' intent...')
   console.log('target: ', target)
-  if (target && enemy.actions > 0) {//target found
+  if (target && enemy.actions > 0 && !enemy.statuses.disarmed) {//target found
     console.log('target found');
     if ((enemy.targetType === 'pieceAndPlace' || enemy.targetType === 'placeAndPieces') && !enemy.hasFriendlySpecial) {
       if (target.place.x === target.piece.headPosition.x && target.place.y === target.piece.headPosition.y) {
@@ -145,7 +145,7 @@ function decideEnemyIntent(
   }
 
   //no immediate attackable target, expose if possible
-  if (canUseSpecial && enemy.actions > 0 && enemy.hasExposingSpecial && enemy.targetType === 'group') {//and group
+  if (canUseSpecial && enemy.actions > 0 && !enemy.statuses.disarmed && enemy.hasExposingSpecial && enemy.targetType === 'group') {//and group
     const inRange = findAnyPiecesInRange(enemy, activePieces);
     return { type: 'special', target: inRange ? inRange : [] }
   }
@@ -155,7 +155,7 @@ function decideEnemyIntent(
     ? enemyPieces.filter(p => p.tiles.length > 1)
     : enemyPieces;
   const friendlyTarget = findWeakestPlayerInRange(enemy, friendlyCandidates);
-  if (canUseSpecial && friendlyTarget && (enemy.hasFriendlySpecial || enemy.hasNeutralSpecial) && enemy.actions > 0) {
+  if (canUseSpecial && friendlyTarget && (enemy.hasFriendlySpecial || enemy.hasNeutralSpecial) && enemy.actions > 0 && !enemy.statuses.disarmed) {
     if ((enemy.targetType === 'pieceAndPlace' || enemy.targetType === 'placeAndPieces') && !enemy.hasFriendlySpecial) {
       if (friendlyTarget.place.x === friendlyTarget.piece.headPosition.x && friendlyTarget.place.y === friendlyTarget.piece.headPosition.y) {
         for (const tile of friendlyTarget.piece.tiles) {
@@ -209,7 +209,7 @@ function decideEnemyIntent(
     }
   }
 
-  if (canUseSpecial && enemy.actions > 0 && specialAttempts < 1) {//still have an action? 
+  if (canUseSpecial && enemy.actions > 0 && !enemy.statuses.disarmed && specialAttempts < 1) {//still have an action? 
     if (enemy.specialName === 'Charge' || enemy.specialName === 'Yo' || enemy.specialName === 'Trample' || enemy.specialName === 'Pounce' || enemy.specialName === 'Dash' || enemy.specialName === 'Maul') {//Action can be used to grow
       const targetCoord = nearest || target?.piece.headPosition;
       if (targetCoord) {
@@ -434,10 +434,10 @@ export async function runEnemyStateMachine(
     for (const enemy of enemiesToProcess) {
       if (isAborted()) return;
       if (!activePieces.includes(enemy)) continue;
-      if (enemy.movesRemaining <= 0 && enemy.actions <= 0) continue;
+      if (enemy.movesRemaining <= 0 && (enemy.actions <= 0 || enemy.statuses.disarmed)) continue;
 
       let specialAttempts = 0;
-      while (enemy.movesRemaining > 0 || enemy.actions > 0) {
+      while (enemy.movesRemaining > 0 || (enemy.actions > 0 && !enemy.statuses.disarmed)) {
         if (isAborted()) return;
         if (!activePieces.includes(enemy)) break;
 
@@ -465,7 +465,7 @@ export async function runEnemyStateMachine(
 // --- HELPER FUNCTIONS ---
 
 async function attackPiece(attacker: Piece, defender: Piece) {
-  if (attacker.actions > 0 && attacker.canAttack) {//!canAttack should do special
+  if (attacker.actions > 0 && !attacker.statuses.disarmed && attacker.canAttack) {//!canAttack should do special
     const damage = attacker.getStat('attack');
     await defender.takeDamage(Math.floor(damage * attacker.damageMult));
     if (defender.willRetaliate || defender.name.includes('Hedgehog')) {

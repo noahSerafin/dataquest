@@ -2128,7 +2128,7 @@ function checkForRoundEnd() {
 const damagePieceAt = async (coord: Coordinate) => {
   if (!selectedPiece.value) return
   if ((selectedPiece.value.team === 'enemy' && !selectedPiece.value.statuses.charmed)) return; //don't wan't control of enemies pieces
-  if (selectedPiece.value.actions <= 0) return
+  if (selectedPiece.value.actions <= 0 || selectedPiece.value.statuses.disarmed) return
   if (selectedPiece.value.team === 'player' && (!isFirstTurn.value || (isFirstTurn.value && !player.value.hasAdmin('Dove')))) {
     player.value.canPlace = false;
   }
@@ -2196,7 +2196,7 @@ const damagePieceAt = async (coord: Coordinate) => {
 
 const handleSpecialActionAt = async (target: Coordinate) => {
   //the enemy should also be able to use special moves, handle in enemy?
-  if (!selectedPiece.value || selectedPiece.value.actions <= 0) return;
+  if (!selectedPiece.value || selectedPiece.value.actions <= 0 || selectedPiece.value.statuses.disarmed) return;
   if ((selectedPiece.value.team === 'enemy' && !selectedPiece.value.statuses.charmed) || selectedPiece.value.team === 'player' && selectedPiece.value.statuses.charmed) return;
   boardRef.value.clearHighlights();
   isAwaitingAction.value = true;
@@ -2611,13 +2611,13 @@ function onKeydown(e: KeyboardEvent) {
       break;
     //inside pieceview???
     case 'KeyA':
-      if (selectedPiece.value?.canAttack) {
+      if (selectedPiece.value?.canAttack && !selectedPiece.value?.statuses.disarmed) {
         boardRef.value.highlightTargets(selectedPiece.value);
       }
       break;
 
     case 'KeyS':
-      if (selectedPiece.value?.specialName) {
+      if (selectedPiece.value?.specialName && !selectedPiece.value?.statuses.disarmed) {
         boardRef.value.highlightSpecials(selectedPiece.value);
       }
       break;

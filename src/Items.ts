@@ -456,8 +456,6 @@ export class Cake extends Item<Piece> {
 
 class Soap extends Item<Piece> {
     static iconID = 180;
-
-
     static name = "Soap";
     static description = "Removes all harmful status effects from a program";
     static unicode = "U+1F9FC";
@@ -466,7 +464,7 @@ class Soap extends Item<Piece> {
     constructor() {
         super(Soap.name, Soap.description, Soap.unicode, Soap.color, 3, Soap.rarity, 'piece')
     }
-    static harmfulStatuses = ['diseased', 'slowed', 'blinded', 'burning', 'poisoned', 'frozen', 'charmed', 'confused', 'exposed']
+    static harmfulStatuses = ['diseased', 'slowed', 'blinded', 'burning', 'poisoned', 'frozen', 'charmed', 'confused', 'exposed', 'disarmed']
     apply(target: Piece, _itemMult: number) {
         for (const key of Soap.harmfulStatuses) {
             target.statuses[key] = false;
@@ -503,7 +501,7 @@ export class Rations extends Item<Piece[]> {
     }
     apply(activePieces: Piece[], _itemMult: number) {//game state from app??
         activePieces.forEach(target => {
-            if (target.team === 'player'){
+            if (target.team === 'player') {
                 target.movesRemaining = target.moves;
             }
         })
@@ -522,7 +520,7 @@ export class Beans extends Item<Piece[]> {
     }
     apply(activePieces: Piece[], _itemMult: number) {//game state from app??
         activePieces.forEach(target => {
-            if (target.team === 'player' && target.actions <= 0){
+            if (target.team === 'player' && target.actions <= 0) {
                 target.actions = 1;
             }
         });

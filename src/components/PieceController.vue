@@ -214,7 +214,7 @@ const spriteStyle = computed(() => {
       </button>
       <button
         class="btn atk-btn"
-        :disabled="!canAction || piece.actions <= 0"
+        :disabled="!canAction || piece.actions <= 0 || piece.statuses.disarmed"
         v-if="((piece.team === 'player' && !piece.statuses.charmed) || (piece.team === 'enemy' && piece.statuses.charmed)) && piece.canAttack"
         @click="$emit('highlightTargets', piece)">
         Attack
@@ -222,7 +222,7 @@ const spriteStyle = computed(() => {
       <button
         class="btn special-btn"
         v-if="piece.specialName && ((piece.team === 'player' && !piece.statuses.charmed) || (piece.team === 'enemy' && piece.statuses.charmed))"
-        :disabled="!canAction || piece.actions <= 0"
+        :disabled="!canAction || piece.actions <= 0 || piece.statuses.disarmed"
         @click="$emit('highlightSpecials', piece)">
         {{ piece.specialName }}
       </button>

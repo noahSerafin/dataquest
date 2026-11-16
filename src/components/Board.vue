@@ -452,7 +452,7 @@ function getTilesInStraightLine(
 
 const highlightTargets = (piece: InstanceType<typeof Piece>) => {
   clearHighlights();
-  if (piece.actions <= 0) {
+  if (piece.actions <= 0 || piece.statuses.disarmed) {
     if (piece.team === 'player' || (piece.team === 'enemy' && piece.statuses.charmed)) {
       return;
     }
@@ -469,7 +469,7 @@ const highlightTargets = (piece: InstanceType<typeof Piece>) => {
 const highlightSpecials = (piece: InstanceType<typeof Piece>) => {
   //console.log('specialtargets', piece.name)
   clearHighlights();
-  if (piece.actions <= 0) return;
+  if (piece.actions <= 0 || piece.statuses.disarmed) return;
   playSoundFx(specialSoundUrl, 1.0);
   if (piece.targetType === 'line') {
     specialHighlights.value = getTilesInStraightLine(

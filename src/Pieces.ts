@@ -2512,7 +2512,7 @@ class Doctor extends Piece {
     this.targetType = 'piece';
     this.hasFriendlySpecial = true;
   }
-  static harmfulStatuses = ['diseased', 'slowed', 'blinded', 'burning', 'poisoned', 'frozen', 'charmed', 'confused']
+  static harmfulStatuses = ['diseased', 'slowed', 'blinded', 'burning', 'poisoned', 'frozen', 'charmed', 'confused', 'disarmed']
   async special(targetPiece: Piece): Promise<void> {
     if (targetPiece.team === this.team) {
       for (const key of Doctor.harmfulStatuses) {
@@ -2540,7 +2540,7 @@ class Medic extends Piece {
     this.targetType = 'piece';
     this.hasFriendlySpecial = true;
   }
-  static harmfulStatuses = ['diseased', 'slowed', 'blinded', 'burning', 'poisoned', 'frozen', 'charmed', 'confused']
+  static harmfulStatuses = ['diseased', 'slowed', 'blinded', 'burning', 'poisoned', 'frozen', 'charmed', 'confused', 'disarmed']
   async special(targetPiece: Piece): Promise<void> {
     if (targetPiece.team === this.team) {
       for (const key of Doctor.harmfulStatuses) {
@@ -2567,7 +2567,7 @@ class Paragon extends Piece {
     this.targetType = 'group';
     this.hasFriendlySpecial = true;
   }
-  static harmfulStatuses = ['diseased', 'slowed', 'blinded', 'burning', 'poisoned', 'frozen', 'charmed', 'confused', 'exposed']
+  static harmfulStatuses = ['diseased', 'slowed', 'blinded', 'burning', 'poisoned', 'frozen', 'charmed', 'confused', 'exposed', 'disarmed']
   async special(targets: Piece[]): Promise<void> {
     for (const targetPiece of targets) {
       if (targetPiece.team === this.team) {

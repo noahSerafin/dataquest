@@ -600,7 +600,7 @@ export class Needle extends Admin {
   }
 }
 
-export class Rune extends Admin {
+export class Rune extends Admin {//exclude from charmed?
   static iconID = 277;
   static name = "Rune";//
   static description = "Your programs with a range of 1 on attacking get +1 damage multiplyer";//all programs?
@@ -621,7 +621,7 @@ export class Rune extends Admin {
   }
 }
 
-class Joker extends Admin {
+class Joker extends Admin {//exclude from charmed?
   static iconID = 270;
   static name = "Joker";
   static description = "+0.5 damage multiplyer on attacking";
@@ -1354,7 +1354,7 @@ class Microscope extends Admin {
   }
 }
 
-class Lotus extends Admin {
+class Lotus extends Admin {//exclude from charmed?
   static iconID = 369;
   static name = "Lotus";
   static description = "Each rare admin gives + 0.5 damage mult on attacking";
@@ -1825,7 +1825,7 @@ class Ace extends Admin {
   }
 }
 
-class Pi extends Admin {
+class Pi extends Admin {//exclude from charmed?
   static iconID = 388;
   static name = "Pi";//
   static description = "Programs get +3.14 damage multiplyer on attacking";
@@ -2187,7 +2187,7 @@ class AirSupport extends Admin {
   }
 }
 
-export class DartBoard extends Admin {
+export class DartBoard extends Admin {//exclude from charmed?
   static iconID = 328;
   static name = "Bullseye";//
   static description = "Programs get +1 damage multiplyer on attacking";
@@ -2739,9 +2739,10 @@ export class Skyscraper extends Admin {
   }
 }
 
-class School extends Admin {
+class School extends Admin {//nerf to add +1 version instead? OR +1 to max size, then moves etc. Too boring as is
   static iconID = 393;
   static name = "Staying in School";
+  //static description = "Each unplaced program in your inventory gains +1 to a stat each round in this order: 1.Max Size 2.Moves 3.Range 4.Attack 5.Defence "
   static description = "Each unplaced program in your inventory gains +1 to all stats at the end of a round, up to a max of +7"
   static unicode = "U+1F393";//school building "U+1F3EB";
   static color = "rgb(180, 210, 243)";
@@ -2749,7 +2750,7 @@ class School extends Admin {
   constructor() {
     super(School.name, School.description, School.unicode, School.color, 12, School.rarity, 'player', 'onRoundEnd')
   }
-  private count = 0;
+  private count = 1;
   async apply({ player }: { player: Player }) {
     if (this.count < 7) {
       this.isTriggering = true;
@@ -2764,8 +2765,42 @@ class School extends Admin {
       this.disabled = true;
     }
   }
+  /*async apply({ player }: { player: Player }) {
+    if (this.count > 6) {
+      this.count = 1
+    }
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
+    for (const bp of player.programs) {
+      if (!bp.isPlaced) {
+        switch(this.count) {
+          case 1:
+            this.upgradeBlueprint(bp, { maxSize: 1});
+            return;
+          case 2:   
+            this.upgradeBlueprint(bp, { moves: 1});
+            return;
+          case 3:   
+            this.upgradeBlueprint(bp, { range: 1});
+            return;
+          case 4:   
+            this.upgradeBlueprint(bp, { attack: 1});
+            return;
+          case 5:   
+            this.upgradeBlueprint(bp, { defence: 1});
+            return;
+          case 6:
+            //add a random immunity
+            break;
+          default:
+            break;
+        }        this.upgradeBlueprint(bp, { maxSize: 1, moves: 1, attack: 1, range: 1, defence: 1 });
+      }
+      };
+    this.count++
+  }*/
   onRoundEnd() {
-    if (this.count >= 7) {
+    if (this.count >= 6) {
       this.disabled = true;
     }
   }
@@ -3132,7 +3167,7 @@ export class Cherries extends Admin {
   }
 }
 
-class Coin extends Admin {
+class Coin extends Admin {//exclude from charmed?
   static iconID = 263;
   static name = "Coin Toss";
   static description = "50% chance for +1 damage multiplyer on attacking";

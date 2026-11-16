@@ -775,7 +775,7 @@ export class Hourglass extends Item<Piece[]> {
     }
 }
 
-class Keygen extends Item<Piece[]> {
+class Keygen extends Item<Piece[]> {//make an admin??
     static iconID = 188;
     static name = "Keygen";
     static description = "Lower the defence of all enemy programs in a node by 1";
@@ -1323,9 +1323,11 @@ class Screwdriver extends Item<Piece> {
 
 
 //remove feast
-//bugle, pep talk, //turn into pieceblueprint targets? raise rarity?
-
 //prayer
+
+//bugle, pep talk, //turn into pieceblueprint targets? raise rarity?
+//make keygen an admin?
+
 //RING BUOY, U+1F6DF restore the last destroyed program to hand /target a space? or give piece a wontDie bool?
 //lifeboat ROWBOAT, U+1F6A3 //all destroyed programs become unplaced
 //PUSHPIN, U+1F4CC save node(+game?) state, return to it later. 6

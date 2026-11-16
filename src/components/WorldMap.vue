@@ -111,13 +111,27 @@ function rerollBosses() {
     rerollBossCost.value = rerollBossCost.value * 2;
 }
 
+function resetMap() {
+    console.log('rebuilding deterministic map');
+    Random.setSeed(props.seed);
+
+    world.value = generateWorld(levelPool.value, props.player.difficulty, props.player.stake);
+    assignSkipRewards(world.value);
+    currentNodeId.value = world.value.startNode;
+    previousNodeId.value = null;
+    selectedPreviewNode.value = null;
+    skipsThisLevel.value = 0;
+    newBoss();
+}
+
 defineExpose({
     world,
     currentNodeId,
     previousNodeId,
     boss,
     skipsThisLevel,
-    rollbackNode
+    rollbackNode,
+    resetMap
 });
 
 const worldNodes = computed(() =>
@@ -562,15 +576,7 @@ function deselect() {
 watch(
     () => props.seed,
     () => {
-        // rebuild world graph using the same deterministic sequence
-        console.log('rebuilding deterministic map');
-        Random.setSeed(props.seed);
-
-        world.value = generateWorld(levelPool.value, props.player.difficulty, props.player.stake);
-        assignSkipRewards(world.value);
-        currentNodeId.value = world.value.startNode;
-        // generate new boss
-        newBoss();
+        resetMap();
     }
 );
 

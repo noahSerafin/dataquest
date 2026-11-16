@@ -4010,14 +4010,7 @@ class Yoyo extends Piece {
         continue;
       }
       await occupier.takeDamage(this.getStat('attack'));
-      const stillOccupied = activePieces.find(p =>
-        p.tiles.some(t => t.x === tile.x && t.y === tile.y)
-      );
-      if (!stillOccupied) {
-        // The enemy died → can move into the tile
-        this.move(tile);
-        continue;
-      } else {//space is still occupied, retract
+      {//we have hit, now retract
         const tail = this.tiles[this.tiles.length - 1];
         this.headPosition = tail;
         this.tiles = [tail];
@@ -4827,7 +4820,7 @@ class Camel extends Piece {//not working
   static color = "rgb(248, 222, 148)";
   static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
-    super(Camel.name, Camel.description, Camel.unicode, 3, 2, 1, 2, 1, Camel.color, headPosition, [headPosition], team, Camel.rarity, removeCallback, id)
+    super(Camel.name, Camel.description, Camel.unicode, 4, 2, 1, 2, 0, Camel.color, headPosition, [headPosition], team, Camel.rarity, removeCallback, id)
     this.specialName = 'Endurance';
     this.targetType = 'self';
     this.hasFriendlySpecial = true;

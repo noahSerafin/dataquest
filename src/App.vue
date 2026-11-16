@@ -261,22 +261,30 @@ const stake = ref(0);//player
 const gameStarted = ref(false);
 const yourTurnWarning = ref(false);
 
-const player = ref(new Player(
-  'U+1F60A',
-  0, // starting money
-  5,  // memory limit
-  4, //admin slots
-  [new Voucher()], // no items yet
-  [testSword, testShield, testSling], // starting pieces
-  [],//no admins yet
-  0,//security level
-  5,
-  0,
-  0,
-  0,
-  0,
-  stake.value
-));
+function createDefaultPlayer() {
+  return new Player(
+    'U+1F60A',
+    0, // starting money
+    5,  // memory limit
+    4, //admin slots
+    [new Voucher()], // no items yet
+    [
+      JSON.parse(JSON.stringify(testSword)),
+      JSON.parse(JSON.stringify(testShield)),
+      JSON.parse(JSON.stringify(testSling))
+    ], // starting pieces
+    [],//no admins yet
+    0,//security level
+    5,
+    0,
+    0,
+    0,
+    0,
+    stake.value
+  );
+}
+
+const player = ref(createDefaultPlayer());
 const showInventory = ref(true);
 //function closeInventory(){
 //showInventory.value = false;
@@ -428,17 +436,26 @@ function createNewPlayer(payload: { os: OS, seed: string, stake?: number }) {
   }
 
   currentSeed.value = (os.prefix || "") + stake.value.toString() + rawSeed;
+  worldSeed.value = 0;
 
   Random.setSeed(rawSeed);
+
+  const startingItems = os.items.map(i => new (i.constructor as ItemConstructor)());
+  const startingBlueprints = os.blueprints.map(bp => ({
+    ...JSON.parse(JSON.stringify(bp)),
+    id: crypto.randomUUID(),
+    isPlaced: false
+  }));
+  const startingAdmins = os.admins.map(a => new (a.constructor as new () => Admin)());
 
   player.value = new Player(
     os.unicode,
     os.money,
     os.memory,
     os.adminSlots,
-    os.items,
-    os.blueprints,
-    os.admins,
+    startingItems,
+    startingBlueprints,
+    startingAdmins,
     os.lives,
     5,
     0,
@@ -447,8 +464,33 @@ function createNewPlayer(payload: { os: OS, seed: string, stake?: number }) {
     0,
     stake.value,
     os.iconID
-  )
+  );
   player.value.difficulty = 1; // rogue mode starts at difficulty 1
+
+  // Reset game & UI states
+  bossAdmins.value = [];
+  activePieces.value = [];
+  originalPieces.value = [];
+  lastTurnPieces.value = [];
+  graveyard.value = [];
+  playerSpawns.value = [];
+  originalSpawns.value = [];
+  originalTiles.value = [];
+  foggedTiles.value = [];
+  selectedPiece.value = null;
+  pieceToPlace.value = null;
+  isPlacing.value = false;
+  isMoving.value = false;
+  roundHasStarted.value = false;
+  hasWonRound.value = false;
+  isFirstTurn.value = true;
+  showBoard.value = false;
+  showSummary.value = false;
+  showShop.value = false;
+  showCompiler.value = false;
+  showAltar.value = false;
+  showDuplicator.value = false;
+  showWorkbench.value = false;
 
   // Track this OS as played
   StorageManager.recordOS(os.unicode);
@@ -502,12 +544,55 @@ function incrementMapProgress(row?: number) {
 }
 
 function openMainMenu() {
-  //window.location.reload();
   showBoard.value = false;
   showSummary.value = false;
+  showMap.value = false;
+  showShop.value = false;
+  showCompiler.value = false;
+  showAltar.value = false;
+  showDuplicator.value = false;
+  showWorkbench.value = false;
+  roundHasStarted.value = false;
+  hasWonRound.value = false;
+  isFirstTurn.value = true;
+  bossAdmins.value = [];
+  activePieces.value = [];
+  originalPieces.value = [];
+  lastTurnPieces.value = [];
+  graveyard.value = [];
+  playerSpawns.value = [];
+  originalSpawns.value = [];
+  originalTiles.value = [];
+  foggedTiles.value = [];
+  selectedPiece.value = null;
+  pieceToPlace.value = null;
+  worldSeed.value = 0;
+  player.value = createDefaultPlayer();
   currentAppMode.value = 'mainMenu';
   sessionStorage.clear();
-  //localStorage.clear(); // only if you aren't using it yet
+}
+
+function retryCurrentSeed() {
+  if (!currentSeed.value) return;
+  const input = currentSeed.value.trim();
+  const prefix = input.charAt(0);
+  let rawSeed = input.substring(1);
+  let parsedStake: number | undefined = player.value.stake;
+
+  const possibleStake = parseInt(input.charAt(1), 10);
+  if (!isNaN(possibleStake)) {
+    parsedStake = possibleStake;
+    rawSeed = input.substring(2);
+  }
+
+  const os = allOSes.find(o => o.prefix === prefix) || allOSes.find(o => o.unicode === player.value.osunicode) || allOSes[0];
+
+  StorageManager.clearSaveGame();
+  createNewPlayer({ os, seed: rawSeed, stake: parsedStake });
+  nextTick(() => {
+    worldMapRef.value?.resetMap();
+    saveGameState();
+  });
 }
 const showFastControls = ref<boolean>(true);
 function toggleFastControls() {
@@ -2706,7 +2791,7 @@ function cancelConfirm() {
 
       <RoundSummary v-if="showSummary" class="stage-panel" :class="{ active: showSummary }" :hasWonRound="hasWonRound"
         :player="player" :bosses="bossAdmins" :roundHasStarted="roundHasStarted" :isCampaign="currentAppMode === 'campaign'" :currentSeed="currentSeed" @proceedFromEndOfRound="handleProceed"
-        @reloadLevel="reloadLevel" @mainMenu="openMainMenu" @returnToMap="handleReturnToMap" />
+        @reloadLevel="reloadLevel" @mainMenu="openMainMenu" @returnToMap="handleReturnToMap" @retrySeed="retryCurrentSeed" />
       <WorldMap ref="worldMapRef" v-if="!displayEditor && currentAppMode !== 'campaign'" class="stage-panel" :class="{ active: showMap }"
         :allLevels="level1Levels" :player="player" :seed="combinedMapSeed" :cssclass="mapClass" :bosses="bossAdmins"
         :staticWorld="campaignWorldMap"

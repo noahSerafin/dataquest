@@ -32,6 +32,7 @@
         (e: 'reloadLevel'): void;
         (e: 'mainMenu'): void;
         (e: 'returnToMap'): void;
+        (e: 'retrySeed'): void;
     }>();
    
     if(!props.isCampaign){
@@ -162,6 +163,7 @@
                 <span class="seed-label">Seed:</span>
                 <span class="seed-value">{{ currentSeed }}</span>
                 <button class="copy-btn" @click="copySeed">Copy Seed</button>
+                <button class="copy-btn" @click="emit('retrySeed')">Retry</button>
                 <span v-if="seedCopied">Seed copied!</span>
             </div>
             <button @click="emit('mainMenu')">Main Menu</button>

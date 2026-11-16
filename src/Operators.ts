@@ -513,7 +513,7 @@ const Cobol: OS = {
     iconID: 466,
     name: 'Cobol',
     unicode: 'U+1F3DB',
-    prefix: 'C',
+    prefix: 'c',
     money: 15,
     memory: 5,
     adminSlots: 5,
@@ -630,7 +630,7 @@ const Satoshi: OS = {
     description: "Volatile currency generator, high memory and admin slots"
 }
 
-const OpenClaw: OS = {
+const OpenClaw: OS = {//make so that programs can't be controlled once placed?
     iconID: 552,
     name: 'OpenClaw',
     unicode: 'U+1F980',

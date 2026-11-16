@@ -718,7 +718,6 @@ steel
 .blueprint.v_Holographic,
 .item-consumable.compressed,
 .item-admin.compressed {
-  filter: invert(1);
   background: linear-gradient(to left, black, rgba(255, 255, 255, 0));
   background-image: linear-gradient(0deg,
       hsl(359, 60%, 40%),
@@ -741,6 +740,14 @@ steel
   /*mix-blend-mode: color-dodge;*/
 }
 
+.piece.v_Holographic .sprite-icon,
+.blueprint.v_Holographic .sprite-icon,
+.piece-controller.v_Holographic .sprite-icon,
+.item-consumable.compressed,
+.item-admin.compressed {
+  filter: invert(1);
+}
+
 .item-admin.compressed .info {
   filter: invert(1)
 }
@@ -757,6 +764,12 @@ steel
 .v_Holographic.piece-controller, .v_Holographic.variant-header{
   
 }
+
+.piece.v_Holographic.status-icons,
+.piece.v_Holographic.piece-stats-left,
+.piece.v_Holographic.deselect-btn,
+.piece.v_Holographic.actions-btn,
+.piece.v_Holographic.version-badge,
 */
 .v_Holographic.piece-controller {
   filter: unset;

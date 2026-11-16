@@ -116,7 +116,7 @@ class Downturn extends Admin {
     static iconID = 403;
     static rarity = 2;
     static name = "Downturn";
-    static description = "Lose $1 every 2 turns";
+    static description = "Lose $1 every 3 turns";
     static unicode = "U+1F4C9";
     static color = "#f11212ff";
     constructor() {

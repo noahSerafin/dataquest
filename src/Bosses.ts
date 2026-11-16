@@ -116,7 +116,7 @@ class Downturn extends Admin {
     static iconID = 403;
     static rarity = 2;
     static name = "Downturn";
-    static description = "Lose $1 every 3 turns";
+    static description = "Lose $1 every 3 turns, resets after each round";
     static unicode = "U+1F4C9";
     static color = "#f11212ff";
     constructor() {
@@ -130,6 +130,9 @@ class Downturn extends Admin {
             this.isTriggering = true;
             setTimeout(() => this.isTriggering = false, 500);
         }
+    }
+    onRoundEnd() {
+        this.count = 0;
     }
 }
 

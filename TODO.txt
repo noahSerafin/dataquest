@@ -49,7 +49,7 @@ BUGS -
 squid not using special 'line' type and is not a charge
 workbench broken - canPlace false?
 -damage mult breaks workbench - dmgmult should be a stat - compiler/duplicator, + Pieces will be affected
--count not showing on reaper/bosses
+-count not showing on reaper/bosses - test
 lower pallette/raise backdoor rarity
 -refresh BEFORE returning to main menu on loss - display seed on game over summary - test piece clearance
 - campaign - next sector needs to close shop

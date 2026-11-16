@@ -148,7 +148,7 @@ const isDisabled = computed(() => {
       <p class='top-left' v-if="cssclass === 'shop' && type == 'admin'"
         :style="`top: -${((props.tileSize - 10) / 2 - 24)}px`">
         A</p>
-      <p class='bottom-left' v-if="type === 'admin' && (item as any).count !== undefined"
+      <p class='bottom-left' v-if="(type === 'admin' || type === 'boss') && (item as any).count !== undefined"
         :style="`bottom: -${((props.tileSize - 10) / 2 - 24)}px`">
         {{ (item as any).count }}</p>
       <div class="icon" :style="spriteStyle" :class="{ 'sprite-icon': !useUnicode }">{{ unicodeSymbol }}</div>

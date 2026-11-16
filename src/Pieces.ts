@@ -395,14 +395,13 @@ export abstract class Piece {
         this.removeCallback?.(this);
       }
     }
+    if (this.statuses.disarmed) {
+      this.statuses.disarmed = false;
+    }
   }
   async applyStartingStatusEffects(mult: number) {
     if (this.statuses.juiced) {
       this.actions = 2;
-    }
-    if (this.statuses.disarmed) {
-      this.actions = 0;
-      this.statuses.disarmed = false;
     }
     if (this.statuses.enraged) {
       this.addTempModifier({ attack: 1 * mult });
@@ -3224,7 +3223,7 @@ class Vampire extends Piece {
     }
     piece.immunities = createDefaultStatuses();
     //if (!piece.immunities.disarmed) {
-      piece.statuses.disarmed = true;
+    piece.statuses.disarmed = true;
     //}
     this.actions--
   }

@@ -48,7 +48,7 @@ export const STATUS_INFO: Record<string, string> = {
   negative: "Can move through other programs",
   enraged: "Gains +1 attack on the start of it's turn",
   zen: "Temporary +1 to all stats at the start of the next turn",
-  disarmed: "Has no actions for one turn",
+  disarmed: "Cannot take any actions for one turn",
   juiced: "Starts the next turn with 2 actions",
   variant: "A program with pre-modified stats",
   Big: "+1 max size",

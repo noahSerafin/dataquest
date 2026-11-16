@@ -168,7 +168,7 @@ export function makeBlueprint(PieceClass: any, variant?: PieceVariant, costReduc
     rarity: temp.rarity,
     color: PieceClass.color,
     isPlaced: false,
-    cost: Math.max(0, (temp.rarity * 2 - 1) - (costReduction ? costReduction : 0)),
+    cost: Math.max(1, (temp.rarity * 2 - 1) - (costReduction ? costReduction : 0)),
     iconID: (PieceClass as any).iconID,
     variantName: temp.variantName,
     immunities: temp.immunities,

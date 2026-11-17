@@ -1281,7 +1281,7 @@ class Screwdriver extends Item<Piece> {
     }
 }
 
-class Pray extends Item<Player> {
+export class Pray extends Item<Player> {
     static iconID = 552;
     static name = "Prayer";
     static description = "Advances the current seed by 1 step";
@@ -1291,8 +1291,12 @@ class Pray extends Item<Player> {
     constructor() {
         super(Pray.name, Pray.description, Pray.unicode, Pray.color, 1, Pray.rarity, 'player')
     }
-    apply(player: Player, itemMult: number) {
-        //add method on the player class to facilitate?
+    apply(player: Player, _itemMult: number) {
+        //const steps = 1 * itemMult;
+        //for (let i = 0; i < steps; i++) {
+        Random.next();
+        //}
+        player.seedOffset += 1;//steps;
     }
 }
 

@@ -2551,7 +2551,8 @@ async function increaseDifficulty() {
   player.value.difficulty += 1;
   StorageManager.recordDifficultyReached(player.value.difficulty);
   refreshShop(true);
-  worldSeed.value++
+  worldSeed.value += 1 + player.value.seedOffset;
+  player.value.seedOffset = 0;
 }
 const decreaseDifficulty = () => {
   player.value.difficulty -= 1;

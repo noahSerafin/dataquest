@@ -1,5 +1,5 @@
 import type { OS } from "./types";
-import { Voucher, Mushroom, Garlic, Meat, Genie, Pandora, Update2, Dupe, Jar, Iron } from "./Items";
+import { Voucher, Mushroom, Garlic, Meat, Genie, Pandora, Update2, Dupe, Jar, Iron, Pray } from "./Items";
 import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Clippy, Notepad, StoneAge, Rune, OffRoader, AdminMap, Compass, Backdoor, Miner, Copier, Cherries, Sneakers, Palette, Hermes, Dove, LLM, Rainbow, Convenience, Toolbox, Schoolbag, Brain } from "./AdminPrograms";
 import { createDefaultStatuses } from "./types";
 
@@ -308,24 +308,6 @@ const aegis = {
     cost: 1,
     immunities: createDefaultStatuses()
 }
-const screwdriver = {
-    iconID: 140,
-    id: crypto.randomUUID(),
-    name: "Screwdriver",
-    description: "A program that can tinker with another, boosting a random stat by 1 or reducing an enemy's by 1",
-    unicode: "U+1FA9B",
-    color: "#ff1d0dff",
-    maxSize: 1,
-    moves: 1,
-    range: 1,
-    attack: 0,
-    defence: 0,
-    rarity: 5,
-    // blueprint-only fields:
-    isPlaced: false,
-    cost: 1,
-    immunities: createDefaultStatuses()
-}
 const lance = {
     iconID: 30,
     id: crypto.randomUUID(),
@@ -401,9 +383,6 @@ const testhybrid = {
 }
 bug.immunities.slowed = true;
 labrat.immunities.diseased = true;
-//guard, snail, TP, Lance, Bug, Screwdriver
-//MINUS WHITE X, U+2756
-//
 
 const Window95: OS = {
     iconID: 459,
@@ -456,7 +435,7 @@ const Window: OS = {//knife //shield //snail
     money: 5,
     memory: 6,
     adminSlots: 5,
-    blueprints: [knife, sling, snail, tp],
+    blueprints: [knife, scissors, sling, snail, tp],
     items: [],
     admins: [],
     lives: 2,
@@ -487,7 +466,7 @@ const Temple: OS = {
     money: 1,
     memory: 8,
     adminSlots: 6,
-    blueprints: [bug, aegis, screwdriver],
+    blueprints: [bug, aegis],
     items: [new Pandora],
     admins: [],
     lives: 3,
@@ -594,7 +573,7 @@ const Explorer: OS = {
     memory: 5,
     adminSlots: 5,
     blueprints: [knife, sling, shield],
-    items: [],
+    items: [new Pray],
     admins: [new OffRoader, new Compass, new AdminMap, new Crystal, new Convenience],
     lives: 1,
     description: "Gets around the overworld with ease, but vunerable with only 1 life. Start with some pocket money."

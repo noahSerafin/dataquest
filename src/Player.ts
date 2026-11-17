@@ -32,6 +32,7 @@ export class Player {
   itemMult: number = 1;
   statusMult: number = 1;
   cloverCount: number = 0;
+  seedOffset: number = 0;
   //adminModifiers: Record<string, StatModifier>
   constructor(
     osunicode = '',

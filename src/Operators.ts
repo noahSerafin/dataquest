@@ -1,5 +1,5 @@
 import type { OS } from "./types";
-import { Voucher, Mushroom, Garlic, Meat, Genie, Pandora, Update2, Dupe, Jar, Iron, Pray } from "./Items";
+import { Voucher, Mushroom, Garlic, Meat, Genie, Pandora, Update2, Dupe, Jar, Iron, Pray, Pin } from "./Items";
 import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Clippy, Notepad, StoneAge, Rune, OffRoader, AdminMap, Compass, Backdoor, Miner, Copier, Cherries, Sneakers, Palette, Hermes, Dove, LLM, Rainbow, Convenience, Toolbox, Schoolbag, Brain } from "./AdminPrograms";
 import { createDefaultStatuses } from "./types";
 
@@ -666,9 +666,9 @@ const Debugger: OS = {
     memory: 10,
     adminSlots: 6,
     blueprints: [banana, superKnife, testhybrid, testPiece],
-    items: [new Genie, new Pandora, new Update2, new Dupe, new Jar],
+    items: [new Genie, new Pandora, new Update2, new Pin, new Jar],
     admins: [new Chemistry, new Notepad, new Dove, new LLM, new Miner, new Rainbow],
-    lives: 9,
+    lives: 4,
     description: 'FOR TESTING'
 }
 

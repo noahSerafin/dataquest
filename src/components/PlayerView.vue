@@ -73,7 +73,8 @@
     const props = defineProps<{
         player: Player,
         showInventory: boolean,
-        isCampaign?: boolean
+        isCampaign?: boolean,
+        hasPin?: boolean
     }>();
     
     const emit = defineEmits<{
@@ -86,6 +87,7 @@
         (e: 'reorderAdmins', admins: Admin[]):void;
         (e: 'closeInventory'):void;
         (e: 'openInventory'):void;
+        (e: 'requestLoadPin'):void;
     }>();
 
     const selectedPiece = ref<PieceBlueprint | null>(null)
@@ -249,11 +251,26 @@
                 </span>
                 <span style="text-align: left;"><strong class="text-yellow">$:</strong> {{ props.player.money }}</span>
 
-                <p v-if="!isCampaign">
+                <div v-if="!isCampaign">
                     <span v-for="_ in (Math.max(0, Math.floor(player.lives || 0)))">
                        {{ String.fromCodePoint(0x1FA77) }}
                     </span>
-                </p>
+                </div>
+                <div v-if="!isCampaign && hasPin" class="pin-btn node startNode clickable visible" @click="$emit('requestLoadPin')" title="Return to pinned save state">
+                    <div class="pins">
+                        <div class="pins-top"></div>
+                        <div class="pins-bottom"></div>
+                        <div class="pins-left"></div>
+                        <div class="pins-right"></div>
+                    </div>
+                    <div class="node-inner">
+                        <div class="node-inner-content">
+                            <div class="icon" :style="{ ...getSpriteStyle(163), width: '24px', height: '24px', display: 'inline-block', color: 'transparent' }">
+                                <template v-if="!getSpriteStyle(163).backgroundImage">📌</template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="admin-middle-container" ref="adminContainerRef">
                 <div class="admin-header flex">
@@ -378,6 +395,58 @@
         position: relative;
         width: 15%;
         line-height: 1.2;
+    }
+    .pin-btn {
+        position: relative;
+        width: 36px;
+        height: 36px;
+        cursor: pointer;
+        margin-top: 4px;
+        z-index: 1;
+    }
+    .pin-btn .node-inner {
+        text-align: center;
+        height: 100%;
+        background: #141414;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        user-select: none;
+    }
+    .pin-btn .pins {
+        position: absolute;
+        z-index: -1;
+        width: 80%;
+        height: 80%;
+    }
+    .pin-btn .pins-left,
+    .pin-btn .pins-right,
+    .pin-btn .pins-top,
+    .pin-btn .pins-bottom {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 4%;
+        border-top: 2px dotted white;
+        border-bottom: 2px dotted white;
+        border-right: 2px dotted white;
+        border-left: 2px dotted white;
+    }
+    .pin-btn .pins-top {
+        left: 4%;
+        top: -9%;
+    }
+    .pin-btn .pins-bottom {
+        left: 10%;
+        top: 20%;
+    }
+    .pin-btn .pins-left {
+        left: -10%;
+    }
+    .pin-btn .pins-right {
+        left: 20%;
     }
     .os{
         font-size: 24px;

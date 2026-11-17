@@ -468,6 +468,8 @@ function createNewPlayer(payload: { os: OS, seed: string, stake?: number }) {
   player.value.difficulty = 1; // rogue mode starts at difficulty 1
 
   // Reset game & UI states
+  StorageManager.clearPinnedGame();
+  pinnedState.value = null;
   bossAdmins.value = [];
   activePieces.value = [];
   originalPieces.value = [];
@@ -588,6 +590,8 @@ function retryCurrentSeed() {
   const os = allOSes.find(o => o.prefix === prefix) || allOSes.find(o => o.unicode === player.value.osunicode) || allOSes[0];
 
   StorageManager.clearSaveGame();
+  StorageManager.clearPinnedGame();
+  pinnedState.value = null;
   createNewPlayer({ os, seed: rawSeed, stake: parsedStake });
   nextTick(() => {
     worldMapRef.value?.resetMap();
@@ -749,6 +753,16 @@ function handleApplyItem(payload: { item: Item, id: string }) {
   }
 
   if (item.targetType === 'gameState') {
+    if (item.name === 'Pin') {
+      player.value.removeItem(item);
+      const snapshot = getSerializedGameState();
+      if (snapshot) {
+        pinnedState.value = snapshot;
+        StorageManager.savePinnedGame(snapshot);
+      }
+      saveGameState();
+      return;
+    }
     if (item.name === 'Hourglass') {
       reloadLevel();
       player.value.removeItem(item);
@@ -1410,10 +1424,10 @@ function closeDisabledBoard() {
 }
 
 const worldMapRef = ref();
+const pinnedState = ref<any | null>(StorageManager.getPinnedGame());
 
-function saveGameState() {
-  console.log('saving game');
-  if (!worldMapRef.value && currentAppMode.value !== 'campaign') return;
+function getSerializedGameState() {
+  if (!worldMapRef.value && currentAppMode.value !== 'campaign') return null;
   
   const isCampaign = currentAppMode.value === 'campaign';
 
@@ -1463,7 +1477,7 @@ function saveGameState() {
     }
   }
 
-  const serialized = serializeGameState(
+  return serializeGameState(
     player.value,
     cleanWorld,
     worldMapRef.value?.currentNodeId || null,
@@ -1473,8 +1487,17 @@ function saveGameState() {
     currentSeed.value,
     boardState,
     uiState,
-    shopState
+    shopState,
+    worldSeed.value
   );
+}
+
+function saveGameState() {
+  console.log('saving game');
+  const serialized = getSerializedGameState();
+  if (!serialized) return;
+  
+  const isCampaign = currentAppMode.value === 'campaign';
   
   if (isCampaign) {
     const campaignData = {
@@ -1486,7 +1509,7 @@ function saveGameState() {
       campaignPlayerIconID: campaignPlayerIconID.value,
       currentCampaignNodeId: currentCampaignNodeId.value,
       messagingState: messagingSystemRef.value?.getState() || {},
-      world: cleanWorld
+      world: serialized.world
     };
     
     // Calculate total nodes vs cleared nodes for completion percentage
@@ -1510,18 +1533,23 @@ function saveGameState() {
   }
 }
 
-function loadSavedGame() {
-  const data = StorageManager.getSavedGame();
-
+function applySavedState(data: any) {
   if (!data) return;
 
   const state = rehydrateGameState(data);
 
   player.value = state.player;
   currentSeed.value = state.seed;
+  worldSeed.value = state.worldSeed ?? 0;
 
   currentAppMode.value = 'rogue';
   gameStarted.value = true;
+  boardDisabled.value = false;
+  selectedPiece.value = null;
+  pieceToPlace.value = null;
+  isPlacing.value = false;
+  isMoving.value = false;
+  hasFinishedTurn.value = false;
 
   const ui = state.uiState || {};
   showBoard.value = ui.showBoard ?? false;
@@ -1583,6 +1611,24 @@ function loadSavedGame() {
       };
       refreshShop(true);
     }
+  });
+}
+
+function loadSavedGame() {
+  const data = StorageManager.getSavedGame();
+  if (!data) return;
+  pinnedState.value = StorageManager.getPinnedGame();
+  applySavedState(data);
+}
+
+function loadPinnedState() {
+  if (!pinnedState.value) return;
+  const dataToLoad = pinnedState.value;
+  pinnedState.value = null;
+  StorageManager.clearPinnedGame();
+  applySavedState(dataToLoad);
+  nextTick(() => {
+    saveGameState();
   });
 }
 
@@ -2377,6 +2423,8 @@ const endRound = async (roundWon: boolean) => {
       await handleApplyAdmins('onRoundLoss', '');
       if (player.value.lives <= 0 && currentAppMode.value !== 'campaign') {
         StorageManager.clearSaveGame();
+        StorageManager.clearPinnedGame();
+        pinnedState.value = null;
       }
     } else {
       alert('game over!');
@@ -2635,7 +2683,7 @@ function onKeydown(e: KeyboardEvent) {
   }
 }
 
-const debugMode = ref<boolean>(false);
+const debugMode = ref<boolean>(true);
 function toggleDebug() {
   debugMode.value = !debugMode.value;
 }
@@ -2643,7 +2691,7 @@ function toggleDebug() {
 const isMobileMenuOpen = ref(false);
 
 const showConfirmModal = ref(false);
-const confirmModalAction = ref<"forfeit" | "retry" | null>(null);
+const confirmModalAction = ref<"forfeit" | "retry" | "loadPin" | null>(null);
 
 function requestForfeit() {
   confirmModalAction.value = "forfeit";
@@ -2656,6 +2704,12 @@ function requestRetry() {
   showConfirmModal.value = true;
 }
 
+function requestLoadPin() {
+  if (!pinnedState.value) return;
+  confirmModalAction.value = "loadPin";
+  showConfirmModal.value = true;
+}
+
 async function handleConfirm() {
   if (confirmModalAction.value === "forfeit") {
     endRound(false);
@@ -2665,6 +2719,8 @@ async function handleConfirm() {
     }
     await handleApplyAdmins('onRoundLoss', '');
     reloadLevel();
+  } else if (confirmModalAction.value === "loadPin") {
+    loadPinnedState();
   }
   showConfirmModal.value = false;
   confirmModalAction.value = null;
@@ -2856,10 +2912,10 @@ function cancelConfirm() {
     </div>
     <div v-if="gameStarted || debugMode" class="player-area">
       <!-- PlayerView + End Turn / Retry -->
-      <PlayerView v-if="!displayEditor" ref="playerViewRef" :player="player" :showInventory="showInventory" :isCampaign="currentAppMode === 'campaign'"
+      <PlayerView v-if="!displayEditor" ref="playerViewRef" :player="player" :showInventory="showInventory" :isCampaign="currentAppMode === 'campaign'" :hasPin="!!pinnedState"
         @highlightPlacements="highlightPlacements" @sellBlueprint="sellBlueprint" @sellItem="sellItem"
         @applyItem="handleApplyItem" @sellAdmin="sellAdmin" @reorderAdmins="handleReorderAdmins"
-        @startPlacementDrag="startPlacementDrag" @closeInventory="toggleInventory" @openInventory="toggleInventory" />
+        @startPlacementDrag="startPlacementDrag" @closeInventory="toggleInventory" @openInventory="toggleInventory" @requestLoadPin="requestLoadPin" />
       <PieceController v-if="selectedPiece && !hasFinishedTurn" :piece="selectedPiece" mode="action"
         :hasFinishedTurn="hasFinishedTurn" :canBuy="false" :canMove="player.canMove" :canAction="player.canAction"
         :defaultPosition="{ x: 0, y: 0 }" @highlightMoves="boardRef.highlightMoves"
@@ -2882,9 +2938,10 @@ function cancelConfirm() {
     
     <div v-if="showConfirmModal" class="confirm-modal-overlay">
       <div class="confirm-modal">
-        <h2>{{ confirmModalAction === 'forfeit' ? 'Forfeit Round?' : 'Retry Round?' }}</h2>
+        <h2>{{ confirmModalAction === 'forfeit' ? 'Forfeit Round?' : confirmModalAction === 'retry' ? 'Retry Round?' : 'Return to Pinned State?' }}</h2>
         <p v-if="confirmModalAction === 'forfeit'">Are you sure you want to forfeit this round? <span v-if="currentAppMode !== 'campaign'">You will lose a life!</span></p>
         <p v-if="confirmModalAction === 'retry'">Are you sure you want to retry this round? <strong v-if="currentAppMode !== 'campaign'" style="color: red;">Warning: This will cost you 1 life.</strong></p>
+        <p v-if="confirmModalAction === 'loadPin'">Are you sure you want to return to your pinned save state? This will consume the pin.</p>
         <div class="modal-actions">
           <button @click="handleConfirm">Yes</button>
           <button @click="cancelConfirm">Cancel</button>

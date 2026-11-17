@@ -2,7 +2,7 @@
 import { computed, ref, onMounted } from "vue";
 import MiniMap from "./MiniMap.vue";
 import { Admin } from "../AdminPrograms";
-import { Item, Box, Genie, Gift, Pinata, Pandora, Voucher, Jar, Update2, Update3, Floppy, Life, Cake, Wand, Hourglass, Dupe } from "../Items";
+import { Item, Box, Genie, Gift, Pinata, Pandora, Voucher, Jar, Update2, Update3, Floppy, Life, Cake, Wand, Hourglass, Dupe, Pin } from "../Items";
 import { rollBoss } from "../helperFunctions";
 import { watch } from "vue";
 import { reapplyTutorialTooltips, showTutorialTip } from "../tutorial";
@@ -491,7 +491,7 @@ function generateSkipReward(): SkipReward {
     }
     return {
         kind: "item",
-        value: pickWeightedRandomItem([Voucher, Box, Gift, Jar, Pinata, Cake, Wand, Dupe, Genie, Pandora, Floppy, Update2, Update3, Hourglass, Life], props.player),
+        value: pickWeightedRandomItem([Voucher, Box, Gift, Jar, Pinata, Cake, Wand, Dupe, Genie, Pandora, Floppy, Update2, Update3, Hourglass, Life, Pin], props.player),
     };
 }
 

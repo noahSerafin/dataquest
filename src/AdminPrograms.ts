@@ -799,9 +799,12 @@ export class Dove extends Admin {
   static color = "rgb(77, 156, 170)";
   static rarity = 4;
   constructor() {
-    super(Dove.name, Dove.description, Dove.unicode, Dove.color, 7, Dove.rarity, 'gameState', 'other')
+    super(Dove.name, Dove.description, Dove.unicode, Dove.color, 7, Dove.rarity, 'gameState', 'onPlacement')
   }
-  //bool
+  async apply({ id: _id, activePieces: _activePieces, player: _player }: { id: string, activePieces: Piece[], player: Player }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
+  }
 }
 
 class Stonks extends Admin {

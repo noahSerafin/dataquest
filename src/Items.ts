@@ -790,7 +790,7 @@ class Keygen extends Item<Piece[]> {//make an admin
         //reload level
     }
 }
-
+/*
 class Bugle extends Item<Piece[]> {
     static iconID = 185;
     static name = "Bugle";
@@ -810,7 +810,6 @@ class Bugle extends Item<Piece[]> {
         })
     }
 }
-
 class Megaphone extends Item<Piece[]> {
     static iconID = 191;
     static name = "Pep Talk";
@@ -830,9 +829,7 @@ class Megaphone extends Item<Piece[]> {
         })
     }
 }
-
-//SANDWICH, U+1F96A, all rounder? random stat?
-/*export class Sandwich extends Item<Piece> {
+export class Sandwich extends Item<Piece> {
     static iconID = 213;
 
 
@@ -1020,7 +1017,7 @@ class Chili extends Item<PieceBlueprint> {
     }
 }
 
-class Feast extends Item<Piece[]> {
+/*class Feast extends Item<Piece[]> {
     static iconID = 216;
 
     static name = "Feast";
@@ -1043,7 +1040,7 @@ class Feast extends Item<Piece[]> {
             }
         }
     }
-}
+}*/
 
 class Lightning extends Item<Piece[]> {
     static iconID = 203;
@@ -1328,7 +1325,7 @@ export class Lifeboat extends Item {
 
 export class Bed extends Item {
     static iconID = 216;
-    static name = "Bed";
+    static name = "Sleep on it";
     static description = "Rerolls the next node structure, company, and programs";
     static unicode = "U+1F6CC";
     static color = "rgba(0, 70, 70, 1)";
@@ -1349,28 +1346,22 @@ export class Pin extends Item {
     static color = "rgba(231, 209, 135, 1)";
     static rarity = 6;
     constructor() {
-        super(Pin.name, Pin.description, Pin.unicode, Pin.color, 1, Pin.rarity, 'playerAndGame')
+        super(Pin.name, Pin.description, Pin.unicode, Pin.color, 15, Pin.rarity, 'gameState')
     }
-    async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }, _itemMult: number) {
-        //complex
+    apply(_target: any, _itemMult: number) {
+        // Handled in App.vue
     }
 }
 
-//4 to remove
-//bugle, pep talk, //turn into programs
-//remove feast
+//1 to remove
 //make keygen an admin?
 
-//4 to add
-//remainders need 
-//RING BUOY, U+1F6DF restore a random destroyed program to hand 1//chose a random one or will need last unplaced to be tracked
-//lifeboat ROWBOAT, U+1F6A3 3//all destroyed programs become unplaced
+//1 to add
 //SLEEPING ACCOMMODATION, U+1F6CC 4reroll next node(s)
-//PUSHPIN, U+1F4CC save node(or whole game?) state, return to it later. 6 //will be hardest to implement, creates a pin button that restores game to when item was used.
 
 // OLIVE, U+1FAD2 //defence and range?
 
-export const allItems = [Blueberry, Iron, Headphones, Juice, Mushroom, Box, Pepper, Pray, Rations, Floppy, Voucher, Bandage, Extinguisher, Formula, Frogman, Gift, Hotline, Labcoat, Plunger, Soap, Teapot, Toothbrush, Beans, Blackheart, Bugle, Gloves, Jar, Keygen, Makeover, Melon, Megaphone, Pinata, Roids, Lips, Spanner, Update2, Cake, Carrot, Garlic, Goggles, Wand, Lightning, Meat, Pie, Screwdriver, Supplement, Coffee, Disguise, Dupe, Genie, Hourglass, Chili, Life, Blessing, Feast, Ginger, Beer, Pandora, Update3, ShootingStar];
+export const allItems = [Blueberry, Iron, Headphones, Juice, Mushroom, Box, Buoy, Pepper, Pray, Rations, Floppy, Voucher, Bandage, Extinguisher, Formula, Frogman, Gift, Hotline, Labcoat, Plunger, Soap, Teapot, Toothbrush, Beans, Blackheart, Gloves, Jar, Keygen, Lifeboat, Makeover, Melon, Pinata, Roids, Lips, Spanner, Update2, Cake, Carrot, Garlic, Goggles, Wand, Lightning, Meat, Pie, Screwdriver, Supplement, Coffee, Disguise, Dupe, Genie, Hourglass, Chili, Life, Blessing, Ginger, Beer, Pandora, Pin, Update3, ShootingStar];
 export const upgradeItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Chili, Blessing, Roids, Formula]
 
 /*Items.forEach(i => {

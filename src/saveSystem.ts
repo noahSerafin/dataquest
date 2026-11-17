@@ -21,12 +21,14 @@ export function serializeGameState(
   seed: string,
   boardState: any, // null if not in a level, or an object if mid-level
   uiState: any,
-  shopState?: any
+  shopState?: any,
+  worldSeed?: number
 ) {
   StorageManager.setHasPlayedOnce();
   return {
     version: 1,
     seed,
+    worldSeed: worldSeed ?? 0,
     player: JSON.parse(JSON.stringify(player)), // strip methods, keep plain fields
     world: JSON.parse(JSON.stringify(world)),
     currentNodeId,
@@ -180,6 +182,7 @@ export function rehydrateGameState(data: any): any {
     skipsThisLevel: data.skipsThisLevel || 0,
     boss,
     seed: data.seed,
+    worldSeed: data.worldSeed ?? 0,
     boardState,
     uiState: data.uiState || {},
     shopState

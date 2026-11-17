@@ -222,6 +222,30 @@ export const StorageManager = {
     localStorage.removeItem('dataquest_save_game');
   },
 
+  getPinnedGame(): any | null {
+    const data = localStorage.getItem('dataquest_pinned_save');
+    if (data) {
+      try {
+        return JSON.parse(data);
+      } catch (e) {
+        console.error("Error parsing pinned save game data", e);
+      }
+    }
+    return null;
+  },
+
+  savePinnedGame(state: any) {
+    localStorage.setItem('dataquest_pinned_save', JSON.stringify(state));
+  },
+
+  hasPinnedGame(): boolean {
+    return !!localStorage.getItem('dataquest_pinned_save');
+  },
+
+  clearPinnedGame() {
+    localStorage.removeItem('dataquest_pinned_save');
+  },
+
   getCampaignSlots(): any[] {
     const data = localStorage.getItem('dataquest_campaign_slots');
     if (data) {

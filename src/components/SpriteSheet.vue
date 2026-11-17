@@ -198,10 +198,8 @@ const allIcons = computed(() => {
     'U+1F947 ',//medal 1
     'U+1F948',//medal 2
     'U+1F949',//medal 3
-    'U+1F6DF',//ring buoy
-    'U+1F6A3',//lifeboat
-    'U+1F6CC',//hotel
-    'U+1F4CC'//pin
+    'U+1FA77',//life
+    'U+1F49D'//1up
   ];
   statuses.forEach((unicode, index) => {
     result.push({

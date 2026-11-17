@@ -391,7 +391,7 @@ class LowBattery extends Admin {
     static name = "Drain";
     static description = "Every player program loses -1 max size";
     static unicode = "U+1FAAB";
-    static color = "#ca220bff";
+    static color = "rgb(33, 53, 6)";
     static rarity = 1;
     constructor() {
         super(LowBattery.name, LowBattery.description, LowBattery.unicode, LowBattery.color, 3, LowBattery.rarity, 'gameState', 'onPlacement')
@@ -1177,7 +1177,7 @@ class Taxman extends Admin {
     static iconID = 399;
     static rarity = 1;
     static name = "Taxman";
-    static description = "Lose $1 every tile lost from attacks";//too similar to battery, set money to 0 after something happens
+    static description = "Lose $1 for every tile lost from attacks";//too similar to battery, set money to 0 after something happens
     static unicode = "U+1F4D2";
     static color = "rgb(70, 70, 70)";
     constructor() {

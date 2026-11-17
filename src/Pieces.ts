@@ -1646,10 +1646,10 @@ class Turtle extends Piece {
 //	U+1F997 hopper
 class Hopper extends Piece {
   static iconID = 57;
-  static name = "Hopper";
+  static name = "Kangaroo";
   static description = "A program that can jump to spaces in range";
-  static unicode = "U+1F997";
-  static color = "#9aff46";
+  static unicode = "U+1F998";
+  static color = "#f4e113";
   static rarity = 3;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
     super(Hopper.name, Hopper.description, Hopper.unicode, 1, 3, 2, 2, 1, Hopper.color, headPosition, [headPosition], team, Hopper.rarity, removeCallback, id)
@@ -3477,10 +3477,10 @@ class Camera extends Piece {
 class Drum extends Piece {
   static iconID = 49;
   static name = "Drum";//Marching Drum
-  static description = "A program that gives +1 moves to all firendlies in range";
+  static description = "A program that cannot attack, but can temporarily boost the moves of all friendlies in range by it's own moves";
   static unicode = "U+1F941";
-  static color = "#57b92eff";
-  static rarity = 3;
+  static color = "rgb(46, 109, 185)";
+  static rarity = 2;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
     super(Drum.name, Drum.description, Drum.unicode, 1, 1, 4, 0, 0, Drum.color, headPosition, [headPosition], team, Drum.rarity, removeCallback, id)
     this.specialName = 'March';
@@ -3489,8 +3489,9 @@ class Drum extends Piece {
   }
   async special(targets: Piece[]): Promise<void> {
     for (const t of targets) {
-      if (t.team === this.team) {
-        t.addModifier({moves: 1});
+      if (t.team === this.team && t.id !== this.id) {
+        t.addTempModifier({ moves: this.getStat('moves') });
+        t.movesRemaining += this.getStat('moves');
       }
     }
     this.actions--
@@ -4956,7 +4957,7 @@ class Hat extends Piece {
 class Coach extends Piece {
   static iconID = 191;
   static name = "Coach";
-  static description = "A program that cannot attack, but can temporarily boost the moves of all friendlies in range by it's own moves";//multpie targets?
+  static description = "A program that gives +1 moves to all firendlies in range";//multpie targets?
   static unicode = "U+1F4E3";//BLACK PENNANT, U+1F3F2 //WAVING BLACK FLAG, U+1F3F4
   static color = "rgb(59, 72, 255)";
   static rarity = 3;
@@ -4967,12 +4968,10 @@ class Coach extends Piece {
     this.hasFriendlySpecial = true;
     this.canAttack = false;
   }
-
   async special(targets: Piece[]): Promise<void> {
     for (const t of targets) {
-      if (t.team === this.team && t.id !== this.id) {
-        t.addTempModifier({ moves: this.getStat('moves') });
-        t.movesRemaining += this.getStat('moves');
+      if (t.team === this.team) {
+        t.addModifier({moves: 1});
       }
     }
     this.actions--
@@ -5031,6 +5030,47 @@ class Scout extends Piece {
         t.addTempModifier({ moves: this.getStat('range') });
       }
     }
+    this.actions--
+  }
+}
+class Locust extends Piece {
+  static iconID = 57;
+  static name = "Locust";//kangaroo? 57 can be used for plague
+  static description = "A fast program that can consume other's tiles to create copies of itself and replenish it's moves remaining";
+  static unicode = "U+1F997";
+  static color = "#fefea1";
+  static rarity = 6;
+  constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
+    super(Locust.name, Locust.description, Locust.unicode, 1, 3, 2, 2, 1, Locust.color, headPosition, [headPosition], team, Locust.rarity, removeCallback, id)
+    this.targetType = 'pieceAndPlace'
+    this.specialName = 'Plague'
+  }
+  async special({ piece, target }: { piece: Piece, target: Coordinate }): Promise<void> {//needs activePieces
+    const tileIndex = piece.tiles.findIndex(t => t.x === target.x && t.y === target.y);
+    if (tileIndex === -1) return;  // No tile there
+    // Do NOT remove head tile
+    if (tileIndex === 0) return;
+    // --- 3. Remove that tile from the piece ---
+    piece.tiles.splice(tileIndex, 1);
+    //place a new locust
+    const newTrojan = new Locust(target, this.team, this.removeCallback, crypto.randomUUID())
+    //copy stats of parent
+    newTrojan.maxSize = this.maxSize;
+    newTrojan.moves = this.moves;
+    newTrojan.range = this.range;
+    newTrojan.attack = this.attack;
+    newTrojan.defence = this.defence;
+    newTrojan.defenceRemaining = this.getStat('defence');
+    newTrojan.statModifiers = this.statModifiers;//this copies modifiers
+    newTrojan.immunities = this.immunities;
+    newTrojan.damageMult = this.damageMult;
+    newTrojan.movesRemaining = 0;
+    newTrojan.actions = 0;
+    newTrojan.hybridName = this.hybridName;
+    newTrojan.extraUnicode = this.extraUnicode;
+    newTrojan.hybridIconID = this.hybridIconID;
+    newTrojan.version = this.version;
+    activePieces.push(newTrojan);
     this.actions--
   }
 }*/
@@ -5108,7 +5148,7 @@ export class Blackwall extends Piece {
   }
 }
 
-export const allPieces = [Ant, Banana, Bee, Egg, Knife, Potato, Rat, Scissors, Shield, Sling, Snail, TP, Acorn, Aegis, Banner, Beetle, Bow, Bull, Camel, Chick, Chicken, Dagger, Decoy, Dog, Fence, Fish, Frond, Doctor, Gecko, Guard, Hedgehog, Jellyfish, Larva, Lance, Tree, Flute, Rooster, Saw, Snake, Tar, Germ, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Buffalo, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, Hopper, Ink, LabRat, LadyBeetle, Magnet, Medic, Mosquito, Ninja, Octopus, Officer, Paladin, Wasp, Pawn, Peacock, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Vulture, Alien, Arms, Axe, Bison, Cannon, Lightning, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Leopard, Lighthouse, Mammoth, Mine, Nerf, Oil, Palm, Parrot, Poop, Puffer, Rabbit, Scarab, Shark, Soldier, Squid, Swan, FishingPole, Teargas, Tiger, Tradie, Bat, Wizard, Wolf, Zebra, Archdaemon, Recurve, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Firework, Gman, Giraffe, Hippo, Lion, Lovebomb, Harp, Orangutan, Paragon, Pentagram, Rhino, Shovel, Shrike, Snowman, Stopwatch, Tank, Coat, UFO, Zombie, Cryptid, Vampire, Greatshield, Bear, Helicopter, Gorilla, Lich, Dolls, Nuke, Oni, Sol, Sponge, Super, Rex, Television, Unicorn]; //100 +2 (web, ink)
+export const allPieces = [Ant, Banana, Bee, Egg, Knife, Potato, Rat, Scissors, Shield, Sling, Snail, TP, Acorn, Aegis, Banner, Beetle, Bow, Bull, Camel, Chick, Chicken, Dagger, Decoy, Dog, Fence, Fish, Frond, Doctor, Gecko, Guard, Hedgehog, Jellyfish, Larva, Lance, Tree, Flute, Rooster, Saw, Snake, Tar, Germ, Watchman, Web, Yarn, Yoyo, Boomerang, Bug, Buffalo, Camera, Coconut, Donkey, Drum, Dynamite, Elephant, Fencer, Gate, Ghost, Highwayman, Honeypot, Ink, Hopper, LabRat, LadyBeetle, Magnet, Medic, Mosquito, Ninja, Octopus, Officer, Paladin, Wasp, Pawn, Peacock, Pitfall, SAM, Scorpion, Turtle, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Vice, Vulture, Alien, Arms, Axe, Bison, Cannon, Lightning, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Leopard, Lighthouse, Mammoth, Mine, Nerf, Oil, Palm, Parrot, Poop, Puffer, Rabbit, Scarab, Shark, Soldier, Squid, Swan, FishingPole, Teargas, Tiger, Tradie, Bat, Wizard, Wolf, Zebra, Archdaemon, Recurve, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Firework, Gman, Giraffe, Hippo, Lion, Lovebomb, Harp, Orangutan, Paragon, Pentagram, Rhino, Shovel, Shrike, Snowman, Stopwatch, Tank, Coat, UFO, Zombie, Cryptid, Vampire, Greatshield, Bear, Helicopter, Gorilla, Lich, Dolls, Nuke, Oni, Sol, Sponge, Super, Rex, Television, Unicorn]; //100 +2 (web, ink)
 
 //companies
 /*
@@ -5166,11 +5206,11 @@ export const starlanePieces = [Ant, Scissors, Sling, Banner, Bow, Decoy, Doctor,
 //Sunrise - animal pieces.
 //all variants
 //export const sunrisePieces = [Swan, Scissors, Camel, Fish, Ink, Parrot, Ant, Bee, Egg, Rat, Snail, Beetle, Bull, Chick, Chicken, Poop, Dog, Gecko, Hedgehog, Jellyfish, Larva, Rooster, Snake, Vulture, Germ, Web, Bug, Buffalo, Donkey, Elephant, Honeypot, Hopper, LabRat, LadyBeetle, Mosquito, Octopus, Wasp, Peacock, Scorpion, Turtle, Spider, Alien, Bison, Cockroach, Croc, Diplodocus, Eagle, Leopard, Mammoth, Puffer, Rabbit, Scarab, Shark, Squid, Tiger, Bat, Wolf, Zebra, Centipede, Copycat, Dataworm, Dragon, Giraffe, Hippo, Lion, Orangutan, Rhino, Shrike, Bear, Gorilla, Rex, Unicorn];//sunrise associates
-export const sunrisePieces = [Ant, Banana, Bee, Egg, Potato, Rat, Snail, Acorn, Beetle, Bull, Camel, Chick, Chicken, Dog, Fish, Frond, Gecko, Hedgehog, Jellyfish, Larva, Tree, Flute, Rooster, Snake, Tar, Germ, Web, Bug, Buffalo, Coconut, Donkey, Elephant, Honeypot, Hopper, Ink, LabRat, LadyBeetle, Mosquito, Octopus, Wasp, Peacock, Pitfall, Scorpion, Turtle, Spider, Trap, Trojan, Vulture, Bison, Cockroach, Croc, Diplodocus, Eagle, Leopard, Mammoth, Mine, Oil, Palm, Parrot, Poop, Puffer, Rabbit, Scarab, Shark, Squid, Swan, Teargas, Tiger, Bat, Wolf, Zebra, Centipede, Copycat, Dataworm, Dragon, Firework, Giraffe, Hippo, Lion, Lovebomb, Harp, Orangutan, Rhino, Shrike, Coat, Bear, Cryptid, Gorilla, Sponge, Rex, Unicorn];
+export const sunrisePieces = [Ant, Banana, Bee, Egg, Potato, Rat, Snail, Acorn, Beetle, Bull, Camel, Chick, Chicken, Dog, Fish, Frond, Gecko, Hedgehog, Jellyfish, Larva, Tree, Flute, Rooster, Snake, Tar, Germ, Web, Bug, Buffalo, Coconut, Donkey, Elephant, Honeypot, Ink, Hopper, LabRat, LadyBeetle, Mosquito, Octopus, Wasp, Peacock, Pitfall, Scorpion, Turtle, Spider, Trap, Trojan, Vulture, Bison, Cockroach, Croc, Diplodocus, Eagle, Leopard, Mammoth, Mine, Oil, Palm, Parrot, Poop, Puffer, Rabbit, Scarab, Shark, Squid, Swan, Teargas, Tiger, Bat, Wolf, Zebra, Centipede, Copycat, Dataworm, Dragon, Firework, Giraffe, Hippo, Lion, Lovebomb, Harp, Orangutan, Rhino, Shrike, Coat, Bear, Cryptid, Gorilla, Sponge, Rex, Unicorn];
 
 //FlyBy - exposers watchman, bug type pieces, small pieces
 //export const flybyPieces = [Scissors, Fish, Lich, Ant, Acorn, Banana, Bee, Egg, Rat, Snail, Beetle, Chick, Dagger, Decoy, Poop, Dog, Frond, Doctor, Gecko, Guard, Larva, Lance, Flute, Tar, Germ, Watchman, Web, Bug, Camera, Drum, Dynamite, Fencer, Gate, Ghost, Highwayman, Honeypot, Hopper, LabRat, LadyBeetle, Magnet, Medic, Mosquito, Officer, Paladin, Wasp, Pawn, Pitfall, Scorpion, Turtle, Spider, Stonewall, Torch, Trap, Trojan, Vice, Alien, Arms, Axe, Cannon, Lightning, Cockroach, Daemon, Eagle, Firewall, Lighthouse, Mine, Nerf, Oil, Rabbit, Stopwatch, Wolf, Archdaemon, Bomb, Centipede, Dataworm, Fairy, Firebrand, Gman, Lovebomb, Oni, Paragon, Shovel, Shrike, Tank, Coat, UFO, Vampire, Helicopter, Sol, Sponge, Unicorn, Teargas];//flyby surveilance
-export const flybyPieces = [Ant, Banana, Bee, Egg, Rat, Scissors, Sling, Snail, Acorn, Banner, Beetle, Chick, Decoy, Dog, Fish, Frond, Doctor, Gecko, Hedgehog, Larva, Flute, Tar, Germ, Watchman, Web, Bug, Coconut, Drum, Dynamite, Honeypot, Hopper, Ink, LabRat, LadyBeetle, Mosquito, Wasp, Pawn, Pitfall, Scorpion, Spider, Tengu, Torch, Trap, Trojan, Alien, Lightning, Cockroach, Lighthouse, Mine, Nerf, Oil, Poop, Rabbit, Scarab, FishingPole, Teargas, Wizard, Wolf, Zebra, Bomb, Centipede, Copycat, Dataworm, Fairy, Firework, Gman, Lovebomb, Harp, Stopwatch, Coat, Dolls, Sol, Sponge, Super, Unicorn];//updated
+export const flybyPieces = [Ant, Banana, Bee, Egg, Rat, Scissors, Sling, Snail, Acorn, Banner, Beetle, Chick, Decoy, Dog, Fish, Frond, Doctor, Gecko, Hedgehog, Larva, Flute, Tar, Germ, Watchman, Web, Bug, Coconut, Drum, Dynamite, Honeypot, Ink, Hopper, LabRat, LadyBeetle, Mosquito, Wasp, Pawn, Pitfall, Scorpion, Spider, Tengu, Torch, Trap, Trojan, Alien, Lightning, Cockroach, Lighthouse, Mine, Nerf, Oil, Poop, Rabbit, Scarab, FishingPole, Teargas, Wizard, Wolf, Zebra, Bomb, Centipede, Copycat, Dataworm, Fairy, Firework, Gman, Lovebomb, Harp, Stopwatch, Coat, Dolls, Sol, Sponge, Super, Unicorn];//updated
 
 
 //Monkey - high move pieces, status appliers
@@ -5181,7 +5221,7 @@ export const monkeyPieces = [Ant, Banana, Rat, TP, Bull, Camel, Dagger, Decoy, F
 //Red Sky - high attack pieces, large defensive pieces, bombs
 //all variants
 //export const redskyPieces = [Television, Dolls, Lich, Zombie, Bee, Knife, Shield, Snail, TP, Beetle, Bow, Banner, Bull, Dagger, Fence, Gecko, Lance, Tree, Vulture, Yarn, Yoyo, Boomerang, Bug, Buffalo, Camera, Donkey, Drum, Dynamite, Elephant, Fencer, Ghost, Highwayman, Hopper, LadyBeetle, Mosquito, Ninja, Officer, Paladin, Wasp, SAM, Turtle, Spider, Stonewall, Tengu, Troll, Arms, Axe, Cannon, Lightning, Palm, Bison, Cockroach, Croc, Daemon, Diplodocus, Eagle, Firewall, Golem, Leopard, Mammoth, Mine, Shark, Soldier, Stopwatch, Tiger, Bat, Wolf, Zebra, Archdaemon, Recurve, Bomb, Centipede, Dataworm, Dragon, Gman, Giraffe, Hippo, Lion, Oni, Orangutan, Rhino, Tank, UFO, Bear, Helicopter, Gorilla, Greatshield, Sol, Rex, Unicorn, Firework];//Red Sky Dynamics
-export const redskyPieces = [Bee, Knife, Sling, TP, Acorn, Banner, Bow, Bull, Dagger, Gecko, Jellyfish, Lance, Rooster, Tar, Yoyo, Boomerang, Buffalo, Camera, Donkey, Dynamite, Elephant, Fencer, Ghost, Highwayman, Honeypot, Hopper, Ink, Ninja, Paladin, Wasp, Pitfall, SAM, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Arms, Axe, Bison, Cannon, Lightning, Croc, Diplodocus, Firewall, Golem, Leopard, Lighthouse, Mammoth, Mine, Nerf, Oil, Poop, Shark, Squid, Swan, Teargas, Tiger, Wizard, Wolf, Zebra, Archdaemon, Recurve, Bomb, Centipede, Dataworm, Dragon, Firebrand, Firework, Gman, Lion, Lovebomb, Harp, Orangutan, Paragon, Snowman, Stopwatch, Tank, Coat, UFO, Vampire, Greatshield, Bear, Cryptid, Helicopter, Gorilla, Lich, Dolls, Nuke, Sol, Rex, Television, Unicorn];//updated
+export const redskyPieces = [Bee, Knife, Sling, TP, Acorn, Banner, Bow, Bull, Dagger, Gecko, Jellyfish, Lance, Rooster, Tar, Yoyo, Boomerang, Buffalo, Camera, Donkey, Dynamite, Elephant, Fencer, Ghost, Highwayman, Honeypot, Ink, Hopper, Ninja, Paladin, Wasp, Pitfall, SAM, Spider, Stonewall, Tengu, Torch, Trap, Trojan, Troll, Arms, Axe, Bison, Cannon, Lightning, Croc, Diplodocus, Firewall, Golem, Leopard, Lighthouse, Mammoth, Mine, Nerf, Oil, Poop, Shark, Squid, Swan, Teargas, Tiger, Wizard, Wolf, Zebra, Archdaemon, Recurve, Bomb, Centipede, Dataworm, Dragon, Firebrand, Firework, Gman, Lion, Lovebomb, Harp, Orangutan, Paragon, Snowman, Stopwatch, Tank, Coat, UFO, Vampire, Greatshield, Bear, Cryptid, Helicopter, Gorilla, Lich, Dolls, Nuke, Sol, Rex, Television, Unicorn];//updated
 
 //Whiteflower - status appliers, traps
 //all variants
@@ -5195,12 +5235,12 @@ export const cookiePieces = [Banana, Egg, Knife, Potato, Scissors, TP, Chicken, 
 
 //Sakura - special move pieces, trap pieces
 //export const sakuraPieces = [Scissors, Fish, Camel, Television, Swan, Ink, Harp, Parrot, Dolls, Lich, Acorn, Banana, Bee, Egg, Snail, Aegis, Bull, Chick, Chicken, Dagger, Decoy, Poop, Dog, Frond, Doctor, Gecko, Jellyfish, Larva, Lance, Tree, Flute, Saw, Snake, Tar, Vulture, Germ, Watchman, Web, Yoyo, Boomerang, Bug, Camera, Coconut, Drum, Dynamite, Fencer, Gate, Ghost, Honeypot, Hopper, LabRat, Magnet, Medic, Mosquito, Ninja, Octopus, Paladin, Wasp, Pawn, Peacock, Pitfall, Scorpion, Spider, Tengu, Torch, Trap, Trojan, Vice, Alien, Arms, Axe, Cannon, Lightning, Palm, Cockroach, Croc, Daemon, Firewall, FishingPole, Lighthouse, Mine, Nerf, Oil, Puffer, Rabbit, Scarab, Snowman, Squid, Stopwatch, Bat, Wizard, Archdaemon, Recurve, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Gman, Lovebomb, Oni, Paragon, Shovel, Shrike, Tank, Coat, UFO, Vampire, Helicopter, Greatshield, Nuke, Sol, Sponge, Rex, Unicorn, Super, Firework, Teargas, Poop];//Sakura Robotics /trim down
-export const sakuraPieces = [Ant, Banana, Bee, Egg, Scissors, Shield, Snail, Acorn, Aegis, Banner, Bull, Camel, Chick, Chicken, Dagger, Decoy, Fish, Frond, Doctor, Gecko, Jellyfish, Larva, Lance, Tree, Flute, Saw, Snake, Tar, Germ, Watchman, Web, Yoyo, Boomerang, Bug, Buffalo, Camera, Coconut, Drum, Elephant, Gate, Ghost, Highwayman, Honeypot, Hopper, Ink, Magnet, Medic, Ninja, Octopus, Paladin, Wasp, Pawn, Pitfall, SAM, Spider, Tengu, Torch, Trap, Trojan, Vice, Alien, Arms, Axe, Cannon, Lightning, Croc, Daemon, Firewall, Leopard, Lighthouse, Mammoth, Mine, Nerf, Oil, Palm, Parrot, Poop, Puffer, Rabbit, Scarab, Shark, Squid, Swan, FishingPole, Teargas, Tiger, Wizard, Wolf, Archdaemon, Recurve, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Firework, Gman, Hippo, Lion, Lovebomb, Harp, Orangutan, Paragon, Pentagram, Rhino, Shovel, Shrike, Snowman, Stopwatch, Tank, Coat, UFO, Zombie, Cryptid, Vampire, Greatshield, Bear, Helicopter, Gorilla, Lich, Dolls, Nuke, Oni, Sponge, Super, Rex, Television, Unicorn];//updated
+export const sakuraPieces = [Ant, Banana, Bee, Egg, Scissors, Shield, Snail, Acorn, Aegis, Banner, Bull, Camel, Chick, Chicken, Dagger, Decoy, Fish, Frond, Doctor, Gecko, Jellyfish, Larva, Lance, Tree, Flute, Saw, Snake, Tar, Germ, Watchman, Web, Yoyo, Boomerang, Bug, Buffalo, Camera, Coconut, Drum, Elephant, Gate, Ghost, Highwayman, Honeypot, Ink, Hopper, Magnet, Medic, Ninja, Octopus, Paladin, Wasp, Pawn, Pitfall, SAM, Spider, Tengu, Torch, Trap, Trojan, Vice, Alien, Arms, Axe, Cannon, Lightning, Croc, Daemon, Firewall, Leopard, Lighthouse, Mammoth, Mine, Nerf, Oil, Palm, Parrot, Poop, Puffer, Rabbit, Scarab, Shark, Squid, Swan, FishingPole, Teargas, Tiger, Wizard, Wolf, Archdaemon, Recurve, Bomb, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firebrand, Firework, Gman, Hippo, Lion, Lovebomb, Harp, Orangutan, Paragon, Pentagram, Rhino, Shovel, Shrike, Snowman, Stopwatch, Tank, Coat, UFO, Zombie, Cryptid, Vampire, Greatshield, Bear, Helicopter, Gorilla, Lich, Dolls, Nuke, Oni, Sponge, Super, Rex, Television, Unicorn];//updated
 
 //panda - plants - slow pieces - re-add daemons?
 //all variants
 //export const pandaPieces = [Swan, Camel, Fish, Parrot, Dolls, Ant, Acorn, Banana, Bee, Egg, Potato, Sling, Snail, TP, Beetle, Bow, Chick, Poop, Chicken, Decoy, Frond, Gecko, Hedgehog, Larva, Tree, Flute, Rooster, Snake, Tar, Germ, Web, Bug, Coconut, Gate, Ghost, Highwayman, Honeypot, Hopper, LadyBeetle, Mosquito, Ninja, Wasp, Peacock, Pitfall, Scorpion, Turtle, Spider, Stonewall, Tengu, Trap, Troll, Palm, Bison, Cockroach, Croc, Daemon, Eagle, Golem, Leopard, Mine, Scarab, Tiger, Bat, Wizard, Wolf, Archdaemon, Recurve, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Lovebomb, Oni, Orangutan, Shrike, Vampire, Bear, Gorilla, Greatshield, Unicorn];
-export const pandaPieces = [Banana, Bee, Egg, Potato, Shield, Snail, TP, Acorn, Aegis, Banner, Beetle, Bull, Chick, Chicken, Decoy, Dog, Fence, Frond, Doctor, Gecko, Guard, Hedgehog, Jellyfish, Larva, Tree, Flute, Snake, Tar, Web, Buffalo, Camera, Coconut, Donkey, Drum, Elephant, Gate, Ghost, Highwayman, Honeypot, Hopper, Ink, LadyBeetle, Medic, Mosquito, Officer, Paladin, Wasp, Pawn, Peacock, Pitfall, Scorpion, Turtle, Spider, Stonewall, Trap, Troll, Vice, Vulture, Bison, Cannon, Lightning, Cockroach, Croc, Diplodocus, Eagle, Firewall, Golem, Lighthouse, Mammoth, Mine, Nerf, Oil, Palm, Parrot, Poop, Puffer, Rabbit, Scarab, FishingPole, Teargas, Tiger, Bat, Wizard, Wolf, Recurve, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firework, Lovebomb, Harp, Orangutan, Paragon, Pentagram, Shrike, Snowman, Stopwatch, Tank, Coat, Zombie, Cryptid, Vampire, Greatshield, Bear, Helicopter, Gorilla, Lich, Nuke, Sponge, Super, Rex, Unicorn];
+export const pandaPieces = [Banana, Bee, Egg, Potato, Shield, Snail, TP, Acorn, Aegis, Banner, Beetle, Bull, Chick, Chicken, Decoy, Dog, Fence, Frond, Doctor, Gecko, Guard, Hedgehog, Jellyfish, Larva, Tree, Flute, Snake, Tar, Web, Buffalo, Camera, Coconut, Donkey, Drum, Elephant, Gate, Ghost, Highwayman, Honeypot, Ink, Hopper, LadyBeetle, Medic, Mosquito, Officer, Paladin, Wasp, Pawn, Peacock, Pitfall, Scorpion, Turtle, Spider, Stonewall, Trap, Troll, Vice, Vulture, Bison, Cannon, Lightning, Cockroach, Croc, Diplodocus, Eagle, Firewall, Golem, Lighthouse, Mammoth, Mine, Nerf, Oil, Palm, Parrot, Poop, Puffer, Rabbit, Scarab, FishingPole, Teargas, Tiger, Bat, Wizard, Wolf, Recurve, Centipede, Copycat, Cupid, Dataworm, Dragon, Fairy, Firework, Lovebomb, Harp, Orangutan, Paragon, Pentagram, Shrike, Snowman, Stopwatch, Tank, Coat, Zombie, Cryptid, Vampire, Greatshield, Bear, Helicopter, Gorilla, Lich, Nuke, Sponge, Super, Rex, Unicorn];
 
 console.log('pieces length: ', allPieces.length)
 

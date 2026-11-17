@@ -494,8 +494,8 @@ export class Rations extends Item<Piece[]> {
     static name = "Rations";
     static description = "Replenish all your loaded programs' moves";
     static unicode = "U+1F96B";
-    static color = "rgb(21, 51, 221)";
-    static rarity = 3;
+    static color = "rgb(210, 210, 209)";
+    static rarity = 1;
     constructor() {
         super(Rations.name, Rations.description, Rations.unicode, Rations.color, 2, Rations.rarity, 'piece')
     }
@@ -773,7 +773,7 @@ export class Hourglass extends Item<Piece[]> {
     }
 }
 
-class Keygen extends Item<Piece[]> {//make an admin??
+class Keygen extends Item<Piece[]> {//make an admin
     static iconID = 188;
     static name = "Keygen";
     static description = "Lower the defence of all enemy programs in a node by 1";
@@ -830,27 +830,6 @@ class Megaphone extends Item<Piece[]> {
         activePieces.forEach(piece => {
             if (piece.team === 'player') {
                 piece.addModifier({ attack: 1 * itemMult })//test
-            }
-        })
-    }
-}
-
-class Battery extends Item<Piece[]> {
-    static iconID = 163;
-
-    static name = "Fresh Batteries";
-    static description = "All placed player programs replenish their moves remaining";
-    static unicode = " U+1F50B";
-    static color = "rgb(132, 180, 189)";
-    static rarity = 1;
-    constructor() {
-        super(Battery.name, Battery.description, Battery.unicode, Battery.color, 1, Battery.rarity, 'gameState');
-        //name desc utf || maxsize moves range atk def
-    }
-    apply(activePieces: Piece[], _itemMult: number) {
-        activePieces.forEach(piece => {
-            if (piece.team === 'player') {
-                piece.resetMoves();
             }
         })
     }
@@ -1302,7 +1281,7 @@ class Screwdriver extends Item<Piece> {
     }
 }
 
-/*class Pray extends Item<Player> {
+class Pray extends Item<Player> {
     static iconID = 552;
     static name = "Prayer";
     static description = "Advances the current seed by 1 step";
@@ -1310,28 +1289,28 @@ class Screwdriver extends Item<Piece> {
     static color = "rgb(196, 255, 255)";
     static rarity = 1;
     constructor() {
-        super(Pray.name, Pray.description, Pray.unicode, Pray.color, 1, Pray.rarity, 'blueprint')
+        super(Pray.name, Pray.description, Pray.unicode, Pray.color, 1, Pray.rarity, 'player')
     }
     apply(player: Player, itemMult: number) {
-        //add method on the player class to facilitate
+        //add method on the player class to facilitate?
     }
-}*/
+}
 
-
+//4 to remove
 //remove feast
-//prayer
-
-//3 to remove
-//bugle, pep talk, //turn into pieceblueprint targets? or programs? raise rarity?
+//bugle, pep talk, //turn into programs
 //make keygen an admin?
 
-//RING BUOY, U+1F6DF restore the last destroyed program to hand /target a space? or give piece a wontDie bool?
-//lifeboat ROWBOAT, U+1F6A3 //all destroyed programs become unplaced
-//PUSHPIN, U+1F4CC save node(+game?) state, return to it later. 6
-//SLEEPING ACCOMMODATION, U+1F6CC reroll next node(s)
+//4 to add
+//remainders need 
+//RING BUOY, U+1F6DF restore a random destroyed program to hand 1//chose a random one or will need last unplaced to be tracked
+//lifeboat ROWBOAT, U+1F6A3 3//all destroyed programs become unplaced
+//SLEEPING ACCOMMODATION, U+1F6CC 4reroll next node(s)
+//PUSHPIN, U+1F4CC save node(or whole game?) state, return to it later. 6 //will be hardest to implement, creates a pin button that restores game to when item was used.
+
 // OLIVE, U+1FAD2 //defence and range?
 
-export const allItems = [Blueberry, Battery, Iron, Headphones, Juice, Mushroom, Box, Pepper, Floppy, Voucher, Bandage, Extinguisher, Formula, Frogman, Gift, Hotline, Labcoat, Plunger, Soap, Teapot, Toothbrush, Beans, Blackheart, Bugle, Gloves, Jar, Keygen, Makeover, Melon, Megaphone, Pinata, Rations, Roids, Lips, Spanner, Update2, Cake, Carrot, Garlic, Goggles, Wand, Lightning, Meat, Pie, Screwdriver, Supplement, Coffee, Disguise, Dupe, Genie, Hourglass, Chili, Life, Blessing, Feast, Ginger, Beer, Pandora, Update3, ShootingStar];
+export const allItems = [Blueberry, Iron, Headphones, Juice, Mushroom, Box, Pepper, Pray, Rations, Floppy, Voucher, Bandage, Extinguisher, Formula, Frogman, Gift, Hotline, Labcoat, Plunger, Soap, Teapot, Toothbrush, Beans, Blackheart, Bugle, Gloves, Jar, Keygen, Makeover, Melon, Megaphone, Pinata, Roids, Lips, Spanner, Update2, Cake, Carrot, Garlic, Goggles, Wand, Lightning, Meat, Pie, Screwdriver, Supplement, Coffee, Disguise, Dupe, Genie, Hourglass, Chili, Life, Blessing, Feast, Ginger, Beer, Pandora, Update3, ShootingStar];
 export const upgradeItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Chili, Blessing, Roids, Formula]
 
 /*Items.forEach(i => {

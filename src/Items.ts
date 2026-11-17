@@ -160,8 +160,6 @@ export class Garlic extends Item<PieceBlueprint> {
 
 export class Ginger extends Item<PieceBlueprint> {
     static iconID = 217;
-
-
     static name = "Ginger";
     static description = "Increases a held program's defence by 3";
     static unicode = "U+1FADA"
@@ -182,8 +180,6 @@ export class Ginger extends Item<PieceBlueprint> {
 
 export class Blueberry extends Item<PieceBlueprint> {
     static iconID = 162;
-
-
     static name = "Blueberry";
     static description = "Increases a held program's max size by 1";
     static unicode = "U+1FAD0";
@@ -1091,8 +1087,6 @@ class Toothbrush extends Item<Piece[]> {
 
 class Beer extends Item<Player> {
     static iconID = 218;
-
-
     static name = "Happy Hour";
     static description = "Duplicate a random item.";
     static unicode = "U+1F37B";
@@ -1120,8 +1114,6 @@ class Beer extends Item<Player> {
 
 export class Headphones extends Item<PieceBlueprint> {
     static iconID = 165;
-
-
     static name = "Locked In";
     static description = "Make a held program in your inventory permanently immune to being confused";
     static unicode = "U+1F3A7";
@@ -1136,8 +1128,6 @@ export class Headphones extends Item<PieceBlueprint> {
 }
 class Disguise extends Item<PieceBlueprint> {
     static iconID = 209;
-
-
     static name = "Disguise";
     static description = "Make a held program in your inventory permanently immune to being exposed";
     static unicode = "U+1F978";
@@ -1152,8 +1142,6 @@ class Disguise extends Item<PieceBlueprint> {
 }
 class Goggles extends Item<PieceBlueprint> {
     static iconID = 201;
-
-
     static name = "Goggles";
     static description = "Make a held program in your inventory permanently immune to being Blinded";
     static unicode = "U+1F97D";
@@ -1168,8 +1156,6 @@ class Goggles extends Item<PieceBlueprint> {
 }
 class Gloves extends Item<PieceBlueprint> {
     static iconID = 186;
-
-
     static name = "Gloves";
     static description = "Make a held program in your inventory permanently immune to being frozen";
     static unicode = "U+1F9E4";
@@ -1184,8 +1170,6 @@ class Gloves extends Item<PieceBlueprint> {
 }
 class Labcoat extends Item<PieceBlueprint> {
     static iconID = 178;
-
-
     static name = "Lab Coat";
     static description = "Make a held program in your inventory permanently immune to being diseased";
     static unicode = "U+1F97C";
@@ -1200,8 +1184,6 @@ class Labcoat extends Item<PieceBlueprint> {
 }
 class Frogman extends Item<PieceBlueprint> {
     static iconID = 175;
-
-
     static name = "Frogman";
     static description = "Make a held program in your inventory permanently immune to being poisoned";
     static unicode = "U+1F93F";
@@ -1216,8 +1198,6 @@ class Frogman extends Item<PieceBlueprint> {
 }
 class Blackheart extends Item<PieceBlueprint> {
     static iconID = 184;
-
-
     static name = "Blackheart";
     static description = "Make a held program in your inventory permanently immune to being charmed";
     static unicode = "U+1F5A4";
@@ -1300,9 +1280,85 @@ export class Pray extends Item<Player> {
     }
 }
 
+export class Buoy extends Item {
+    static iconID = 551;
+    static name = "Buoy";
+    static description = "Restore a random destroyed program to hand";
+    static unicode = "U+1F6DF";
+    static color = "rgb(196, 255, 255)";
+    static rarity = 1;
+    constructor() {
+        super(Buoy.name, Buoy.description, Buoy.unicode, Buoy.color, 2, Buoy.rarity, 'playerAndGame')
+    }
+    async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }, _itemMult: number) {
+        const placedPrograms = player.programs.filter(bp => bp.isPlaced);
+        const destroyedPrograms = placedPrograms.filter(bp => !activePieces.some(p => p.id === bp.id));
+        if (destroyedPrograms.length === 0) return;
+
+        const chosen = Random.pick(destroyedPrograms);
+        chosen.isPlaced = false;
+        player.removeItem(this);
+    }
+}
+
+export class Lifeboat extends Item {
+    static iconID = 552;
+    static name = "Lifeboat";
+    static description = "Restore all destroyed programs to hand";
+    static unicode = "U+1F6A3";
+    static color = "rgba(0, 70, 70, 1)";
+    static rarity = 3;
+    constructor() {
+        super(Lifeboat.name, Lifeboat.description, Lifeboat.unicode, Lifeboat.color, 5, Lifeboat.rarity, 'playerAndGame')
+    }
+    async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }, _itemMult: number) {
+        let restoredAny = false;
+        for (const bp of player.programs) {
+            const idx = activePieces.findIndex(p => p.id === bp.id);
+            if (bp.isPlaced && idx === -1) {
+                bp.isPlaced = false;
+                restoredAny = true;
+            }
+        }
+        if (restoredAny) {
+            player.removeItem(this);
+        }
+    }
+}
+
+export class Bed extends Item {
+    static iconID = 216;
+    static name = "Bed";
+    static description = "Rerolls the next node structure, company, and programs";
+    static unicode = "U+1F6CC";
+    static color = "rgba(0, 70, 70, 1)";
+    static rarity = 1;
+    constructor() {
+        super(Bed.name, Bed.description, Bed.unicode, Bed.color, 1, Bed.rarity, 'playerAndGame')
+    }
+    async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }, _itemMult: number) {
+        //complex
+    }
+}
+
+export class Pin extends Item {
+    static iconID = 163;
+    static name = "Pin";
+    static description = "Saves the current game state, creating a button you can use to come back to here later.";
+    static unicode = "U+1F4CC";
+    static color = "rgba(231, 209, 135, 1)";
+    static rarity = 6;
+    constructor() {
+        super(Pin.name, Pin.description, Pin.unicode, Pin.color, 1, Pin.rarity, 'playerAndGame')
+    }
+    async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }, _itemMult: number) {
+        //complex
+    }
+}
+
 //4 to remove
-//remove feast
 //bugle, pep talk, //turn into programs
+//remove feast
 //make keygen an admin?
 
 //4 to add

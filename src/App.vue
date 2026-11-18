@@ -2291,9 +2291,11 @@ const handleSpecialActionAt = async (target: Coordinate) => {
   }
   if (selectedPiece.value.targetType === 'placeAndPieces') {
     if (targetPiece) {
+      const tileSet = new Set(level.value.tiles.map(t => `${t.x},${t.y}`));
       await selectedPiece.value.special({
         target: target,
-        activePieces: activePieces.value
+        activePieces: activePieces.value,
+        tileSet: tileSet
       });
     }
   }

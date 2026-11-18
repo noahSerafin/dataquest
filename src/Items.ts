@@ -1322,7 +1322,7 @@ export class Pin extends Item {
 
 // OLIVE, U+1FAD2 //defence and range?
 
-export const allItems = [Blueberry, Iron, Headphones, Juice, Mushroom, Box, Buoy, Pepper, Pray, Rations, Floppy, Voucher, Bandage, Extinguisher, Formula, Frogman, Gift, Hotline, Labcoat, Plunger, Soap, Teapot, Toothbrush, Beans, Blackheart, Gloves, Jar, Lifeboat, Makeover, Melon, Pinata, Roids, Lips, Spanner, Update2, Cake, Carrot, Garlic, Goggles, Wand, Lightning, Meat, Pie, Screwdriver, Supplement, Bed, Coffee, Disguise, Dupe, Genie, Ginger, Beer, Hourglass, Chili, Life, Blessing, Pandora, Pin, Update3, ShootingStar];
+export const allItems = [Blueberry, Buoy, Iron, Headphones, Juice, Mushroom, Box, Pepper, Pray, Rations, Floppy, Voucher, Bandage, Extinguisher, Formula, Frogman, Gift, Hotline, Labcoat, Plunger, Soap, Teapot, Toothbrush, Beans, Blackheart, Gloves, Jar, Lifeboat, Makeover, Melon, Pinata, Roids, Lips, Spanner, Update2, Cake, Carrot, Garlic, Goggles, Wand, Lightning, Meat, Pie, Screwdriver, Bed, Supplement, Coffee, Disguise, Dupe, Genie, Ginger, Beer, Hourglass, Chili, Life, Blessing, Pandora, Pin, Update3, ShootingStar];
 export const upgradeItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Chili, Blessing, Roids, Formula]
 
 /*Items.forEach(i => {

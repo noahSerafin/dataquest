@@ -171,7 +171,7 @@ function getPathPositions(
   };
 }
 
-function adjustImportedLevelSpawns(level: Level, stake: number = 0): Level {
+export function adjustImportedLevelSpawns(level: Level, stake: number = 0): Level {
   if (stake < 1) return level;
 
   let spawnsToRemove = 0;
@@ -608,7 +608,7 @@ export function generateWorld(
   };
 }
 
-function processSpawnPoints(
+export function processSpawnPoints(
   pieces: Piece[],
   companyPieces: any[],
   difficulty: number,

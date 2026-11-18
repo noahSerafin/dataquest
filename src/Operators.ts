@@ -1,5 +1,5 @@
 import type { OS } from "./types";
-import { Voucher, Mushroom, Garlic, Meat, Genie, Pandora, Update2, Dupe, Jar, Iron, Pray, Pin } from "./Items";
+import { Voucher, Mushroom, Garlic, Meat, Genie, Pandora, Update2, Dupe, Jar, Iron, Pray, Pin, Bed } from "./Items";
 import { Abacus, Bank, Bubble, Cheese, Chemistry, Crystal, PetriDish, Seed, Volatile, Clippy, Notepad, StoneAge, Rune, OffRoader, AdminMap, Compass, Backdoor, Miner, Copier, Cherries, Sneakers, Palette, Hermes, Dove, LLM, Rainbow, Convenience, Toolbox, Schoolbag, Brain } from "./AdminPrograms";
 import { createDefaultStatuses } from "./types";
 
@@ -570,13 +570,13 @@ const Explorer: OS = {
     unicode: 'U+1F30D',
     prefix: 'E',
     money: 9,
-    memory: 5,
+    memory: 6,
     adminSlots: 5,
     blueprints: [knife, sling, shield],
-    items: [new Pray],
+    items: [new Pray, new Bed, new Pin],
     admins: [new OffRoader, new Compass, new AdminMap, new Crystal, new Convenience],
     lives: 1,
-    description: "Gets around the overworld with ease, but vunerable with only 1 life. Start with some pocket money."
+    description: "Gets around the overworld with ease, but only 1 life. Start with some pocket money, and some useful items."
 }
 
 const Solaris: OS = {

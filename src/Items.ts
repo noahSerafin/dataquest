@@ -90,8 +90,6 @@ export abstract class Item<TTarget = any> {
 
 export class Mushroom extends Item<PieceBlueprint> {
     static iconID = 167;
-
-
     static name = "Mushroom";
     static description = "Increases a held program's attack by 1";
     static unicode = "U+1F344";
@@ -108,8 +106,6 @@ export class Mushroom extends Item<PieceBlueprint> {
 
 export class Meat extends Item<PieceBlueprint> {
     static iconID = 204;
-
-
     static name = "Meat";
     static description = "Increases a held program's attack by 2";
     static unicode = "U+1F356";//Meat "U+1F3CB"; //U+1F356 Large meat
@@ -125,8 +121,6 @@ export class Meat extends Item<PieceBlueprint> {
 
 export class Iron extends Item<PieceBlueprint> {
     static iconID = 164;
-
-
     static name = "Iron";
     static description = "Increases a held held program's defence by 1";
     static unicode = "U+1F96C"
@@ -143,8 +137,6 @@ export class Iron extends Item<PieceBlueprint> {
 
 export class Garlic extends Item<PieceBlueprint> {
     static iconID = 200;
-
-
     static name = "Garlic";
     static description = "Increases a held program's defence by 2";
     static unicode = "U+1F9C4";
@@ -164,7 +156,7 @@ export class Ginger extends Item<PieceBlueprint> {
     static description = "Increases a held program's defence by 3";
     static unicode = "U+1FADA"
     static color = "#54a4ffff"
-    static rarity = 6;
+    static rarity = 5;
     constructor() {
         super(Ginger.name, Ginger.description, Ginger.unicode, Ginger.color, 7, Ginger.rarity, 'blueprint')
     }
@@ -197,8 +189,6 @@ export class Blueberry extends Item<PieceBlueprint> {
 
 class Melon extends Item<PieceBlueprint> {
     static iconID = 190;
-
-
     static name = "Melon";
     static description = "+2 max size to a held program";
     static unicode = "U+1F349";
@@ -216,8 +206,6 @@ class Melon extends Item<PieceBlueprint> {
 
 class Pie extends Item<PieceBlueprint> {
     static iconID = 205;
-
-
     static name = "Pie";
     static description = "+3 max size to a held program";
     static unicode = "U+1F967";
@@ -252,8 +240,6 @@ class Pepper extends Item<PieceBlueprint> {
 
 export class Carrot extends Item<PieceBlueprint> {
     static iconID = 199;
-
-
     static name = "Carrot";
     static description = "Increases a held program's range by 2";
     static unicode = "U+1F955"//scope "U+1F52D";
@@ -271,8 +257,6 @@ export class Carrot extends Item<PieceBlueprint> {
 
 export class Juice extends Item<PieceBlueprint> {
     static iconID = 166;
-
-
     static name = "Juiced";
     static description = "Increases a held program's moves by 1";
     static unicode = "U+1F9C3";
@@ -288,12 +272,10 @@ export class Juice extends Item<PieceBlueprint> {
 
 class Teapot extends Item<PieceBlueprint> {
     static iconID = 181;
-
-
     static name = "Teapot";//defence?
     static description = "Increases a held program's moves by 2";
     static unicode = "U+1FAD6";//BEANS, U+1FAD8
-    static color = "#dc00e4ff";
+    static color = "#f09af3ff";
     static rarity = 2;
     constructor() {
         super(Teapot.name, Teapot.description, Teapot.unicode, Teapot.color, 3, Teapot.rarity, 'blueprint')
@@ -306,8 +288,6 @@ class Teapot extends Item<PieceBlueprint> {
 
 export class Coffee extends Item<PieceBlueprint> {
     static iconID = 208;
-
-
     static name = "Coffee";
     static description = "Increases a held program's moves by 3";
     static unicode = "U+2615";
@@ -339,8 +319,6 @@ export class Roids extends Item<PieceBlueprint> {
 
 export class Formula extends Item<PieceBlueprint> {
     static iconID = 174;
-
-
     static name = "Formula";
     static description = "Increases a held program's max size by 1 and defence by 1";
     static unicode = "U+1F37C";
@@ -401,8 +379,6 @@ export class Supplement extends Item<Piece[]> {
 
 export class Bandage extends Item<Piece> {
     static iconID = 172;
-
-
     static name = "Bandage";
     static description = "Removes 1 harmful status effect from a program";
     static unicode = "U+1FA79";
@@ -470,8 +446,6 @@ class Soap extends Item<Piece> {
 
 export class Voucher extends Item<Item> {
     static iconID = 171;
-
-
     static name = "Voucher";
     static description = "Makes a selected item in the shop free";
     static unicode = "U+1F9FE";
@@ -525,8 +499,6 @@ export class Beans extends Item<Piece[]> {
 
 export class ShootingStar extends Item<PieceBlueprint> {
     static iconID = 221;
-
-
     static name = "Shooting Star";
     static description = "Make a held program immune to all harmful statuses";
     static unicode = "U+1F320";
@@ -558,10 +530,8 @@ export class ShootingStar extends Item<PieceBlueprint> {
 //// AMPHORA, U+1F3FA Pandora
 export class Pandora extends Item<Player> {
     static iconID = 219;
-
-
     static name = "Pandora";
-    static description = "Grants 3 random upgrade items (must have room)";
+    static description = "Grants 3 random stat upgrade items (must have room)";
     static unicode = "U+1F3FA";
     static color = "#e0b24fff";
     static rarity = 6;
@@ -679,10 +649,8 @@ export class Pinata extends Item<Player> {
 
 export class Spanner extends Item<Piece> {
     static iconID = 195;
-
-
     static name = "Spanner";
-    static description = "Freezes and disarms a program. Preventing it from moving, and taking action for one turn";
+    static description = "Freezes and disarms a program. Preventing it from moving premanently, and taking action for one turn";
     static unicode = "U+1F527";
     static color = "#5a0505ff";
     static rarity = 3;
@@ -700,8 +668,6 @@ export class Spanner extends Item<Piece> {
 
 class Makeover extends Item<PieceBlueprint> {
     static iconID = 189;
-
-
     static name = "Makeover";
     static description = "Roll a random variant on a held program";//"Remove exposed from a program";//roll a random variant on a program
     static unicode = "U+1F485";
@@ -722,13 +688,11 @@ class Makeover extends Item<PieceBlueprint> {
 
 class Lips extends Item<Piece> {
     static iconID = 206;
-
-
     static name = "Seduction";
     static description = "Charm an enemy program";
     static unicode = "U+1F484";
-    static color = "rgb(230, 47, 223)";
-    static rarity = 3;
+    static color = "rgb(95, 0, 92)";
+    static rarity = 5;
     constructor() {
         super(Lips.name, Lips.description, Lips.unicode, Lips.color, 3, Lips.rarity, 'piece')
         //name desc utf || maxsize moves range atk def
@@ -768,7 +732,7 @@ export class Hourglass extends Item<Piece[]> {
         //reload level
     }
 }
-
+/*
 class Keygen extends Item<Piece[]> {//make an admin
     static iconID = 188;
     static name = "Keygen";
@@ -790,7 +754,6 @@ class Keygen extends Item<Piece[]> {//make an admin
         //reload level
     }
 }
-/*
 class Bugle extends Item<Piece[]> {
     static iconID = 185;
     static name = "Bugle";
@@ -853,8 +816,6 @@ export class Sandwich extends Item<Piece> {
 
 class Hotline extends Item {
     static iconID = 177;
-
-
     static name = "Hotline";
     static description = "load a random friendly program into a node at a random position";
     static unicode = "U+1F4DE";
@@ -1088,7 +1049,7 @@ class Beer extends Item<Player> {
     static description = "Duplicate a random item.";
     static unicode = "U+1F37B";
     static color = "rgb(237, 159, 49)";
-    static rarity = 6;
+    static rarity = 5;
     constructor() {
         super(Beer.name, Beer.description, Beer.unicode, Beer.color, 7, Beer.rarity, 'player')
     }
@@ -1259,7 +1220,7 @@ class Screwdriver extends Item<Piece> {
 }
 
 export class Pray extends Item<Player> {
-    static iconID = 552;
+    static iconID = 554;
     static name = "Prayer";
     static description = "Advances the current seed by 1 step";
     static unicode = "U+1F9EF";
@@ -1278,11 +1239,11 @@ export class Pray extends Item<Player> {
 }
 
 export class Buoy extends Item {
-    static iconID = 551;
+    static iconID = 543;
     static name = "Buoy";
     static description = "Restore a random destroyed program to hand";
     static unicode = "U+1F6DF";
-    static color = "rgb(196, 255, 255)";
+    static color = "rgb(111, 229, 229)";
     static rarity = 1;
     constructor() {
         super(Buoy.name, Buoy.description, Buoy.unicode, Buoy.color, 2, Buoy.rarity, 'playerAndGame')
@@ -1299,11 +1260,11 @@ export class Buoy extends Item {
 }
 
 export class Lifeboat extends Item {
-    static iconID = 552;
+    static iconID = 544;
     static name = "Lifeboat";
     static description = "Restore all destroyed programs to hand";
     static unicode = "U+1F6A3";
-    static color = "rgba(0, 70, 70, 1)";
+    static color = "rgba(0, 122, 122, 1)";
     static rarity = 3;
     constructor() {
         super(Lifeboat.name, Lifeboat.description, Lifeboat.unicode, Lifeboat.color, 5, Lifeboat.rarity, 'playerAndGame')
@@ -1326,15 +1287,15 @@ export class Lifeboat extends Item {
 export class Bed extends Item {
     static iconID = 216;
     static name = "Sleep on it";
-    static description = "Rerolls the next node structure, company, and programs";
+    static description = "Rerolls any connected node's contents";
     static unicode = "U+1F6CC";
-    static color = "rgba(0, 70, 70, 1)";
-    static rarity = 1;
+    static color = "rgba(1, 1, 32, 1)";
+    static rarity = 5;
     constructor() {
-        super(Bed.name, Bed.description, Bed.unicode, Bed.color, 1, Bed.rarity, 'playerAndGame')
+        super(Bed.name, Bed.description, Bed.unicode, Bed.color, 7, Bed.rarity, 'gameState')
     }
-    async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }, _itemMult: number) {
-        //complex
+    apply(_target: any, _itemMult: number) {
+        // Handled in App.vue
     }
 }
 
@@ -1361,7 +1322,7 @@ export class Pin extends Item {
 
 // OLIVE, U+1FAD2 //defence and range?
 
-export const allItems = [Blueberry, Iron, Headphones, Juice, Mushroom, Box, Buoy, Pepper, Pray, Rations, Floppy, Voucher, Bandage, Extinguisher, Formula, Frogman, Gift, Hotline, Labcoat, Plunger, Soap, Teapot, Toothbrush, Beans, Blackheart, Gloves, Jar, Keygen, Lifeboat, Makeover, Melon, Pinata, Roids, Lips, Spanner, Update2, Cake, Carrot, Garlic, Goggles, Wand, Lightning, Meat, Pie, Screwdriver, Supplement, Coffee, Disguise, Dupe, Genie, Hourglass, Chili, Life, Blessing, Ginger, Beer, Pandora, Pin, Update3, ShootingStar];
+export const allItems = [Blueberry, Iron, Headphones, Juice, Mushroom, Box, Buoy, Pepper, Pray, Rations, Floppy, Voucher, Bandage, Extinguisher, Formula, Frogman, Gift, Hotline, Labcoat, Plunger, Soap, Teapot, Toothbrush, Beans, Blackheart, Gloves, Jar, Lifeboat, Makeover, Melon, Pinata, Roids, Lips, Spanner, Update2, Cake, Carrot, Garlic, Goggles, Wand, Lightning, Meat, Pie, Screwdriver, Supplement, Bed, Coffee, Disguise, Dupe, Genie, Ginger, Beer, Hourglass, Chili, Life, Blessing, Pandora, Pin, Update3, ShootingStar];
 export const upgradeItems = [Mushroom, Meat, Iron, Garlic, Ginger, Blueberry, Melon, Pie, Pepper, Carrot, Juice, Teapot, Coffee, Chili, Blessing, Roids, Formula]
 
 /*Items.forEach(i => {

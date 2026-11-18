@@ -753,6 +753,17 @@ function handleApplyItem(payload: { item: Item, id: string }) {
   }
 
   if (item.targetType === 'gameState') {
+    if (item.name === 'Sleep on it') {
+      if (worldMapRef.value && currentAppMode.value !== 'campaign') {
+        const result = worldMapRef.value.rerollConnectedNodes();
+        if (result?.rerolledUnvisitedShop) {
+          refreshShop(true);
+        }
+        player.value.removeItem(item);
+        saveGameState();
+      }
+      return;
+    }
     if (item.name === 'Pin') {
       player.value.removeItem(item);
       const snapshot = getSerializedGameState();
@@ -2683,7 +2694,7 @@ function onKeydown(e: KeyboardEvent) {
   }
 }
 
-const debugMode = ref<boolean>(true);
+const debugMode = ref<boolean>(false);
 function toggleDebug() {
   debugMode.value = !debugMode.value;
 }

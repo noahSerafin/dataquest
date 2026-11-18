@@ -232,7 +232,7 @@ class Razor extends Admin {
 class BionicArm extends Admin {
   static iconID = 324;
   static name = "Bionic Arms";
-  static description = "Raises all your program's attack by 2";
+  static description = "Raises all your program's attack by 2";//and immune to disarmed?
   static unicode = "U+1F9BE";
   static color = "#ff4040ff";
   static rarity = 4;
@@ -362,7 +362,7 @@ class Bouquet extends Admin {
   static description = "Held admin programs can reappear in the shop";
   static unicode = "U+1F490";
   static color = "#e758e7ff";
-  static rarity = 3;
+  static rarity = 2;
   constructor() {
     super(Bouquet.name, Bouquet.description, Bouquet.unicode, Bouquet.color, 3, Bouquet.rarity, 'gameState', 'other')//shop
   }
@@ -778,7 +778,7 @@ export class Brain extends Admin {
     activePieces[idx].addModifier({ attack: Math.round(player.freeMemory) })
   }
 }
-
+/*
 class GoldenTicket extends Admin {
   static iconID = 233;
   static name = "Golden Ticket";
@@ -788,6 +788,28 @@ class GoldenTicket extends Admin {
   static rarity = 1;
   constructor() {
     super(GoldenTicket.name, GoldenTicket.description, GoldenTicket.unicode, GoldenTicket.color, 5, GoldenTicket.rarity, 'gameState', 'other');
+  }
+}*/
+
+class Keygen extends Admin {
+  static iconID = 188;
+  static name = "Keygen";
+  static description = "Lowers the defence of all enemy programs in a node by 1";
+  static unicode = "U+1F511";
+  static color = "#89315aff";
+  static rarity = 3;
+  constructor() {
+    super(Keygen.name, Keygen.description, Keygen.unicode, Keygen.color, 3, Keygen.rarity, 'gameState', 'onRoundStart');
+  }
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
+    for (const p of activePieces) {
+      if (p.team === 'enemy') {
+        p.addModifier({ defence: -1 })
+        p.defenceRemaining -= 1;
+      }
+    }
   }
 }
 
@@ -953,7 +975,7 @@ class Newspaper extends Admin {
   static description = "+1 damage for programs with a range of 1 on load";
   static unicode = " U+1F5DE";//U+1F4F0";
   static color = "#eb1919ff";
-  static rarity = 2;
+  static rarity = 1;
   constructor() {
     super(Newspaper.name, Newspaper.description, Newspaper.unicode, Newspaper.color, 1, Newspaper.rarity, 'gameState', 'onPlacement')
   }
@@ -3955,7 +3977,7 @@ export class Silly extends Admin {
 export class Collector extends Admin {
   static iconID = 265;
   static name = "Collector";
-  static description = "Unloaded variant programs each give $1 at the end of a round";
+  static description = "Unloaded variant programs each give $1 at the end of a round ($3 for Gold, and $5 for Holographic)";
   static unicode = "U+1F5BC";//painting
   static color = "rgba(8, 56, 111, 1)";
   static rarity = 2;//1?
@@ -3964,10 +3986,16 @@ export class Collector extends Admin {
   }
   async apply({ player }: { player: Player }) {
     for (const bp of player.programs) {
-      if (!bp.isPlaced) {
+      if (!bp.isPlaced && bp.variantName) {
         this.isTriggering = true;
         setTimeout(() => this.isTriggering = false, 500);
-        player.money += 1;
+        if (bp.variantName === 'Gold') {
+          player.money += 3;
+        } else if (bp.variantName === 'Holographic') {
+          player.money += 5;
+        } else {
+          player.money += 1;
+        }
       }
     };
   }
@@ -4038,7 +4066,7 @@ export class Clippy extends Admin {
   //handle in player
 }
 
-export const allAdmins = [Bank, Bucket, Candle, Cane, Cheese, Clippy, Smoker, Compass, CreditCard, Glasses, GoldenTicket, Harvest, Heartbreaker, Hermit, Knot, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Schoolbag, Seed, Slots, Sprinkler, Tempura, Sneakers, Chime, AdminMap, Abacus, Aesculapius, Appraisal, Balloon, Bone, Briefcase, Bubble, Cactus, Coin, Purse, Collector, Convenience, Crystal, FireEngine, Heart, Dice, Joker, Clover, Microscope, Newspaper, Pickup, Putter, Relay, Rune, Scarf, Stiletto, Mail, Bowling, Nose, Bipolar, Violin, Vitamins, Wings, Barber, Ace, AirSupport, Bouquet, Broom, Camp, Huzzah, Luggage, Chain, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Jammer, Roger, Juggler, Ladder, Loot, Drunk, Puzzle, Razor, Sled, Shades, Spoon, Pants, StoneAge, Stonks, Christmas, Telescope, Toolbox, Tracker, Ambulance, Bassline, BionicArm, BionicLeg, Crash, Blood, DartBoard, Butler, Chivalry, Dove, Evergreen, Discount, Fountain, Feather, Fuel, Howzat, Liberty, Lightbulb, Ollie, Palette, Pazzaz, PetriDish, Pong, Prayer, Wheel, Salt, Bell, Selfie, Taoism, Crown, Variety, Volatile, Djembe, Artic, Backdoor, BlackBelt, Booty, Lungs, Chemistry, Toilet, Copier, Daisy, Diamond, Disco, Hamsa, Skyscraper, Hermes, Cards, Inheritance, Cherries, LLM, Lotus, Brain, Meditation, Meteor, Monarch, Onion, PeaPod, Teddy, RollerBlades, Baseball, Ice, Ballet, Bath, Lefty, Minerva, Needle, Pi, Osiris, Righty, Ring, Silly, School, Umbrella, Dharma];
+export const allAdmins = [Bank, Bucket, Candle, Cane, Cheese, Clippy, Smoker, Compass, CreditCard, Glasses, Harvest, Heartbreaker, Hermit, Knot, Newspaper, Miner, Nest, Notepad, OffRoader, Parachute, Piggy, Rainbow, Protein, Punching, Reinforcement, Schoolbag, Seed, Slots, Sprinkler, Tempura, Sneakers, Chime, AdminMap, Abacus, Aesculapius, Appraisal, Balloon, Bone, Bouquet, Briefcase, Bubble, Cactus, Coin, Purse, Collector, Convenience, Crystal, FireEngine, Heart, Dice, Joker, Clover, Microscope, Pickup, Putter, Relay, Rune, Scarf, Stiletto, Mail, Bowling, Nose, Bipolar, Violin, Vitamins, Wings, Barber, Ace, AirSupport, Broom, Camp, Huzzah, Luggage, Chain, Communism, Department, Triangle, FakeID, Wine, HedgeFund, Jammer, Keygen, Roger, Juggler, Ladder, Loot, Drunk, Puzzle, Razor, Sled, Shades, Spoon, Pants, StoneAge, Stonks, Christmas, Telescope, Toolbox, Tracker, Ambulance, Bassline, BionicArm, BionicLeg, Crash, Blood, DartBoard, Butler, Chivalry, Dove, Evergreen, Discount, Fountain, Feather, Fuel, Howzat, Liberty, Lightbulb, Ollie, Palette, Pazzaz, PetriDish, Pong, Prayer, Wheel, Salt, Bell, Selfie, Taoism, Crown, Variety, Volatile, Djembe, Artic, Backdoor, BlackBelt, Booty, Lungs, Chemistry, Toilet, Copier, Daisy, Diamond, Disco, Hamsa, Skyscraper, Hermes, Cards, Inheritance, Cherries, LLM, Lotus, Brain, Meditation, Meteor, Monarch, Onion, PeaPod, Teddy, RollerBlades, Baseball, Ice, Ballet, Bath, Lefty, Minerva, Needle, Pi, Osiris, Righty, Ring, Silly, School, Umbrella, Dharma];
 console.log('admins length: ', allAdmins.length)
 let adminLogs = {
   rarity1: 0,
@@ -4073,7 +4101,7 @@ console.log("Admins of rarity 4: ", adminLogs.rarity4)
 console.log("Admins of rarity 5: ", adminLogs.rarity5)
 console.log("Admins of rarity 6: ", adminLogs.rarity6)
 
-//keygen - evil eye effect
+
 //CRUTCH, U+1FA7C +1 moves for programs not at their max size, immune to being disarmed
 // U+1F3C4 surfing Kali Yuga - like butter for friendlies
 //CLAPPER BOARD, U+1F3AC Disarms enemies when a round starts, making them take no actions on their first turn

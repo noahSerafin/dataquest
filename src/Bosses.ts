@@ -866,7 +866,7 @@ class Coaster extends Admin {
 class Eye extends Admin {
     static iconID = 332;
     static name = "Evil Eye";
-    static description = "Lowers the defences of all enemy progams by 1 on load";
+    static description = "Lowers the defence of all your progams by 1 on load";
     static unicode = "U+1F9FF";
     static color = "#020072ff";
     static rarity = 4;

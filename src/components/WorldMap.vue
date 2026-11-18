@@ -2,13 +2,15 @@
 import { computed, ref, onMounted } from "vue";
 import MiniMap from "./MiniMap.vue";
 import { Admin } from "../AdminPrograms";
-import { Item, Box, Genie, Gift, Pinata, Pandora, Voucher, Jar, Update2, Update3, Floppy, Life, Cake, Wand, Hourglass, Dupe, Pin } from "../Items";
+import { Item, Box, Genie, Gift, Pinata, Pandora, Voucher, Jar, Update2, Update3, Floppy, Life, Cake, Wand, Hourglass, Dupe, Pin, Bed } from "../Items";
 import { rollBoss } from "../helperFunctions";
 import { watch } from "vue";
 import { reapplyTutorialTooltips, showTutorialTip } from "../tutorial";
 import { Player } from "../Player";
 import type { WorldMap, WorldNode } from "../worldBuilder";
-import { generateWorld, getNodeRow } from "../worldBuilder";
+import { generateWorld, getNodeRow, processSpawnPoints, adjustImportedLevelSpawns } from "../worldBuilder";
+import { generateNode } from "../nodeBuilder";
+import { companies, shopCompany, playerCompany } from "../companies";
 import type { Company, Level, PieceBlueprint, SkipReward } from "../types";
 import { level1Levels } from "../level1Levels";
 import { level2Levels } from "../level2Levels";
@@ -131,7 +133,8 @@ defineExpose({
     boss,
     skipsThisLevel,
     rollbackNode,
-    resetMap
+    resetMap,
+    rerollConnectedNodes
 });
 
 const worldNodes = computed(() =>
@@ -491,7 +494,7 @@ function generateSkipReward(): SkipReward {
     }
     return {
         kind: "item",
-        value: pickWeightedRandomItem([Voucher, Box, Gift, Jar, Pinata, Cake, Wand, Dupe, Genie, Pandora, Floppy, Update2, Update3, Hourglass, Life, Pin], props.player),
+        value: pickWeightedRandomItem([Voucher, Box, Gift, Jar, Pinata, Cake, Wand, Dupe, Genie, Pandora, Floppy, Update2, Update3, Hourglass, Life, Pin, Bed], props.player),
     };
 }
 
@@ -557,6 +560,63 @@ function rollbackNode() {
         // the user said "returning could take the player back to their last visited node", 
         // so maybe we only allow one rollback.
     }
+}
+
+const hiddenNodeTypes: WorldNode['type'][] = [
+    'shop',
+    'sacrificial altar',
+    'duplicator',
+    'workbench',
+    'hybrid compiler'
+];
+
+function rerollConnectedNodes(): { rerolledUnvisitedShop: boolean } {
+    let rerolledUnvisitedShop = false;
+    const connectedNodes = worldNodes.value.filter(node => canClick(node));
+
+    for (const node of connectedNodes) {
+        if (node.type === 'level' || node.type === 'boss') {
+            const nodeDifficulty = Math.max(1, props.player.difficulty + node.difficultyMod);
+            const newCompany = Random.pick(companies);
+            node.company = newCompany;
+
+            const isImported = Random.bool(0.5);
+            let newLevel: Level;
+            if (isImported) {
+                const pool = nodeDifficulty > 6
+                    ? [...level1Levels, ...level2Levels, ...level3Levels, ...level4Levels, ...level5Levels, ...level6Levels]
+                    : levelTiers[Math.max(0, Math.min(nodeDifficulty - 1, levelTiers.length - 1))];
+                newLevel = JSON.parse(JSON.stringify(Random.pick(pool)));
+                newLevel = adjustImportedLevelSpawns(newLevel, props.player.stake);
+            } else {
+                newLevel = JSON.parse(JSON.stringify(generateNode(nodeDifficulty, props.player.stake)));
+            }
+
+            const { processedPieces } = processSpawnPoints(
+                newLevel.pieces as any,
+                (newCompany.pieceList && newCompany.pieceList.length > 0) ? newCompany.pieceList : allPieces,
+                props.player.difficulty,
+                node.difficultyMod
+            );
+            newLevel.pieces = processedPieces;
+            node.level = newLevel;
+
+            if (node.type === 'boss') {
+                boss.value = rollBoss(props.player.difficulty, props.bosses);
+            }
+        } else if (node.type === 'skip') {
+            node.skipReward = generateSkipReward();
+        } else if (node.hiddenUntilVisited && hiddenNodeTypes.includes(node.type)) {
+            const otherTypes = hiddenNodeTypes.filter(t => t !== node.type);
+            const nextType = Random.pick(otherTypes);
+            node.type = nextType;
+            node.company = nextType === 'shop' ? shopCompany : playerCompany;
+        } else if (node.type === 'shop') {
+            rerolledUnvisitedShop = true;
+        }
+    }
+
+    return { rerolledUnvisitedShop };
 }
 
 const skipTarget = ref<PieceBlueprint | Item | null>(null);

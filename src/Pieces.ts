@@ -5006,7 +5006,7 @@ class Bugle extends Piece {
 }
 ////fleur de lis U+269C scout, lay traps? expose/Temp increase friendlies range.
 class Scout extends Piece {
-  static iconID = 551;
+  static iconID = 553;
   static name = "Scout";
   static description = "A fast program that can expose hidden enemies and increase friendlies range by it's own range";
   static unicode = "U+269C";

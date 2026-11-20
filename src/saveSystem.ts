@@ -69,7 +69,8 @@ export function rehydrateGameState(data: any): any {
     const Cls = allPossibleAdmins.find(a => a.name === aData.name);
     if (!Cls) return null;
     const inst = new Cls();
-    Object.assign(inst, aData);
+    const { targetType: _t, triggerType: _tr, description: _d, ...rest } = aData;
+    Object.assign(inst, rest);
     return inst;
   }).filter(Boolean);
 

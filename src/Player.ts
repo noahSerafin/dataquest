@@ -203,25 +203,20 @@ export class Player {
     return this.admins.filter(a => a.name === name).length;
   }
 
-  calcInterest() {
-    const baseMoney = Math.max(0, this.money);   // ← prevents negative interest
+  calcInterest(bonus: number = 0) {
+    const baseMoney = Math.max(0, this.money + this.nextReward + this.bonusReward + bonus);   // ← prevents negative interest
     const noOfFives = Math.floor(baseMoney / 5);
     if (noOfFives > this.interestCap) {
       this.nextInterest += this.interestCap;
     } else {
       this.nextInterest += noOfFives;
     }
-    //bubble
-    this.nextInterest += this.bonusInterest;
-    if (this.hasAdmin('Inheritance')) {
-      this.nextInterest = (this.nextInterest * 2)
-    }
-    this.nextReward += this.bonusReward;
   }
 
   collectMoney(bonus: number) {
     console.log(this.nextInterest, this.nextReward)
-    this.money += this.nextInterest + this.bonusInterest + this.nextReward + this.bonusReward + bonus;
+    const totalInterest = (this.nextInterest + this.bonusInterest) * (this.hasAdmin('Inheritance') ? 2 : 1);
+    this.money += totalInterest + this.nextReward + this.bonusReward + bonus;
   }
 
   resetInterestAndReward() {

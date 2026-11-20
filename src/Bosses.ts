@@ -1247,7 +1247,7 @@ class Snoozefest extends Admin {
     static color = "rgb(25, 25, 21)";
     static rarity = 2;
     constructor() {
-        super(Snoozefest.name, Snoozefest.description, Snoozefest.unicode, Snoozefest.color, 3, Snoozefest.rarity, 'gameState', 'onTurnStart')
+        super(Snoozefest.name, Snoozefest.description, Snoozefest.unicode, Snoozefest.color, 3, Snoozefest.rarity, 'gameState', 'onPlacement')
     }
     private candidates: Record<string, number> = {};
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
@@ -1261,7 +1261,7 @@ class Snoozefest extends Admin {
                     //piece.actions--;
                     this.isTriggering = true;
                     setTimeout(() => this.isTriggering = false, 500);
-                }// else {
+                }// else { 
                 // piece.statuses.disarmed = false;
                 //}
             }

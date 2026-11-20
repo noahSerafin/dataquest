@@ -1252,6 +1252,7 @@ async function selectLevel(newLevel: Level, company: Company, difficultyMod: num
 }
 
 async function handleProceed() {
+  renewBlueprints();//after applyadmins for school, after roundend for collector
   bgProgress.value++;
   for (const admin of player.value.admins) {
     if (admin.onRoundEnd) admin.onRoundEnd();
@@ -2443,7 +2444,6 @@ const endRound = async (roundWon: boolean) => {
       alert('game over!');
     }
   }
-  renewBlueprints();//after applyadmins for school
   for (const admin of bossAdmins.value) {//only necessary if we keep boss admins
     admin.onRoundEnd?.();
   }

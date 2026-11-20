@@ -35,8 +35,12 @@
         (e: 'retrySeed'): void;
     }>();
    
+    const bonus = computed(() => 
+        props.player.hasAdmin('Punching') ? 5 * props.player.adminCount('Punching') : 0
+    )
+
     if(!props.isCampaign){
-        props.player.calcInterest(); //await?? for html
+        props.player.calcInterest(bonus.value); //await?? for html
     }
 
     onMounted(() => {
@@ -44,10 +48,6 @@
             reapplyTutorialTooltips(200);
         }
     });
-
-    const bonus = computed(() => 
-        props.player.hasAdmin('Pot of Gold') && props.player.mapProgress >= 2 ? 10 * props.player.adminCount('Pot of Gold') : 0
-    )
 
     function collectAndProceed(){
         props.player.collectMoney(bonus.value);
@@ -57,8 +57,15 @@
     }
 
     function getUnplaced(player: Player){
-        const unplaced = player.programs.filter(bp => !bp.isPlaced);
-        return unplaced.length;
+        let total = 0;
+        for (const bp of player.programs) {
+            if (!bp.isPlaced && bp.variantName) {
+                if (bp.variantName === 'Gold') total += 3;
+                else if (bp.variantName === 'Holographic') total += 5;
+                else total += 1;
+            }
+        }
+        return total;
     }
     //duplicate admins later??
 </script>
@@ -72,22 +79,6 @@
             <h3>
                 Node complete
             </h3>
-            <div v-if="!isCampaign" class="interest-summary">Interest earned: 
-                <span class="text-yellow">
-                    ${{ player.nextInterest }}
-                </span>
-                <span class="bonus"
-                 v-if="player.bonusInterest > 0">+ Bonus interest
-                    <span class="text-yellow">
-                        ${{ player.bonusInterest }}
-                    </span>
-                </span>
-                <span class="inheritance" v-if="player.hasAdmin('inheritance')">+ Inheritance 
-                    <span class="text-yellow">
-                        ${{ (player.nextInterest + player.bonusInterest) * 2 }}
-                    </span>
-                </span>
-            </div>
             <div class="reward-summary">
                 Reward: 
                 <span class="text-yellow">
@@ -128,7 +119,7 @@
                         ${{ 6 * player.adminCount('Booty') }}
                     </span>
                 </span>
-                <span v-if="player.hasAdmin('Collector') && player.mapProgress >= 2">+ Collector
+                <span v-if="player.hasAdmin('Collector') && getUnplaced(player) > 0">+ Collector
                     <span class="text-yellow">
                         ${{ getUnplaced(player) * player.adminCount('Collector') }}
                     </span>
@@ -138,7 +129,22 @@
                         ${{ 10 * player.adminCount('Pot of Gold') }}
                     </span>
                 </span>
-
+            </div>
+            <div v-if="!isCampaign" class="interest-summary">Interest earned: 
+                <span class="text-yellow">
+                    ${{ player.nextInterest }}
+                </span>
+                <span class="bonus"
+                 v-if="player.bonusInterest > 0">+ Bonus interest
+                    <span class="text-yellow">
+                        ${{ player.bonusInterest }}
+                    </span>
+                </span>
+                <span class="inheritance" v-if="player.hasAdmin('Inheritance')">+ Inheritance 
+                    <span class="text-yellow">
+                        ${{ player.nextInterest + player.bonusInterest }}
+                    </span>
+                </span>
             </div>
             <button class="btn-grey" @click="collectAndProceed">Collect <span class="text-yellow">$</span> and proceed</button>
         </div>

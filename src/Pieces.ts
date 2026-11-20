@@ -1044,8 +1044,8 @@ class Trojan extends Piece {
     newTrojan.attack = this.attack;
     newTrojan.defence = this.defence;
     newTrojan.defenceRemaining = this.getStat('defence');
-    newTrojan.statModifiers = this.statModifiers;//this copies modifiers
-    newTrojan.immunities = this.immunities;
+    newTrojan.statModifiers = { ...this.statModifiers };//this copies modifiers
+    newTrojan.immunities = { ...this.immunities };
     newTrojan.damageMult = this.damageMult;
     newTrojan.movesRemaining = 0;
     newTrojan.actions = 0;
@@ -2025,9 +2025,9 @@ export class Pawn extends Piece {
     promoted.attack = targetPiece.attack;
     promoted.defence = targetPiece.defence;
     promoted.defenceRemaining = targetPiece.defenceRemaining;
-    promoted.statModifiers = targetPiece.statModifiers
+    promoted.statModifiers = { ...targetPiece.statModifiers }
     promoted.damageMult = targetPiece.damageMult;
-    promoted.immunities = targetPiece.immunities;
+    promoted.immunities = { ...targetPiece.immunities };
     promoted.version = targetPiece.version;
     if (targetPiece.variantName) {
       promoted.variantName = targetPiece.variantName;
@@ -2379,12 +2379,19 @@ class Snail extends Piece {
 class Shark extends Piece {
   static iconID = 109;
   static name = "Shark";
-  static description = "A fast program with high attack";//exposes pieces that take damage?
+  static description = "A fast program with high attack. Can use an action to replenish it's moves";//exposes pieces that take damage?
   static unicode = "U+1F988";
   static color = "#0061bdff";
   static rarity = 4;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
     super(Shark.name, Shark.description, Shark.unicode, 4, 4, 1, 4, 1, Shark.color, headPosition, [headPosition], team, Shark.rarity, removeCallback, id)
+    this.specialName = 'Swim'
+    this.targetType = 'self'
+  }
+  //async special({target, activePieces} : {target: Coordinate, activePieces: Piece[]}):Promise<void>{
+  async special(_target: Coordinate): Promise<void> {
+    this.movesRemaining += this.tiles.length;
+    this.actions--
   }
 }
 
@@ -3490,7 +3497,7 @@ class Drum extends Piece {
   async special(targets: Piece[]): Promise<void> {
     for (const t of targets) {
       if (t.team === this.team) {
-        t.addModifier({moves: 1});
+        t.addModifier({ moves: 1 });
       }
     }
     this.actions--
@@ -4602,11 +4609,11 @@ class Dolls extends Piece {//demote
     newDoll.attack = this.attack;
     newDoll.defence = this.defence - 1;
     newDoll.defenceRemaining = this.getStat('defence') - 1;
-    newDoll.statModifiers = this.statModifiers;//this copies modifiers
+    newDoll.statModifiers = { ...this.statModifiers };//this copies modifiers
     //newTrojan.addModifier({moves: 2})
     //newTrojan.addModifier({defence: -1})
     //newTrojan.addModifier({maxSize: -1})
-    newDoll.immunities = this.immunities;
+    newDoll.immunities = { ...this.immunities };
     newDoll.damageMult = this.damageMult;
     newDoll.movesRemaining = 0;
     newDoll.actions = 0;
@@ -4672,8 +4679,8 @@ class Zombie extends Piece {
       newZombie.attack = this.attack;
       newZombie.defence = this.defence;
       newZombie.defenceRemaining = this.getStat('defence');
-      newZombie.statModifiers = this.statModifiers;//this copies modifiers
-      newZombie.immunities = this.immunities;
+      newZombie.statModifiers = { ...this.statModifiers };//this copies modifiers
+      newZombie.immunities = { ...this.immunities };
       newZombie.damageMult = this.damageMult;
       newZombie.movesRemaining = 0;
       newZombie.actions = 0;
@@ -4938,16 +4945,16 @@ class Hat extends Piece {
   }
   async special({ line, activePieces }: { line: Coordinate[], activePieces: Piece[] }): Promise<void> {
     for (const tile of line) {
-        const occupier = activePieces.find(p =>
-          p.tiles.some(t => t.x === tile.x && t.y === tile.y)
-        );
-        if(!occupier){
-          const newRabbit = new Rabbit(tile, this.team, this.removeCallback, crypto.randomUUID());
-          newRabbit.actions = 0;
-          newRabbit.movesRemaining = 0;
-          activePieces.push(newRabbit);
-        }
+      const occupier = activePieces.find(p =>
+        p.tiles.some(t => t.x === tile.x && t.y === tile.y)
+      );
+      if (!occupier) {
+        const newRabbit = new Rabbit(tile, this.team, this.removeCallback, crypto.randomUUID());
+        newRabbit.actions = 0;
+        newRabbit.movesRemaining = 0;
+        activePieces.push(newRabbit);
       }
+    }
     this.actions--
     this.removeCallback?.(this);
   }
@@ -5150,8 +5157,8 @@ class Locust extends Piece {
     newTrojan.attack = this.attack;
     newTrojan.defence = this.defence;
     newTrojan.defenceRemaining = this.getStat('defence');
-    newTrojan.statModifiers = this.statModifiers;//this copies modifiers
-    newTrojan.immunities = this.immunities;
+    newTrojan.statModifiers = { ...this.statModifiers };
+    newTrojan.immunities = { ...this.immunities };
     newTrojan.damageMult = this.damageMult;
     newTrojan.movesRemaining = 0;
     newTrojan.actions = 0;

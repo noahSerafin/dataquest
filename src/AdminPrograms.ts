@@ -549,10 +549,9 @@ class Inheritance extends Admin {
   constructor() {
     super(Inheritance.name, Inheritance.description, Inheritance.unicode, Inheritance.color, 10, Inheritance.rarity, 'player', 'onRoundEnd')//onroundend, but we handle outside
   }
-  async apply({ player }: { player: Player }) {
+  async apply({ player: _player }: { player: Player }) {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
-    player.bonusReward += ((player.nextInterest + player.bonusInterest) * 2)
   }
 }
 
@@ -2104,7 +2103,6 @@ class Punching extends Admin {
     } else {
       player.difficulty += 1;
     }
-    player.bonusReward += 5;
   }
   async remove({ player, decreaseDifficulty }: { player: Player, decreaseDifficulty?: () => Promise<void> }) {
     if (decreaseDifficulty) {
@@ -2112,7 +2110,6 @@ class Punching extends Admin {
     } else {
       player.difficulty -= 1;
     }
-    player.bonusReward -= 5;
   }
 }
 
@@ -2401,9 +2398,15 @@ export class Rainbow extends Admin {
   static color = "#77e9f1ff";
   static rarity = 1;
   constructor() {
-    super(Rainbow.name, Rainbow.description, Rainbow.unicode, Rainbow.color, 3, Rainbow.rarity, 'player', 'other')
+    super(Rainbow.name, Rainbow.description, Rainbow.unicode, Rainbow.color, 3, Rainbow.rarity, 'player', 'onRoundEnd')
   }
-  //handled in RoundSummary
+  async apply({ player }: { player: Player }) {
+    if (player.mapProgress >= 2) {
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
+      player.bonusReward += 10;
+    }
+  }
 }
 
 class Jammer extends Admin {
@@ -3977,9 +3980,9 @@ export class Silly extends Admin {
 export class Collector extends Admin {
   static iconID = 265;
   static name = "Collector";
-  static description = "Unloaded variant programs each give $1 at the end of a round ($3 for Gold, and $5 for Holographic)";
+  static description = "Unloaded variant programs each give <span class='text-yellow'>$1</span> at the end of a round (<span class='text-yellow'>$3</span> for Gold, and <span class='text-yellow'>$5</span> for Holographic)";
   static unicode = "U+1F5BC";//painting
-  static color = "rgba(8, 56, 111, 1)";
+  static color = "rgba(245, 245, 245, 1)";
   static rarity = 2;//1?
   constructor() {
     super(Collector.name, Collector.description, Collector.unicode, Collector.color, 5, Collector.rarity, 'player', 'onRoundEnd');
@@ -3990,11 +3993,11 @@ export class Collector extends Admin {
         this.isTriggering = true;
         setTimeout(() => this.isTriggering = false, 500);
         if (bp.variantName === 'Gold') {
-          player.money += 3;
+          player.bonusReward += 3;
         } else if (bp.variantName === 'Holographic') {
-          player.money += 5;
+          player.bonusReward += 5;
         } else {
-          player.money += 1;
+          player.bonusReward += 1;
         }
       }
     };

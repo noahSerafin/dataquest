@@ -6,6 +6,7 @@ import { Random } from "./Random";
 
 type EnemyIntent =
   | { type: 'attack'; target: Piece }
+  | { type: 'special'; target: Piece | Coordinate | Piece[] | { piece: Piece, target: Coordinate } | { piece: Piece, player: Player, originalPieceIds?: string[] } | { line: Coordinate[], activePieces: Piece[] } | { target: Coordinate, activePieces: Piece[], player?: Player } | null }
   | { type: 'special'; target: Piece | Coordinate | Piece[] | { piece: Piece, target: Coordinate } | { piece: Piece, player: Player, originalPieceIds?: string[] } | { line: Coordinate[], activePieces: Piece[] } | { target: Coordinate, activePieces: Piece[], player?: Player, tileSet?: Set<string> } | null }
   | { type: 'move'; path: Coordinate[] }
   | { type: 'wander'; space: Coordinate }
@@ -106,6 +107,7 @@ function decideEnemyIntent(
         return { type: 'special', target: { piece: target.piece, target: target.place } }//enemy still attacking- but should use this
       }
       if (enemy.targetType == 'placeAndPieces' && (target.piece.headPosition.x !== target.place.x || target.piece.headPosition.y !== target.place.y) && specialAttempts < 1) {//rectify attempts later
+        return { type: 'special', target: { target: target.place, activePieces: activePieces } }
         return { type: 'special', target: { target: target.place, activePieces: activePieces, tileSet: tileSet } }
       }
       if ((enemy.targetType === 'piece' || enemy.targetType === 'pieceAndPlayer') && specialAttempts < 1) { ///can execute a special
@@ -175,6 +177,7 @@ function decideEnemyIntent(
     } else if (enemy.targetType === 'pieceAndPlace' && (friendlyTarget.piece.headPosition.x !== friendlyTarget.place.x || friendlyTarget.piece.headPosition.y !== friendlyTarget.place.y) && (specialAttempts < 1 || enemy.name === 'Dracula')) {
       return { type: 'special', target: { piece: friendlyTarget.piece, target: friendlyTarget.place } }
     } else if (enemy.targetType == 'placeAndPieces' && specialAttempts < 1 || enemy.name === 'Locust') {//rectify attempts later
+      return { type: 'special', target: { target: friendlyTarget.place, activePieces: activePieces } }
       return { type: 'special', target: { target: friendlyTarget.place, activePieces: activePieces, tileSet: tileSet } }
     } else if (enemy.targetType === 'piece' || enemy.targetType === 'pieceAndPlayer') {//piece
       if (enemy.targetType === 'pieceAndPlayer') {
@@ -285,6 +288,7 @@ function decideEnemyIntent(
       if (enemy.targetType === 'placeAndPieces') {//pawn
         const strongest = findStrongestInRange(enemy, activePieces)
         console.log('strongest: ', strongest)
+        if (strongest) return { type: 'special', target: { target: strongest.place, activePieces: activePieces } }
         if (strongest) return { type: 'special', target: { target: strongest.place, activePieces: activePieces, tileSet: tileSet } }
       }
       if (enemy.targetType === 'group') {
@@ -496,11 +500,11 @@ async function attackPiece(attacker: Piece, defender: Piece) {
       }
     }
     if (defender.name.includes('Cryptid')) {
-      if(!attacker.immunities.confused){
+      if (!attacker.immunities.confused) {
         attacker.statuses.confused = true;
       }
-      if(!defender.statuses.exposed){
-        defender.statuses.hideen = true;
+      if (!defender.statuses.exposed) {
+        defender.statuses.hidden = true;
       }
     }
     attacker.actions--;

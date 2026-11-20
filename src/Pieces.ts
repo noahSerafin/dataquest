@@ -4911,6 +4911,7 @@ class Cryptid extends Piece {
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
     super(Cryptid.name, Cryptid.description, Cryptid.unicode, 6, 2, 1, 6, 4, Cryptid.color, headPosition, [headPosition], team, Cryptid.rarity, removeCallback, id)
     this.targetType = 'piece';
+    this.statuses.hidden = true;
     //this.specialName = 'Pummel';
   }
   /*async special(_target: Coordinate): Promise<void> {

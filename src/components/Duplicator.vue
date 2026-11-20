@@ -112,6 +112,7 @@
     }
 
     function skip(){
+        cancel()
         emit('close')
     }
     function select(bp: PieceBlueprint){
@@ -126,6 +127,7 @@
         if (!props.pieceToPlace) return
         if (primaryItem.value) return
 
+        if (primaryBP.value) primaryBP.value.isPlaced = false
         primaryBP.value = props.pieceToPlace
         primaryBP.value.isPlaced = true
 

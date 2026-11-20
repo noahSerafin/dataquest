@@ -167,6 +167,8 @@
     }
 
     function skip(){
+        if (resultBP.value) return;
+        cancel();
         emit('close')
     }
     function select(bp: PieceBlueprint){
@@ -182,6 +184,8 @@
         if (secondaryBP.value){
             if(secondaryBP.value.name.includes(props.pieceToPlace.name)) return
         }
+        if (primaryBP.value) primaryBP.value.isPlaced = false
+        resultBP.value = null
         primaryBP.value = props.pieceToPlace
         primaryBP.value.isPlaced = true
         emit('clear-drag')
@@ -193,6 +197,8 @@
         if (primaryBP.value){
             if (primaryBP.value.name.includes(props.pieceToPlace.name)) return
         }
+        if (secondaryBP.value) secondaryBP.value.isPlaced = false
+        resultBP.value = null
         secondaryBP.value = props.pieceToPlace
         secondaryBP.value.isPlaced = true
         emit('clear-drag')
@@ -285,8 +291,8 @@
       Collect
     </button>
     <div class="btns">
-        <button :disabled="!primaryBP || !secondaryBP" @click="cancel">Cancel</button>
-        <button @click="skip">Skip</button>
+        <button :disabled="!primaryBP && !secondaryBP" @click="cancel">Cancel</button>
+        <button :disabled="!!resultBP" @click="skip">Skip</button>
     </div>
 
   </div>

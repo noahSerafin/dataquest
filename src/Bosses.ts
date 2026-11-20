@@ -1407,7 +1407,7 @@ class Love extends Admin {
     private count: number = 3;
     private candidate: string = '';
     async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
-        if (this.count <= 0) return;
+        if (this.count >= 0) return;
         this.count--
         //remove charmed from the previous candidate
 

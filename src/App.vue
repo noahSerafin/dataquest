@@ -2928,7 +2928,7 @@ function cancelConfirm() {
       <PlayerView v-if="!displayEditor" ref="playerViewRef" :player="player" :showInventory="showInventory" :isCampaign="currentAppMode === 'campaign'" :hasPin="!!pinnedState"
         @highlightPlacements="highlightPlacements" @sellBlueprint="sellBlueprint" @sellItem="sellItem"
         @applyItem="handleApplyItem" @sellAdmin="sellAdmin" @reorderAdmins="handleReorderAdmins"
-        @startPlacementDrag="startPlacementDrag" @closeInventory="toggleInventory" @openInventory="toggleInventory" @requestLoadPin="requestLoadPin" />
+        @startPlacementDrag="startPlacementDrag" @closeInventory="toggleInventory" @openInventory="toggleInventory" @requestLoadPin="requestLoadPin" @toggleShop="toggleShop"/>
       <PieceController v-if="selectedPiece && !hasFinishedTurn" :piece="selectedPiece" mode="action"
         :hasFinishedTurn="hasFinishedTurn" :canBuy="false" :canMove="player.canMove" :canAction="player.canAction"
         :defaultPosition="{ x: 0, y: 0 }" @highlightMoves="boardRef.highlightMoves"

@@ -24,6 +24,9 @@
         primaryBP.value.isPlaced = false
         primaryBP.value = null
         resultBP.value = null
+        workingBP.value = null
+        selectedBP.value = null
+        freePoints.value = 0
     }
 
 
@@ -123,10 +126,12 @@
         primaryBP.value = null;
         resultBP.value = null;
         workingBP.value = null;
+        selectedBP.value = null;
         freePoints.value = 0;
     }
 
     function skip(){
+        if (resultBP.value) return;
         cancel();
         emit('close')
     }
@@ -140,6 +145,10 @@
     function tryAssignPrimary() {
         if (!props.isDraggingPlacement) return
         if (!props.pieceToPlace) return
+
+        if (primaryBP.value) primaryBP.value.isPlaced = false
+        resultBP.value = null
+        selectedBP.value = null
 
         primaryBP.value = props.pieceToPlace
         primaryBP.value.isPlaced = true
@@ -163,7 +172,9 @@
         props.player.addProgram(resultBP.value);
         primaryBP.value = null;
         resultBP.value = null;
+        workingBP.value = null;
         selectedBP.value = null;
+        freePoints.value = 0;
         emit('close');
     }
 
@@ -283,7 +294,7 @@
         Collect
         </button>
         <button :disabled="!primaryBP" @click="cancel">Cancel</button>
-        <button @click="skip">Skip</button>
+        <button :disabled="!!resultBP" @click="skip">Skip</button>
     </div>
 
   </div>

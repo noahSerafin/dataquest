@@ -88,6 +88,7 @@
         (e: 'closeInventory'):void;
         (e: 'openInventory'):void;
         (e: 'requestLoadPin'):void;
+        (e: 'toggleShop'):void;
     }>();
 
     const selectedPiece = ref<PieceBlueprint | null>(null)
@@ -256,21 +257,6 @@
                        {{ String.fromCodePoint(0x1FA77) }}
                     </span>
                 </div>
-                <div v-if="!isCampaign && hasPin" class="pin-btn node startNode clickable visible" @click="$emit('requestLoadPin')" title="Return to pinned save state">
-                    <div class="pins">
-                        <div class="pins-top"></div>
-                        <div class="pins-bottom"></div>
-                        <div class="pins-left"></div>
-                        <div class="pins-right"></div>
-                    </div>
-                    <div class="node-inner">
-                        <div class="node-inner-content">
-                            <div class="icon" :style="{ ...getSpriteStyle(163), width: '24px', height: '24px', display: 'inline-block', color: 'transparent' }">
-                                <template v-if="!getSpriteStyle(163).backgroundImage">📌</template>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
             <div class="admin-middle-container" ref="adminContainerRef">
                 <div class="admin-header flex">
@@ -300,7 +286,41 @@
                     </li>
                 </ul>
             </div>
-            <button id="inventory-btn" class="inv-btn mt-2 px-2 py-1 bg-blue-500 text-white rounded" @click="$emit('openInventory')">{{showInventory ? 'Hide' : 'Inventory' }}<span class="phone-hide"></span></button>
+            <div class="right-container">
+                <button id="inventory-btn" class="inv-btn mt-2 px-2 py-1 bg-blue-500 text-white rounded" @click="$emit('openInventory')">{{showInventory ? 'Hide' : 'Inventory' }}<span class="phone-hide"></span></button>
+                <div class="flex">
+                    <div v-if="!isCampaign && hasPin" class="pin-btn node startNode clickable visible" @click="$emit('requestLoadPin')" title="Return to pinned save state">
+                        <div class="pins">
+                            <div class="pins-top"></div>
+                            <div class="pins-bottom"></div>
+                            <div class="pins-left"></div>
+                            <div class="pins-right"></div>
+                        </div>
+                        <div class="node-inner">
+                            <div class="node-inner-content">
+                                <div class="icon" :style="{ ...getSpriteStyle(163), width: '24px', height: '24px', display: 'inline-block', color: 'transparent' }">
+                                    <template v-if="!getSpriteStyle(163).backgroundImage">📌</template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="!isCampaign && player.hasAdmin('Convenience Store')" class="pin-btn node startNode clickable visible" @click="$emit('toggleShop')">
+                        <div class="pins">
+                            <div class="pins-top"></div>
+                            <div class="pins-bottom"></div>
+                            <div class="pins-left"></div>
+                            <div class="pins-right"></div>
+                        </div>
+                        <div class="node-inner">
+                            <div class="node-inner-content">
+                                <div class="icon" :style="{ ...getSpriteStyle(266), width: '24px', height: '24px', display: 'inline-block', color: 'transparent' }">
+                                    <template v-if="!getSpriteStyle(266).backgroundImage">🏪</template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -366,6 +386,10 @@
 </template>
 
 <style scoped>
+    .flex{
+        display: flex;
+        width: 100%;
+    }
     .player, .inventory {
         background-color: black;
         width: 100%;
@@ -374,11 +398,7 @@
         border: 2px solid #ccc;
         border-radius: 0.75rem;
         padding: 10px;
-        z-index: 50;
-        .flex{
-            display: flex;
-            width: 100%;
-        }
+        z-index: 50;    
     }
     .admin-header{
         position: absolute;
@@ -517,7 +537,7 @@
         grid-template-columns: 1fr 1fr 1fr 1fr;
         width: 50%;
     }
-    .inv-btn{
+    .right-container{
         width: 15%;
     }
     .z-top {

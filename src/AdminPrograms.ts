@@ -2982,9 +2982,9 @@ class Cards extends Admin {
   async apply({ id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     const idx = activePieces.findIndex(p => p.id === id);
     const maxSizeMod = player.items.filter(i => i.name === 'Formula').length + player.items.filter(i => i.name === 'Blueberry').length + (2 * player.items.filter(i => i.name === 'Melon').length) + (3 * player.items.filter(i => i.name === 'Pie').length);
-    const movesMod = player.items.filter(i => i.name === 'Roids').length + player.items.filter(i => i.name === 'Juice').length + (2 * player.items.filter(i => i.name === 'Teapot').length) + (2 * player.items.filter(i => i.name === 'Coffee').length);
-    const rangeMod = player.items.filter(i => i.name === 'Glasses').length + (2 * player.items.filter(i => i.name === 'Carrot').length);
-    const attackMod = player.items.filter(i => i.name === 'Roids').length + player.items.filter(i => i.name === 'Mushroom').length + (2 * player.items.filter(i => i.name === 'Meat').length);
+    const movesMod = player.items.filter(i => i.name === 'Zing').length + player.items.filter(i => i.name === 'Roids').length + player.items.filter(i => i.name === 'Juice').length + (2 * player.items.filter(i => i.name === 'Teapot').length) + (2 * player.items.filter(i => i.name === 'Coffee').length);
+    const rangeMod = player.items.filter(i => i.name === 'Zing').length + player.items.filter(i => i.name === 'Pepper').length + (2 * player.items.filter(i => i.name === 'Carrot').length);
+    const attackMod = player.items.filter(i => i.name === 'Zing').length + player.items.filter(i => i.name === 'Roids').length + player.items.filter(i => i.name === 'Mushroom').length + (2 * player.items.filter(i => i.name === 'Meat').length);
     const defenceMod = player.items.filter(i => i.name === 'Formula').length + player.items.filter(i => i.name === 'Iron').length + (2 * player.items.filter(i => i.name === 'Garlic').length) + (3 * player.items.filter(i => i.name === 'Ginger').length);
     const blessingBonus = player.items.filter(i => i.name === 'Blessing').length;
     const burnImmunity = player.items.some(i => i.name === 'Extinguisher');

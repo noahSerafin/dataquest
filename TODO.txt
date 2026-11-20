@@ -46,6 +46,9 @@ overworld map?
 background colours for node maps (use company owner)//levels array (make map have a starting copmany)
 
 BUGS - 
+- possible to proceed from workbench without collecting, check hybrid compiler too
+-starlane colors not showing on background
+base damage mult not animating mult
 - returning to map does not reset background color
 squid not using special 'line' type and is not a charge - test
 -damage mult breaks workbench - dmgmult should be a stat - compiler/duplicator, + Pieces will be affected

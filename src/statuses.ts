@@ -83,6 +83,12 @@ export const STATUS_INFO: Record<string, string> = {
   "🥇️": "Won at 1 infamy",
   "🥈️": "Won at 2 infamy",
   "🥉️": "Won at 3 infamy",
+  "Common": "base 40% chance to appear",
+  "Uncommon": "base 30% chance to appear",
+  "Rare": "base 14% chance to appear",
+  "Very Rare": "base 9% chance to appear",
+  "Black Market": "base 5% chance to appear",
+  "Legendary": "base 2% chance to appear",//const base = [40, 30, 14, 9, 5, 2];
 };
 // 🫨 SHAKING FACE, U+1FAE8
 

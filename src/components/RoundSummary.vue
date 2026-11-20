@@ -114,7 +114,7 @@
                         ${{ 5 * player.adminCount('Tithe') }}
                     </span>
                 </span>
-                <span v-if="player.hasAdmin('Booty') && bosses.length > 0">+ Booty 
+                <span v-if="player.hasAdmin('Booty')">+ Booty 
                     <span class="text-yellow">
                         ${{ 6 * player.adminCount('Booty') }}
                     </span>
@@ -130,7 +130,10 @@
                     </span>
                 </span>
             </div>
-            <div v-if="!isCampaign" class="interest-summary">Interest earned: 
+            <div v-if="!isCampaign" class="interest-summary">Interest earned (on 
+                <span class="text-yellow">
+                    ${{ player.money + player.nextReward + player.bonusReward + bonus }}
+                </span>): 
                 <span class="text-yellow">
                     ${{ player.nextInterest }}
                 </span>

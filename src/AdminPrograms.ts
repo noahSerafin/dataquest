@@ -3879,6 +3879,8 @@ export class Booty extends Admin {
   }
   async apply({ player }: { player: Player }) {
     player.bonusReward += 6;//add to RoundSummary
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
   }
 }
 

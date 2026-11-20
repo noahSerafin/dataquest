@@ -48,6 +48,7 @@ background colours for node maps (use company owner)//levels array (make map hav
 BUGS - 
 - possible to proceed from workbench without collecting, check hybrid compiler too
 -starlane colors not showing on background
+hamster can occupy a tile not on the board in its cheeks
 base damage mult not animating mult
 - returning to map does not reset background color
 squid not using special 'line' type and is not a charge - test

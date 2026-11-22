@@ -1980,8 +1980,8 @@ async function placePieceOnBoardAt(coord: Coordinate) {
   if (isFirstTurn.value) {
     // Dove admin: allow normal moves/actions on the first turn
     if (player.value.hasAdmin('Dove')) {
-      PieceInstance.movesRemaining = PieceInstance.getStat('moves');
-      PieceInstance.actions = 1;
+      PieceInstance.resetMoves();
+      PieceInstance.resetActions();
     } else {
       PieceInstance.movesRemaining = 0;
       PieceInstance.actions = 0;

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { computed, ref, onMounted, onUnmounted } from "vue";
+    import { computed, ref, watch, nextTick, onMounted, onUnmounted } from "vue";
     import type { Player } from "../Player";
     import type { PieceBlueprint } from "../types";
     import { Item } from "../Items";
@@ -10,6 +10,7 @@
     import { reapplyTutorialTooltips } from "../tutorial";
     import { playSoundFx, preloadSound, getSpriteStyle } from "../helperFunctions";
     import selectSoundUrl from "../../sfx/select.ogg";
+    import cashOutSoundUrl from "../../sfx/cash.ogg";
 
     // Drag state
     const isDragging = ref(false);
@@ -69,6 +70,7 @@
     }
 
     preloadSound(selectSoundUrl);
+    preloadSound(cashOutSoundUrl);
 
     const props = defineProps<{
         player: Player,
@@ -76,6 +78,31 @@
         isCampaign?: boolean,
         hasPin?: boolean
     }>();
+
+    const isMoneyTriggering = ref(false);
+    let moneyTriggerTimeout: ReturnType<typeof setTimeout> | null = null;
+
+    function triggerMoneyPulse() {
+        playSoundFx(cashOutSoundUrl, 1.0);
+        isMoneyTriggering.value = false;
+        nextTick(() => {
+            isMoneyTriggering.value = true;
+            if (moneyTriggerTimeout) clearTimeout(moneyTriggerTimeout);
+            moneyTriggerTimeout = setTimeout(() => {
+                isMoneyTriggering.value = false;
+            }, 500);
+        });
+    }
+
+    watch(
+        () => [props.player, props.player.money] as const,
+        ([newPlayer, newMoney], [oldPlayer, oldMoney]) => {
+            // Only play when the money of the SAME player instance increases (skip new game / load game swaps)
+            if (newPlayer === oldPlayer && newMoney > oldMoney) {
+                triggerMoneyPulse();
+            }
+        }
+    );
     
     const emit = defineEmits<{
         (e: 'highlightPlacements', blueprint: PieceBlueprint): void;
@@ -250,7 +277,7 @@
                         {{ String.fromCodePoint(parseInt(player.osunicode.replace('U+', ''), 16), 0xFE0F) }}
                     </template>
                 </span>
-                <span style="text-align: left;"><strong class="text-yellow">$:</strong> {{ props.player.money }}</span>
+                <span class="money-counter" :class="{ 'is-triggering': isMoneyTriggering }" style="text-align: left;"><strong class="text-yellow">$:</strong> {{ props.player.money }}</span>
 
                 <div v-if="!isCampaign">
                     <span v-for="_ in (Math.max(0, Math.floor(player.lives || 0)))">
@@ -553,6 +580,28 @@
     }
     .admins li:hover {
         z-index: 100 !important;
+    }
+    .money-counter {
+        display: inline-block;
+        transition: transform 0.2s ease;
+    }
+    @keyframes moneyTrigger {
+        0% {
+            transform: scale(1);
+            filter: brightness(1) drop-shadow(0 0 0px yellow);
+        }
+        50% {
+            transform: scale(1.3);
+            filter: brightness(1.3) drop-shadow(0 0 12px yellow);
+        }
+        100% {
+            transform: scale(1);
+            filter: brightness(1) drop-shadow(0 0 0px yellow);
+        }
+    }
+    .money-counter.is-triggering {
+        z-index: 9999 !important;
+        animation: moneyTrigger 0.5s ease-in-out;
     }
     @media (max-width: 500px) {
         .phone-hide{

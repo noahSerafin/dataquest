@@ -46,6 +46,9 @@ overworld map?
 background colours for node maps (use company owner)//levels array (make map have a starting copmany)
 
 BUGS - 
+review chain reaction
+- saw speacial breaking, messes with its own tiles after being nerfed
+-sound effects needed on traps
 - possible to proceed from workbench without collecting, check hybrid compiler too
 -starlane colors not showing on background
 hamster can occupy a tile not on the board in its cheeks

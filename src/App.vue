@@ -2405,11 +2405,12 @@ const endRound = async (roundWon: boolean) => {
   selectedPiece.value = null;
   if (roundWon) {
     hasWonRound.value = true;
-    await handleApplyAdmins('onRoundEnd', '');
-    activePieces.value = [];//for needle
-    originalPieces.value = [];
-    console.log('player map progress: ', player.value.mapProgress)
-    console.log('player previous bosses cleared: ', player.value.bossesCleared)
+    player.value.roundSummaryEvents = [];
+    player.value.bonusReward = 0;
+    player.value.bonusInterest = 0;
+    player.value.nextInterest = 0;
+    player.value.interestPrincipal = 0;
+
     if (player.value.mapProgress >= 2) {
       player.value.bossesCleared += 1;
       console.log('boss defeated, new player bosses cleared: ', player.value.bossesCleared)
@@ -2419,7 +2420,34 @@ const endRound = async (roundWon: boolean) => {
         StorageManager.recordWin(player.value.osunicode, player.value.stake);
       }
     }
+
     openSummary(true);
+    await nextTick();
+    await new Promise(resolve => setTimeout(resolve, 450));
+
+    // Add the base level reward first before any bonus reward admins
+    if (player.value.nextReward > 0) {
+      player.value.isBaseRewardTriggering = true;
+      setTimeout(() => player.value.isBaseRewardTriggering = false, 500);
+      player.value.money += player.value.nextReward;
+      await new Promise(resolve => setTimeout(resolve, 450));
+    }
+
+    // Punching bag bonus reward triggers one after another just like onRoundEnd reward admins
+    for (const admin of player.value.admins) {
+      if (!admin.disabled && admin.name === 'Punching') {
+        admin.isTriggering = true;
+        setTimeout(() => admin.isTriggering = false, 500);
+        player.value.addRoundReward('Punching', 5, 'reward');
+        await new Promise(resolve => setTimeout(resolve, 450));
+      }
+    }
+
+    await handleApplyAdmins('onRoundEnd', '');
+    activePieces.value = [];//for needle
+    originalPieces.value = [];
+    console.log('player map progress: ', player.value.mapProgress)
+    console.log('player previous bosses cleared: ', player.value.bossesCleared)
   } else {
     hasWonRound.value = false;
     activePieces.value = [];

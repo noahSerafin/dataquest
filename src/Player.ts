@@ -3,6 +3,14 @@ import { Item } from "./Items";
 import { Admin } from "./AdminPrograms";
 import { StorageManager } from "./StorageManager";
 
+export interface RoundSummaryEvent {
+  id: string;
+  label: string;
+  amount: number;
+  kind: 'reward' | 'interest';
+  isLoss?: boolean;
+}
+
 export class Player {
   difficulty: number = 1;
   extraDifficulty: number = 0;
@@ -33,6 +41,9 @@ export class Player {
   statusMult: number = 1;
   cloverCount: number = 0;
   seedOffset: number = 0;
+  roundSummaryEvents: RoundSummaryEvent[] = [];
+  interestPrincipal: number = 0;
+  isBaseRewardTriggering: boolean = false;
   //adminModifiers: Record<string, StatModifier>
   constructor(
     osunicode = '',
@@ -204,19 +215,35 @@ export class Player {
   }
 
   calcInterest(bonus: number = 0) {
-    const baseMoney = Math.max(0, this.money + this.nextReward + this.bonusReward + bonus);   // ← prevents negative interest
+    const baseMoney = Math.max(0, this.money + bonus);   // ← prevents negative interest
+    this.interestPrincipal = baseMoney;
     const noOfFives = Math.floor(baseMoney / 5);
     if (noOfFives > this.interestCap) {
-      this.nextInterest += this.interestCap;
+      this.nextInterest = this.interestCap;
     } else {
-      this.nextInterest += noOfFives;
+      this.nextInterest = noOfFives;
     }
   }
 
-  collectMoney(bonus: number) {
+  addRoundReward(label: string, amount: number, kind: 'reward' | 'interest' = 'reward') {
+    if (amount > 0) {
+      this.money += amount;
+      if (kind === 'reward') {
+        this.bonusReward += amount;
+      }
+      this.roundSummaryEvents.push({
+        id: crypto.randomUUID(),
+        label,
+        amount,
+        kind
+      });
+    }
+  }
+
+  collectMoney(bonus: number = 0) {
     console.log(this.nextInterest, this.nextReward)
     const totalInterest = (this.nextInterest + this.bonusInterest) * (this.hasAdmin('Inheritance') ? 2 : 1);
-    this.money += totalInterest + this.nextReward + this.bonusReward + bonus;
+    this.money += totalInterest + bonus;
   }
 
   resetInterestAndReward() {
@@ -224,5 +251,8 @@ export class Player {
     this.nextReward = 0;
     this.bonusInterest = 0;
     this.bonusReward = 0;
+    this.roundSummaryEvents = [];
+    this.interestPrincipal = 0;
+    this.isBaseRewardTriggering = false;
   }
 }

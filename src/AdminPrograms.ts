@@ -99,7 +99,8 @@ export class Miner extends Admin {
   async apply({ player }: { player: Player }) {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
-    player.bonusReward += 2
+    player.addRoundReward(Miner.name, 2, 'reward');
+    await new Promise(resolve => setTimeout(resolve, 450));
   }
   //
 }
@@ -124,13 +125,27 @@ export class Bubble extends Admin {
     if (pop) {
       player.money = 0
       player.bonusInterest = 0
+      this.count = 1;
+      player.roundSummaryEvents.push({
+        id: crypto.randomUUID(),
+        label: `${Bubble.name} (Popped!)`,
+        amount: 0,
+        kind: 'interest',
+        isLoss: true
+      });
       //remove self?
     } else {
-      //player.bonusInterest = this.count;
-      player.bonusInterest += 1;
-      this.count++
+      const gained = this.count;
+      player.bonusInterest += gained;
+      this.count++;
+      player.roundSummaryEvents.push({
+        id: crypto.randomUUID(),
+        label: Bubble.name,
+        amount: gained,
+        kind: 'interest'
+      });
     }
-
+    await new Promise(resolve => setTimeout(resolve, 450));
   }
 
 }
@@ -315,6 +330,10 @@ export class LLM extends Admin {
     a: Admin | undefined,
     context?: { player: Player; increaseDifficulty?: () => Promise<void>; decreaseDifficulty?: () => void }
   ) {
+    this.count = 0;
+    this.ids = [];
+    this.candidates = {};
+    this.firstId = '';
     const effectiveSourceId = !a ? null : a instanceof LLM ? a.copiedSourceId : a.id;
 
     if (this.copiedSourceId === effectiveSourceId) return;
@@ -410,10 +429,8 @@ class Hamsa extends Admin {
 
 class Relay extends Admin {
   static iconID = 276;
-
-
   static name = "Relay";
-  static description = "All placed programs with a range bigger than 1 on placement gain +1 attack";
+  static description = "All placed programs with a range bigger than 1 on placement gain +1 attack";//+1 attack for each friendly in range
   static unicode = "U+1F4E1";
   static color = "rgb(226, 94, 42)";
   static rarity = 2;
@@ -845,7 +862,15 @@ class Stonks extends Admin {
     if (noOfFives > 0) {
       this.isTriggering = true;
       setTimeout(() => this.isTriggering = false, 500);
-      player.bonusInterest += Math.min(player.interestCap, noOfFives);//reset after round
+      const gained = Math.min(player.interestCap, noOfFives);
+      player.bonusInterest += gained;//reset after round
+      player.roundSummaryEvents.push({
+        id: crypto.randomUUID(),
+        label: Stonks.name,
+        amount: gained,
+        kind: 'interest'
+      });
+      await new Promise(resolve => setTimeout(resolve, 450));
     }
   }
 
@@ -1002,7 +1027,8 @@ class Crown extends Admin {
   async apply({ player }: { player: Player }) {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
-    player.bonusReward += 5;
+    player.addRoundReward(Crown.name, 5, 'reward');
+    await new Promise(resolve => setTimeout(resolve, 450));
   }
 }
 
@@ -2026,7 +2052,8 @@ class Loot extends Admin {
   async apply({ player }: { player: Player }) {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
-    player.bonusReward += 4;
+    player.addRoundReward(Loot.name, 4, 'reward');
+    await new Promise(resolve => setTimeout(resolve, 450));
   }
 }
 
@@ -2098,6 +2125,8 @@ class Punching extends Admin {
     super(Punching.name, Punching.description, Punching.unicode, Punching.color, 5, Punching.rarity, 'player', 'other')
   }
   async apply({ player, increaseDifficulty }: { player: Player, increaseDifficulty?: () => Promise<void> }) {
+    this.isTriggering = true;
+    setTimeout(() => this.isTriggering = false, 500);
     if (increaseDifficulty) {
       await increaseDifficulty();
     } else {
@@ -2154,7 +2183,8 @@ export class Abacus extends Admin {
     if (amount > 0) {
       this.isTriggering = true;
       setTimeout(() => this.isTriggering = false, 500);
-      player.bonusReward += amount;
+      player.addRoundReward(Abacus.name, amount, 'reward');
+      await new Promise(resolve => setTimeout(resolve, 450));
     }
   }
 }
@@ -2182,7 +2212,8 @@ export class Cheese extends Admin {
   async apply({ player }: { player: Player }) {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
-    player.bonusReward += 1;
+    player.addRoundReward(Cheese.name, 1, 'reward');
+    await new Promise(resolve => setTimeout(resolve, 450));
   }
 }
 
@@ -2404,7 +2435,8 @@ export class Rainbow extends Admin {
     if (player.mapProgress >= 2) {
       this.isTriggering = true;
       setTimeout(() => this.isTriggering = false, 500);
-      player.bonusReward += 10;
+      player.addRoundReward(Rainbow.name, 10, 'reward');
+      await new Promise(resolve => setTimeout(resolve, 450));
     }
   }
 }
@@ -3524,7 +3556,7 @@ class Butler extends Admin {
   }
 }
 //CHAIN reaction onPieceDestruction deal damage around head like bowling but deal +1 damage each time?
-class Chain extends Admin {
+export class Chain extends Admin {
   static iconID = 296;
   static name = "Chain Reaction";
   static description = "Destroying a program deals 1 damage to each enemy adjacent to it's head, +1 damage each time this is triggered."// Resets to 1 each round.";//or enemy's attack???
@@ -3547,12 +3579,12 @@ class Chain extends Admin {
       if (!isAdjacent) continue;
       this.isTriggering = true;
       setTimeout(() => this.isTriggering = false, 250);
-      await piece.takeDamage(1 + this.count);
-      this.count++
+      await enemy.takeDamage(1 + this.count);
     }
+    this.count++
   }
   //situational so don't reset it
-  /*onRoundEnd() {
+  /*onRoundEnd() {LL
     this.count = 0;
   }*/
 }
@@ -3878,9 +3910,10 @@ export class Booty extends Admin {
     super(Booty.name, Booty.description, Booty.unicode, Booty.color, 7, Booty.rarity, 'player', 'onRoundEnd')
   }
   async apply({ player }: { player: Player }) {
-    player.bonusReward += 6;//add to RoundSummary
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
+    player.addRoundReward(Booty.name, 6, 'reward');
+    await new Promise(resolve => setTimeout(resolve, 450));
   }
 }
 
@@ -3990,19 +4023,24 @@ export class Collector extends Admin {
     super(Collector.name, Collector.description, Collector.unicode, Collector.color, 5, Collector.rarity, 'player', 'onRoundEnd');
   }
   async apply({ player }: { player: Player }) {
+    let total = 0;
     for (const bp of player.programs) {
       if (!bp.isPlaced && bp.variantName) {
-        this.isTriggering = true;
-        setTimeout(() => this.isTriggering = false, 500);
         if (bp.variantName === 'Gold') {
-          player.bonusReward += 3;
+          total += 3;
         } else if (bp.variantName === 'Holographic') {
-          player.bonusReward += 5;
+          total += 5;
         } else {
-          player.bonusReward += 1;
+          total += 1;
         }
       }
-    };
+    }
+    if (total > 0) {
+      this.isTriggering = true;
+      setTimeout(() => this.isTriggering = false, 500);
+      player.addRoundReward(Collector.name, total, 'reward');
+      await new Promise(resolve => setTimeout(resolve, 450));
+    }
   }
 }
 

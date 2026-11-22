@@ -108,7 +108,7 @@ function decideEnemyIntent(
       }
       if (enemy.targetType == 'placeAndPieces' && (target.piece.headPosition.x !== target.place.x || target.piece.headPosition.y !== target.place.y) && specialAttempts < 1) {//rectify attempts later
         return { type: 'special', target: { target: target.place, activePieces: activePieces } }
-        return { type: 'special', target: { target: target.place, activePieces: activePieces, tileSet: tileSet } }
+        //return { type: 'special', target: { target: target.place, activePieces: activePieces, tileSet: tileSet } }
       }
       if ((enemy.targetType === 'piece' || enemy.targetType === 'pieceAndPlayer') && specialAttempts < 1) { ///can execute a special
         const allStatusesApplied = enemy.appliesStatuses.length > 0 && enemy.appliesStatuses.every(s => target.piece.statuses[s] || target.piece.immunities[s]);

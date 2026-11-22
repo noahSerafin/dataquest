@@ -430,20 +430,28 @@ class Hamsa extends Admin {
 class Relay extends Admin {
   static iconID = 276;
   static name = "Relay";
-  static description = "All placed programs with a range bigger than 1 on placement gain +1 attack";//+1 attack for each friendly in range
+  static description = "Programs gain a temporary +1 attack for each friendly program in range at the start of your turn";
   static unicode = "U+1F4E1";
   static color = "rgb(226, 94, 42)";
   static rarity = 2;
   constructor() {
-    super(Relay.name, Relay.description, Relay.unicode, Relay.color, 5, Relay.rarity, 'gameState', 'onPlacement')
+    super(Relay.name, Relay.description, Relay.unicode, Relay.color, 5, Relay.rarity, 'gameState', 'onTurnStart')
   }
 
-  async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
-    const idx = activePieces.findIndex(p => p.id === id);
-    if (activePieces[idx].team === 'player' && activePieces[idx].getStat('range') > 1) {
-      this.isTriggering = true;
-      setTimeout(() => this.isTriggering = false, 500);
-      activePieces[idx].addModifier({ attack: 1 })
+  async apply({ id: _id, activePieces }: { id: string, activePieces: Piece[] }) {
+    const allies = activePieces.filter(p => p.team === 'player' && p.name !== 'Spawn');
+    for (const p of allies) {
+      const head = p.headPosition;
+      const range = p.getStat('range');
+      const noOfAlliesInRange = allies.filter(other =>
+        other !== p &&
+        other.tiles.some(t => Math.abs(t.x - head.x) + Math.abs(t.y - head.y) <= range)
+      ).length;
+      if (noOfAlliesInRange > 0) {
+        p.addTempModifier({ attack: noOfAlliesInRange });
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
+      }
     }
   }
 }

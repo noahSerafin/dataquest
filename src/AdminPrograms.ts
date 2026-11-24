@@ -100,7 +100,7 @@ export class Miner extends Admin {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
     player.addRoundReward(Miner.name, 2, 'reward');
-    await new Promise(resolve => setTimeout(resolve, 450));
+    await new Promise(resolve => setTimeout(resolve, 350));
   }
   //
 }
@@ -145,7 +145,7 @@ export class Bubble extends Admin {
         kind: 'interest'
       });
     }
-    await new Promise(resolve => setTimeout(resolve, 450));
+    await new Promise(resolve => setTimeout(resolve, 350));
   }
 
 }
@@ -317,10 +317,10 @@ export class LLM extends Admin {
   static unicode = "U+1F5B2";
   static color = "rgb(31, 31, 31)";
   static rarity = 5;
-  private count = 0;
-  private ids: string[] = [];
-  private candidates: Record<string, number> = {};
-  private firstId: string = '';
+  count = 0;
+  ids: string[] = [];
+  candidates: Record<string, number> = {};
+  firstId: string = '';
   copiedSourceId: string | null = null;
   constructor() {
     super(LLM.name, LLM.description, LLM.unicode, LLM.color, 10, LLM.rarity, 'player', 'other')//handle on purchase, and when the player drags it
@@ -878,7 +878,7 @@ class Stonks extends Admin {
         amount: gained,
         kind: 'interest'
       });
-      await new Promise(resolve => setTimeout(resolve, 450));
+      await new Promise(resolve => setTimeout(resolve, 350));
     }
   }
 
@@ -1036,7 +1036,7 @@ class Crown extends Admin {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
     player.addRoundReward(Crown.name, 5, 'reward');
-    await new Promise(resolve => setTimeout(resolve, 450));
+    await new Promise(resolve => setTimeout(resolve, 350));
   }
 }
 
@@ -2061,7 +2061,7 @@ class Loot extends Admin {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
     player.addRoundReward(Loot.name, 4, 'reward');
-    await new Promise(resolve => setTimeout(resolve, 450));
+    await new Promise(resolve => setTimeout(resolve, 350));
   }
 }
 
@@ -2192,7 +2192,7 @@ export class Abacus extends Admin {
       this.isTriggering = true;
       setTimeout(() => this.isTriggering = false, 500);
       player.addRoundReward(Abacus.name, amount, 'reward');
-      await new Promise(resolve => setTimeout(resolve, 450));
+      await new Promise(resolve => setTimeout(resolve, 350));
     }
   }
 }
@@ -2221,7 +2221,7 @@ export class Cheese extends Admin {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
     player.addRoundReward(Cheese.name, 1, 'reward');
-    await new Promise(resolve => setTimeout(resolve, 450));
+    await new Promise(resolve => setTimeout(resolve, 350));
   }
 }
 
@@ -2444,7 +2444,7 @@ export class Rainbow extends Admin {
       this.isTriggering = true;
       setTimeout(() => this.isTriggering = false, 500);
       player.addRoundReward(Rainbow.name, 10, 'reward');
-      await new Promise(resolve => setTimeout(resolve, 450));
+      await new Promise(resolve => setTimeout(resolve, 350));
     }
   }
 }
@@ -3921,7 +3921,7 @@ export class Booty extends Admin {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
     player.addRoundReward(Booty.name, 6, 'reward');
-    await new Promise(resolve => setTimeout(resolve, 450));
+    await new Promise(resolve => setTimeout(resolve, 350));
   }
 }
 
@@ -4047,7 +4047,7 @@ export class Collector extends Admin {
       this.isTriggering = true;
       setTimeout(() => this.isTriggering = false, 500);
       player.addRoundReward(Collector.name, total, 'reward');
-      await new Promise(resolve => setTimeout(resolve, 450));
+      await new Promise(resolve => setTimeout(resolve, 350));
     }
   }
 }

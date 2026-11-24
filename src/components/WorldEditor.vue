@@ -145,7 +145,7 @@ function onMouseMove(event: MouseEvent) {
     if (sourceNode && targetNode) {
       if (!sourceNode.pathOffsets) sourceNode.pathOffsets = {};
       const current = sourceNode.pathOffsets[dragPathTarget.value];
-      let offsets = { x: 0, y1: 0, y2: 0 };
+      let offsets: Record<string, any> = { x: 0, y1: 0, y2: 0 };
       if (typeof current === 'number') {
         offsets.x = current;
       } else if (current) {
@@ -615,12 +615,12 @@ function canvasOffsetY(y: number) {
           <div class="next-nodes-list">
             <div v-for="(nextId, index) in selectedNode.next" :key="index" class="next-node-card">
               <div class="next-node-header">
-                <input type="text" :value="nextId" @change="updateNextNodeId(selectedNode, index, $event.target.value)" placeholder="Target Node ID" />
+                <input type="text" :value="nextId" @change="updateNextNodeId(selectedNode, index, ($event.target as HTMLInputElement).value)" placeholder="Target Node ID" />
                 <button class="remove-btn" @click="removeNextNode(selectedNode, index)">X</button>
               </div>
               <div class="path-settings">
                 <label>Path Type:</label>
-                <select :value="getPathSettings(selectedNode, nextId).type || 'HDVDH'" @change="updatePathSetting(selectedNode, nextId, 'type', $event.target.value)">
+                <select :value="getPathSettings(selectedNode, nextId).type || 'HDVDH'" @change="updatePathSetting(selectedNode, nextId, 'type', ($event.target as HTMLSelectElement).value)">
                   <option value="HDVDH">HDVDH</option>
                   <option value="VDHDV">VDHDV</option>
                 </select>
@@ -628,12 +628,12 @@ function canvasOffsetY(y: number) {
                 <label>Diag 1 Length ({{ getPathSettings(selectedNode, nextId).ds1 ?? 'auto' }})</label>
                 <input type="range" min="0" max="200" 
                        :value="getPathSettings(selectedNode, nextId).ds1 || 0" 
-                       @input="updatePathSetting(selectedNode, nextId, 'ds1', parseInt($event.target.value))" />
+                       @input="updatePathSetting(selectedNode, nextId, 'ds1', parseInt(($event.target as HTMLInputElement).value))" />
                        
                 <label>Diag 2 Length ({{ getPathSettings(selectedNode, nextId).ds2 ?? 'auto' }})</label>
                 <input type="range" min="0" max="200" 
                        :value="getPathSettings(selectedNode, nextId).ds2 || 0" 
-                       @input="updatePathSetting(selectedNode, nextId, 'ds2', parseInt($event.target.value))" />
+                       @input="updatePathSetting(selectedNode, nextId, 'ds2', parseInt(($event.target as HTMLInputElement).value))" />
               </div>
             </div>
           </div>

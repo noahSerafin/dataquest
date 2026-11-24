@@ -3,7 +3,7 @@ import { Blackwall, Piece, allPieces } from "./Pieces";
 import { Player } from "./Player";
 import type { Coordinate } from "./types";
 import { DIFFICULTY_RARITY, PIECE_VARIANTS } from "./constants";
-import { applyVariant, getRandomUnoccupiedTile, rollVariant } from "./helperFunctions";
+import { applyVariant, getRandomUnoccupiedTile } from "./helperFunctions";
 import { Random } from "./Random";
 
 //lower difficulty of +1 bosses, more +2 bosses

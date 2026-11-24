@@ -193,7 +193,7 @@ onUnmounted(() => {
           @mouseleave="handleMouseLeave(index)"
           @mousemove="handleMouseMove"
         >
-          <template v-if="! STATUS_ICONS[chunk.key] && chunk.iconID !== undefined && !spritesheetState.error">
+          <template v-if="!chunk.icon && chunk.iconID !== undefined && !spritesheetState.error">
             <span class="status-sprite-inline" :style="getSpriteStyle(chunk.iconID)"></span>
           </template>
           <template v-else>
@@ -207,7 +207,7 @@ onUnmounted(() => {
                   :style="{ left: mouseX + 'px', top: (mouseY - 15) + 'px' }">
               <div class="tooltip-header" :style="{ borderBottomColor: chunk.color || '#00ffcc' }">
                 <span v-if="chunk.icon" class="tooltip-icon">{{ chunk.icon }}</span>
-                <span v-if="!STATUS_ICONS[chunk.key] && chunk.iconID !== undefined && !spritesheetState.error" class="status-sprite-inline" :style="getSpriteStyle(chunk.iconID)"></span>
+                <span v-if="!chunk.icon && chunk.iconID !== undefined && !spritesheetState.error" class="status-sprite-inline" :style="getSpriteStyle(chunk.iconID)"></span>
                 <span v-else class="tooltip-title" :style="{ color: chunk.color || '#00ffcc' }">{{ chunk.key }}</span>
               </div>
               <div class="tooltip-body">

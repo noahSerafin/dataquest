@@ -178,7 +178,6 @@ function decideEnemyIntent(
       return { type: 'special', target: { piece: friendlyTarget.piece, target: friendlyTarget.place } }
     } else if (enemy.targetType == 'placeAndPieces' && specialAttempts < 1 || enemy.name === 'Locust') {//rectify attempts later
       return { type: 'special', target: { target: friendlyTarget.place, activePieces: activePieces } }
-      return { type: 'special', target: { target: friendlyTarget.place, activePieces: activePieces, tileSet: tileSet } }
     } else if (enemy.targetType === 'piece' || enemy.targetType === 'pieceAndPlayer') {//piece
       if (enemy.targetType === 'pieceAndPlayer') {
         return { type: 'special', target: { piece: friendlyTarget.piece, player: player, originalPieceIds: originalPieceIds } };
@@ -289,7 +288,6 @@ function decideEnemyIntent(
         const strongest = findStrongestInRange(enemy, activePieces)
         console.log('strongest: ', strongest)
         if (strongest) return { type: 'special', target: { target: strongest.place, activePieces: activePieces } }
-        if (strongest) return { type: 'special', target: { target: strongest.place, activePieces: activePieces, tileSet: tileSet } }
       }
       if (enemy.targetType === 'group') {
         return { type: 'special', target: (findAnyPiecesInRange(enemy, enemyPieces)) }

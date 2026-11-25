@@ -287,5 +287,15 @@ export const StorageManager = {
     const slots = this.getCampaignSlots();
     slots[index] = { isEmpty: true };
     localStorage.setItem('dataquest_campaign_slots', JSON.stringify(slots));
+  },
+
+  clearAllData() {
+    localStorage.removeItem(COLLECTION_KEY);
+    localStorage.removeItem(STATS_KEY);
+    localStorage.removeItem('dataquest_save_game');
+    localStorage.removeItem('dataquest_pinned_save');
+    localStorage.removeItem('dataquest_campaign_slots');
+    window.dispatchEvent(new CustomEvent('storageManagerCollection', { detail: { pieces: [], admins: [], bosses: [], items: [] } }));
+    window.dispatchEvent(new CustomEvent('storageManagerStats', { detail: { osStats: {}, usageStats: { programs: {}, items: {}, admins: {} } } }));
   }
 };

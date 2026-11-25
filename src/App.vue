@@ -2410,6 +2410,7 @@ const endRound = async (roundWon: boolean) => {
     player.value.bonusInterest = 0;
     player.value.nextInterest = 0;
     player.value.interestPrincipal = 0;
+    player.value.isSummaryProcessing = true;
 
     if (player.value.mapProgress >= 2) {
       player.value.bossesCleared += 1;
@@ -2444,6 +2445,7 @@ const endRound = async (roundWon: boolean) => {
     }
 
     await handleApplyAdmins('onRoundEnd', '');
+    player.value.isSummaryProcessing = false;
     activePieces.value = [];//for needle
     originalPieces.value = [];
     console.log('player map progress: ', player.value.mapProgress)
@@ -2732,7 +2734,7 @@ function toggleDebug() {
 const isMobileMenuOpen = ref(false);
 
 const showConfirmModal = ref(false);
-const confirmModalAction = ref<"forfeit" | "retry" | "loadPin" | null>(null);
+const confirmModalAction = ref<"forfeit" | "retry" | "loadPin" | "clearSaveData" | null>(null);
 
 function requestForfeit() {
   confirmModalAction.value = "forfeit";
@@ -2751,6 +2753,11 @@ function requestLoadPin() {
   showConfirmModal.value = true;
 }
 
+function requestClearSaveData() {
+  confirmModalAction.value = "clearSaveData";
+  showConfirmModal.value = true;
+}
+
 async function handleConfirm() {
   if (confirmModalAction.value === "forfeit") {
     endRound(false);
@@ -2762,6 +2769,10 @@ async function handleConfirm() {
     reloadLevel();
   } else if (confirmModalAction.value === "loadPin") {
     loadPinnedState();
+  } else if (confirmModalAction.value === "clearSaveData") {
+    StorageManager.clearAllData();
+    localStorage.clear();
+    pinnedState.value = null;
   }
   showConfirmModal.value = false;
   confirmModalAction.value = null;
@@ -2824,6 +2835,9 @@ function cancelConfirm() {
       </button>
       <button v-if="debugMode === true" class="board-toggle" @mousedown="showBoard = true">
         Toggle Board
+      </button>
+      <button v-if="debugMode === true" class="clear-save-btn" @mousedown="requestClearSaveData()">
+        Clear Save Data
       </button>
       <div v-if="debugMode === true" class="flex">
         <button class="phone-hide" @mousedown="decreaseDifficulty()">
@@ -2979,10 +2993,11 @@ function cancelConfirm() {
     
     <div v-if="showConfirmModal" class="confirm-modal-overlay">
       <div class="confirm-modal">
-        <h2>{{ confirmModalAction === 'forfeit' ? 'Forfeit Round?' : confirmModalAction === 'retry' ? 'Retry Round?' : 'Return to Pinned State?' }}</h2>
+        <h2>{{ confirmModalAction === 'forfeit' ? 'Forfeit Round?' : confirmModalAction === 'retry' ? 'Retry Round?' : confirmModalAction === 'clearSaveData' ? 'Clear Save Data?' : 'Return to Pinned State?' }}</h2>
         <p v-if="confirmModalAction === 'forfeit'">Are you sure you want to forfeit this round? <span v-if="currentAppMode !== 'campaign'">You will lose a life!</span></p>
         <p v-if="confirmModalAction === 'retry'">Are you sure you want to retry this round? <strong v-if="currentAppMode !== 'campaign'" style="color: red;">Warning: This will cost you 1 life.</strong></p>
         <p v-if="confirmModalAction === 'loadPin'">Are you sure you want to return to your pinned save state? This will consume the pin.</p>
+        <p v-if="confirmModalAction === 'clearSaveData'">Are you sure? This will delete all current save data in local storage.</p>
         <div class="modal-actions">
           <button @click="handleConfirm">Yes</button>
           <button @click="cancelConfirm">Cancel</button>

@@ -44,6 +44,7 @@ export class Player {
   roundSummaryEvents: RoundSummaryEvent[] = [];
   interestPrincipal: number = 0;
   isBaseRewardTriggering: boolean = false;
+  isSummaryProcessing: boolean = false;
   //adminModifiers: Record<string, StatModifier>
   constructor(
     osunicode = '',
@@ -254,5 +255,6 @@ export class Player {
     this.roundSummaryEvents = [];
     this.interestPrincipal = 0;
     this.isBaseRewardTriggering = false;
+    this.isSummaryProcessing = false;
   }
 }

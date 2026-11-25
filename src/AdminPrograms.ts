@@ -147,7 +147,6 @@ export class Bubble extends Admin {
     }
     await new Promise(resolve => setTimeout(resolve, 350));
   }
-
 }
 
 export class Crystal extends Admin {
@@ -423,7 +422,8 @@ class Hamsa extends Admin {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({ defence: 3 })
+    activePieces[idx].addModifier({ defence: 3 });
+    activePieces[idx].resetDefence();
   }
 }
 
@@ -596,13 +596,32 @@ export class CreditCard extends Admin {
 export class Needle extends Admin {
   static iconID = 387;
   static name = "Needle";
-  static description = "Winning a round with one program placed boosts all it's stats by one permanently";
+  static description = "Winning a round with one program loaded boosts all it's stats by one permanently";
   static unicode = "U+1FAA1";
-  static color = "rgb(209, 89, 193)";
+  static color = "rgb(248, 222, 255)";
   static rarity = 6;
   constructor() {
-    super(Needle.name, Needle.description, Needle.unicode, Needle.color, 10, Needle.rarity, 'playerAndGame', 'onRoundEnd')//6 and player?
+    super(Needle.name, Needle.description, Needle.unicode, Needle.color, 10, Needle.rarity, 'player', 'onRoundEnd')//6 and player?
   }
+
+  async apply({ player }: { player: Player }) {
+    const playerPieces: PieceBlueprint[] = [];
+    for (const bp of player.programs) {
+      if (bp.name !== 'Spawn' && bp.isPlaced) {
+
+      }
+    }
+    if (playerPieces.length === 1) {
+      const bpID = playerPieces[0].id
+      const idx = player.programs.findIndex(p => p.id === bpID) !== -1 ? player.programs.findIndex(p => p.id === bpID) : player.programs.findIndex(p => p.id === bpID.slice(0, -5));
+      if (idx !== -1) {
+        this.isTriggering = true;
+        setTimeout(() => this.isTriggering = false, 500);
+        this.upgradeBlueprint(player.programs[idx], { maxSize: 1, moves: 1, attack: 1, range: 1, defence: 1 });
+      }
+    }
+  }
+  /*
   async apply({ id: _id, activePieces, player }: { id: string, activePieces: Piece[], player: Player }) {
     for (const p of activePieces) {
       const playerPieces = [];
@@ -621,7 +640,7 @@ export class Needle extends Admin {
         }
       }
     }
-  }
+  }*/
 }
 
 export class Rune extends Admin {//exclude from charmed?
@@ -1056,7 +1075,9 @@ class Cactus extends Admin {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
-    await activePieces[idx].takeDamage(Math.round(player.difficulty / 2));
+    if (idx !== -1) {
+      await activePieces[idx].takeDamage(Math.round(player.difficulty / 2));
+    }
   }
 }
 
@@ -1543,7 +1564,8 @@ class Prayer extends Admin {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
-    activePieces[idx].addModifier({ defence: 2 })
+    activePieces[idx].addModifier({ defence: 2 });
+    activePieces[idx].resetDefence();
   }
 
 }
@@ -1562,6 +1584,7 @@ class Vitamins extends Admin {
     setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
     activePieces[idx].addModifier({ defence: 1 })
+    activePieces[idx].resetDefence();
   }
 }
 
@@ -2413,7 +2436,9 @@ class Pong extends Admin {
     this.isTriggering = true;
     setTimeout(() => this.isTriggering = false, 500);
     const idx = activePieces.findIndex(p => p.id === id);
-    await activePieces[idx].takeDamage(activePieces[idx].getStat('attack'));
+    if (idx !== -1 && activePieces[idx].team === 'enemy') {
+      await activePieces[idx].takeDamage(activePieces[idx].getStat('attack'));
+    }
   }
 }
 
@@ -2697,6 +2722,7 @@ class Disco extends Admin {
   async apply({ id, activePieces }: { id: string, activePieces: Piece[] }) {
     const idx = activePieces.findIndex(p => p.id === id);
     //activePieces[idx].takeDamage(activePieces[idx].getStat('attack'));
+    if (idx === -1) return;
     for (const piece of activePieces) {
       if (piece.id === id || piece.team === 'player') return;//skip the attacker?, and only reflect damage to enemies
       const isAdjacent = piece.tiles.some(st =>
@@ -4023,7 +4049,7 @@ export class Silly extends Admin {
 export class Collector extends Admin {
   static iconID = 265;
   static name = "Collector";
-  static description = "Unloaded variant programs each give <span class='text-yellow'>$1</span> at the end of a round (<span class='text-yellow'>$3</span> for Gold, and <span class='text-yellow'>$5</span> for Holographic)";
+  static description = "Unloaded variant programs each give $1 at the end of a round (or $3 for Gold, and $5 for Holographic)";
   static unicode = "U+1F5BC";//painting
   static color = "rgba(245, 245, 245, 1)";
   static rarity = 2;//1?
@@ -4152,10 +4178,10 @@ console.log("Admins of rarity 4: ", adminLogs.rarity4)
 console.log("Admins of rarity 5: ", adminLogs.rarity5)
 console.log("Admins of rarity 6: ", adminLogs.rarity6)
 
-
+//make some candidates to remove
 //CRUTCH, U+1FA7C +1 moves for programs not at their max size, immune to being disarmed
-// U+1F3C4 surfing Kali Yuga - like butter for friendlies
 //CLAPPER BOARD, U+1F3AC Disarms enemies when a round starts, making them take no actions on their first turn
+// U+1F3C4 surfing Kali Yuga - like butter for friendlies
 //Swish, U+1F3C0 - range of 3+ gets +3 attack
 //Boots, U+1F462 +1 moves, +1 max size, +1 attack, -1 def
 //JEANS, U+1F456 all hidden nodes are compilers - cost gets more expensive each time //gene hybrids appear in shop

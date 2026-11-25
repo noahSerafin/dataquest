@@ -45,9 +45,17 @@ secret bonus nodes - classified bosses
 overworld map?
 background colours for node maps (use company owner)//levels array (make map have a starting copmany)
 
+NEXT
+visual rework, proper menu - add prev-skip btns to music
+Make clippy messages use formatted description
+preview modal slide in
+sound effects
+    crunch/bite for blueprint target items
+    dropping coins for money loss
+
 BUGS - 
-review chain reaction
-- saw speacial breaking, messes with its own tiles after being nerfed
+format text in item descriptions
+- saw special breaking, messes with its own tiles after being nerfed
 -sound effects needed on traps
 - possible to proceed from workbench without collecting, check hybrid compiler too
 -starlane colors not showing on background
@@ -60,6 +68,7 @@ squid not using special 'line' type and is not a charge - test
 - campaign - next sector needs to close shop
 
 NICE TO HAVE - VISUAL IMPROVEMENTS
+lower chivalry, raise something else
 diversify starting programs in operators - window should have scissors
 finish newer items
 Worldmap view future maps/bosses?

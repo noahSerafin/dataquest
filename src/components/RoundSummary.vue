@@ -89,7 +89,7 @@
             <div v-if="!isCampaign" class="interest-summary">
                 <div class="summary-line">
                     Interest earned:
-                    <span class="text-yellow">
+                    <span v-if="!player.isSummaryProcessing" class="text-yellow">
                         ${{ player.nextInterest }}
                     </span>
                 </div>
@@ -116,7 +116,7 @@
                     </div>
                 </TransitionGroup>
             </div>
-            <button class="btn-grey" @click="collectAndProceed">Collect <span class="text-yellow bold">interest</span> and proceed</button>
+            <button class="btn-grey" :disabled="player.isSummaryProcessing" @click="collectAndProceed">Collect <span class="text-yellow bold">interest</span> and proceed</button>
         </div>
         <div class="if-lost" v-if="!hasWonRound && isCampaign">
             <h3>
@@ -243,6 +243,10 @@
     .btn-grey{
         background-color: #acacac;
         border: 1px solid white;
+    }
+    .btn-grey:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
     }
     .seed-display {
         display: flex;

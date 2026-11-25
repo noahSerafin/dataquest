@@ -1063,7 +1063,7 @@ class Blackmail extends Admin {
         if (this.count === 0) {
             const playerPieces: Piece[] = []
             for (const piece of activePieces) {
-                if (piece.team === 'player') {
+                if (piece.team === 'player' && !piece.statuses.charmed) {
                     playerPieces.push(piece)
                 }
             };
@@ -1072,8 +1072,9 @@ class Blackmail extends Admin {
             activePieces[idx].team = 'enemy';
             this.isTriggering = true;
             setTimeout(() => this.isTriggering = false, 500);
+            this.count--;
         } else {
-            this.count--
+            this.count--;
         }
     }
     onRoundEnd() {

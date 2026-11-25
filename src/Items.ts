@@ -407,10 +407,9 @@ export class Bandage extends Item<Piece> {
     }
 }
 
-export class Cake extends Item<Piece> {
+//U+1F58C //LOWER LEFT PAINTBRUSH Fresh Coat
+export class Cake extends Item<Piece> {//cake hide a blueprint
     static iconID = 198;
-
-
     static name = "Cake";
     static description = "Hide a non-exposed program";
     static unicode = "U+1F382";

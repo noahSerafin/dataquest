@@ -2403,7 +2403,7 @@ class Greatshield extends Piece {
   static color = "rgba(0, 82, 85, 1)";
   static rarity = 6;
   constructor(headPosition: Coordinate, team: string, removeCallback?: (piece: Piece) => void, id?: string) {
-    super(Greatshield.name, Greatshield.description, Greatshield.unicode, 5, 2, 1, 2, 5, Greatshield.color, headPosition, [headPosition], team, Greatshield.rarity, removeCallback, id)
+    super(Greatshield.name, Greatshield.description, Greatshield.unicode, 5, 2, 2, 2, 5, Greatshield.color, headPosition, [headPosition], team, Greatshield.rarity, removeCallback, id)
     this.specialName = 'Testudo';
     this.hasFriendlySpecial = true;
     this.targetType = 'group';
@@ -3619,7 +3619,7 @@ class Vulture extends Piece {
     this.canAttack = false;
   }
   async special(targetPiece: Piece): Promise<void> {
-    if ((targetPiece.defence + targetPiece.tiles.length) < this.getStat('attack')) {
+    if ((Math.max(0, targetPiece.defenceRemaining) + targetPiece.tiles.length) <= this.getStat('attack')) {
       this.addModifier({ maxSize: 1 });
     }
     targetPiece.takeDamage(this.getStat('attack'));
@@ -4644,7 +4644,9 @@ class Parrot extends Piece {
   }
   async special(target: Piece): Promise<void> {
     //copy base stats or enhanced stats?
-    this.attack = target.getStat('attack');
+    this.attack = target.getBaseStat('attack');
+    this.statModifiers.attack = target.getModifier('attack');
+    this.tempStatModifiers.attack = target.getTempModifier('attack');
     this.actions--
   }
   //check for programs in range, inheret methods from them
@@ -4670,7 +4672,7 @@ class Zombie extends Piece {
       p.tiles.some(t => t.x === target.x && t.y === target.y)
     );
     if (!targetPiece) return;
-    if ((targetPiece.defence + targetPiece.tiles.length) < this.getStat('attack')) {
+    if ((Math.max(0, targetPiece.defenceRemaining) + targetPiece.tiles.length) <= this.getStat('attack')) {
       const newZombie = new Zombie(target, this.team, this.removeCallback, crypto.randomUUID())
       //should we allow copying of stats also?
       newZombie.maxSize = this.maxSize;
@@ -4690,7 +4692,8 @@ class Zombie extends Piece {
       newZombie.version = this.version;
       activePieces.push(newZombie);
     }
-    targetPiece.takeDamage(this.getStat('attack'));
+    //wait for new piece to arrive before damaging old one?
+    await targetPiece.takeDamage(this.getStat('attack'));
     this.actions--
   }
 }

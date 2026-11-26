@@ -5038,7 +5038,7 @@ class Scout extends Piece {
           t.statuses.exposed = true;
         }
       } else {
-        t.addTempModifier({ moves: this.getStat('range') });
+        t.addTempModifier({ range: this.getStat('range') });
       }
     }
     this.actions--

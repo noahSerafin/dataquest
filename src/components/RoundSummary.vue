@@ -51,7 +51,7 @@
     );
 
     onMounted(() => {
-        if(props.player.hasAdmin('Clippy')){
+        if(props.player.hasAdmin('Clippy') && props.player.difficulty !== 0){
             reapplyTutorialTooltips(200);
         }
     });

@@ -7,7 +7,7 @@ export const tutorialDialogue = {
       "nodeID": "load:node0Start",
       "elementID": "messaging-system",
       "speaker": "Clippy",
-      "text": "Woah there! It looks like you are trying to play ROGUE mode. ROGUE mode is a set of randomised trials with an endless challenge, and recommended only for the dedicated gamer. Would you like me to walk you through the basics?",
+      "text": "Woah there! It looks like you are trying to play ROGUE mode. ROGUE mode is a set of randomised trials with an endless challenge, recommended only for the dedicated gamer. Would you like me to walk you through the basics?",
       "choices": [
         {
           "text": "Yes please",
@@ -23,7 +23,7 @@ export const tutorialDialogue = {
       "id": "node_2",
       "elementID": "node_g41ksufcp",
       "speaker": "Clippy",
-      "text": "The circuit represents a map of available nodes. You always start at the bottom of a circuit with a choice of paths to move forward. ROGUE maps will always have at 2 nodes clear before the shop node, followed by a boss node. Clearing the boss node will load the next ROGUE node map.",
+      "text": "The circuit represents a map of available nodes. You always start at the bottom of a circuit with a choice of paths to move forward. ROGUE maps will always have at least 2 nodes to clear before the shop node, followed by a boss node. Clearing the boss node will load the next ROGUE node map at a higher security level.",
       "choices": [
         {
           "text": "Got it.",
@@ -33,33 +33,15 @@ export const tutorialDialogue = {
     },
     "node_3": {
       "id": "node_3",
-      "elementID": "node_km8bwjcq7",
+      "elementID": "tutorial-first-node",
       "speaker": "Clippy",
       "text": "Right now you are connected to a node with a bounty on it. You can see here the <span class='text-yellow'>reward (in $)</span>, the company logo, and the node's security level 🔒. Tougher nodes will typically have a higher reward for clearing them. Click here to bring up the node's preview.",
-      "choices": [
-         {
-          "text":"What about the other node?",
-          "nextNode": "node_4"
-         }
-      ]
-    },
-    "node_4": {
-      "id": "node_4",
-      "nodeID": "preview:node_km8bwjcq7",
-      "elementID": "preview-modal-node_km8bwjcq7",
-      "speaker": "Clippy",
-      "text": "This is a skip reward node. It will reward you with the item pictured, and you will have to clear the node after it on this path. Skip nodes are normally followed by a harder security level 🔒 node, but occaisonally there will be a paths that cross the branches of nodes.",
-      "choices": [
-        {
-          "text": "Alright, what now?",
-          "nextNode": "node_12"
-        },
-      ]
+      "choices": []
     },
     "node_5": {
       "id": "node_5",
-      "nodeID": "preview:node_km8bwjcq7",
-      "elementID": "preview-modal-node_km8bwjcq7",
+      "nodeID": "preview:tutorial-first-node",
+      "elementID": "preview-modal-tutorial-first-node",
       "speaker": "Clippy",
       "text": "Here you can see some more details about the node, including a minimap of it's layout. Red squares indicate tiles occupied by the defending (enemy) programs. And green represent your entry points into the node.",
       "choices": [
@@ -91,7 +73,7 @@ export const tutorialDialogue = {
       "speaker": "Clippy",
       "nodeID": "click:piece-141ea35c-5b06-4f6c-9cbe-a93fd691db8f",
       "elementID": "141ea35c-5b06-4f6c-9cbe-a93fd691db8f-controller",
-      "text": "This guard program has a pretty even spread of stats. <span class='text-green'>Max size</span> determines how many tiles a program will take up when it moves, think of it like it's max health. <span class='text-blue'>Moves</span> is how many spaces it can move each turn. <span class='text-orange'>Range</span> is how far a program can target others for attacks or special moves. <span class='text-red'>Attack</span> is how many tiles a program can remove from another, and <span class='text-cyan'>Defence</span> is how much damage a program can absorb before losing tiles.",
+      "text": `This "Potato" program has a pretty even spread of stats. <span class='text-green'>Max size</span> determines how many tiles a program will take up when it moves, think of it like it's max health. <span class='text-blue'>Moves</span> is how many spaces it can move each turn. <span class='text-orange'>Range</span> is how far a program can target others for attacks or special moves. <span class='text-red'>Attack</span> is how many tiles a program can remove from another, and <span class='text-cyan'>Defence</span> is how much damage a program can absorb before losing tiles.`,
       "choices": [
         {
           "text": "Now what?",
@@ -167,21 +149,35 @@ export const tutorialDialogue = {
         }
       ]
     },
-    "node_6": {
-      "id": "node_6",
+    "node_21": {
+      "id": "node_21",
+      "nodeID": "tutorial-first-node-summary",//change to id of round summary //have a different id for node failure
+      "elementID": "tutorial-first-node-summary",
       "speaker": "Clippy",
-      "nodeID": "click:accept-blueprint-button",
-      "elementID": "node_5i9h9b6ti",
-      "text": "One more node type you should know about, this is a boss node. Boss nodes will have special effect inside that will add an extra challenge to clearing them. Once you clear this node, you've passed your training and can move out into the rest of cyberspace.",
+      "text": "Congrats on clearing your first node! Here you can see a breakdown of your rewards, indcluding earned interest. For every $5 you hold at the end of a round, you will earn $1 of interest, up to a maximum of $5 (if at least $25 is held). Click the proceed button to collect your interest and reward.",
+      "choices": [
+      ]
+    },
+    "node_22": {
+      "id": "node_22",
+      "nodeID": "tutorial-skip-node",
+      "elementID": "tutorial-skip-node",
+      "speaker": "Clippy",
+      "text": "Now you've cleared a node, your position has moved up. You are now connected to a skip reward node. It will reward you with the item pictured. Skip nodes are normally followed by a harder security level 🔒 node, but here in the training ground it is placed in front of the shop. Click on it to see details about the reward.",
       "choices": [
         {
-          "text": "What about the 🛒 ahead?",
-          "nextNode": "node_6"
+          "text": "Alright, what now?",
+          "nextNode": "node_12"
         },
-        {
-          "text": "Thanks, That's all for now",
-          "nextNode": "node_99"
-        },
+      ]
+    },
+    "node_23": {
+      "id": "node_23",
+      "nodeID": "preview:tutorial-skip-node",
+      "elementID": "preview-modal-tutorial-skip-node",
+      "speaker": "Clippy",
+      "text": "This Voucher will allow you to make an item in the upcoming shop completely free. I would suggest you use it on the most expensive thing",
+      "choices": [
       ]
     },
     "node_99": {
@@ -192,8 +188,8 @@ export const tutorialDialogue = {
     "s0node_1": {
       "id": "s0node_1",
       "nodeID": "enter:node_9wnsfvrt4",
-      "speaker": "Hamuel",
-      "text": "Welcome to the trainee shop! You can buy as many programs as you like. But consumables and admins are a one time purchase I'm afraid.",
+      "speaker": "Clippy",
+      "text": "At the shop, you can buy more programs. As well as single use consumable items, and admin programs.",
       "choices": [
         {
           "text": "What's an admin?",
@@ -209,9 +205,9 @@ export const tutorialDialogue = {
       ]
     },
     "s0node_2": {
-      "id": "s0node_2",
-      "speaker": "Hamuel",
-      "text": "Admins are programs that run passively in the background, they take up admin slots instead of inventory memory. You can currently hold up to 4. Depending on what triggers them, you will get different bonuses. Some might modify you programs when you load them, some might generate extra money from completed nodes, and some might drastically change the way programs behave.",
+      "id": "shop_node_2",
+      "speaker": "Clippy",
+      "text": "Admins are programs that run passively in the background, they take up admin slots instead of inventory memory. You can currently hold up to 5. Depending on what triggers them, you will get different bonuses. Some might modify you programs when you load them, some might generate extra money from completed nodes, and some might drastically change the way programs behave.",
       "choices": [
         {
           "text": "What about consumables?",
@@ -223,8 +219,8 @@ export const tutorialDialogue = {
       ]
     },
     "s0node_3": {
-      "id": "s0node_3",
-      "speaker": "Hamuel",
+      "id": "shop_node_3",
+      "speaker": "Clippy",
       "text": "Consumables are single use pieces of software. They can either modify programs in your inventory, programs inside a node, or your own operating system, like increasing your current memory.",
       "choices": [
         {
@@ -235,6 +231,46 @@ export const tutorialDialogue = {
           "text": "Thanks",
         }
       ]
-    }
+    },
+    "node_6": {
+      "id": "node_6",
+      "speaker": "Clippy",
+      "nodeID": "boss-node0",
+      "elementID": "node_5i9h9b6ti",//target the security level in top left
+      "text": "This last node is a boss node. Boss nodes will have special effect inside that will add an extra challenge to clearing them. The effect will always be described on the map. Once you clear this node, a new map will load with a higher security level.",
+      "choices": [
+        {
+          "text": "Tell me more about security levels",
+          "nextNode": "node_76"
+        },
+        {
+          "text": "Thanks, That's all for now"
+        },
+      ]
+    },
+    "node_76": {
+      "id": "node_76",
+      "speaker": "Clippy",
+      "text": "Higher security levels will load larger nodes with rarer programs in them. Once you have cleared level 6, you have beaten the game, but can still continue in endless mode.",
+      "choices": [
+        {
+          "text": "Endless mode?",
+          "nextNode": "node_77"
+        },
+        {
+          "text": "Thanks, That's all for now"
+        },
+      ]
+    },
+    "node_77": {
+      "id": "node_77",
+      "speaker": "Clippy",
+      "text": "In endless mode, bosses will continue to stack every level. And programs of any rarity can appear, but lower ranked programs will be buffed to match the current security level.",
+      "choices": [
+        {
+          "text": "Thanks, That's all for now"
+        },
+      ]
+    },
   }
 }

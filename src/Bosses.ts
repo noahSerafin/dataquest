@@ -508,7 +508,7 @@ class Sun extends Admin {
 
 class Whale extends Admin {
     static iconID = 409;
-    static name = "Whale";
+    static name = "Bloatware";
     static description = "Every enemy gains +2 max size at the start of the round";
     static unicode = "U+1F433";
     static color = "#060143ff";
@@ -1873,7 +1873,7 @@ class Zero extends Admin {//to test
     }
 }
 
-export const allBosses = [Concussion, LowBattery, NorthWind, Taxman, TrafficLight, Quicksand, Butter, Customs, Downturn, Hook, Mirror, Rage, Salsa, Shrine, Snoozefest, Whale, Anchor, Hammer, Castle, Circus, Clapback, ClipBoard, Izakaya, Mountain, Tsunami, Wilt, Autumn, Avalanche, Biohazard, Cocktail, Coral, Eclipse, Lock, Eye, Factory, Jack, Blackmail, Snowflake, Love, Bones, Nofun, Frog, Seething, Tornado, Volcano, Snow, Sun, Fog, Nightfall, Omega, Reaper, REDACTED, Singularity, Wrath, AirGap, Battle, Lockdown, Variantr, SoulKiller, Zero];
+export const allBosses = [Concussion, LowBattery, NorthWind, Taxman, TrafficLight, Quicksand, Whale, Butter, Customs, Downturn, Hook, Mirror, Rage, Salsa, Shrine, Snoozefest, Anchor, Hammer, Castle, Circus, Clapback, ClipBoard, Izakaya, Mountain, Tsunami, Wilt, Autumn, Avalanche, Biohazard, Cocktail, Coral, Eclipse, Lock, Eye, Factory, Jack, Blackmail, Snowflake, Love, Bones, Nofun, Frog, Seething, Tornado, Volcano, Snow, Sun, Fog, Nightfall, Omega, Reaper, REDACTED, Singularity, Wrath, AirGap, Battle, Lockdown, Variantr, SoulKiller, Zero];
 export const nonStackableBosses = [Mirror, Customs, Snowflake, Sun, Frog, Biohazard, Coral, Izakaya, REDACTED, Fog, Singularity, Tornado, Cocktail, AirGap, Battle, Lockdown, Variantr, SoulKiller, Zero];
 
 console.log('bosses length: ', allBosses.length)

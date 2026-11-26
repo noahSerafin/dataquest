@@ -2355,12 +2355,10 @@ class Ring extends Admin {
 
 class Minerva extends Admin {
   static iconID = 386;
-
-
   static name = "Minerva";
   static description = "+1 range for all your placed programs each time one of your programs is destroyed";//player programs only?
   static unicode = "U+1F989";//horus: "U+1314A";
-  static color = "rgb(211, 169, 31)";
+  static color = "rgb(211, 127, 31)";
   static rarity = 6;
   constructor() {
     super(Minerva.name, Minerva.description, Minerva.unicode, Minerva.color, 9, Minerva.rarity, 'gameState', 'onPieceDestruction')

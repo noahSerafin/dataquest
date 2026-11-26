@@ -599,7 +599,7 @@ class Aegis extends Piece {
   }
 }
 
-class Sling extends Piece {
+export class Sling extends Piece {
   static iconID = 8;
   static name = "Sling";
   static description = "A basic ranged piece";
@@ -987,7 +987,7 @@ class Mole extends Piece {//unfinished - test negative
 }
   */
 
-class Lance extends Piece {
+export class Lance extends Piece {
   static iconID = 30;
   static name = "Lance";
   static description = "An attacking program that can charge, damaging targets in a staight line and moving forward until stopped";
@@ -1298,7 +1298,7 @@ class Copycat extends Piece {
   //check for programs in range, inheret methods from them
 }
 
-class Banana extends Piece {
+export class Banana extends Piece {
   static iconID = 1;
   static name = "Banana Peel";
   static description = "A program hidden to the enemy that immobilises programs moving over it for 1 turn, and strips them of any actions, removing itself in the process";
@@ -2289,7 +2289,7 @@ class Dragon extends Piece {
 class Ink extends Piece {
   static iconID = 530;
   static name = "Ink";
-  static description = "A decoy that applies blinded to programs it makes contact with";
+  static description = "A decoy that applies blinded to programs it makes contact with, removing itself";
   static unicode = "U+1F322";//"U+26AB";
   static color = "#303030ff";
   static rarity = 3;
@@ -5038,7 +5038,7 @@ class Scout extends Piece {
           t.statuses.exposed = true;
         }
       } else {
-        t.addTempModifier({ moves: this.getStat('range') });
+        t.addTempModifier({ range: this.getStat('range') });
       }
     }
     this.actions--

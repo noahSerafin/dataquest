@@ -9,8 +9,16 @@ export const tutorialState = reactive({
   message: welcomeTip,
   collapsed: false, // starts open with the welcome message
   activeId: "",
-  hasSeenFirst: false
+  hasSeenFirst: false,
+  disabled: false
 });
+
+export function setTutorialTooltipsDisabled(disabled: boolean) {
+  tutorialState.disabled = disabled;
+  if (disabled) {
+    clearTooltips();
+  }
+}
 
 
 for (const tip of allTips){//but do this every time the enviroment change
@@ -39,6 +47,10 @@ export function highlightElement(el: HTMLElement) {
 }*/
 
 export function applyTutorialTooltips(steps: TutorialStep[]) {
+  if (tutorialState.disabled) {
+    clearTooltips();
+    return;
+  }
   // First, clean up any stale help buttons
   const existingButtons = document.querySelectorAll('.tutorial-help-btn');
   existingButtons.forEach(btn => {
@@ -86,12 +98,15 @@ export function applyTutorialTooltips(steps: TutorialStep[]) {
 }
 
 export function reapplyTutorialTooltips(delay: number = 100) {
+  if (tutorialState.disabled) return;
   setTimeout(() => {
+    if (tutorialState.disabled) return;
     applyTutorialTooltips(allTips);
   }, delay);
 }
 
 export function showTutorialTip(stepId: string) {
+  if (tutorialState.disabled) return;
   const step = allTips.find(t => t.id === stepId);
   if (step) {
     tutorialState.message = step.tooltip;

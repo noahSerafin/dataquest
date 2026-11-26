@@ -1,5 +1,7 @@
 import type { Company, Coordinate, SkipReward, DialogueTree } from "./types";
 import { Spawn, allPieces } from "./Pieces";
+import { Voucher } from "./Items";
+import { sandpit, statCheck } from "./level0Levels";
 import { DIFFICULTY_RARITY } from "./constants";
 import { applyVariant, rollVariant } from "./helperFunctions";
 import { generateNode } from "./nodeBuilder";
@@ -28,6 +30,7 @@ export interface WorldNode {
   hiddenUntilVisited?: string; // node id that must be completed first
   visited?: boolean;
   skipReward?: SkipReward; //get shop function into helpers to create these
+  shopContents?: string | string[];
   resolved?: boolean;          // skip nodes only
   visible?: boolean;
   bossName?: string;
@@ -208,6 +211,105 @@ export function generateWorld(
   stake: number
 ): WorldMap {
 
+  const startId = "start";
+  const shopId = "shop";
+  const bossId = "boss";
+
+  if (difficulty <= 0) {
+    const saturnCompany = companies.find(c => c.name === "Saturn Solutions") ?? companies[0];
+    const p1 = "path_0_1";
+    const p2 = "path_0_2";
+    const pos = getPathPositions(0, 1);
+
+    const sandpitLevel: Level = JSON.parse(JSON.stringify(sandpit));
+    sandpitLevel.pieces = processSpawnPoints(
+      sandpitLevel.pieces,
+      (saturnCompany.pieceList && saturnCompany.pieceList.length > 0) ? saturnCompany.pieceList : allPieces,
+      0,
+      0
+    ).processedPieces;
+
+    const statCheckLevel: Level = JSON.parse(JSON.stringify(statCheck));
+    statCheckLevel.pieces = processSpawnPoints(
+      statCheckLevel.pieces,
+      (saturnCompany.pieceList && saturnCompany.pieceList.length > 0) ? saturnCompany.pieceList : allPieces,
+      0,
+      0
+    ).processedPieces;
+
+    const nodes: Record<string, WorldNode> = {
+      [startId]: {
+        id: startId,
+        type: "start",
+        next: [p1],
+        position: { x: 200, y: 500 },
+        row: 0,
+        company: saturnCompany,
+        difficultyMod: -1,
+        reward: 0,
+        visible: true
+      },
+      [p1]: {
+        id: p1,
+        type: "level",
+        level: sandpitLevel,
+        next: [p2],
+        position: pos.node1,
+        row: 1,
+        company: saturnCompany,
+        difficultyMod: 0,
+        reward: 3,
+        visible: true
+      },
+      [p2]: {
+        id: p2,
+        type: "skip",
+        next: [shopId],
+        position: pos.node2,
+        row: 2,
+        company: bossCompany,
+        difficultyMod: 0,
+        reward: 0,
+        skipReward: {
+          kind: "item",
+          value: new Voucher()
+        },
+        resolved: false,
+        visible: true
+      },
+      [shopId]: {
+        id: shopId,
+        type: "shop",
+        next: [bossId],
+        position: { x: 200, y: 150 },
+        row: 2,
+        company: shopCompany,
+        difficultyMod: 0,
+        reward: 0,
+        shopContents: ["Knife", "Banana Peel", "Lance", "Mushroom", "Iron", "Chedda"],
+        visible: true
+      },
+      [bossId]: {
+        id: bossId,
+        type: "boss",
+        level: statCheckLevel,
+        next: [],
+        position: { x: 200, y: 30 },
+        row: 3,
+        company: saturnCompany,
+        difficultyMod: 0,
+        reward: 4,
+        bossName: "North Wind",
+        visible: true
+      }
+    };
+
+    return {
+      startNode: startId,
+      nodes
+    };
+  }
+
   //const pick = () => levelPool[Math.floor(Math.random() * levelPool.length)];
   const pick = () => {
     const isImported = Random.bool(0.5);
@@ -218,10 +320,6 @@ export function generateWorld(
     }
     return level;
   };
-
-  const startId = "start";
-  const shopId = "shop";
-  const bossId = "boss";
 
   const pathSpecs = getPathSpecsForDifficulty(difficulty);
 

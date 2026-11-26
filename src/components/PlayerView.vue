@@ -127,7 +127,7 @@
             playSoundFx(selectSoundUrl, 1.0);
         }
         selectedPiece.value = piece;
-        if(props.player.hasAdmin('Clippy')){
+        if(props.player.hasAdmin('Clippy') && props.player.difficulty !== 0){
             reapplyTutorialTooltips(200);
         }
     }
@@ -306,6 +306,7 @@
                             :tileSize="adminLayout.size"
                             :canBuy="false"
                             :showController="(selectedAdmin === item)"
+                            :hideSpeechBubble="props.player.difficulty === 0"
                             @sell="$emit('sellAdmin', item.id)"
                             @select="selectAdmin"
                             @deselect="deselectAdmin"

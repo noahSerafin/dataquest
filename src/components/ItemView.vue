@@ -17,6 +17,7 @@ const props = defineProps<{
   canBuy: boolean;       // for custom styling (shop / inventory)
   canSteal?: boolean;
   showController: boolean;
+  hideSpeechBubble?: boolean;
   //variant: PieceVariant;
 }>();
 
@@ -155,7 +156,7 @@ const isDisabled = computed(() => {
     </div>
 
     <!-- Speech bubble for Clippy admin -->
-    <div v-if="cssclass !== 'shop' && cssclass !== 'collection' && item.name === 'Clippy' && tutorialState.message"
+    <div v-if="cssclass !== 'shop' && cssclass !== 'collection' && !hideSpeechBubble && item.name === 'Clippy' && tutorialState.message"
       class="clippy-speech-bubble-container" @click.stop>
       <div v-if="!tutorialState.collapsed" class="clippy-speech-bubble">
         <button class="clippy-toggle" @click="tutorialState.collapsed = true">X</button>

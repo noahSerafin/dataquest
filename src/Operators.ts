@@ -392,11 +392,11 @@ const Window95: OS = {
     money: 3,
     memory: 8,//increase for all ops
     adminSlots: 5,
-    blueprints: [lance, shield, banana],
+    blueprints: [scissors, sling, shield],
     items: [new Voucher, new Mushroom],
     admins: [new Notepad, new Clippy],
     lives: 3,
-    description: 'The intro to cyberspace, comes with a helpful assistant.'
+    description: 'The intro to cyberspace. Starts at a low security level, and comes with a helpful assistant.'
 }
 const Steam: OS = {
     iconID: 460,
@@ -451,7 +451,7 @@ const Apple: OS = {
     money: 10,
     memory: 7,
     adminSlots: 4,
-    blueprints: [scissors, sling, shield, ant, bee],
+    blueprints: [sling, shield, ant, bee],
     items: [],
     admins: [],
     lives: 3,

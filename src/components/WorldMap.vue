@@ -2,6 +2,7 @@
 import { computed, ref, onMounted } from "vue";
 import MiniMap from "./MiniMap.vue";
 import { Admin } from "../AdminPrograms";
+import { allBosses } from "../Bosses";
 import { Item, Box, Genie, Gift, Pinata, Pandora, Voucher, Jar, Update2, Update3, Floppy, Life, Cake, Wand, Hourglass, Dupe, Pin, Bed } from "../Items";
 import { rollBoss } from "../helperFunctions";
 import { watch } from "vue";
@@ -91,6 +92,11 @@ const boss = ref<Admin>(returnNewBoss());
 
 function returnNewBoss() {
     skipsThisLevel.value = 0;
+    const bossNode = world.value?.nodes?.boss;
+    if (bossNode?.bossName) {
+        const BossClass = allBosses.find(b => b.name === bossNode.bossName);
+        if (BossClass) return new BossClass();
+    }
     return rollBoss(props.player.difficulty, props.bosses);
 }
 function newBoss() {
@@ -176,7 +182,7 @@ function trySelect(node: WorldNode) {
     }
 
     selectedPreviewNode.value = node;
-    if (props.player.hasAdmin('Clippy')) {
+    if (props.player.hasAdmin('Clippy') && props.player.difficulty !== 0) {
         reapplyTutorialTooltips(200);
     }
 }
@@ -244,7 +250,9 @@ function enterNode(node: WorldNode) {
     }
     if (node.level) {
         props.player.mapProgress = Math.max(0, getNodeRow(node) - 1);
-        showTutorialTip('board');
+        if (props.player.difficulty !== 0) {
+            showTutorialTip('board');
+        }
         //just pass the compamy for extra visual styling?
         emit("selectLevel", node.level, node.company, node.difficultyMod, (node.reward + props.player.bonusReward));
     }
@@ -545,7 +553,7 @@ function takeSkipReward(node: WorldNode) {//ask about this next
     canReroll.value = true;
     node.visible = true;
     emit('incrementProgress', getNodeRow(node));
-    if (props.player.hasAdmin('Clippy')) {
+    if (props.player.hasAdmin('Clippy') && props.player.difficulty !== 0) {
         reapplyTutorialTooltips(200);
     }
 }

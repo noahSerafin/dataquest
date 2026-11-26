@@ -179,7 +179,7 @@ import PieceController from "./components/PieceController.vue";
 import HybridCompiler from "./components/HybridCompiler.vue";
 import Collection from "./components/Collection.vue";
 import SpriteSheet from "./components/SpriteSheet.vue";
-import { applyTutorialTooltips, reapplyTutorialTooltips } from "./tutorial.ts";
+import { applyTutorialTooltips, reapplyTutorialTooltips, clearTooltips, setTutorialTooltipsDisabled } from "./tutorial.ts";
 import { allTips } from "./tutorialSteps.ts";
 import { StorageManager } from "./StorageManager";
 import Altar from "./components/Altar.vue";
@@ -465,7 +465,8 @@ function createNewPlayer(payload: { os: OS, seed: string, stake?: number }) {
     stake.value,
     os.iconID
   );
-  player.value.difficulty = 1; // rogue mode starts at difficulty 1
+  player.value.difficulty = os.name === 'Classic95' ? 0 : 1; // Classic95 starts at difficulty 0 (tutorial), other operators at 1
+  setTutorialTooltipsDisabled(player.value.difficulty === 0);
 
   // Reset game & UI states
   StorageManager.clearPinnedGame();
@@ -540,7 +541,7 @@ function incrementMapProgress(row?: number) {
     }
   }
   //console.log('progress increased:', mapProgress.value)
-  if (player.value.hasAdmin('Clippy')) {
+  if (player.value.hasAdmin('Clippy') && player.value.difficulty !== 0) {
     reapplyTutorialTooltips(200);
   }
 }
@@ -883,8 +884,47 @@ const hasStolenFromThisShop = computed({
 });
 const canProceedFromShop = ref<boolean>(false);
 
-function generateShopStock() {
+function buildShopStockFromContents(contents: string[]) {
   const appraisalDiscount = 2 * player.value.admins.filter(a => a.name === 'Appraisal').length;
+  const allItemsAndAdmins: ItemConstructor[] = [...allItems, ...allAdmins];
+  const blueprints: PieceBlueprint[] = [];
+  const items: Item[] = [];
+
+  for (const rawName of contents) {
+    const pName = rawName.trim();
+    const p = allPieces.find(x => x.name === pName || (pName === 'Banana' && x.name === 'Banana Peel'));
+    if (p) {
+      blueprints.push(makeBlueprint(p, undefined, appraisalDiscount));
+    } else {
+      const iClass = allItemsAndAdmins.find(x => x.name === pName);
+      if (iClass) {
+        const itemInst = new iClass();
+        if (appraisalDiscount) {
+          itemInst.cost = Math.max(0, itemInst.cost - appraisalDiscount);
+        }
+        items.push(itemInst);
+      }
+    }
+  }
+  return { blueprints, items };
+}
+
+function generateShopStock(allowFixed: boolean = true) {
+  const appraisalDiscount = 2 * player.value.admins.filter(a => a.name === 'Appraisal').length;
+
+  if (allowFixed) {
+    const shopNode = worldMapRef.value?.world?.nodes?.shop;
+    if (shopNode?.shopContents) {
+      const list = typeof shopNode.shopContents === 'string'
+        ? shopNode.shopContents.split(',').map((s: string) => s.trim())
+        : shopNode.shopContents;
+      return buildShopStockFromContents(list);
+    }
+    if (player.value.difficulty <= 0) {
+      return buildShopStockFromContents(['Banana Peel', 'Sling', 'Lance', 'Mushroom', 'Iron', 'Chedda']);
+    }
+  }
+
   const ownedAdmins = new Set(player.value.admins.map(a => a.name));
   const availableAdmins = (player.value.hasAdmin('Bouquet')) ? allAdmins : allAdmins.filter(AdminClass => !ownedAdmins.has(AdminClass.name));
   const allItemsAndAdmins: ItemConstructor[] = [...allItems, ...availableAdmins];
@@ -930,13 +970,13 @@ function refreshShop(isFree: boolean) {
     } else {
       shop.rerollCost = 0;
     }
-    const { blueprints, items } = generateShopStock();
+    const { blueprints, items } = generateShopStock(false);
     shop.shopBlueprints = blueprints;
     shop.shopItems = items;
     saveGameState();
   } else {
     // Standard refresh preps a new futureShop
-    const { blueprints, items } = generateShopStock();
+    const { blueprints, items } = generateShopStock(true);
     const initialRerollCost = player.value.hasAdmin('Wheel of Dharma') ? 0 : (player.value.hasAdmin('Slots') ? 3 : 5);
     futureShop.value = {
       shopBlueprints: blueprints,
@@ -953,7 +993,7 @@ function addBlueprintToInventory(bp: PieceBlueprint){
   player.value.addProgram(bp);
   StorageManager.recordUsage('programs', bp.name);
   shopTarget.value = null;
-  if (player.value.hasAdmin('Clippy')) {
+  if (player.value.hasAdmin('Clippy') && player.value.difficulty !== 0) {
     reapplyTutorialTooltips(200);
   }
 }
@@ -989,7 +1029,7 @@ async function addItemToinventory(item: Item) {
     StorageManager.recordUsage('items', item.name);
   }
   shopTarget.value = null;
-  if (player.value.hasAdmin('Clippy')) {
+  if (player.value.hasAdmin('Clippy') && player.value.difficulty !== 0) {
     reapplyTutorialTooltips(200);
   }
 }
@@ -1551,6 +1591,7 @@ function applySavedState(data: any) {
   const state = rehydrateGameState(data);
 
   player.value = state.player;
+  setTutorialTooltipsDisabled(player.value.difficulty === 0);
   currentSeed.value = state.seed;
   worldSeed.value = state.worldSeed ?? 0;
 
@@ -1713,6 +1754,17 @@ const openShop = (node?: any) => {
   }
   if (currentAppMode.value === 'campaign') {
     loadCampaignShop();
+  } else if (activeShopContents.value && activeShopContents.value.length > 0) {
+    const { blueprints, items } = buildShopStockFromContents(activeShopContents.value);
+    const initialRerollCost = player.value.hasAdmin('Wheel of Dharma') ? 0 : (player.value.hasAdmin('Slots') ? 3 : 5);
+    currentShop.value = {
+      shopBlueprints: blueprints,
+      shopItems: items,
+      rerollCost: initialRerollCost,
+      prevFib: 0,
+      currentFib: 1,
+      hasStolenFromThisShop: false
+    };
   } else {
     currentShop.value = {
       ...futureShop.value,
@@ -2095,7 +2147,7 @@ function handlePieceSelect(piece: Piece) {
   } else if (player.value.canMove) {
     boardRef.value.highlightMoves(piece);
   }
-  if (player.value.hasAdmin('Clippy')) {
+  if (player.value.hasAdmin('Clippy') && player.value.difficulty !== 0) {
     reapplyTutorialTooltips(200);
   }
 }
@@ -2643,14 +2695,24 @@ async function increaseDifficulty() {
     }
   }
   player.value.difficulty += 1;
+  setTutorialTooltipsDisabled(player.value.difficulty === 0);
   StorageManager.recordDifficultyReached(player.value.difficulty);
-  refreshShop(true);
   worldSeed.value += 1 + player.value.seedOffset;
   player.value.seedOffset = 0;
+  refreshShop(true);
 }
 const decreaseDifficulty = () => {
   player.value.difficulty -= 1;
+  setTutorialTooltipsDisabled(player.value.difficulty === 0);
   worldSeed.value--
+  if (player.value.difficulty <= 0) {
+    refreshShop(true);
+    currentShop.value = {
+      ...futureShop.value,
+      shopBlueprints: [...futureShop.value.shopBlueprints],
+      shopItems: [...futureShop.value.shopItems]
+    };
+  }
 }
 const increaseStake = () => {
   if (stake.value < 3) {
@@ -2669,14 +2731,19 @@ watch(
     showMap.value,
     roundHasStarted.value,
     activePieces.value.length,
+    player.value.difficulty,
   ],
   () => {
-    if (player.value.hasAdmin("Clippy")) {
+    setTutorialTooltipsDisabled(player.value.difficulty === 0);
+    if (player.value.difficulty === 0) {
+      clearTooltips();
+    } else if (player.value.hasAdmin("Clippy")) {
       requestAnimationFrame(() => {
         applyTutorialTooltips(allTips);
       });
     }
-  }
+  },
+  { immediate: true }
 );
 
 //HOTKEYS

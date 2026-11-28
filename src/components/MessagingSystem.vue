@@ -2,10 +2,13 @@
 import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue';
 import type { DialogueTree, DialogueNode, DialogueChoice } from '../types';
 import { characters } from '../Characters';
+import { getSpriteStyle } from '../helperFunctions';
 
 const props = defineProps<{
     dialogueTree?: DialogueTree | null;
     activeMapEvent?: string | null;
+    minimizedIconID?: number;
+    currentAppMode?: string;
 }>();
 
 const emit = defineEmits<{
@@ -41,6 +44,20 @@ const isVisible = computed(() => {
 const waitingForMapNode = computed(() => {
     return currentNode.value?.nodeID ? currentNode.value.nodeID !== props.activeMapEvent : false;
 });
+
+function getCharacterIconStyle(speakerId: string, size: number = 28): Record<string, any> {
+    const char = characters[speakerId];
+    if (char && char.iconId !== undefined && char.iconId >= 0) {
+        return {
+            ...getSpriteStyle(char.iconId),
+            width: `${size}px`,
+            height: `${size}px`,
+            display: 'inline-block',
+            flexShrink: 0
+        };
+    }
+    return {};
+}
 
 function getCharacterIcon(speakerId: string) {
     const char = characters[speakerId];
@@ -127,6 +144,10 @@ function triggerNodeCleared(nodeId: string) {
     checkNodeTriggers(`clear:${nodeId}`);
 }
 
+function triggerRoundSummary(nodeId: string) {
+    checkNodeTriggers(`${nodeId}-summary`);
+}
+
 function startNewCampaign(tree?: DialogueTree) {
     seenNodes.value = new Set();
     chatHistories.value = {};
@@ -173,6 +194,7 @@ function loadState(state: any) {
 
 defineExpose({
     triggerNodeCleared,
+    triggerRoundSummary,
     getState,
     loadState,
     startNewCampaign
@@ -255,7 +277,8 @@ function selectChoice(choice: DialogueChoice) {
     <div id="messaging-system" v-if="isVisible" class="messaging-system" :class="{ minimized: isMinimized }">
         <!-- Minimized View -->
         <div v-if="isMinimized" class="minimized-icon" @click="isMinimized = false; scrollToBottom()">
-            ✉️
+            <div v-if="props.minimizedIconID !== undefined && props.minimizedIconID >= 0" class="minimized-sprite-icon" :style="getSpriteStyle(props.minimizedIconID)"></div>
+            <template v-else>✉️</template>
             <div v-if="currentNode !== null" class="notification-dot"></div>
         </div>
 
@@ -275,7 +298,8 @@ function selectChoice(choice: DialogueChoice) {
                         class="contact-item"
                         @click="viewState = 'chat'; selectedContact = speaker; scrollToBottom()"
                     >
-                        <span class="icon">{{ getCharacterIcon(speaker) }}</span>
+                        <div v-if="getCharacterIconStyle(speaker, 32).backgroundImage" class="icon" :style="getCharacterIconStyle(speaker, 32)"></div>
+                        <span v-else class="icon">{{ getCharacterIcon(speaker) }}</span>
                         <div class="contact-info">
                             <span class="name">{{ getCharacterName(speaker) }}</span>
                             <span class="last-msg">{{ messages[messages.length - 1]?.text }}</span>
@@ -290,9 +314,10 @@ function selectChoice(choice: DialogueChoice) {
             <!-- CHAT MODE -->
             <template v-else-if="viewState === 'chat' && selectedContact">
                 <div class="header">
-                    <button class="back-btn" @click="viewState = 'overview'">&#8592;</button>
+                    <button v-if="currentAppMode === 'campaign'" class="back-btn" @click="viewState = 'overview'">&#8592;</button>
                     <div class="character-info">
-                        <span class="icon">{{ getCharacterIcon(selectedContact) }}</span>
+                        <div v-if="getCharacterIconStyle(selectedContact, 24).backgroundImage" class="icon" :style="getCharacterIconStyle(selectedContact, 24)"></div>
+                        <span v-else class="icon">{{ getCharacterIcon(selectedContact) }}</span>
                         <span class="name">{{ getCharacterName(selectedContact) }}</span>
                     </div>
                     <button class="minimize-btn" @click="isMinimized = true">_</button>
@@ -363,6 +388,12 @@ function selectChoice(choice: DialogueChoice) {
 
 .minimized-icon:hover {
     transform: scale(1.1);
+}
+
+.minimized-sprite-icon {
+    width: 36px;
+    height: 36px;
+    display: inline-block;
 }
 
 .notification-dot {

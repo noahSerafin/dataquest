@@ -52,6 +52,7 @@ const emit = defineEmits<{
     (e: "replaceBosses", admins: Admin[]): void;
     (e: "increaseDifficulty"): void;
     (e: "incrementProgress", row?: number): void;
+    (e: "mapEvent", eventStr: string): void;
 }>();
 
 const levelTiers = [
@@ -182,6 +183,7 @@ function trySelect(node: WorldNode) {
     }
 
     selectedPreviewNode.value = node;
+    emit('mapEvent', `preview:${node.id}`);
     if (props.player.hasAdmin('Clippy') && props.player.difficulty !== 0) {
         reapplyTutorialTooltips(200);
     }
@@ -209,6 +211,7 @@ function skipNode(node: WorldNode) {
     //node.visible = true;
     previousNodeId.value = currentNodeId.value;
     currentNodeId.value = node.id;
+    emit('mapEvent', `skip:${node.id}`);
     emit('incrementProgress', getNodeRow(node));
 }
 
@@ -230,6 +233,7 @@ function enterNode(node: WorldNode) {
     current.visited = true;
     currentNodeId.value = node.id;
     node.visible = true;
+    emit('mapEvent', `enter:${node.id}`);
     if (node.type === 'shop') {
         emit('openShop', node)
     }
@@ -552,6 +556,7 @@ function takeSkipReward(node: WorldNode) {//ask about this next
     selectedPreviewNode.value = null;
     canReroll.value = true;
     node.visible = true;
+    emit('mapEvent', `clear:${node.id}`);
     emit('incrementProgress', getNodeRow(node));
     if (props.player.hasAdmin('Clippy') && props.player.difficulty !== 0) {
         reapplyTutorialTooltips(200);
@@ -701,7 +706,7 @@ watch(currentNodeId, () => {
 </script>
 
 <template>
-    <div class="container world-map" :class="props.cssclass" ref="mapContainer"
+    <div id="world-map" class="container world-map" :class="props.cssclass" ref="mapContainer"
         @mousedown="handleMapMouseDown"
         @mousemove="handleMapMouseMove"
         @mouseup="handleMapMouseUpOrLeave"
@@ -799,7 +804,7 @@ watch(currentNodeId, () => {
         </div>
 
         <!-- Preview modal -->
-        <div v-if="selectedPreviewNode" :class="`preview-modal ${selectedPreviewNode.company.abbr}`"
+        <div v-if="selectedPreviewNode" :id="'preview-modal-' + selectedPreviewNode.id" :class="`preview-modal ${selectedPreviewNode.company.abbr}`"
             :style="selectedPreviewNode.type === 'boss' || selectedPreviewNode.type === 'level' ? { backgroundColor: `${selectedPreviewNode.company.tileColor}`, border: `2px solid ${selectedPreviewNode.company.edgeColor}` } : {}">
             <h3>{{ selectedPreviewNode.type.toUpperCase() }}</h3>
             <h6 v-if="selectedPreviewNode.type === 'boss'"></h6>
@@ -861,7 +866,7 @@ watch(currentNodeId, () => {
                     :disabled="!canReroll" @click="rerollSkipReward(selectedPreviewNode)">
                     Reroll
                 </button>
-                <button v-if="selectedPreviewNode && selectedPreviewNode?.type !== 'skip'"
+                <button id="enterNodeButton" v-if="selectedPreviewNode && selectedPreviewNode?.type !== 'skip'"
                     :disabled="!canClick(selectedPreviewNode)"
                     @click="enterNode(selectedPreviewNode)">Enter</button>
                 <button v-if="selectedPreviewNode && player.hasAdmin('Crystal Ball') && (selectedPreviewNode.type === 'shop' || ((selectedPreviewNode.type === 'level' || selectedPreviewNode.type === 'boss') && !selectedPreviewNode.visited))"

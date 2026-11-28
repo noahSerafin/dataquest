@@ -514,8 +514,8 @@
         padding: 1rem;
         margin: 0;
         display: block;
-        bottom: 0;
-        height: 100%;
+        top: 0;
+        height: 75%;
         width: 100%;
         z-index: 99999;
         margin: 0;

@@ -345,7 +345,7 @@ const banana = {
 //2, 2, 1, 1, 0,
 const scissors = {
     iconID: 541,
-    id: crypto.randomUUID(),
+    id: "274ec329-8c17-4265-8c12-e9a28bcf0110",//crypto.randomUUID(),//make fixed for tutorial
     name: "Scissors",
     description: "A program that can remove a body tile from an enemy, regardless of its defence, and move into the empty space",
     unicode: "U+2702",

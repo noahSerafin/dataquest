@@ -240,5 +240,9 @@ const hiddenTip: TutorialStep = {
     id: 'chargeTip',
     tooltip: "Attacking with a hidden program will reveal it."
 }
+const shopTip2: TutorialStep = {
+    id: 'chargeTip',
+    tooltip: "Shops all have the same content. Exiting a shop will reroll the contents of the next one."
+}
 
-export const proTips: TutorialStep[] = [proTipSuggestion, defenderTip, specialTip, damageMultTip, adminOrderTip, lineSpecialsTipTip, hotkeysTip, statusesTip, slowedTip, hiddenNodesTip, chargeTip, hiddenTip];
+export const proTips: TutorialStep[] = [proTipSuggestion, defenderTip, specialTip, damageMultTip, adminOrderTip, lineSpecialsTipTip, hotkeysTip, statusesTip, slowedTip, hiddenNodesTip, chargeTip, hiddenTip, shopTip2];

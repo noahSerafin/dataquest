@@ -19,6 +19,7 @@ export class GameCharacter extends Character {
 }
 
 export const characters: Record<string, Character> = {
+    "Clippy": new GameCharacter("Clippy", 227, "U+1F4CE", "Guide"),
     "Rick": new GameCharacter("Rick", 497, "U+1F6FA", "Shopkeeper"),
     "Sue": new GameCharacter("Sue", 498, "U+1F9F5", "Shopkeeper"),
     "Buster": new GameCharacter("Buster", 499, "U+1FA97", ""),

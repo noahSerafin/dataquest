@@ -46,14 +46,17 @@ overworld map?
 background colours for node maps (use company owner)//levels array (make map have a starting copmany)
 
 NEXT
-visual rework, proper menu - add prev-skip btns to music
+visual rework, proper menu - add prev-skip btns to music, loading screen
 Make clippy messages use formatted description
 preview modal slide in
 sound effects
     crunch/bite for blueprint target items
     dropping coins for money loss
+    list from piece special moves
 
-BUGS - 
+BUGS -
+-preview text in messaging system showing "<span etc..
+-fix no fun allowed boss
 format text in item descriptions
 - saw special breaking, messes with its own tiles after being nerfed
 -sound effects needed on traps

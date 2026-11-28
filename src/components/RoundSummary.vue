@@ -10,7 +10,8 @@
         bosses: Admin[],
         roundHasStarted: boolean,
         isCampaign?: boolean,
-        currentSeed?: string
+        currentSeed?: string,
+        nodeId?: string | null
     }
     const props = defineProps<Props>()
 
@@ -65,7 +66,7 @@
 
 <template>
     <div class="container round-summary">
-        <div class="if-won" v-if="hasWonRound">
+        <div :id="props.nodeId ? `${props.nodeId}-summary` : 'round-summary'" class="if-won" v-if="hasWonRound">
             <h1 v-if="player.hasWonGame && player.difficulty < 7">
                 You win!
             </h1>
@@ -118,20 +119,20 @@
             </div>
             <button class="btn-grey" :disabled="player.isSummaryProcessing" @click="collectAndProceed">Collect <span class="text-yellow bold">interest</span> and proceed</button>
         </div>
-        <div class="if-lost" v-if="!hasWonRound && isCampaign">
+        <div :id="props.nodeId ? `${props.nodeId}-summary` : 'round-summary'" class="if-lost" v-if="!hasWonRound && isCampaign">
             <h3>
                 Round Over
             </h3>
             <button @click="emit('returnToMap')" :disabled="roundHasStarted">Return to Map</button>
         </div>
-        <div class="if-lost" v-else-if="!hasWonRound && player.lives > 0">
+        <div :id="props.nodeId ? `${props.nodeId}-summary` : 'round-summary'" class="if-lost" v-else-if="!hasWonRound && player.lives > 0">
             <h3>
                 Round Over
             </h3>
             <button @click="emit('reloadLevel')" :disabled="roundHasStarted">Retry</button>
             <button v-if="props.player.mapProgress < 2" @click="emit('returnToMap')" :disabled="roundHasStarted">Return to Map</button>
         </div>
-        <div class="if-lost" v-else-if="!hasWonRound && player.lives <= 0">
+        <div :id="props.nodeId ? `${props.nodeId}-summary` : 'round-summary'" class="if-lost" v-else-if="!hasWonRound && player.lives <= 0">
             <H2>
                 GAME OVER
             </h2>

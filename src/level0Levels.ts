@@ -170,7 +170,7 @@ export const sandpit: Level = {
     "pieces": [
         {
             "id": "141ea35c-5b06-4f6c-9cbe-a93fd691db8f",
-            "name": "Potato",
+            "name": "Potato",//Potato?
             "team": "enemy",
             "headPosition": {
                 "x": 4,
@@ -196,6 +196,24 @@ export const sandpit: Level = {
                 {
                     "x": 4,
                     "y": 6
+                }
+            ],
+
+            "moves": 0,
+            "range": 0
+        },
+        {
+            "id": "d24f9cd0-131c-4869-838c-5192f49d7702",
+            "name": "Spawn",
+            "team": "player",
+            "headPosition": {
+                "x": 4,
+                "y": 5
+            },
+            "tiles": [
+                {
+                    "x": 4,
+                    "y": 5
                 }
             ],
 

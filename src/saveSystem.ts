@@ -22,7 +22,8 @@ export function serializeGameState(
   boardState: any, // null if not in a level, or an object if mid-level
   uiState: any,
   shopState?: any,
-  worldSeed?: number
+  worldSeed?: number,
+  messagingState?: any
 ) {
   StorageManager.setHasPlayedOnce();
   return {
@@ -37,7 +38,8 @@ export function serializeGameState(
     bossName: boss?.name, // just store constructor name to grab from allBosses
     boardState: boardState ? JSON.parse(JSON.stringify(boardState)) : null,
     uiState: JSON.parse(JSON.stringify(uiState)),
-    shopState: shopState ? JSON.parse(JSON.stringify(shopState)) : null
+    shopState: shopState ? JSON.parse(JSON.stringify(shopState)) : null,
+    messagingState: messagingState ? JSON.parse(JSON.stringify(messagingState)) : null
   };
 }
 
@@ -186,7 +188,8 @@ export function rehydrateGameState(data: any): any {
     worldSeed: data.worldSeed ?? 0,
     boardState,
     uiState: data.uiState || {},
-    shopState
+    shopState,
+    messagingState: data.messagingState || null
   };
 }
 

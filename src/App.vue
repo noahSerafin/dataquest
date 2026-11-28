@@ -198,6 +198,7 @@ import { sector3 } from "./campaignMaps/sector3.ts";
 import { sector4 } from "./campaignMaps/sector4.ts";
 import { sector5 } from "./campaignMaps/sector5.ts";
 import { sector6 } from "./campaignMaps/sector6.ts";
+import { tutorialDialogue as rogueTutorialDialogue } from "./dialogue/ROGUEtutorial.ts";
 
 
 const testSword = {
@@ -305,6 +306,22 @@ const allCampaignSectors = [sector0, sector1, sector2, sector3, sector4, sector5
 const currentCampaignNodeId = ref<string | null>(null);
 const appDialogueEvent = ref<string | null>(null);
 const messagingSystemRef = ref<InstanceType<typeof MessagingSystem> | null>(null);
+
+const isRogueTutorialActive = computed(() =>
+  currentAppMode.value === 'rogue' &&
+  player.value.difficulty === 0 &&
+  player.value.osunicode === 'U+229E'
+);
+
+const activeDialogueTree = computed(() => {
+  if (currentAppMode.value === 'campaign') {
+    return campaignWorldMap.value?.dialogueTree || null;
+  }
+  if (isRogueTutorialActive.value) {
+    return rogueTutorialDialogue as any;
+  }
+  return null;
+});
 
 onMounted(() => {
     document.addEventListener('click', (e) => {
@@ -516,6 +533,16 @@ function createNewPlayer(payload: { os: OS, seed: string, stake?: number }) {
   };
   refreshShop(true);
   player.value.canPlace = false;
+
+  if (isRogueTutorialActive.value) {
+    appDialogueEvent.value = 'load:node0Start';
+    nextTick(() => {
+      messagingSystemRef.value?.startNewCampaign(rogueTutorialDialogue as any);
+      saveGameState();
+    });
+  } else {
+    appDialogueEvent.value = null;
+  }
 }
 const showCollection = ref(false);
 const showSpriteSheet = ref(false);
@@ -1208,8 +1235,21 @@ function clearFog() {
 const toggleMap = () => {
   showMap.value = !showMap.value;
 }
+const activeSummaryNodeId = computed(() =>
+  currentAppMode.value === 'campaign'
+    ? currentCampaignNodeId.value
+    : (worldMapRef.value?.currentNodeId || null)
+);
+
 const openSummary = (state: boolean) => {
   showSummary.value = state;
+  if (state) {
+    const nodeId = activeSummaryNodeId.value;
+    if (nodeId) {
+      appDialogueEvent.value = `${nodeId}-summary`;
+      messagingSystemRef.value?.triggerRoundSummary(nodeId);
+    }
+  }
 }
 
 const renewBlueprints = async () => {
@@ -1302,6 +1342,7 @@ async function handleProceed() {
     if (admin.onRoundEnd) admin.onRoundEnd(bossAdmins.value);
   };
   openSummary(false);
+  const clearedRogueNodeId = currentAppMode.value !== 'campaign' ? worldMapRef.value?.currentNodeId : null;
   if (currentAppMode.value !== 'campaign') {
     incrementMapProgress();
     if (player.value.mapProgress >= 3) {
@@ -1324,6 +1365,9 @@ async function handleProceed() {
       handleCampaignNodeCleared(currentCampaignNodeId.value);
       currentCampaignNodeId.value = null;
     }
+  } else if (clearedRogueNodeId) {
+    appDialogueEvent.value = `clear:${clearedRogueNodeId}`;
+    messagingSystemRef.value?.triggerNodeCleared(clearedRogueNodeId);
   }
   hasWonRound.value = false;
   saveGameState();
@@ -1540,7 +1584,8 @@ function getSerializedGameState() {
     boardState,
     uiState,
     shopState,
-    worldSeed.value
+    worldSeed.value,
+    isRogueTutorialActive.value ? (messagingSystemRef.value?.getState() || null) : null
   );
 }
 
@@ -1664,6 +1709,13 @@ function applySavedState(data: any) {
       };
       refreshShop(true);
     }
+    if (isRogueTutorialActive.value) {
+      if (state.messagingState) {
+        messagingSystemRef.value?.loadState(state.messagingState);
+      } else {
+        messagingSystemRef.value?.startNewCampaign(rogueTutorialDialogue as any);
+      }
+    }
   });
 }
 
@@ -1781,6 +1833,11 @@ const closeShop = () => {
   showShop.value = false;
   if (!shopDisabled.value && canProceedFromShop.value) {
     refreshShop(true);
+    if (currentAppMode.value !== 'campaign') {
+      const shopNodeId = currentShopNodeId.value || 'shop';
+      appDialogueEvent.value = `clear:${shopNodeId}`;
+      messagingSystemRef.value?.triggerNodeCleared(shopNodeId);
+    }
   }
   canProceedFromShop.value = false;
   saveGameState();
@@ -2972,7 +3029,7 @@ function cancelConfirm() {
       <WorldEditor v-if="currentAppMode === 'worldEditor'" class="stage-panel active" />
 
       <RoundSummary v-if="showSummary" class="stage-panel" :class="{ active: showSummary }" :hasWonRound="hasWonRound"
-        :player="player" :bosses="bossAdmins" :roundHasStarted="roundHasStarted" :isCampaign="currentAppMode === 'campaign'" :currentSeed="currentSeed" @proceedFromEndOfRound="handleProceed"
+        :player="player" :bosses="bossAdmins" :roundHasStarted="roundHasStarted" :isCampaign="currentAppMode === 'campaign'" :currentSeed="currentSeed" :nodeId="activeSummaryNodeId" @proceedFromEndOfRound="handleProceed"
         @reloadLevel="reloadLevel" @mainMenu="openMainMenu" @returnToMap="handleReturnToMap" @retrySeed="retryCurrentSeed" />
       <WorldMap ref="worldMapRef" v-if="!displayEditor && currentAppMode !== 'campaign'" class="stage-panel" :class="{ active: showMap }"
         :allLevels="level1Levels" :player="player" :seed="combinedMapSeed" :cssclass="mapClass" :bosses="bossAdmins"
@@ -2980,7 +3037,7 @@ function cancelConfirm() {
         @selectLevel="selectLevel" @previewLevel="openDisabledBoard" @openShop="openShop" @openDisabledShop="openDisabledShop"
         @openCompiler="openCompiler" @openAltar="openAltar" @openDuplicator="openDuplicator"
         @openWorkbench="openWorkbench" @incrementProgress="(row) => { incrementMapProgress(row); saveGameState(); }"
-        @addBoss="addBossAdmin" @replaceBosses="replaceBosses" @increaseDifficulty="increaseDifficulty" />
+        @addBoss="addBossAdmin" @replaceBosses="replaceBosses" @increaseDifficulty="increaseDifficulty" @mapEvent="handleMapEvent" />
       <CampaignWorldMap v-if="!displayEditor && currentAppMode === 'campaign'" class="stage-panel" :class="{ active: showMap }"
         :player="player" :cssclass="mapClass" :staticWorld="campaignWorldMap" :clearedNodes="campaignClearedNodes"
         @selectLevel="selectLevel" @previewLevel="openDisabledBoard" @openShop="openShop" @openDisabledShop="openDisabledShop"
@@ -3025,9 +3082,11 @@ function cancelConfirm() {
       <Teleport to="body">
         <MessagingSystem 
           ref="messagingSystemRef"
-          v-if="campaignWorldMap?.dialogueTree"
-          :dialogueTree="campaignWorldMap.dialogueTree"
+          v-if="activeDialogueTree"
+          :dialogueTree="activeDialogueTree"
           :activeMapEvent="appDialogueEvent"
+          :minimizedIconID="isRogueTutorialActive ? 227 : undefined"
+          :currentAppMode="currentAppMode"
         />
       </Teleport>
       <Leveleditor v-if="currentAppMode === 'levelEditor'" @export-level="handleExport" />
